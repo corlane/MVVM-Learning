@@ -5,9 +5,9 @@ namespace MVVM_Learning.Services;
 
 public class CabinetService : ICabinetService
 {
-    public ObservableCollection<CabinetModel> Cabinets { get; } = new();
+    public ObservableCollection<BaseCabinetModel> Cabinets { get; } = new();
 
-    public void Add(CabinetModel cabinet)
+    public void Add(BaseCabinetModel cabinet)
     {
         Cabinets.Add(cabinet);
     }

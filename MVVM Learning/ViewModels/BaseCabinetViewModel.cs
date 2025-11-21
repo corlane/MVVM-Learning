@@ -5,16 +5,16 @@ using MVVM_Learning.Services;
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class CabinetViewModel : ObservableObject
+public partial class BaseCabinetViewModel : ObservableObject
 {
     private readonly ICabinetService? _cabinetService;
 
-    public CabinetViewModel()
+    public BaseCabinetViewModel()
     {
         
     }
 
-    public CabinetViewModel(ICabinetService cabinetService)
+    public BaseCabinetViewModel(ICabinetService cabinetService)
     {
         _cabinetService = cabinetService;
     }
@@ -26,7 +26,7 @@ public partial class CabinetViewModel : ObservableObject
     [RelayCommand]
     private void AddCabinet()
     {
-        var newCabinet = new CabinetModel
+        var newCabinet = new BaseCabinetModel
         {
             Width = Width,
             Height = Height,

@@ -5,6 +5,6 @@ namespace MVVM_Learning.Services;
 
 public interface ICabinetService
 {
-    ObservableCollection<CabinetModel> Cabinets { get; }
-    void Add(CabinetModel cabinet);
+    ObservableCollection<BaseCabinetModel> Cabinets { get; }
+    void Add(BaseCabinetModel cabinet);
 }

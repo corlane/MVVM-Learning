@@ -4,11 +4,11 @@ using System.Windows.Controls;
 
 namespace MVVM_Learning.Views;
 
-public partial class CabinetView : UserControl
+public partial class BaseCabinetView : UserControl
 {
-    public CabinetView()
+    public BaseCabinetView()
     {
         InitializeComponent();
-        DataContext = App.ServiceProvider.GetRequiredService<CabinetViewModel>();
+        DataContext = App.ServiceProvider.GetRequiredService<BaseCabinetViewModel>();
     }
 }

@@ -8,7 +8,7 @@ namespace MVVM_Learning.ViewModels;
 public partial class CabinetListViewModel : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<CabinetModel> cabinets;
+    private ObservableCollection<BaseCabinetModel> cabinets;
 
     public CabinetListViewModel(ICabinetService cabinetService)
     {

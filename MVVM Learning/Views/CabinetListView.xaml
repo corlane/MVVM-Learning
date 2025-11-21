@@ -10,7 +10,7 @@
              d:Background="LightGray">
 
     <d:UserControl.DataContext>
-        <viewmodels:CabinetViewModel/>
+        <viewmodels:BaseCabinetViewModel/>
     </d:UserControl.DataContext>
 
 

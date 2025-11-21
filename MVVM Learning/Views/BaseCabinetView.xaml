@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MVVM_Learning.Views.CabinetView"
+﻿<UserControl x:Class="MVVM_Learning.Views.BaseCabinetView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,7 +11,7 @@
              >
     <!-- Design-time DataContext (add this block) -->
     <d:UserControl.DataContext>
-        <viewmodels:CabinetViewModel/>
+        <viewmodels:BaseCabinetViewModel/>
     </d:UserControl.DataContext>
 
     <Grid>

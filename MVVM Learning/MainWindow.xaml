@@ -12,7 +12,7 @@
     <Grid>
         <TabControl>
             <TabItem Header="Cabinet View">
-                <views:CabinetView/>
+                <views:BaseCabinetView/>
             </TabItem>
             <TabItem Header="Cabinet List">
                 <views:CabinetListView/>
