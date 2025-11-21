@@ -7,7 +7,12 @@ namespace MVVM_Learning.ViewModels;
 
 public partial class CabinetViewModel : ObservableObject
 {
-    private readonly ICabinetService _cabinetService;
+    private readonly ICabinetService? _cabinetService;
+
+    public CabinetViewModel()
+    {
+        
+    }
 
     public CabinetViewModel(ICabinetService cabinetService)
     {
@@ -28,7 +33,7 @@ public partial class CabinetViewModel : ObservableObject
             Depth = Depth
         };
 
-        _cabinetService.Add(newCabinet); // Add to shared service
+        _cabinetService?.Add(newCabinet); // Add to shared service
 
         Width = Height = Depth = string.Empty;
     }
