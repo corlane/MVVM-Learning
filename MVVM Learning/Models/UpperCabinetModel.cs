@@ -2,7 +2,7 @@
 
 namespace MVVM_Learning.Models;
 
-public partial class BaseCabinetModel : ObservableObject
+public partial class UpperCabinetModel : ObservableObject
 {
     [ObservableProperty]
     public partial string Width { get; set; } = "";

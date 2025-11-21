@@ -7,19 +7,46 @@
         xmlns:viewmodels="clr-namespace:MVVM_Learning.ViewModels"
         xmlns:views="clr-namespace:MVVM_Learning.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" 
+        Height="1000" Width="1800"
+        MinHeight="1000" MinWidth="1800"
+        >
 
+    <!-- Design-time DataContext (add this block) -->
+    <d:Window.DataContext>
+        <viewmodels:MainWindowViewModel/>
+    </d:Window.DataContext>
+    
     <Grid>
-        <TabControl>
-            <TabItem Header="Cabinet View">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <TabControl Grid.Row="1" Grid.Column="0">
+            <TabItem Header="Base Cabinet">
                 <views:BaseCabinetView/>
             </TabItem>
-            <TabItem Header="Cabinet List">
-                <views:CabinetListView/>
+            <TabItem Header="Upper Cabinet">
+                <views:UpperCabinetView/>
             </TabItem>
             <TabItem Header="Another View">
                 <!-- Another view can be placed here -->
             </TabItem>
         </TabControl>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <views:CabinetListView Grid.Column="0" Grid.Row="1"/>
+
+        </Grid>
+        
     </Grid>
 </Window>

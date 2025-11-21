@@ -5,13 +5,8 @@ using System.Collections.ObjectModel;
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class CabinetListViewModel : ObservableObject
+public partial class CabinetListViewModel(ICabinetService cabinetService) : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<BaseCabinetModel> cabinets;
-
-    public CabinetListViewModel(ICabinetService cabinetService)
-    {
-        Cabinets = cabinetService.Cabinets; // Reference the shared collection
-    }
+    public partial ObservableCollection<BaseCabinetModel> Cabinets { get; set; } = cabinetService.Cabinets; // Reference the shared collection
 }

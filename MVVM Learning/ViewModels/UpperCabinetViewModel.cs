@@ -5,16 +5,16 @@ using MVVM_Learning.Services;
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class BaseCabinetViewModel : ObservableObject
+public partial class UpperCabinetViewModel : ObservableObject
 {
     private readonly ICabinetService? _cabinetService;
 
-    public BaseCabinetViewModel()
+    public UpperCabinetViewModel()
     {
         // empty constructor for design-time support
     }
 
-    public BaseCabinetViewModel(ICabinetService cabinetService)
+    public UpperCabinetViewModel(ICabinetService cabinetService)
     {
         _cabinetService = cabinetService;
     }

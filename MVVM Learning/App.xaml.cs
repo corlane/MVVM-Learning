@@ -23,6 +23,7 @@ public partial class App : Application
                 // Register ViewModels as transients
                 services.AddTransient<MainWindowViewModel>();
                 services.AddTransient<BaseCabinetViewModel>();
+                services.AddTransient<UpperCabinetViewModel>();
                 services.AddTransient<CabinetListViewModel>();
             })
             .Build();
