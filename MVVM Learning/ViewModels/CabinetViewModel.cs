@@ -1,35 +1,35 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MVVM_Learning.Models;
-using System.Collections.ObjectModel;
+using MVVM_Learning.Services;
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class CabinetViewModel : ObservableValidator
+public partial class CabinetViewModel : ObservableObject
 {
-    public CabinetViewModel()
-    {
+    private readonly ICabinetService _cabinetService;
 
+    public CabinetViewModel(ICabinetService cabinetService)
+    {
+        _cabinetService = cabinetService;
     }
 
-
-    [ObservableProperty] public partial string Width { get; set; } = "";
-    [ObservableProperty] public partial string Height { get; set; } = "";
-    [ObservableProperty] public partial string Depth { get; set; } = "";
+    [ObservableProperty] private string width = "";
+    [ObservableProperty] private string height = "";
+    [ObservableProperty] private string depth = "";
 
     [RelayCommand]
-    public void AddCabinet()
+    private void AddCabinet()
     {
-        CabinetList.Add(new CabinetModel()
+        var newCabinet = new CabinetModel
         {
-            Width = this.Width,
-            Height = this.Height,
-            Depth = this.Depth
-        });
+            Width = Width,
+            Height = Height,
+            Depth = Depth
+        };
 
-        // Clear input fields after adding
-        // This uses the generated OnWidthChanged etc.
+        _cabinetService.Add(newCabinet); // Add to shared service
+
         Width = Height = Depth = string.Empty;
     }
-
 }

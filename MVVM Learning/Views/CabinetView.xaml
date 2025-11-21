@@ -7,15 +7,8 @@
              xmlns:viewmodels="clr-namespace:MVVM_Learning.ViewModels"           
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:Background="LightGray"
-             
-             >
+             d:Background="LightGray">
 
-
-    <UserControl.DataContext>
-        <viewmodels:CabinetViewModel/>
-    </UserControl.DataContext>
-    
     <Grid>
         <StackPanel>
             <TextBox x:Name="TextWidth" Margin="20" Text="{Binding Width}"/>

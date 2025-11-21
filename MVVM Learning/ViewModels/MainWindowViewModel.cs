@@ -2,11 +2,7 @@
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class MainWindowViewModel : ObservableValidator
+public partial class MainWindowViewModel : ObservableObject
 {
-    public MainWindowViewModel()
-    {
-
-    }
-    
+    // Empty for now — could add navigation or other app-level logic
 }

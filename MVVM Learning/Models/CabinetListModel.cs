@@ -8,7 +8,6 @@ namespace MVVM_Learning.Models;
 
 public partial class CabinetListModel : ObservableValidator
 {
-    [ObservableProperty]
-    public partial ObservableCollection<CabinetModel> CabinetList { get; set; } = new();
+
 
 }

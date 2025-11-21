@@ -1,9 +1,10 @@
-﻿namespace MVVM_Learning.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class CabinetModel
+namespace MVVM_Learning.Models;
+
+public partial class CabinetModel : ObservableObject
 {
-    public string Width { get; set; } = "";
-    public string Height { get; set; } = "";
-    public string Depth { get; set; } = "";
-
+    [ObservableProperty] private string width = "";
+    [ObservableProperty] private string height = "";
+    [ObservableProperty] private string depth = "";
 }
