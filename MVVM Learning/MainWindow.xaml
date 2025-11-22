@@ -27,6 +27,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Load Job" Width="150" Height="50" Margin="30,10,10,10" Command="{Binding LoadJobCommand}" HorizontalAlignment="Left"/>
+            <Button Content="Save Job" Width="150" Height="50" Margin="30,10,10,10" Command="{Binding SaveJobCommand}" HorizontalAlignment="Left"/>
+        </StackPanel>
+
         <TabControl Grid.Row="1" Grid.Column="0">
             <TabItem Header="Base Cabinet">
                 <views:BaseCabinetView/>

@@ -7,6 +7,12 @@ namespace MVVM_Learning.ViewModels;
 
 public partial class CabinetListViewModel(ICabinetService cabinetService) : ObservableObject
 {
+    public CabinetListViewModel() : this(new CabinetService())
+    {
+        // empty constructor for design-time support
+    }
+
     [ObservableProperty]
-    public partial ObservableCollection<BaseCabinetModel> Cabinets { get; set; } = cabinetService.Cabinets; // Reference the shared collection
+    public partial ObservableCollection<CabinetModel> Cabinets { get; set; } = cabinetService.Cabinets; // Reference the shared collection
 }
+

@@ -31,7 +31,7 @@ public partial class UpperCabinetViewModel : ObservableObject
     [RelayCommand]
     private void AddCabinet()
     {
-        var newCabinet = new BaseCabinetModel
+        var newCabinet = new UpperCabinetModel
         {
             Width = Width,
             Height = Height,
