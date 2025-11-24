@@ -48,7 +48,7 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Width" HorizontalAlignment="Left" Margin="5,5,3,0"/>
-                    <TextBox x:Name="textWidthBase" Width="60" Text="{Binding WidthBaseCab, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox x:Name="textWidthBase" Width="60" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
 												 HorizontalAlignment="Right" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -57,7 +57,7 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="textHeightBase" Width="60" Text="{Binding HeightBaseCab, UpdateSourceTrigger=PropertyChanged}" 
+                    <TextBox x:Name="textHeightBase" Width="60" Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" 
 												 HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
@@ -67,7 +67,7 @@
                 <StackPanel Orientation="Horizontal">
 
                     <Label Content="Depth" Margin="5,0,4,0" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="textDepthBase" Width="60" Text="{Binding DepthBaseCab, UpdateSourceTrigger=PropertyChanged}" 
+                    <TextBox x:Name="textDepthBase" Width="60" Text="{Binding Depth, UpdateSourceTrigger=PropertyChanged}" 
 												 HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -83,7 +83,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                     <Label Content="Left Front Width" HorizontalAlignment="Left" Margin="5,5,0,0"/>
                     <TextBox x:Name="textLeftFrontWidthBase" Width="65" VerticalAlignment="Center" Margin="12,0,0,0" 
-                                         Text="{Binding LeftFrontWidthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                         Text="{Binding LeftFrontWidth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -93,7 +93,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Right Front Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textRightFrontWidthBase" Width="65"  VerticalAlignment="Center" Margin="3,0,0,0" 
-                                         Text="{Binding RightFrontWidthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                         Text="{Binding RightFrontWidth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -103,7 +103,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                     <Label Content="Left Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textLeftDepthBase" Width="65"  VerticalAlignment="Center" Margin="48,0,0,0" 
-                                         Text="{Binding LeftDepthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                         Text="{Binding LeftDepth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -113,7 +113,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Right Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textRightDepthBase" Width="65" VerticalAlignment="Center" Margin="38,0,0,0" 
-                                         Text="{Binding RightDepthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                         Text="{Binding RightDepth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -132,7 +132,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textHeightCornerBase" Width="65"  VerticalAlignment="Center" Margin="71,0,0,0" 
-                                         Text="{Binding HeightBaseCab, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                         Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -148,7 +148,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                     <Label Content="Left Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textLeftDepth45Base" Width="65" VerticalAlignment="Center" Margin="48,0,0,0"
-                                         Text="{Binding LeftDepthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                         Text="{Binding LeftDepth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -158,7 +158,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Right Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textRightDepth45Base" Width="65" VerticalAlignment="Center" Margin="38,0,0,0" 
-                                                 Text="{Binding RightDepthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                                 Text="{Binding RightDepth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -168,7 +168,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                     <Label Content="Left Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textLeftBackWidth45Base" Width="65" VerticalAlignment="Center" Margin="16,0,0,0" 
-                                                 Text="{Binding LeftBackWidthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                                 Text="{Binding LeftBackWidth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -178,7 +178,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Right Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textRightBackWidth45Base" Width="65" VerticalAlignment="Center" Margin="7,0,0,0" 
-                                                 Text="{Binding RightBackWidthBase, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                                 Text="{Binding RightBackWidth, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -192,7 +192,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textHeightCorner45Base" Width="65" VerticalAlignment="Center" Margin="71,0,0,0" 
-                                                 Text="{Binding HeightBaseCab, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                                 Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
@@ -226,7 +226,7 @@
         <GroupBox Grid.Row="0" Grid.Column="2" Header="Species" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="210">
             <StackPanel Orientation="Vertical">
                 <Label Content="Species:" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboBaseCabinetSpecies" Margin="5" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding BaseSpecies}" HorizontalAlignment="Left" Width="190"/>
+                <ComboBox Name="comboBaseCabinetSpecies" Margin="5" ItemsSource="{Binding Path={StaticResource }}" SelectedItem="{Binding BaseSpecies}" HorizontalAlignment="Left" Width="190"/>
                 <Label Content="Edgebanding" Margin="0,0,0,-8"/>
                 <ComboBox Name="comboBaseEBSpecies" Margin="5" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding BaseEdgebanding}" HorizontalAlignment="Left" Width="190"/>
                 <Label Content="Door / Drw. Front Species:"/>

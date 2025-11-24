@@ -101,10 +101,59 @@ public partial class BaseCabinetViewModel : ObservableObject
     // Combobox options
     public List<int> ComboShelfCount { get; } = [0, 1, 2, 3, 4, 5];
     public static List<string> TypeList => [Type1, Type2, Type3, Type4];
+    public List<string> ListDrawerStyle { get; } =
+    [
+        "Blum Tandem H/Equivalent Undermount",
+        "Accuride/Equivalent Sidemount"
+    ];
+    public List<int> ListDoorCount { get; } =
+    [
+        0,
+        1,
+        2
+    ];
+    public List<string> ListGrainDirection { get; } =
+    [
+        "Horizontal",
+        "Vertical"
+    ];
 
 
 
     // Visibility properties
+    [ObservableProperty] public partial bool GroupBaseDoorsVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupDrawersVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupDoorDrwFrontsVisibility { get; set; }
+    [ObservableProperty] public partial bool StdOrDrwBaseVisibility { get; set; }
+    [ObservableProperty] public partial bool BaseCorner90Visibility { get; set; }
+    [ObservableProperty] public partial bool BaseCorner45Visibility { get; set; }
+    [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupShelvesBaseVisibility { get; set; }
+    [ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
+    [ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
+    [ObservableProperty] public partial bool DrwFrontHeight3Enabled { get; set; }
+    [ObservableProperty] public partial bool BaseShowRevealSettings { get; set; }
+    [ObservableProperty] public partial bool DrwFront1Visible { get; set; }
+    [ObservableProperty] public partial bool DrwFront2Visible { get; set; }
+    [ObservableProperty] public partial bool DrwFront3Visible { get; set; }
+    [ObservableProperty] public partial bool DrwFront4Visible { get; set; }
+    [ObservableProperty] public partial bool DrwFront1PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrwFront2PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrwFront3PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrwFront4PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening1Visible { get; set; }
+    [ObservableProperty] public partial bool Opening2Visible { get; set; }
+    [ObservableProperty] public partial bool Opening3Visible { get; set; }
+    [ObservableProperty] public partial bool Opening4Visible { get; set; }
+    [ObservableProperty] public partial bool Opening1PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening2PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening3PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
+
+
+
+
 
 
     [RelayCommand]
