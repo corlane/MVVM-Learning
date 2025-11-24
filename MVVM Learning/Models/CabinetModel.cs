@@ -19,6 +19,9 @@ public abstract partial class CabinetModel : ObservableObject
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty] public partial int Qty { get; set; }
+    [ObservableProperty] public partial string Notes { get; set; } = "";
+
 
     // Optional: Add shared methods, e.g., CalculateVolume() if needed
+
 }

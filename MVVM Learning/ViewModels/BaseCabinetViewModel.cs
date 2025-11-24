@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using MVVM_Learning.Models;
 using MVVM_Learning.Services;
+using System.Collections.ObjectModel;
 
 namespace MVVM_Learning.ViewModels;
 
@@ -33,6 +34,7 @@ public partial class BaseCabinetViewModel : ObservableObject
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty] public partial int Qty { get; set; }
+    [ObservableProperty] public partial string Notes { get; set; } = "";
 
     // Type-specific properties for BaseCabinetModel
     [ObservableProperty] public partial string LeftBackWidth { get; set; } = "";
@@ -117,8 +119,55 @@ public partial class BaseCabinetViewModel : ObservableObject
         "Horizontal",
         "Vertical"
     ];
-
-
+    public List<string> ListCabSpecies { get; } =
+[
+    "Prefinished Ply",
+        "Maple Ply",
+        "Red Oak Ply",
+        "White Oak Ply",
+        "Cherry Ply",
+        "Alder Ply",
+        "Mahogany Ply",
+        "Walnut Ply",
+        "Hickory Ply",
+        "MDF",
+        "Melamine",
+        "Custom"
+];
+    public List<string> ListEBSpecies { get; } =
+    [
+        "None",
+        "PVC White",
+        "PVC Black",
+        "PVC Hardrock Maple",
+        "PVC Paint Grade",
+        "Wood Prefinished Maple",
+        "Wood Maple",
+        "Wood Red Oak",
+        "Wood White Oak",
+        "Wood Walnut",
+        "Wood Cherry",
+        "Wood Alder",
+        "Wood Hickory",
+        "Wood Mahogany",
+        "Custom"
+    ];
+    public List<string> ListShelfDepth { get; } =
+        [
+            "Half Depth",
+            "Full Depth"
+        ];
+    public List<string> ListBackThickness { get; } =
+        [
+            "0.25",
+            "0.75"
+        ];
+    public List<string> ListTopType { get; } =
+        [
+            "Stretcher",
+            "Full"
+        ];
+    public ObservableCollection<int> ListDrwCount { get; set; } = [];
 
     // Visibility properties
     [ObservableProperty] public partial bool GroupBaseDoorsVisibility { get; set; }
@@ -168,6 +217,7 @@ public partial class BaseCabinetViewModel : ObservableObject
             EBSpecies = EBSpecies,
             Name = Name,
             Qty = Qty,
+            Notes = Notes,
 
             TKHeight = TKHeight,  // Subtype-specific
             Type = Type,
