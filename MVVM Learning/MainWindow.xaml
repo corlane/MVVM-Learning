@@ -10,6 +10,7 @@
         Title="MainWindow" 
         Height="1000" Width="1800"
         MinHeight="1000" MinWidth="1800"
+        Background="DarkGray"
         >
 
     <!-- Design-time DataContext (add this block) -->
@@ -32,7 +33,7 @@
             <Button Content="Save Job" Width="150" Height="50" Margin="30,10,10,10" Command="{Binding SaveJobCommand}" HorizontalAlignment="Left"/>
         </StackPanel>
 
-        <TabControl Grid.Row="1" Grid.Column="0">
+        <TabControl Grid.Row="1" Grid.Column="0" Background="LightGray">
             <TabItem Header="Base Cabinet">
                 <views:BaseCabinetView/>
             </TabItem>
@@ -49,7 +50,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <views:CabinetListView Grid.Column="0" Grid.Row="1"/>
+            <views:CabinetListView Grid.Column="0" Grid.Row="1" Background="LightGray"/>
 
         </Grid>
         

@@ -12,6 +12,7 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+
         base.OnStartup(e);
 
         var host = Host.CreateDefaultBuilder()
@@ -33,6 +34,9 @@ public partial class App : Application
         // Set MainWindow DataContext
         var mainWindow = new MainWindow
         {
+//#pragma warning disable WPF0001
+//            ThemeMode = ThemeMode.System,
+//#pragma warning restore WPF0001
             DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
         };
         mainWindow.Show();
