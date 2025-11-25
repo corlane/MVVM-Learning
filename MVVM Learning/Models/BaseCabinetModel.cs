@@ -31,7 +31,7 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool IncDrwFronts { get; set; }
     [ObservableProperty] public partial bool IncDrwBoxesInList { get; set; }
     [ObservableProperty] public partial bool IncDrwBoxes { get; set; }
-    [ObservableProperty] public partial bool DrillDrwSlideMountingHoles { get; set; }
+    [ObservableProperty] public partial bool DrillSlideHoles { get; set; }
     [ObservableProperty] public partial int DrwCount { get; set; }
     [ObservableProperty] public partial string DrwStyle { get; set; }
     [ObservableProperty] public partial string OpeningHeight1 { get; set; } = "";
@@ -58,10 +58,10 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool IncDrwFront2 { get; set; }
     [ObservableProperty] public partial bool IncDrwFront3 { get; set; }
     [ObservableProperty] public partial bool IncDrwFront4 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList1 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList2 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList3 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList4 { get; set; }
+    [ObservableProperty] public partial bool IncDrwFrontInList1 { get; set; }
+    [ObservableProperty] public partial bool IncDrwFrontInList2 { get; set; }
+    [ObservableProperty] public partial bool IncDrwFrontInList3 { get; set; }
+    [ObservableProperty] public partial bool IncDrwFrontInList4 { get; set; }
     [ObservableProperty] public partial string LeftReveal { get; set; } = "";
     [ObservableProperty] public partial string RightReveal { get; set; } = "";
     [ObservableProperty] public partial string TopReveal { get; set; } = "";

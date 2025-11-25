@@ -10,9 +10,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
              d:Background="DarkGray"
-            
+             
              >
-    
+
     <!-- Design-time DataContext (so intellisense will work) -->
     <d:UserControl.DataContext>
         <viewmodels:BaseCabinetViewModel/>
@@ -23,7 +23,7 @@
         <Converters:BoolInverter x:Key="BoolInverter"/>
         <Converters:IndexConverter x:Key="ListViewIndexConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="155"/>
@@ -271,7 +271,7 @@
                 <Separator Margin="5,0,5,0"/>
                 <CheckBox x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}"/>
                 <CheckBox x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}"/>
-                <CheckBox x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillDrwSlideMountingHoles}"/>
+                <CheckBox x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}"/>
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Number of Drawers:" Margin="0,3,0,0"/>
@@ -348,7 +348,7 @@
                             <CheckBox x:Name="checkShowPropertiesDrwFront1" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront1PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <CheckBox x:Name="checkIncDrwFront1" Content="Supply Slab Drw. Front" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFront1}"/>
-                                <CheckBox x:Name="checkIncDrwFrontInListOpening1" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInSizeList1}"/>
+                                <CheckBox x:Name="checkIncDrwFrontInListOpening1" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInList1}"/>
                             </StackPanel>
                         </StackPanel>
 
@@ -359,7 +359,7 @@
                             <CheckBox x:Name="checkShowPropertiesDrwFront2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront2PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront2PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <CheckBox x:Name="checkIncDrwFront2" Content="Supply Slab Drw. Front" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFront2}"/>
-                                <CheckBox x:Name="checkIncDrwFrontInListOpening2" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInSizeList2}"/>
+                                <CheckBox x:Name="checkIncDrwFrontInListOpening2" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInList2}"/>
                             </StackPanel>
                         </StackPanel>
 
@@ -370,7 +370,7 @@
                             <CheckBox x:Name="checkShowPropertiesDrwFront3" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront3PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront3PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <CheckBox x:Name="checkIncDrwFront3" Content="Supply Slab Drw. Front" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFront3}"/>
-                                <CheckBox x:Name="checkIncDrwFrontInListOpening3" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInSizeList3}"/>
+                                <CheckBox x:Name="checkIncDrwFrontInListOpening3" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInList3}"/>
                             </StackPanel>
                         </StackPanel>
 
@@ -381,7 +381,7 @@
                             <CheckBox x:Name="checkShowPropertiesDrwFront4" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront4PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront4PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <CheckBox x:Name="checkIncDrwFront4" Content="Supply Slab Drw. Front" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFront4}"/>
-                                <CheckBox x:Name="checkIncDrwFrontInListOpening4" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInSizeList4}"/>
+                                <CheckBox x:Name="checkIncDrwFrontInListOpening4" Content="Include Drw. Front in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFrontInList4}"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -453,7 +453,7 @@
             <TextBox x:Name="textBaseCabNotes" Margin="10" IsReadOnly="False" TextWrapping="Wrap" Text="{Binding Notes}"/>
         </GroupBox>
 
-        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="5,65,5,5">
+        <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,169,25,0" Grid.RowSpan="2">
             <Label Content="Cabinet Name:" VerticalAlignment="Top" Margin="5,0,0,0"/>
             <TextBox x:Name="textBaseName" Width="150" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,5,0" 
                                  Text="{Binding Name}" GotFocus="TextBoxGotFocus"/>

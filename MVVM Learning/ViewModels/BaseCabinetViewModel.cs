@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using MVVM_Learning.ValidationAttributes;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MVVM_Learning.ViewModels;
 
@@ -17,7 +18,7 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
     }
 
     private readonly ICabinetService? _cabinetService;
-
+ 
     public BaseCabinetViewModel(ICabinetService cabinetService)
     {
         _cabinetService = cabinetService;
@@ -70,62 +71,270 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
     [ObservableProperty] public partial string Notes { get; set; } = "";
 
     // Type-specific properties for BaseCabinetModel
+
+    // Corner Cab specific properties
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = "";
+
+    [ObservableProperty] public partial string BackThickness { get; set; } = "";
+    [ObservableProperty] public partial string TopType { get; set; } = "";
+
+    // Toekick-specific properties
     [ObservableProperty] public partial bool HasTK { get; set; }
     [ObservableProperty] public partial string TKHeight { get; set; } = "";
     [ObservableProperty] public partial string TKDepth { get; set; } = "";
-    [ObservableProperty] public partial string DoorSpecies { get; set; } = "";
-    [ObservableProperty] public partial string BackThickness { get; set; } = "";
-    [ObservableProperty] public partial string TopType { get; set; } = "";
+
+    // Shelf-specific properties
     [ObservableProperty] public partial int ShelfCount { get; set; }
     [ObservableProperty] public partial string ShelfDepth { get; set; } = "";
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }
+
+    // Door-specific properties
+    [ObservableProperty] public partial string DoorSpecies { get; set; } = "";
     [ObservableProperty] public partial int DoorCount { get; set; }
+    [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
     [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";
     [ObservableProperty] public partial bool IncDoorsInList { get; set; }
     [ObservableProperty] public partial bool IncDoors { get; set; }
-    [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
-    [ObservableProperty] public partial string DrwFrontGrainDir { get; set; } = "";
-    [ObservableProperty] public partial bool IncDrwFrontsInList { get; set; }
-    [ObservableProperty] public partial bool IncDrwFronts { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxesInList { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxes { get; set; }
-    [ObservableProperty] public partial bool DrillDrwSlideMountingHoles { get; set; }
-    [ObservableProperty] public partial int DrwCount { get; set; }
+
+    // Drawer-specific properties
+    [ObservableProperty] public partial int DrwCount { get; set; } partial void OnDrwCountChanged(int oldValue, int newValue)
+    {
+        if (newValue != oldValue)
+        {
+            // Update visibility of drawer front height properties based on DrwCount
+            DrwFrontHeight1Enabled = newValue >= 1;
+            DrwFrontHeight2Enabled = newValue >= 2;
+            DrwFrontHeight3Enabled = newValue >= 3;
+            DrwFront1Visible = newValue >= 1;
+            DrwFront2Visible = newValue >= 2;
+            DrwFront3Visible = newValue >= 3;
+            DrwFront4Visible = newValue == 4;
+            Opening1Visible = newValue >= 1;
+            Opening2Visible = newValue >= 2;
+            Opening3Visible = newValue >= 3;
+            Opening4Visible = newValue == 4;
+        }
+    }
     [ObservableProperty] public partial string DrwStyle { get; set; } = "";
+    [ObservableProperty] public partial string DrwFrontGrainDir { get; set; } = "";
+    [ObservableProperty] public partial bool IncDrwFrontsInList { get; set; } partial void OnIncDrwFrontsInListChanged(bool oldValue, bool newValue)
+    {
+        if (newValue != oldValue)
+        {
+            if (IncDrwFrontsInList)
+            {
+                IncDrwFrontInList1 = true;
+                IncDrwFrontInList2 = true;
+                IncDrwFrontInList3 = true;
+                IncDrwFrontInList4 = true;
+            }
+            else
+            {
+                IncDrwFrontInList1 = false;
+                IncDrwFrontInList2 = false;
+                IncDrwFrontInList3 = false;
+                IncDrwFrontInList4 = false;
+            }
+        }
+    }
+    [ObservableProperty] public partial bool IncDrwFrontInList1 { get; set; } partial void OnIncDrwFrontInList1Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
+        { IncDrwFrontsInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwFrontInList2 { get; set; } partial void OnIncDrwFrontInList2Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
+        { IncDrwFrontsInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwFrontInList3 { get; set; } partial void OnIncDrwFrontInList3Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
+        { IncDrwFrontsInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwFrontInList4 { get; set; } partial void OnIncDrwFrontInList4Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
+        { IncDrwFrontsInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwFronts { get; set; } partial void OnIncDrwFrontsChanged(bool oldValue, bool newValue)
+    {
+        if (newValue != oldValue)
+        {
+            if (IncDrwFronts)
+            {
+                IncDrwFront1 = true;
+                IncDrwFront2 = true;
+                IncDrwFront3 = true;
+                IncDrwFront4 = true;
+            }
+            else
+            {
+                IncDrwFront1 = false;
+                IncDrwFront2 = false;
+                IncDrwFront3 = false;
+                IncDrwFront4 = false;
+            }
+        }
+    }
+    [ObservableProperty] public partial bool IncDrwFront1 { get; set; } partial void OnIncDrwFront1Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
+        { IncDrwFronts = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwFront2 { get; set; } partial void OnIncDrwFront2Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
+        { IncDrwFronts = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwFront3 { get; set; } partial void OnIncDrwFront3Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
+        { IncDrwFronts = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwFront4 { get; set; } partial void OnIncDrwFront4Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
+        { IncDrwFronts = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxesInList { get; set; } partial void OnIncDrwBoxesInListChanged(bool oldValue, bool newValue)
+    {
+        if (newValue != oldValue)
+        {
+            if (IncDrwBoxesInList)
+            {
+                IncDrwBoxInListOpening1 = true;
+                IncDrwBoxInListOpening2 = true;
+                IncDrwBoxInListOpening3 = true;
+                IncDrwBoxInListOpening4 = true;
+            }
+            else
+            {
+                IncDrwBoxInListOpening1 = false;
+                IncDrwBoxInListOpening2 = false;
+                IncDrwBoxInListOpening3 = false;
+                IncDrwBoxInListOpening4 = false;
+            }
+        }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxInListOpening1 { get; set; } partial void OnIncDrwBoxInListOpening1Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
+        { IncDrwBoxesInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxInListOpening2 { get; set; } partial void OnIncDrwBoxInListOpening2Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
+        { IncDrwBoxesInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxInListOpening3 { get; set; } partial void OnIncDrwBoxInListOpening3Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
+        { IncDrwBoxesInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxInListOpening4 { get; set; } partial void OnIncDrwBoxInListOpening4Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
+        { IncDrwBoxesInList = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxes { get; set; } partial void OnIncDrwBoxesChanged(bool oldValue, bool newValue)
+    {
+        if (newValue != oldValue)
+        {
+            if (IncDrwBoxes)
+            {
+                IncDrwBoxOpening1 = true;
+                IncDrwBoxOpening2 = true;
+                IncDrwBoxOpening3 = true;
+                IncDrwBoxOpening4 = true;
+            }
+            else
+            {
+                IncDrwBoxOpening1 = false;
+                IncDrwBoxOpening2 = false;
+                IncDrwBoxOpening3 = false;
+                IncDrwBoxOpening4 = false;
+            }
+        }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxOpening1 { get; set; } partial void OnIncDrwBoxOpening1Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
+        { IncDrwBoxes = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxOpening2 { get; set; } partial void OnIncDrwBoxOpening2Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
+        { IncDrwBoxes = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxOpening3 { get; set; } partial void OnIncDrwBoxOpening3Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
+        { IncDrwBoxes = false; }
+    }
+    [ObservableProperty] public partial bool IncDrwBoxOpening4 { get; set; } partial void OnIncDrwBoxOpening4Changed(bool oldValue, bool newValue)
+    {
+        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
+        { IncDrwBoxes = false; }
+    }
+    [ObservableProperty] public partial bool DrillSlideHoles { get; set; } partial void OnDrillSlideHolesChanged(bool oldValue, bool newValue)
+    {
+        if (!newValue)
+        {
+            DrillSlideHolesOpening1 = false;
+            DrillSlideHolesOpening2 = false;
+            DrillSlideHolesOpening3 = false;
+            DrillSlideHolesOpening4 = false;
+        }
+        else
+        {
+            DrillSlideHolesOpening1 = true;
+            DrillSlideHolesOpening2 = true;
+            DrillSlideHolesOpening3 = true;
+            DrillSlideHolesOpening4 = true;
+        }
+    }
+    [ObservableProperty] public partial bool DrillSlideHolesOpening1 { get; set; } partial void OnDrillSlideHolesOpening1Changed(bool oldValue, bool newValue)
+    {
+        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
+        {
+            DrillSlideHoles = false;
+        }
+    }
+    [ObservableProperty] public partial bool DrillSlideHolesOpening2 { get; set; } partial void OnDrillSlideHolesOpening2Changed(bool oldValue, bool newValue)
+    {
+        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
+        {
+            DrillSlideHoles = false;
+        }
+    }
+    [ObservableProperty] public partial bool DrillSlideHolesOpening3 { get; set; } partial void OnDrillSlideHolesOpening3Changed(bool oldValue, bool newValue)
+    {
+        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
+        {
+            DrillSlideHoles = false;
+        }
+    }
+    [ObservableProperty] public partial bool DrillSlideHolesOpening4 { get; set; } partial void OnDrillSlideHolesOpening4Changed(bool oldValue, bool newValue)
+    {
+        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
+        {
+            DrillSlideHoles = false;
+        }
+    }
     [ObservableProperty] public partial string OpeningHeight1 { get; set; } = "";
     [ObservableProperty] public partial string OpeningHeight2 { get; set; } = "";
     [ObservableProperty] public partial string OpeningHeight3 { get; set; } = "";
     [ObservableProperty] public partial string OpeningHeight4 { get; set; } = "";
-    [ObservableProperty] public partial bool IncDrwBoxOpening1 { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxOpening2 { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxOpening3 { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxOpening4 { get; set; }
-    [ObservableProperty] public partial bool DrillSlideHolesOpening1 { get; set; }
-    [ObservableProperty] public partial bool DrillSlideHolesOpening2 { get; set; }
-    [ObservableProperty] public partial bool DrillSlideHolesOpening3 { get; set; }
-    [ObservableProperty] public partial bool DrillSlideHolesOpening4 { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxInListOpening1 { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxInListOpening2 { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxInListOpening3 { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxInListOpening4 { get; set; } 
     [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = "";
-    [ObservableProperty] public partial bool IncDrwFront1 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFront2 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFront3 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFront4 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList1 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList2 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList3 { get; set; }
-    [ObservableProperty] public partial bool IncDrwFrontInSizeList4 { get; set; }
     [ObservableProperty] public partial string LeftReveal { get; set; } = "";
     [ObservableProperty] public partial string RightReveal { get; set; } = "";
     [ObservableProperty] public partial string TopReveal { get; set; } = "";
@@ -277,7 +486,7 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
             IncDrwFronts = IncDrwFronts,
             IncDrwBoxesInList = IncDrwBoxesInList,
             IncDrwBoxes = IncDrwBoxes,
-            DrillDrwSlideMountingHoles = DrillDrwSlideMountingHoles,
+            DrillSlideHoles = DrillSlideHoles,
             DrwCount = DrwCount,
             DrwStyle = DrwStyle,
             OpeningHeight1 = OpeningHeight1,
@@ -304,10 +513,10 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
             IncDrwFront2 = IncDrwFront2,
             IncDrwFront3 = IncDrwFront3,
             IncDrwFront4 = IncDrwFront4,
-            IncDrwFrontInSizeList1 = IncDrwFrontInSizeList1,
-            IncDrwFrontInSizeList2 = IncDrwFrontInSizeList2,
-            IncDrwFrontInSizeList3 = IncDrwFrontInSizeList3,
-            IncDrwFrontInSizeList4 = IncDrwFrontInSizeList4,
+            IncDrwFrontInList1 = IncDrwFrontInList1,
+            IncDrwFrontInList2 = IncDrwFrontInList2,
+            IncDrwFrontInList3 = IncDrwFrontInList3,
+            IncDrwFrontInList4 = IncDrwFrontInList4,
             LeftReveal = LeftReveal,
             RightReveal = RightReveal,
             TopReveal = TopReveal,

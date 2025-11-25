@@ -12,6 +12,7 @@
         Height="1000" Width="1800"
         MinHeight="1000" MinWidth="1800"
         Background="DarkGray"
+        
         >
 
     <!-- Design-time DataContext (add this block) -->
