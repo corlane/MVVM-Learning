@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using MVVM_Learning.Models;
 using MVVM_Learning.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace MVVM_Learning.ViewModels;
 
@@ -18,6 +19,8 @@ public partial class BaseCabinetViewModel : ObservableObject
     public BaseCabinetViewModel(ICabinetService cabinetService)
     {
         _cabinetService = cabinetService;
+
+        Type = Type1; // Default type
     }
 
     // Base cabinet type strings
@@ -26,7 +29,33 @@ public partial class BaseCabinetViewModel : ObservableObject
     public static string Type3 => "90° Corner";
     public static string Type4 => "45° Corner";
 
-    [ObservableProperty] public partial string Type { get; set; } = "";
+    // Common properties from CabinetModel
+    [ObservableProperty] public partial string Type { get; set; } = ""; partial void OnTypeChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            // Update visibility based on selected type
+            StdOrDrwBaseVisibility = (newValue == Type1 || newValue == Type2);
+            Corner90Visibility = (newValue == Type3);
+            Corner45Visibility = (newValue == Type4);
+            GroupShelvesVisibility = (newValue == Type1 || newValue == Type3 || newValue == Type4);
+            GroupDrawersVisibility = (newValue == Type1 || newValue == Type2);
+            GroupCabinetTopTypeVisibility = (newValue == Type1 || newValue == Type2);
+            GroupDrawerFrontHeightsVisibility = (newValue == Type1 || newValue == Type2);
+            GroupDoorsVisibility = (newValue == Type1 || newValue == Type3 || newValue == Type4);
+
+            if (newValue == Type2)
+            {
+                // Drawer cabinet selected
+                ListDrwCount = [1,2,3,4];
+            }
+            else if (newValue == Type1)
+            {
+                // Standard or corner cabinet selected
+                ListDrwCount = [0,1];
+            }
+        }
+    }
     [ObservableProperty] public partial string Width { get; set; } = "";
     [ObservableProperty] public partial string Height { get; set; } = "";
     [ObservableProperty] public partial string Depth { get; set; } = "";
@@ -167,18 +196,17 @@ public partial class BaseCabinetViewModel : ObservableObject
             "Stretcher",
             "Full"
         ];
-    public ObservableCollection<int> ListDrwCount { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<int> ListDrwCount { get; set; } = [];
 
     // Visibility properties
-    [ObservableProperty] public partial bool GroupBaseDoorsVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupDoorsVisibility { get; set; }
     [ObservableProperty] public partial bool GroupDrawersVisibility { get; set; }
-    [ObservableProperty] public partial bool GroupDoorDrwFrontsVisibility { get; set; }
     [ObservableProperty] public partial bool StdOrDrwBaseVisibility { get; set; }
-    [ObservableProperty] public partial bool BaseCorner90Visibility { get; set; }
-    [ObservableProperty] public partial bool BaseCorner45Visibility { get; set; }
+    [ObservableProperty] public partial bool Corner90Visibility { get; set; }
+    [ObservableProperty] public partial bool Corner45Visibility { get; set; }
     [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; }
     [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; }
-    [ObservableProperty] public partial bool GroupShelvesBaseVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight3Enabled { get; set; }

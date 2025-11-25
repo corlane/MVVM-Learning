@@ -78,7 +78,7 @@
         </GroupBox>
 
         <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseCorner90Dimensions" Header="Dimensions" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                              Visibility="{Binding BaseCorner90Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                              Visibility="{Binding Corner90Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
@@ -144,7 +144,7 @@
         </GroupBox>
 
         <GroupBox x:Name="groupBase45CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
-                              Visibility="{Binding BaseCorner45Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                              Visibility="{Binding Corner45Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                     <Label Content="Left Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
@@ -237,7 +237,7 @@
         </GroupBox>
 
         <GroupBox x:Name="groupBaseShelves" Grid.Row="0" Grid.Column="3" Header="Shelves" Margin="-15,5,5,30" VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                              Visibility="{Binding GroupShelvesBaseVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                              Visibility="{Binding GroupShelvesVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <ComboBox Name="comboShelvesBase" Width="80" HorizontalAlignment="Left" Margin="5"
                                       ItemsSource="{Binding ComboShelfCount}" SelectedItem="{Binding ShelfCount}"/>
@@ -390,7 +390,7 @@
         </GroupBox>
 
         <GroupBox x:Name="groupDoorsFronts" Grid.Row="1" Grid.Column="0" Header="Doors" Margin="5,0,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.RowSpan="3"
-                              Visibility="{Binding GroupBaseDoorsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                              Visibility="{Binding GroupDoorsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="No. of Doors:"/>
