@@ -109,7 +109,7 @@
 
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
                                        Visibility="{Binding (Validation.HasError), ElementName=textLeftDepthBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightFrontWidthBase, FallbackValue=''}"/>
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepthBase, FallbackValue=''}"/>
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Right Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>

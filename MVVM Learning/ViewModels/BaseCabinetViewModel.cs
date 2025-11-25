@@ -3,11 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 using MVVM_Learning.Models;
 using MVVM_Learning.Services;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.ComponentModel.DataAnnotations;
+using MVVM_Learning.ValidationAttributes;
+using System.ComponentModel;
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class BaseCabinetViewModel : ObservableObject
+public partial class BaseCabinetViewModel : ObservableValidator, INotifyPropertyChanged
 {
     public BaseCabinetViewModel()
     {
@@ -21,6 +23,8 @@ public partial class BaseCabinetViewModel : ObservableObject
         _cabinetService = cabinetService;
 
         Type = Type1; // Default type
+
+        ValidateAllProperties();
     }
 
     // Base cabinet type strings
@@ -56,9 +60,9 @@ public partial class BaseCabinetViewModel : ObservableObject
             }
         }
     }
-    [ObservableProperty] public partial string Width { get; set; } = "";
-    [ObservableProperty] public partial string Height { get; set; } = "";
-    [ObservableProperty] public partial string Depth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
@@ -66,12 +70,12 @@ public partial class BaseCabinetViewModel : ObservableObject
     [ObservableProperty] public partial string Notes { get; set; } = "";
 
     // Type-specific properties for BaseCabinetModel
-    [ObservableProperty] public partial string LeftBackWidth { get; set; } = "";
-    [ObservableProperty] public partial string RightBackWidth { get; set; } = "";
-    [ObservableProperty] public partial string LeftFrontWidth { get; set; } = "";
-    [ObservableProperty] public partial string RightFrontWidth { get; set; } = "";
-    [ObservableProperty] public partial string LeftDepth { get; set; } = "";
-    [ObservableProperty] public partial string RightDepth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = "";
     [ObservableProperty] public partial bool HasTK { get; set; }
     [ObservableProperty] public partial string TKHeight { get; set; } = "";
     [ObservableProperty] public partial string TKDepth { get; set; } = "";
