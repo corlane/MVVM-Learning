@@ -12,6 +12,8 @@ namespace MVVM_Learning.Models;
 public abstract partial class CabinetModel : ObservableObject
 {
     // These properties are common to all cabinet types
+    [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
+    [ObservableProperty] public partial double MaterialThickness14 { get; set; } = 0.25;
     [ObservableProperty] public partial string Width { get; set; } = "";
     [ObservableProperty] public partial string Height { get; set; } = "";
     [ObservableProperty] public partial string Depth { get; set; } = "";

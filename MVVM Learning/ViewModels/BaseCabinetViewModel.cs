@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MVVM_Learning.Converters;
 using MVVM_Learning.Models;
 using MVVM_Learning.Services;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using MVVM_Learning.ValidationAttributes;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MVVM_Learning.ViewModels;
@@ -62,7 +63,13 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
@@ -84,8 +91,14 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
     [ObservableProperty] public partial string TopType { get; set; } = "";
 
     // Toekick-specific properties
-    [ObservableProperty] public partial bool HasTK { get; set; }
-    [ObservableProperty] public partial string TKHeight { get; set; } = "";
+    [ObservableProperty] public partial bool HasTK { get; set; } partial void OnHasTKChanged(bool oldValue, bool newValue)
+    {
+        ResizeOpeningHeights();
+    }
+    [ObservableProperty] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
+    {
+        ResizeOpeningHeights();
+    }
     [ObservableProperty] public partial string TKDepth { get; set; } = "";
 
     // Shelf-specific properties
@@ -118,6 +131,7 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
             Opening2Visible = newValue >= 2;
             Opening3Visible = newValue >= 3;
             Opening4Visible = newValue == 4;
+            ResizeOpeningHeights();
         }
     }
     [ObservableProperty] public partial string DrwStyle { get; set; } = "";
@@ -327,14 +341,40 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
             DrillSlideHoles = false;
         }
     }
-    [ObservableProperty] public partial string OpeningHeight1 { get; set; } = "";
-    [ObservableProperty] public partial string OpeningHeight2 { get; set; } = "";
-    [ObservableProperty] public partial string OpeningHeight3 { get; set; } = "";
-    [ObservableProperty] public partial string OpeningHeight4 { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight1 { get; set; } = ""; partial void OnOpeningHeight1Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight2 { get; set; } = ""; partial void OnOpeningHeight2Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight3 { get; set; } = ""; partial void OnOpeningHeight3Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight4 { get; set; } = ""; partial void OnOpeningHeight4Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
     [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = "";
+
+    // Reveal and gap properties
     [ObservableProperty] public partial string LeftReveal { get; set; } = "";
     [ObservableProperty] public partial string RightReveal { get; set; } = "";
     [ObservableProperty] public partial string TopReveal { get; set; } = "";
@@ -442,10 +482,41 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
     [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
 
 
+    // Calculate opening heights based on drawer count and cabinet height
+    private void ResizeOpeningHeights()
+    {
+        const double MaterialThickness34 = 0.75; // 3/4" material thickness
+
+        double tkHeight = ConvertDimension.FractionToDouble(TKHeight!);
+        if (!HasTK) { tkHeight = 0; }
+        double height = ConvertDimension.FractionToDouble(Height);
+        double opening1Height = ConvertDimension.FractionToDouble(OpeningHeight1);
+        double opening2Height = ConvertDimension.FractionToDouble(OpeningHeight2);
+        double opening3Height = ConvertDimension.FractionToDouble(OpeningHeight3);
+        double opening4Height = ConvertDimension.FractionToDouble(OpeningHeight4);
+
+        if (DrwCount == 2)
+        {
+            opening2Height = height - tkHeight - (3 * MaterialThickness34) - opening1Height;
+            OpeningHeight2 = opening2Height.ToString();
+        }
+
+        if (DrwCount == 3)
+        {
+            opening3Height = height - tkHeight - (4 * MaterialThickness34) - opening1Height - opening2Height;
+            OpeningHeight3 = opening3Height.ToString();
+
+        }
+
+        if (DrwCount == 4)
+        {
+            opening4Height = height - tkHeight - (5 * MaterialThickness34) - opening1Height - opening2Height - opening3Height;
+            OpeningHeight4 = opening4Height.ToString();
+        }
+    }
 
 
-
-
+    // Commands
     [RelayCommand]
     private void AddCabinet()
     {
