@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MVVM_Learning.Views"
-             xmlns:viewmodels="clr-namespace:MVVM_Learning.ViewModels"           
+             xmlns:viewmodels="clr-namespace:MVVM_Learning.ViewModels"  
+             xmlns:Converters="clr-namespace:MVVM_Learning.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="900" d:DesignWidth="1200"
              d:Background="LightGray"
              >
 
@@ -15,12 +16,288 @@
         <viewmodels:UpperCabinetViewModel/>
     </d:UserControl.DataContext>
 
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Converters:BoolInverter x:Key="BoolInverter"/>
+        <Converters:IndexConverter x:Key="ListViewIndexConverter"/>
+    </UserControl.Resources>
+    
+    
     <Grid>
-        <StackPanel>
-            <TextBox x:Name="TextWidth" Margin="20" Text="{Binding Width}"/>
-            <TextBox x:Name="TextHeight" Margin="20" Text="{Binding Height}"/>
-            <TextBox x:Name="TextDepth" Margin="20" Text="{Binding Depth}"/>
-            <Button x:Name="ButtonAdd" Content="Add" Margin="20" Width="100" Command="{Binding AddCabinetCommand}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="170"/>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Grid.Column="0" Margin="5" Header="Upper Cabinet Type" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ComboBox Name="comboUpperCabType" Width="132" Margin="0,10,0,10" ItemsSource="{Binding ListUpperCabinetType}" SelectedValue="{Binding UpperCabType, UpdateSourceTrigger=PropertyChanged}"/>
+        </GroupBox>
+
+        <GroupBox x:Name="groupUpperDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
+                                      Visibility="{Binding UpperStandardDimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Width" HorizontalAlignment="Left" Margin="5,5,3,0"/>
+                    <TextBox x:Name="textWidthUpper" Width="50" HorizontalAlignment="Right" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"
+                                                 Text="{Binding WidthUpper, UpdateSourceTrigger=PropertyChanged}"/>
+
+                </StackPanel>
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textWidthUpper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textHeightUpper" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"
+                                                 Text="{Binding HeightUpper, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textHeightUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightUpper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Depth" Margin="5,0,4,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textDepthUpper" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"
+                                                 Text="{Binding DepthUpper, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textDepthUpper, FallbackValue=''}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox x:Name="groupUpper90CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
+                                      Visibility="{Binding UpperCorner90DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Left Front Width" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+                    <TextBox x:Name="textLeftFrontWidthUpper" Width="65" VerticalAlignment="Center" Margin="12,0,0,0" 
+                                                 Text="{Binding LeftFrontWidthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textLeftFrontWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftFrontWidthUpper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Right Front Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textRightFrontWidthUpper" Width="65"  VerticalAlignment="Center" Margin="3,0,0,0" 
+                                                 Text="{Binding RightFrontWidthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textRightFrontWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightFrontWidthUpper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Left Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textLeftDepthUpper" Width="65"  VerticalAlignment="Center" Margin="48,0,0,0" 
+                                                 Text="{Binding LeftDepthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textLeftDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepthUpper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Right Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textRightDepthUpper" Width="65" VerticalAlignment="Center" Margin="38,0,0,0" 
+                                                 Text="{Binding RightDepthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textRightDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepthUpper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Left Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textLeftBackWidthUpper" Width="65" Text="CALC" VerticalAlignment="Center" Margin="16,0,0,0" IsReadOnly="True" Background="LightGray"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Right Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textRightBackWidthUpper" Width="65" Text="CALC" VerticalAlignment="Center" Margin="6,0,0,0" IsReadOnly="True" Background="LightGray"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textHeightCornerUpper" Width="65"  VerticalAlignment="Center" Margin="71,0,0,0" 
+                                                 Text="{Binding HeightUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textHeightCornerUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCornerUpper, FallbackValue=''}"/>
+
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox x:Name="groupUpper45CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
+									      Visibility="{Binding UpperCorner45DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Left Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textLeftDepth45Upper" Width="65" VerticalAlignment="Center" Margin="48,0,0,0" 
+                                                 Text="{Binding LeftDepthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textLeftDepth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepth45Upper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Right Depth" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textRightDepth45Upper" Width="65" VerticalAlignment="Center" Margin="38,0,0,0" 
+                                                 Text="{Binding RightDepthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textRightDepth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepth45Upper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <Label Content="Left Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textLeftBackWidth45Upper" Width="65" VerticalAlignment="Center" Margin="16,0,0,0" 
+                                                 Text="{Binding LeftBackWidthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textLeftBackWidth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftBackWidth45Upper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Right Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textRightBackWidth45Upper" Width="65" VerticalAlignment="Center" Margin="7,0,0,0" 
+                                                 Text="{Binding RightBackWidthUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textRightBackWidth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightBackWidth45Upper, FallbackValue=''}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Front Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textFrontWidth45Upper" Width="65" Text="CALC" VerticalAlignment="Center" Margin="40,0,0,0" IsReadOnly="True" Background="LightGray"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>
+                    <TextBox x:Name="textHeightCorner45Upper" Width="65" VerticalAlignment="Center" Margin="71,0,0,0" 
+                                                 Text="{Binding HeightUpper, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
+                                               Visibility="{Binding (Validation.HasError), ElementName=textHeightCorner45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCorner45Upper, FallbackValue=''}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Species" Grid.Row="0" Grid.Column="2" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <StackPanel Orientation="Vertical">
+                <Label Content="Species:" Margin="0,0,0,-8"/>
+                <ComboBox Name="comboUpperCabinetSpecies" Margin="5" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding UpperSpecies}"/>
+                <Label Content="Edgebanding" Margin="0,0,0,-8"/>
+                <ComboBox Name="comboUpperEBSpecies" Margin="5" Width="190" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding UpperEdgebanding}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Shelves" Grid.Row="0" Grid.Column="0" Margin="5,80,5,5" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical">
+                <ComboBox Name="comboShelvesUpper" Width="80" HorizontalAlignment="Left" Margin="5" 
+                                                      ItemsSource="{Binding DefaultShelves}" SelectedItem="{Binding UpperShelfCount}"/>
+                <CheckBox x:Name="checkDrillShelfHolesUpper" Content="Drill Shelf Holes" Margin="5" IsChecked="{Binding UpperDrillShelfHoles}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Back Thickness" Grid.Row="0" Grid.Column="0" Margin="5,170,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ComboBox x:Name="comboUpperBackThickness" Width="110" Margin="5" ItemsSource="{Binding ListBackThickness}" SelectedItem="{Binding UpperBackThickness}"/>
+        </GroupBox>
+
+        <GroupBox Header="Doors" Grid.Row="0" Grid.Column="2" Margin="5,140,5,5" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical">
+                <CheckBox x:Name="checkIncludeUpperDoorsInSizesList" Content="Include Doors In Door Sizes List" Margin="5" IsChecked="{Binding UpperIncDoorsInList}"/>
+                <CheckBox x:Name="checkIncludeUpperDoorsWithCabinet" Content="Include Slab Doors With Cabinet" Margin="5" IsChecked="{Binding UpperIncDoorsWithCab}"/>
+                <Label Content="Door Species:"/>
+                <ComboBox x:Name="comboUpperDoorSpecies" Margin="5,0,5,5" Width="150" HorizontalAlignment="Left" ItemsSource="{Binding ListCabSpecies}" 
+                                              SelectedItem="{Binding UpperDoorSpecies}"/>
+                <CheckBox x:Name="checkDrillUpperHingPlateHoles" Content="Drill Hinge Plate Mounting Holes" Margin="5" IsChecked="{Binding UpperDrillHingeHoles}"/>
+                <CheckBox x:Name="checkUpperFlushDoors" Content="Doors Flush w/ Top Of Cabinet" Margin="5" IsChecked="{Binding UpperFlushDoorsWithTop}"/>
+                <Label Content="Grain Direction:"/>
+                <ComboBox Name="comboUpperDoorGrainDir" Width="100" HorizontalAlignment="Left" Margin="5"
+                                          ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding UpperDoorGrainDirection}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Show Door Reveals:"/>
+                    <CheckBox x:Name="checkShowUpperRevealSettings" Margin="5" IsChecked="{Binding UpperShowRevealSettings}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Visibility="{Binding UpperShowRevealSettings, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Left Reveal" Grid.Row="0" Grid.Column="0" Margin="5" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="textUpperDoorLeftReveal" Grid.Row="0" Grid.Column="1" Margin="5" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding UpperDoorLeftReveal, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+
+                        <Label Content="Right Reveal" Grid.Row="1" Grid.Column="0" Margin="5" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="textUpperDoorRightReveal" Grid.Row="1" Grid.Column="1" Margin="5" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding UpperDoorRightReveal, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+
+                        <Label Content="Top Reveal" Grid.Row="2" Grid.Column="0" Margin="5" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="textUpperDoorTopReveal" Grid.Row="2" Grid.Column="1" Margin="5" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding UpperDoorTopReveal, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+
+                        <Label Content="Bottom Reveal" Grid.Row="3" Grid.Column="0" Margin="5" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="textUpperDoorBottomReveal" Grid.Row="3" Grid.Column="1" Margin="5" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding UpperDoorBottomReveal, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+
+                        <Label Content="Door/Drw." Grid.Row="0" Grid.Column="3" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                        <Label Content="Front Gaps" Grid.Row="1" Grid.Column="3" Margin="0,-8" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        <TextBox x:Name="textUpperDoorGaps" Grid.Row="2" Grid.Column="2" Margin="5,-18,5,5" Width="60" VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding UpperDoorGaps, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+
+        </GroupBox>
+
+        <GroupBox Header="Special instructions/notes for this item" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="270" Height="200" Margin="5" HorizontalAlignment="Left">
+            <TextBox x:Name="textUpperCabNotes" Margin="5" IsReadOnly="False" TextWrapping="Wrap" Text="{Binding UpperCabNotes}"/>
+        </GroupBox>
+
+        <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Right" Width="360" Margin="0,50,0,0">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Quantity:" Margin="5"/>
+                <TextBox x:Name="textQtyUpper" Width="40" Height="25" VerticalAlignment="Center" Margin="0" 
+                                             Text="{Binding UpperQty, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Name:" VerticalAlignment="Top" Margin="5"/>
+                <TextBox x:Name="textNameUpper" Width="140" Height="25" VerticalAlignment="Center" Margin="0" 
+                                             Text="{Binding UpperCabName}" GotFocus="TextBoxGotFocus"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="5">
+                <Button x:Name="buttonAddUpper" Content="Add to List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
+                                            Command="{Binding AddCabinetCommand}"/>
+                <Button x:Name="buttonUpdateUpper" Content="Update in List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
+                                            Command="{Binding UpdateCabinetCommand}"/>
+                <Button x:Name="buttonDeleteUpper" Content="Delete from List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
+                                            Command="{Binding DeleteCabinetCommand}"/>
+            </StackPanel>
         </StackPanel>
+
     </Grid>
 </UserControl>
