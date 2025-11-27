@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class BaseCabinetViewModel : ObservableValidator, INotifyPropertyChanged
+public partial class BaseCabinetViewModel : ObservableValidator
 {
     public BaseCabinetViewModel()
     {
@@ -452,34 +452,34 @@ public partial class BaseCabinetViewModel : ObservableValidator, INotifyProperty
     [ObservableProperty] public partial ObservableCollection<int> ListDrwCount { get; set; } = [];
 
     // Visibility properties
-    [ObservableProperty] public partial bool GroupDoorsVisibility { get; set; }
-    [ObservableProperty] public partial bool GroupDrawersVisibility { get; set; }
-    [ObservableProperty] public partial bool StdOrDrwBaseVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupDoorsVisibility { get; set; } = true;
+    [ObservableProperty] public partial bool GroupDrawersVisibility { get; set; } = true;
+    [ObservableProperty] public partial bool StdOrDrwBaseVisibility { get; set; } = true;
     [ObservableProperty] public partial bool Corner90Visibility { get; set; }
     [ObservableProperty] public partial bool Corner45Visibility { get; set; }
-    [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; }
-    [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; }
-    [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; }
+    [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; } = true;
+    [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = true;
+    [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = true;
     [ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight3Enabled { get; set; }
     [ObservableProperty] public partial bool BaseShowRevealSettings { get; set; }
-    [ObservableProperty] public partial bool DrwFront1Visible { get; set; }
-    [ObservableProperty] public partial bool DrwFront2Visible { get; set; }
-    [ObservableProperty] public partial bool DrwFront3Visible { get; set; }
-    [ObservableProperty] public partial bool DrwFront4Visible { get; set; }
-    [ObservableProperty] public partial bool DrwFront1PropertiesVisible { get; set; } = false;
-    [ObservableProperty] public partial bool DrwFront2PropertiesVisible { get; set; } = false;
-    [ObservableProperty] public partial bool DrwFront3PropertiesVisible { get; set; } = false;
-    [ObservableProperty] public partial bool DrwFront4PropertiesVisible { get; set; } = false;
-    [ObservableProperty] public partial bool Opening1Visible { get; set; }
-    [ObservableProperty] public partial bool Opening2Visible { get; set; }
-    [ObservableProperty] public partial bool Opening3Visible { get; set; }
-    [ObservableProperty] public partial bool Opening4Visible { get; set; }
-    [ObservableProperty] public partial bool Opening1PropertiesVisible { get; set; } = false;
-    [ObservableProperty] public partial bool Opening2PropertiesVisible { get; set; } = false;
-    [ObservableProperty] public partial bool Opening3PropertiesVisible { get; set; } = false;
-    [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrwFront1Visible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront2Visible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront3Visible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront4Visible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront1PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront2PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront3PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront4PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening1Visible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening2Visible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening3Visible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening4Visible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening1PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening2PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening3PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = true;
 
 
     // Calculate opening heights based on drawer count and cabinet height

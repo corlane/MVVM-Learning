@@ -6,9 +6,10 @@ namespace MVVM_Learning.Models;
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "Type")]  // JSON setup for subtypes
 [JsonDerivedType(typeof(BaseCabinetModel), "BaseCabinet")]
 [JsonDerivedType(typeof(UpperCabinetModel), "UpperCabinet")]
-//[JsonDerivedType(typeof(PanelModel), "Panel")]
-//[JsonDerivedType(typeof(FillerModel), "Filler")]
+[JsonDerivedType(typeof(FillerModel), "Filler")]
+[JsonDerivedType(typeof(PanelModel), "Panel")]
 // Add entries for future subtypes as you create them
+
 public abstract partial class CabinetModel : ObservableObject
 {
     // These properties are common to all cabinet types

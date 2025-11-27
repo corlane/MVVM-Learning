@@ -36,15 +36,23 @@
         </StackPanel>
 
         <TabControl Grid.Row="1" Grid.Column="0" Background="LightGray">
+            
             <TabItem Header="Base Cabinet">
                 <views:BaseCabinetView/>
             </TabItem>
+            
             <TabItem Header="Upper Cabinet">
                 <views:UpperCabinetView/>
             </TabItem>
-            <TabItem Header="Another View">
-                <!-- Another view can be placed here -->
+
+            <TabItem Header="Filler/End">
+                <views:FillerView/>
             </TabItem>
+
+            <TabItem Header="Panel">
+                <views:PanelView/>
+            </TabItem>
+            
         </TabControl>
 
         <Grid Grid.Row="1" Grid.Column="1">

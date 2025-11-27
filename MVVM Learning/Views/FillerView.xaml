@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="MVVM_Learning.Views.FillerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MVVM_Learning.Views"
+             xmlns:viewmodels="clr-namespace:MVVM_Learning.ViewModels"    
+             xmlns:Converters="clr-namespace:MVVM_Learning.Converters"
+             xmlns:Models="clr-namespace:MVVM_Learning.Models"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="1200"
+             d:Background="DarkGray"
+             
+             >
+
+    <!-- Design-time DataContext (so intellisense will work) -->
+    <d:UserControl.DataContext>
+        <viewmodels:BaseCabinetViewModel/>
+    </d:UserControl.DataContext>
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Converters:BoolInverter x:Key="BoolInverter"/>
+        <Converters:IndexConverter x:Key="ListViewIndexConverter"/>
+    </UserControl.Resources>
+    <Grid>
+            
+    </Grid>
+</UserControl>
