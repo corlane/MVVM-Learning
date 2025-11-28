@@ -19,7 +19,6 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Converters:BoolInverter x:Key="BoolInverter"/>
-        <Converters:IndexConverter x:Key="ListViewIndexConverter"/>
     </UserControl.Resources>
 
 
@@ -294,8 +293,6 @@
                                             Command="{Binding AddCabinetCommand}"/>
                 <Button x:Name="buttonUpdateUpper" Content="Update in List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
                                             Command="{Binding UpdateCabinetCommand}"/>
-                <Button x:Name="buttonDeleteUpper" Content="Delete from List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
-                                            Command="{Binding DeleteCabinetCommand}"/>
             </StackPanel>
         </StackPanel>
 

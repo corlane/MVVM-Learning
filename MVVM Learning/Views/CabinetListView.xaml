@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MVVM_Learning.Views"
              xmlns:viewmodels="clr-namespace:MVVM_Learning.ViewModels"
+             xmlns:converters="clr-namespace:MVVM_Learning.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:Background="LightGray"
@@ -15,17 +16,53 @@
         <viewmodels:CabinetListViewModel/>
     </d:UserControl.DataContext>
 
+    <UserControl.Resources>
+        <converters:AddOneConverter x:Key="AddOneConverter"/>
+    </UserControl.Resources>
 
     <Grid>
         <ListView x:Name="ListViewItems"
                   Margin="20" 
-                  Height="Auto" 
-                  ItemsSource="{Binding Cabinets}">
+                  Height="Auto"
+                  FontSize="14"
+                  ItemsSource="{Binding Cabinets}"
+                  AlternationCount="2147483647">
+            
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width}" Width="100"/>
-                    <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height}" Width="100"/>
-                    <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth}" Width="100"/>
+                    <GridViewColumn Header="#" Width="30">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource AddOneConverter}}"
+                                           TextAlignment="Center"
+                                           FontWeight="SemiBold"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    
+                    <GridViewColumn Header="Actions" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete"
+                                    Background="#FF6666"
+                                    Foreground="White"
+                                    Padding="8,2"
+                                    Margin="4"
+                                    Cursor="Hand"
+                                    Command="{Binding DataContext.DeleteCabinetCommand,RelativeSource={RelativeSource AncestorType=ListView}}"
+                                    CommandParameter="{Binding}"
+                                />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Qty" DisplayMemberBinding="{Binding Qty}" Width="Auto"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding CabinetType}" Width="Auto"/>
+                    <GridViewColumn Header="Style" DisplayMemberBinding="{Binding Type}" Width="Auto"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
+                    <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width}" Width="Auto"/>
+                    <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height}" Width="Auto"/>
+                    <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth}" Width="Auto"/>
                 </GridView>
             </ListView.View>
         </ListView>

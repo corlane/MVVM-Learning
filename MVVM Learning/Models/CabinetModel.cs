@@ -25,6 +25,15 @@ public abstract partial class CabinetModel : ObservableObject
     [ObservableProperty] public partial string Notes { get; set; } = "";
 
 
+    public virtual string CabinetType =>
+        this switch
+        {
+            BaseCabinetModel => "Base Cabinet",
+            UpperCabinetModel => "Upper Cabinet",
+            PanelModel => "Panel",
+            FillerModel => "Filler",
+            _ => "Unknown"
+        };
     // Optional: Add shared methods, e.g., CalculateVolume() if needed
 
 }

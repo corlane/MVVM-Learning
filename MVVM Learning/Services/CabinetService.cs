@@ -15,6 +15,12 @@ public class CabinetService : ICabinetService
         Cabinets.Add(cabinet);
     }
 
+    public void Remove(CabinetModel cabinet)
+    {
+        Cabinets.Remove(cabinet);
+    }
+
+
     public async Task SaveAsync(string filePath)
     {
         var options = new JsonSerializerOptions

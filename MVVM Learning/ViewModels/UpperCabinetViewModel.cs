@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using MVVM_Learning.Models;
 using MVVM_Learning.Services;
 using MVVM_Learning.ValidationAttributes;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MVVM_Learning.ViewModels;

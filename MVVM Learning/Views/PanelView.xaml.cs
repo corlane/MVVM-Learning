@@ -24,7 +24,6 @@ namespace MVVM_Learning.Views
         {
             InitializeComponent();
             DataContext = App.ServiceProvider.GetRequiredService<PanelViewModel>();
-
         }
 
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)
