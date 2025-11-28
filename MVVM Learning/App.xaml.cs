@@ -26,6 +26,8 @@ public partial class App : Application
                 services.AddTransient<BaseCabinetViewModel>();
                 services.AddTransient<UpperCabinetViewModel>();
                 services.AddTransient<CabinetListViewModel>();
+                services.AddTransient<FillerViewModel>();
+                services.AddTransient<PanelViewModel>();
             })
             .Build();
 
@@ -37,7 +39,9 @@ public partial class App : Application
 //#pragma warning disable WPF0001
 //            ThemeMode = ThemeMode.System,
 //#pragma warning restore WPF0001
+
             DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
+
         };
         mainWindow.Show();
     }

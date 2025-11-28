@@ -7,13 +7,17 @@ using System.Windows;
 
 namespace MVVM_Learning.ViewModels;
 
-public partial class MainWindowViewModel(ICabinetService cabinetService) : ObservableObject
+public partial class MainWindowViewModel(ICabinetService cabinetService) : ObservableValidator
 {
 
     public MainWindowViewModel() : this(new CabinetService())
     {
         // empty constructor for design-time support
+
     }
+
+    [ObservableProperty] public partial bool IsDarkMode { get; set; }
+    
 
     private readonly ICabinetService _cabinetService = cabinetService;
 

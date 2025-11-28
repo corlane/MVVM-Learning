@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MVVM_Learning.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,6 +23,19 @@ namespace MVVM_Learning.Views
         public PanelView()
         {
             InitializeComponent();
+            DataContext = App.ServiceProvider.GetRequiredService<PanelViewModel>();
+
         }
+
+        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                Dispatcher.BeginInvoke(() => textBox.SelectAll());
+            }
+
+            e.Handled = true;
+        }
+
     }
 }

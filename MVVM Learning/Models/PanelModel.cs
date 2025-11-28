@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MVVM_Learning.Models;
 
-public partial class PanelModel
+public partial class PanelModel : CabinetModel
 {
 
 }
