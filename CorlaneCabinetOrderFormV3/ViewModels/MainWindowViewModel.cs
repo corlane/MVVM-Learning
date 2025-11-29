@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
+using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using Microsoft.Win32;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -64,5 +65,30 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
                 MessageBox.Show($"Error loading job: {ex.Message}", "Error");
             }
         }
+    }
+
+    [ObservableProperty]
+    private CabinetModel? selectedCabinet;
+
+    [ObservableProperty]
+    public partial int SelectedTabIndex { get; set; }
+
+    partial void OnSelectedCabinetChanged(CabinetModel? value)
+    {
+        if (value == null)
+        {
+            SelectedTabIndex = 0;   // or whatever default you want
+            return;
+        }
+
+        // THIS IS THE ONLY PLACE THAT KNOWS ABOUT TYPES → tiny and forever
+        SelectedTabIndex = value switch
+        {
+            BaseCabinetModel => 0,
+            UpperCabinetModel => 1,
+            FillerModel => 2,
+            PanelModel => 3,
+            _ => SelectedTabIndex
+        };
     }
 }

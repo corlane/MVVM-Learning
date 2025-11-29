@@ -17,13 +17,23 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             // empty constructor for design-time support
         }
 
-        private readonly ICabinetService? _cabinetService;
+        // Example: BaseCabinetViewModel.cs (copy to all input VMs)
 
-        public PanelViewModel(ICabinetService cabinetService)
+        private readonly ICabinetService? _cabinetService;
+        private readonly MainWindowViewModel? _mainVm;
+
+        public PanelViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
         {
             _cabinetService = cabinetService;
+            _mainVm = mainVm;
 
-            ValidateAllProperties();
+            _mainVm.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+                    LoadSelectedIfMine();
+            };
+
+            LoadSelectedIfMine(); // initial
         }
 
 
@@ -79,6 +89,33 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         "Custom"
         ];
 
+        private void LoadSelectedIfMine()
+        {
+            if (_mainVm.SelectedCabinet is PanelModel panel)
+            {
+                Width = panel.Width;
+                Height = panel.Height;
+                Depth = panel.Depth;
+                Species = panel.Species;
+                Name = panel.Name;
+                Qty = panel.Qty;
+                Notes = panel.Notes;
+                PanelEBTop = panel.PanelEBTop;
+                PanelEBBottom = panel.PanelEBBottom;
+                PanelEBLeft = panel.PanelEBLeft;
+                PanelEBRight = panel.PanelEBRight;
+                PanelEBBottom = panel.PanelEBBottom;
+
+                // copy every property
+            }
+            else if (_mainVm.SelectedCabinet == null)
+            {
+                // Optional: clear fields when nothing selected
+                //Width = Height = Depth = ToeKickHeight = "";
+                // clear all
+            }
+        }
+
 
         [RelayCommand]
         private void AddCabinet()
@@ -102,5 +139,30 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         }
 
+        [RelayCommand]
+        private void UpdateCabinet()
+        {
+            if (_mainVm.SelectedCabinet is PanelModel selected)
+            {
+                selected.Width = Width;
+                selected.Height = Height;
+                selected.Depth = Depth;
+                selected.Species = Species;
+                selected.Name = Name;
+                selected.Qty = Qty;
+                selected.Notes = Notes;
+                selected.PanelEBTop = PanelEBTop;
+                selected.PanelEBBottom = PanelEBBottom;
+                selected.PanelEBLeft = PanelEBLeft;
+                selected.PanelEBRight = PanelEBRight;
+
+                // copy every property back
+
+                // No collection replace needed — bindings update instantly
+            }
+
+            // Optional: clear selection after update
+            _mainVm.SelectedCabinet = null;
+        }
     }
 }

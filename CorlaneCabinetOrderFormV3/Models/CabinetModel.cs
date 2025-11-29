@@ -36,4 +36,5 @@ public abstract partial class CabinetModel : ObservableObject
         };
     // Optional: Add shared methods, e.g., CalculateVolume() if needed
 
+
 }

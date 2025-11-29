@@ -26,6 +26,8 @@
                   Height="Auto"
                   FontSize="14"
                   ItemsSource="{Binding Cabinets}"
+                  SelectedItem="{Binding DataContext.SelectedCabinet, 
+                         RelativeSource={RelativeSource AncestorType=Window}}"
                   AlternationCount="2147483647">
             
             <ListView.View>

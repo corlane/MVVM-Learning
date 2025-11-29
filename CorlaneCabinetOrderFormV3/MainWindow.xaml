@@ -34,7 +34,7 @@
             <CheckBox Content="Theme" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
         </StackPanel>
 
-        <TabControl Grid.Row="1" Grid.Column="0">
+        <TabControl Grid.Row="1" Grid.Column="0" SelectedIndex="{Binding SelectedTabIndex}">
             
             <TabItem Header="Base Cabinet">
                 <views:BaseCabinetView/>

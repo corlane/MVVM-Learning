@@ -20,9 +20,10 @@ public partial class App : Application
             {
                 // Register the shared service as singleton
                 services.AddSingleton<ICabinetService, CabinetService>();
+                services.AddSingleton<MainWindowViewModel>();
 
                 // Register ViewModels as transients
-                services.AddTransient<MainWindowViewModel>();
+                //services.AddTransient<MainWindowViewModel>();
                 services.AddTransient<BaseCabinetViewModel>();
                 services.AddTransient<UpperCabinetViewModel>();
                 services.AddTransient<CabinetListViewModel>();

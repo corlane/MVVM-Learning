@@ -9,19 +9,29 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class UpperCabinetViewModel : ObservableValidator
 {
-    private readonly ICabinetService? _cabinetService;
 
     public UpperCabinetViewModel()
     {
         // empty constructor for design-time support
     }
 
-    public UpperCabinetViewModel(ICabinetService cabinetService)
+    private readonly ICabinetService? _cabinetService;
+    private readonly MainWindowViewModel? _mainVm;
+
+    public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
     {
         _cabinetService = cabinetService;
+        _mainVm = mainVm;
 
-        ValidateAllProperties();
+        _mainVm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+                LoadSelectedIfMine();
+        };
+
+        LoadSelectedIfMine(); // initial
     }
+
 
     // Upper cabinet type strings
     public static string Type1 => "Standard";
@@ -143,9 +153,123 @@ public partial class UpperCabinetViewModel : ObservableValidator
         {
             Width = Width,
             Height = Height,
-            Depth = Depth
+            Depth = Depth,
+            Species = Species,
+            EBSpecies = EBSpecies,
+            Name = Name,
+            Qty = Qty,
+            Notes = Notes,
+            Type = Type,
+            LeftBackWidth = LeftBackWidth,
+            RightBackWidth = RightBackWidth,
+            LeftFrontWidth = LeftFrontWidth,
+            RightFrontWidth = RightFrontWidth,
+            LeftDepth = LeftDepth,
+            RightDepth = RightDepth,
+            DoorSpecies = DoorSpecies,
+            BackThickness = BackThickness,
+            ShelfCount = ShelfCount,
+            DrillShelfHoles = DrillShelfHoles,
+            DoorCount = DoorCount,
+            DoorGrainDir = DoorGrainDir,
+            IncDoorsInList = IncDoorsInList,
+            IncDoors = IncDoors,
+            DrillHingeHoles = DrillHingeHoles,
+            LeftReveal = LeftReveal,
+            RightReveal = RightReveal,
+            TopReveal = TopReveal,
+            BottomReveal = BottomReveal,
+            GapWidth = GapWidth
         };
 
         _cabinetService?.Add(newCabinet); // Add to shared service
+    }
+
+    private void LoadSelectedIfMine()
+    {
+        if (_mainVm!.SelectedCabinet is UpperCabinetModel upperCab)
+        {
+            Width = upperCab.Width;
+            Height = upperCab.Height;
+            Depth = upperCab.Depth;
+            Species = upperCab.Species;
+            EBSpecies = upperCab.EBSpecies;
+            Name = upperCab.Name;
+            Qty = upperCab.Qty;
+            Notes = upperCab.Notes;
+            Type = upperCab.Type;
+            LeftBackWidth = upperCab.LeftBackWidth;
+            RightBackWidth = upperCab.RightBackWidth;
+            LeftFrontWidth = upperCab.LeftFrontWidth;
+            RightFrontWidth = upperCab.RightFrontWidth;
+            LeftDepth = upperCab.LeftDepth;
+            RightDepth = upperCab.RightDepth;
+            DoorSpecies = upperCab.DoorSpecies;
+            BackThickness = upperCab.BackThickness;
+            ShelfCount = upperCab.ShelfCount;
+            DrillShelfHoles = upperCab.DrillShelfHoles;
+            DoorCount = upperCab.DoorCount;
+            DoorGrainDir = upperCab.DoorGrainDir;   
+            IncDoorsInList = upperCab.IncDoorsInList;
+            IncDoors = upperCab.IncDoors;
+            DrillHingeHoles = upperCab.DrillHingeHoles;
+            LeftReveal = upperCab.LeftReveal;
+            RightReveal = upperCab.RightReveal;
+            TopReveal = upperCab.TopReveal;
+            BottomReveal = upperCab.BottomReveal;
+            GapWidth = upperCab.GapWidth;
+
+            // copy every property
+        }
+        else if (_mainVm.SelectedCabinet == null)
+        {
+            // Optional: clear fields when nothing selected
+            //Width = Height = Depth = ToeKickHeight = "";
+            // clear all
+        }
+    }
+
+    [RelayCommand]
+    private void UpdateCabinet()
+    {
+        if (_mainVm!.SelectedCabinet is UpperCabinetModel selected)
+        {
+            selected.Width = Width;
+            selected.Height = Height;
+            selected.Depth = Depth;
+            selected.Species = Species;
+            selected.EBSpecies = EBSpecies;
+            selected.Name = Name;
+            selected.Qty = Qty;
+            selected.Notes = Notes;
+            selected.Type = Type;
+            selected.LeftBackWidth = LeftBackWidth;
+            selected.RightBackWidth = RightBackWidth;
+            selected.LeftFrontWidth = LeftFrontWidth;
+            selected.RightFrontWidth = RightFrontWidth;
+            selected.LeftDepth = LeftDepth;
+            selected.RightDepth = RightDepth;
+            selected.DoorSpecies = DoorSpecies;
+            selected.BackThickness = BackThickness;
+            selected.ShelfCount = ShelfCount;
+            selected.DrillShelfHoles = DrillShelfHoles;
+            selected.DoorCount = DoorCount;
+            selected.DoorGrainDir = DoorGrainDir;
+            selected.IncDoorsInList = IncDoorsInList;
+            selected.IncDoors = IncDoors;
+            selected.DrillHingeHoles = DrillHingeHoles;
+            selected.LeftReveal = LeftReveal;
+            selected.RightReveal = RightReveal;
+            selected.TopReveal = TopReveal;
+            selected.BottomReveal = BottomReveal;
+            selected.GapWidth = GapWidth;
+
+            // copy every property back
+
+            // No collection replace needed — bindings update instantly
+        }
+
+        // Optional: clear selection after update
+        _mainVm.SelectedCabinet = null;
     }
 }

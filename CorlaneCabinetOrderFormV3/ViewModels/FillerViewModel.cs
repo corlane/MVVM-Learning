@@ -20,12 +20,43 @@ public partial class FillerViewModel : ObservableValidator
     }
 
     private readonly ICabinetService? _cabinetService;
+    private readonly MainWindowViewModel? _mainVm;
 
-    public FillerViewModel(ICabinetService cabinetService)
+    public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
     {
         _cabinetService = cabinetService;
+        _mainVm = mainVm;
 
-        ValidateAllProperties();
+        _mainVm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+                LoadSelectedIfMine();
+        };
+
+        LoadSelectedIfMine(); // initial
+    }
+
+    private void LoadSelectedIfMine()
+    {
+        if (_mainVm.SelectedCabinet is FillerModel filler)
+        {
+            Width = filler.Width;
+            Height = filler.Height;
+            Depth = filler.Depth;
+            Species = filler.Species;
+            EBSpecies = filler.EBSpecies;
+            Name = filler.Name;
+            Qty = filler.Qty;
+            Notes = filler.Notes;
+
+            // copy every property
+        }
+        else if (_mainVm.SelectedCabinet == null)
+        {
+            // Optional: clear fields when nothing selected
+            //Width = Height = Depth = ToeKickHeight = "";
+            // clear all
+        }
     }
 
 
@@ -94,4 +125,27 @@ public partial class FillerViewModel : ObservableValidator
         _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
     }
 
+
+    [RelayCommand]
+    private void UpdateCabinet()
+    {
+        if (_mainVm.SelectedCabinet is FillerModel selected)
+        {
+            selected.Width = Width;
+            selected.Height = Height;
+            selected.Depth = Depth;
+            selected.Species = Species;
+            selected.EBSpecies = EBSpecies;
+            selected.Name = Name;
+            selected.Qty = Qty;
+            selected.Notes = Notes;
+
+            // copy every property back
+
+            // No collection replace needed — bindings update instantly
+        }
+
+        // Optional: clear selection after update
+        _mainVm.SelectedCabinet = null;
+    }
 }
