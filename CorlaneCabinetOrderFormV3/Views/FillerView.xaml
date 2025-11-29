@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views"
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
@@ -22,7 +23,13 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Converters:BoolInverter x:Key="BoolInverter"/>
     </UserControl.Resources>
-    
+
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Loaded">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadDefaultsCommand}" />
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

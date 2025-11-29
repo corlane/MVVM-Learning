@@ -155,7 +155,7 @@ public partial class FillerViewModel : ObservableValidator
     }
 
 
-
+    [RelayCommand]
     private void LoadDefaults()
     {
         Species = _defaults!.DefaultSpecies;
