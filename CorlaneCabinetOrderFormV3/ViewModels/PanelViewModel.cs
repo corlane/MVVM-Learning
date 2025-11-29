@@ -34,6 +34,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             };
 
             LoadSelectedIfMine(); // initial
+
+            ValidateAllProperties();
         }
 
 
@@ -91,7 +93,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         private void LoadSelectedIfMine()
         {
-            if (_mainVm.SelectedCabinet is PanelModel panel)
+            if (_mainVm!.SelectedCabinet is PanelModel panel)
             {
                 Width = panel.Width;
                 Height = panel.Height;
@@ -142,7 +144,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         [RelayCommand]
         private void UpdateCabinet()
         {
-            if (_mainVm.SelectedCabinet is PanelModel selected)
+            if (_mainVm!.SelectedCabinet is PanelModel selected)
             {
                 selected.Width = Width;
                 selected.Height = Height;

@@ -30,6 +30,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         };
 
         LoadSelectedIfMine(); // initial
+
+        ValidateAllProperties();
     }
 
 

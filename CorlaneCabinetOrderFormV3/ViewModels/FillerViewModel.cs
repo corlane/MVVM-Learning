@@ -34,11 +34,13 @@ public partial class FillerViewModel : ObservableValidator
         };
 
         LoadSelectedIfMine(); // initial
+
+        ValidateAllProperties();
     }
 
     private void LoadSelectedIfMine()
     {
-        if (_mainVm.SelectedCabinet is FillerModel filler)
+        if (_mainVm!.SelectedCabinet is FillerModel filler)
         {
             Width = filler.Width;
             Height = filler.Height;
@@ -129,7 +131,7 @@ public partial class FillerViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (_mainVm.SelectedCabinet is FillerModel selected)
+        if (_mainVm!.SelectedCabinet is FillerModel selected)
         {
             selected.Width = Width;
             selected.Height = Height;

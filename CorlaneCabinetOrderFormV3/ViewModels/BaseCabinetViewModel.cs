@@ -21,15 +21,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
 
-    //public BaseCabinetViewModel(ICabinetService cabinetService)
-    //{
-    //    _cabinetService = cabinetService;
-
-    //    Type = Type1; // Default type
-
-    //    ValidateAllProperties();
-    //}
-
 
     // inject MainWindowViewModel (perfectly fine — it's the parent coordinator)
     public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
@@ -44,6 +35,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         };
 
         LoadSelectedIfMine(); // initial
+
+        ValidateAllProperties();
     }
 
 
@@ -533,10 +526,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
-
     private void LoadSelectedIfMine()
     {
-        if (_mainVm.SelectedCabinet is BaseCabinetModel baseCab)
+        if (_mainVm!.SelectedCabinet is BaseCabinetModel baseCab)
         {
             Width = baseCab.Width;
             Height = baseCab.Height;
@@ -705,7 +697,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (_mainVm.SelectedCabinet is BaseCabinetModel selected)
+        if (_mainVm!.SelectedCabinet is BaseCabinetModel selected)
         {
             selected.Width = Width;
             selected.Height = Height;
@@ -784,261 +776,4 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // Optional: clear selection after update
         _mainVm.SelectedCabinet = null;
     }
-
-
-
-
-
-
-
-
-
-
-
-    //private void TryLoadSelectedCabinet()
-    //{
-    //    if (_mainVm.SelectedCabinet is BaseCabinetModel baseCab)
-    //    {
-    //        // === EDIT MODE: copy from selected cabinet ===
-    //        Width = baseCab.Width;
-    //        Height = baseCab.Height;
-    //        Depth = baseCab.Depth;
-    //        Species = baseCab.Species;
-    //        EBSpecies = baseCab.EBSpecies;
-    //        Name = baseCab.Name;
-    //        Qty = baseCab.Qty;
-    //        Notes = baseCab.Notes;
-    //        TKHeight = baseCab.TKHeight;  // Subtype-specific
-    //        Type = baseCab.Type;
-    //        LeftBackWidth = baseCab.LeftBackWidth;
-    //        RightBackWidth = baseCab.RightBackWidth;
-    //        LeftFrontWidth = baseCab.LeftFrontWidth;
-    //        RightFrontWidth = baseCab.RightFrontWidth;
-    //        LeftDepth = baseCab.LeftDepth;
-    //        RightDepth = baseCab.RightDepth;
-    //        HasTK = baseCab.HasTK;
-    //        TKDepth = baseCab.TKDepth;
-    //        DoorSpecies = baseCab.DoorSpecies;
-    //        BackThickness = baseCab.BackThickness;
-    //        TopType = baseCab.TopType;
-    //        ShelfCount = baseCab.ShelfCount;
-    //        ShelfDepth = baseCab.ShelfDepth;
-    //        DrillShelfHoles = baseCab.DrillShelfHoles;
-    //        DoorCount = baseCab.DoorCount;
-    //        DoorGrainDir = baseCab.DoorGrainDir;
-    //        IncDoorsInList = baseCab.IncDoorsInList;
-    //        IncDoors = baseCab.IncDoors;
-    //        DrillHingeHoles = baseCab.DrillHingeHoles;
-    //        DrwFrontGrainDir = baseCab.DrwFrontGrainDir;
-    //        IncDrwFrontsInList = baseCab.IncDrwFrontsInList;
-    //        IncDrwFront1 = baseCab.IncDrwFront1;
-    //        IncDrwFront2 = baseCab.IncDrwFront2;
-    //        IncDrwFront3 = baseCab.IncDrwFront3;
-    //        IncDrwFront4 = baseCab.IncDrwFront4;
-    //        IncDrwBoxesInList = baseCab.IncDrwBoxesInList;
-    //        IncDrwBoxes = baseCab.IncDrwBoxes;
-    //        DrillSlideHoles = baseCab.DrillSlideHoles;
-    //        DrwCount = baseCab.DrwCount;
-    //        DrwStyle = baseCab.DrwStyle;
-    //        OpeningHeight1 = baseCab.OpeningHeight1;
-    //        OpeningHeight2 = baseCab.OpeningHeight2;
-    //        OpeningHeight3 = baseCab.OpeningHeight3;
-    //        OpeningHeight4 = baseCab.OpeningHeight4;
-    //        IncDrwBoxOpening1 = baseCab.IncDrwBoxOpening1;
-    //        IncDrwBoxOpening2 = baseCab.IncDrwBoxOpening2;
-    //        IncDrwBoxOpening3 = baseCab.IncDrwBoxOpening3;
-    //        IncDrwBoxOpening4 = baseCab.IncDrwBoxOpening4;
-    //        DrillSlideHolesOpening1 = baseCab.DrillSlideHolesOpening1;
-    //        DrillSlideHolesOpening2 = baseCab.DrillSlideHolesOpening2;
-    //        DrillSlideHolesOpening3 = baseCab.DrillSlideHolesOpening3;
-    //        DrillSlideHolesOpening4 = baseCab.DrillSlideHolesOpening4;
-    //        IncDrwBoxInListOpening1 = baseCab.IncDrwBoxInListOpening1;
-    //        IncDrwBoxInListOpening2 = baseCab.IncDrwBoxInListOpening2;
-    //        IncDrwBoxInListOpening3 = baseCab.IncDrwBoxInListOpening3;
-    //        IncDrwBoxInListOpening4 = baseCab.IncDrwBoxInListOpening4;
-    //        DrwFrontHeight1 = baseCab.DrwFrontHeight1;
-    //        DrwFrontHeight2 = baseCab.DrwFrontHeight2;
-    //        DrwFrontHeight3 = baseCab.DrwFrontHeight3;
-    //        DrwFrontHeight4 = baseCab.DrwFrontHeight4;
-    //        LeftReveal = baseCab.LeftReveal;
-    //        RightReveal = baseCab.RightReveal;
-    //        TopReveal = baseCab.TopReveal;
-    //        BottomReveal = baseCab.BottomReveal;
-    //        GapWidth = baseCab.GapWidth;
-
-    //        // copy every property
-    //    }
-    //    else if (_mainVm.SelectedCabinet == null)
-    //    {
-    //        // === ADD MODE: clear fields ===
-    //       // Width = Height = Depth = ToeKickHeight = "";
-    //        // clear all
-
-    //    }
-    //}
-
-    ////public enum EditMode { Add, Edit }
-
-
-    //// Single command works for both Add and Update
-    //[RelayCommand]
-    //private void SaveCabinet()
-    //{
-    //    if (CurrentMode == EditMode.Add)
-    //    {
-    //        var newCab = new BaseCabinetModel
-    //        {
-    //            Width = Width,
-    //            Height = Height,
-    //            Depth = Depth,
-    //            Species = Species,
-    //            EBSpecies = EBSpecies,
-    //            Name = Name,
-    //            Qty = Qty,
-    //            Notes = Notes,
-
-    //            TKHeight = TKHeight,  // Subtype-specific
-    //            Type = Type,
-    //            LeftBackWidth = LeftBackWidth,
-    //            RightBackWidth = RightBackWidth,
-    //            LeftFrontWidth = LeftFrontWidth,
-    //            RightFrontWidth = RightFrontWidth,
-    //            LeftDepth = LeftDepth,
-    //            RightDepth = RightDepth,
-    //            HasTK = HasTK,
-    //            TKDepth = TKDepth,
-    //            DoorSpecies = DoorSpecies,
-    //            BackThickness = BackThickness,
-    //            TopType = TopType,
-    //            ShelfCount = ShelfCount,
-    //            ShelfDepth = ShelfDepth,
-    //            DrillShelfHoles = DrillShelfHoles,
-    //            DoorCount = DoorCount,
-    //            DoorGrainDir = DoorGrainDir,
-    //            IncDoorsInList = IncDoorsInList,
-    //            IncDoors = IncDoors,
-    //            DrillHingeHoles = DrillHingeHoles,
-    //            DrwFrontGrainDir = DrwFrontGrainDir,
-    //            IncDrwFrontsInList = IncDrwFrontsInList,
-    //            IncDrwFronts = IncDrwFronts,
-    //            IncDrwBoxesInList = IncDrwBoxesInList,
-    //            IncDrwBoxes = IncDrwBoxes,
-    //            DrillSlideHoles = DrillSlideHoles,
-    //            DrwCount = DrwCount,
-    //            DrwStyle = DrwStyle,
-    //            OpeningHeight1 = OpeningHeight1,
-    //            OpeningHeight2 = OpeningHeight2,
-    //            OpeningHeight3 = OpeningHeight3,
-    //            OpeningHeight4 = OpeningHeight4,
-    //            IncDrwBoxOpening1 = IncDrwBoxOpening1,
-    //            IncDrwBoxOpening2 = IncDrwBoxOpening2,
-    //            IncDrwBoxOpening3 = IncDrwBoxOpening3,
-    //            IncDrwBoxOpening4 = IncDrwBoxOpening4,
-    //            DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
-    //            DrillSlideHolesOpening2 = DrillSlideHolesOpening2,
-    //            DrillSlideHolesOpening3 = DrillSlideHolesOpening3,
-    //            DrillSlideHolesOpening4 = DrillSlideHolesOpening4,
-    //            IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1,
-    //            IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2,
-    //            IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3,
-    //            IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4,
-    //            DrwFrontHeight1 = DrwFrontHeight1,
-    //            DrwFrontHeight2 = DrwFrontHeight2,
-    //            DrwFrontHeight3 = DrwFrontHeight3,
-    //            DrwFrontHeight4 = DrwFrontHeight4,
-    //            IncDrwFront1 = IncDrwFront1,
-    //            IncDrwFront2 = IncDrwFront2,
-    //            IncDrwFront3 = IncDrwFront3,
-    //            IncDrwFront4 = IncDrwFront4,
-    //            IncDrwFrontInList1 = IncDrwFrontInList1,
-    //            IncDrwFrontInList2 = IncDrwFrontInList2,
-    //            IncDrwFrontInList3 = IncDrwFrontInList3,
-    //            IncDrwFrontInList4 = IncDrwFrontInList4,
-    //            LeftReveal = LeftReveal,
-    //            RightReveal = RightReveal,
-    //            TopReveal = TopReveal,
-    //            BottomReveal = BottomReveal,
-    //            GapWidth = GapWidth
-    //            // etc.
-    //        };
-    //        _cabinetService.Add(newCab);
-    //    }
-    //    else // Edit mode
-    //    {
-    //        if (_mainVm.SelectedCabinet is BaseCabinetModel selected)
-    //        {
-    //            selected.Width = Width;
-    //            selected.Height = Height;
-    //            selected.Depth = Depth;
-    //            selected.Species = Species;
-    //            selected.EBSpecies = EBSpecies;
-    //            selected.Name = Name;
-    //            selected.Qty = Qty;
-    //            selected.Notes = Notes;
-    //            selected.TKHeight = TKHeight;  // Subtype-specific
-    //            selected.Type = Type;
-    //            selected.LeftBackWidth = LeftBackWidth;
-    //            selected.RightBackWidth = RightBackWidth;
-    //            selected.LeftFrontWidth = LeftFrontWidth;
-    //            selected.RightFrontWidth = RightFrontWidth;
-    //            selected.LeftDepth = LeftDepth;
-    //            selected.RightDepth = RightDepth;
-    //            selected.HasTK = HasTK;
-    //            selected.TKDepth = TKDepth;
-    //            selected.DoorSpecies = DoorSpecies;
-    //            selected.BackThickness = BackThickness;
-    //            selected.TopType = TopType;
-    //            selected.ShelfCount = ShelfCount;
-    //            selected.ShelfDepth = ShelfDepth;
-    //            selected.DrillShelfHoles = DrillShelfHoles;
-    //            selected.DoorCount = DoorCount;
-    //            selected.DoorGrainDir = DoorGrainDir;
-    //            selected.IncDoorsInList = IncDoorsInList;
-    //            selected.IncDoors = IncDoors;
-    //            selected.DrillHingeHoles = DrillHingeHoles;
-    //            selected.DrwFrontGrainDir = DrwFrontGrainDir;
-    //            selected.IncDrwFrontsInList = IncDrwFrontsInList;
-    //            selected.IncDrwFront1 = IncDrwFront1;
-    //            selected.IncDrwFront2 = IncDrwFront2;
-    //            selected.IncDrwFront3 = IncDrwFront3;
-    //            selected.IncDrwFront4 = IncDrwFront4;
-    //            selected.IncDrwBoxesInList = IncDrwBoxesInList;
-    //            selected.IncDrwBoxes = IncDrwBoxes;
-    //            selected.DrillSlideHoles = DrillSlideHoles;
-    //            selected.DrwCount = DrwCount;
-    //            selected.DrwStyle = DrwStyle;
-    //            selected.OpeningHeight1 = OpeningHeight1;
-    //            selected.OpeningHeight2 = OpeningHeight2;
-    //            selected.OpeningHeight3 = OpeningHeight3;
-    //            selected.OpeningHeight4 = OpeningHeight4;
-    //            selected.IncDrwBoxOpening1 = IncDrwBoxOpening1;
-    //            selected.IncDrwBoxOpening2 = IncDrwBoxOpening2;
-    //            selected.IncDrwBoxOpening3 = IncDrwBoxOpening3;
-    //            selected.IncDrwBoxOpening4 = IncDrwBoxOpening4;
-    //            selected.DrillSlideHolesOpening1 = DrillSlideHolesOpening1;
-    //            selected.DrillSlideHolesOpening2 = DrillSlideHolesOpening2;
-    //            selected.DrillSlideHolesOpening3 = DrillSlideHolesOpening3;
-    //            selected.DrillSlideHolesOpening4 = DrillSlideHolesOpening4;
-    //            selected.IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1;
-    //            selected.IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2;                    
-    //            selected.IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3;
-    //            selected.IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4;
-    //            selected.DrwFrontHeight1 = DrwFrontHeight1;
-    //            selected.DrwFrontHeight2 = DrwFrontHeight2;
-    //            selected.DrwFrontHeight3 = DrwFrontHeight3;
-    //            selected.DrwFrontHeight4 = DrwFrontHeight4;
-    //            selected.LeftReveal = LeftReveal;
-    //            selected.RightReveal = RightReveal;
-    //            selected.TopReveal = TopReveal;
-    //            selected.BottomReveal = BottomReveal;
-    //            selected.GapWidth = GapWidth;
-
-    //            // copy every property back
-
-    //        }
-    //    }
-
-    //    // Return to clean add mode
-    //    _mainVm.SelectedCabinet = null;
-    //}
 }
