@@ -10,7 +10,7 @@ public partial class App : Application
 {
     public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
 
         base.OnStartup(e);
@@ -21,6 +21,7 @@ public partial class App : Application
                 // Register the shared service as singleton
                 services.AddSingleton<ICabinetService, CabinetService>();
                 services.AddSingleton<MainWindowViewModel>();
+                services.AddSingleton<DefaultSettingsService>();
 
                 // Register ViewModels as transients
                 //services.AddTransient<MainWindowViewModel>();
@@ -29,21 +30,21 @@ public partial class App : Application
                 services.AddTransient<CabinetListViewModel>();
                 services.AddTransient<FillerViewModel>();
                 services.AddTransient<PanelViewModel>();
+                services.AddTransient<DefaultSettingsViewModel>();
             })
             .Build();
 
         ServiceProvider = host.Services;
+        var defaults = ServiceProvider.GetRequiredService<DefaultSettingsService>();
+        await defaults.LoadAsync();
 
         // Set MainWindow DataContext
         var mainWindow = new MainWindow
         {
-//#pragma warning disable WPF0001
-//            ThemeMode = ThemeMode.System,
-//#pragma warning restore WPF0001
-
             DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
 
         };
         mainWindow.Show();
     }
+
 }

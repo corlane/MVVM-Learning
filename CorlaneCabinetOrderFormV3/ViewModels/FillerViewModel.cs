@@ -21,11 +21,13 @@ public partial class FillerViewModel : ObservableValidator
 
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
+    private readonly DefaultSettingsService? _defaults;
 
-    public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
+    public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
+        _defaults = defaults;
 
         _mainVm.PropertyChanged += (_, e) =>
         {
@@ -34,6 +36,7 @@ public partial class FillerViewModel : ObservableValidator
         };
 
         LoadSelectedIfMine(); // initial
+        LoadDefaults();
 
         ValidateAllProperties();
     }
@@ -149,5 +152,14 @@ public partial class FillerViewModel : ObservableValidator
 
         // Optional: clear selection after update
         _mainVm.SelectedCabinet = null;
+    }
+
+
+
+    private void LoadDefaults()
+    {
+        Species = _defaults!.DefaultSpecies;
+        EBSpecies = _defaults.DefaultEBSpecies;
+        // etc.
     }
 }
