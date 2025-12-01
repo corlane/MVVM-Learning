@@ -25,5 +25,16 @@ namespace CorlaneCabinetOrderFormV3.Views
             InitializeComponent();
             DataContext = App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
         }
+
+        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                Dispatcher.BeginInvoke(() => textBox.SelectAll());
+            }
+
+            e.Handled = true;
+        }
+
     }
 }

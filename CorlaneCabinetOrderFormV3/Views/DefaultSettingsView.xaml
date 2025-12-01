@@ -29,12 +29,85 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
+
+        <GroupBox Header="Dimensions" Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical">
+                <ComboBox x:Name="comboDefaultDimensions" Margin="5" ItemsSource="{Binding ListDimensionFormat}" SelectedItem="{Binding DefaultDimensionFormat}" HorizontalAlignment="Left" Width="110"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Back Thickness" Grid.Row="0" Grid.Column="0" Margin="5,80,5,5" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical">
+                <Label Content="Base Cabinet:"/>
+                <ComboBox x:Name="comboDefaultBaseBackThickness" Margin="5" ItemsSource="{Binding ListBackThickness}" SelectedItem="{Binding DefaultBaseBackThickness}"/>
+                <Separator Margin="5,15,5,5"/>
+                <Label Content="Upper Cabinet:" Margin="0,5,0,0"/>
+                <ComboBox x:Name="comboDefaultUpperBackThickness" Margin="5" ItemsSource="{Binding ListBackThickness}" SelectedItem="{Binding DefaultUpperBackThickness}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Base Cabinet Top Type" Grid.Row="2" Grid.Column="2" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <ComboBox x:Name="comboDefaultTopType" Margin="5" ItemsSource="{Binding ListTopType}" SelectedItem="{Binding DefaultTopType}"/>
+        </GroupBox>
+
+        <GroupBox x:Name="groupDefaultDrawerFrontHeights" Grid.Row="2" Grid.Column="2" Header="Drw. Front Heights" Margin="5,80,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="65"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Top" VerticalAlignment="Top" Margin="5,0,0,0"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="textDefaultDrwFront1Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" 
+                                     Text="{Binding DefaultDrwFrontHeight1}" GotFocus="TextBoxGotFocus"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Second" VerticalAlignment="Top" Margin="5,0,0,0"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="textDefaultDrwFront2Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3"
+                                     Text="{Binding DefaultDrwFrontHeight2}" GotFocus="TextBoxGotFocus"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Third" VerticalAlignment="Top" Margin="5,0,0,0"/>
+                <TextBox Grid.Row="2" Grid.Column="1" x:Name="textDefaultDrwFront3Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3"
+                                     Text="{Binding DefaultDrwFrontHeight3}" GotFocus="TextBoxGotFocus"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox x:Name="groupDefaultOpeningHeights" Grid.Row="3" Grid.Column="2" Header="Opening Heights" Margin="5,-40,5,5" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="65"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Top" VerticalAlignment="Top" Margin="5,0,0,0"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="textDefaultOpening1Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" 
+                                     Text="{Binding DefaultOpeningHeight1}" GotFocus="TextBoxGotFocus"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Second" VerticalAlignment="Top" Margin="5,0,0,0"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="textDefaultOpening2Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3"
+                                     Text="{Binding DefaultOpeningHeight2}" GotFocus="TextBoxGotFocus"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Third" VerticalAlignment="Top" Margin="5,0,0,0"/>
+                <TextBox Grid.Row="2" Grid.Column="1" x:Name="textDefaultOpening3Height" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3"
+                                     Text="{Binding DefaultOpeningHeight3}" GotFocus="TextBoxGotFocus"/>
+            </Grid>
+        </GroupBox>
+
 
         <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" >
             <StackPanel Orientation="Vertical">
@@ -56,6 +129,142 @@
                 </ComboBox>
             </StackPanel>
         </GroupBox>
+
+        <GroupBox Header="Toekick" Grid.Row="1" Grid.Column="2" Margin="5,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical">
+                <CheckBox x:Name="defaultCheckHasTK" Margin="10" Content="Has Toekick" IsChecked="{Binding DefaultHasTK}"/>
+                <Label Content="Toekick Height" Margin="5,5,5,0" HorizontalAlignment="Left"/>
+                <TextBox x:Name="textDefaultTKHeight" Width="60" HorizontalAlignment="Left" Margin="12,0,5,0" GotFocus="TextBoxGotFocus" 
+                                         Text="{Binding DefaultTKHeight}"/>
+                <Label Content="Toekick Depth" Margin="5,5,5,0" HorizontalAlignment="Left"/>
+                <TextBox x:Name="textDefaultTKDepth" Width="60" HorizontalAlignment="Left" Margin="12,0,5,5" GotFocus="TextBoxGotFocus" 
+                                         Text="{Binding DefaultTKDepth}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Door Reveals" Grid.Row="1" Grid.Column="0" Margin="5,40,5,5" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                <Label Content="Base Cabinets:"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Left Reveal"/>
+                    <TextBox x:Name="textDefaultBaseDoorLeftReveal" Margin="5" Width="65" Text="{Binding DefaulBasetLeftReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Right Reveal"/>
+                    <TextBox x:Name="textDefaultBaseDoorRightReveal" Margin="5" Width="65" Text="{Binding DefaultBaseRightReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Top Reveal"/>
+                    <TextBox x:Name="textDefaultBaseDoorTopReveal" Margin="5" Width="65" Text="{Binding DefaultBaseTopReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Bottom Reveal"/>
+                    <TextBox x:Name="textDefaultBaseDoorBottomReveal" Margin="5" Width="65" Text="{Binding DefaultBaseBottomReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+                <Separator Margin="5,0,5,0"/>
+
+                <Label Content="Upper Cabinets:"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Left Reveal"/>
+                    <TextBox x:Name="textDefaultUpperDoorLeftReveal" Margin="5" Width="65" Text="{Binding DefaultUpperLeftReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Right Reveal"/>
+                    <TextBox x:Name="textDefaultUpperDoorRightReveal" Margin="5" Width="65" Text="{Binding DefaultUpperRightReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Top Reveal"/>
+                    <TextBox x:Name="textDefaultUpperDoorTopReveal" Margin="5" Width="65" Text="{Binding DefaultUpperTopReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Bottom Reveal"/>
+                    <TextBox x:Name="textDefaultUpperDoorBottomReveal" Margin="5" Width="65" Text="{Binding DefaultUpperBottomReveal}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+                <Separator Margin="5,0,5,5"/>
+                <Label Content="All Cabinets Door Gaps:"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Gaps"/>
+                    <TextBox x:Name="textDefaultUpperDoorGaps" Margin="5" Width="65" Text="{Binding DefaultGapWidth}" GotFocus="TextBoxGotFocus"/>
+                </StackPanel>
+
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Drawers" Grid.Row="2" Grid.Column="1" Margin="5 -45 20 5" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Std. Base:" Margin="0,0,0,-8"/>
+                        <ComboBox Name="comboDefaultStdDrws" Width="85" HorizontalAlignment="Left" Margin="5,5,60,5" 
+                                                  ItemsSource="{Binding ListStdDrwCount}" SelectedValue="{Binding DefaultStdDrawerCount}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Drawer Base:" Margin="0,0,0,-8"/>
+                        <ComboBox Name="comboDefaultDrwBaseDrws" Width="85" HorizontalAlignment="Left" Margin="5" 
+                                                  ItemsSource="{Binding ListDrwStackDrwCount}" SelectedValue="{Binding DefaultDrawerStackDrawerCount}"/>
+                    </StackPanel>
+                </StackPanel>
+                <CheckBox x:Name="checkDefaultDrillDrwSlideHoles" Content="Drill Drawer Slide Holes In Cabinet" Margin="5" 
+                                          IsChecked="{Binding DefaultDrillSlideHoles}"/>
+                <CheckBox x:Name="checkDefaultIncludeDrwBoxes" Content="Include Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding DefaultIncDrwBoxes}"/>
+                <Label Content="Drawer Style:"/>
+                <ComboBox x:Name="comboDefaultDrwStyle" Width="285" Margin="5" HorizontalAlignment="Left" ItemsSource="{Binding ListDrawerStyle}" SelectedValue="{Binding DefaultDrwStyle}"/>
+                <CheckBox x:Name="checkDefaultIncludeInDrwBoxSizeList" Content="Include Drawer Boxes in Drw Box Size List" Margin="5" 
+                                          IsChecked="{Binding DefaultIncDrwBoxesInList}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Doors/Drawer Fronts" Grid.Row="0" Grid.Column="1" Margin="5 140 20 5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2">
+            <StackPanel Orientation="Vertical">
+                <CheckBox x:Name="checkDefaultIncludeDoorsInSizesList" Content="Include Doors/Drw Fronts In Door Sizes List" Margin="5" 
+                                          IsChecked="{Binding DefaultIncDoorsInList}"/>
+                <CheckBox x:Name="checkDefaultIncludeDoorsWithCabinet" Content="Include Slab Doors/Drw Fronts With Cabinet" Margin="5" 
+                                          IsChecked="{Binding DefaultIncDoors}"/>
+                <Label Content="Doors/Drw Front Species:"/>
+                <ComboBox x:Name="comboDefaultDoorSpecies" Width="150" HorizontalAlignment="Left" Margin="5,0,5,5" 
+                                          ItemsSource="{Binding ListCabSpecies}" SelectedValue="{Binding DefaultDoorDrwSpecies}"/>
+                <CheckBox x:Name="checkDefaultDrillHingePlateHoles" Content="Drill Hinge Plate Mounting Holes In Cabinet" Margin="5" 
+                                          IsChecked="{Binding DefaultDrillHingeHoles}"/>
+
+                <Label Content="Door Grain Direction:"/>
+                <ComboBox Name="defaultComboBaseDoorGrainDir" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,5"
+                                          ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DefaultDoorGrainDir}"/>
+
+
+                <Label Content="Drawer Front Grain Direction:"/>
+                <ComboBox Name="defaultComboDrwGrainDir" Width="100" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,0,5"
+                                          ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DefaultDrwGrainDir}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Shelves" Grid.Row="0" Grid.Column="2" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" Height="170" Grid.RowSpan="2">
+            <StackPanel Orientation="Vertical">
+                <ComboBox x:Name="comboDefaultShelves" Width="80" HorizontalAlignment="Left" Margin="5" ItemsSource="{Binding ListShelfCount}" 
+                                          SelectedValue="{Binding DefaultShelfCount}"/>
+                <ComboBox x:Name="comboDefaultShelfDepth" Margin="5" ItemsSource="{Binding ListShelfDepth}" SelectedItem="{Binding DefaultShelfDepth}"/>
+                <CheckBox x:Name="checkDefaultDrillShelfHoles" Content="Drill Shelf Holes" Margin="5" IsChecked="{Binding DefaultDrillShelfHoles}"/>
+                <TextBlock Text="Shelf Depth only applies to Base cabinet types." Width="100" TextWrapping="Wrap" Margin="5"/>
+            </StackPanel>
+        </GroupBox>
+
+
+        <GroupBox Header="NOTES:" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"  Margin="5" FontSize="16" HorizontalAlignment="Left">
+            <TextBlock x:Name="textDefaultsNotes" HorizontalAlignment="Left" Height="Auto" TextWrapping="Wrap" Margin="5" Padding="5" FontSize="12">
+							Toekick Height only applies to base cabinets with integrated toekicks. It does not apply to "No Toekick" cabinets.
+							Toekick Depth does not include the thickness of any applied face frame or toekick skin board.
+                            <LineBreak/>
+                            <LineBreak/>
+
+                            IMPORTANT: Be sure you know what you are doing if you are setting custom door/drawer front reveal values. Incorrect values will result
+                            in incorrectly sized doors and drawer fronts!
+                            <LineBreak/>
+                            Corlane will not be held responsible for incorrect door/drw. front sizes as a result of deviating from our recommended values.
+            </TextBlock>
+        </GroupBox>
+
+
+
 
     </Grid>
     
