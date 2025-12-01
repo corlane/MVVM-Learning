@@ -1,13 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -160,6 +156,7 @@ public partial class FillerViewModel : ObservableValidator
     {
         Species = _defaults!.DefaultSpecies;
         EBSpecies = _defaults.DefaultEBSpecies;
+        
         // etc.
     }
 }

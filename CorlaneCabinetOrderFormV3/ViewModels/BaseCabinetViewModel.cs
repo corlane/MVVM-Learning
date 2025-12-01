@@ -20,13 +20,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
+    private readonly DefaultSettingsService? _defaults;
 
-
-    // inject MainWindowViewModel (perfectly fine — it's the parent coordinator)
-    public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
+    public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
+        _defaults = defaults;
 
         _mainVm.PropertyChanged += (_, e) =>
         {
@@ -35,6 +35,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         };
 
         LoadSelectedIfMine(); // initial
+        LoadDefaults();
 
         ValidateAllProperties();
     }
@@ -479,18 +480,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrwFront2Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront3Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront4Visible { get; set; } = true;
-    [ObservableProperty] public partial bool DrwFront1PropertiesVisible { get; set; } = true;
-    [ObservableProperty] public partial bool DrwFront2PropertiesVisible { get; set; } = true;
-    [ObservableProperty] public partial bool DrwFront3PropertiesVisible { get; set; } = true;
-    [ObservableProperty] public partial bool DrwFront4PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool DrwFront1PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrwFront2PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrwFront3PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrwFront4PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool Opening1Visible { get; set; } = true;
     [ObservableProperty] public partial bool Opening2Visible { get; set; } = true;
     [ObservableProperty] public partial bool Opening3Visible { get; set; } = true;
     [ObservableProperty] public partial bool Opening4Visible { get; set; } = true;
-    [ObservableProperty] public partial bool Opening1PropertiesVisible { get; set; } = true;
-    [ObservableProperty] public partial bool Opening2PropertiesVisible { get; set; } = true;
-    [ObservableProperty] public partial bool Opening3PropertiesVisible { get; set; } = true;
-    [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool Opening1PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening2PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening3PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
 
 
     // Calculate opening heights based on drawer count and cabinet height
@@ -775,5 +776,43 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         // Optional: clear selection after update
         _mainVm.SelectedCabinet = null;
+    }
+
+    [RelayCommand]
+    private void LoadDefaults()
+    {
+        Species = _defaults!.DefaultSpecies;
+        EBSpecies = _defaults.DefaultEBSpecies;
+        HasTK = _defaults!.DefaultHasTK;
+        TKHeight = _defaults!.DefaultTKHeight;
+        TKDepth = _defaults!.DefaultTKDepth;
+        DoorCount = _defaults!.DefaultDoorCount;
+        DoorGrainDir = _defaults!.DefaultDoorGrainDir;
+        IncDoorsInList = _defaults!.DefaultIncDoorsInList;
+        IncDoors = _defaults!.DefaultIncDoors;
+        DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
+        DoorSpecies = _defaults.DefaultDoorDrwSpecies;
+        BackThickness = _defaults.DefaultBaseBackThickness;
+        TopType = _defaults!.DefaultTopType;
+        ShelfCount = _defaults!.DefaultShelfCount;
+        ShelfDepth = _defaults!.DefaultShelfDepth;
+        DrillShelfHoles = _defaults!.DefaultDrillShelfHoles;
+        DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
+        IncDrwFrontsInList = _defaults!.DefaultIncDrwFrontsInList;
+        IncDrwFronts = _defaults!.DefaultIncDrwFronts;
+        IncDrwBoxesInList = _defaults!.DefaultIncDrwBoxesInList;
+        IncDrwBoxes = _defaults!.DefaultIncDrwBoxes;
+        DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
+        if (Type == Type1) { DrwCount = _defaults.DefaultStdDrawerCount; }
+        if (Type == Type2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
+        DrwStyle = _defaults!.DefaultDrwStyle;
+        OpeningHeight1 = _defaults!.DefaultOpeningHeight1;
+        OpeningHeight2 = _defaults!.DefaultOpeningHeight2;
+        OpeningHeight3 = _defaults!.DefaultOpeningHeight3;
+        DrwFrontHeight1 = _defaults!.DefaultDrwFrontHeight1;
+        DrwFrontHeight2 = _defaults!.DefaultDrwFrontHeight2;
+        DrwFrontHeight3 = _defaults!.DefaultDrwFrontHeight3;
+
+        // etc.
     }
 }

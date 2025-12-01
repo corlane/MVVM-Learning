@@ -30,7 +30,7 @@ public partial class DefaultSettingsService : ObservableObject
 
     // Shelves
     [ObservableProperty] public partial int DefaultShelfCount { get; set; } = 1;
-    [ObservableProperty] public partial string DefaultShelfDepth { get; set; } = "Half";
+    [ObservableProperty] public partial string DefaultShelfDepth { get; set; } = "Half Depth";
     [ObservableProperty] public partial bool DefaultDrillShelfHoles { get; set; } = true;
 
     // Openings

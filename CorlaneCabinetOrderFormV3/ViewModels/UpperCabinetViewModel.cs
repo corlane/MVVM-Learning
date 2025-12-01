@@ -17,11 +17,13 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
+    private readonly DefaultSettingsService? _defaults;
 
-    public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
+    public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
+        _defaults = defaults;
 
         _mainVm.PropertyChanged += (_, e) =>
         {
@@ -30,6 +32,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         };
 
         LoadSelectedIfMine(); // initial
+        LoadDefaults();
 
         ValidateAllProperties();
     }
@@ -272,6 +275,29 @@ public partial class UpperCabinetViewModel : ObservableValidator
         }
 
         // Optional: clear selection after update
-        _mainVm.SelectedCabinet = null;
+        //_mainVm.SelectedCabinet = null;
     }
+
+    [RelayCommand]
+    private void LoadDefaults()
+    {
+        Species = _defaults!.DefaultSpecies;
+        EBSpecies = _defaults.DefaultEBSpecies;
+        ShelfCount = _defaults.DefaultShelfCount;
+        DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
+        BackThickness = _defaults.DefaultUpperBackThickness;
+        DoorCount = _defaults.DefaultDoorCount;
+        IncDoors = _defaults.DefaultIncDoors;
+        IncDoorsInList = _defaults.DefaultIncDoorsInList;
+        DoorSpecies = _defaults.DefaultDoorDrwSpecies;
+        DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
+        DoorGrainDir = _defaults.DefaultDoorGrainDir;
+        LeftReveal = _defaults.DefaultUpperLeftReveal;
+        RightReveal = _defaults.DefaultUpperRightReveal;
+        TopReveal = _defaults.DefaultUpperTopReveal;
+        BottomReveal = _defaults.DefaultUpperBottomReveal;
+        GapWidth = _defaults.DefaultGapWidth;
+        // etc.
+    }
+
 }
