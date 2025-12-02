@@ -25,6 +25,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
 
+        // Subscribe to ALL property changes in this ViewModel
+        this.PropertyChanged += (_, __) => UpdatePreview();
+
         _mainVm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
@@ -232,6 +235,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
             //Width = Height = Depth = ToeKickHeight = "";
             // clear all
         }
+
+        UpdatePreview();
+
     }
 
     [RelayCommand]
@@ -298,6 +304,48 @@ public partial class UpperCabinetViewModel : ObservableValidator
         BottomReveal = _defaults.DefaultUpperBottomReveal;
         GapWidth = _defaults.DefaultGapWidth;
         // etc.
+    }
+
+
+    // For 3D model:
+
+    private void UpdatePreview()
+    {
+        _mainVm!.CurrentPreviewCabinet = new BaseCabinetModel
+        {
+            Width = Width,
+            Height = Height,
+            Depth = Depth,
+            Species = Species,
+            EBSpecies = EBSpecies,
+            Name = Name,
+            Qty = Qty,
+            Notes = Notes,
+            Type = Type,
+            LeftBackWidth = LeftBackWidth,
+            RightBackWidth = RightBackWidth,
+            LeftFrontWidth = LeftFrontWidth,
+            RightFrontWidth = RightFrontWidth,
+            LeftDepth = LeftDepth,
+            RightDepth = RightDepth,
+            DoorSpecies = DoorSpecies,
+            BackThickness = BackThickness,
+            ShelfCount = ShelfCount,
+            DrillShelfHoles = DrillShelfHoles,
+            DoorCount = DoorCount,
+            DoorGrainDir = DoorGrainDir,
+            IncDoorsInList = IncDoorsInList,
+            IncDoors = IncDoors,
+            DrillHingeHoles = DrillHingeHoles,
+            LeftReveal = LeftReveal,
+            RightReveal = RightReveal,
+            TopReveal = TopReveal,
+            BottomReveal = BottomReveal,
+            GapWidth = GapWidth
+
+            // ... copy EVERY property from fields to the preview model
+            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
+        };
     }
 
 }

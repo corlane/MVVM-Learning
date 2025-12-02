@@ -28,6 +28,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
 
+        // Subscribe to ALL property changes in this ViewModel
+        this.PropertyChanged += (_, __) => UpdatePreview();
+
         _mainVm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
@@ -610,6 +613,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             //Width = Height = Depth = ToeKickHeight = "";
             // clear all
         }
+
+        // Force preview rebuild after load
+        UpdatePreview();
     }
 
     // Commands
@@ -814,5 +820,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
         DrwFrontHeight3 = _defaults!.DefaultDrwFrontHeight3;
 
         // etc.
+    }
+
+    // For 3D model:
+    private void UpdatePreview()
+    {
+        _mainVm!.CurrentPreviewCabinet = new BaseCabinetModel
+        {
+            Width = Width,
+            Height = Height,
+            Depth = Depth,
+            // ... copy EVERY property from fields to the preview model
+            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
+        };
     }
 }

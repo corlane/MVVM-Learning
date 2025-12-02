@@ -67,8 +67,12 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
         }
     }
 
+
     [ObservableProperty]
-    private CabinetModel? selectedCabinet;
+    public partial CabinetModel? CurrentPreviewCabinet { get; set; }
+
+    [ObservableProperty]
+    public partial CabinetModel? SelectedCabinet { get; set; }
 
     [ObservableProperty]
     public partial int SelectedTabIndex { get; set; }
