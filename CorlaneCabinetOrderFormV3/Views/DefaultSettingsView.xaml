@@ -11,14 +11,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
              d:Background="DarkGray"
-             
              >
+    
     <Behaviors:Interaction.Triggers>
         <Behaviors:EventTrigger EventName="Unloaded">
             <Behaviors:InvokeCommandAction Command="{Binding SaveDefaultsCommand}" />
-        </Behaviors:EventTrigger>
-        <Behaviors:EventTrigger EventName="Loaded">
-            <Behaviors:InvokeCommandAction Command="{Binding LoadDefaultsCommand}" />
         </Behaviors:EventTrigger>
     </Behaviors:Interaction.Triggers>
 

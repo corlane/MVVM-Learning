@@ -80,16 +80,21 @@ public partial class DefaultSettingsService : ObservableObject
 
     public async Task LoadAsync()
     {
-        if (File.Exists(SettingsFile))
-        {
-            var json = await File.ReadAllTextAsync(SettingsFile);
-            var loaded = JsonSerializer.Deserialize<DefaultSettingsService>(json);
-            if (loaded != null)
-            {
+        if (!File.Exists(SettingsFile)) return;
 
-                DefaultSpecies = loaded.DefaultSpecies;
-                DefaultEBSpecies = loaded.DefaultEBSpecies;
-                // copy all
+        var json = await File.ReadAllTextAsync(SettingsFile);
+        var loaded = JsonSerializer.Deserialize<DefaultSettingsService>(json);
+
+        if (loaded == null) return;
+
+        foreach (var prop in typeof(DefaultSettingsService).GetProperties(
+                     System.Reflection.BindingFlags.Public |
+                     System.Reflection.BindingFlags.Instance))
+        {
+            if (prop.CanRead && prop.CanWrite)
+            {
+                var value = prop.GetValue(loaded);
+                prop.SetValue(this, value);
             }
         }
     }

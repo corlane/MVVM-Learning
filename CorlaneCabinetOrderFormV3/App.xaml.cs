@@ -31,6 +31,7 @@ public partial class App : Application
                 services.AddTransient<FillerViewModel>();
                 services.AddTransient<PanelViewModel>();
                 services.AddTransient<DefaultSettingsViewModel>();
+                services.AddTransient<Cabinet3DViewModel>();
             })
             .Build();
 

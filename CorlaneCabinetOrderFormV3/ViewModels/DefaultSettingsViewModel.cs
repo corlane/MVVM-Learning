@@ -165,35 +165,6 @@ public partial class DefaultSettingsViewModel : ObservableObject
         ];
 
 
-    [RelayCommand]
-    private void LoadDefaults()
-    {
-        DefaultDimensionFormat = _defaults!.DefaultDimensionFormat;
-        DefaultSpecies = _defaults!.DefaultSpecies;
-        DefaultEBSpecies = _defaults.DefaultEBSpecies;
-        DefaultTopType = _defaults!.DefaultTopType;
-        DefaultBaseBackThickness = _defaults!.DefaultBaseBackThickness;
-        DefaultUpperBackThickness = _defaults!.DefaultUpperBackThickness;
-        DefaultHasTK = _defaults!.DefaultHasTK;
-        DefaultTKHeight = _defaults!.DefaultTKHeight;
-        DefaultTKDepth = _defaults!.DefaultTKDepth;
-        DefaultShelfCount = _defaults!.DefaultShelfCount;
-        DefaultShelfDepth = _defaults!.DefaultShelfDepth;
-        DefaultDrillShelfHoles = _defaults!.DefaultDrillShelfHoles;
-        DefaultOpeningHeight1 = _defaults!.DefaultOpeningHeight1;
-        DefaultOpeningHeight2 = _defaults!.DefaultOpeningHeight2;
-        DefaultOpeningHeight3 = _defaults!.DefaultOpeningHeight3;
-        DefaultDoorDrwSpecies = _defaults!.DefaultDoorDrwSpecies;
-        DefaultDoorCount = _defaults!.DefaultDoorCount;
-        DefaultDrillHingeHoles = _defaults.DefaultDrillHingeHoles;
-        DefaultDoorGrainDir = _defaults!.DefaultDoorGrainDir;
-        DefaultIncDoorsInList = _defaults!.DefaultIncDoorsInList;
-        DefaultIncDoors = _defaults!.DefaultIncDoors;
-
-        // etc.
-    }
-
-
     // Command to save defaults
     [RelayCommand]
     private async Task SaveDefaults()
