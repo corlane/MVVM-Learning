@@ -63,6 +63,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            <views:Cabinet3DView Grid.Column="0" Grid.Row="0"/>
             <views:CabinetListView Grid.Column="0" Grid.Row="1"/>
 
         </Grid>

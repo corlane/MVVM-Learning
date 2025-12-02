@@ -21,7 +21,6 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <Converters:BoolInverter x:Key="BoolInverter"/>
     </UserControl.Resources>
 
     <Grid Background="#FF222222">
@@ -36,11 +35,10 @@
 							   ViewCubeBottomText = "B"
 							   ViewCubeTopText = "T"
 							   IsHeadLightEnabled="True"
-                               SizeChanged="viewport_SizeChanged"
 							   >
             <HelixToolkit:DirectionalHeadLight Brightness="0.2"/>
 
-            <ModelVisual3D Content="{Binding CurrentModel}"/>
+            <ModelVisual3D Content="{Binding PreviewModel}"/>
 
         </HelixToolkit:HelixViewport3D>
 

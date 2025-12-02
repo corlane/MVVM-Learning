@@ -94,5 +94,8 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             PanelModel => 3,
             _ => SelectedTabIndex
         };
+
+        // THIS IS THE KEY: clear preview when user clicks away from a cabinet
+        CurrentPreviewCabinet = null;
     }
 }

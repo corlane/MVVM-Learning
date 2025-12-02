@@ -39,7 +39,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         LoadSelectedIfMine(); // initial
         LoadDefaults();
-
+        UpdatePreview();
         ValidateAllProperties();
     }
 
@@ -820,6 +820,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         DrwFrontHeight3 = _defaults!.DefaultDrwFrontHeight3;
 
         // etc.
+
+        UpdatePreview();
+
     }
 
     // For 3D model:
@@ -830,6 +833,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Width = Width,
             Height = Height,
             Depth = Depth,
+            Type = Type,
             // ... copy EVERY property from fields to the preview model
             // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
