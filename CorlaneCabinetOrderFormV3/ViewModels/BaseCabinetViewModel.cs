@@ -16,6 +16,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public BaseCabinetViewModel()
     {
         // empty constructor for design-time support
+
     }
 
     private readonly ICabinetService? _cabinetService;
@@ -37,9 +38,20 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 LoadSelectedIfMine();
         };
 
-        LoadSelectedIfMine(); // initial
+        //Width = "18";
+        //Height = "34.5";
+        //Depth = "24";
+        //Type = Type1;
+        //LeftFrontWidth = "12";
+        //RightFrontWidth = "12";
+        //LeftBackWidth = "36";
+        //RightBackWidth = "36";
+        //LeftDepth = "24";
+        //RightDepth = "24";
+
         LoadDefaults();
-        UpdatePreview();
+        LoadSelectedIfMine(); // initial
+        //UpdatePreview();
         ValidateAllProperties();
     }
 
@@ -51,7 +63,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public static string Type4 => "45° Corner";
 
     // Common properties from CabinetModel
-    [ObservableProperty] public partial string Type { get; set; } = ""; partial void OnTypeChanged(string oldValue, string newValue)
+    [ObservableProperty] public partial string Type { get; set; } = Type1; partial void OnTypeChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
@@ -77,15 +89,15 @@ public partial class BaseCabinetViewModel : ObservableValidator
             }
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "18";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "34.5"; partial void OnHeightChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "24";
     [ObservableProperty] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
@@ -818,7 +830,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
         DrwFrontHeight1 = _defaults!.DefaultDrwFrontHeight1;
         DrwFrontHeight2 = _defaults!.DefaultDrwFrontHeight2;
         DrwFrontHeight3 = _defaults!.DefaultDrwFrontHeight3;
-
+        LeftReveal = _defaults!.DefaultBaseLeftReveal;
+        RightReveal = _defaults!.DefaultBaseRightReveal;
+        TopReveal = _defaults!.DefaultBaseTopReveal;
+        BottomReveal = _defaults!.DefaultBaseBottomReveal;
+        GapWidth = _defaults!.DefaultGapWidth;
         // etc.
 
         UpdatePreview();

@@ -12,7 +12,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
              d:Background="DarkGray"
-             
+             Margin="10"
              >
 
     <!-- Design-time DataContext (so intellisense will work) -->
@@ -25,7 +25,7 @@
     </UserControl.Resources>
 
     <Grid Background="#FF222222">
-        <HelixToolkit:HelixViewport3D x:Name="viewport" Grid.Column="0" Grid.Row="0" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Background="Gray" Margin="10"
+        <HelixToolkit:HelixViewport3D x:Name="viewport" Grid.Column="0" Grid.Row="0" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Background="Gray" Margin="0"
                                helpers:ZoomExtentsHelper.Bounds="{Binding PreviewBounds}"
 							   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
 							   BorderThickness="5" BorderBrush="#FF555555" 

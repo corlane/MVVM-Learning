@@ -30,12 +30,14 @@ namespace CorlaneCabinetOrderFormV3.Views
         private void ResetToFrontView_Click(object sender, RoutedEventArgs e)
         {
             // Perfect straight-on front view — tested and gorgeous
-            viewport.Camera.Position = new Point3D(0, 60, 160);
-            viewport.Camera.LookDirection = new Vector3D(0, -60, -160);
+            viewport.Camera.Position = new Point3D(0, 0, 160);
+            viewport.Camera.LookDirection = new Vector3D(0, 0, -160);
             viewport.Camera.UpDirection = new Vector3D(0, 1, 0);
 
             // Frame it perfectly every time
             viewport.ZoomExtents();
         }
+
+
     }
 }

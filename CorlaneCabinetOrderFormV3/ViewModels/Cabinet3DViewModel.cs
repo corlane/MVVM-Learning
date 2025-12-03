@@ -28,7 +28,7 @@ public partial class Cabinet3DViewModel : ObservableObject
             if (e.PropertyName == nameof(MainWindowViewModel.CurrentPreviewCabinet))
                 RebuildPreview();
         };
-        RebuildPreview(); // initial
+        RebuildPreview(); // initial  
     }
 
     [ObservableProperty]
@@ -44,44 +44,26 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
 
-    private void RebuildPreview()
+    public void RebuildPreview()
     {
         var group = new Model3DGroup();
 
-        if (_mainVm?.CurrentPreviewCabinet is CabinetModel cab)
+
+
+        if (_mainVm!.CurrentPreviewCabinet is CabinetModel cab)
         {
-            var cabinetModel = BuildSingleCabinet(cab);
-            group.Children.Add(cabinetModel);
+            group.Children.Add(BuildCabinet(cab));
         }
 
         // Lights
         group.Children.Add(new AmbientLight(Colors.DarkGray));
-        group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-1, -1, -1)));
-        group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(1, -1, 1)));
+        //group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-1, -1, -1)));
+        //group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(1, -1, 1)));
         
         PreviewModel = group;
     }
 
-    //private void RebuildPreview()
-    //{
-    //    var group = new Model3DGroup();
-
-    //    if (_mainVm!.CurrentPreviewCabinet is CabinetModel cab)
-    //    {
-    //        group.Children.Add(BuildSingleCabinet(_mainVm.CurrentPreviewCabinet));
-    //    }
-
-    //    // Lights
-    //    group.Children.Add(new AmbientLight(Colors.Gray));
-    //    group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-2, -3, -2)));
-    //    group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(2, -1, 2)));
-
-    //    PreviewModel = group;
-    //}
-
-    // Keep your existing BuildSingleCabinet method (the full detailed one you pasted)
-    // Just change it to take CabinetModel cab and use 'is' checks for type-specific logic
-    private Model3DGroup BuildSingleCabinet(CabinetModel cab)
+    private Model3DGroup BuildCabinet(CabinetModel cab)
     {
         Model3DGroup cabinet = new();
 
@@ -375,12 +357,12 @@ public partial class Cabinet3DViewModel : ObservableObject
                 }
 
                 // Doors
-                if (baseCab.DoorCount > 0 && baseCab.IncDoors)
+                if (baseCab.DoorCount > 0 && baseCab.IncDoors && cabType is not "Drawer")
                 {
                     double doorWidth = width - (doorSideReveal * 2);
                     double doorHeight = height - doorTopReveal - doorBottomReveal - tk_Height;
 
-                    if (baseCab.CabinetType == "Standard" && baseCab.DrwCount == 1)
+                    if (cabType == "Standard" && baseCab.DrwCount == 1)
                     {
                         doorHeight = height - opening1Height - MaterialThickness34 - halfMaterialThickness34 - (baseDoorGap / 2) - doorBottomReveal - tk_Height;
                     }
@@ -409,7 +391,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                     if (baseCab.DoorCount == 2)
                     {
-                        doorWidth = (doorWidth / 2) - .0625;
+                        doorWidth = (doorWidth / 2) - (baseDoorGap/2);
 
                         doorPoints = new List<Point3D>
                         {

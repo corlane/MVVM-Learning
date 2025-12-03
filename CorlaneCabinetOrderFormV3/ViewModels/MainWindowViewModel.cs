@@ -17,6 +17,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
 
     }
 
+
     [ObservableProperty] public partial bool IsDarkMode { get; set; }
     
 
@@ -69,19 +70,21 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
 
 
     [ObservableProperty]
+    public partial int SelectedTabIndex { get; set; }
+
+
+    [ObservableProperty]
     public partial CabinetModel? CurrentPreviewCabinet { get; set; }
+
 
     [ObservableProperty]
     public partial CabinetModel? SelectedCabinet { get; set; }
-
-    [ObservableProperty]
-    public partial int SelectedTabIndex { get; set; }
-
     partial void OnSelectedCabinetChanged(CabinetModel? value)
     {
         if (value == null)
         {
             SelectedTabIndex = 0;   // or whatever default you want
+            CurrentPreviewCabinet = new BaseCabinetModel();
             return;
         }
 
@@ -95,7 +98,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             _ => SelectedTabIndex
         };
 
-        // THIS IS THE KEY: clear preview when user clicks away from a cabinet
-        CurrentPreviewCabinet = null;
     }
+
+
 }
