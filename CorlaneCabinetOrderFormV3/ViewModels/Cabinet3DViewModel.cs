@@ -20,6 +20,16 @@ public partial class Cabinet3DViewModel : ObservableObject
     }
 
     private readonly MainWindowViewModel? _mainVm;
+    public Cabinet3DViewModel(MainWindowViewModel mainVm)
+    {
+        _mainVm = mainVm;
+        _mainVm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(MainWindowViewModel.CurrentPreviewCabinet))
+                RebuildPreview();
+        };
+        RebuildPreview(); // initial
+    }
 
     [ObservableProperty]
     public partial Model3DGroup? PreviewModel { get; set; }
@@ -32,16 +42,6 @@ public partial class Cabinet3DViewModel : ObservableObject
     [ObservableProperty]
     public partial Rect3D PreviewBounds { get; set; }
 
-    public Cabinet3DViewModel(MainWindowViewModel mainVm)
-    {
-        _mainVm = mainVm;
-        _mainVm.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(MainWindowViewModel.CurrentPreviewCabinet))
-                RebuildPreview();
-        };
-        RebuildPreview(); // initial
-    }
 
 
     private void RebuildPreview()
@@ -58,7 +58,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         group.Children.Add(new AmbientLight(Colors.DarkGray));
         group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-1, -1, -1)));
         group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(1, -1, 1)));
-
+        
         PreviewModel = group;
     }
 
@@ -160,8 +160,6 @@ public partial class Cabinet3DViewModel : ObservableObject
             double doubleMaterialThickness34 = MaterialThickness34 * 2; // This is to make door calcs etc. more straightforward
             double tripleMaterialThickness34 = MaterialThickness34 * 3; // This is to make door calcs etc. more straightforward
             double quadrupleMaterialThickness34 = MaterialThickness34 * 4; // This is to make door calcs etc. more straightforward
-
-        
 
 
             if (baseCab.HasTK)
@@ -290,7 +288,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 }
 
                 // Drawer Stretchers
-                if (baseCab.CabinetType == "Standard")
+                if (cabType == "Standard")
                 {
                     if (baseCab.DrwCount == 1)
                     {
@@ -307,7 +305,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     }
                 }
 
-                if (baseCab.CabinetType == "Drawer")
+                if (cabType == "Drawer")
                 {
                     if (baseCab.DrwCount > 1)
                     {
@@ -354,7 +352,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 }
 
                 // Shelves
-                if (baseCab.CabinetType != "Drawer")
+                if (cabType != "Drawer")
                 {
                     double shelfSpacing = interiorHeight - opening1Height + MaterialThickness34; // This should be the space between the shelves
                     if (baseCab.HasTK) { shelfSpacing += tk_Height * 2; } // why the fuck does this work - oh well, it does.
@@ -444,7 +442,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                 if (baseCab.IncDrwFronts)
                 {
-                    if (baseCab.CabinetType == "Standard" && baseCab.DrwCount == 1)
+                    if (cabType == "Standard" && baseCab.DrwCount == 1)
                     {
                         drwFront1Height = opening1Height + (MaterialThickness34 - doorTopReveal) + (halfMaterialThickness34 - (baseDoorGap / 2));
 
@@ -461,7 +459,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                     }
 
-                    if (baseCab.CabinetType == "Drawer")
+                    if (cabType == "Drawer")
                     {
                         if (baseCab.DrwCount == 1)
                         {
