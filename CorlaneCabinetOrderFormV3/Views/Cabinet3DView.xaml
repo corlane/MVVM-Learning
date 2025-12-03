@@ -7,6 +7,7 @@
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
+             xmlns:helpers="clr-namespace:CorlaneCabinetOrderFormV3.Helpers"
              xmlns:HelixToolkit="http://helix-toolkit.org/wpf"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
@@ -24,7 +25,8 @@
     </UserControl.Resources>
 
     <Grid Background="#FF222222">
-        <HelixToolkit:HelixViewport3D x:Name="viewport" Grid.Column="0" Grid.Row="0" ZoomExtentsWhenLoaded="True" ModelUpDirection="0,1,0" Background="Gray" Margin="10"
+        <HelixToolkit:HelixViewport3D x:Name="viewport" Grid.Column="0" Grid.Row="0" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Background="Gray" Margin="10"
+                               helpers:ZoomExtentsHelper.Bounds="{Binding PreviewBounds}"
 							   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
 							   BorderThickness="5" BorderBrush="#FF555555" 
 							   ShowCameraTarget="False"
@@ -41,11 +43,16 @@
             <ModelVisual3D Content="{Binding PreviewModel}"/>
 
         </HelixToolkit:HelixViewport3D>
+        <Button Content="Reset View" 
+        Click="ResetToFrontView_Click"
+        Width="100" Height="30"
+        HorizontalAlignment="Left" 
+        VerticalAlignment="Top"
+        Margin="20" 
+        Background="#333333"
+        Foreground="White"
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
 
-        <!-- Optional overlay text if empty -->
-        <!--<TextBlock Text="No cabinets yet — add some!" 
-                   Foreground="White" FontSize="24" 
-                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                   Visibility="{Binding CabinetModels.Children.Count, Converter={StaticResource IntToVisibilityConverter}, ConverterParameter=0}"/>-->
     </Grid>
 </UserControl>

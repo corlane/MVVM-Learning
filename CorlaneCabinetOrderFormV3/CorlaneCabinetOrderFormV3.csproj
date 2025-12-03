@@ -11,6 +11,56 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Edgebanding\Custom.png" />
+    <None Remove="Images\Edgebanding\PVC Black.png" />
+    <None Remove="Images\Edgebanding\PVC Hardrock Maple.png" />
+    <None Remove="Images\Edgebanding\PVC Paint Grade.png" />
+    <None Remove="Images\Edgebanding\PVC White.png" />
+    <None Remove="Images\Edgebanding\Wood Alder.png" />
+    <None Remove="Images\Edgebanding\Wood Cherry.png" />
+    <None Remove="Images\Edgebanding\Wood Hickory.png" />
+    <None Remove="Images\Edgebanding\Wood Mahogany.png" />
+    <None Remove="Images\Edgebanding\Wood Maple.png" />
+    <None Remove="Images\Edgebanding\Wood Prefinished Maple.png" />
+    <None Remove="Images\Edgebanding\Wood Red Oak.png" />
+    <None Remove="Images\Edgebanding\Wood Walnut.png" />
+    <None Remove="Images\Edgebanding\Wood White Oak.png" />
+    <None Remove="Images\help.png" />
+    <None Remove="Images\icon.ico" />
+    <None Remove="Images\load.png" />
+    <None Remove="Images\new.png" />
+    <None Remove="Images\Plywood\Alder Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Alder Ply - Vertical.png" />
+    <None Remove="Images\Plywood\Cherry Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Cherry Ply - Vertical.png" />
+    <None Remove="Images\Plywood\Custom - Horizontal.png" />
+    <None Remove="Images\Plywood\Custom - Vertical.png" />
+    <None Remove="Images\Plywood\Hickory Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Hickory Ply - Vertical.png" />
+    <None Remove="Images\Plywood\Mahogany Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Mahogany Ply - Vertical.png" />
+    <None Remove="Images\Plywood\Maple Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Maple Ply - Vertical.png" />
+    <None Remove="Images\Plywood\MDF - Horizontal.png" />
+    <None Remove="Images\Plywood\MDF - Vertical.png" />
+    <None Remove="Images\Plywood\Melamine - Horizontal.png" />
+    <None Remove="Images\Plywood\Melamine - Vertical.png" />
+    <None Remove="Images\Plywood\Prefinished Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Prefinished Ply - Vertical.png" />
+    <None Remove="Images\Plywood\Red Oak Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Red Oak Ply - Vertical.png" />
+    <None Remove="Images\Plywood\Walnut Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Walnut Ply - Vertical.png" />
+    <None Remove="Images\Plywood\White Oak Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\White Oak Ply - Vertical.png" />
+    <None Remove="Images\print.png" />
+    <None Remove="Images\quit.png" />
+    <None Remove="Images\save.png" />
+    <None Remove="Images\settings.jpg" />
+    <None Remove="Images\woodgrain.PNG" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="HelixToolkit.Wpf" Version="2.27.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
@@ -19,7 +69,147 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
+    <Resource Include="Images\Edgebanding\Custom.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\PVC Black.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\PVC Hardrock Maple.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\PVC Paint Grade.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\PVC White.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Alder.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Cherry.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Hickory.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Mahogany.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Maple.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Prefinished Maple.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Red Oak.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood Walnut.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Edgebanding\Wood White Oak.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\help.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\icon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\load.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\new.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Alder Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Alder Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Cherry Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Cherry Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Custom - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Custom - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Hickory Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Hickory Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Mahogany Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Mahogany Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Maple Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Maple Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\MDF - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\MDF - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Melamine - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Melamine - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Prefinished Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Prefinished Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Red Oak Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Red Oak Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Walnut Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\Walnut Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\White Oak Ply - Horizontal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Plywood\White Oak Ply - Vertical.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\print.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\quit.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\save.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\settings.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\woodgrain.PNG">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

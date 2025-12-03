@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -24,6 +25,17 @@ namespace CorlaneCabinetOrderFormV3.Views
         {
             InitializeComponent();
             DataContext = App.ServiceProvider.GetRequiredService<Cabinet3DViewModel>();
+        }
+
+        private void ResetToFrontView_Click(object sender, RoutedEventArgs e)
+        {
+            // Perfect straight-on front view — tested and gorgeous
+            viewport.Camera.Position = new Point3D(0, 60, 160);
+            viewport.Camera.LookDirection = new Vector3D(0, -60, -160);
+            viewport.Camera.UpDirection = new Vector3D(0, 1, 0);
+
+            // Frame it perfectly every time
+            viewport.ZoomExtents();
         }
     }
 }

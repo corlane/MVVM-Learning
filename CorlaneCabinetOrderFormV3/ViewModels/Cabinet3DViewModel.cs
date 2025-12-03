@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.ViewModels;
@@ -22,6 +23,14 @@ public partial class Cabinet3DViewModel : ObservableObject
 
     [ObservableProperty]
     public partial Model3DGroup? PreviewModel { get; set; }
+    partial void OnPreviewModelChanged(Model3DGroup? value)
+    {
+        // This triggers the attached property every time the model changes
+        PreviewBounds = value?.Bounds ?? Rect3D.Empty;
+    }
+
+    [ObservableProperty]
+    public partial Rect3D PreviewBounds { get; set; }
 
     public Cabinet3DViewModel(MainWindowViewModel mainVm)
     {
@@ -83,10 +92,6 @@ public partial class Cabinet3DViewModel : ObservableObject
         Model3DGroup topStretcherFront;
         Model3DGroup topStretcherBack;
         Model3DGroup stretcher;
-        //Model3DGroup stretcher1 = new();
-        //Model3DGroup stretcher2 = new();
-        //Model3DGroup stretcher3 = new();
-        //Model3DGroup stretcher4 = new();
         Model3DGroup shelf;
         Model3DGroup toekick = new();
         Model3DGroup back;
@@ -709,44 +714,17 @@ public partial class Cabinet3DViewModel : ObservableObject
         // Convert to a MeshGeometry3D, freezing for performance
         var mesh = mainBuilder.ToMesh(true);
         var specialMesh = specialBuilder.ToMesh(true);
-
-
-        if (cab is BaseCabinetModel b)
-        {
-            var plywoodSpecies = GetPlywoodSpecies(b.Species ?? "Prefinished Ply", "Vertical");
-        }
-
-        // Apply material texture to panel
-        BitmapImage panelSpeciesImage = new();
-        panelSpeciesImage.BeginInit();
-        panelSpeciesImage.UriSource = new Uri($"Images/Plywood/{panelSpecies} - {grainDirection}.png", UriKind.Relative);
-        panelSpeciesImage.EndInit();
-        var panelSpeciesBrush = new ImageBrush(panelSpeciesImage) { TileMode = TileMode.Tile, ViewportUnits = BrushMappingMode.Absolute, Viewport = new Rect(0, 0, 1, 1) };
-
-        // Apply material texture to edgebanding
-        ImageBrush edgebandingSpeciesBrush = new();
-        if (edgebandingSpecies != "None")
-        {
-            BitmapImage edgebandingSpeciesImage = new();
-            edgebandingSpeciesImage.BeginInit();
-            edgebandingSpeciesImage.UriSource = new Uri($"Images/Edgebanding/{edgebandingSpecies}.png", UriKind.Relative);
-            edgebandingSpeciesImage.EndInit();
-            edgebandingSpeciesBrush = new ImageBrush(edgebandingSpeciesImage) { TileMode = TileMode.Tile, Viewport = new Rect(0, 0, 1, 1) };
-        }
-        else // This colors the edge with the selected plywood species if edgebandingSpecies is set to "None":
-        {
-            BitmapImage edgebandingSpeciesImage = new();
-            edgebandingSpeciesImage.BeginInit();
-            edgebandingSpeciesImage.UriSource = new Uri($"Images/Plywood/{panelSpecies} - {grainDirection}.png", UriKind.Relative);
-            edgebandingSpeciesImage.EndInit();
-            edgebandingSpeciesBrush = new ImageBrush(edgebandingSpeciesImage) { TileMode = TileMode.Tile, Viewport = new Rect(0, 0, 1, 1) };
-        }
+ 
 
 
 
         // Create a material with texture
-        var material = new DiffuseMaterial(panelSpeciesBrush);
-        var specialMaterial = new DiffuseMaterial(edgebandingSpeciesBrush);
+        var material = GetPlywoodSpecies(panelSpecies, grainDirection);
+        var specialMaterial = GetEdgeBandingSpecies(edgebandingSpecies);
+        if (edgebandingSpecies == "None")
+        {
+            specialMaterial = GetPlywoodSpecies(panelSpecies, grainDirection);
+        }
 
         // Create a GeometryModel3D
         var panelModel = new GeometryModel3D
@@ -765,7 +743,6 @@ public partial class Cabinet3DViewModel : ObservableObject
         partModel.Children.Add(edgebandingModel);
 
         return partModel;
-
     }
 
     // Transform method. This allows x, y, and z translation, as well as x, y, and z rotation.
@@ -786,15 +763,6 @@ public partial class Cabinet3DViewModel : ObservableObject
         geometryModel.Transform = transformGroup;
 
     }
-
-
-
-
-
-
-
-
-
 
 
     private static Material GetPlywoodSpecies(string species, string grainDirection)
@@ -824,13 +792,12 @@ public partial class Cabinet3DViewModel : ObservableObject
         catch
         {
             // Fallback if texture missing
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(180, 140, 100)));
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(0, 140, 140)));
         }
     }
 
-    private static Material GetEdgeBandingSpecies(string species, string grainDirection)
+    private static Material GetEdgeBandingSpecies(string species)
     {
-        //string cleanSpecies = species.Replace(" ", ""); // "Prefinished Ply" → "PrefinishedPly"
 
         string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
 
@@ -855,9 +822,10 @@ public partial class Cabinet3DViewModel : ObservableObject
         catch
         {
             // Fallback if texture missing
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(180, 140, 100)));
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(255, 0, 0)));
         }
     }
+
 
 }
 
