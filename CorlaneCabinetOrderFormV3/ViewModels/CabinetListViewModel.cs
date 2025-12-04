@@ -12,6 +12,7 @@ public partial class CabinetListViewModel(ICabinetService cabinetService) : Obse
     public CabinetListViewModel() : this(new CabinetService())
     {
         // empty constructor for design-time support
+
     }
 
     private readonly ICabinetService _cabinetService = cabinetService;

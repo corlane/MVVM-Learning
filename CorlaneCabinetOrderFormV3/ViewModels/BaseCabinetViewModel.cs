@@ -7,12 +7,14 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class BaseCabinetViewModel : ObservableValidator
 {
+
     public BaseCabinetViewModel()
     {
         // empty constructor for design-time support
@@ -38,22 +40,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 LoadSelectedIfMine();
         };
 
-        //Width = "18";
-        //Height = "34.5";
-        //Depth = "24";
-        //Type = Type1;
-        //LeftFrontWidth = "12";
-        //RightFrontWidth = "12";
-        //LeftBackWidth = "36";
-        //RightBackWidth = "36";
-        //LeftDepth = "24";
-        //RightDepth = "24";
-
         LoadDefaults();
         LoadSelectedIfMine(); // initial
         ValidateAllProperties();
         UpdatePreview();
-
+        Debug.WriteLine($"*****************************      ***   ***     MainWindowViewModel Instance: {_mainVm.InstanceId}");
     }
 
 
@@ -88,57 +79,58 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 // Standard or corner cabinet selected
                 ListDrwCount = [0,1];
             }
+            UpdatePreview();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "18";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "34.5"; partial void OnHeightChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } partial void OnHeightChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "24";
-    [ObservableProperty] public partial string Species { get; set; } = "";
-    [ObservableProperty] public partial string EBSpecies { get; set; } = "";
-    [ObservableProperty] public partial string Name { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; }
+    [ObservableProperty] public partial string Species { get; set; }
+    [ObservableProperty] public partial string EBSpecies { get; set; }
+    [ObservableProperty] public partial string Name { get; set; }
     [ObservableProperty] public partial int Qty { get; set; }
-    [ObservableProperty] public partial string Notes { get; set; } = "";
+    [ObservableProperty] public partial string Notes { get; set; }
 
     // Type-specific properties for BaseCabinetModel
 
     // Corner Cab specific properties
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; }
 
-    [ObservableProperty] public partial string BackThickness { get; set; } = "";
-    [ObservableProperty] public partial string TopType { get; set; } = "";
+    [ObservableProperty] public partial string BackThickness { get; set; }
+    [ObservableProperty] public partial string TopType { get; set; }
 
     // Toekick-specific properties
     [ObservableProperty] public partial bool HasTK { get; set; } partial void OnHasTKChanged(bool oldValue, bool newValue)
     {
         ResizeOpeningHeights();
     }
-    [ObservableProperty] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
+    [ObservableProperty] public partial string TKHeight { get; set; } partial void OnTKHeightChanged(string oldValue, string newValue)
     {
         ResizeOpeningHeights();
     }
-    [ObservableProperty] public partial string TKDepth { get; set; } = "";
+    [ObservableProperty] public partial string TKDepth { get; set; }
 
     // Shelf-specific properties
     [ObservableProperty] public partial int ShelfCount { get; set; }
-    [ObservableProperty] public partial string ShelfDepth { get; set; } = "";
+    [ObservableProperty] public partial string ShelfDepth { get; set; }
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }
 
     // Door-specific properties
-    [ObservableProperty] public partial string DoorSpecies { get; set; } = "";
+    [ObservableProperty] public partial string DoorSpecies { get; set; }
     [ObservableProperty] public partial int DoorCount { get; set; }
     [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
-    [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";
+    [ObservableProperty] public partial string DoorGrainDir { get; set; }
     [ObservableProperty] public partial bool IncDoorsInList { get; set; }
     [ObservableProperty] public partial bool IncDoors { get; set; }
 
@@ -162,8 +154,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty] public partial string DrwStyle { get; set; } = "";
-    [ObservableProperty] public partial string DrwFrontGrainDir { get; set; } = "";
+    [ObservableProperty] public partial string DrwStyle { get; set; }
+    [ObservableProperty] public partial string DrwFrontGrainDir { get; set; }
     [ObservableProperty] public partial bool IncDrwFrontsInList { get; set; } partial void OnIncDrwFrontsInListChanged(bool oldValue, bool newValue)
     {
         if (newValue != oldValue)
@@ -369,45 +361,45 @@ public partial class BaseCabinetViewModel : ObservableValidator
             DrillSlideHoles = false;
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight1 { get; set; } = ""; partial void OnOpeningHeight1Changed(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight1 { get; set; } partial void OnOpeningHeight1Changed(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight2 { get; set; } = ""; partial void OnOpeningHeight2Changed(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight2 { get; set; } partial void OnOpeningHeight2Changed(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight3 { get; set; } = ""; partial void OnOpeningHeight3Changed(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight3 { get; set; } partial void OnOpeningHeight3Changed(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight4 { get; set; } = ""; partial void OnOpeningHeight4Changed(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight4 { get; set; } partial void OnOpeningHeight4Changed(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = "";
-    [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = "";
-    [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = "";
-    [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = "";
+    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; }
+    [ObservableProperty] public partial string DrwFrontHeight2 { get; set; }
+    [ObservableProperty] public partial string DrwFrontHeight3 { get; set; }
+    [ObservableProperty] public partial string DrwFrontHeight4 { get; set; }
 
     // Reveal and gap properties
-    [ObservableProperty] public partial string LeftReveal { get; set; } = "";
-    [ObservableProperty] public partial string RightReveal { get; set; } = "";
-    [ObservableProperty] public partial string TopReveal { get; set; } = "";
-    [ObservableProperty] public partial string BottomReveal { get; set; } = "";
-    [ObservableProperty] public partial string GapWidth { get; set; } = "";
+    [ObservableProperty] public partial string LeftReveal { get; set; }
+    [ObservableProperty] public partial string RightReveal { get; set; }
+    [ObservableProperty] public partial string TopReveal { get; set; }
+    [ObservableProperty] public partial string BottomReveal { get; set; }
+    [ObservableProperty] public partial string GapWidth { get; set; }
 
 
     // Combobox options
@@ -545,7 +537,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     private void LoadSelectedIfMine()
     {
-        if (_mainVm!.SelectedCabinet is BaseCabinetModel baseCab)
+        if (_mainVm.SelectedCabinet is BaseCabinetModel baseCab)
         {
             Width = baseCab.Width;
             Height = baseCab.Height;
@@ -716,7 +708,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (_mainVm!.SelectedCabinet is BaseCabinetModel selected)
+        if (_mainVm.SelectedCabinet is BaseCabinetModel selected)
         {
             selected.Width = Width;
             selected.Height = Height;
@@ -799,42 +791,53 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void LoadDefaults()
     {
-        Species = _defaults!.DefaultSpecies;
+        if (Type == Type2)
+        {
+            // Drawer cabinet selected
+            ListDrwCount = [1, 2, 3, 4];
+        }
+        else if (Type == Type1)
+        {
+            // Standard or corner cabinet selected
+            ListDrwCount = [0, 1];
+        }
+
+        Species = _defaults.DefaultSpecies;
         EBSpecies = _defaults.DefaultEBSpecies;
-        HasTK = _defaults!.DefaultHasTK;
-        TKHeight = _defaults!.DefaultTKHeight;
-        TKDepth = _defaults!.DefaultTKDepth;
-        DoorCount = _defaults!.DefaultDoorCount;
-        DoorGrainDir = _defaults!.DefaultDoorGrainDir;
-        IncDoorsInList = _defaults!.DefaultIncDoorsInList;
-        IncDoors = _defaults!.DefaultIncDoors;
+        HasTK = _defaults.DefaultHasTK;
+        TKHeight = _defaults.DefaultTKHeight;
+        TKDepth = _defaults.DefaultTKDepth;
+        DoorCount = _defaults.DefaultDoorCount;
+        DoorGrainDir = _defaults.DefaultDoorGrainDir;
+        IncDoorsInList = _defaults.DefaultIncDoorsInList;
+        IncDoors = _defaults.DefaultIncDoors;
         DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
         DoorSpecies = _defaults.DefaultDoorDrwSpecies;
         BackThickness = _defaults.DefaultBaseBackThickness;
-        TopType = _defaults!.DefaultTopType;
-        ShelfCount = _defaults!.DefaultShelfCount;
-        ShelfDepth = _defaults!.DefaultShelfDepth;
-        DrillShelfHoles = _defaults!.DefaultDrillShelfHoles;
+        TopType = _defaults.DefaultTopType;
+        ShelfCount = _defaults.DefaultShelfCount;
+        ShelfDepth = _defaults.DefaultShelfDepth;
+        DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
         DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
-        IncDrwFrontsInList = _defaults!.DefaultIncDrwFrontsInList;
-        IncDrwFronts = _defaults!.DefaultIncDrwFronts;
-        IncDrwBoxesInList = _defaults!.DefaultIncDrwBoxesInList;
-        IncDrwBoxes = _defaults!.DefaultIncDrwBoxes;
+        IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
+        IncDrwFronts = _defaults.DefaultIncDrwFronts;
+        IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
+        IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
         DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
         if (Type == Type1) { DrwCount = _defaults.DefaultStdDrawerCount; }
         if (Type == Type2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
-        DrwStyle = _defaults!.DefaultDrwStyle;
-        OpeningHeight1 = _defaults!.DefaultOpeningHeight1;
-        OpeningHeight2 = _defaults!.DefaultOpeningHeight2;
-        OpeningHeight3 = _defaults!.DefaultOpeningHeight3;
-        DrwFrontHeight1 = _defaults!.DefaultDrwFrontHeight1;
-        DrwFrontHeight2 = _defaults!.DefaultDrwFrontHeight2;
-        DrwFrontHeight3 = _defaults!.DefaultDrwFrontHeight3;
-        LeftReveal = _defaults!.DefaultBaseLeftReveal;
-        RightReveal = _defaults!.DefaultBaseRightReveal;
-        TopReveal = _defaults!.DefaultBaseTopReveal;
-        BottomReveal = _defaults!.DefaultBaseBottomReveal;
-        GapWidth = _defaults!.DefaultGapWidth;
+        DrwStyle = _defaults.DefaultDrwStyle;
+        OpeningHeight1 = _defaults.DefaultOpeningHeight1;
+        OpeningHeight2 = _defaults.DefaultOpeningHeight2;
+        OpeningHeight3 = _defaults.DefaultOpeningHeight3;
+        DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+        DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
+        DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+        LeftReveal = _defaults.DefaultBaseLeftReveal;
+        RightReveal = _defaults.DefaultBaseRightReveal;
+        TopReveal = _defaults.DefaultBaseTopReveal;
+        BottomReveal = _defaults.DefaultBaseBottomReveal;
+        GapWidth = _defaults.DefaultGapWidth;
         // etc.
 
         UpdatePreview();
@@ -844,8 +847,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // For 3D model:
     private void UpdatePreview()
     {
-        _mainVm!.CurrentPreviewCabinet = new BaseCabinetModel
+        _mainVm.CurrentPreviewCabinet = new BaseCabinetModel()
         {
+            Type = Type,
             Width = Width,
             Height = Height,
             Depth = Depth,
@@ -856,7 +860,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Notes = Notes,
 
             TKHeight = TKHeight,  // Subtype-specific
-            Type = Type,
             LeftBackWidth = LeftBackWidth,
             RightBackWidth = RightBackWidth,
             LeftFrontWidth = LeftFrontWidth,
@@ -922,166 +925,4 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
     }
-
-    //private void UpdatePreview()
-    //{
-    //    // THIS IS THE ONLY CORRECT WAY
-    //    // We COPY the current values into the already-selected preview object
-    //    // or create a new one if none exists
-    //    if (_mainVm!.CurrentPreviewCabinet is BaseCabinetModel preview)
-    //    {
-    //        // Editing existing preview (live update as you type)
-    //        preview.Width = Width;
-    //        preview.Height = Height;
-    //        preview.Depth = Depth;
-    //        preview.Species = Species;
-    //        preview.EBSpecies = EBSpecies;
-    //        preview.Name = Name;
-    //        preview.Qty = Qty;
-    //        preview.Notes = Notes;
-
-    //        preview.TKHeight = TKHeight;  // Subtype-specific
-    //        preview.Type = Type;
-    //        preview.LeftBackWidth = LeftBackWidth;
-    //        preview.RightBackWidth = RightBackWidth;
-    //        preview.LeftFrontWidth = LeftFrontWidth;
-    //        preview.RightFrontWidth = RightFrontWidth;
-    //        preview.LeftDepth = LeftDepth;
-    //        preview.RightDepth = RightDepth;
-    //        preview.HasTK = HasTK;
-    //        preview.TKDepth = TKDepth;
-    //        preview.DoorSpecies = DoorSpecies;
-    //        preview.BackThickness = BackThickness;
-    //        preview.TopType = TopType;
-    //        preview.ShelfCount = ShelfCount;
-    //        preview.ShelfDepth = ShelfDepth;
-    //        preview.DrillShelfHoles = DrillShelfHoles;
-    //        preview.DoorCount = DoorCount;
-    //        preview.DoorGrainDir = DoorGrainDir;
-    //        preview.IncDoorsInList = IncDoorsInList;
-    //        preview.IncDoors = IncDoors;
-    //        preview.DrillHingeHoles = DrillHingeHoles;
-    //        preview.DrwFrontGrainDir = DrwFrontGrainDir;
-    //        preview.IncDrwFrontsInList = IncDrwFrontsInList;
-    //        preview.IncDrwFronts = IncDrwFronts;
-    //        preview.IncDrwBoxesInList = IncDrwBoxesInList;
-    //        preview.IncDrwBoxes = IncDrwBoxes;
-    //        preview.DrillSlideHoles = DrillSlideHoles;
-    //        preview.DrwCount = DrwCount;
-    //        preview.DrwStyle = DrwStyle;
-    //        preview.OpeningHeight1 = OpeningHeight1;
-    //        preview.OpeningHeight2 = OpeningHeight2;
-    //        preview.OpeningHeight3 = OpeningHeight3;
-    //        preview.OpeningHeight4 = OpeningHeight4;
-    //        preview.IncDrwBoxOpening1 = IncDrwBoxOpening1;
-    //        preview.IncDrwBoxOpening2 = IncDrwBoxOpening2;
-    //        preview.IncDrwBoxOpening3 = IncDrwBoxOpening3;
-    //        preview.IncDrwBoxOpening4 = IncDrwBoxOpening4;
-    //        preview.DrillSlideHolesOpening1 = DrillSlideHolesOpening1;
-    //        preview.DrillSlideHolesOpening2 = DrillSlideHolesOpening2;
-    //        preview.DrillSlideHolesOpening3 = DrillSlideHolesOpening3;
-    //        preview.DrillSlideHolesOpening4 = DrillSlideHolesOpening4;
-    //        preview.IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1;
-    //        preview.IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2;
-    //        preview.IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3;
-    //        preview.IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4;
-    //        preview.DrwFrontHeight1 = DrwFrontHeight1;
-    //        preview.DrwFrontHeight2 = DrwFrontHeight2;
-    //        preview.DrwFrontHeight3 = DrwFrontHeight3;
-    //        preview.DrwFrontHeight4 = DrwFrontHeight4;
-    //        preview.IncDrwFront1 = IncDrwFront1;
-    //        preview.IncDrwFront2 = IncDrwFront2;
-    //        preview.IncDrwFront3 = IncDrwFront3;
-    //        preview.IncDrwFront4 = IncDrwFront4;
-    //        preview.IncDrwFrontInList1 = IncDrwFrontInList1;
-    //        preview.IncDrwFrontInList2 = IncDrwFrontInList2;
-    //        preview.IncDrwFrontInList3 = IncDrwFrontInList3;
-    //        preview.IncDrwFrontInList4 = IncDrwFrontInList4;
-    //        preview.LeftReveal = LeftReveal;
-    //        preview.RightReveal = RightReveal;
-    //        preview.TopReveal = TopReveal;
-    //        preview.BottomReveal = BottomReveal;
-    //        preview.GapWidth = GapWidth;
-    //        // ... copy every single property
-    //    }
-    //    else
-    //    {
-    //        // No preview yet selected — create fresh preview from current fields
-    //        _mainVm.CurrentPreviewCabinet = new BaseCabinetModel
-    //        {
-    //            Width = Width,
-    //            Height = Height,
-    //            Depth = Depth,
-    //            Species = Species,
-    //            EBSpecies = EBSpecies,
-    //            Name = Name,
-    //            Qty = Qty,
-    //            Notes = Notes,
-
-    //            TKHeight = TKHeight,  // Subtype-specific
-    //            Type = Type,
-    //            LeftBackWidth = LeftBackWidth,
-    //            RightBackWidth = RightBackWidth,
-    //            LeftFrontWidth = LeftFrontWidth,
-    //            RightFrontWidth = RightFrontWidth,
-    //            LeftDepth = LeftDepth,
-    //            RightDepth = RightDepth,
-    //            HasTK = HasTK,
-    //            TKDepth = TKDepth,
-    //            DoorSpecies = DoorSpecies,
-    //            BackThickness = BackThickness,
-    //            TopType = TopType,
-    //            ShelfCount = ShelfCount,
-    //            ShelfDepth = ShelfDepth,
-    //            DrillShelfHoles = DrillShelfHoles,
-    //            DoorCount = DoorCount,
-    //            DoorGrainDir = DoorGrainDir,
-    //            IncDoorsInList = IncDoorsInList,
-    //            IncDoors = IncDoors,
-    //            DrillHingeHoles = DrillHingeHoles,
-    //            DrwFrontGrainDir = DrwFrontGrainDir,
-    //            IncDrwFrontsInList = IncDrwFrontsInList,
-    //            IncDrwFronts = IncDrwFronts,
-    //            IncDrwBoxesInList = IncDrwBoxesInList,
-    //            IncDrwBoxes = IncDrwBoxes,
-    //            DrillSlideHoles = DrillSlideHoles,
-    //            DrwCount = DrwCount,
-    //            DrwStyle = DrwStyle,
-    //            OpeningHeight1 = OpeningHeight1,
-    //            OpeningHeight2 = OpeningHeight2,
-    //            OpeningHeight3 = OpeningHeight3,
-    //            OpeningHeight4 = OpeningHeight4,
-    //            IncDrwBoxOpening1 = IncDrwBoxOpening1,
-    //            IncDrwBoxOpening2 = IncDrwBoxOpening2,
-    //            IncDrwBoxOpening3 = IncDrwBoxOpening3,
-    //            IncDrwBoxOpening4 = IncDrwBoxOpening4,
-    //            DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
-    //            DrillSlideHolesOpening2 = DrillSlideHolesOpening2,
-    //            DrillSlideHolesOpening3 = DrillSlideHolesOpening3,
-    //            DrillSlideHolesOpening4 = DrillSlideHolesOpening4,
-    //            IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1,
-    //            IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2,
-    //            IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3,
-    //            IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4,
-    //            DrwFrontHeight1 = DrwFrontHeight1,
-    //            DrwFrontHeight2 = DrwFrontHeight2,
-    //            DrwFrontHeight3 = DrwFrontHeight3,
-    //            DrwFrontHeight4 = DrwFrontHeight4,
-    //            IncDrwFront1 = IncDrwFront1,
-    //            IncDrwFront2 = IncDrwFront2,
-    //            IncDrwFront3 = IncDrwFront3,
-    //            IncDrwFront4 = IncDrwFront4,
-    //            IncDrwFrontInList1 = IncDrwFrontInList1,
-    //            IncDrwFrontInList2 = IncDrwFrontInList2,
-    //            IncDrwFrontInList3 = IncDrwFrontInList3,
-    //            IncDrwFrontInList4 = IncDrwFrontInList4,
-    //            LeftReveal = LeftReveal,
-    //            RightReveal = RightReveal,
-    //            TopReveal = TopReveal,
-    //            BottomReveal = BottomReveal,
-    //            GapWidth = GapWidth
-    //            // ... copy every property
-    //        };
-    //    }
-    //}
 }

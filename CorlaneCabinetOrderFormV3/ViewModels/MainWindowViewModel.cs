@@ -10,7 +10,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel(ICabinetService cabinetService) : ObservableValidator
 {
-
+    public Guid InstanceId { get; } = Guid.NewGuid();
     public MainWindowViewModel() : this(new CabinetService())
     {
         // empty constructor for design-time support
@@ -70,7 +70,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
 
 
     [ObservableProperty]
-    public partial int SelectedTabIndex { get; set; }
+    public partial int SelectedTabIndex { get; set; } = 0;
 
 
     [ObservableProperty]
@@ -83,7 +83,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
     {
         if (value == null)
         {
-            SelectedTabIndex = 0;   // or whatever default you want
+            SelectedTabIndex = 1;   // or whatever default you want
             CurrentPreviewCabinet = new BaseCabinetModel();
             return;
         }

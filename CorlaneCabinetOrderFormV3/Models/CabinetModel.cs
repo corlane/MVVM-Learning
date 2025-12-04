@@ -15,14 +15,14 @@ public abstract partial class CabinetModel : ObservableObject
     // These properties are common to all cabinet types
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
     [ObservableProperty] public partial double MaterialThickness14 { get; set; } = 0.25;
-    [ObservableProperty] public partial string Width { get; set; } = "";
-    [ObservableProperty] public partial string Height { get; set; } = "";
-    [ObservableProperty] public partial string Depth { get; set; } = "";
-    [ObservableProperty] public partial string Species { get; set; } = "";
-    [ObservableProperty] public partial string EBSpecies { get; set; } = "";
-    [ObservableProperty] public partial string Name { get; set; } = "";
+    [ObservableProperty] public partial string Width { get; set; }
+    [ObservableProperty] public partial string Height { get; set; }
+    [ObservableProperty] public partial string Depth { get; set; }
+    [ObservableProperty] public partial string Species { get; set; }
+    [ObservableProperty] public partial string EBSpecies { get; set; } 
+    [ObservableProperty] public partial string Name { get; set; }
     [ObservableProperty] public partial int Qty { get; set; }
-    [ObservableProperty] public partial string Notes { get; set; } = "";
+    [ObservableProperty] public partial string Notes { get; set; }
 
 
     public virtual string CabinetType =>

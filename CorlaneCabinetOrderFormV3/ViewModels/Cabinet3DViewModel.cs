@@ -2,9 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.ViewModels;
 using HelixToolkit.Wpf;
-using Microsoft.Xaml.Behaviors.Layout;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -19,6 +18,8 @@ public partial class Cabinet3DViewModel : ObservableObject
         // Blank constructor for design
     }
 
+
+
     private readonly MainWindowViewModel? _mainVm;
     public Cabinet3DViewModel(MainWindowViewModel mainVm)
     {
@@ -28,8 +29,11 @@ public partial class Cabinet3DViewModel : ObservableObject
             if (e.PropertyName == nameof(MainWindowViewModel.CurrentPreviewCabinet))
                 RebuildPreview();
         };
-        RebuildPreview(); // initial  
+        Debug.WriteLine($"*****************************      ***   ***     MainWindowViewModel Instance: {_mainVm.InstanceId}");
+
     }
+
+
 
     [ObservableProperty]
     public partial Model3DGroup? PreviewModel { get; set; }
@@ -39,8 +43,12 @@ public partial class Cabinet3DViewModel : ObservableObject
         PreviewBounds = value?.Bounds ?? Rect3D.Empty;
     }
 
+
+
     [ObservableProperty]
     public partial Rect3D PreviewBounds { get; set; }
+
+
 
 
     [RelayCommand]
@@ -55,7 +63,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
 
-        if (_mainVm!.CurrentPreviewCabinet is CabinetModel cab)
+        if (_mainVm.CurrentPreviewCabinet is CabinetModel cab)
         {
             group.Children.Add(BuildCabinet(cab));
         }
@@ -108,28 +116,33 @@ public partial class Cabinet3DViewModel : ObservableObject
         // It will work perfectly
         if (cab is BaseCabinetModel baseCab)
         {
+            if (string.IsNullOrWhiteSpace(baseCab.Type)) { baseCab.Type = "Standard"; }
+            if (string.IsNullOrWhiteSpace(baseCab.Width)) { baseCab.Width = "18"; }
+            if (string.IsNullOrWhiteSpace(baseCab.Height)) { baseCab.Height = "34.5"; }
+            if (string.IsNullOrWhiteSpace(baseCab.Depth)) { baseCab.Depth = "24"; }
+
             string? cabType = baseCab.Type;
-            double width = ConvertDimension.FractionToDouble(baseCab.Width!);
-            double height = ConvertDimension.FractionToDouble(baseCab.Height!);
-            double depth = ConvertDimension.FractionToDouble(baseCab.Depth!);
+            double width = ConvertDimension.FractionToDouble(baseCab.Width);
+            double height = ConvertDimension.FractionToDouble(baseCab.Height);
+            double depth = ConvertDimension.FractionToDouble(baseCab.Depth);
             double backThickness = ConvertDimension.FractionToDouble(baseCab.BackThickness);
             if (backThickness == 0.25) { depth -= backThickness; }
-            double leftFrontWidth = ConvertDimension.FractionToDouble(baseCab.LeftFrontWidth!);
-            double rightFrontWidth = ConvertDimension.FractionToDouble(baseCab.RightFrontWidth!);
-            double leftDepth = ConvertDimension.FractionToDouble(baseCab.LeftDepth!);
-            double rightDepth = ConvertDimension.FractionToDouble(baseCab.RightDepth!);
-            double leftBackWidth = ConvertDimension.FractionToDouble(baseCab.LeftBackWidth!);
-            double rightBackWidth = ConvertDimension.FractionToDouble(baseCab.RightBackWidth!);
-            double tk_Height = ConvertDimension.FractionToDouble(baseCab.TKHeight!);
-            double tk_Depth = ConvertDimension.FractionToDouble(baseCab.TKDepth!);
-            double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1!);
-            double opening2Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2!);
-            double opening3Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3!);
-            double opening4Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight4!);
-            double drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1!);
-            double drwFront2Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight2!);
-            double drwFront3Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight3!);
-            double drwFront4Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight4!);
+            double leftFrontWidth = ConvertDimension.FractionToDouble(baseCab.LeftFrontWidth);
+            double rightFrontWidth = ConvertDimension.FractionToDouble(baseCab.RightFrontWidth);
+            double leftDepth = ConvertDimension.FractionToDouble(baseCab.LeftDepth);
+            double rightDepth = ConvertDimension.FractionToDouble(baseCab.RightDepth);
+            double leftBackWidth = ConvertDimension.FractionToDouble(baseCab.LeftBackWidth);
+            double rightBackWidth = ConvertDimension.FractionToDouble(baseCab.RightBackWidth);
+            double tk_Height = ConvertDimension.FractionToDouble(baseCab.TKHeight ?? "4");
+            double tk_Depth = ConvertDimension.FractionToDouble(baseCab.TKDepth ?? "3");
+            double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1);
+            double opening2Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2);
+            double opening3Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3);
+            double opening4Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight4);
+            double drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1);
+            double drwFront2Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight2);
+            double drwFront3Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight3);
+            double drwFront4Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight4);
             double interiorWidth = width - (MaterialThickness34 * 2);
             double interiorDepth = depth - backThickness;
             double interiorHeight;
@@ -137,16 +150,31 @@ public partial class Cabinet3DViewModel : ObservableObject
             if (baseCab.ShelfDepth == "Half Depth") { shelfDepth = interiorDepth / 2; }
             else { shelfDepth = interiorDepth; }
             shelfDepth -= 0.125;
-            double baseDoorGap = ConvertDimension.FractionToDouble(baseCab.GapWidth!);
-            double doorLeftReveal = ConvertDimension.FractionToDouble(baseCab.LeftReveal!);
-            double doorRightReveal = ConvertDimension.FractionToDouble(baseCab.RightReveal!);
-            double doorTopReveal = ConvertDimension.FractionToDouble(baseCab.TopReveal!);
-            double doorBottomReveal = ConvertDimension.FractionToDouble(baseCab.BottomReveal!);
+            double baseDoorGap = ConvertDimension.FractionToDouble(baseCab.GapWidth);
+            double doorLeftReveal = ConvertDimension.FractionToDouble(baseCab.LeftReveal);
+            double doorRightReveal = ConvertDimension.FractionToDouble(baseCab.RightReveal);
+            double doorTopReveal = ConvertDimension.FractionToDouble(baseCab.TopReveal);
+            double doorBottomReveal = ConvertDimension.FractionToDouble(baseCab.BottomReveal);
             double doorSideReveal = (doorLeftReveal + doorRightReveal) / 2; // this averages the potentially different left and right reveals so that the door creation calc can use just one variable instead of two.
             double halfMaterialThickness34 = MaterialThickness34 / 2; // This is to make door calcs etc. more straightforward
             double doubleMaterialThickness34 = MaterialThickness34 * 2; // This is to make door calcs etc. more straightforward
             double tripleMaterialThickness34 = MaterialThickness34 * 3; // This is to make door calcs etc. more straightforward
             double quadrupleMaterialThickness34 = MaterialThickness34 * 4; // This is to make door calcs etc. more straightforward
+
+
+
+            //Apparently these are null on app launch. Uncommenting these causes a cabinet to appear. 
+            //cabType = "Standard";
+            //height = 34;
+            //width = 18;
+            //depth = 24;
+            //backThickness = .75;
+            //tk_Depth = 3;
+            //tk_Height = 4;
+
+
+
+
 
 
             if (baseCab.HasTK)
@@ -178,8 +206,8 @@ public partial class Cabinet3DViewModel : ObservableObject
 
             interiorHeight = height - (MaterialThickness34 * 2) - tk_Height;
 
-            leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Vertical", cab);
-            rightEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Vertical", cab);
+            leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", cab);
+            rightEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", cab);
 
             if (cabType.Contains("Standard") || cabType.Contains("Drawer"))
             {
@@ -198,7 +226,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (interiorWidth,depth,0),
                     new (0,depth,0)
                 };
-                deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
+                deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
                 ApplyTransform(deck, -(interiorWidth / 2), -depth, tk_Height, 270, 0, 0);
 
                 // Full Top
@@ -211,12 +239,11 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (interiorWidth,depth,0),
                         new (0,depth,0)
                     };
-                    top = CreatePanel(topPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
+                    top = CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
                     ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
                 }
 
-                // Stretcher Top
-                if (baseCab.TopType == "Stretcher")
+                else
                 {
                     topPoints = new List<Point3D>
                     {
@@ -225,8 +252,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (interiorWidth,StretcherWidth,0),
                         new (0,StretcherWidth,0)
                     };
-                    topStretcherFront = CreatePanel(topPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
-                    topStretcherBack = CreatePanel(topPoints, MaterialThickness34, baseCab.Species!, "None", "Horizontal", cab);
+                    topStretcherFront = CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
+                    topStretcherBack = CreatePanel(topPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", cab);
 
                     ApplyTransform(topStretcherFront, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
                     ApplyTransform(topStretcherBack, -(interiorWidth / 2), -StretcherWidth, height - MaterialThickness34, 270, 0, 0);
@@ -244,7 +271,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (interiorWidth,tk_Height-.5,0),
                         new (0,tk_Height-.5,0)
                     };
-                    toekick = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species!, "None", "Horizontal", cab);
+                    toekick = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", cab);
                     ApplyTransform(toekick, -(interiorWidth / 2), 0.5, depth - tk_Depth - MaterialThickness34, 0, 0, 0); // The hardcoded 1/2" here is because the actual toekick board is 1/2" narrower than the specified toekick height
                 }
 
@@ -258,7 +285,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (interiorWidth,interiorHeight,0),
                         new (0,interiorHeight,0)
                     };
-                    back = CreatePanel(backPoints, MaterialThickness34, baseCab.Species!, "None", "Vertical", cab);
+                    back = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", cab);
                     ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34 + tk_Height, 0, 0, 0, 0);
                 }
                 else
@@ -270,7 +297,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (width,height-tk_Height,0),
                         new (0,height-tk_Height,0)
                     };
-                    back = CreatePanel(backPoints, MaterialThickness14, baseCab.Species!, "None", "Vertical", cab);
+                    back = CreatePanel(backPoints, MaterialThickness14, baseCab.Species, "None", "Vertical", cab);
                     ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
                 }
 
@@ -286,7 +313,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (interiorWidth,StretcherWidth,0),
                             new (0,StretcherWidth,0)
                         };
-                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
+                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
                         ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
@@ -303,7 +330,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (interiorWidth,StretcherWidth,0),
                             new (0,StretcherWidth,0)
                         };
-                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
+                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
                         ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
@@ -317,7 +344,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (interiorWidth,StretcherWidth,0),
                             new (0,StretcherWidth,0)
                         };
-                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
+                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
                         ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - MaterialThickness34 - opening2Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
@@ -331,7 +358,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (interiorWidth,StretcherWidth,0),
                             new (0,StretcherWidth,0)
                         };
-                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
+                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
                         ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - MaterialThickness34 - opening2Height - MaterialThickness34 - opening3Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
@@ -355,7 +382,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (interiorWidth-.125,shelfDepth,0),
                             new (0,shelfDepth,0)
                         };
-                        shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species!, baseCab.EBSpecies!, "Horizontal", cab);
+                        shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
                         ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -MaterialThickness34 - shelfDepth, i * shelfSpacing, 270, 0, 0);
                         cabinet.Children.Add(shelf);
                     }
@@ -382,7 +409,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (doorWidth,doorHeight,0),
                             new (0,doorHeight,0)
                         };
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DoorGrainDir!, cab);
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DoorGrainDir, cab);
                         if (!baseCab.HasTK)
                         {
                             ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
@@ -405,8 +432,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (doorWidth, doorHeight, 0),
                             new (0,doorHeight,0)
                         };
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DoorGrainDir!, cab);
-                        door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DoorGrainDir!, cab);
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DoorGrainDir, cab);
+                        door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DoorGrainDir, cab);
                         if (!baseCab.HasTK)
                         {
                             ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
@@ -440,7 +467,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (drwFrontWidth,drwFront1Height,0),
                         new (0,drwFront1Height,0)
                     };
-                        drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DrwFrontGrainDir!, cab);
+                        drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab);
                         ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
                         cabinet.Children.Add(drwFront1);
 
@@ -459,7 +486,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                 new (drwFrontWidth,drwFront1Height,0),
                                 new (0,drwFront1Height,0)
                             };
-                            drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DrwFrontGrainDir!, cab);
+                            drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab);
                             ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
                             cabinet.Children.Add(drwFront1);
                         }
@@ -476,7 +503,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                 new (drwFrontWidth,drwFront1Height,0),
                                 new (0,drwFront1Height,0)
                             };
-                            drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DrwFrontGrainDir!, cab);
+                            drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab);
                             ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
                             cabinet.Children.Add(drwFront1);
 
@@ -498,7 +525,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                 new (drwFrontWidth,drwFront2Height,0),
                                 new (0,drwFront2Height,0)
                             };
-                            drwFront2 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DrwFrontGrainDir!, cab);
+                            drwFront2 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab);
                             ApplyTransform(drwFront2,
                                 -(width / 2) + doorLeftReveal,
                                 height - drwFront2Height - opening1Height - (2 * MaterialThickness34) + halfMaterialThickness34 - (baseDoorGap / 2),
@@ -527,7 +554,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                     new (drwFrontWidth,drwFront3Height,0),
                                     new (0,drwFront3Height,0)
                                 };
-                                drwFront3 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DrwFrontGrainDir!, cab);
+                                drwFront3 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab);
                                 ApplyTransform(drwFront3,
                                     -(width / 2) + doorLeftReveal,
                                     height - drwFront3Height - opening1Height - opening2Height - (3 * MaterialThickness34) + halfMaterialThickness34 - (baseDoorGap / 2),
@@ -559,7 +586,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                     new (drwFrontWidth,drwFront4Height,0),
                                     new (0,drwFront4Height,0)
                                 };
-                                drwFront4 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies!, "None", baseCab.DrwFrontGrainDir!, cab);
+                                drwFront4 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab);
                                 ApplyTransform(drwFront4,
                                     -(width / 2) + doorLeftReveal,
                                     height - drwFront4Height - opening1Height - opening2Height - opening3Height - (4 * MaterialThickness34) + halfMaterialThickness34 - (baseDoorGap / 2),
@@ -585,6 +612,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         }
 
         // other cabinet types here
+        Debug.WriteLine($"*****************************      ***   *** From Build Cabinet:    MainWindowViewModel Instance: {_mainVm.InstanceId}");
 
         return cabinet;
     }

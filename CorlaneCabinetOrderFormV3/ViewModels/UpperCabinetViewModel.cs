@@ -9,7 +9,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class UpperCabinetViewModel : ObservableValidator
 {
-
     public UpperCabinetViewModel()
     {
         // empty constructor for design-time support
@@ -195,7 +194,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     private void LoadSelectedIfMine()
     {
-        if (_mainVm!.SelectedCabinet is UpperCabinetModel upperCab)
+        if (_mainVm.SelectedCabinet is UpperCabinetModel upperCab)
         {
             Width = upperCab.Width;
             Height = upperCab.Height;
@@ -243,7 +242,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (_mainVm!.SelectedCabinet is UpperCabinetModel selected)
+        if (_mainVm.SelectedCabinet is UpperCabinetModel selected)
         {
             selected.Width = Width;
             selected.Height = Height;
@@ -287,7 +286,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void LoadDefaults()
     {
-        Species = _defaults!.DefaultSpecies;
+        Species = _defaults.DefaultSpecies;
         EBSpecies = _defaults.DefaultEBSpecies;
         ShelfCount = _defaults.DefaultShelfCount;
         DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
@@ -311,7 +310,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     private void UpdatePreview()
     {
-        _mainVm!.CurrentPreviewCabinet = new BaseCabinetModel
+        _mainVm.CurrentPreviewCabinet = new BaseCabinetModel // WROOOOOOONG... but works when clicking on the list?!
         {
             Width = Width,
             Height = Height,
