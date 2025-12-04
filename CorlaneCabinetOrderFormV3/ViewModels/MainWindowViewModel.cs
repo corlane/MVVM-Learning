@@ -97,7 +97,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             PanelModel => 3,
             _ => SelectedTabIndex
         };
-
+        CurrentPreviewCabinet = value;
     }
 
 

@@ -51,8 +51,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         LoadDefaults();
         LoadSelectedIfMine(); // initial
-        //UpdatePreview();
         ValidateAllProperties();
+        UpdatePreview();
+
     }
 
 
@@ -617,17 +618,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
             BottomReveal = baseCab.BottomReveal;
             GapWidth = baseCab.GapWidth;
 
-            // copy every property
+            UpdatePreview();
+
         }
-        else if (_mainVm.SelectedCabinet == null)
+        else
         {
-            // Optional: clear fields when nothing selected
-            //Width = Height = Depth = ToeKickHeight = "";
-            // clear all
+            LoadDefaults();
+            UpdatePreview();
         }
 
         // Force preview rebuild after load
-        UpdatePreview();
     }
 
     // Commands
@@ -922,4 +922,166 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
     }
+
+    //private void UpdatePreview()
+    //{
+    //    // THIS IS THE ONLY CORRECT WAY
+    //    // We COPY the current values into the already-selected preview object
+    //    // or create a new one if none exists
+    //    if (_mainVm!.CurrentPreviewCabinet is BaseCabinetModel preview)
+    //    {
+    //        // Editing existing preview (live update as you type)
+    //        preview.Width = Width;
+    //        preview.Height = Height;
+    //        preview.Depth = Depth;
+    //        preview.Species = Species;
+    //        preview.EBSpecies = EBSpecies;
+    //        preview.Name = Name;
+    //        preview.Qty = Qty;
+    //        preview.Notes = Notes;
+
+    //        preview.TKHeight = TKHeight;  // Subtype-specific
+    //        preview.Type = Type;
+    //        preview.LeftBackWidth = LeftBackWidth;
+    //        preview.RightBackWidth = RightBackWidth;
+    //        preview.LeftFrontWidth = LeftFrontWidth;
+    //        preview.RightFrontWidth = RightFrontWidth;
+    //        preview.LeftDepth = LeftDepth;
+    //        preview.RightDepth = RightDepth;
+    //        preview.HasTK = HasTK;
+    //        preview.TKDepth = TKDepth;
+    //        preview.DoorSpecies = DoorSpecies;
+    //        preview.BackThickness = BackThickness;
+    //        preview.TopType = TopType;
+    //        preview.ShelfCount = ShelfCount;
+    //        preview.ShelfDepth = ShelfDepth;
+    //        preview.DrillShelfHoles = DrillShelfHoles;
+    //        preview.DoorCount = DoorCount;
+    //        preview.DoorGrainDir = DoorGrainDir;
+    //        preview.IncDoorsInList = IncDoorsInList;
+    //        preview.IncDoors = IncDoors;
+    //        preview.DrillHingeHoles = DrillHingeHoles;
+    //        preview.DrwFrontGrainDir = DrwFrontGrainDir;
+    //        preview.IncDrwFrontsInList = IncDrwFrontsInList;
+    //        preview.IncDrwFronts = IncDrwFronts;
+    //        preview.IncDrwBoxesInList = IncDrwBoxesInList;
+    //        preview.IncDrwBoxes = IncDrwBoxes;
+    //        preview.DrillSlideHoles = DrillSlideHoles;
+    //        preview.DrwCount = DrwCount;
+    //        preview.DrwStyle = DrwStyle;
+    //        preview.OpeningHeight1 = OpeningHeight1;
+    //        preview.OpeningHeight2 = OpeningHeight2;
+    //        preview.OpeningHeight3 = OpeningHeight3;
+    //        preview.OpeningHeight4 = OpeningHeight4;
+    //        preview.IncDrwBoxOpening1 = IncDrwBoxOpening1;
+    //        preview.IncDrwBoxOpening2 = IncDrwBoxOpening2;
+    //        preview.IncDrwBoxOpening3 = IncDrwBoxOpening3;
+    //        preview.IncDrwBoxOpening4 = IncDrwBoxOpening4;
+    //        preview.DrillSlideHolesOpening1 = DrillSlideHolesOpening1;
+    //        preview.DrillSlideHolesOpening2 = DrillSlideHolesOpening2;
+    //        preview.DrillSlideHolesOpening3 = DrillSlideHolesOpening3;
+    //        preview.DrillSlideHolesOpening4 = DrillSlideHolesOpening4;
+    //        preview.IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1;
+    //        preview.IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2;
+    //        preview.IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3;
+    //        preview.IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4;
+    //        preview.DrwFrontHeight1 = DrwFrontHeight1;
+    //        preview.DrwFrontHeight2 = DrwFrontHeight2;
+    //        preview.DrwFrontHeight3 = DrwFrontHeight3;
+    //        preview.DrwFrontHeight4 = DrwFrontHeight4;
+    //        preview.IncDrwFront1 = IncDrwFront1;
+    //        preview.IncDrwFront2 = IncDrwFront2;
+    //        preview.IncDrwFront3 = IncDrwFront3;
+    //        preview.IncDrwFront4 = IncDrwFront4;
+    //        preview.IncDrwFrontInList1 = IncDrwFrontInList1;
+    //        preview.IncDrwFrontInList2 = IncDrwFrontInList2;
+    //        preview.IncDrwFrontInList3 = IncDrwFrontInList3;
+    //        preview.IncDrwFrontInList4 = IncDrwFrontInList4;
+    //        preview.LeftReveal = LeftReveal;
+    //        preview.RightReveal = RightReveal;
+    //        preview.TopReveal = TopReveal;
+    //        preview.BottomReveal = BottomReveal;
+    //        preview.GapWidth = GapWidth;
+    //        // ... copy every single property
+    //    }
+    //    else
+    //    {
+    //        // No preview yet selected — create fresh preview from current fields
+    //        _mainVm.CurrentPreviewCabinet = new BaseCabinetModel
+    //        {
+    //            Width = Width,
+    //            Height = Height,
+    //            Depth = Depth,
+    //            Species = Species,
+    //            EBSpecies = EBSpecies,
+    //            Name = Name,
+    //            Qty = Qty,
+    //            Notes = Notes,
+
+    //            TKHeight = TKHeight,  // Subtype-specific
+    //            Type = Type,
+    //            LeftBackWidth = LeftBackWidth,
+    //            RightBackWidth = RightBackWidth,
+    //            LeftFrontWidth = LeftFrontWidth,
+    //            RightFrontWidth = RightFrontWidth,
+    //            LeftDepth = LeftDepth,
+    //            RightDepth = RightDepth,
+    //            HasTK = HasTK,
+    //            TKDepth = TKDepth,
+    //            DoorSpecies = DoorSpecies,
+    //            BackThickness = BackThickness,
+    //            TopType = TopType,
+    //            ShelfCount = ShelfCount,
+    //            ShelfDepth = ShelfDepth,
+    //            DrillShelfHoles = DrillShelfHoles,
+    //            DoorCount = DoorCount,
+    //            DoorGrainDir = DoorGrainDir,
+    //            IncDoorsInList = IncDoorsInList,
+    //            IncDoors = IncDoors,
+    //            DrillHingeHoles = DrillHingeHoles,
+    //            DrwFrontGrainDir = DrwFrontGrainDir,
+    //            IncDrwFrontsInList = IncDrwFrontsInList,
+    //            IncDrwFronts = IncDrwFronts,
+    //            IncDrwBoxesInList = IncDrwBoxesInList,
+    //            IncDrwBoxes = IncDrwBoxes,
+    //            DrillSlideHoles = DrillSlideHoles,
+    //            DrwCount = DrwCount,
+    //            DrwStyle = DrwStyle,
+    //            OpeningHeight1 = OpeningHeight1,
+    //            OpeningHeight2 = OpeningHeight2,
+    //            OpeningHeight3 = OpeningHeight3,
+    //            OpeningHeight4 = OpeningHeight4,
+    //            IncDrwBoxOpening1 = IncDrwBoxOpening1,
+    //            IncDrwBoxOpening2 = IncDrwBoxOpening2,
+    //            IncDrwBoxOpening3 = IncDrwBoxOpening3,
+    //            IncDrwBoxOpening4 = IncDrwBoxOpening4,
+    //            DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
+    //            DrillSlideHolesOpening2 = DrillSlideHolesOpening2,
+    //            DrillSlideHolesOpening3 = DrillSlideHolesOpening3,
+    //            DrillSlideHolesOpening4 = DrillSlideHolesOpening4,
+    //            IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1,
+    //            IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2,
+    //            IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3,
+    //            IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4,
+    //            DrwFrontHeight1 = DrwFrontHeight1,
+    //            DrwFrontHeight2 = DrwFrontHeight2,
+    //            DrwFrontHeight3 = DrwFrontHeight3,
+    //            DrwFrontHeight4 = DrwFrontHeight4,
+    //            IncDrwFront1 = IncDrwFront1,
+    //            IncDrwFront2 = IncDrwFront2,
+    //            IncDrwFront3 = IncDrwFront3,
+    //            IncDrwFront4 = IncDrwFront4,
+    //            IncDrwFrontInList1 = IncDrwFrontInList1,
+    //            IncDrwFrontInList2 = IncDrwFrontInList2,
+    //            IncDrwFrontInList3 = IncDrwFrontInList3,
+    //            IncDrwFrontInList4 = IncDrwFrontInList4,
+    //            LeftReveal = LeftReveal,
+    //            RightReveal = RightReveal,
+    //            TopReveal = TopReveal,
+    //            BottomReveal = BottomReveal,
+    //            GapWidth = GapWidth
+    //            // ... copy every property
+    //        };
+    //    }
+    //}
 }

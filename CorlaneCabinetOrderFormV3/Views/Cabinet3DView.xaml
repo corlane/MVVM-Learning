@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views"
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              xmlns:helpers="clr-namespace:CorlaneCabinetOrderFormV3.Helpers"
              xmlns:HelixToolkit="http://helix-toolkit.org/wpf"
@@ -20,12 +21,20 @@
         <viewmodels:Cabinet3DViewModel/>
     </d:UserControl.DataContext>
 
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Loaded">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadInitialModelCommand}" />
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
+
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid Background="#FF222222">
-        <HelixToolkit:HelixViewport3D x:Name="viewport" Grid.Column="0" Grid.Row="0" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Background="Gray" Margin="0"
+
+
+        <HelixToolkit:HelixViewport3D x:Name="viewport" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Background="Gray" Margin="0"
                                helpers:ZoomExtentsHelper.Bounds="{Binding PreviewBounds}"
 							   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
 							   BorderThickness="5" BorderBrush="#FF555555" 

@@ -43,6 +43,11 @@ public partial class Cabinet3DViewModel : ObservableObject
     public partial Rect3D PreviewBounds { get; set; }
 
 
+    [RelayCommand]
+    private void LoadInitialModel()
+    {
+        RebuildPreview();
+    }
 
     public void RebuildPreview()
     {
@@ -56,8 +61,8 @@ public partial class Cabinet3DViewModel : ObservableObject
         }
 
         // Lights
-        group.Children.Add(new AmbientLight(Colors.DarkGray));
-        //group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(-1, -1, -1)));
+        //group.Children.Add(new AmbientLight(Colors.DarkGray));
+        group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
         //group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(1, -1, 1)));
         
         PreviewModel = group;
