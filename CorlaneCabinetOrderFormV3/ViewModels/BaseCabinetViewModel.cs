@@ -43,8 +43,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         LoadDefaults();
         LoadSelectedIfMine(); // initial
         ValidateAllProperties();
-        UpdatePreview();
-        Debug.WriteLine($"*****************************      ***   ***     MainWindowViewModel Instance: {_mainVm.InstanceId}");
+        //UpdatePreview();
     }
 
 
@@ -55,7 +54,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public static string Type4 => "45° Corner";
 
     // Common properties from CabinetModel
-    [ObservableProperty] public partial string Type { get; set; } = Type1; partial void OnTypeChanged(string oldValue, string newValue)
+    [ObservableProperty] public partial string BaseCabType { get; set; } = Type1; partial void OnBaseCabTypeChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
@@ -548,7 +547,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Qty = baseCab.Qty;
             Notes = baseCab.Notes;
             TKHeight = baseCab.TKHeight;  // Subtype-specific
-            Type = baseCab.Type;
+            BaseCabType = baseCab.BaseCabType;
             LeftBackWidth = baseCab.LeftBackWidth;
             RightBackWidth = baseCab.RightBackWidth;
             LeftFrontWidth = baseCab.LeftFrontWidth;
@@ -616,7 +615,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         else
         {
             LoadDefaults();
-            UpdatePreview();
+            //UpdatePreview();
         }
 
         // Force preview rebuild after load
@@ -638,7 +637,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Notes = Notes,
 
             TKHeight = TKHeight,  // Subtype-specific
-            Type = Type,
+            BaseCabType = BaseCabType,
             LeftBackWidth = LeftBackWidth,
             RightBackWidth = RightBackWidth,
             LeftFrontWidth = LeftFrontWidth,
@@ -719,7 +718,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.Qty = Qty;
             selected.Notes = Notes;
             selected.TKHeight = TKHeight;  // Subtype-specific
-            selected.Type = Type;
+            selected.BaseCabType = BaseCabType;
             selected.LeftBackWidth = LeftBackWidth;
             selected.RightBackWidth = RightBackWidth;
             selected.LeftFrontWidth = LeftFrontWidth;
@@ -791,12 +790,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void LoadDefaults()
     {
-        if (Type == Type2)
+        if (BaseCabType == Type2)
         {
             // Drawer cabinet selected
             ListDrwCount = [1, 2, 3, 4];
         }
-        else if (Type == Type1)
+        else if (BaseCabType == Type1)
         {
             // Standard or corner cabinet selected
             ListDrwCount = [0, 1];
@@ -824,8 +823,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
         IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
         DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
-        if (Type == Type1) { DrwCount = _defaults.DefaultStdDrawerCount; }
-        if (Type == Type2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
+        if (BaseCabType == Type1) { DrwCount = _defaults.DefaultStdDrawerCount; }
+        if (BaseCabType == Type2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
         DrwStyle = _defaults.DefaultDrwStyle;
         OpeningHeight1 = _defaults.DefaultOpeningHeight1;
         OpeningHeight2 = _defaults.DefaultOpeningHeight2;
@@ -840,7 +839,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         GapWidth = _defaults.DefaultGapWidth;
         // etc.
 
-        UpdatePreview();
+        //UpdatePreview();
 
     }
 
@@ -849,7 +848,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         _mainVm.CurrentPreviewCabinet = new BaseCabinetModel()
         {
-            Type = Type,
+            BaseCabType = BaseCabType,
             Width = Width,
             Height = Height,
             Depth = Depth,

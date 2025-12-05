@@ -13,6 +13,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class Cabinet3DViewModel : ObservableObject
 {
+    private bool _isRebuilding = false; // Add this field
+
     public Cabinet3DViewModel()
     {
         // Blank constructor for design
@@ -27,9 +29,14 @@ public partial class Cabinet3DViewModel : ObservableObject
         _mainVm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainWindowViewModel.CurrentPreviewCabinet))
-                RebuildPreview();
+            {
+                if (!_isRebuilding) // Prevent re-entry
+                {
+                    RebuildPreview();
+                }
+            }
+
         };
-        Debug.WriteLine($"*****************************      ***   ***     MainWindowViewModel Instance: {_mainVm.InstanceId}");
 
     }
 
@@ -57,24 +64,48 @@ public partial class Cabinet3DViewModel : ObservableObject
         RebuildPreview();
     }
 
+
     public void RebuildPreview()
     {
-        var group = new Model3DGroup();
-
-
-
-        if (_mainVm.CurrentPreviewCabinet is CabinetModel cab)
+        if (_isRebuilding)
         {
-            group.Children.Add(BuildCabinet(cab));
+            Debug.WriteLine($"[Cabinet3DViewModel] Skipping RebuildPreview - already rebuilding");
+            return;
         }
 
-        // Lights
-        //group.Children.Add(new AmbientLight(Colors.DarkGray));
-        group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
-        //group.Children.Add(new DirectionalLight(Colors.White, new Vector3D(1, -1, 1)));
-        
-        PreviewModel = group;
+        try
+        {
+            _isRebuilding = true;
+
+            Debug.WriteLine($"[Cabinet3DViewModel] RebuildPreview called. CurrentPreviewCabinet: {_mainVm?.CurrentPreviewCabinet?.Name ?? "null"} (Type: {_mainVm?.CurrentPreviewCabinet?.GetType().Name ?? "null"})");
+
+            var group = new Model3DGroup();
+
+            if (_mainVm?.CurrentPreviewCabinet is CabinetModel cab)
+            {
+                Debug.WriteLine($"[Cabinet3DViewModel] Building cabinet. Type: {cab.GetType().Name}, BaseCabType: {(cab as BaseCabinetModel)?.BaseCabType ?? "N/A"}");
+                var built = BuildCabinet(cab);
+                Debug.WriteLine($"[Cabinet3DViewModel] Built cabinet has {built.Children.Count} children");
+                group.Children.Add(built);
+            }
+            else
+            {
+                Debug.WriteLine($"[Cabinet3DViewModel] WARNING: CurrentPreviewCabinet is null or not a CabinetModel!");
+            }
+
+            // Lights
+            group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
+
+            Debug.WriteLine($"[Cabinet3DViewModel] Setting PreviewModel with {group.Children.Count} total children");
+            PreviewModel = group;
+        }
+        finally
+        {
+            _isRebuilding = false;
+        }
     }
+
+
 
     private Model3DGroup BuildCabinet(CabinetModel cab)
     {
@@ -116,12 +147,12 @@ public partial class Cabinet3DViewModel : ObservableObject
         // It will work perfectly
         if (cab is BaseCabinetModel baseCab)
         {
-            if (string.IsNullOrWhiteSpace(baseCab.Type)) { baseCab.Type = "Standard"; }
+            if (string.IsNullOrWhiteSpace(baseCab.BaseCabType)) { baseCab.BaseCabType = "Standard"; }
             if (string.IsNullOrWhiteSpace(baseCab.Width)) { baseCab.Width = "18"; }
             if (string.IsNullOrWhiteSpace(baseCab.Height)) { baseCab.Height = "34.5"; }
             if (string.IsNullOrWhiteSpace(baseCab.Depth)) { baseCab.Depth = "24"; }
 
-            string? cabType = baseCab.Type;
+            string? cabType = baseCab.BaseCabType;
             double width = ConvertDimension.FractionToDouble(baseCab.Width);
             double height = ConvertDimension.FractionToDouble(baseCab.Height);
             double depth = ConvertDimension.FractionToDouble(baseCab.Depth);
@@ -612,7 +643,6 @@ public partial class Cabinet3DViewModel : ObservableObject
         }
 
         // other cabinet types here
-        Debug.WriteLine($"*****************************      ***   *** From Build Cabinet:    MainWindowViewModel Instance: {_mainVm.InstanceId}");
 
         return cabinet;
     }
@@ -777,40 +807,59 @@ public partial class Cabinet3DViewModel : ObservableObject
 
     }
 
-
-    private static Material GetPlywoodSpecies(string species, string grainDirection)
+    private static Material GetPlywoodSpecies(string? panelSpecies, string? grainDirection)
     {
-        //string cleanSpecies = species.Replace(" ", ""); // "Prefinished Ply" → "PrefinishedPly"
+        // Provide defaults if null or empty
+        panelSpecies ??= "Prefinished Ply";
+        grainDirection ??= "Horizontal";
 
-        string resourcePath = $"pack://application:,,,/Images/Plywood/{species} - {grainDirection}.png";
+        if (string.IsNullOrWhiteSpace(panelSpecies))
+            panelSpecies = "Prefinished Ply";
+        if (string.IsNullOrWhiteSpace(grainDirection))
+            grainDirection = "Horizontal";
+
+        Debug.WriteLine($"[GetPlywoodSpecies] Attempting to load: species='{panelSpecies}', grain='{grainDirection}'");
+
+        string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
 
         try
         {
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(resourcePath);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad; // important!
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.EndInit();
-            bitmap.Freeze(); // makes it thread-safe
+            bitmap.Freeze();
+
+            Debug.WriteLine($"[GetPlywoodSpecies] SUCCESS loading: {resourcePath}");
 
             var brush = new ImageBrush(bitmap)
             {
                 TileMode = TileMode.Tile,
                 ViewportUnits = BrushMappingMode.Absolute,
-                Viewport = new Rect(0, 0, 1, 1) // 1 unit = 1 inch in 3D space
+                Viewport = new Rect(0, 0, 1, 1)
             };
 
             return new DiffuseMaterial(brush);
         }
-        catch
+        catch (Exception ex)
         {
-            // Fallback if texture missing
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(0, 140, 140)));
+            Debug.WriteLine($"[GetPlywoodSpecies] ERROR loading texture '{resourcePath}': {ex.GetType().Name} - {ex.Message}");
+            // Fallback to solid color
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
         }
     }
 
-    private static Material GetEdgeBandingSpecies(string species)
+    private static Material GetEdgeBandingSpecies(string? species)
     {
+        Debug.WriteLine($"[GetEdgeBandingSpecies] Attempting to load: species='{species ?? "null"}'");
+
+        // Handle "None" or null
+        if (string.IsNullOrWhiteSpace(species) || species == "None")
+        {
+            Debug.WriteLine($"[GetEdgeBandingSpecies] Using solid color for 'None' or null");
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19))); // Wood brown
+        }
 
         string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
 
@@ -819,26 +868,28 @@ public partial class Cabinet3DViewModel : ObservableObject
             var bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.UriSource = new Uri(resourcePath);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad; // important!
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.EndInit();
-            bitmap.Freeze(); // makes it thread-safe
+            bitmap.Freeze();
+
+            Debug.WriteLine($"[GetEdgeBandingSpecies] SUCCESS loading: {resourcePath}");
 
             var brush = new ImageBrush(bitmap)
             {
                 TileMode = TileMode.Tile,
                 ViewportUnits = BrushMappingMode.Absolute,
-                Viewport = new Rect(0, 0, 1, 1) // 1 unit = 1 inch in 3D space
+                Viewport = new Rect(0, 0, 1, 1)
             };
 
             return new DiffuseMaterial(brush);
         }
-        catch
+        catch (Exception ex)
         {
-            // Fallback if texture missing
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(255, 0, 0)));
+            Debug.WriteLine($"[GetEdgeBandingSpecies] ERROR loading edgebanding texture '{resourcePath}': {ex.GetType().Name} - {ex.Message}");
+            // Fallback to solid color
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19)));
         }
     }
-
 
 }
 

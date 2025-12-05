@@ -79,17 +79,18 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
 
     [ObservableProperty]
     public partial CabinetModel? SelectedCabinet { get; set; }
+
     partial void OnSelectedCabinetChanged(CabinetModel? value)
     {
         if (value == null)
         {
-            SelectedTabIndex = 1;   // or whatever default you want
-            CurrentPreviewCabinet = new BaseCabinetModel();
+            // DON'T clear the preview when deselecting - keep the last cabinet visible
+            // CurrentPreviewCabinet = null;
             return;
         }
 
-        // THIS IS THE ONLY PLACE THAT KNOWS ABOUT TYPES → tiny and forever
-        SelectedTabIndex = value switch
+        // Determine target tab but don't switch if already there
+        int targetTab = value switch
         {
             BaseCabinetModel => 0,
             UpperCabinetModel => 1,
@@ -97,8 +98,13 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             PanelModel => 3,
             _ => SelectedTabIndex
         };
+
+        // Only change tab if different (prevents feedback loop)
+        if (SelectedTabIndex != targetTab)
+        {
+            SelectedTabIndex = targetTab;
+        }
+
         CurrentPreviewCabinet = value;
     }
-
-
 }

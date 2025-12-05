@@ -69,7 +69,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string BackThickness { get; set; } = "";
 
 
-    [ObservableProperty] public partial string Type { get; set; } = ""; partial void OnTypeChanged(string value)
+    [ObservableProperty] public partial string UpperCabType { get; set; } = ""; partial void OnUpperCabTypeChanged(string value)
     {
         StandardDimsVisibility = value == Type1;
         Corner90DimsVisibility = value == Type2;
@@ -166,7 +166,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             Name = Name,
             Qty = Qty,
             Notes = Notes,
-            Type = Type,
+            UpperCabType = UpperCabType,
             LeftBackWidth = LeftBackWidth,
             RightBackWidth = RightBackWidth,
             LeftFrontWidth = LeftFrontWidth,
@@ -204,7 +204,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             Name = upperCab.Name;
             Qty = upperCab.Qty;
             Notes = upperCab.Notes;
-            Type = upperCab.Type;
+            UpperCabType = upperCab.UpperCabType;
             LeftBackWidth = upperCab.LeftBackWidth;
             RightBackWidth = upperCab.RightBackWidth;
             LeftFrontWidth = upperCab.LeftFrontWidth;
@@ -225,7 +225,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             TopReveal = upperCab.TopReveal;
             BottomReveal = upperCab.BottomReveal;
             GapWidth = upperCab.GapWidth;
-
+            UpdatePreview();
             // copy every property
         }
         else if (_mainVm.SelectedCabinet == null)
@@ -235,7 +235,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             // clear all
         }
 
-        UpdatePreview();
+       // UpdatePreview();
 
     }
 
@@ -252,7 +252,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;
-            selected.Type = Type;
+            selected.UpperCabType = UpperCabType;
             selected.LeftBackWidth = LeftBackWidth;
             selected.RightBackWidth = RightBackWidth;
             selected.LeftFrontWidth = LeftFrontWidth;
@@ -310,7 +310,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     private void UpdatePreview()
     {
-        _mainVm.CurrentPreviewCabinet = new BaseCabinetModel // WROOOOOOONG... but works when clicking on the list?!
+        _mainVm.CurrentPreviewCabinet = new UpperCabinetModel // WROOOOOOONG... but works when clicking on the list?!
         {
             Width = Width,
             Height = Height,
@@ -320,7 +320,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             Name = Name,
             Qty = Qty,
             Notes = Notes,
-            Type = Type,
+            UpperCabType = UpperCabType,
             LeftBackWidth = LeftBackWidth,
             RightBackWidth = RightBackWidth,
             LeftFrontWidth = LeftFrontWidth,

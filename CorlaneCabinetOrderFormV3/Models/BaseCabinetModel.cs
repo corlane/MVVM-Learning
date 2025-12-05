@@ -1,22 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CorlaneCabinetOrderFormV3.ViewModels;
 
 namespace CorlaneCabinetOrderFormV3.Models;
 
 public partial class BaseCabinetModel : CabinetModel
 {
-    public BaseCabinetModel()
-    {
-        //Type = "Standard";
-        //Width = "18";
-        //Height = "34.5";
-        //Depth = "24";
-        //BackThickness = "0.75";
-        //TKDepth = "3";
-        //TKHeight = "4";
-    }
-
     // Type-specific properties for BaseCabinetModel
-    [ObservableProperty] public partial string Type { get; set; }
+    [ObservableProperty] public partial string BaseCabType { get; set; }
     [ObservableProperty] public partial string LeftBackWidth { get; set; }
     [ObservableProperty] public partial string RightBackWidth { get; set; }
     [ObservableProperty] public partial string LeftFrontWidth { get; set; }
