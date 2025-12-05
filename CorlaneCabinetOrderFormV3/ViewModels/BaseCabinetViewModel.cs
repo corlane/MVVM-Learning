@@ -43,7 +43,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         LoadDefaults();
         LoadSelectedIfMine(); // initial
         ValidateAllProperties();
-        //UpdatePreview();
     }
 
 
@@ -615,10 +614,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         else
         {
             LoadDefaults();
-            //UpdatePreview();
         }
-
-        // Force preview rebuild after load
     }
 
     // Commands
@@ -780,11 +776,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.BottomReveal = BottomReveal;
             selected.GapWidth = GapWidth;
 
-            // No collection replace needed — bindings update instantly
         }
 
         // Optional: clear selection after update
-        _mainVm.SelectedCabinet = null;
+        //_mainVm.SelectedCabinet = null;
     }
 
     [RelayCommand]
@@ -837,9 +832,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         TopReveal = _defaults.DefaultBaseTopReveal;
         BottomReveal = _defaults.DefaultBaseBottomReveal;
         GapWidth = _defaults.DefaultGapWidth;
-        // etc.
-
-        //UpdatePreview();
 
     }
 
@@ -920,8 +912,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             BottomReveal = BottomReveal,
             GapWidth = GapWidth
 
-            // ... copy EVERY property from fields to the preview model
-            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
     }
 }
