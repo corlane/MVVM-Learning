@@ -78,8 +78,6 @@
             <StackPanel Orientation="Vertical">
                 <Label Content="Species:" Margin="0,0,0,-8"/>
                 <ComboBox Name="comboFillerCabinetSpecies" Margin="5" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}"/>
-                <Label Content="Edgebanding" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboFillerEBSpecies" Margin="5" Width="190" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding EBSpecies}"/>
             </StackPanel>
         </GroupBox>
 

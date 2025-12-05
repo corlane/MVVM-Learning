@@ -4,6 +4,7 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using System.ComponentModel.DataAnnotations;
+using System.Windows;
 
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -25,39 +26,20 @@ public partial class FillerViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
 
+        // Subscribe to ALL property changes in this ViewModel
+        this.PropertyChanged += (_, __) => UpdatePreview();
+
         _mainVm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
                 LoadSelectedIfMine();
         };
 
-        LoadSelectedIfMine(); // initial
+        Width = "4";
+        Height = "34.5";
+        Depth = "24";
         LoadDefaults();
-
         ValidateAllProperties();
-    }
-
-    private void LoadSelectedIfMine()
-    {
-        if (_mainVm!.SelectedCabinet is FillerModel filler)
-        {
-            Width = filler.Width;
-            Height = filler.Height;
-            Depth = filler.Depth;
-            Species = filler.Species;
-            EBSpecies = filler.EBSpecies;
-            Name = filler.Name;
-            Qty = filler.Qty;
-            Notes = filler.Notes;
-
-            // copy every property
-        }
-        else if (_mainVm.SelectedCabinet == null)
-        {
-            // Optional: clear fields when nothing selected
-            //Width = Height = Depth = ToeKickHeight = "";
-            // clear all
-        }
     }
 
 
@@ -108,6 +90,32 @@ public partial class FillerViewModel : ObservableValidator
         "Custom"
     ];
 
+    private void LoadSelectedIfMine()
+    {
+        if (_mainVm.SelectedCabinet is FillerModel filler)
+        {
+            Width = filler.Width;
+            Height = filler.Height;
+            Depth = filler.Depth;
+            Species = filler.Species;
+            EBSpecies = filler.EBSpecies;
+            Name = filler.Name;
+            Qty = filler.Qty;
+            Notes = filler.Notes;
+
+            UpdatePreview();
+        }
+        else if (_mainVm.SelectedCabinet == null)
+        {
+            // Optional: clear fields when nothing selected
+            //Width = Height = Depth = ToeKickHeight = "";
+            // clear all
+        }
+
+
+    }
+
+
     [RelayCommand]
     private void AddCabinet()
     {
@@ -140,14 +148,10 @@ public partial class FillerViewModel : ObservableValidator
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;
-
-            // copy every property back
-
-            // No collection replace needed — bindings update instantly
         }
 
         // Optional: clear selection after update
-        _mainVm.SelectedCabinet = null;
+        //_mainVm.SelectedCabinet = null;
     }
 
 
@@ -159,4 +163,21 @@ public partial class FillerViewModel : ObservableValidator
         
         // etc.
     }
+
+
+    private void UpdatePreview()
+    {
+        _mainVm.CurrentPreviewCabinet = new FillerModel
+        {
+            Width = Width,
+            Height = Height,
+            Depth = Depth,
+            Species = Species,
+            EBSpecies = EBSpecies,
+
+            // ... copy EVERY property from fields to the preview model
+            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
+        };
+    }
+
 }

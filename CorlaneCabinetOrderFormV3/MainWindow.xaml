@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3"
         xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
         xmlns:views="clr-namespace:CorlaneCabinetOrderFormV3.Views"
+        xmlns:b="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" 

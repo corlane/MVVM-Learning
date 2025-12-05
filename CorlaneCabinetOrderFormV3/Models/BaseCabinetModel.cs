@@ -6,7 +6,6 @@ namespace CorlaneCabinetOrderFormV3.Models;
 public partial class BaseCabinetModel : CabinetModel
 {
     // Type-specific properties for BaseCabinetModel
-    [ObservableProperty] public partial string BaseCabType { get; set; }
     [ObservableProperty] public partial string LeftBackWidth { get; set; }
     [ObservableProperty] public partial string RightBackWidth { get; set; }
     [ObservableProperty] public partial string LeftFrontWidth { get; set; }

@@ -61,8 +61,7 @@
 
                     <GridViewColumn Header="Qty" DisplayMemberBinding="{Binding Qty}" Width="Auto"/>
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding CabinetType}" Width="Auto"/>
-                    <GridViewColumn Header="Base Style" DisplayMemberBinding="{Binding BaseCabType}" Width="Auto"/>
-                    <GridViewColumn Header="Upper Style" DisplayMemberBinding="{Binding UpperCabType}" Width="Auto"/>
+                    <GridViewColumn Header="Style" DisplayMemberBinding="{Binding Style}" Width="Auto"/>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
                     <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width}" Width="Auto"/>
                     <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height}" Width="Auto"/>

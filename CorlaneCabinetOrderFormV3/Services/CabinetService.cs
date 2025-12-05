@@ -26,7 +26,7 @@ public class CabinetService : ICabinetService
         var options = new JsonSerializerOptions
         {
             WriteIndented = true,  // Pretty-print JSON for readability
-            IncludeFields = true   // If needed for any fields
+            IncludeFields = true,   // If needed for any fields
         };
         var json = JsonSerializer.Serialize(Cabinets, options);
         await File.WriteAllTextAsync(filePath, json);

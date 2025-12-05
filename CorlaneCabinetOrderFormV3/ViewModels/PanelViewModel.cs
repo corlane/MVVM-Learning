@@ -27,15 +27,19 @@ public partial class PanelViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
 
+        // Subscribe to ALL property changes in this ViewModel
+        this.PropertyChanged += (_, __) => UpdatePreview();
+
         _mainVm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
                 LoadSelectedIfMine();
         };
 
-        LoadSelectedIfMine(); // initial
+        Width = "16";
+        Height = "32";
+        Depth = "0.75";
         LoadDefaults();
-
         ValidateAllProperties();
     }
 
@@ -45,7 +49,7 @@ public partial class PanelViewModel : ObservableValidator
     [ObservableProperty] public partial double MaterialThickness14 { get; set; } = 0.25;
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Height { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Depth { get; set; } = "";
     [ObservableProperty] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
@@ -92,6 +96,12 @@ public partial class PanelViewModel : ObservableValidator
     "Wood Mahogany",
     "Custom"
     ];
+    public List<string> ListPanelDepths { get; } =
+    [
+        "0.25",
+        "0.75"
+    ];
+
 
     private void LoadSelectedIfMine()
     {
@@ -110,7 +120,7 @@ public partial class PanelViewModel : ObservableValidator
             PanelEBRight = panel.PanelEBRight;
             PanelEBBottom = panel.PanelEBBottom;
 
-            // copy every property
+            UpdatePreview();
         }
         else if (_mainVm.SelectedCabinet == null)
         {
@@ -176,6 +186,21 @@ public partial class PanelViewModel : ObservableValidator
         EBSpecies = _defaults.DefaultEBSpecies;
 
         // etc.
+    }
+
+    private void UpdatePreview()
+    {
+        _mainVm.CurrentPreviewCabinet = new PanelModel
+        {
+            Width = Width,
+            Height = Height,
+            Depth = Depth,
+            Species = Species,
+            EBSpecies = EBSpecies,
+
+            // ... copy EVERY property from fields to the preview model
+            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
+        };
     }
 
 }

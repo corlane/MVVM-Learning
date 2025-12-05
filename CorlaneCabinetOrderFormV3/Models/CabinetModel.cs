@@ -23,6 +23,7 @@ public abstract partial class CabinetModel : ObservableObject
     [ObservableProperty] public partial string Name { get; set; }
     [ObservableProperty] public partial int Qty { get; set; }
     [ObservableProperty] public partial string Notes { get; set; }
+    [ObservableProperty] public partial string Style { get; set; }
 
 
     public virtual string CabinetType =>

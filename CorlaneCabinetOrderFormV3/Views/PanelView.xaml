@@ -57,7 +57,7 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Depth" Margin="5,0,4,0" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="textDepthUpper" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"
+                    <ComboBox x:Name="comboDepthUpper" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding ListPanelDepths}"
                                                  Text="{Binding Depth, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
