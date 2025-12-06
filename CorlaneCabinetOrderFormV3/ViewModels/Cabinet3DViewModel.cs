@@ -647,30 +647,22 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                 // working on 90 deg deck and top now:
 
-                // Deck
+                // Deck & top
                 deckPoints = new List<Point3D>
                 {
                     new (0,0,0),
-                    new (interiorWidth,0,0),
-                    new (interiorWidth,depth,0),
-                    new (0,depth,0)
+                    new (leftFrontWidth-MaterialThickness34,0,0),
+                    new (leftFrontWidth-MaterialThickness34, rightFrontWidth-MaterialThickness34,0),
+                    new ((leftFrontWidth - MaterialThickness34) + rightDepth,rightFrontWidth - MaterialThickness34,0),
+                    new ((leftFrontWidth - MaterialThickness34) + rightDepth,-leftDepth,0),
+                    new (0,-leftDepth,0),
+
                 };
                 deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
-                ApplyTransform(deck, -(interiorWidth / 2), -depth, tk_Height, 270, 0, 0);
+                top = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
 
-                // Full Top
-                if (baseCab.TopType == "Full")
-                {
-                    topPoints = new List<Point3D>
-                    {
-                        new (0,0,0),
-                        new (interiorWidth,0,0),
-                        new (interiorWidth,depth,0),
-                        new (0,depth,0)
-                    };
-                    top = CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab);
-                    ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
-                }
+                ApplyTransform(deck, 0, leftDepth, -height, 90, 0, 0);
+                ApplyTransform(top, 0, leftDepth, -tk_Height - MaterialThickness34, 90, 0, 0);
 
 
                 // etc...
@@ -688,7 +680,8 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
 
-
+                cabinet.Children.Add(deck);
+                cabinet.Children.Add(top);
 
                 cabinet.Children.Add(leftEnd);
                 cabinet.Children.Add(rightEnd);
