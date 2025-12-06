@@ -82,11 +82,11 @@
 
         <GroupBox Header="Select Edges To Be Edgebanded" Grid.Row="1" Grid.Column="1" Margin="5">
             <StackPanel Orientation="Vertical">
-                <CheckBox x:Name="checkEBPanelTop" Content="Top" HorizontalAlignment="Center" Margin="0,40,0,5" IsChecked="{Binding PanelEBTop}"/>
+                <CheckBox x:Name="checkEBPanelTop" Content="Top" HorizontalAlignment="Center" Margin="0,15,0,5" IsChecked="{Binding PanelEBTop}"/>
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox x:Name="checkEBPanelLeft" Content="Left" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding PanelEBLeft}"/>
-                    <!--<Image Source="/Images/woodgrain.PNG" Width="150" Height="200"/>-->
-                    <CheckBox x:Name="checkEBPanelRight" Content="Right" VerticalAlignment="Center" Margin="0,0,20,0" IsChecked="{Binding PanelEBRight}"/>
+                    <CheckBox x:Name="checkEBPanelLeft" Content="Left" VerticalAlignment="Center" Margin="65,0,0,0" IsChecked="{Binding PanelEBLeft}"/>
+                    <Image Source="/Images/woodgrain.PNG" Width="150" Height="200" HorizontalAlignment="Center"/>
+                    <CheckBox x:Name="checkEBPanelRight" Content="Right" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding PanelEBRight}"/>
                 </StackPanel>
                 <CheckBox x:Name="checkEBPanelBottom" Content="Bottom" HorizontalAlignment="Center" Margin="0,5,0,20" IsChecked="{Binding PanelEBBottom}"/>
             </StackPanel>

@@ -66,35 +66,35 @@ public partial class PanelViewModel : ObservableValidator
     public List<string> ListCabSpecies { get; } =
     [
         "Prefinished Ply",
-    "Maple Ply",
-    "Red Oak Ply",
-    "White Oak Ply",
-    "Cherry Ply",
-    "Alder Ply",
-    "Mahogany Ply",
-    "Walnut Ply",
-    "Hickory Ply",
-    "MDF",
-    "Melamine",
-    "Custom"
+        "Maple Ply",
+        "Red Oak Ply",
+        "White Oak Ply",
+        "Cherry Ply",
+        "Alder Ply",
+        "Mahogany Ply",
+        "Walnut Ply",
+        "Hickory Ply",
+        "MDF",
+        "Melamine",
+        "Custom"
     ];
     public List<string> ListEBSpecies { get; } =
     [
         "None",
-    "PVC White",
-    "PVC Black",
-    "PVC Hardrock Maple",
-    "PVC Paint Grade",
-    "Wood Prefinished Maple",
-    "Wood Maple",
-    "Wood Red Oak",
-    "Wood White Oak",
-    "Wood Walnut",
-    "Wood Cherry",
-    "Wood Alder",
-    "Wood Hickory",
-    "Wood Mahogany",
-    "Custom"
+        "PVC White",
+        "PVC Black",
+        "PVC Hardrock Maple",
+        "PVC Paint Grade",
+        "Wood Prefinished Maple",
+        "Wood Maple",
+        "Wood Red Oak",
+        "Wood White Oak",
+        "Wood Walnut",
+        "Wood Cherry",
+        "Wood Alder",
+        "Wood Hickory",
+        "Wood Mahogany",
+        "Custom"
     ];
     public List<string> ListPanelDepths { get; } =
     [
