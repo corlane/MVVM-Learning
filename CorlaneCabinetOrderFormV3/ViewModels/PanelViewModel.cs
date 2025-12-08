@@ -201,6 +201,10 @@ public partial class PanelViewModel : ObservableValidator
             Depth = Depth,
             Species = Species,
             EBSpecies = EBSpecies,
+            PanelEBTop = PanelEBTop,
+            PanelEBBottom = PanelEBBottom,
+            PanelEBLeft = PanelEBLeft,
+            PanelEBRight = PanelEBRight
         };
         // Request preview using the tab index owner token (Panel tab = 3)
         previewSvc.RequestPreview(3, model);
