@@ -4,6 +4,7 @@ using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -42,6 +43,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
         Width = "18";
         Height = "34.5";
         Depth = "24";
+        LeftFrontWidth = "12";
+        RightFrontWidth = "12";
+        LeftDepth = "24";
+        RightDepth = "24";
 
         ValidateAllProperties();
     }
@@ -840,7 +845,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // For 3D model:
     private void UpdatePreview() // Update 3D cabinet model preview
     {
-        _mainVm.CurrentPreviewCabinet = new BaseCabinetModel()
+        // _mainVm.CurrentPreviewCabinet = new BaseCabinetModel() --- Original before Preview Service
+        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
+
+        var model = new BaseCabinetModel
         {
             Style = Style,
             Width = Width,
@@ -848,9 +856,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Depth = Depth,
             Species = Species,
             EBSpecies = EBSpecies,
-            //Name = Name,
-            //Qty = Qty,
-            //Notes = Notes,
 
             TKHeight = TKHeight,  // Subtype-specific
             LeftBackWidth = LeftBackWidth,
@@ -866,20 +871,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
             TopType = TopType,
             ShelfCount = ShelfCount,
             ShelfDepth = ShelfDepth,
-            //DrillShelfHoles = DrillShelfHoles,
             DoorCount = DoorCount,
             DoorGrainDir = DoorGrainDir,
-            //IncDoorsInList = IncDoorsInList,
             IncDoors = IncDoors,
-            //DrillHingeHoles = DrillHingeHoles,
             DrwFrontGrainDir = DrwFrontGrainDir,
-            //IncDrwFrontsInList = IncDrwFrontsInList,
             IncDrwFronts = IncDrwFronts,
-            //IncDrwBoxesInList = IncDrwBoxesInList,
             IncDrwBoxes = IncDrwBoxes,
-            //DrillSlideHoles = DrillSlideHoles,
             DrwCount = DrwCount,
-            //DrwStyle = DrwStyle,
             OpeningHeight1 = OpeningHeight1,
             OpeningHeight2 = OpeningHeight2,
             OpeningHeight3 = OpeningHeight3,
@@ -888,14 +886,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwBoxOpening2 = IncDrwBoxOpening2,
             IncDrwBoxOpening3 = IncDrwBoxOpening3,
             IncDrwBoxOpening4 = IncDrwBoxOpening4,
-            //DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
-            //DrillSlideHolesOpening2 = DrillSlideHolesOpening2,
-            //DrillSlideHolesOpening3 = DrillSlideHolesOpening3,
-            //DrillSlideHolesOpening4 = DrillSlideHolesOpening4,
-            //IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1,
-            //IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2,
-            //IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3,
-            //IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4,
             DrwFrontHeight1 = DrwFrontHeight1,
             DrwFrontHeight2 = DrwFrontHeight2,
             DrwFrontHeight3 = DrwFrontHeight3,
@@ -904,15 +894,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwFront2 = IncDrwFront2,
             IncDrwFront3 = IncDrwFront3,
             IncDrwFront4 = IncDrwFront4,
-            //IncDrwFrontInList1 = IncDrwFrontInList1,
-            //IncDrwFrontInList2 = IncDrwFrontInList2,
-            //IncDrwFrontInList3 = IncDrwFrontInList3,
-            //IncDrwFrontInList4 = IncDrwFrontInList4,
             LeftReveal = LeftReveal,
             RightReveal = RightReveal,
             TopReveal = TopReveal,
             BottomReveal = BottomReveal,
             GapWidth = GapWidth
         };
+
+        // Request preview using the tab index owner token (Base tab = 0)
+        previewSvc.RequestPreview(0, model);
     }
 }

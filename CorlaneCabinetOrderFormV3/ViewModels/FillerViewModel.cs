@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
 
@@ -167,7 +168,10 @@ public partial class FillerViewModel : ObservableValidator
 
     private void UpdatePreview()
     {
-        _mainVm.CurrentPreviewCabinet = new FillerModel
+        //_mainVm.CurrentPreviewCabinet = new FillerModel --- Original before Preview Service
+        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
+
+        var model = new FillerModel
         {
             Width = Width,
             Height = Height,
@@ -178,6 +182,8 @@ public partial class FillerViewModel : ObservableValidator
             // ... copy EVERY property from fields to the preview model
             // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
+        // Request preview using the tab index owner token (Filler tab = 2)
+        previewSvc.RequestPreview(2, model);
     }
 
 }

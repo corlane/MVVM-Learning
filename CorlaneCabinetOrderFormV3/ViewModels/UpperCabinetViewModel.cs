@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -311,7 +312,10 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     private void UpdatePreview()
     {
-        _mainVm.CurrentPreviewCabinet = new UpperCabinetModel
+        //_mainVm.CurrentPreviewCabinet = new UpperCabinetModel --- Original before Preview Service
+        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
+
+        var model = new UpperCabinetModel
         {
             Style = Style,
             Width = Width,
@@ -319,9 +323,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
             Depth = Depth,
             Species = Species,
             EBSpecies = EBSpecies,
-            //Name = Name,
-            //Qty = Qty,
-            //Notes = Notes,
             LeftBackWidth = LeftBackWidth,
             RightBackWidth = RightBackWidth,
             LeftFrontWidth = LeftFrontWidth,
@@ -331,21 +332,18 @@ public partial class UpperCabinetViewModel : ObservableValidator
             DoorSpecies = DoorSpecies,
             BackThickness = BackThickness,
             ShelfCount = ShelfCount,
-            //DrillShelfHoles = DrillShelfHoles,
             DoorCount = DoorCount,
             DoorGrainDir = DoorGrainDir,
-            //IncDoorsInList = IncDoorsInList,
             IncDoors = IncDoors,
-            //DrillHingeHoles = DrillHingeHoles,
             LeftReveal = LeftReveal,
             RightReveal = RightReveal,
             TopReveal = TopReveal,
             BottomReveal = BottomReveal,
             GapWidth = GapWidth
-
-            // ... copy EVERY property from fields to the preview model
-            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
+
+        // Request preview using the tab index owner token (Upper tab = 1)
+        previewSvc.RequestPreview(1, model);
     }
 
 }

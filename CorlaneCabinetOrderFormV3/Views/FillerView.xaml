@@ -41,7 +41,10 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <GroupBox x:Name="groupFillerDimensions" Grid.Column="0" Grid.Row="0" Header="Dimensions" Margin="5">
+
+        <Button x:Name="buttonLoadDefaults" Content="Load Defaults" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Command="{Binding LoadDefaultsCommand, Mode=OneWay}"/>
+
+        <GroupBox x:Name="groupFillerDimensions" Grid.Column="0" Grid.Row="0" Header="Dimensions" Margin="5,50,5,5" HorizontalAlignment="Left" Padding="0,0,20,0">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Width" HorizontalAlignment="Left" Margin="5,5,3,0"/>

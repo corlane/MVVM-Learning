@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -190,17 +191,19 @@ public partial class PanelViewModel : ObservableValidator
 
     private void UpdatePreview()
     {
-        _mainVm.CurrentPreviewCabinet = new PanelModel
+        //_mainVm.CurrentPreviewCabinet = new PanelModel -- Original before Preview Service
+        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
+
+        var model = new PanelModel
         {
             Width = Width,
             Height = Height,
             Depth = Depth,
             Species = Species,
             EBSpecies = EBSpecies,
-
-            // ... copy EVERY property from fields to the preview model
-            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
+        // Request preview using the tab index owner token (Panel tab = 3)
+        previewSvc.RequestPreview(3, model);
     }
 
 }

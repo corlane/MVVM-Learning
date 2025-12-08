@@ -35,7 +35,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Margin="5" Header="Upper Cabinet Style" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Button x:Name="buttonLoadDefaults" Content="Load Defaults" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Command="{Binding LoadDefaultsCommand, Mode=OneWay}"/>
+
+        <GroupBox Grid.Row="0" Grid.Column="0" Margin="5,50,5,5" Header="Upper Cabinet Style" HorizontalAlignment="Left" VerticalAlignment="Top">
             <ComboBox Name="comboUpperCabType" Width="132" Margin="0,10,0,10" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Style, UpdateSourceTrigger=PropertyChanged}"/>
         </GroupBox>
 
@@ -205,7 +207,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Shelves" Grid.Row="0" Grid.Column="0" Margin="5,80,5,5" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <GroupBox Header="Shelves" Grid.Row="0" Grid.Column="0" Margin="5,125,5,5" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <ComboBox Name="comboShelvesUpper" Width="80" HorizontalAlignment="Left" Margin="5" 
                                                       ItemsSource="{Binding ComboShelfCount}" SelectedItem="{Binding ShelfCount}"/>
@@ -213,7 +215,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Back Thickness" Grid.Row="0" Grid.Column="0" Margin="5,170,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <GroupBox Header="Back Thickness" Grid.Row="0" Grid.Column="0" Margin="5,220,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
             <ComboBox x:Name="comboUpperBackThickness" Width="110" Margin="5" ItemsSource="{Binding ListBackThickness}" SelectedItem="{Binding BackThickness}"/>
         </GroupBox>
 

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using System.Threading.Tasks;
 using System.Windows;
@@ -81,16 +82,22 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
     [ObservableProperty]
     public partial CabinetModel? SelectedCabinet { get; set; }
 
+    partial void OnSelectedTabIndexChanged(int value)
+    {
+        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
+        // Use the tab index as the owner token (or map index → viewmodel instance)
+        previewSvc.SetActiveOwner(value);
+    }
+
+    // When the user clicks the list (SelectedCabinet set), you may want to force preview:
     partial void OnSelectedCabinetChanged(CabinetModel? value)
     {
         if (value == null)
         {
-            // DON'T clear the preview when deselecting - keep the last cabinet visible
-            // CurrentPreviewCabinet = null;
             return;
         }
 
-        // Determine target tab but don't switch if already there
+        // Map runtime cabinet type -> tab index
         int targetTab = value switch
         {
             BaseCabinetModel => 0,
@@ -100,12 +107,14 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             _ => SelectedTabIndex
         };
 
-        // Only change tab if different (prevents feedback loop)
+        // Only change tab when different (prevents unnecessary churn)
         if (SelectedTabIndex != targetTab)
         {
             SelectedTabIndex = targetTab;
         }
 
-        CurrentPreviewCabinet = value;
+        // Force preview immediately with the selected cabinet's data
+        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
+        previewSvc.ForcePreview(value);
     }
 }

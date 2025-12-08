@@ -22,6 +22,7 @@ public partial class App : Application
                 services.AddSingleton<ICabinetService, CabinetService>();
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<DefaultSettingsService>();
+                services.AddSingleton<IPreviewService, PreviewService>();
 
                 // Register ViewModels as transients
                 //services.AddTransient<MainWindowViewModel>();
@@ -45,6 +46,13 @@ public partial class App : Application
             DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
 
         };
+
+        // Ensure the PreviewService has an initial active owner (the current SelectedTabIndex)
+        // Otherwise RequestPreview(ownerIndex, model) calls made by the tab VMs are ignored
+        var previewSvc = ServiceProvider.GetRequiredService<IPreviewService>();
+        var mainVm = ServiceProvider.GetRequiredService<MainWindowViewModel>();
+        previewSvc.SetActiveOwner(mainVm.SelectedTabIndex);
+
         mainWindow.Show();
     }
 

@@ -30,7 +30,6 @@ public partial class CabinetListViewModel : ObservableValidator
             {
                 if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
                 {
-                    Debug.WriteLine($"[CabinetListViewModel] MainVM.SelectedCabinet changed to: {_mainVm.SelectedCabinet?.Name ?? "null"}");
                     OnPropertyChanged(nameof(SelectedCabinet));
                 }
             };
@@ -45,20 +44,13 @@ public partial class CabinetListViewModel : ObservableValidator
         get => _mainVm?.SelectedCabinet;
         set
         {
-            Debug.WriteLine($"[CabinetListViewModel] SelectedCabinet setter called with: {value?.Name ?? "null"} (Type: {value?.GetType().Name ?? "null"})");
-
             if (_mainVm != null)
             {
                 var oldValue = _mainVm.SelectedCabinet;
                 if (oldValue != value)
                 {
-                    Debug.WriteLine($"[CabinetListViewModel] Setting MainVM.SelectedCabinet from {oldValue?.Name ?? "null"} to {value?.Name ?? "null"}");
                     _mainVm.SelectedCabinet = value;
                     OnPropertyChanged();
-                }
-                else
-                {
-                    Debug.WriteLine($"[CabinetListViewModel] Value unchanged, not setting");
                 }
             }
         }
