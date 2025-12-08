@@ -24,6 +24,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
+    private bool _isResizing;
 
     public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
@@ -394,10 +395,34 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = "";
-    [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = "";
-    [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = "";
-    [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = "";
+    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = ""; partial void OnDrwFrontHeight1Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
+    [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = ""; partial void OnDrwFrontHeight2Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
+    [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = ""; partial void OnDrwFrontHeight3Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
+    [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = ""; partial void OnDrwFrontHeight4Changed(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            ResizeOpeningHeights();
+        }
+    }
 
     // Reveal and gap properties
     [ObservableProperty] public partial string LeftReveal { get; set; } = "";
@@ -478,12 +503,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     // Visibility properties
     [ObservableProperty] public partial bool GroupDoorsVisibility { get; set; } = true;
-    [ObservableProperty] public partial bool GroupDrawersVisibility { get; set; } = false;
+    [ObservableProperty] public partial bool GroupDrawersVisibility { get; set; } = true;
     [ObservableProperty] public partial bool StdOrDrwBaseVisibility { get; set; } = true;
     [ObservableProperty] public partial bool Corner90Visibility { get; set; }
     [ObservableProperty] public partial bool Corner45Visibility { get; set; }
     [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; } = false;
-    [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = false;
+    [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = false;
     [ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
@@ -507,42 +532,275 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
 
 
-    // Calculate opening heights based on drawer count and cabinet height
-    private void ResizeOpeningHeights()
+    [ObservableProperty] public partial bool AdjustOpeningHeightsChecked { get; set; } = true; partial void OnAdjustOpeningHeightsCheckedChanged(bool oldValue, bool newValue)
     {
-        const double MaterialThickness34 = 0.75; // 3/4" material thickness
-
-        double tkHeight = ConvertDimension.FractionToDouble(TKHeight!);
-        if (!HasTK) { tkHeight = 0; }
-        double height = ConvertDimension.FractionToDouble(Height);
-        double opening1Height = ConvertDimension.FractionToDouble(OpeningHeight1);
-        double opening2Height = ConvertDimension.FractionToDouble(OpeningHeight2);
-        double opening3Height = ConvertDimension.FractionToDouble(OpeningHeight3);
-        double opening4Height = ConvertDimension.FractionToDouble(OpeningHeight4);
-
-        if (DrwCount == 2)
+        if (newValue)
         {
-            opening2Height = height - tkHeight - (3 * MaterialThickness34) - opening1Height;
-            OpeningHeight2 = opening2Height.ToString();
+            ResizeOpeningHeights();
         }
-
-        if (DrwCount == 3)
+    }
+    [ObservableProperty] public partial bool AdjustDrwFrontHeightsChecked { get; set; } = false; partial void OnAdjustDrwFrontHeightsCheckedChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
         {
-            opening3Height = height - tkHeight - (4 * MaterialThickness34) - opening1Height - opening2Height;
-            OpeningHeight3 = opening3Height.ToString();
-
-        }
-
-        if (DrwCount == 4)
-        {
-            opening4Height = height - tkHeight - (5 * MaterialThickness34) - opening1Height - opening2Height - opening3Height;
-            OpeningHeight4 = opening4Height.ToString();
+            ResizeOpeningHeights();
         }
     }
 
+
+
+
+
+    private void ResizeOpeningHeights()
+    {
+        // Prevent re-entrancy caused by property-change handlers
+        if (_isResizing) return;
+
+        try
+        {
+            _isResizing = true;
+
+            const double MaterialThickness34 = 0.75; // 3/4" material thickness
+            double halfMaterialThickness34 = MaterialThickness34 / 2;
+            double doubleMaterialThickness34 = MaterialThickness34 * 2;
+
+            double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
+            if (!HasTK) { tkHeight = 0; }
+            double height = ConvertDimension.FractionToDouble(Height);
+
+            if (AdjustOpeningHeightsChecked)
+            {
+                DrwFrontHeight1Enabled = false;
+                DrwFrontHeight2Enabled = false;
+                DrwFrontHeight3Enabled = false;
+
+                double opening1Height = ConvertDimension.FractionToDouble(OpeningHeight1);
+                double opening2Height = ConvertDimension.FractionToDouble(OpeningHeight2);
+                double opening3Height = ConvertDimension.FractionToDouble(OpeningHeight3);
+                double opening4Height = ConvertDimension.FractionToDouble(OpeningHeight4);
+
+                if (DrwCount == 2)
+                {
+                    opening2Height = height - tkHeight - (4 * MaterialThickness34) - opening1Height;
+                    OpeningHeight2 = opening2Height.ToString();
+                }
+
+                if (DrwCount == 3)
+                {
+                    opening3Height = height - tkHeight - (5 * MaterialThickness34) - opening1Height - opening2Height;
+                    OpeningHeight3 = opening3Height.ToString();
+                }
+
+                if (DrwCount == 4)
+                {
+                    opening4Height = height - tkHeight - (6 * MaterialThickness34) - opening1Height - opening2Height - opening3Height;
+                    OpeningHeight4 = opening4Height.ToString();
+                }
+
+                // --- update drawer-front fields to reflect opening changes ---
+                double doorTopReveal = ConvertDimension.FractionToDouble(TopReveal);
+                double doorBottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
+                double baseDoorGap = ConvertDimension.FractionToDouble(GapWidth);
+
+                if (Style == Style1 && DrwCount == 1)
+                {
+                    double drw1 = opening1Height + (MaterialThickness34 - doorTopReveal) + (halfMaterialThickness34 - (baseDoorGap / 2));
+                    DrwFrontHeight1 = Math.Max(0, drw1).ToString();
+                }
+                else if (Style == Style2)
+                {
+                    if (DrwCount == 1)
+                    {
+                        double drw1 = height - doorTopReveal - doorBottomReveal - tkHeight;
+                        DrwFrontHeight1 = Math.Max(0, drw1).ToString();
+                    }
+                    else
+                    {
+                        // top drawer uses existing formula
+                        double drw1 = (opening1Height + doubleMaterialThickness34) - doorTopReveal - halfMaterialThickness34 - (baseDoorGap / 2);
+                        DrwFrontHeight1 = Math.Max(0, drw1).ToString();
+
+                        // For middle (non-bottom) drawers use the corrected forward formula:
+                        // drwFront = opening + doubleM - halfM - (gap/2)
+                        if (DrwCount >= 2)
+                        {
+                            if (DrwCount == 2)
+                            {
+                                // bottom when only 2 drawers uses bottom formula
+                                double drw2 = opening2Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2);
+                                DrwFrontHeight2 = Math.Max(0, drw2).ToString();
+                            }
+                            else
+                            {
+                                // non-bottom (middle) drawer 2
+                                //double drw2 = opening2Height + doubleMaterialThickness34 - halfMaterialThickness34 - (baseDoorGap / 2);
+                                double drw2 = opening2Height + (MaterialThickness34*1.5) - (baseDoorGap);
+
+                                DrwFrontHeight2 = Math.Max(0, drw2).ToString();
+                            }
+                        }
+
+                        if (DrwCount >= 3)
+                        {
+                            if (DrwCount == 3)
+                            {
+                                // bottom when 3 drawers
+                                double drw3 = opening3Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2);
+                                DrwFrontHeight3 = Math.Max(0, drw3).ToString();
+                            }
+                            else
+                            {
+                                // middle
+                                //double drw3 = opening3Height + doubleMaterialThickness34 - halfMaterialThickness34 - (baseDoorGap / 2);
+                                double drw3 = opening3Height + (MaterialThickness34*1.5) - (baseDoorGap);
+
+                                DrwFrontHeight3 = Math.Max(0, drw3).ToString();
+                            }
+                        }
+
+                        if (DrwCount >= 4)
+                        {
+                            if (DrwCount == 4)
+                            {
+                                // bottom when 4 drawers
+                                //double drw4 = opening4Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2);
+                                double drw4 = opening4Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2);
+
+                                DrwFrontHeight4 = Math.Max(0, drw4).ToString();
+                            }
+                            //else
+                            //{
+                            //    double drw4 = opening4Height + doubleMaterialThickness34 - halfMaterialThickness34 - (baseDoorGap / 2);
+
+                            //    DrwFrontHeight4 = Math.Max(0, drw4).ToString();
+                            //}
+                        }
+                    }
+                }
+            }
+
+            if (AdjustDrwFrontHeightsChecked)
+            {
+                // Allow user editing of drawer front heights (top/middles). Bottom will be calculated to fill remaining space.
+                DrwFrontHeight1Enabled = true;
+                DrwFrontHeight2Enabled = true;
+                DrwFrontHeight3Enabled = true;
+
+                double doorTopReveal = ConvertDimension.FractionToDouble(TopReveal);
+                double doorBottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
+                double baseDoorGap = ConvertDimension.FractionToDouble(GapWidth);
+                int n = DrwCount;
+
+                if (n > 0)
+                {
+                    // Compute openings from user-entered drawer-fronts for drawers 1..(n-1)
+                    var openings = new double[n]; // openings[0] == OpeningHeight1
+
+                    if (Style == Style1 && n == 1)
+                    {
+                        double drw1 = ConvertDimension.FractionToDouble(DrwFrontHeight1);
+                        double opening1 = drw1 - (MaterialThickness34 - doorTopReveal) - (halfMaterialThickness34 - (baseDoorGap / 2));
+                        openings[0] = Math.Max(0, opening1);
+                        OpeningHeight1 = openings[0].ToString();
+                    }
+                    else if (Style == Style2)
+                    {
+                        if (n >= 1)
+                        {
+                            double drw1 = ConvertDimension.FractionToDouble(DrwFrontHeight1);
+                            double opening1 = drw1 + doorTopReveal + halfMaterialThickness34 + (baseDoorGap / 2) - doubleMaterialThickness34;
+                            openings[0] = Math.Max(0, opening1);
+                            OpeningHeight1 = openings[0].ToString();
+                        }
+
+                        // For middle (non-bottom) drawers we must invert the corrected forward formula:
+                        // forward: drw = opening + doubleM - halfM - (gap/2)
+                        // inverse: opening = drw - (doubleM - halfM - (gap/2))
+                        double middleOffset = (MaterialThickness34*1.5) - (baseDoorGap);
+
+                        for (int i = 2; i <= n - 1; i++)
+                        {
+                            double drw = i switch
+                            {
+                                2 => ConvertDimension.FractionToDouble(DrwFrontHeight2),
+                                3 => ConvertDimension.FractionToDouble(DrwFrontHeight3),
+                                4 => ConvertDimension.FractionToDouble(DrwFrontHeight4),
+                                _ => 0
+                            };
+
+                            double opening;
+                            if (i == n && n > 1)
+                            {
+                                // will not reach here because loop goes to n-1, bottom handled below
+                                opening = drw - middleOffset;
+                            }
+                            else
+                            {
+                                // non-bottom (middle) drawers use inverted middleOffset
+                                opening = drw - middleOffset;
+                            }
+
+                            openings[i - 1] = Math.Max(0, opening);
+                            if (i == 2) OpeningHeight2 = openings[1].ToString();
+                            if (i == 3) OpeningHeight3 = openings[2].ToString();
+                        }
+
+                        // Compute total openings sum allowed by cabinet geometry:
+                        double allowedSumOpenings = height - tkHeight - ((n + 1) * MaterialThickness34);
+
+                        double sumKnownOpenings = 0;
+                        for (int i = 0; i < n - 1; i++) sumKnownOpenings += openings[i];
+
+                        double lastOpening = Math.Max(0, allowedSumOpenings - sumKnownOpenings - MaterialThickness34);
+                        openings[n - 1] = lastOpening;
+
+                        if (n == 2) OpeningHeight2 = openings[1].ToString();
+                        if (n == 3) OpeningHeight3 = openings[2].ToString();
+                        if (n == 4) OpeningHeight4 = openings[3].ToString();
+
+                        double bottomDrwFront = openings[n - 1] + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2);
+
+                        if (n == 2) DrwFrontHeight2 = Math.Max(0, bottomDrwFront).ToString();
+                        if (n == 3) DrwFrontHeight3 = Math.Max(0, bottomDrwFront).ToString();
+                        if (n == 4) DrwFrontHeight4 = Math.Max(0, bottomDrwFront).ToString();
+                    }
+                }
+
+                // Update preview after computed openings
+                UpdatePreview();
+            }
+        }
+        finally
+        {
+            _isResizing = false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
-        if (_mainVm.SelectedCabinet is BaseCabinetModel baseCab)
+        if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel baseCab)
         {   
             Style = baseCab.Style;
             Width = baseCab.Width;
@@ -710,7 +968,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (_mainVm.SelectedCabinet is BaseCabinetModel selected)
+        if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel selected)
         {
             selected.Width = Width;
             selected.Height = Height;
@@ -792,6 +1050,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void LoadDefaults()
     {
+        if (_defaults is null) return;
+
         if (Style == Style2)
         {
             // Drawer cabinet selected

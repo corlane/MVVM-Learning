@@ -287,6 +287,7 @@
 
                 <GroupBox x:Name="groupOpeningHeights" Grid.Row="1" Grid.Column="0" Header="Opening Heights" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5">
                     <StackPanel Orientation="Vertical">
+                        <RadioButton Content="Adjust Opening Heights" Margin="5" GroupName="AdjustHeights" IsChecked="{Binding AdjustOpeningHeightsChecked}"/>
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="1" VerticalAlignment="Top"/>
                             <TextBox x:Name="textOpeningHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3"
@@ -338,10 +339,10 @@
                     </StackPanel>
                 </GroupBox>
 
-
                 <GroupBox x:Name="groupDrawerFrontHeights" Grid.Row="0" Grid.Column="0" Header="Drw. Front Heights" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5"
                                 Visibility="{Binding GroupDrawerFrontHeightsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Orientation="Vertical">
+                        <RadioButton Content="Adjust Drw. Front Heights" Margin="5" GroupName="AdjustHeights" IsChecked="{Binding AdjustDrwFrontHeightsChecked}"/>
                         <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="1" VerticalAlignment="Top" Margin="5,0,0,0"/>
                             <TextBox x:Name="textDrwFrontHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" 

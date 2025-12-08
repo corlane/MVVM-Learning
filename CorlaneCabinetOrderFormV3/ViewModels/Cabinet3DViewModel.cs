@@ -180,6 +180,9 @@ public partial class Cabinet3DViewModel : ObservableObject
             int shelfCount = baseCab.ShelfCount;
             string panelEBEdges = "";
 
+
+
+
             if (baseCab.HasTK)
             {
                 endPanelPoints = new List<Point3D>
@@ -589,7 +592,6 @@ public partial class Cabinet3DViewModel : ObservableObject
                                     cabinet.Children.Add(drwFront4);
                                 }
                             }
-
                         }
                     }
                 }
@@ -1355,7 +1357,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
             return new DiffuseMaterial(brush);
         }
-        catch (Exception ex)
+        catch
         {
             // Fallback to solid color
             return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
@@ -1390,7 +1392,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
             return new DiffuseMaterial(brush);
         }
-        catch (Exception ex)
+        catch
         {
             // Fallback to solid color
             return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19)));
