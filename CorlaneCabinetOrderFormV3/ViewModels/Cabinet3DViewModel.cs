@@ -447,7 +447,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                 {
                     if (cabType == style1 && baseCab.DrwCount == 1 && baseCab.IncDrwFront1)
                     {
-                        drwFront1Height = opening1Height + (MaterialThickness34 - doorTopReveal) + (halfMaterialThickness34 - (baseDoorGap / 2));
+                        drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1);
+                        //drwFront1Height = opening1Height + (MaterialThickness34 - doorTopReveal) + (halfMaterialThickness34 - (baseDoorGap / 2));
 
                         drwFrontPoints = new List<Point3D>
                     {
@@ -466,7 +467,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                     {
                         if (baseCab.DrwCount == 1 && baseCab.IncDrwFront1)
                         {
-                            drwFront1Height = height - doorTopReveal - doorBottomReveal - tk_Height;
+                            drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1);
+                            //drwFront1Height = height - doorTopReveal - doorBottomReveal - tk_Height;
 
                             drwFrontPoints = new List<Point3D>
                             {
@@ -485,7 +487,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                             // Top Drawer
                             if (baseCab.IncDrwFront1)
                             {
-                                drwFront1Height = (opening1Height + doubleMaterialThickness34) - doorTopReveal - halfMaterialThickness34 - (baseDoorGap / 2);
+                                drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1);
+                                //drwFront1Height = (opening1Height + doubleMaterialThickness34) - doorTopReveal - halfMaterialThickness34 - (baseDoorGap / 2);
                                 drwFrontPoints = new List<Point3D>
                                 {
                                     new (0,0,0),
@@ -504,20 +507,21 @@ public partial class Cabinet3DViewModel : ObservableObject
                             {
                                 if (baseCab.DrwCount == 2) // if true, this is the bottom drawer
                                 {
-                                    drwFront2Height = opening2Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2); // if the bottom drawer
+                                    drwFront2Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight2);
+                                    //drwFront2Height = opening2Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2); // if the bottom drawer
                                 }
                                 else
                                 {
-                                    drwFront2Height = opening2Height + MaterialThickness34 - baseDoorGap; // if NOT the bottom drawer
+                                    //drwFront2Height = opening2Height + MaterialThickness34 - baseDoorGap; // if NOT the bottom drawer
                                 }
 
                                 drwFrontPoints = new List<Point3D>
-                            {
-                                new (0,0,0),
-                                new (drwFrontWidth,0,0),
-                                new (drwFrontWidth,drwFront2Height,0),
-                                new (0,drwFront2Height,0)
-                            };
+                                {
+                                    new (0,0,0),
+                                    new (drwFrontWidth,0,0),
+                                    new (drwFrontWidth,drwFront2Height,0),
+                                    new (0,drwFront2Height,0)
+                                };
                                 drwFront2 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab, topDeck90, isPanel, panelEBEdges);
                                 ApplyTransform(drwFront2,
                                     -(width / 2) + doorLeftReveal,
@@ -535,20 +539,21 @@ public partial class Cabinet3DViewModel : ObservableObject
                                 {
                                     if (baseCab.DrwCount == 3) // if true, this is the bottom drawer
                                     {
-                                        drwFront3Height = opening3Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2); // if the bottom drawer
+                                        drwFront3Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight3);
+                                        //drwFront3Height = opening3Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2); // if the bottom drawer
                                     }
                                     else
                                     {
-                                        drwFront3Height = opening3Height + MaterialThickness34 - baseDoorGap; // if NOT the bottom drawer
+                                        //drwFront3Height = opening3Height + MaterialThickness34 - baseDoorGap; // if NOT the bottom drawer
                                     }
 
                                     drwFrontPoints = new List<Point3D>
-                                {
-                                    new (0,0,0),
-                                    new (drwFrontWidth,0,0),
-                                    new (drwFrontWidth,drwFront3Height,0),
-                                    new (0,drwFront3Height,0)
-                                };
+                                    {
+                                        new (0,0,0),
+                                        new (drwFrontWidth,0,0),
+                                        new (drwFrontWidth,drwFront3Height,0),
+                                        new (0,drwFront3Height,0)
+                                    };
                                     drwFront3 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab, topDeck90, isPanel, panelEBEdges);
                                     ApplyTransform(drwFront3,
                                         -(width / 2) + doorLeftReveal,
@@ -568,20 +573,21 @@ public partial class Cabinet3DViewModel : ObservableObject
                                 {
                                     if (baseCab.DrwCount == 4) // if true, this is the bottom drawer
                                     {
-                                        drwFront4Height = opening4Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2); // if the bottom drawer
+                                        drwFront4Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight4);
+                                        //drwFront4Height = opening4Height + (MaterialThickness34 * 1.5) - doorBottomReveal - (baseDoorGap / 2); // if the bottom drawer
                                     }
                                     else
                                     {
-                                        drwFront4Height = opening4Height + MaterialThickness34 - baseDoorGap; // if NOT the bottom drawer
+                                        //drwFront4Height = opening4Height + MaterialThickness34 - baseDoorGap; // if NOT the bottom drawer
                                     }
 
                                     drwFrontPoints = new List<Point3D>
-                                {
-                                    new (0,0,0),
-                                    new (drwFrontWidth,0,0),
-                                    new (drwFrontWidth,drwFront4Height,0),
-                                    new (0,drwFront4Height,0)
-                                };
+                                    {
+                                        new (0,0,0),
+                                        new (drwFrontWidth,0,0),
+                                        new (drwFrontWidth,drwFront4Height,0),
+                                        new (0,drwFront4Height,0)
+                                    };
                                     drwFront4 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab, topDeck90, isPanel, panelEBEdges);
                                     ApplyTransform(drwFront4,
                                         -(width / 2) + doorLeftReveal,
