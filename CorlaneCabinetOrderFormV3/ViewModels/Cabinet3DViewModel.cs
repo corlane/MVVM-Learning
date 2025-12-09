@@ -5,6 +5,7 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using HelixToolkit.Wpf;
 using System.Diagnostics;
+using System.Security.Permissions;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -344,14 +345,14 @@ public partial class Cabinet3DViewModel : ObservableObject
                     if (baseCab.DrwCount > 2)
                     {
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - MaterialThickness34 - opening2Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - (MaterialThickness34*1.5) - opening2Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
 
                     if (baseCab.DrwCount > 3)
                     {
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - MaterialThickness34 - opening2Height - MaterialThickness34 - opening3Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - doubleMaterialThickness34 - opening2Height - MaterialThickness34 - opening3Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
                 }
@@ -525,7 +526,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                 drwFront2 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab, topDeck90, isPanel, panelEBEdges);
                                 ApplyTransform(drwFront2,
                                     -(width / 2) + doorLeftReveal,
-                                    height - drwFront2Height - opening1Height - (2 * MaterialThickness34) + halfMaterialThickness34 - (baseDoorGap / 2),
+                                    height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height,
                                     depth,
                                     0, 0, 0);
 
@@ -557,7 +558,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                     drwFront3 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab, topDeck90, isPanel, panelEBEdges);
                                     ApplyTransform(drwFront3,
                                         -(width / 2) + doorLeftReveal,
-                                        height - drwFront3Height - opening1Height - opening2Height - (3 * MaterialThickness34) + halfMaterialThickness34 - (baseDoorGap / 2),
+                                        height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height - baseDoorGap - drwFront3Height,
                                         depth,
                                         0, 0, 0);
 
@@ -591,7 +592,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                                     drwFront4 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, "None", baseCab.DrwFrontGrainDir, cab, topDeck90, isPanel, panelEBEdges);
                                     ApplyTransform(drwFront4,
                                         -(width / 2) + doorLeftReveal,
-                                        height - drwFront4Height - opening1Height - opening2Height - opening3Height - (4 * MaterialThickness34) + halfMaterialThickness34 - (baseDoorGap / 2),
+                                        height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height - baseDoorGap - drwFront3Height - baseDoorGap - drwFront4Height,
                                         depth,
                                         0, 0, 0);
 
@@ -602,7 +603,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     }
                 }
                 cabinet.Children.Add(leftEnd);
-                cabinet.Children.Add(rightEnd);
+                //cabinet.Children.Add(rightEnd);
                 cabinet.Children.Add(deck);
                 cabinet.Children.Add(top);
                 cabinet.Children.Add(toekick);
