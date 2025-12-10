@@ -177,11 +177,25 @@ public partial class Cabinet3DViewModel : ObservableObject
             double doorBottomReveal = ConvertDimension.FractionToDouble(baseCab.BottomReveal);
             double doorSideReveal = (doorLeftReveal + doorRightReveal) / 2; // this averages the potentially different left and right reveals so that the door creation calc can use just one variable instead of two.
             bool topDeck90 = false; // This is sent to the panel creator to let it know if it is a top or deck at 90 degrees so it cab have 2 edgebanded edges
-            bool isPanel = false; // This is sent to the panel creator to let it know if it is a panel (true) or a shelf/deck/top/toekick (false) so it can have edgebanding applied correctly.
+            bool isPanel = false; // This is sent to the panel creator to let it know if it is a panel (true) so it can have edgebanding applied correctly.
             int shelfCount = baseCab.ShelfCount;
             string panelEBEdges = "";
 
+            stretcherPoints = new List<Point3D>
+            {
+                new (0,0,0),
+                new (interiorWidth,0,0),
+                new (interiorWidth,StretcherWidth,0),
+                new (0,StretcherWidth,0)
+            };
 
+            shelfPoints = new List<Point3D>
+            {
+                new (0,0,0),
+                new (interiorWidth-.125,0,0),
+                new (interiorWidth-.125,shelfDepth,0),
+                new (0,shelfDepth,0)
+            };
 
 
             if (baseCab.HasTK)
@@ -310,49 +324,38 @@ public partial class Cabinet3DViewModel : ObservableObject
                 // Drawer Stretchers
                 if (cabType == style1)
                 {
+                    double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
+
                     if (baseCab.DrwCount == 1)
                     {
-                        stretcherPoints = new List<Point3D>
-                        {
-                            new (0,0,0),
-                            new (interiorWidth,0,0),
-                            new (interiorWidth,StretcherWidth,0),
-                            new (0,StretcherWidth,0)
-                        };
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
                 }
 
                 if (cabType == style2)
                 {
-                    stretcherPoints = new List<Point3D>
-                    {
-                        new (0,0,0),
-                        new (interiorWidth,0,0),
-                        new (interiorWidth,StretcherWidth,0),
-                        new (0,StretcherWidth,0)
-                    };
+                    double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
 
                     if (baseCab.DrwCount > 1)
                     {
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
 
                     if (baseCab.DrwCount > 2)
                     {
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - (MaterialThickness34*1.5) - opening2Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height - opening2Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
 
                     if (baseCab.DrwCount > 3)
                     {
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - doubleMaterialThickness34 - opening1Height - doubleMaterialThickness34 - opening2Height - MaterialThickness34 - opening3Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height - opening2Height - opening3Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
                 }
@@ -366,13 +369,6 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                     for (int i = 1; i < baseCab.ShelfCount + 1; i++)
                     {
-                        shelfPoints = new List<Point3D>
-                        {
-                            new (0,0,0),
-                            new (interiorWidth-.125,0,0),
-                            new (interiorWidth-.125,shelfDepth,0),
-                            new (0,shelfDepth,0)
-                        };
                         shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
                         ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -MaterialThickness34 - shelfDepth, i * shelfSpacing, 270, 0, 0);
                         cabinet.Children.Add(shelf);
