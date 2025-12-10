@@ -322,40 +322,53 @@ public partial class Cabinet3DViewModel : ObservableObject
                 }
 
                 // Drawer Stretchers
-                if (cabType == style1)
+                if (cabType == style1 && baseCab.DrwCount == 1)
                 {
                     double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
 
-                    if (baseCab.DrwCount == 1)
-                    {
-                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
-                        cabinet.Children.Add(stretcher);
-                    }
+                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
+                    cabinet.Children.Add(stretcher);          
                 }
 
                 if (cabType == style2)
                 {
-                    double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
-
-                    if (baseCab.DrwCount > 1)
+                    if (baseCab.DrwCount == 2)
                     {
+                        opening1Height += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
 
-                    if (baseCab.DrwCount > 2)
+                    if (baseCab.DrwCount == 3)
                     {
+                        opening1Height += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height - opening2Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height, 270, 0, 0);
+                        cabinet.Children.Add(stretcher);
+
+                        opening2Height += MaterialThickness34; // moves the reference to the bottom of the stretcher
+                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height - opening2Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
 
-                    if (baseCab.DrwCount > 3)
+                    if (baseCab.DrwCount == 4)
                     {
+                        opening1Height += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
                         stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
-                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height - opening2Height - opening3Height, 270, 0, 0);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height, 270, 0, 0);
+                        cabinet.Children.Add(stretcher);
+
+                        opening2Height += MaterialThickness34; // moves the reference to the bottom of the stretcher
+                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height - opening2Height, 270, 0, 0);
+                        cabinet.Children.Add(stretcher);
+
+                        opening3Height += MaterialThickness34; // moves the reference to the bottom of the stretcher
+                        stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
+                        ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height - opening2Height - opening3Height, 270, 0, 0);
                         cabinet.Children.Add(stretcher);
                     }
                 }

@@ -10,6 +10,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -541,6 +543,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrwFront2PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool DrwFront3PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool DrwFront4PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool Opening1Enabled { get; set; }
+    [ObservableProperty] public partial bool Opening2Enabled { get; set; }
+    [ObservableProperty] public partial bool Opening3Enabled { get; set; }
     [ObservableProperty] public partial bool Opening1Visible { get; set; } = true;
     [ObservableProperty] public partial bool Opening2Visible { get; set; } = true;
     [ObservableProperty] public partial bool Opening3Visible { get; set; } = true;
@@ -590,26 +595,43 @@ public partial class BaseCabinetViewModel : ObservableValidator
         double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
         if (!HasTK) { tkHeight = 0; }
         double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
-        
+
         double topDeckAndStretcherThickness = (DrwCount + 1) * MaterialThickness34;
 
         try
         {
             _isResizing = true;
 
-            if (DrwCount > 1)
+            if (DrwCount == 2)
             {
-                opening2Height = height - topDeckAndStretcherThickness - opening1Height;
+                opening2Height = height - topDeckAndStretcherThickness - opening1Height - (MaterialThickness34 * .5);
+                OpeningHeight2 = opening2Height.ToString();
+                Opening1Enabled = true;
+                Opening2Enabled = false;
+                Opening3Enabled = false;
             }
 
-            if (DrwCount > 2)
+            if (DrwCount == 3)
             {
-                opening3Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height;
+                opening3Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height - (MaterialThickness34 * .5);
+                OpeningHeight3 = opening3Height.ToString();
+                Opening1Enabled = true;
+                Opening2Enabled = true;
+                Opening3Enabled = false;
             }
 
-            if (DrwCount > 3)
+            if (DrwCount == 4)
             {
-                opening4Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height - opening3Height;
+                opening4Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height - opening3Height - MaterialThickness34;
+                OpeningHeight4 = opening4Height.ToString();
+                Opening1Enabled = true;
+                Opening2Enabled = true;
+                Opening3Enabled = true;
+                DrwFrontHeight1 = (opening1Height + (2 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
+                DrwFrontHeight2 = (opening2Height + (MaterialThickness34) - gapWidth).ToString();
+                DrwFrontHeight3 = (opening3Height + (MaterialThickness34) - gapWidth).ToString();
+                DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
+
             }
 
             UpdatePreview();
@@ -617,79 +639,81 @@ public partial class BaseCabinetViewModel : ObservableValidator
         finally
         {
             _isResizing = false;
+
         }
     }
 
 
-    private void ResizeDrwFrontHeights()
+
+private void ResizeDrwFrontHeights()
     {
-        //// Prevent re-entrancy caused by property-change handlers
-        //if (_isResizing) return;
+        // Prevent re-entrancy caused by property-change handlers
+        if (_isResizing) return;
 
-        //const double MaterialThickness34 = 0.75; // 3/4" material thickness
-        ////double halfMaterialThickness34 = MaterialThickness34 / 2;
-        //double doubleMaterialThickness34 = MaterialThickness34 * 2;
+        const double MaterialThickness34 = 0.75; // 3/4" material thickness
+        //double halfMaterialThickness34 = MaterialThickness34 / 2;
+        double doubleMaterialThickness34 = MaterialThickness34 * 2;
 
-        //double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
-        //if (!HasTK) { tkHeight = 0; }
-        //double height = ConvertDimension.FractionToDouble(Height);
+        double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
+        if (!HasTK) { tkHeight = 0; }
+        double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
 
-        //double topReveal = ConvertDimension.FractionToDouble(TopReveal);
-        //double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
-        //double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
+        double topReveal = ConvertDimension.FractionToDouble(TopReveal);
+        double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
+        double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
 
-        //double opening1Height = ConvertDimension.FractionToDouble(OpeningHeight1);
-        //double opening2Height = ConvertDimension.FractionToDouble(OpeningHeight2);
-        //double opening3Height = ConvertDimension.FractionToDouble(OpeningHeight3);
-        //double opening4Height = ConvertDimension.FractionToDouble(OpeningHeight4);
-
-
-        //double drwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1);
-        //double drwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2);
-        //double drwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3);
-        //double drwFrontHeight4 = height - tkHeight - drwFrontHeight1 - drwFrontHeight2 - drwFrontHeight3 - topReveal - bottomReveal - (3 * gapWidth);
-        //try
-        //{
-        //    _isResizing = true;
+        double opening1Height = ConvertDimension.FractionToDouble(OpeningHeight1);
+        double opening2Height = ConvertDimension.FractionToDouble(OpeningHeight2);
+        double opening3Height = ConvertDimension.FractionToDouble(OpeningHeight3);
+        double opening4Height = ConvertDimension.FractionToDouble(OpeningHeight4);
 
 
-        //    if (DrwCount == 2)
-        //    {
-        //        opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-        //        opening2Height = drwFrontHeight2 + bottomReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);  // This is bottom drawer
-        //        //OpeningHeight2 = opening2Height.ToString();
-        //    }
+        double drwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1);
+        double drwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2);
+        double drwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3);
+        double drwFrontHeight4 = height - tkHeight - drwFrontHeight1 - drwFrontHeight2 - drwFrontHeight3 - topReveal - bottomReveal - (3 * gapWidth);
+        try
+        {
+            _isResizing = true;
 
-        //    if (DrwCount == 3)
-        //    {
-        //        opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-        //        opening2Height = drwFrontHeight2 + gapWidth - (1.5*MaterialThickness34);
-        //        opening3Height = drwFrontHeight3 + bottomReveal + (gapWidth / 2) - (1.5 * MaterialThickness34); // This is bottom drawer
-        //        //OpeningHeight3 = opening3Height.ToString();
-        //    }
 
-        //    if (DrwCount == 4)
-        //    {
-        //        opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-        //        opening2Height = drwFrontHeight2 + gapWidth - (1.5*MaterialThickness34);
-        //        opening3Height = drwFrontHeight3 + gapWidth - (1.5 * MaterialThickness34);
-        //        opening4Height = drwFrontHeight4 + bottomReveal + (gapWidth / 2) - (1.5*MaterialThickness34); // This is bottom drawer
-        //        //OpeningHeight4 = opening4Height.ToString();
-        //    }
+            if (DrwCount == 2)
+            {
+                opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                opening2Height = drwFrontHeight2 + bottomReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);  // This is bottom drawer
+                //OpeningHeight2 = opening2Height.ToString();
+            }
 
-        //    OpeningHeight1 = opening1Height.ToString();
-        //    OpeningHeight2 = opening2Height.ToString();
-        //    OpeningHeight3 = opening3Height.ToString();
-        //    OpeningHeight4 = opening4Height.ToString();
-        //    DrwFrontHeight4 = drwFrontHeight4.ToString();
+            if (DrwCount == 3)
+            {
+                opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                opening2Height = drwFrontHeight2 + gapWidth - (1.5 * MaterialThickness34);
+                opening3Height = drwFrontHeight3 + bottomReveal + (gapWidth / 2) - (1.5 * MaterialThickness34); // This is bottom drawer
+                //OpeningHeight3 = opening3Height.ToString();
+            }
 
-        //    //ResizeOpeningHeights();
-        //    UpdatePreview();
-        //}
-        //finally
-        //{
-        //    _isResizing = false;
-        //}
+            if (DrwCount == 4)
+            {
+                opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                opening2Height = drwFrontHeight2 + gapWidth - (1.5 * MaterialThickness34);
+                opening3Height = drwFrontHeight3 + gapWidth - (1.5 * MaterialThickness34);
+                opening4Height = drwFrontHeight4 + bottomReveal + (gapWidth / 2) - (1.5 * MaterialThickness34); // This is bottom drawer
+                //OpeningHeight4 = opening4Height.ToString();
+            }
+
+            OpeningHeight1 = opening1Height.ToString();
+            OpeningHeight2 = opening2Height.ToString();
+            OpeningHeight3 = opening3Height.ToString();
+            OpeningHeight4 = opening4Height.ToString();
+            DrwFrontHeight4 = drwFrontHeight4.ToString();
+
+            //ResizeOpeningHeights();
+            UpdatePreview();
+        }
+        finally
+        {
+            _isResizing = false;
+        }
     }
 
 

@@ -290,7 +290,7 @@
                         <RadioButton Content="Adjust Opening Heights" Margin="5" GroupName="AdjustHeights" IsChecked="{Binding AdjustOpeningHeightsChecked}"/>
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="1" VerticalAlignment="Top"/>
-                            <TextBox x:Name="textOpeningHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding AdjustOpeningHeightsChecked}"
+                            <TextBox x:Name="textOpeningHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding Opening1Enabled}"
                                             Text="{Binding OpeningHeight1, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesOpening1" Grid.Row="0" Grid.Column="2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding Opening1PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -303,7 +303,7 @@
 
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Opening2Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="2" VerticalAlignment="Top"/>
-                            <TextBox x:Name="textOpeningHeight2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding AdjustOpeningHeightsChecked}"
+                            <TextBox x:Name="textOpeningHeight2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding Opening2Enabled}"
                                             Text="{Binding OpeningHeight2, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesOpening2" Grid.Row="1" Grid.Column="2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding Opening2PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening2PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -315,7 +315,7 @@
 
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Opening3Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="3" VerticalAlignment="Top"/>
-                            <TextBox x:Name="textOpeningHeight3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding AdjustOpeningHeightsChecked}"
+                            <TextBox x:Name="textOpeningHeight3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding Opening3Enabled}"
                                             Text="{Binding OpeningHeight3, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesOpening3" Grid.Row="2" Grid.Column="2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding Opening3PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening3PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
