@@ -287,10 +287,9 @@
 
                 <GroupBox x:Name="groupOpeningHeights" Grid.Row="1" Grid.Column="0" Header="Opening Heights" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5">
                     <StackPanel Orientation="Vertical">
-                        <RadioButton Content="Adjust Opening Heights" Margin="5" GroupName="AdjustHeights" IsChecked="{Binding AdjustOpeningHeightsChecked}"/>
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="1" VerticalAlignment="Top"/>
-                            <TextBox x:Name="textOpeningHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding Opening1Enabled}"
+                            <TextBox x:Name="textOpeningHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding Opening1Disabled}"
                                             Text="{Binding OpeningHeight1, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesOpening1" Grid.Row="0" Grid.Column="2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding Opening1PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -303,7 +302,7 @@
 
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Opening2Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="2" VerticalAlignment="Top"/>
-                            <TextBox x:Name="textOpeningHeight2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding Opening2Enabled}"
+                            <TextBox x:Name="textOpeningHeight2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding Opening2Disabled}"
                                             Text="{Binding OpeningHeight2, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesOpening2" Grid.Row="1" Grid.Column="2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding Opening2PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening2PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -315,7 +314,7 @@
 
                         <StackPanel Orientation="Horizontal" Visibility="{Binding Opening3Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="3" VerticalAlignment="Top"/>
-                            <TextBox x:Name="textOpeningHeight3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding Opening3Enabled}"
+                            <TextBox x:Name="textOpeningHeight3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding Opening3Disabled}"
                                             Text="{Binding OpeningHeight3, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesOpening3" Grid.Row="2" Grid.Column="2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding Opening3PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening3PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -342,10 +341,9 @@
                 <GroupBox x:Name="groupDrawerFrontHeights" Grid.Row="0" Grid.Column="0" Header="Drw. Front Heights" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5"
                                 Visibility="{Binding GroupDrawerFrontHeightsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                     <StackPanel Orientation="Vertical">
-                        <RadioButton Content="Adjust Drw. Front Heights" Margin="5" GroupName="AdjustHeights" IsChecked="{Binding AdjustDrwFrontHeightsChecked}"/>
                         <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="1" VerticalAlignment="Top" Margin="5,0,0,0"/>
-                            <TextBox x:Name="textDrwFrontHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding AdjustDrwFrontHeightsChecked}"
+                            <TextBox x:Name="textDrwFrontHeight1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding DrwFront1Disabled}"
                                         Text="{Binding DrwFrontHeight1, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesDrwFront1" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront1PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -356,7 +354,7 @@
 
                         <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront2Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="2" VerticalAlignment="Top" Margin="5,0,0,0"/>
-                            <TextBox x:Name="textDrwFrontHeight2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding AdjustDrwFrontHeightsChecked}"
+                            <TextBox x:Name="textDrwFrontHeight2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding DrwFront2Disabled}"
                                         Text="{Binding DrwFrontHeight2, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesDrwFront2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront2PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront2PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -367,7 +365,7 @@
 
                         <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront3Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Label Content="3" VerticalAlignment="Top" Margin="5,0,0,0"/>
-                            <TextBox x:Name="textDrwFrontHeight3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsEnabled="{Binding AdjustDrwFrontHeightsChecked}"
+                            <TextBox x:Name="textDrwFrontHeight3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding DrwFront3Disabled}"
                                         Text="{Binding DrwFrontHeight3, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                             <CheckBox x:Name="checkShowPropertiesDrwFront3" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront3PropertiesVisible}" IsTabStop="False"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront3PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
