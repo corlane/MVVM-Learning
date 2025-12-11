@@ -1263,6 +1263,142 @@ public partial class Cabinet3DViewModel : ObservableObject
                 ApplyTransform(cabinet, 0, 0, 0, 0, 45, 0);
             }
 
+
+
+            // 45 deg. Corner Cabinet Style 3
+            if (cabType == style3)
+            {
+                // End Panels
+
+                leftEndPanelPoints = new List<Point3D>
+                {
+                    new (leftDepth,0,0),
+                    new (leftDepth,height,0),
+                    new (0,height,0),
+                    new (0,0,0)
+                };
+
+                rightEndPanelPoints = new List<Point3D>
+                {
+                    new (rightDepth,0,0),
+                    new (rightDepth,height,0),
+                    new (0,height,0),
+                    new (0,0,0)
+                };
+
+                leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", cab, topDeck90, isPanel, panelEBEdges);
+                rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", cab, topDeck90, isPanel, panelEBEdges);
+
+                ApplyTransform(leftEnd, 0, 0, 0, 0, 270, 0);
+                ApplyTransform(rightEnd, -(rightDepth - MaterialThickness34) - leftFrontWidth, 0, -leftDepth - rightFrontWidth, 0, 180, 0);
+
+                // Deck & top
+                deckPoints = new List<Point3D>
+                {
+                    new (0,leftDepth,0),
+                    new (rightBackWidth,leftBackWidth - rightDepth,0),
+                    new (rightBackWidth, leftBackWidth,0),
+                    new (0,leftBackWidth,0),
+                    new (0,0,0),
+                };
+                deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", cab, true, isPanel, panelEBEdges);
+                top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", cab, true, isPanel, panelEBEdges);
+
+                ApplyTransform(top, 0, leftDepth, -height, 90, 0, 0);
+                ApplyTransform(deck, 0, leftDepth, -MaterialThickness34, 90, 0, 0);
+
+                // Backs
+
+                // Left Back
+
+                backPoints = new List<Point3D>
+                {
+                    new (0,0,0),
+                    new (leftFrontWidth + rightDepth - MaterialThickness34  - MaterialThickness34,0,0),
+                    new (leftFrontWidth + rightDepth - MaterialThickness34  - MaterialThickness34,height,0),
+                    new (0,height,0)
+                };
+                leftBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", cab, topDeck90, isPanel, panelEBEdges);
+                ApplyTransform(leftBack, 0, 0, MaterialThickness34, 0, 0, 0);
+
+                // Right Back
+                backPoints = new List<Point3D>
+                {
+                    new (0,0,0),
+                    new (leftDepth+rightFrontWidth - MaterialThickness34 - doubleMaterialThickness34,0,0),
+                    new (leftDepth+rightFrontWidth - MaterialThickness34 - doubleMaterialThickness34,height,0),
+                    new (0,height,0),
+                };
+                rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", cab, topDeck90, isPanel, panelEBEdges);
+                ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, 0, leftFrontWidth + rightDepth - doubleMaterialThickness34 - .75, 0, 90, 0);
+
+
+                // Shelves
+                if (shelfCount > 0)
+                {
+                    double gap = .125;
+
+                    double shelfSpacing = (height - doubleMaterialThickness34) / (shelfCount + 1);
+                    for (int i = 1; i < shelfCount + 1; i++)
+                    {
+                        shelfPoints = new List<Point3D>
+                        {
+                            new (0,0,0),
+                            new (leftFrontWidth-MaterialThickness34-gap,0,0),
+                            new (leftFrontWidth-MaterialThickness34-gap, rightFrontWidth-MaterialThickness34-gap,0),
+                            new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,rightFrontWidth - MaterialThickness34-gap,0),
+                            new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,-leftDepth + doubleMaterialThickness34 + gap,0),
+                            new (0,-leftDepth + doubleMaterialThickness34 + gap,0),
+                        };
+                        shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "None", "Horizontal", cab, true, isPanel, panelEBEdges);
+                        ApplyTransform(shelf, 0 + .0625, leftDepth, -i * shelfSpacing, 90, 0, 0);
+                        cabinet.Children.Add(shelf);
+                    }
+                }
+
+                // Doors
+                double cornerCabDoorOpenSideReveal = 0.875;
+
+                if (upperCab.DoorCount > 0 && upperCab.IncDoors)
+                {
+                    double door1Width = leftFrontWidth - doorLeftReveal - cornerCabDoorOpenSideReveal;
+                    double door2Width = rightFrontWidth - doorRightReveal - cornerCabDoorOpenSideReveal;
+
+                    double doorHeight = height - doorTopReveal - doorBottomReveal;
+
+                    doorPoints = new List<Point3D>
+                    {
+                        new (0,0,0),
+                        new (door1Width,0,0),
+                        new (door1Width,doorHeight,0),
+                        new (0,doorHeight,0)
+                    };
+                    door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, cab, topDeck90, isPanel, panelEBEdges);
+
+                    doorPoints = new List<Point3D>
+                    {
+                        new (0,0,0),
+                        new (door2Width,0,0),
+                        new (door2Width,doorHeight,0),
+                        new (0,doorHeight,0)
+                    };
+                    door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, cab, topDeck90, isPanel, panelEBEdges);
+
+                    ApplyTransform(door1, -MaterialThickness34 + doorLeftReveal, doorBottomReveal, leftDepth, 0, 0, 0);
+                    ApplyTransform(door2, -leftDepth - door2Width - cornerCabDoorOpenSideReveal, doorBottomReveal, leftFrontWidth - (doubleMaterialThickness34), 0, 90, 0);
+                    cabinet.Children.Add(door1);
+                    cabinet.Children.Add(door2);
+                }
+
+                cabinet.Children.Add(leftEnd);
+                cabinet.Children.Add(rightEnd);
+                cabinet.Children.Add(deck);
+                cabinet.Children.Add(top);
+                cabinet.Children.Add(leftBack);
+                cabinet.Children.Add(rightBack);
+                ApplyTransform(cabinet, 0, 0, 0, 0, 45, 0);
+            }
+
         }
 
         if (cab is FillerModel filler)
