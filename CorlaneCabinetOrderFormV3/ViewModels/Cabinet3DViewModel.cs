@@ -4,6 +4,7 @@ using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using HelixToolkit.Wpf;
+using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -1266,6 +1267,8 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
             // 45 deg. Corner Cabinet Style 3
+            double frontWidth = Math.Sqrt((rightBackWidth - leftDepth) * (rightBackWidth - leftDepth) + (leftBackWidth - rightDepth) * (leftBackWidth - rightDepth));
+
             if (cabType == style3)
             {
                 // End Panels
@@ -1289,20 +1292,20 @@ public partial class Cabinet3DViewModel : ObservableObject
                 leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", cab, topDeck90, isPanel, panelEBEdges);
                 rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", cab, topDeck90, isPanel, panelEBEdges);
 
-                ApplyTransform(leftEnd, 0, 0, 0, 0, 90, 0);
-                ApplyTransform(rightEnd, -leftBackWidth, 0, -rightBackWidth - MaterialThickness34, 0, 0, 0);
-
+                ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 90, 0);
+                ApplyTransform(rightEnd, -leftBackWidth, 0, -rightBackWidth, 0, 0, 0);
+                
                 // Deck & top
                 deckPoints = new List<Point3D>
                 {
-                    new (leftDepth,0,0),
-                    new (rightBackWidth,leftBackWidth - rightDepth,0),
-                    new (rightBackWidth, leftBackWidth,0),
-                    new (0,leftBackWidth,0),
-                    new (0,0,0),
+                    new (leftDepth,MaterialThickness34,0),
+                    new (rightBackWidth - MaterialThickness34, leftBackWidth - rightDepth,0),
+                    new (rightBackWidth - MaterialThickness34, leftBackWidth - MaterialThickness34 - .25,0),
+                    new (MaterialThickness34 + .25, leftBackWidth - MaterialThickness34 - .25,0),
+                    new (MaterialThickness34 + .25, MaterialThickness34,0),
                 };
-                deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", cab, false, isPanel, panelEBEdges);
-                top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", cab, false, isPanel, panelEBEdges);
+                deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", cab, false, isPanel, panelEBEdges, 45);
+                top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", cab, false, isPanel, panelEBEdges, 45);
 
                 ApplyTransform(top, 0, 0, height - MaterialThickness34, 90, 90, 180);
                 ApplyTransform(deck, 0, 0, 0, 90, 90, 180);
@@ -1314,23 +1317,23 @@ public partial class Cabinet3DViewModel : ObservableObject
                 backPoints = new List<Point3D>
                 {
                     new (0,0,0),
-                    new (leftFrontWidth + rightDepth - MaterialThickness34  - MaterialThickness34,0,0),
-                    new (leftFrontWidth + rightDepth - MaterialThickness34  - MaterialThickness34,height,0),
+                    new (leftBackWidth - MaterialThickness34 - .25,0,0),
+                    new (leftBackWidth - MaterialThickness34 - .25,height,0),
                     new (0,height,0)
                 };
                 leftBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", cab, topDeck90, isPanel, panelEBEdges);
-                ApplyTransform(leftBack, 0, 0, MaterialThickness34, 0, 0, 0);
+                ApplyTransform(leftBack, -leftBackWidth + .25, 0, -MaterialThickness34 - .25, 0, 0, 0);
 
                 // Right Back
                 backPoints = new List<Point3D>
                 {
                     new (0,0,0),
-                    new (leftDepth+rightFrontWidth - MaterialThickness34 - doubleMaterialThickness34,0,0),
-                    new (leftDepth+rightFrontWidth - MaterialThickness34 - doubleMaterialThickness34,height,0),
-                    new (0,height,0),
+                    new (rightBackWidth - doubleMaterialThickness34 - .25,0,0),
+                    new (rightBackWidth - doubleMaterialThickness34 - .25,height,0),
+                    new (0,height,0)
                 };
                 rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", cab, topDeck90, isPanel, panelEBEdges);
-                ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, 0, leftFrontWidth + rightDepth - doubleMaterialThickness34 - .75, 0, 90, 0);
+                ApplyTransform(rightBack, MaterialThickness34 + .25, 0, -leftBackWidth + .25, 0, 90, 0);
 
 
                 // Shelves
@@ -1343,59 +1346,70 @@ public partial class Cabinet3DViewModel : ObservableObject
                     {
                         shelfPoints = new List<Point3D>
                         {
-                            new (leftDepth-gap,0,0),
-                            new (rightBackWidth - gap,leftBackWidth - rightDepth+gap,0),
-                            new (rightBackWidth - gap, leftBackWidth - gap,0),
-                            new (gap,leftBackWidth - gap,0),
-                            new (gap,0,0),
+                            new (leftDepth,MaterialThickness34 + gap,0),
+                            new (rightBackWidth - MaterialThickness34 - gap, leftBackWidth - rightDepth,0),
+                            new (rightBackWidth - MaterialThickness34 - gap, leftBackWidth - MaterialThickness34 - .25 - gap,0),
+                            new (MaterialThickness34 + .25 + gap, leftBackWidth - MaterialThickness34 - .25 - gap,0),
+                            new (MaterialThickness34 + .25 + gap, MaterialThickness34 + gap,0),
                         };
-                        shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "None", "Horizontal", cab, true, isPanel, panelEBEdges);
+                        shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "None", "Horizontal", cab, true, isPanel, panelEBEdges, 45);
                         ApplyTransform(shelf,0,gap/2, +i * shelfSpacing, 90, 90, 180);
                         cabinet.Children.Add(shelf);
                     }
                 }
 
                 // Doors
-                double cornerCabDoorOpenSideReveal = 0.875;
-
                 if (upperCab.DoorCount > 0 && upperCab.IncDoors)
                 {
-                    double door1Width = leftFrontWidth - doorLeftReveal - cornerCabDoorOpenSideReveal;
-                    double door2Width = rightFrontWidth - doorRightReveal - cornerCabDoorOpenSideReveal;
+                    double door1Width = frontWidth;
+                    double door2Width = (rightFrontWidth/2) - doorLeftReveal - (upperDoorGap/2);
 
                     double doorHeight = height - doorTopReveal - doorBottomReveal;
 
-                    doorPoints = new List<Point3D>
+                    if (upperCab.DoorCount == 1)
                     {
-                        new (0,0,0),
-                        new (door1Width,0,0),
-                        new (door1Width,doorHeight,0),
-                        new (0,doorHeight,0)
-                    };
-                    door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, cab, topDeck90, isPanel, panelEBEdges);
-
-                    doorPoints = new List<Point3D>
+                        doorPoints = new List<Point3D>
+                        {
+                            new (0,0,0),
+                            new (door1Width,0,0),
+                            new (door1Width,doorHeight,0),
+                            new (0,doorHeight,0)
+                        };
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, cab, topDeck90, isPanel, panelEBEdges);
+                        ApplyTransform(door1, 0, 0, 0, 0, -45, 0);
+                        cabinet.Children.Add(door1);
+                    }
+                    if (upperCab.DoorCount == 2)
                     {
-                        new (0,0,0),
-                        new (door2Width,0,0),
-                        new (door2Width,doorHeight,0),
-                        new (0,doorHeight,0)
-                    };
-                    door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, cab, topDeck90, isPanel, panelEBEdges);
+                        doorPoints = new List<Point3D>
+                        {
+                            new (0,0,0),
+                            new (door1Width,0,0),
+                            new (door1Width,doorHeight,0),
+                            new (0,doorHeight,0)
+                        };
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, cab, topDeck90, isPanel, panelEBEdges);
 
-                    ApplyTransform(door1, -MaterialThickness34 + doorLeftReveal, doorBottomReveal, leftDepth, 0, 0, 0);
-                    ApplyTransform(door2, -leftDepth - door2Width - cornerCabDoorOpenSideReveal, doorBottomReveal, leftFrontWidth - (doubleMaterialThickness34), 0, 90, 0);
-                    cabinet.Children.Add(door1);
-                    cabinet.Children.Add(door2);
+                        doorPoints = new List<Point3D>
+                        {
+                            new (0,0,0),
+                            new (door2Width,0,0),
+                            new (door2Width,doorHeight,0),
+                            new (0,doorHeight,0)
+                        };
+                        door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, cab, topDeck90, isPanel, panelEBEdges);
+                        ApplyTransform(door2, 0, 0, 0, 0, 0, 0);
+                        cabinet.Children.Add(door2);
+                    }
                 }
 
                 cabinet.Children.Add(leftEnd);
                 cabinet.Children.Add(rightEnd);
                 cabinet.Children.Add(deck);
                 cabinet.Children.Add(top);
-                //cabinet.Children.Add(leftBack);
-                //cabinet.Children.Add(rightBack);
-                //ApplyTransform(cabinet, 0, 0, 0, 0, 45, 0);
+                cabinet.Children.Add(leftBack);
+                cabinet.Children.Add(rightBack);
+                ApplyTransform(cabinet, 0, 0, 0, 0, -135, 0);
             }
 
         }
@@ -1468,216 +1482,216 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
     // This lovely bit of kit will create a panel of any size, shape, thickness, material species, etc. and edgeband it
-    private static Model3DGroup CreatePanel(List<Point3D> polygonPoints, double matlThickness, string panelSpecies, string edgebandingSpecies, string grainDirection, CabinetModel cab, bool topDeck90, bool isPanel, string panelEBEdges)
-    {
-        //panelSpecies ??= "Prefinished Ply";
-        //edgebandingSpecies ??= "Wood Maple";
+    //private static Model3DGroup CreatePanel(List<Point3D> polygonPoints, double matlThickness, string panelSpecies, string edgebandingSpecies, string grainDirection, CabinetModel cab, bool topDeck90, bool isPanel, string panelEBEdges)
+    //{
+    //    //panelSpecies ??= "Prefinished Ply";
+    //    //edgebandingSpecies ??= "Wood Maple";
 
-        double thickness = matlThickness;
+    //    double thickness = matlThickness;
 
-        // Create a MeshBuilder with textures enabled (second param true)
-        var mainBuilder = new MeshBuilder(false, true);
-        var specialBuilder = new MeshBuilder(false, true); // For edgebanded side
+    //    // Create a MeshBuilder with textures enabled (second param true)
+    //    var mainBuilder = new MeshBuilder(false, true);
+    //    var specialBuilder = new MeshBuilder(false, true); // For edgebanded side
 
-        // Find min/max for UV normalization (project XY to 0-1)
-        double minX = polygonPoints.Min(p => p.X);
-        double maxX = polygonPoints.Max(p => p.X);
-        double minY = polygonPoints.Min(p => p.Y);
-        double maxY = polygonPoints.Max(p => p.Y);
+    //    // Find min/max for UV normalization (project XY to 0-1)
+    //    double minX = polygonPoints.Min(p => p.X);
+    //    double maxX = polygonPoints.Max(p => p.X);
+    //    double minY = polygonPoints.Min(p => p.Y);
+    //    double maxY = polygonPoints.Max(p => p.Y);
 
-        // Add bottom positions and texture coords
-        foreach (var point in polygonPoints)
-        {
-            mainBuilder.Positions.Add(point);
-            double u = (point.X - minX) / (maxX - minX);
-            double v = (point.Y - minY) / (maxY - minY);
-            mainBuilder.TextureCoordinates.Add(new Point(u, v));
-        }
+    //    // Add bottom positions and texture coords
+    //    foreach (var point in polygonPoints)
+    //    {
+    //        mainBuilder.Positions.Add(point);
+    //        double u = (point.X - minX) / (maxX - minX);
+    //        double v = (point.Y - minY) / (maxY - minY);
+    //        mainBuilder.TextureCoordinates.Add(new Point(u, v));
+    //    }
 
-        // Add bottom face using triangulation
-        var bottomIndices = Enumerable.Range(0, polygonPoints.Count).ToList();
-        mainBuilder.AddPolygonByTriangulation(bottomIndices);
+    //    // Add bottom face using triangulation
+    //    var bottomIndices = Enumerable.Range(0, polygonPoints.Count).ToList();
+    //    mainBuilder.AddPolygonByTriangulation(bottomIndices);
 
-        // Add top positions at z=1 with same texture coords (or flipped if needed)
-        int topOffset = polygonPoints.Count;
-        foreach (var point in polygonPoints)
-        {
-            mainBuilder.Positions.Add(new Point3D(point.X, point.Y, thickness));
-            double u = (point.X - minX) / (maxX - minX);
-            double v = (point.Y - minY) / (maxY - minY);
-            mainBuilder.TextureCoordinates.Add(new Point(u, v)); // Same as bottom for simple mapping
-        }
+    //    // Add top positions at z=1 with same texture coords (or flipped if needed)
+    //    int topOffset = polygonPoints.Count;
+    //    foreach (var point in polygonPoints)
+    //    {
+    //        mainBuilder.Positions.Add(new Point3D(point.X, point.Y, thickness));
+    //        double u = (point.X - minX) / (maxX - minX);
+    //        double v = (point.Y - minY) / (maxY - minY);
+    //        mainBuilder.TextureCoordinates.Add(new Point(u, v)); // Same as bottom for simple mapping
+    //    }
 
-        // Add top face (reverse indices for correct winding/normal direction)
-        var topIndices = Enumerable.Range(topOffset, polygonPoints.Count).Reverse().ToList();
-        mainBuilder.AddPolygonByTriangulation(topIndices);
-
-
-
-        // Add side faces as quads with texture coords (unwrap sides: U around perimeter, V height)
-        double perimeter = 0;
-        var sideLengths = new List<double>();
-        for (int i = 0; i < polygonPoints.Count; i++)
-        {
-            int next = (i + 1) % polygonPoints.Count;
-            double dx = polygonPoints[next].X - polygonPoints[i].X;
-            double dy = polygonPoints[next].Y - polygonPoints[i].Y;
-            double len = Math.Sqrt(dx * dx + dy * dy);
-            sideLengths.Add(len);
-            perimeter += len;
-        }
-
-
-        // In the side faces loop (replace the existing loop):
-        double cumulativeU = 0;
-        for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
-        {
-            int b0 = edgeFace; // bottom index
-            int b1 = (edgeFace + 1) % polygonPoints.Count; // next bottom
-            int t1 = b1 + topOffset; // next top
-            int t0 = b0 + topOffset; // top
-
-            // Texture coords for quad: unwrap horizontally (U cumulative perimeter, V height 0-1)
-            double u0 = cumulativeU / perimeter;
-            double u1 = (cumulativeU + sideLengths[edgeFace]) / perimeter;
-            Point uvBottomLeft = new(u0, 0);  // bottom b0
-            Point uvBottomRight = new(u1, 0); // bottom b1
-            Point uvTopRight = new(u1, 1);    // top t1
-            Point uvTopLeft = new(u0, 1);     // top t0
-
-            // Add quad to appropriate builder (special for edgeFace==0, e.g., first side)
-            if (!isPanel && !topDeck90)
-            {
-                if (edgeFace == 0) // Edge(s) to show edgeband texture
-                {
-                    specialBuilder.AddQuad(
-                    mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else
-                {
-                    mainBuilder.AddQuad(
-                    mainBuilder.Positions[b0],
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-            }
-
-            if (isPanel)
-            {
-                mainBuilder.AddQuad(
-                mainBuilder.Positions[b0],
-                mainBuilder.Positions[b1],
-                mainBuilder.Positions[t1],
-                mainBuilder.Positions[t0],
-                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-
-                if (panelEBEdges.Contains('B') && edgeFace == 0) // Bottom edge
-                {
-                    specialBuilder.AddQuad(
-                    mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else if (panelEBEdges.Contains('R') && edgeFace == 1) // Right edge
-                {
-                    specialBuilder.AddQuad(
-                    mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else if (panelEBEdges.Contains('T') && edgeFace == 2) // Top edge
-                {
-                    specialBuilder.AddQuad(
-                    mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else if (panelEBEdges.Contains('L') && edgeFace == 3) // Left edge
-                {
-                    specialBuilder.AddQuad(
-                    mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-            }
-
-            if (topDeck90)
-            {
-                if (edgeFace == 0 || edgeFace == 1) // Edge(s) to show edgeband texture
-                {
-                    specialBuilder.AddQuad(
-                    mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else
-                {
-                    mainBuilder.AddQuad(
-                    mainBuilder.Positions[b0],
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-
-            }
-
-            cumulativeU += sideLengths[edgeFace];
-        }
-
-        // Compute normals for proper lighting
-        mainBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
-        specialBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
-
-        // Convert to a MeshGeometry3D, freezing for performance
-        var mesh = mainBuilder.ToMesh(true);
-        var specialMesh = specialBuilder.ToMesh(true);
+    //    // Add top face (reverse indices for correct winding/normal direction)
+    //    var topIndices = Enumerable.Range(topOffset, polygonPoints.Count).Reverse().ToList();
+    //    mainBuilder.AddPolygonByTriangulation(topIndices);
 
 
 
-
-        // Create a material with texture
-        var material = GetPlywoodSpecies(panelSpecies, grainDirection);
-        var specialMaterial = GetEdgeBandingSpecies(edgebandingSpecies);
-        if (edgebandingSpecies == "None")
-        {
-            specialMaterial = GetPlywoodSpecies(panelSpecies, grainDirection);
-        }
-
-        // Create a GeometryModel3D
-        var panelModel = new GeometryModel3D
-        {
-            Geometry = mesh,
-            Material = material,
-            BackMaterial = material // Visible from both sides
-        };
-
-        var edgebandingModel = new GeometryModel3D { Geometry = specialMesh, Material = specialMaterial, BackMaterial = specialMaterial };
+    //    // Add side faces as quads with texture coords (unwrap sides: U around perimeter, V height)
+    //    double perimeter = 0;
+    //    var sideLengths = new List<double>();
+    //    for (int i = 0; i < polygonPoints.Count; i++)
+    //    {
+    //        int next = (i + 1) % polygonPoints.Count;
+    //        double dx = polygonPoints[next].X - polygonPoints[i].X;
+    //        double dy = polygonPoints[next].Y - polygonPoints[i].Y;
+    //        double len = Math.Sqrt(dx * dx + dy * dy);
+    //        sideLengths.Add(len);
+    //        perimeter += len;
+    //    }
 
 
-        // Create a ModelVisual3D and add to the viewport
-        var partModel = new Model3DGroup();
-        partModel.Children.Add(panelModel);
-        partModel.Children.Add(edgebandingModel);
+    //    // In the side faces loop (replace the existing loop):
+    //    double cumulativeU = 0;
+    //    for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
+    //    {
+    //        int b0 = edgeFace; // bottom index
+    //        int b1 = (edgeFace + 1) % polygonPoints.Count; // next bottom
+    //        int t1 = b1 + topOffset; // next top
+    //        int t0 = b0 + topOffset; // top
 
-        return partModel;
-    }
+    //        // Texture coords for quad: unwrap horizontally (U cumulative perimeter, V height 0-1)
+    //        double u0 = cumulativeU / perimeter;
+    //        double u1 = (cumulativeU + sideLengths[edgeFace]) / perimeter;
+    //        Point uvBottomLeft = new(u0, 0);  // bottom b0
+    //        Point uvBottomRight = new(u1, 0); // bottom b1
+    //        Point uvTopRight = new(u1, 1);    // top t1
+    //        Point uvTopLeft = new(u0, 1);     // top t0
+
+    //        // Add quad to appropriate builder (special for edgeFace==0, e.g., first side)
+    //        if (!isPanel && !topDeck90)
+    //        {
+    //            if (edgeFace == 0) // Edge(s) to show edgeband texture
+    //            {
+    //                specialBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+    //            else
+    //            {
+    //                mainBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+    //        }
+
+    //        if (isPanel)
+    //        {
+    //            mainBuilder.AddQuad(
+    //            mainBuilder.Positions[b0],
+    //            mainBuilder.Positions[b1],
+    //            mainBuilder.Positions[t1],
+    //            mainBuilder.Positions[t0],
+    //            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+
+    //            if (panelEBEdges.Contains('B') && edgeFace == 0) // Bottom edge
+    //            {
+    //                specialBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+    //            else if (panelEBEdges.Contains('R') && edgeFace == 1) // Right edge
+    //            {
+    //                specialBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+    //            else if (panelEBEdges.Contains('T') && edgeFace == 2) // Top edge
+    //            {
+    //                specialBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+    //            else if (panelEBEdges.Contains('L') && edgeFace == 3) // Left edge
+    //            {
+    //                specialBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+    //        }
+
+    //        if (topDeck90)
+    //        {
+    //            if (edgeFace == 0 || edgeFace == 1) // Edge(s) to show edgeband texture
+    //            {
+    //                specialBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+    //            else
+    //            {
+    //                mainBuilder.AddQuad(
+    //                mainBuilder.Positions[b0],
+    //                mainBuilder.Positions[b1],
+    //                mainBuilder.Positions[t1],
+    //                mainBuilder.Positions[t0],
+    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+    //            }
+
+    //        }
+
+    //        cumulativeU += sideLengths[edgeFace];
+    //    }
+
+    //    // Compute normals for proper lighting
+    //    mainBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
+    //    specialBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
+
+    //    // Convert to a MeshGeometry3D, freezing for performance
+    //    var mesh = mainBuilder.ToMesh(true);
+    //    var specialMesh = specialBuilder.ToMesh(true);
+
+
+
+
+    //    // Create a material with texture
+    //    var material = GetPlywoodSpecies(panelSpecies, grainDirection);
+    //    var specialMaterial = GetEdgeBandingSpecies(edgebandingSpecies);
+    //    if (edgebandingSpecies == "None")
+    //    {
+    //        specialMaterial = GetPlywoodSpecies(panelSpecies, grainDirection);
+    //    }
+
+    //    // Create a GeometryModel3D
+    //    var panelModel = new GeometryModel3D
+    //    {
+    //        Geometry = mesh,
+    //        Material = material,
+    //        BackMaterial = material // Visible from both sides
+    //    };
+
+    //    var edgebandingModel = new GeometryModel3D { Geometry = specialMesh, Material = specialMaterial, BackMaterial = specialMaterial };
+
+
+    //    // Create a ModelVisual3D and add to the viewport
+    //    var partModel = new Model3DGroup();
+    //    partModel.Children.Add(panelModel);
+    //    partModel.Children.Add(edgebandingModel);
+
+    //    return partModel;
+    //}
 
     // Transform method. This allows x, y, and z translation, as well as x, y, and z rotation.
     private static void ApplyTransform(Model3DGroup geometryModel, double translateX, double translateY, double translateZ, double rotateXDegrees, double rotateYDegrees, double rotateZDegrees)
@@ -1698,43 +1712,43 @@ public partial class Cabinet3DViewModel : ObservableObject
 
     }
 
-    private static Material GetPlywoodSpecies(string? panelSpecies, string? grainDirection)
-    {
-        // Provide defaults if null or empty
-        panelSpecies ??= "Prefinished Ply";
-        grainDirection ??= "Horizontal";
+    //private static Material GetPlywoodSpecies(string? panelSpecies, string? grainDirection)
+    //{
+    //    // Provide defaults if null or empty
+    //    panelSpecies ??= "Prefinished Ply";
+    //    grainDirection ??= "Horizontal";
 
-        if (string.IsNullOrWhiteSpace(panelSpecies))
-            panelSpecies = "Prefinished Ply";
-        if (string.IsNullOrWhiteSpace(grainDirection))
-            grainDirection = "Horizontal";
+    //    if (string.IsNullOrWhiteSpace(panelSpecies))
+    //        panelSpecies = "Prefinished Ply";
+    //    if (string.IsNullOrWhiteSpace(grainDirection))
+    //        grainDirection = "Horizontal";
 
-        string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
+    //    string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
 
-        try
-        {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(resourcePath);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            bitmap.Freeze();
+    //    try
+    //    {
+    //        var bitmap = new BitmapImage();
+    //        bitmap.BeginInit();
+    //        bitmap.UriSource = new Uri(resourcePath);
+    //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+    //        bitmap.EndInit();
+    //        bitmap.Freeze();
 
-            var brush = new ImageBrush(bitmap)
-            {
-                TileMode = TileMode.Tile,
-                ViewportUnits = BrushMappingMode.Absolute,
-                Viewport = new Rect(0, 0, .5, 1)
-            };
+    //        var brush = new ImageBrush(bitmap)
+    //        {
+    //            TileMode = TileMode.Tile,
+    //            ViewportUnits = BrushMappingMode.Absolute,
+    //            Viewport = new Rect(0, 0, .5, 1)
+    //        };
 
-            return new DiffuseMaterial(brush);
-        }
-        catch
-        {
-            // Fallback to solid color
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
-        }
-    }
+    //        return new DiffuseMaterial(brush);
+    //    }
+    //    catch
+    //    {
+    //        // Fallback to solid color
+    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
+    //    }
+    //}
 
     private static Material GetEdgeBandingSpecies(string? species)
     {
@@ -1889,5 +1903,256 @@ public partial class Cabinet3DViewModel : ObservableObject
         return result;
     }
 
+
+
+
+
+    // This lovely bit of kit will create a panel of any size, shape, thickness, material species, etc. and edgeband it
+    // Added optional 'plywoodTextureRotationDegrees' parameter (default 0) so callers can rotate plywood texture.
+    private static Model3DGroup CreatePanel(List<Point3D> polygonPoints, double matlThickness, string panelSpecies, string edgebandingSpecies, string grainDirection, CabinetModel cab, bool topDeck90, bool isPanel, string panelEBEdges, double plywoodTextureRotationDegrees = 0)
+    {
+        double thickness = matlThickness;
+
+        // Create a MeshBuilder with textures enabled (second param true)
+        var mainBuilder = new MeshBuilder(false, true);
+        var specialBuilder = new MeshBuilder(false, true); // For edgebanded side
+
+        // Find min/max for UV normalization (project XY to 0-1)
+        double minX = polygonPoints.Min(p => p.X);
+        double maxX = polygonPoints.Max(p => p.X);
+        double minY = polygonPoints.Min(p => p.Y);
+        double maxY = polygonPoints.Max(p => p.Y);
+
+        // Add bottom positions and texture coords
+        foreach (var point in polygonPoints)
+        {
+            mainBuilder.Positions.Add(point);
+            double u = (point.X - minX) / (maxX - minX);
+            double v = (point.Y - minY) / (maxY - minY);
+            mainBuilder.TextureCoordinates.Add(new Point(u, v));
+        }
+
+        // Add bottom face using triangulation
+        var bottomIndices = Enumerable.Range(0, polygonPoints.Count).ToList();
+        mainBuilder.AddPolygonByTriangulation(bottomIndices);
+
+        // Add top positions at z=1 with same texture coords (or flipped if needed)
+        int topOffset = polygonPoints.Count;
+        foreach (var point in polygonPoints)
+        {
+            mainBuilder.Positions.Add(new Point3D(point.X, point.Y, thickness));
+            double u = (point.X - minX) / (maxX - minX);
+            double v = (point.Y - minY) / (maxY - minY);
+            mainBuilder.TextureCoordinates.Add(new Point(u, v)); // Same as bottom for simple mapping
+        }
+
+        // Add top face (reverse indices for correct winding/normal direction)
+        var topIndices = Enumerable.Range(topOffset, polygonPoints.Count).Reverse().ToList();
+        mainBuilder.AddPolygonByTriangulation(topIndices);
+
+        // Add side faces as quads with texture coords (unwrap sides: U around perimeter, V height)
+        double perimeter = 0;
+        var sideLengths = new List<double>();
+        for (int i = 0; i < polygonPoints.Count; i++)
+        {
+            int next = (i + 1) % polygonPoints.Count;
+            double dx = polygonPoints[next].X - polygonPoints[i].X;
+            double dy = polygonPoints[next].Y - polygonPoints[i].Y;
+            double len = Math.Sqrt(dx * dx + dy * dy);
+            sideLengths.Add(len);
+            perimeter += len;
+        }
+
+        double cumulativeU = 0;
+        for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
+        {
+            int b0 = edgeFace; // bottom index
+            int b1 = (edgeFace + 1) % polygonPoints.Count; // next bottom
+            int t1 = b1 + topOffset; // next top
+            int t0 = b0 + topOffset; // top
+
+            // Texture coords for quad: unwrap horizontally (U cumulative perimeter, V height 0-1)
+            double u0 = cumulativeU / perimeter;
+            double u1 = (cumulativeU + sideLengths[edgeFace]) / perimeter;
+            Point uvBottomLeft = new(u0, 0);  // bottom b0
+            Point uvBottomRight = new(u1, 0); // bottom b1
+            Point uvTopRight = new(u1, 1);    // top t1
+            Point uvTopLeft = new(u0, 1);     // top t0
+
+            // Add quad to appropriate builder (special for edgeFace==0, e.g., first side)
+            if (!isPanel && !topDeck90)
+            {
+                if (edgeFace == 0) // Edge(s) to show edgeband texture
+                {
+                    specialBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+                else
+                {
+                    mainBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+            }
+
+            if (isPanel)
+            {
+                mainBuilder.AddQuad(
+                mainBuilder.Positions[b0],
+                mainBuilder.Positions[b1],
+                mainBuilder.Positions[t1],
+                mainBuilder.Positions[t0],
+                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+
+                if (panelEBEdges.Contains('B') && edgeFace == 0) // Bottom edge
+                {
+                    specialBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+                else if (panelEBEdges.Contains('R') && edgeFace == 1) // Right edge
+                {
+                    specialBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+                else if (panelEBEdges.Contains('T') && edgeFace == 2) // Top edge
+                {
+                    specialBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+                else if (panelEBEdges.Contains('L') && edgeFace == 3) // Left edge
+                {
+                    specialBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+            }
+
+            if (topDeck90)
+            {
+                if (edgeFace == 0 || edgeFace == 1) // Edge(s) to show edgeband texture
+                {
+                    specialBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+                else
+                {
+                    mainBuilder.AddQuad(
+                    mainBuilder.Positions[b0],
+                    mainBuilder.Positions[b1],
+                    mainBuilder.Positions[t1],
+                    mainBuilder.Positions[t0],
+                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                }
+            }
+
+            cumulativeU += sideLengths[edgeFace];
+        }
+
+        // Compute normals for proper lighting
+        mainBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
+        specialBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
+
+        // Convert to a MeshGeometry3D, freezing for performance
+        var mesh = mainBuilder.ToMesh(true);
+        var specialMesh = specialBuilder.ToMesh(true);
+
+        // Create a material with texture: pass plywood rotation through to GetPlywoodSpecies
+        var material = GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
+        var specialMaterial = GetEdgeBandingSpecies(edgebandingSpecies);
+        if (edgebandingSpecies == "None")
+        {
+            specialMaterial = GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
+        }
+
+        // Create a GeometryModel3D
+        var panelModel = new GeometryModel3D
+        {
+            Geometry = mesh,
+            Material = material,
+            BackMaterial = material // Visible from both sides
+        };
+
+        var edgebandingModel = new GeometryModel3D { Geometry = specialMesh, Material = specialMaterial, BackMaterial = specialMaterial };
+
+        // Create a ModelVisual3D and add to the viewport
+        var partModel = new Model3DGroup();
+        partModel.Children.Add(panelModel);
+        partModel.Children.Add(edgebandingModel);
+
+        return partModel;
+    }
+
+
+
+    private static Material GetPlywoodSpecies(string? panelSpecies, string? grainDirection, double rotationDegrees = 0)
+    {
+        // Provide defaults if null or empty
+        panelSpecies ??= "Prefinished Ply";
+        grainDirection ??= "Horizontal";
+
+        if (string.IsNullOrWhiteSpace(panelSpecies))
+            panelSpecies = "Prefinished Ply";
+        if (string.IsNullOrWhiteSpace(grainDirection))
+            grainDirection = "Horizontal";
+
+        string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
+
+        try
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(resourcePath);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            var brush = new ImageBrush(bitmap)
+            {
+                TileMode = TileMode.Tile,
+                ViewportUnits = BrushMappingMode.Absolute,
+                Viewport = new Rect(0, 0, .5, 1)
+            };
+
+            // Apply rotation about the brush center using RelativeTransform.
+            // RelativeTransform uses 0..1 coordinates, so center = (0.5, 0.5).
+            if (Math.Abs(rotationDegrees) > 1e-6)
+            {
+                brush.RelativeTransform = new RotateTransform(rotationDegrees, 0.5, 0.5);
+            }
+
+            return new DiffuseMaterial(brush);
+        }
+        catch
+        {
+            // Fallback to solid color
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
+        }
+    }
 }
 
