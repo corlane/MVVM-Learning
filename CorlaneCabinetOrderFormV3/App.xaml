@@ -9,7 +9,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <!--<ResourceDictionary Source="/Themes/ColourfulDarkTheme.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml" />-->
-                <ResourceDictionary Source="Themes/ColourDictionaries/SoftDark.xaml"/>
+                <ResourceDictionary Source="Themes/ColourDictionaries/LightTheme.xaml"/>
                 <ResourceDictionary Source="Themes/ControlColours.xaml"/>
                 <ResourceDictionary Source="Themes/Controls.xaml"/>
             </ResourceDictionary.MergedDictionaries>

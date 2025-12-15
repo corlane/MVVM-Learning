@@ -13,7 +13,7 @@
         Title="MainWindow" 
         Height="1000" Width="1800"
         MinHeight="1000" MinWidth="1800"
-        Background="{DynamicResource Window.Static.Background}"
+        Background="{DynamicResource ABrush.Tone1.Background.Static}"
         >
 
     <!-- Design-time DataContext (add this block) -->
@@ -23,8 +23,8 @@
 
         <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".6*"/>
-            <ColumnDefinition Width=".3*"/>
+            <ColumnDefinition Width="1000"/>
+            <ColumnDefinition Width=".4*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>

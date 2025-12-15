@@ -12,6 +12,8 @@
              xmlns:HelixToolkit="http://helix-toolkit.org/wpf"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}"
              Margin="10"
              >
 
@@ -57,8 +59,6 @@
         HorizontalAlignment="Left" 
         VerticalAlignment="Top"
         Margin="20" 
-        Background="#333333"
-        Foreground="White"
         FontWeight="SemiBold"
         Cursor="Hand"/>
 

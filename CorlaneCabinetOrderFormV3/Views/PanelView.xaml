@@ -9,7 +9,8 @@
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
-             
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}"             
              >
 
     <!-- Design-time DataContext (so intellisense will work) -->
