@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using CorlaneCabinetOrderFormV3.Themes;
+using CorlaneCabinetOrderFormV3.ViewModels;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CorlaneCabinetOrderFormV3;
 
@@ -6,32 +9,9 @@ public partial class MainWindow : Window
 {
     public MainWindow()
     {
-//#pragma warning disable WPF0001
-
-//        Application.Current.ThemeMode = ThemeMode.System;
-//#pragma warning restore WPF0001
+        //var theme = defaultSettings.DefaultTheme;
+        //ThemesController.SetTheme(theme);
 
         InitializeComponent();
-
-    }
-
-    private void CheckBox_Checked(object sender, RoutedEventArgs e)
-    {
-//#pragma warning disable WPF0001
-        
-//        Application.Current.ThemeMode = ThemeMode.Dark;
-        
-//#pragma warning restore WPF0001
-
-    }
-
-
-    private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-    {
-//#pragma warning disable WPF0001
-//        Application.Current.ThemeMode = ThemeMode.Light;
-
-//#pragma warning restore WPF0001
-
     }
 }

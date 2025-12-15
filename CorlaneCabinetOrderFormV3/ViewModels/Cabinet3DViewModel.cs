@@ -1481,431 +1481,6 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
 
-    // This lovely bit of kit will create a panel of any size, shape, thickness, material species, etc. and edgeband it
-    //private static Model3DGroup CreatePanel(List<Point3D> polygonPoints, double matlThickness, string panelSpecies, string edgebandingSpecies, string grainDirection, CabinetModel cab, bool topDeck90, bool isPanel, string panelEBEdges)
-    //{
-    //    //panelSpecies ??= "Prefinished Ply";
-    //    //edgebandingSpecies ??= "Wood Maple";
-
-    //    double thickness = matlThickness;
-
-    //    // Create a MeshBuilder with textures enabled (second param true)
-    //    var mainBuilder = new MeshBuilder(false, true);
-    //    var specialBuilder = new MeshBuilder(false, true); // For edgebanded side
-
-    //    // Find min/max for UV normalization (project XY to 0-1)
-    //    double minX = polygonPoints.Min(p => p.X);
-    //    double maxX = polygonPoints.Max(p => p.X);
-    //    double minY = polygonPoints.Min(p => p.Y);
-    //    double maxY = polygonPoints.Max(p => p.Y);
-
-    //    // Add bottom positions and texture coords
-    //    foreach (var point in polygonPoints)
-    //    {
-    //        mainBuilder.Positions.Add(point);
-    //        double u = (point.X - minX) / (maxX - minX);
-    //        double v = (point.Y - minY) / (maxY - minY);
-    //        mainBuilder.TextureCoordinates.Add(new Point(u, v));
-    //    }
-
-    //    // Add bottom face using triangulation
-    //    var bottomIndices = Enumerable.Range(0, polygonPoints.Count).ToList();
-    //    mainBuilder.AddPolygonByTriangulation(bottomIndices);
-
-    //    // Add top positions at z=1 with same texture coords (or flipped if needed)
-    //    int topOffset = polygonPoints.Count;
-    //    foreach (var point in polygonPoints)
-    //    {
-    //        mainBuilder.Positions.Add(new Point3D(point.X, point.Y, thickness));
-    //        double u = (point.X - minX) / (maxX - minX);
-    //        double v = (point.Y - minY) / (maxY - minY);
-    //        mainBuilder.TextureCoordinates.Add(new Point(u, v)); // Same as bottom for simple mapping
-    //    }
-
-    //    // Add top face (reverse indices for correct winding/normal direction)
-    //    var topIndices = Enumerable.Range(topOffset, polygonPoints.Count).Reverse().ToList();
-    //    mainBuilder.AddPolygonByTriangulation(topIndices);
-
-
-
-    //    // Add side faces as quads with texture coords (unwrap sides: U around perimeter, V height)
-    //    double perimeter = 0;
-    //    var sideLengths = new List<double>();
-    //    for (int i = 0; i < polygonPoints.Count; i++)
-    //    {
-    //        int next = (i + 1) % polygonPoints.Count;
-    //        double dx = polygonPoints[next].X - polygonPoints[i].X;
-    //        double dy = polygonPoints[next].Y - polygonPoints[i].Y;
-    //        double len = Math.Sqrt(dx * dx + dy * dy);
-    //        sideLengths.Add(len);
-    //        perimeter += len;
-    //    }
-
-
-    //    // In the side faces loop (replace the existing loop):
-    //    double cumulativeU = 0;
-    //    for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
-    //    {
-    //        int b0 = edgeFace; // bottom index
-    //        int b1 = (edgeFace + 1) % polygonPoints.Count; // next bottom
-    //        int t1 = b1 + topOffset; // next top
-    //        int t0 = b0 + topOffset; // top
-
-    //        // Texture coords for quad: unwrap horizontally (U cumulative perimeter, V height 0-1)
-    //        double u0 = cumulativeU / perimeter;
-    //        double u1 = (cumulativeU + sideLengths[edgeFace]) / perimeter;
-    //        Point uvBottomLeft = new(u0, 0);  // bottom b0
-    //        Point uvBottomRight = new(u1, 0); // bottom b1
-    //        Point uvTopRight = new(u1, 1);    // top t1
-    //        Point uvTopLeft = new(u0, 1);     // top t0
-
-    //        // Add quad to appropriate builder (special for edgeFace==0, e.g., first side)
-    //        if (!isPanel && !topDeck90)
-    //        {
-    //            if (edgeFace == 0) // Edge(s) to show edgeband texture
-    //            {
-    //                specialBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-    //            else
-    //            {
-    //                mainBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-    //        }
-
-    //        if (isPanel)
-    //        {
-    //            mainBuilder.AddQuad(
-    //            mainBuilder.Positions[b0],
-    //            mainBuilder.Positions[b1],
-    //            mainBuilder.Positions[t1],
-    //            mainBuilder.Positions[t0],
-    //            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-
-    //            if (panelEBEdges.Contains('B') && edgeFace == 0) // Bottom edge
-    //            {
-    //                specialBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-    //            else if (panelEBEdges.Contains('R') && edgeFace == 1) // Right edge
-    //            {
-    //                specialBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-    //            else if (panelEBEdges.Contains('T') && edgeFace == 2) // Top edge
-    //            {
-    //                specialBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-    //            else if (panelEBEdges.Contains('L') && edgeFace == 3) // Left edge
-    //            {
-    //                specialBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-    //        }
-
-    //        if (topDeck90)
-    //        {
-    //            if (edgeFace == 0 || edgeFace == 1) // Edge(s) to show edgeband texture
-    //            {
-    //                specialBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],  // Note: positions are shared or duplicate if needed; but since separate meshes, add to special
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-    //            else
-    //            {
-    //                mainBuilder.AddQuad(
-    //                mainBuilder.Positions[b0],
-    //                mainBuilder.Positions[b1],
-    //                mainBuilder.Positions[t1],
-    //                mainBuilder.Positions[t0],
-    //                uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-    //            }
-
-    //        }
-
-    //        cumulativeU += sideLengths[edgeFace];
-    //    }
-
-    //    // Compute normals for proper lighting
-    //    mainBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
-    //    specialBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
-
-    //    // Convert to a MeshGeometry3D, freezing for performance
-    //    var mesh = mainBuilder.ToMesh(true);
-    //    var specialMesh = specialBuilder.ToMesh(true);
-
-
-
-
-    //    // Create a material with texture
-    //    var material = GetPlywoodSpecies(panelSpecies, grainDirection);
-    //    var specialMaterial = GetEdgeBandingSpecies(edgebandingSpecies);
-    //    if (edgebandingSpecies == "None")
-    //    {
-    //        specialMaterial = GetPlywoodSpecies(panelSpecies, grainDirection);
-    //    }
-
-    //    // Create a GeometryModel3D
-    //    var panelModel = new GeometryModel3D
-    //    {
-    //        Geometry = mesh,
-    //        Material = material,
-    //        BackMaterial = material // Visible from both sides
-    //    };
-
-    //    var edgebandingModel = new GeometryModel3D { Geometry = specialMesh, Material = specialMaterial, BackMaterial = specialMaterial };
-
-
-    //    // Create a ModelVisual3D and add to the viewport
-    //    var partModel = new Model3DGroup();
-    //    partModel.Children.Add(panelModel);
-    //    partModel.Children.Add(edgebandingModel);
-
-    //    return partModel;
-    //}
-
-    // Transform method. This allows x, y, and z translation, as well as x, y, and z rotation.
-    private static void ApplyTransform(Model3DGroup geometryModel, double translateX, double translateY, double translateZ, double rotateXDegrees, double rotateYDegrees, double rotateZDegrees)
-    {
-
-        var transformGroup = new Transform3DGroup();
-
-        // Apply translation
-        transformGroup.Children.Add(new TranslateTransform3D(translateX, translateY, translateZ));
-
-        // Apply rotations (around X, Y, Z axes in degrees)
-        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1, 0, 0), rotateXDegrees)));
-        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), rotateYDegrees)));
-        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), rotateZDegrees)));
-
-        // Assign the transform group to the model
-        geometryModel.Transform = transformGroup;
-
-    }
-
-    //private static Material GetPlywoodSpecies(string? panelSpecies, string? grainDirection)
-    //{
-    //    // Provide defaults if null or empty
-    //    panelSpecies ??= "Prefinished Ply";
-    //    grainDirection ??= "Horizontal";
-
-    //    if (string.IsNullOrWhiteSpace(panelSpecies))
-    //        panelSpecies = "Prefinished Ply";
-    //    if (string.IsNullOrWhiteSpace(grainDirection))
-    //        grainDirection = "Horizontal";
-
-    //    string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
-
-    //    try
-    //    {
-    //        var bitmap = new BitmapImage();
-    //        bitmap.BeginInit();
-    //        bitmap.UriSource = new Uri(resourcePath);
-    //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-    //        bitmap.EndInit();
-    //        bitmap.Freeze();
-
-    //        var brush = new ImageBrush(bitmap)
-    //        {
-    //            TileMode = TileMode.Tile,
-    //            ViewportUnits = BrushMappingMode.Absolute,
-    //            Viewport = new Rect(0, 0, .5, 1)
-    //        };
-
-    //        return new DiffuseMaterial(brush);
-    //    }
-    //    catch
-    //    {
-    //        // Fallback to solid color
-    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
-    //    }
-    //}
-
-    private static Material GetEdgeBandingSpecies(string? species)
-    {
-        // Handle "None" or null
-        if (string.IsNullOrWhiteSpace(species) || species == "None")
-        {
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19))); // Wood brown
-        }
-
-        string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
-
-        try
-        {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(resourcePath);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            bitmap.Freeze();
-
-            var brush = new ImageBrush(bitmap)
-            {
-                TileMode = TileMode.Tile,
-                ViewportUnits = BrushMappingMode.Absolute,
-                Viewport = new Rect(0, 0, 1, 1)
-            };
-
-            return new DiffuseMaterial(brush);
-        }
-        catch
-        {
-            // Fallback to solid color
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19)));
-        }
-    }
-
-    // Add this helper below the other private static helpers (e.g. below ApplyTransform) in the same file.
-    private static List<Point3D> FilletPolygon(List<Point3D> polygonPoints, double radius, int segments)
-    {
-        // No-op for trivial requests
-        if (radius <= double.Epsilon || segments < 1 || polygonPoints == null || polygonPoints.Count < 3)
-            return new List<Point3D>(polygonPoints);
-
-        var result = new List<Point3D>();
-        int n = polygonPoints.Count;
-
-        for (int i = 0; i < n; i++)
-        {
-            Point3D prev3 = polygonPoints[(i - 1 + n) % n];
-            Point3D curr3 = polygonPoints[i];
-            Point3D next3 = polygonPoints[(i + 1) % n];
-
-            // Work in 2D (XY plane). Use Z of current for produced points.
-            var currZ = curr3.Z;
-            var prev = new Vector(prev3.X - curr3.X, prev3.Y - curr3.Y); // from corner toward prev
-            var next = new Vector(next3.X - curr3.X, next3.Y - curr3.Y); // from corner toward next
-
-            double lenPrev = prev.Length;
-            double lenNext = next.Length;
-
-            // Degenerate edges -> keep corner
-            if (lenPrev < 1e-8 || lenNext < 1e-8)
-            {
-                result.Add(curr3);
-                continue;
-            }
-
-            prev.Normalize();
-            next.Normalize();
-
-            // Angle between the two edge directions (in radians)
-            double dot = Math.Max(-1.0, Math.Min(1.0, (prev.X * next.X + prev.Y * next.Y)));
-            double angle = Math.Acos(dot);
-
-            // If angle ~ 0 (collinear) or ~pi (straight/180), nothing to fillet
-            if (angle < 1e-4 || Math.PI - angle < 1e-4)
-            {
-                result.Add(curr3);
-                continue;
-            }
-
-            // distance along each edge to tangent point
-            double tangentDist = radius / Math.Tan(angle / 2.0);
-
-            // cannot exceed available edge segment length
-            double maxAllowed = Math.Min(lenPrev, lenNext) - 1e-6;
-            if (tangentDist > maxAllowed) tangentDist = Math.Max(0.0, maxAllowed);
-
-            if (tangentDist <= 1e-6)
-            {
-                result.Add(curr3);
-                continue;
-            }
-
-            // Tangent points (in XY)
-            var t1 = new Point(curr3.X + prev.X * tangentDist, curr3.Y + prev.Y * tangentDist); // along prev edge
-            var t2 = new Point(curr3.X + next.X * tangentDist, curr3.Y + next.Y * tangentDist); // along next edge
-
-            // bisector direction (prev + next). When opposite directions (straight line) bisector is zero and already handled above.
-            var bis = new Vector(prev.X + next.X, prev.Y + next.Y);
-            double bisLen = bis.Length;
-            if (bisLen < 1e-8)
-            {
-                // fallback: just emit corner
-                result.Add(curr3);
-                continue;
-            }
-            bis.Normalize();
-
-            // center distance along bisector from corner
-            double centerDist = radius / Math.Sin(angle / 2.0);
-            var center = new Point(curr3.X + bis.X * centerDist, curr3.Y + bis.Y * centerDist);
-
-            // start/end angles for arc
-            double startAng = Math.Atan2(t1.Y - center.Y, t1.X - center.X);
-            double endAng = Math.Atan2(t2.Y - center.Y, t2.X - center.X);
-
-            // Determine sweep direction so arc goes inside the corner.
-            // cross < 0 => clockwise turn from prev->next (concave vs convex depends on polygon orientation),
-            // we adapt sweep to follow the smaller arc that lies between t1 and t2 toward the polygon interior.
-            double cross = prev.X * next.Y - prev.Y * next.X;
-            double sweep = endAng - startAng;
-
-            if (cross < 0)
-            {
-                // prefer clockwise sweep
-                if (sweep > 0) sweep -= 2.0 * Math.PI;
-            }
-            else
-            {
-                // prefer counter-clockwise sweep
-                if (sweep < 0) sweep += 2.0 * Math.PI;
-            }
-
-            // Add tangent start
-            result.Add(new Point3D(t1.X, t1.Y, currZ));
-
-            // Add intermediate arc points (evenly spaced by angle)
-            for (int s = 1; s <= segments; s++)
-            {
-                double t = (double)s / (segments + 1);
-                double ang = startAng + sweep * t;
-                double x = center.X + radius * Math.Cos(ang);
-                double y = center.Y + radius * Math.Sin(ang);
-                result.Add(new Point3D(x, y, currZ));
-            }
-
-            // Add tangent end
-            result.Add(new Point3D(t2.X, t2.Y, currZ));
-        }
-
-        return result;
-    }
-
-
-
-
 
     // This lovely bit of kit will create a panel of any size, shape, thickness, material species, etc. and edgeband it
     // Added optional 'plywoodTextureRotationDegrees' parameter (default 0) so callers can rotate plywood texture.
@@ -2108,7 +1683,23 @@ public partial class Cabinet3DViewModel : ObservableObject
         return partModel;
     }
 
+    private static void ApplyTransform(Model3DGroup geometryModel, double translateX, double translateY, double translateZ, double rotateXDegrees, double rotateYDegrees, double rotateZDegrees)
+    {
 
+        var transformGroup = new Transform3DGroup();
+
+        // Apply translation
+        transformGroup.Children.Add(new TranslateTransform3D(translateX, translateY, translateZ));
+
+        // Apply rotations (around X, Y, Z axes in degrees)
+        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1, 0, 0), rotateXDegrees)));
+        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), rotateYDegrees)));
+        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), rotateZDegrees)));
+
+        // Assign the transform group to the model
+        geometryModel.Transform = transformGroup;
+
+    }
 
     private static Material GetPlywoodSpecies(string? panelSpecies, string? grainDirection, double rotationDegrees = 0)
     {
@@ -2154,5 +1745,166 @@ public partial class Cabinet3DViewModel : ObservableObject
             return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
         }
     }
+
+    private static Material GetEdgeBandingSpecies(string? species)
+    {
+        // Handle "None" or null
+        if (string.IsNullOrWhiteSpace(species) || species == "None")
+        {
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19))); // Wood brown
+        }
+
+        string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
+
+        try
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(resourcePath);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            var brush = new ImageBrush(bitmap)
+            {
+                TileMode = TileMode.Tile,
+                ViewportUnits = BrushMappingMode.Absolute,
+                Viewport = new Rect(0, 0, 1, 1)
+            };
+
+            return new DiffuseMaterial(brush);
+        }
+        catch
+        {
+            // Fallback to solid color
+            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19)));
+        }
+    }
+
+    // Add this helper below the other private static helpers (e.g. below ApplyTransform) in the same file.
+    private static List<Point3D> FilletPolygon(List<Point3D> polygonPoints, double radius, int segments)
+    {
+        // No-op for trivial requests
+        if (radius <= double.Epsilon || segments < 1 || polygonPoints == null || polygonPoints.Count < 3)
+            return new List<Point3D>(polygonPoints);
+
+        var result = new List<Point3D>();
+        int n = polygonPoints.Count;
+
+        for (int i = 0; i < n; i++)
+        {
+            Point3D prev3 = polygonPoints[(i - 1 + n) % n];
+            Point3D curr3 = polygonPoints[i];
+            Point3D next3 = polygonPoints[(i + 1) % n];
+
+            // Work in 2D (XY plane). Use Z of current for produced points.
+            var currZ = curr3.Z;
+            var prev = new Vector(prev3.X - curr3.X, prev3.Y - curr3.Y); // from corner toward prev
+            var next = new Vector(next3.X - curr3.X, next3.Y - curr3.Y); // from corner toward next
+
+            double lenPrev = prev.Length;
+            double lenNext = next.Length;
+
+            // Degenerate edges -> keep corner
+            if (lenPrev < 1e-8 || lenNext < 1e-8)
+            {
+                result.Add(curr3);
+                continue;
+            }
+
+            prev.Normalize();
+            next.Normalize();
+
+            // Angle between the two edge directions (in radians)
+            double dot = Math.Max(-1.0, Math.Min(1.0, (prev.X * next.X + prev.Y * next.Y)));
+            double angle = Math.Acos(dot);
+
+            // If angle ~ 0 (collinear) or ~pi (straight/180), nothing to fillet
+            if (angle < 1e-4 || Math.PI - angle < 1e-4)
+            {
+                result.Add(curr3);
+                continue;
+            }
+
+            // distance along each edge to tangent point
+            double tangentDist = radius / Math.Tan(angle / 2.0);
+
+            // cannot exceed available edge segment length
+            double maxAllowed = Math.Min(lenPrev, lenNext) - 1e-6;
+            if (tangentDist > maxAllowed) tangentDist = Math.Max(0.0, maxAllowed);
+
+            if (tangentDist <= 1e-6)
+            {
+                result.Add(curr3);
+                continue;
+            }
+
+            // Tangent points (in XY)
+            var t1 = new Point(curr3.X + prev.X * tangentDist, curr3.Y + prev.Y * tangentDist); // along prev edge
+            var t2 = new Point(curr3.X + next.X * tangentDist, curr3.Y + next.Y * tangentDist); // along next edge
+
+            // bisector direction (prev + next). When opposite directions (straight line) bisector is zero and already handled above.
+            var bis = new Vector(prev.X + next.X, prev.Y + next.Y);
+            double bisLen = bis.Length;
+            if (bisLen < 1e-8)
+            {
+                // fallback: just emit corner
+                result.Add(curr3);
+                continue;
+            }
+            bis.Normalize();
+
+            // center distance along bisector from corner
+            double centerDist = radius / Math.Sin(angle / 2.0);
+            var center = new Point(curr3.X + bis.X * centerDist, curr3.Y + bis.Y * centerDist);
+
+            // start/end angles for arc
+            double startAng = Math.Atan2(t1.Y - center.Y, t1.X - center.X);
+            double endAng = Math.Atan2(t2.Y - center.Y, t2.X - center.X);
+
+            // Determine sweep direction so arc goes inside the corner.
+            // cross < 0 => clockwise turn from prev->next (concave vs convex depends on polygon orientation),
+            // we adapt sweep to follow the smaller arc that lies between t1 and t2 toward the polygon interior.
+            double cross = prev.X * next.Y - prev.Y * next.X;
+            double sweep = endAng - startAng;
+
+            if (cross < 0)
+            {
+                // prefer clockwise sweep
+                if (sweep > 0) sweep -= 2.0 * Math.PI;
+            }
+            else
+            {
+                // prefer counter-clockwise sweep
+                if (sweep < 0) sweep += 2.0 * Math.PI;
+            }
+
+            // Add tangent start
+            result.Add(new Point3D(t1.X, t1.Y, currZ));
+
+            // Add intermediate arc points (evenly spaced by angle)
+            for (int s = 1; s <= segments; s++)
+            {
+                double t = (double)s / (segments + 1);
+                double ang = startAng + sweep * t;
+                double x = center.X + radius * Math.Cos(ang);
+                double y = center.Y + radius * Math.Sin(ang);
+                result.Add(new Point3D(x, y, currZ));
+            }
+
+            // Add tangent end
+            result.Add(new Point3D(t2.X, t2.Y, currZ));
+        }
+
+        return result;
+    }
+
+
+
+
+
+
+
+
 }
 

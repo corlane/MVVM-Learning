@@ -8,7 +8,6 @@
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
-             d:Background="LightGray"
              >
 
     <!-- Design-time DataContext (add this block) -->

@@ -2,26 +2,23 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.Themes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel(ICabinetService cabinetService) : ObservableValidator
 {
-    public Guid InstanceId { get; } = Guid.NewGuid();
     public MainWindowViewModel() : this(new CabinetService())
     {
         // empty constructor for design-time support
-
     }
 
-
-    [ObservableProperty] public partial bool IsDarkMode { get; set; }
-    
 
     private readonly ICabinetService _cabinetService = cabinetService;
 
@@ -117,4 +114,6 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
         var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
         previewSvc.ForcePreview(value);
     }
+
+
 }

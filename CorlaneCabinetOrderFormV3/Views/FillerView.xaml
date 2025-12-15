@@ -10,7 +10,6 @@
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
-             d:Background="DarkGray"
              
              >
 

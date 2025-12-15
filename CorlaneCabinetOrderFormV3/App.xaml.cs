@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using CorlaneCabinetOrderFormV3.Services;
+﻿using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.Themes;
 using CorlaneCabinetOrderFormV3.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3;
@@ -39,6 +40,23 @@ public partial class App : Application
         ServiceProvider = host.Services;
         var defaults = ServiceProvider.GetRequiredService<DefaultSettingsService>();
         await defaults.LoadAsync();
+
+        // Apply persisted theme (if any) before creating/showing MainWindow
+        if (!string.IsNullOrWhiteSpace(defaults.DefaultTheme))
+        {
+            var theme = defaults.DefaultTheme;
+            ThemeType t = theme switch
+            {
+                "Soft Dark" => ThemeType.SoftDark,
+                "Red Black Theme" => ThemeType.RedBlackTheme,
+                "Deep Dark" => ThemeType.DeepDark,
+                "Grey Theme" => ThemeType.GreyTheme,
+                "Dark Grey Theme" => ThemeType.DarkGreyTheme,
+                "Light Theme" => ThemeType.LightTheme,
+                _ => ThemeType.LightTheme
+            };
+            ThemesController.SetTheme(t);
+        }
 
         // Set MainWindow DataContext
         var mainWindow = new MainWindow

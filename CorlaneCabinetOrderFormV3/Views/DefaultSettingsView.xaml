@@ -10,7 +10,6 @@
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
-             d:Background="DarkGray"
              >
     
     <Behaviors:Interaction.Triggers>
@@ -43,6 +42,11 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <GroupBox Header="Theme Selection" Grid.Row="0" Grid.Column="0" Margin="130,5,5,5" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical">
+                <ComboBox x:Name="comboThemes" ItemsSource="{Binding ThemeOptions}" SelectedItem="{Binding SelectedTheme}" Height="30" Width="100" Margin="5" VerticalAlignment="Top"/>
+            </StackPanel>
+        </GroupBox>
 
         <GroupBox Header="Dimensions" Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left">
             <StackPanel Orientation="Vertical">

@@ -75,6 +75,8 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial string DefaultGapWidth { get; set; } = ".125";
 
 
+    // Default Theme
+    [ObservableProperty] public partial string? DefaultTheme { get; set; }
 
     // Add more defaults here as you create new properties
 

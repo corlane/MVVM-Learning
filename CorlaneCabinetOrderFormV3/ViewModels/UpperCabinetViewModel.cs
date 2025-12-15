@@ -37,6 +37,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
         Width = "16";
         Height = "42";
         Depth = "12";
+        LeftFrontWidth = "12";
+        RightFrontWidth = "12";
+        LeftDepth = "12";
+        RightDepth = "12";
+        LeftBackWidth = "24";
+        RightBackWidth = "24";
 
         ValidateAllProperties();
     }

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.Themes;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -15,6 +16,14 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public DefaultSettingsViewModel(DefaultSettingsService defaults)
     {
         _defaults = defaults;
+
+        // Initialize SelectedTheme from persisted default (falls back to Light Theme)
+        if (_defaults != null)
+        {
+            SelectedTheme = string.IsNullOrWhiteSpace(_defaults.DefaultTheme)
+                ? "Light Theme"
+                : _defaults.DefaultTheme;
+        }
     }
 
 
@@ -88,6 +97,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     public string DefaultGapWidth { get => _defaults.DefaultGapWidth; set => _defaults.DefaultGapWidth = value; }
 
+    public string DefaultTheme { get => _defaults.DefaultTheme; set => _defaults.DefaultTheme = value; }
     // Add more mirrored properties here as you create new default properties
 
     // Combobox Lists
@@ -163,6 +173,39 @@ public partial class DefaultSettingsViewModel : ObservableObject
             "Stretcher",
             "Full"
         ];
+    public List<string> ThemeOptions { get; } = new()
+    {
+        "Deep Dark",
+        "Soft Dark",
+        "Dark Grey Theme",
+        "Grey Theme",
+        "Light Theme",
+        "Red Black Theme"
+    };
+
+    [ObservableProperty]
+    public partial string SelectedTheme { get; set; } = "Light Theme";
+    partial void OnSelectedThemeChanged(string value)
+    {
+        ThemeType selectedTheme = value switch
+        {
+            "Soft Dark" => ThemeType.SoftDark,
+            "Red Black Theme" => ThemeType.RedBlackTheme,
+            "Deep Dark" => ThemeType.DeepDark,
+            "Grey Theme" => ThemeType.GreyTheme,
+            "Dark Grey Theme" => ThemeType.DarkGreyTheme,
+            "Light Theme" => ThemeType.LightTheme,
+            _ => ThemeType.LightTheme
+        };
+        ThemesController.SetTheme(selectedTheme);
+
+        // Persist selection to defaults and save
+        if (_defaults != null)
+        {
+            _defaults.DefaultTheme = value;
+            _ = _defaults.SaveAsync(); // fire-and-forget; best-effort persist
+        }
+    }
 
 
     // Command to save defaults

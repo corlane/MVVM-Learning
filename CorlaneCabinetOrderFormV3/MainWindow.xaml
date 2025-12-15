@@ -7,19 +7,21 @@
         xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
         xmlns:views="clr-namespace:CorlaneCabinetOrderFormV3.Views"
         xmlns:b="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
+        xmlns:themes="clr-namespace:CorlaneCabinetOrderFormV3.Themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" 
         Height="1000" Width="1800"
         MinHeight="1000" MinWidth="1800"
+        Background="{DynamicResource Window.Static.Background}"
         >
 
     <!-- Design-time DataContext (add this block) -->
     <d:Window.DataContext>
         <viewmodels:MainWindowViewModel/>
     </d:Window.DataContext>
-    
-    <Grid>
+
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".6*"/>
             <ColumnDefinition Width=".3*"/>
@@ -32,7 +34,6 @@
         <StackPanel Orientation="Horizontal">
             <Button Content="Load Job" Width="150" Height="50" Margin="30,10,10,10" Command="{Binding LoadJobCommand}" HorizontalAlignment="Left"/>
             <Button Content="Save Job" Width="150" Height="50" Margin="30,10,10,10" Command="{Binding SaveJobCommand}" HorizontalAlignment="Left"/>
-            <CheckBox Content="Theme" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
         </StackPanel>
 
         <TabControl Grid.Row="1" Grid.Column="0" SelectedIndex="{Binding SelectedTabIndex}">

@@ -12,7 +12,6 @@
              xmlns:HelixToolkit="http://helix-toolkit.org/wpf"
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="1200"
-             d:Background="DarkGray"
              Margin="10"
              >
 
