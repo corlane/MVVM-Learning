@@ -9,7 +9,7 @@
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="900" d:DesignWidth="1200"
+             d:DesignHeight="920" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}"             
              >
@@ -44,7 +44,7 @@
 
         <Button x:Name="buttonLoadDefaults" Content="Load Defaults" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Command="{Binding LoadDefaultsCommand, Mode=OneWay}"/>
 
-        <GroupBox x:Name="groupFillerDimensions" Grid.Column="0" Grid.Row="0" Header="Dimensions" Margin="5,50,5,5" HorizontalAlignment="Left" Padding="0,0,20,0">
+        <GroupBox x:Name="groupFillerDimensions" Grid.Column="0" Grid.Row="0" Header="Dimensions" Margin="150,5,5,5" HorizontalAlignment="Left" Padding="0,0,20,0" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Width" HorizontalAlignment="Left" Margin="5,5,3,0"/>
@@ -77,19 +77,19 @@
         </GroupBox>
 
 
-        <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" >
+        <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="-45,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <Label Content="Species:" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboFillerCabinetSpecies" Margin="5" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}"/>
+                <ComboBox Name="comboFillerCabinetSpecies" Margin="5,5,5,10" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}"/>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Special instructions/notes for this item" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="270" Height="200" Margin="5" HorizontalAlignment="Left">
-            <TextBox x:Name="textFillerNotes" Margin="5" IsReadOnly="False" TextWrapping="Wrap" Text="{Binding Notes}"/>
+        <GroupBox Header="Special instructions/notes for this item" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="350" Height="160" Margin="25,45,10,200" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.RowSpan="2">
+            <TextBox x:Name="textUpperCabNotes" Margin="5" IsReadOnly="False" TextWrapping="Wrap" Text="{Binding Notes}"/>
         </GroupBox>
 
-        
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0">
+
+        <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Bottom">
 
             <StackPanel Orientation="Vertical" Margin="5">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top">
@@ -104,12 +104,12 @@
                                              Text="{Binding Name}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
-                <Button x:Name="buttonAddUpper" Content="Add to List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" Cursor="Hand"
+                <Button x:Name="buttonAddUpper" Content="Add to List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
                                             Command="{Binding AddCabinetCommand}"/>
                 <Button x:Name="buttonUpdateUpper" Content="Update in List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
                                             Command="{Binding UpdateCabinetCommand}"/>
             </StackPanel>
         </StackPanel>
-
+        
     </Grid>
 </UserControl>

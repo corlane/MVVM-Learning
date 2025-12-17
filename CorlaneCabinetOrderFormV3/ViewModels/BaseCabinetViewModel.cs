@@ -45,7 +45,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         RightFrontWidth = "12";
         LeftDepth = "24";
         RightDepth = "24";
-
+        Style = Style1;
         ValidateAllProperties();
     }
 
@@ -54,7 +54,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public static string Style1 => "Standard";
     public static string Style2 => "Drawer";
     public static string Style3 => "90° Corner";
-    public static string Style4 => "45° Corner";
+    public static string Style4 => "Angle Front";
 
     // Common properties from CabinetModel
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string oldValue, string newValue)
@@ -145,6 +145,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (newValue != oldValue)
         {
             // Update visibility of drawer front height properties based on DrwCount
+            DrawersStackPanelVisible = newValue > 0;
             DrwFront1Visible = newValue >= 1;
             DrwFront2Visible = newValue >= 2;
             DrwFront3Visible = newValue >= 3;
@@ -526,14 +527,15 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial ObservableCollection<int> ListDrwCount { get; set; } = [];
 
     // Visibility properties
+    [ObservableProperty] public partial bool DrawersStackPanelVisible { get; set; } = true;
     [ObservableProperty] public partial bool GroupDoorsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupDrawersVisibility { get; set; } = true;
-    [ObservableProperty] public partial bool StdOrDrwBaseVisibility { get; set; } = true;
-    [ObservableProperty] public partial bool Corner90Visibility { get; set; }
-    [ObservableProperty] public partial bool Corner45Visibility { get; set; }
-    [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; } = false;
+    [ObservableProperty] public partial bool StdOrDrwBaseVisibility { get; set; } = false;
+    [ObservableProperty] public partial bool Corner90Visibility { get; set; } = false;
+    [ObservableProperty] public partial bool Corner45Visibility { get; set; } = true;
+    [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = true;
-    [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = false;
+    [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = true;
     [ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
     [ObservableProperty] public partial bool DrwFrontHeight3Enabled { get; set; }

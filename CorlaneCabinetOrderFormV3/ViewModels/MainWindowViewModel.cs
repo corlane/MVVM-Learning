@@ -37,6 +37,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             {
                 await _cabinetService.SaveAsync(dialog.FileName);
                 MessageBox.Show("Job saved successfully!", "Success");
+                CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
             }
             catch (Exception ex)
             {
@@ -58,7 +59,8 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             try
             {
                 await _cabinetService.LoadAsync(dialog.FileName);
-                MessageBox.Show("Job loaded successfully!", "Success");
+                //MessageBox.Show("Job loaded successfully!", "Success");
+                CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
             }
             catch (Exception ex)
             {
@@ -67,6 +69,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
         }
     }
 
+    [ObservableProperty] public partial string CurrentJobName { get; set; } = "Untitled Job";
 
     [ObservableProperty]
     public partial int SelectedTabIndex { get; set; } = 0;

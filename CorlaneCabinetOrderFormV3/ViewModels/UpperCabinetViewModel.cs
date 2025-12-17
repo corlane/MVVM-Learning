@@ -51,7 +51,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     // Upper cabinet type strings
     public static string Style1 => "Standard";
     public static string Style2 => "90° Corner";
-    public static string Style3 => "45° Corner";
+    public static string Style3 => "Angle Front";
 
     // Common properties from CabinetModel
     [ObservableProperty] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string value)
@@ -160,7 +160,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool StandardDimsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool Corner90DimsVisibility { get; set; } = false;
     [ObservableProperty] public partial bool Corner45DimsVisibility { get; set; } = false;
-    [ObservableProperty] public partial bool ShowRevealSettings { get; set; } = false;
+    [ObservableProperty] public partial bool ShowRevealSettings { get; set; } = true;
 
     [RelayCommand]
     private void AddCabinet()

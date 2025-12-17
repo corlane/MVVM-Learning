@@ -34,6 +34,7 @@ public partial class App : Application
                 services.AddTransient<PanelViewModel>();
                 services.AddTransient<DefaultSettingsViewModel>();
                 services.AddTransient<Cabinet3DViewModel>();
+                services.AddTransient<PlaceOrderViewModel>();
             })
             .Build();
 
@@ -62,7 +63,6 @@ public partial class App : Application
         var mainWindow = new MainWindow
         {
             DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
-
         };
 
         // Ensure the PreviewService has an initial active owner (the current SelectedTabIndex)

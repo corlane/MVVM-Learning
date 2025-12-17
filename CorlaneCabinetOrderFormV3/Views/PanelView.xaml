@@ -8,7 +8,7 @@
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="900" d:DesignWidth="1200"
+             d:DesignHeight="920" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}"             
              >
@@ -37,7 +37,7 @@
 
         <Button x:Name="buttonLoadDefaults" Content="Load Defaults" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Command="{Binding LoadDefaultsCommand, Mode=OneWay}"/>
 
-        <GroupBox x:Name="groupPanelDimensions" Grid.Column="0" Grid.Row="0" Header="Dimensions" Margin="5,50,5,5" HorizontalAlignment="Left" Padding="0,0,20,0" VerticalAlignment="Top">
+        <GroupBox x:Name="groupPanelDimensions" Grid.Column="0" Grid.Row="0" Header="Dimensions" Margin="160,5,5,5" HorizontalAlignment="Left" Padding="0,0,20,0" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Width" HorizontalAlignment="Left" Margin="5,5,3,0"/>
@@ -69,7 +69,7 @@
         </GroupBox>
 
 
-        <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" >
+        <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="-25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" >
             <StackPanel Orientation="Vertical">
                 <Label Content="Species:" Margin="0,0,0,-8"/>
                 <ComboBox Name="comboFillerCabinetSpecies" Margin="5" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}"/>
@@ -78,23 +78,24 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Special instructions/notes for this item" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Width="270" Height="200" Margin="5" HorizontalAlignment="Left">
-            <TextBox x:Name="textFillerNotes" Margin="5" IsReadOnly="False" TextWrapping="Wrap" Text="{Binding Notes}"/>
-        </GroupBox>
-
-        <GroupBox Header="Select Edges To Be Edgebanded" Grid.Row="1" Grid.Column="1" Margin="5">
+        <GroupBox Header="Select Edges To Be Edgebanded" Grid.Row="1" Grid.Column="1" Margin="5,-100,5,5" VerticalAlignment="Top" HorizontalAlignment="Left">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkEBPanelTop" Content="Top" HorizontalAlignment="Center" Margin="0,15,0,5" IsChecked="{Binding PanelEBTop}"/>
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox x:Name="checkEBPanelLeft" Content="Left" VerticalAlignment="Center" Margin="65,0,0,0" IsChecked="{Binding PanelEBLeft}"/>
-                    <Image Source="/Images/woodgrain.PNG" Width="150" Height="200" HorizontalAlignment="Center"/>
-                    <CheckBox x:Name="checkEBPanelRight" Content="Right" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding PanelEBRight}"/>
+                    <CheckBox x:Name="checkEBPanelLeft" Content="Left" VerticalAlignment="Center" Margin="10,0,0,0" IsChecked="{Binding PanelEBLeft}"/>
+                    <Image Source="/Images/woodgrain.PNG" Width="150" Height="200" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                    <CheckBox x:Name="checkEBPanelRight" Content="Right" VerticalAlignment="Center" Margin="5,0,10,0" IsChecked="{Binding PanelEBRight}"/>
                 </StackPanel>
-                <CheckBox x:Name="checkEBPanelBottom" Content="Bottom" HorizontalAlignment="Center" Margin="0,5,0,20" IsChecked="{Binding PanelEBBottom}"/>
+                <CheckBox x:Name="checkEBPanelBottom" Content="Bottom" HorizontalAlignment="Center" Margin="26,5,0,20" IsChecked="{Binding PanelEBBottom}"/>
             </StackPanel>
         </GroupBox>
 
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0">
+        <GroupBox Header="Special instructions/notes for this item" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Width="350" Height="160" Margin="25,45,10,200" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.RowSpan="2">
+            <TextBox x:Name="textUpperCabNotes" Margin="5" IsReadOnly="False" TextWrapping="Wrap" Text="{Binding Notes}"/>
+        </GroupBox>
+
+
+        <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Bottom">
 
             <StackPanel Orientation="Vertical" Margin="5">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top">
