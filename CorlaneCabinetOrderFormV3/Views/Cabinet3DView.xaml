@@ -62,5 +62,42 @@
         FontWeight="SemiBold"
         Cursor="Hand"/>
 
+        <ToggleButton Content="{Binding HideLeftEndText}" IsChecked="{Binding LeftEndHidden}"
+        Click="ResetToFrontView_Click"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,60,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <ToggleButton Content="{Binding HideRightEndText}" IsChecked="{Binding RightEndHidden}"
+        Click="ResetToFrontView_Click"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,100,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <ToggleButton Content="{Binding HideTopText}" IsChecked="{Binding TopHidden}"
+        Click="ResetToFrontView_Click"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,140,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <ToggleButton Content="{Binding HideDeckText}" IsChecked="{Binding DeckHidden}"
+        Click="ResetToFrontView_Click"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,180,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+
     </Grid>
 </UserControl>

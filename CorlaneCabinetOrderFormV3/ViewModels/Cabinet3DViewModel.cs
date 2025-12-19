@@ -4,7 +4,6 @@ using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using HelixToolkit.Wpf;
-using System;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -39,6 +38,43 @@ public partial class Cabinet3DViewModel : ObservableObject
             RebuildPreview();
         }
     }
+
+    // Visibility Properties
+    [ObservableProperty] public partial bool LeftEndHidden { get; set; } = false; partial void OnLeftEndHiddenChanged(bool value)
+    {
+        if (value) HideLeftEndText = "Show Left End";
+        else HideLeftEndText = "Hide Left End";
+
+        RebuildPreview();
+    }
+    [ObservableProperty] public partial bool RightEndHidden { get; set; } = false; partial void OnRightEndHiddenChanged(bool value)
+    {
+        if (value) HideRightEndText = "Show Right End";
+        else HideRightEndText = "Hide Right End";
+
+        RebuildPreview();
+    }
+    [ObservableProperty] public partial bool DeckHidden { get; set; } = false; partial void OnDeckHiddenChanged(bool value)
+    {
+        if (value) HideDeckText = "Show Deck";
+        else HideDeckText = "Hide Deck";
+
+        RebuildPreview();
+    }
+    [ObservableProperty] public partial bool TopHidden { get; set; } = false; partial void OnTopHiddenChanged(bool value)
+    {
+        if (value) HideTopText = "Show Top";
+        else HideTopText = "Hide Top";
+
+        RebuildPreview();
+    }
+    [ObservableProperty] public partial string HideTopText { get; set; } = "Hide Top";
+    [ObservableProperty] public partial string HideDeckText { get; set; } = "Hide Deck";
+    [ObservableProperty] public partial string HideLeftEndText { get; set; } = "Hide Left End";
+    [ObservableProperty] public partial string HideRightEndText { get; set; } = "Hide Right End";
+
+
+
 
     private void PreviewSvc_PreviewChanged(object? sender, EventArgs e)
     {
@@ -75,6 +111,9 @@ public partial class Cabinet3DViewModel : ObservableObject
 
         if (cab is CabinetModel cabinetModel)
         {
+            // Reset accumulators so rebuild produces fresh material/edge totals
+            cabinetModel.ResetAllMaterialAndEdgeTotals();
+
             var built = BuildCabinet(cabinetModel);
             group.Children.Add(built);
         }
@@ -88,6 +127,40 @@ public partial class Cabinet3DViewModel : ObservableObject
 
         PreviewModel = group;
     }
+
+
+    // Public helper: force the 3D builder to (re)compute material / edgeband accumulators for a CabinetModel instance.
+    // This does NOT change the preview; it simply runs the same BuildCabinet pipeline that populates the
+    // CabinetModel.MaterialAreaBySpecies and CabinetModel.EdgeBandingLengthBySpecies dictionaries.
+    public void AccumulateMaterialAndEdgeTotals(CabinetModel? cab)
+    {
+        if (cab == null) return;
+
+        // Clear previous totals
+        cab.ResetAllMaterialAndEdgeTotals();
+
+        // BuildCabinet will call CreatePanel(...) which accumulates into the provided cab.
+        // Run on the UI thread because some HelixToolkit operations expect a Dispatcher (and to be safe).
+        if (Application.Current?.Dispatcher == null)
+        {
+            try { _ = BuildCabinet(cab); } catch { /* best-effort */ }
+        }
+        else
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    try { _ = BuildCabinet(cab); } catch { /* swallow */ }
+                }, DispatcherPriority.Render);
+            }
+            catch
+            {
+                // swallow - best-effort
+            }
+        }
+    }
+
 
     private Model3DGroup BuildCabinet(CabinetModel cab)
     {
@@ -333,7 +406,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", cab, topDeck90, isPanel, panelEBEdges);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
-                    cabinet.Children.Add(stretcher);          
+                    cabinet.Children.Add(stretcher);
                 }
 
                 if (cabType == style2)
@@ -599,10 +672,10 @@ public partial class Cabinet3DViewModel : ObservableObject
                         }
                     }
                 }
-                cabinet.Children.Add(leftEnd);
-                cabinet.Children.Add(rightEnd);
-                cabinet.Children.Add(deck);
-                cabinet.Children.Add(top);
+                if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
+                if (!RightEndHidden) cabinet.Children.Add(rightEnd);
+                if (!DeckHidden) cabinet.Children.Add(deck);
+                if (!TopHidden) cabinet.Children.Add(top);
                 cabinet.Children.Add(toekick);
                 cabinet.Children.Add(back);
             }
@@ -722,7 +795,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (0,height-tk_Height,0),
                 };
                 rightBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", cab, topDeck90, isPanel, panelEBEdges);
-                ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, tk_Height, leftFrontWidth + rightDepth - doubleMaterialThickness34 -.75, 0, 90, 0);
+                ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, tk_Height, leftFrontWidth + rightDepth - doubleMaterialThickness34 - .75, 0, 90, 0);
 
 
                 // Toekick
@@ -818,10 +891,10 @@ public partial class Cabinet3DViewModel : ObservableObject
                     cabinet.Children.Add(door2);
                 }
 
-                cabinet.Children.Add(leftEnd);
-                cabinet.Children.Add(rightEnd);
-                cabinet.Children.Add(deck);
-                cabinet.Children.Add(top);
+                if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
+                if (!RightEndHidden) cabinet.Children.Add(rightEnd);
+                if (!DeckHidden) cabinet.Children.Add(deck);
+                if (!TopHidden) cabinet.Children.Add(top);
                 cabinet.Children.Add(leftBack);
                 cabinet.Children.Add(rightBack);
                 ApplyTransform(cabinet, 0, 0, 0, 0, 45, 0);
@@ -945,10 +1018,10 @@ public partial class Cabinet3DViewModel : ObservableObject
                     }
                 }
 
-                cabinet.Children.Add(leftEnd);
-                cabinet.Children.Add(rightEnd);
-                cabinet.Children.Add(deck);
-                cabinet.Children.Add(top);
+                if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
+                if (!RightEndHidden) cabinet.Children.Add(rightEnd);
+                if (!DeckHidden) cabinet.Children.Add(deck);
+                if (!TopHidden) cabinet.Children.Add(top);
                 cabinet.Children.Add(leftBack);
                 cabinet.Children.Add(rightBack);
             }
@@ -1120,16 +1193,16 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                 }
 
-                cabinet.Children.Add(leftEnd);
-                cabinet.Children.Add(rightEnd);
-                cabinet.Children.Add(deck);
-                cabinet.Children.Add(top);
+                if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
+                if (!RightEndHidden) cabinet.Children.Add(rightEnd);
+                if (!DeckHidden) cabinet.Children.Add(deck);
+                if (!TopHidden) cabinet.Children.Add(top);
                 cabinet.Children.Add(back);
 
             }
 
 
-             // 90 deg. Corner Cabinet Style 2
+            // 90 deg. Corner Cabinet Style 2
             if (cabType == style2)
             {
                 // End Panels
@@ -1170,7 +1243,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", cab, true, isPanel, panelEBEdges);
 
                 ApplyTransform(top, 0, leftDepth, -height, 90, 0, 0);
-                ApplyTransform(deck, 0, leftDepth, - MaterialThickness34, 90, 0, 0);
+                ApplyTransform(deck, 0, leftDepth, -MaterialThickness34, 90, 0, 0);
 
                 // Backs
 
@@ -1195,7 +1268,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (0,height,0),
                 };
                 rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", cab, topDeck90, isPanel, panelEBEdges);
-                ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, 0, leftFrontWidth + rightDepth - doubleMaterialThickness34 -.75, 0, 90, 0);
+                ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, 0, leftFrontWidth + rightDepth - doubleMaterialThickness34 - .75, 0, 90, 0);
 
 
                 // Shelves
@@ -1203,7 +1276,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 {
                     double gap = .125;
 
-                    double shelfSpacing = (height  - doubleMaterialThickness34) / (shelfCount + 1);
+                    double shelfSpacing = (height - doubleMaterialThickness34) / (shelfCount + 1);
                     for (int i = 1; i < shelfCount + 1; i++)
                     {
                         shelfPoints = new List<Point3D>
@@ -1255,10 +1328,10 @@ public partial class Cabinet3DViewModel : ObservableObject
                     cabinet.Children.Add(door2);
                 }
 
-                cabinet.Children.Add(leftEnd);
-                cabinet.Children.Add(rightEnd);
-                cabinet.Children.Add(deck);
-                cabinet.Children.Add(top);
+                if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
+                if (!RightEndHidden) cabinet.Children.Add(rightEnd);
+                if (!DeckHidden) cabinet.Children.Add(deck);
+                if (!TopHidden) cabinet.Children.Add(top);
                 cabinet.Children.Add(leftBack);
                 cabinet.Children.Add(rightBack);
                 ApplyTransform(cabinet, 0, 0, 0, 0, 45, 0);
@@ -1294,7 +1367,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                 ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 90, 0);
                 ApplyTransform(rightEnd, -leftBackWidth, 0, -rightBackWidth, 0, 0, 0);
-                
+
                 // Deck & top
                 deckPoints = new List<Point3D>
                 {
@@ -1353,7 +1426,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (MaterialThickness34 + .25 + gap, MaterialThickness34 + gap,0),
                         };
                         shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "None", "Horizontal", cab, true, isPanel, panelEBEdges, 45);
-                        ApplyTransform(shelf,0,gap/2, +i * shelfSpacing, 90, 90, 180);
+                        ApplyTransform(shelf, 0, gap / 2, +i * shelfSpacing, 90, 90, 180);
                         cabinet.Children.Add(shelf);
                     }
                 }
@@ -1362,7 +1435,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 if (upperCab.DoorCount > 0 && upperCab.IncDoors)
                 {
                     double door1Width = frontWidth;
-                    double door2Width = (rightFrontWidth/2) - doorLeftReveal - (upperDoorGap/2);
+                    double door2Width = (rightFrontWidth / 2) - doorLeftReveal - (upperDoorGap / 2);
 
                     double doorHeight = height - doorTopReveal - doorBottomReveal;
 
@@ -1403,10 +1476,10 @@ public partial class Cabinet3DViewModel : ObservableObject
                     }
                 }
 
-                cabinet.Children.Add(leftEnd);
-                cabinet.Children.Add(rightEnd);
-                cabinet.Children.Add(deck);
-                cabinet.Children.Add(top);
+                if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
+                if (!RightEndHidden) cabinet.Children.Add(rightEnd);
+                if (!DeckHidden) cabinet.Children.Add(deck);
+                if (!TopHidden) cabinet.Children.Add(top);
                 cabinet.Children.Add(leftBack);
                 cabinet.Children.Add(rightBack);
                 ApplyTransform(cabinet, 0, 0, 0, 0, -135, 0);
@@ -1488,6 +1561,33 @@ public partial class Cabinet3DViewModel : ObservableObject
     {
         double thickness = matlThickness;
 
+        // --- compute polygon area (shoelace) in square inches and accumulate into cabinet totals ---
+        double areaSqIn = 0.0;
+        for (int i = 0, j = polygonPoints.Count - 1; i < polygonPoints.Count; j = i++)
+        {
+            var pi = polygonPoints[i];
+            var pj = polygonPoints[j];
+            areaSqIn += (pj.X * pi.Y) - (pi.X * pj.Y);
+        }
+        areaSqIn = Math.Abs(areaSqIn) * 0.5;
+        double areaFt2 = areaSqIn / 144.0; // convert in^2 -> ft^2
+
+        try
+        {
+            if (cab != null)
+            {
+                var speciesKey = string.IsNullOrWhiteSpace(panelSpecies) ? "None" : panelSpecies;
+                if (cab.MaterialAreaBySpecies.ContainsKey(speciesKey))
+                    cab.MaterialAreaBySpecies[speciesKey] += areaFt2;
+                else
+                    cab.MaterialAreaBySpecies[speciesKey] = areaFt2;
+            }
+        }
+        catch
+        {
+            // Keep CreatePanel robust - don't let accumulation failures break the preview
+        }
+
         // Create a MeshBuilder with textures enabled (second param true)
         var mainBuilder = new MeshBuilder(false, true);
         var specialBuilder = new MeshBuilder(false, true); // For edgebanded side
@@ -1538,6 +1638,9 @@ public partial class Cabinet3DViewModel : ObservableObject
             perimeter += len;
         }
 
+        // Track edgebanding total length (in inches) for this panel
+        double edgeBandLengthInches = 0.0;
+
         double cumulativeU = 0;
         for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
         {
@@ -1565,6 +1668,9 @@ public partial class Cabinet3DViewModel : ObservableObject
                     mainBuilder.Positions[t1],
                     mainBuilder.Positions[t0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+
+                    // accumulate edgeband length for this edge
+                    edgeBandLengthInches += sideLengths[edgeFace];
                 }
                 else
                 {
@@ -1594,6 +1700,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     mainBuilder.Positions[t1],
                     mainBuilder.Positions[t0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    edgeBandLengthInches += sideLengths[edgeFace];
                 }
                 else if (panelEBEdges.Contains('R') && edgeFace == 1) // Right edge
                 {
@@ -1603,6 +1710,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     mainBuilder.Positions[t1],
                     mainBuilder.Positions[t0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    edgeBandLengthInches += sideLengths[edgeFace];
                 }
                 else if (panelEBEdges.Contains('T') && edgeFace == 2) // Top edge
                 {
@@ -1612,6 +1720,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     mainBuilder.Positions[t1],
                     mainBuilder.Positions[t0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    edgeBandLengthInches += sideLengths[edgeFace];
                 }
                 else if (panelEBEdges.Contains('L') && edgeFace == 3) // Left edge
                 {
@@ -1621,6 +1730,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     mainBuilder.Positions[t1],
                     mainBuilder.Positions[t0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    edgeBandLengthInches += sideLengths[edgeFace];
                 }
             }
 
@@ -1634,6 +1744,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     mainBuilder.Positions[t1],
                     mainBuilder.Positions[t0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    edgeBandLengthInches += sideLengths[edgeFace];
                 }
                 else
                 {
@@ -1647,6 +1758,24 @@ public partial class Cabinet3DViewModel : ObservableObject
             }
 
             cumulativeU += sideLengths[edgeFace];
+        }
+
+        // If edgebanding was applied, accumulate into the cabinet's edge-banding totals
+        try
+        {
+            if (cab != null && edgeBandLengthInches > 0.0)
+            {
+                var ebSpeciesKey = string.IsNullOrWhiteSpace(edgebandingSpecies) ? "None" : edgebandingSpecies;
+                double feet = edgeBandLengthInches / 12.0;
+                if (cab.EdgeBandingLengthBySpecies.ContainsKey(ebSpeciesKey))
+                    cab.EdgeBandingLengthBySpecies[ebSpeciesKey] += feet;
+                else
+                    cab.EdgeBandingLengthBySpecies[ebSpeciesKey] = feet;
+            }
+        }
+        catch
+        {
+            // swallow accumulation errors to keep preview resilient
         }
 
         // Compute normals for proper lighting
@@ -1899,12 +2028,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         return result;
     }
 
-
-
-
-
-
-
-
 }
+
+
 

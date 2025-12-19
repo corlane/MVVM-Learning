@@ -78,6 +78,15 @@ public partial class DefaultSettingsService : ObservableObject
     // Default Theme
     [ObservableProperty] public partial string? DefaultTheme { get; set; }
 
+    // Customer Info
+    [ObservableProperty] public partial string? CompanyName { get; set; }
+    [ObservableProperty] public partial string? ContactName { get; set; }
+    [ObservableProperty] public partial string? PhoneNumber { get; set; }
+    [ObservableProperty] public partial string? EMail { get; set; }
+    [ObservableProperty] public partial string? Street { get; set; }
+    [ObservableProperty] public partial string? City { get; set; }
+    [ObservableProperty] public partial string? ZipCode { get; set; }
+
     // Add more defaults here as you create new properties
 
     public async Task LoadAsync()

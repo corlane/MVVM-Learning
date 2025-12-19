@@ -181,12 +181,12 @@
                 <views:PanelView/>
             </TabItem>
 
-            <TabItem Header="Defaults" Padding="10" Width="120">
-                <views:DefaultSettingsView/>
-            </TabItem>
-
             <TabItem Header="Place Order" Padding="10" Width="120">
                 <views:PlaceOrderView/>
+            </TabItem>
+
+            <TabItem Header="Defaults" Padding="10" Width="120">
+                <views:DefaultSettingsView/>
             </TabItem>
 
         </TabControl>

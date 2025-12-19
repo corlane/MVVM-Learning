@@ -23,66 +23,94 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Converters:BoolInverter x:Key="BoolInverter"/>
     </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-    <GroupBox x:Name="groupCompanyInfo" Header="Your Company Info" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,5,5" Padding="20">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="250"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="60"/>
-            </Grid.RowDefinitions>
 
-            <Label Content="Company Name" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-            <TextBox x:Name="textCompanyName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+        <GroupBox x:Name="groupCompanyInfo" Grid.Column="0" Header="Your Company Info" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,5,5" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Company Name" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textCompanyName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
                                  Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Content="Contact Name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-            <TextBox x:Name="textContactName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <Label Content="Contact Name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textContactName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
                                  Text="{Binding ContactName, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Content="Phone Number" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-            <TextBox x:Name="textPhoneNumber" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <Label Content="Phone Number" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textPhoneNumber" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
                                  Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Content="E-Mail Address" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-            <TextBox x:Name="textEmailAddress" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <Label Content="E-Mail Address" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textEmailAddress" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
                                  Text="{Binding EMail, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Content="Street" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-            <TextBox x:Name="textStreet" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <Label Content="Street" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textStreet" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
                                  Text="{Binding Street, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Content="City" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-            <TextBox x:Name="textCity" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <Label Content="City" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textCity" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
                                  Text="{Binding City, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Content="Zip Code" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-            <TextBox x:Name="textZipCode" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <Label Content="Zip Code" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textZipCode" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
                                  Text="{Binding ZipCode, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+        </GroupBox>
 
-            <Label Content="Internet Status" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2"/>
-            <TextBlock Grid.Row="8" Grid.Column="1"  Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="70,8,20,8"
-                                   Text="NOT CONNECTED" Background="#FFFF5871" Foreground="#FF0F0F0F"/>
+        <GroupBox x:Name="groupOrderSummary" Grid.Column="1" Header="Order Summary" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-            <Label Content="Order Status" Grid.Row="9" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2"/>
-            <TextBlock Grid.Row="9" Grid.Column="1"  Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="80,8,20,8"
+                <Label Content="Price:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                <Label Content="{Binding FormattedTotal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Margin="2"/>
+                
+                <Label Content="Internet Status:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="2" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="40,5,40,5"
+                                   Text="{Binding InternetStatusText}" Background="{Binding InternetStatusBackground}" Foreground="#FF0F0F0F"/>
+
+                <Label Content="Order Status:" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="3" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="48 5 48 5"
                                    Text="NOT ORDERED" Background="#FFFF5871" Foreground="#FF0F0F0F"/>
 
-            <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="10" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="10,5,5,5"
+                <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="60,15,5,15" Grid.ColumnSpan="2"
                                 Command="{Binding PlaceOrderCommand}"/>
-        </Grid>
-    </GroupBox>
 
+
+
+            </Grid>
+        </GroupBox>
+    </Grid>
 </UserControl>
