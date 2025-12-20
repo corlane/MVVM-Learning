@@ -1,0 +1,29 @@
+﻿.
+.
+.
+User side:
+
+Finish angle corner cabinet models
+Finish validation (don't foget to disable add, place order buttons etc. on invalid form)
+Implement FTP connection for order submission and material price retrieval
+Change pricing method to use material prices from FTP server
+Implement order status indicator
+Add drawer box and rollout 3D models and incorporate into material yield calculations
+Add Sink Cabinet checkbox, and add special sink stretchers
+Add some option to specify rollouts
+Add option for trash drawer
+Hide cabinet preview window when Defaults or Place Order tabs are active
+Implement Print button functionality
+Add Door Sizes List
+Add Drawer Box Sizes List
+Implement New button functionality
+Add "MODIFIED" label to title when editing existing order
+
+OPTIONAL: Add thumbnail images in ListCabinetView.
+OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
+
+
+Corlane side:
+
+Add tab or window for order processing
+Save customer information & quoted price in job file

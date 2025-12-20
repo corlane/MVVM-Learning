@@ -2,10 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3"
-             >
-    
+             xmlns:conv="clr-namespace:CorlaneCabinetOrderFormV3.Converters">
+             
+
     <Application.Resources>
         <ResourceDictionary>
+            <conv:DimensionFormatConverter x:Key="DimensionFormatConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <!--<ResourceDictionary Source="/Themes/ColourfulDarkTheme.xaml"/>-->
                 <!--<ResourceDictionary Source="pack://application:,,,/PresentationFramework.Fluent;component/Themes/Fluent.xaml" />-->

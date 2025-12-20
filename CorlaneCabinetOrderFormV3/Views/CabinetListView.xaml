@@ -64,9 +64,9 @@
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding CabinetType}" Width="Auto"/>
                     <GridViewColumn Header="Style" DisplayMemberBinding="{Binding Style}" Width="Auto"/>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="Auto"/>
-                    <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width}" Width="Auto"/>
-                    <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height}" Width="Auto"/>
-                    <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth}" Width="Auto"/>
+                    <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                 </GridView>
             </ListView.View>
         </ListView>
