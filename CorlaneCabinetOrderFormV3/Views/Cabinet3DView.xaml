@@ -35,10 +35,10 @@
     <Grid Background="#FF222222">
 
 
-        <HelixToolkit:HelixViewport3D x:Name="viewport" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Background="Gray" Margin="0"
+        <HelixToolkit:HelixViewport3D x:Name="viewport" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Margin="0"
                                helpers:ZoomExtentsHelper.Bounds="{Binding PreviewBounds}"
 							   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-							   BorderThickness="5" BorderBrush="#FF555555" 
+							   BorderThickness="5" BorderBrush="#FF555555"
 							   ShowCameraTarget="False"
 							   ViewCubeBackText = "BK"
 							   ViewCubeFrontText = "F"
@@ -48,6 +48,12 @@
 							   ViewCubeTopText = "T"
 							   IsHeadLightEnabled="True"
 							   >
+            <HelixToolkit:HelixViewport3D.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF1D1B1B" Offset="1"/>
+                    <GradientStop Color="#FF9E9E9E" Offset="0.038"/>
+                </LinearGradientBrush>
+            </HelixToolkit:HelixViewport3D.Background>
             <HelixToolkit:DirectionalHeadLight Brightness="0.2"/>
 
             <ModelVisual3D Content="{Binding PreviewModel}"/>

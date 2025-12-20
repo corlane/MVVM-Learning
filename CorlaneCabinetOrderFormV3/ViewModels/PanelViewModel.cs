@@ -141,6 +141,7 @@ public partial class PanelViewModel : ObservableValidator
             Height = Height,
             Depth = Depth,
             Species = Species,
+            EBSpecies = EBSpecies,
             Name = Name,
             Qty = Qty,
             Notes = Notes,

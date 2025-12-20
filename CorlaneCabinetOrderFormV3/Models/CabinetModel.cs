@@ -51,6 +51,8 @@ public abstract partial class CabinetModel : ObservableObject
     [JsonIgnore]
     public Dictionary<string, double> EdgeBandingLengthBySpecies { get; } = new(StringComparer.OrdinalIgnoreCase);
 
+
+
     // Convenience helpers to clear accumulators before rebuilds
     public void ResetMaterialTotals() => MaterialAreaBySpecies.Clear();
     public void ResetEdgeBandingTotals() => EdgeBandingLengthBySpecies.Clear();

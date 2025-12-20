@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
-             Background="{DynamicResource ABrush.Tone1.Background.Static}"             
+             Background="{DynamicResource ABrush.Tone1.Background.Static}"
              >
     
     <!-- Design-time DataContext (add this block) -->
@@ -23,7 +23,7 @@
 
     <Grid>
         <ListView x:Name="ListViewItems"
-                  Margin="20" 
+                  Margin="20"
                   Height="Auto"
                   FontSize="14"
                   ItemsSource="{Binding Cabinets}"

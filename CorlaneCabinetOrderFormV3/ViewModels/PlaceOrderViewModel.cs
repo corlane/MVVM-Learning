@@ -69,38 +69,31 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? CompanyName { get; set; }
-        partial void OnCompanyNameChanged(string? oldValue, string? newValue)
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? CompanyName { get; set; } partial void OnCompanyNameChanged(string? oldValue, string? newValue)
         {
             _defaults.CompanyName = newValue;
         }
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ContactName { get; set; }
-        partial void OnContactNameChanged(string? oldValue, string? newValue)
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ContactName { get; set; } partial void OnContactNameChanged(string? oldValue, string? newValue)
         {
             _defaults.ContactName = newValue;
         }
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? PhoneNumber { get; set; }
-        partial void OnPhoneNumberChanged(string? oldValue, string? newValue)
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? PhoneNumber { get; set; } partial void OnPhoneNumberChanged(string? oldValue, string? newValue)
         {
             _defaults.PhoneNumber = newValue;
         }
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? EMail { get; set; }
-        partial void OnEMailChanged(string? oldValue, string? newValue)
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? EMail { get; set; } partial void OnEMailChanged(string? oldValue, string? newValue)
         {
             _defaults.EMail = newValue;
         }
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? Street { get; set; }
-        partial void OnStreetChanged(string? oldValue, string? newValue)
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? Street { get; set; } partial void OnStreetChanged(string? oldValue, string? newValue)
         {
             _defaults.Street = newValue;
         }
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? City { get; set; }
-        partial void OnCityChanged(string? oldValue, string? newValue)
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? City { get; set; } partial void OnCityChanged(string? oldValue, string? newValue)
         {
             _defaults.City = newValue;
         }
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ZipCode { get; set; }
-        partial void OnZipCodeChanged(string? oldValue, string? newValue)
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ZipCode { get; set; } partial void OnZipCodeChanged(string? oldValue, string? newValue)
         {
             _defaults.ZipCode = newValue;
         }
@@ -112,119 +105,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             MessageBox.Show("Not implemented yet!", "Order", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // Internet connection state properties
-        [ObservableProperty]
-        public partial bool IsInternetConnected { get; set; }
 
-        // Background brush for the status TextBlock (bind to this in XAML)
-        [ObservableProperty]
-        private SolidColorBrush internetStatusBackground = new SolidColorBrush(Color.FromRgb(255, 88, 113));
-
-        // Computed text bound to the TextBlock
-        public string InternetStatusText => IsInternetConnected ? "CONNECTED" : "NOT CONNECTED";
-
-        partial void OnIsInternetConnectedChanged(bool oldValue, bool newValue)
-        {
-            // Update background and notify computed text property changed on UI thread
-            if (Application.Current?.Dispatcher == null)
-            {
-                InternetStatusBackground = newValue
-                    ? new SolidColorBrush(Color.FromRgb(146, 250, 153)) // light green when connected
-                    : new SolidColorBrush(Color.FromRgb(255, 88, 113)); // red when not connected
-                OnPropertyChanged(nameof(InternetStatusText));
-            }
-            else
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    InternetStatusBackground = newValue
-                        ? new SolidColorBrush(Color.FromRgb(146, 250, 153))
-                        : new SolidColorBrush(Color.FromRgb(255, 88, 113));
-                    OnPropertyChanged(nameof(InternetStatusText));
-                });
-            }
-        }
-
-        private void InitializeNetworkMonitoring()
-        {
-            try
-            {
-                // initial quick check (use probing for real Internet reachability)
-                _ = ProbeInternetAsync();
-
-                // Subscribe to static network events to get notified of changes
-                NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-                NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
-
-                // Start a periodic background probe to catch cases where network stack reports available but no Internet
-                _networkCts = new CancellationTokenSource();
-                _ = Task.Run(() => ProbeLoopAsync(_networkCts.Token), _networkCts.Token);
-            }
-            catch
-            {
-                // ignore if network APIs aren't available in some environments
-            }
-        }
-
-        private void NetworkChange_NetworkAddressChanged(object? sender, EventArgs e)
-        {
-            // do an immediate probe when network addresses change
-            _ = ProbeInternetAsync();
-        }
-
-        private void NetworkChange_NetworkAvailabilityChanged(object? sender, NetworkAvailabilityEventArgs e)
-        {
-            // do an immediate probe when availability changes
-            _ = ProbeInternetAsync();
-        }
-
-        // Periodic loop that re-checks reachability in the background
-        private async Task ProbeLoopAsync(CancellationToken token)
-        {
-            try
-            {
-                while (!token.IsCancellationRequested)
-                {
-                    await ProbeInternetAsync().ConfigureAwait(false);
-                    await Task.Delay(TimeSpan.FromSeconds(15), token).ConfigureAwait(false);
-                }
-            }
-            catch (OperationCanceledException) { }
-            catch { /* swallow background exceptions */ }
-        }
-
-        // A reliable probe: make a short HTTP GET to a lightweight URL that returns 204 when reachable.
-        // Returns true only when a successful response is received.
-        private async Task ProbeInternetAsync()
-        {
-            bool connected = false;
-
-            try
-            {
-                using var request = new HttpRequestMessage(HttpMethod.Get, "https://clients3.google.com/generate_204");
-                // Add a small header to reduce chance of redirection to captive portals, still tolerant to success statuses
-                request.Headers.Add("Cache-Control", "no-cache");
-
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await s_httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).ConfigureAwait(false);
-
-                connected = response.StatusCode == HttpStatusCode.NoContent || response.IsSuccessStatusCode;
-            }
-            catch
-            {
-                connected = false;
-            }
-
-            // Marshal to UI thread to update bound property
-            if (Application.Current?.Dispatcher == null)
-            {
-                IsInternetConnected = connected;
-            }
-            else
-            {
-                Application.Current.Dispatcher.Invoke(() => IsInternetConnected = connected);
-            }
-        }
 
         // Total numeric price
         [ObservableProperty]
@@ -251,6 +132,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
+
+
         // Public helper — call this from UI or tests if needed.
         public void CalculatePrices()
         {
@@ -274,7 +157,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private decimal ComputeTotal()
         {
             decimal total = 0m;
-
+            double totalArea= 0;
+            double totalEdgeBandingLength = 0;
             // Ensure accumulators exist: run the 3D builder accumulation for each saved cabinet.
             // This is necessary because the preview flow builds and accumulates into the preview model
             // instances (often different object instances than the saved cabinets).
@@ -305,10 +189,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                             decimal rate = GetRateForSpecies(species);
                             total += rate * (decimal)areaFt2;
                             total = total * cab.Qty;
-                            int sheetCount = (int)Math.Ceiling(areaFt2 / 32.0);
-                            decimal sheetCost = sheetCount * 55; // price to cut a 4x8 sheet of plywood
-                            total += sheetCost;
-                            Debug.WriteLine($"Cabinet '{cab.Name}': Species '{species}', Area {areaFt2} ft², Rate {rate:C2}/ft², Qty {cab.Qty}, SheetCount {sheetCount}, SheetCost {sheetCost:C2}");
+                            totalArea += areaFt2 * cab.Qty;
                         }
 
                         // Add edgebanding cost if present
@@ -320,15 +201,22 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                                 var feet = kv.Value;
                                 decimal ebRate = GetEdgeBandRateForSpecies(ebSpecies);
                                 total += ebRate * (decimal)feet;
+                                totalEdgeBandingLength += feet * cab.Qty;
                             }
                         }
                     }
+
                 }
                 catch
                 {
                     // ignore individual cabinet errors — continue best-effort
                 }
             }
+            int sheetCount = (int)Math.Ceiling(totalArea / 32.0);
+            decimal sheetCost = sheetCount * 55; // price to cut a 4x8 sheet of plywood
+            total += sheetCost;
+
+            Debug.WriteLine($"[Pricing] Total area: {totalArea} ft², Total edge length: {totalEdgeBandingLength} ft, Sheet count: {sheetCount}");
 
             return Math.Round(total, 2);
         }
@@ -363,17 +251,125 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         private static decimal GetRateForSpecies(string? species)
         {
-            if (string.IsNullOrWhiteSpace(species)) return 25m;
+            if (string.IsNullOrWhiteSpace(species)) return 0m;
             if (_priceBySpecies.TryGetValue(species, out var r)) return r;
             // fallback
-            return 25m;
+            return 0m;
         }
 
         private static decimal GetEdgeBandRateForSpecies(string? species)
         {
-            if (string.IsNullOrWhiteSpace(species)) return 0.75m;
+            if (string.IsNullOrWhiteSpace(species)) return 0;
             if (_edgebandRateBySpecies.TryGetValue(species, out var r)) return r;
-            return 0.75m; // default per-foot
+            return 0m; // default per-foot
         }
+
+
+        // Internet connection state properties
+        [ObservableProperty]
+        public partial bool IsInternetConnected { get; set; }
+        // Background brush for the status TextBlock (bind to this in XAML)
+        [ObservableProperty]
+        private SolidColorBrush internetStatusBackground = new SolidColorBrush(Color.FromRgb(255, 88, 113));
+        // Computed text bound to the TextBlock
+        public string InternetStatusText => IsInternetConnected ? "CONNECTED" : "NOT CONNECTED";
+        partial void OnIsInternetConnectedChanged(bool oldValue, bool newValue)
+        {
+            // Update background and notify computed text property changed on UI thread
+            if (Application.Current?.Dispatcher == null)
+            {
+                InternetStatusBackground = newValue
+                    ? new SolidColorBrush(Color.FromRgb(146, 250, 153)) // light green when connected
+                    : new SolidColorBrush(Color.FromRgb(255, 88, 113)); // red when not connected
+                OnPropertyChanged(nameof(InternetStatusText));
+            }
+            else
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    InternetStatusBackground = newValue
+                        ? new SolidColorBrush(Color.FromRgb(146, 250, 153))
+                        : new SolidColorBrush(Color.FromRgb(255, 88, 113));
+                    OnPropertyChanged(nameof(InternetStatusText));
+                });
+            }
+        }
+        private void InitializeNetworkMonitoring()
+        {
+            try
+            {
+                // initial quick check (use probing for real Internet reachability)
+                _ = ProbeInternetAsync();
+
+                // Subscribe to static network events to get notified of changes
+                NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+                NetworkChange.NetworkAddressChanged += NetworkChange_NetworkAddressChanged;
+
+                // Start a periodic background probe to catch cases where network stack reports available but no Internet
+                _networkCts = new CancellationTokenSource();
+                _ = Task.Run(() => ProbeLoopAsync(_networkCts.Token), _networkCts.Token);
+            }
+            catch
+            {
+                // ignore if network APIs aren't available in some environments
+            }
+        }
+        private void NetworkChange_NetworkAddressChanged(object? sender, EventArgs e)
+        {
+            // do an immediate probe when network addresses change
+            _ = ProbeInternetAsync();
+        }
+        private void NetworkChange_NetworkAvailabilityChanged(object? sender, NetworkAvailabilityEventArgs e)
+        {
+            // do an immediate probe when availability changes
+            _ = ProbeInternetAsync();
+        }
+        // Periodic loop that re-checks reachability in the background
+        private async Task ProbeLoopAsync(CancellationToken token)
+        {
+            try
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    await ProbeInternetAsync().ConfigureAwait(false);
+                    await Task.Delay(TimeSpan.FromSeconds(15), token).ConfigureAwait(false);
+                }
+            }
+            catch (OperationCanceledException) { }
+            catch { /* swallow background exceptions */ }
+        }
+        // A reliable probe: make a short HTTP GET to a lightweight URL that returns 204 when reachable.
+        // Returns true only when a successful response is received.
+        private async Task ProbeInternetAsync()
+        {
+            bool connected = false;
+
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Get, "https://clients3.google.com/generate_204");
+                // Add a small header to reduce chance of redirection to captive portals, still tolerant to success statuses
+                request.Headers.Add("Cache-Control", "no-cache");
+
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                var response = await s_httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).ConfigureAwait(false);
+
+                connected = response.StatusCode == HttpStatusCode.NoContent || response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                connected = false;
+            }
+
+            // Marshal to UI thread to update bound property
+            if (Application.Current?.Dispatcher == null)
+            {
+                IsInternetConnected = connected;
+            }
+            else
+            {
+                Application.Current.Dispatcher.Invoke(() => IsInternetConnected = connected);
+            }
+        }
+
     }
 }
