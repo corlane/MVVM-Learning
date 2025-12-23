@@ -3,7 +3,7 @@
 .
 User side:
 
-Finish angle corner cabinet models - working on Uppers now
+Finish angle corner cabinet models - working on Uppers now. Done! Now do base angle front lmao
 Finish validation (don't foget to disable add, place order buttons etc. on invalid form)
 Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2.
 Implement FTP connection for order submission and material price retrieval
@@ -20,6 +20,8 @@ Add Drawer Box Sizes List
 Implement New button functionality
 Add "MODIFIED" label to title when editing existing order
 Doors should calculate for edgebanding, even though it is specified as "None".
+Hide back thickness selection for corner cabinets
+When clicking on cabinet list, run dimensions thru converter to display in user's selected units before populating form fields
 
 OPTIONAL: Add thumbnail images in ListCabinetView
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview

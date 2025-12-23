@@ -1396,27 +1396,27 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
 
-        // 45 deg. Corner Cabinet Style 3
+        // Angle Front Corner Cabinet Style 3
 
         if (cabType == style3)
         {
             // End Panels
 
             leftEndPanelPoints = new List<Point3D>
-                {
-                    new (leftDepth,0,0),
-                    new (leftDepth,height,0),
-                    new (0,height,0),
-                    new (0,0,0)
-                };
+            {
+                new (leftDepth,0,0),
+                new (leftDepth,height,0),
+                new (0,height,0),
+                new (0,0,0)
+            };
 
             rightEndPanelPoints = new List<Point3D>
-                {
-                    new (rightDepth,0,0),
-                    new (rightDepth,height,0),
-                    new (0,height,0),
-                    new (0,0,0)
-                };
+            {
+                new (rightDepth,0,0),
+                new (rightDepth,height,0),
+                new (0,height,0),
+                new (0,0,0)
+            };
 
             leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
             rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
@@ -1424,51 +1424,16 @@ public partial class Cabinet3DViewModel : ObservableObject
             ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 90, 0);
             ApplyTransform(rightEnd, -leftBackWidth, 0, -rightBackWidth, 0, 0, 0);
 
-            //// Deck & top
-            //deckPoints = new List<Point3D>
-            //    {
-            //        new (leftDepth,MaterialThickness34,0),
-            //        new (rightBackWidth - MaterialThickness34, leftBackWidth - rightDepth,0),
-            //        new (rightBackWidth - MaterialThickness34, leftBackWidth - MaterialThickness34 - .25,0),
-            //        new (MaterialThickness34 + .25, leftBackWidth - MaterialThickness34 - .25,0),
-            //        new (MaterialThickness34 + .25, MaterialThickness34,0),
-            //    };
-            //deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, 45);
-            //top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, 45);
-
-            //ApplyTransform(top, 0, 0, height - MaterialThickness34, 90, 90, 180);
-            //ApplyTransform(deck, 0, 0, 0, 90, 90, 180);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // Replace the existing deck/top creation in the "45 deg. Corner Cabinet Style 3" block
-            // with the following code. It computes the original polygon exactly as before, then
-            // translates + rotates the polygon so edge 0 (original[0] -> original[1]) starts
-            // at (0,0,0) and lies along +X. The rest of the code (CreatePanel / ApplyTransform)
-            // remains the same so later alignment code can rely on edge 0 being on the X axis.
 
             // Deck & top - build original polygon then normalize so edge[0] is at origin along +X
             var originalDeck = new List<Point3D>
-                {
-                    new (leftDepth,MaterialThickness34,0),
-                    new (rightBackWidth - MaterialThickness34, leftBackWidth - rightDepth,0),
-                    new (rightBackWidth - MaterialThickness34, leftBackWidth - MaterialThickness34 - .25,0),
-                    new (MaterialThickness34 + .25, leftBackWidth - MaterialThickness34 - .25,0),
-                    new (MaterialThickness34 + .25, MaterialThickness34,0),
-                };
+            {
+                new (leftDepth,MaterialThickness34,0),
+                new (rightBackWidth - MaterialThickness34, leftBackWidth - rightDepth,0),
+                new (rightBackWidth - MaterialThickness34, leftBackWidth - MaterialThickness34 - .25,0),
+                new (MaterialThickness34 + .25, leftBackWidth - MaterialThickness34 - .25,0),
+                new (MaterialThickness34 + .25, MaterialThickness34,0),
+            };
 
             // Pick p0,p1 as the "front" edge we want to align
             var p0 = originalDeck[0];
@@ -1499,31 +1464,20 @@ public partial class Cabinet3DViewModel : ObservableObject
             }
 
             // Create deck/top from normalized polygon (edge[0] now runs from (0,0,0) -> (edgeLen,0,0))
-            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, 45);
-            top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, 45);
+            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, ((angle * 180) / Math.PI)-45);
+            top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, ((angle * 180) / Math.PI)-45);
 
             // Apply the same world transforms as before
-            ApplyTransform(top, 0, 0, height - MaterialThickness34, 90, 45, 180);
-            ApplyTransform(deck, 0, 0, 0, 90, 45, 180);
+            ApplyTransform(top, 0, 0, 0, -90, ((angle * 180) / Math.PI) + 90, 0);
+            ApplyTransform(deck, 0, 0, 0, -90, ((angle * 180) / Math.PI) + 90, 0); //rads to degs ((angle * 180) / Math.PI) + 90
+            var deckRotated = new Model3DGroup();
+            var topRotated = new Model3DGroup();
 
+            deckRotated.Children.Add(deck);
+            topRotated.Children.Add(top);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            ApplyTransform(deckRotated, -MaterialThickness34, 0, -leftDepth, 0, 0, 0);
+            ApplyTransform(topRotated, -MaterialThickness34, height - MaterialThickness34, -leftDepth, 0, 0, 0);
 
 
             // Backs
@@ -1531,23 +1485,23 @@ public partial class Cabinet3DViewModel : ObservableObject
             // Left Back
 
             backPoints = new List<Point3D>
-                {
-                    new (0,0,0),
-                    new (leftBackWidth - MaterialThickness34 - .25,0,0),
-                    new (leftBackWidth - MaterialThickness34 - .25,height,0),
-                    new (0,height,0)
-                };
+            {
+                new (0,0,0),
+                new (leftBackWidth - MaterialThickness34 - .25,0,0),
+                new (leftBackWidth - MaterialThickness34 - .25,height,0),
+                new (0,height,0)
+            };
             leftBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
             ApplyTransform(leftBack, -leftBackWidth + .25, 0, -MaterialThickness34 - .25, 0, 0, 0);
 
             // Right Back
             backPoints = new List<Point3D>
-                {
-                    new (0,0,0),
-                    new (rightBackWidth - doubleMaterialThickness34 - .25,0,0),
-                    new (rightBackWidth - doubleMaterialThickness34 - .25,height,0),
-                    new (0,height,0)
-                };
+            {
+                new (0,0,0),
+                new (rightBackWidth - doubleMaterialThickness34 - .25,0,0),
+                new (rightBackWidth - doubleMaterialThickness34 - .25,height,0),
+                new (0,height,0)
+            };
             rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
             ApplyTransform(rightBack, MaterialThickness34 + .25, 0, -leftBackWidth + .25, 0, 90, 0);
 
@@ -1578,149 +1532,86 @@ public partial class Cabinet3DViewModel : ObservableObject
             if (upperCab.DoorCount > 0 && upperCab.IncDoors)
             {
                 double door1Width = frontWidth - doorLeftReveal - doorRightReveal;
-                double door2Width = (rightFrontWidth / 2) - doorLeftReveal - (upperDoorGap / 2);
 
                 double doorHeight = height - doorTopReveal - doorBottomReveal;
 
                 if (upperCab.DoorCount == 1)
                 {
                     doorPoints = new List<Point3D>
-                        {
-                            new (0,0,0),
-                            new (door1Width,0,0),
-                            new (door1Width,doorHeight,0),
-                            new (0,doorHeight,0)
-                        };
+                    {
+                        new (0,0,0),
+                        new (door1Width,0,0),
+                        new (door1Width,doorHeight,0),
+                        new (0,doorHeight,0)
+                    };
                     door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, upperCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, 135, 0);
-                    cabinet.Children.Add(door1);
+                    ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
+                    var door1Rotated = new Model3DGroup();
+                    door1Rotated.Children.Add(door1);
+                    ApplyTransform(door1Rotated, -MaterialThickness34, 0, -leftDepth, 0, 0, 0);
+                    cabinet.Children.Add(door1Rotated);
                 }
                 if (upperCab.DoorCount == 2)
                 {
+                    door1Width = (frontWidth / 2) - doorLeftReveal - (upperDoorGap / 2);
+                    double door2Width = (frontWidth / 2) - doorRightReveal - (upperDoorGap / 2);
                     doorPoints = new List<Point3D>
-                        {
-                            new (0,0,0),
-                            new (door1Width,0,0),
-                            new (door1Width,doorHeight,0),
-                            new (0,doorHeight,0)
-                        };
+                    {
+                        new (0,0,0),
+                        new (door1Width,0,0),
+                        new (door1Width,doorHeight,0),
+                        new (0,doorHeight,0)
+                    };
                     door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, upperCab, topDeck90, isPanel, panelEBEdges);
+                    ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
+                    var door1Rotated = new Model3DGroup();
+                    door1Rotated.Children.Add(door1);
+                    ApplyTransform(door1Rotated, -MaterialThickness34, 0, -leftDepth, 0, 0, 0);
+                    cabinet.Children.Add(door1Rotated);
 
                     doorPoints = new List<Point3D>
-                        {
-                            new (0,0,0),
-                            new (door2Width,0,0),
-                            new (door2Width,doorHeight,0),
-                            new (0,doorHeight,0)
-                        };
+                    {
+                        new (0,0,0),
+                        new (door2Width,0,0),
+                        new (door2Width,doorHeight,0),
+                        new (0,doorHeight,0)
+                    };
                     door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, upperCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(door2, 0, 0, 0, 0, 0, 0);
-                    cabinet.Children.Add(door2);
+                    ApplyTransform(door2, door1Width + doorLeftReveal + upperDoorGap, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
+                    var door2Rotated = new Model3DGroup();
+                    door2Rotated.Children.Add(door2);
+                    ApplyTransform(door2Rotated, -MaterialThickness34, 0, -leftDepth, 0, 0, 0);
+                    cabinet.Children.Add(door2Rotated);
                 }
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //// Replace the existing "Doors" block in the Style 3 (45°) branch with this block,
-            //// and add the helper `AddDoorAlignedToPolygonEdge` below the BuildUpper method (or anywhere in the class).
-            ////
-            //// This implementation aligns a door panel to the polygon edge that receives edgebanding
-            //// (CreatePanel uses edge index 0 for special edgeband in non-panel / non-topDeck90 cases),
-            //// computes the midpoint, edge vector and outward normal in the panel-local XY plane,
-            //// places the door so it sits along that edge, and reapplies the same deck rotations
-            //// used for the deck so the door ends up flush with the edgebanded face in world space.
-            ////
-            //// Paste the modified Doors block into the Style 3 section where the previous simple door code was,
-            //// and paste the helper method anywhere inside the `Cabinet3DViewModel` class (private scope).
-            ////
-            //// --- Replacement Doors block for Style 3 (insert where the old Doors logic was) ---
-            //if (upperCab.DoorCount > 0 && upperCab.IncDoors)
-            //{
-            //    // For the 45° corner front we align doors to the "front" polygon edge (edge index 0)
-            //    // which is the edge CreatePanel renders with edgebanding for this deck.
-            //    double doorHeight = height - doorTopReveal - doorBottomReveal;
-            //    double doorOffsetOut = 0.01; // small gap so door sits slightly out from edgeband (inches)
-
-            //    // The deckPoints variable above defines the 5-sided deck polygon in deck-local XY.
-            //    // Use edge 0 (between deckPoints[0] and deckPoints[1]) as the front edge.
-            //    if (deckPoints != null && deckPoints.Count >= 2)
-            //    {
-            //        // door width: length of front edge (frontWidth computed earlier)
-            //        double doorWidth = frontWidth;
-
-            //        // Create door geometry in local coordinates (origin at lower-left).
-            //        var doorPts = new List<Point3D>
-            //        {
-            //            new (0,0,0),
-            //            new (doorWidth,0,0),
-            //            new (doorWidth,doorHeight,0),
-            //            new (0,doorHeight,0)
-            //        };
-
-            //        // Build the door model (no edgebanding on the door itself)
-            //        var alignedDoor = CreatePanel(doorPts, MaterialThickness34, upperCab.DoorSpecies, "None", upperCab.DoorGrainDir, upperCab, false, false, "");
-
-            //        // Align door to deck edge (edge 0) in deck-local coordinates and then
-            //        // apply the same transforms the deck gets so it lands correctly in world space.
-            //        AddDoorAlignedToPolygonEdge(
-            //            cabinet,
-            //            deckPoints,
-            //            edgeIndex: 0,
-            //            alignedDoor,
-            //            doorWidth,
-            //            doorHeight,
-            //            MaterialThickness34,
-            //            offsetOutInches: doorOffsetOut,
-            //            deckRotateX: 90, deckRotateY: 90, deckRotateZ: 180,
-            //            deckTranslateX: 0, deckTranslateY: 0, deckTranslateZ: 0
-            //        );
-            //    }
-            //}
-            //// --- end replacement block ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
             if (!RightEndHidden) cabinet.Children.Add(rightEnd);
-            if (!DeckHidden) cabinet.Children.Add(deck);
-            if (!TopHidden) cabinet.Children.Add(top);
+            if (!DeckHidden) cabinet.Children.Add(deckRotated);
+            if (!TopHidden) cabinet.Children.Add(topRotated);
             cabinet.Children.Add(leftBack);
             cabinet.Children.Add(rightBack);
             ApplyTransform(cabinet, 0, 0, 0, 0, -135, 0);
         }
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }
@@ -2097,23 +1988,49 @@ public partial class Cabinet3DViewModel : ObservableObject
         return partModel;
     }
 
-    private static void ApplyTransform(Model3DGroup geometryModel, double translateX, double translateY, double translateZ, double rotateXDegrees, double rotateYDegrees, double rotateZDegrees)
-    {
 
+    private static void ApplyTransform(
+    Model3DGroup geometryModel,
+    double translateX,
+    double translateY,
+    double translateZ,
+    double rotateXDegrees,
+    double rotateYDegrees,
+    double rotateZDegrees,
+    double? centerX = null,
+    double? centerY = null,
+    double? centerZ = null)
+    {
+        // Build transform sequence explicitly so callers can choose a rotation center.
         var transformGroup = new Transform3DGroup();
 
-        // Apply translation
-        transformGroup.Children.Add(new TranslateTransform3D(translateX, translateY, translateZ));
+        if (centerX.HasValue && centerY.HasValue && centerZ.HasValue)
+        {
+            // 1) Translate pivot to origin
+            transformGroup.Children.Add(new TranslateTransform3D(-centerX.Value, -centerY.Value, -centerZ.Value));
 
-        // Apply rotations (around X, Y, Z axes in degrees)
-        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1, 0, 0), rotateXDegrees)));
-        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), rotateYDegrees)));
-        transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), rotateZDegrees)));
+            // 2) Apply rotations around origin (pivot is at origin now)
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1, 0, 0), rotateXDegrees)));
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), rotateYDegrees)));
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), rotateZDegrees)));
 
-        // Assign the transform group to the model
+            // 3) Translate back to pivot and apply the requested world translation
+            transformGroup.Children.Add(new TranslateTransform3D(centerX.Value + translateX, centerY.Value + translateY, centerZ.Value + translateZ));
+        }
+        else
+        {
+            // Backwards-compatible: previous behavior was translate then rotate around origin.
+            transformGroup.Children.Add(new TranslateTransform3D(translateX, translateY, translateZ));
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(1, 0, 0), rotateXDegrees)));
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 1, 0), rotateYDegrees)));
+            transformGroup.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), rotateZDegrees)));
+        }
+
         geometryModel.Transform = transformGroup;
-
     }
+
+
+
 
     private static Material GetPlywoodSpecies(string? panelSpecies, string? grainDirection, double rotationDegrees = 0)
     {
@@ -2312,105 +2229,6 @@ public partial class Cabinet3DViewModel : ObservableObject
 
         return result;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // --- Helper: add this method to the class (private) ---
-    // Callers construct a door Model3DGroup already (alignedDoor) and supply the polygon (deckPoints)
-    // and the deck's transforms (so we can re-use them and the door will line up with the deck face).
-    private void AddDoorAlignedToPolygonEdge(
-        Model3DGroup cabinet,
-        List<Point3D> polygonPoints,
-        int edgeIndex,
-        Model3DGroup doorModel,
-        double doorWidth,
-        double doorHeight,
-        double doorThickness,
-        double offsetOutInches,
-        double deckRotateX, double deckRotateY, double deckRotateZ,
-        double deckTranslateX, double deckTranslateY, double deckTranslateZ)
-    {
-        if (polygonPoints == null || polygonPoints.Count < 2 || doorModel == null)
-        {
-            cabinet.Children.Add(doorModel); // fallback
-            return;
-        }
-
-        int n = polygonPoints.Count;
-        int i0 = edgeIndex % n;
-        int i1 = (edgeIndex + 1) % n;
-
-        var p0 = polygonPoints[i0];
-        var p1 = polygonPoints[i1];
-
-        // midpoint of the edge (deck-local coordinates)
-        var mid = new Point3D((p0.X + p1.X) / 2.0, (p0.Y + p1.Y) / 2.0, (p0.Z + p1.Z) / 2.0);
-
-        // edge vector and length
-        double vx = p1.X - p0.X;
-        double vy = p1.Y - p0.Y;
-        double edgeLen = Math.Sqrt(vx * vx + vy * vy);
-        if (edgeLen <= 1e-6)
-        {
-            // degenerate - just place door at midpoint and proceed
-            ApplyTransform(doorModel, mid.X - (doorWidth / 2.0), mid.Y, mid.Z, deckRotateX, deckRotateY, deckRotateZ);
-            cabinet.Children.Add(doorModel);
-            return;
-        }
-
-        // angle of edge in deck-local XY (radians -> degrees)
-        double angleDeg = Math.Atan2(vy, vx) * (180.0 / Math.PI);
-
-        // outward normal (perpendicular) in deck-local XY
-        var nx = -vy;
-        var ny = vx;
-        double nlen = Math.Sqrt(nx * nx + ny * ny);
-        if (nlen > 1e-6)
-        {
-            nx /= nlen; ny /= nlen;
-        }
-        else
-        {
-            nx = 0; ny = 0;
-        }
-
-        // offset outward so the door doesn't intersect edgeband (in deck-local units/inches)
-        double ox = nx * (doorThickness / 2.0 + offsetOutInches);
-        double oy = ny * (doorThickness / 2.0 + offsetOutInches);
-
-        // Because the door geometry was created with its lower-left at (0,0),
-        // translate so its lower-left sits at (mid - halfWidth) in deck-local XY and offset outward.
-        double localTranslateX = mid.X - (doorWidth / 2.0) + ox;
-        double localTranslateY = mid.Y + oy;
-        double localTranslateZ = mid.Z; // typically 0 for deck-local
-
-        // Apply same deck transforms so door ends up in world space exactly where the deck's edgeband face is.
-        // We add the calculated edge angle to deckRotateZ so the door's X axis aligns with the edge.
-        double finalRotateX = deckRotateX;
-        double finalRotateY = deckRotateY;
-        double finalRotateZ = deckRotateZ + angleDeg;
-
-        // Note: ApplyTransform uses translate then rotateX, rotateY, rotateZ.
-        ApplyTransform(doorModel, localTranslateX + deckTranslateX, localTranslateY + deckTranslateY, localTranslateZ + deckTranslateZ,
-            finalRotateX, finalRotateY, finalRotateZ);
-
-        cabinet.Children.Add(doorModel);
-    }
-
-
 
 }
 
