@@ -28,7 +28,7 @@ Update is not working anymore? Only main dimensions seem to be updating. Need to
 	Worse: It seems sporadic, and clicking on the cabinet in the list doesn't seem to be reliably updating either.
 	MapModelToViewModel seems to be working properly. But it is not updating all form fields. Haven't found a pattern yet. -- DONE
 
-OPTIONAL: Add thumbnail images in ListCabinetView
+OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
 
 
