@@ -3,7 +3,7 @@
 .
 User side:
 
-Finish angle corner cabinet models -- DONE except angle front base toekick board. 
+Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
 Finish validation (don't foget to disable add, place order buttons etc. on invalid form)
 Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2.
 Implement FTP connection for order submission and material price retrieval

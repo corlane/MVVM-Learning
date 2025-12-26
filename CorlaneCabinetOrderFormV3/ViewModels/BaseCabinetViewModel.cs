@@ -50,6 +50,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
         LeftBackWidth = "36";
         RightBackWidth = "36";
         Style = Style1;
+
+        // Testing for validation:
+        Species = "";
+        Style = "";
+        // End test
         ValidateAllProperties();
 
         if (_defaults != null)
@@ -112,7 +117,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
-    [ObservableProperty] public partial string Species { get; set; } = "";
+    [ObservableProperty, Required] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required, Range(1,100)] public partial int Qty { get; set; }

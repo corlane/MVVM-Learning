@@ -1053,6 +1053,25 @@ public partial class Cabinet3DViewModel : ObservableObject
             ApplyTransform(topRotated, -MaterialThickness34, height - MaterialThickness34, -leftDepth, 0, 0, 0);
 
 
+            // Toekick
+            if (baseCab.HasTK)
+            {
+                toekickPoints = new List<Point3D>
+                {
+                    new (-tk_Depth,0,0),
+                    new (frontWidth + tk_Depth,0,0),
+                    new (frontWidth + tk_Depth,tk_Height-.5,0),
+                    new (-tk_Depth,tk_Height-.5,0)
+                };
+                toekick = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                ApplyTransform(toekick, 0, 0, -tk_Depth, 0, ((angle * 180) / Math.PI) + 90, 0);
+                var toekickRotated = new Model3DGroup();
+                toekickRotated.Children.Add(toekick);
+                ApplyTransform(toekickRotated, -MaterialThickness34, 0, -leftDepth, 0, 0, 0);
+                cabinet.Children.Add(toekickRotated);
+            }
+
+
             // Backs
 
             // Left Back
