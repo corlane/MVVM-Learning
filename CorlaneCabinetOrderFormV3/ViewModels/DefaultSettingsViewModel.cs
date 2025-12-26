@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
 
@@ -163,11 +164,24 @@ public partial class DefaultSettingsViewModel : ObservableObject
             "Half Depth",
             "Full Depth"
         ];
-    public List<string> ListBackThickness { get; } =
-        [
-            "0.25",
-            "0.75"
-        ];
+    public List<string> ListBackThickness
+    {
+        get
+        {
+            var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
+            bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
+
+            string thin = useFraction
+                ? ConvertDimension.DoubleToFraction(0.25)
+                : 0.25.ToString();
+
+            string thick = useFraction
+                ? ConvertDimension.DoubleToFraction(0.75)
+                : 0.75.ToString();
+
+            return new List<string> { thin, thick };
+        }
+    }
     public List<string> ListTopType { get; } =
         [
             "Stretcher",

@@ -52,8 +52,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         Style = Style1;
 
         // Testing for validation:
-        Species = "";
-        Style = "";
+
+
         // End test
         ValidateAllProperties();
 
@@ -117,7 +117,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
-    [ObservableProperty, Required] public partial string Species { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required, Range(1,100)] public partial int Qty { get; set; }
@@ -141,11 +141,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         ResizeOpeningHeights();
     }
-    [ObservableProperty] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 8)] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
     {
         ResizeOpeningHeights();
     }
-    [ObservableProperty] public partial string TKDepth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 8)] public partial string TKDepth { get; set; } = "";
 
     // Shelf-specific properties
     [ObservableProperty] public partial int ShelfCount { get; set; }

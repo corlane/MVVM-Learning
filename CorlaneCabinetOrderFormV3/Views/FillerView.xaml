@@ -42,8 +42,6 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="buttonLoadDefaults" Content="Load Defaults" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Command="{Binding LoadDefaultsCommand, Mode=OneWay}"/>
-
         <GroupBox x:Name="groupFillerDimensions" Grid.Column="0" Grid.Row="0" Header="Dimensions" Margin="150,5,5,5" HorizontalAlignment="Left" Padding="0,0,20,0" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
@@ -89,10 +87,12 @@
         </GroupBox>
 
 
-        <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Bottom">
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
 
             <StackPanel Orientation="Vertical" Margin="5">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top">
+                    <Button x:Name="buttonLoadDefaults" Content="Load Defaults" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,125,5" Command="{Binding LoadDefaultsCommand, Mode=OneWay}"/>
+
                     <Label Content="Quantity:" Margin="5"/>
                     <TextBox x:Name="textQtyUpper" Width="40" Height="25" VerticalAlignment="Center" Margin="0" 
                                              Text="{Binding Qty, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>

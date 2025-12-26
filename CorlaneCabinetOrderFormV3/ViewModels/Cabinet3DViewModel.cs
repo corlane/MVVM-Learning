@@ -1067,7 +1067,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 ApplyTransform(toekick, 0, 0, -tk_Depth, 0, ((angle * 180) / Math.PI) + 90, 0);
                 var toekickRotated = new Model3DGroup();
                 toekickRotated.Children.Add(toekick);
-                ApplyTransform(toekickRotated, -MaterialThickness34, 0, -leftDepth, 0, 0, 0);
+                ApplyTransform(toekickRotated, -MaterialThickness34, .5, -leftDepth, 0, 0, 0);
                 cabinet.Children.Add(toekickRotated);
             }
 
