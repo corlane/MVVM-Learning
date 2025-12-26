@@ -3,7 +3,7 @@
 .
 User side:
 
-Finish angle corner cabinet models - working on Uppers now. Done! Now do base angle front lmao
+Finish angle corner cabinet models -- DONE except angle front base toekick board. 
 Finish validation (don't foget to disable add, place order buttons etc. on invalid form)
 Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2.
 Implement FTP connection for order submission and material price retrieval
@@ -11,6 +11,7 @@ Change pricing method to use material prices from FTP server
 Implement order status indicator
 Add drawer box and rollout 3D models and incorporate into material yield calculations
 Add Sink Cabinet checkbox, and add special sink stretchers
+Add rollouts option																											*** Working on this ***
 Add some option to specify rollouts
 Add option for trash drawer
 Hide cabinet preview window when Defaults or Place Order tabs are active
@@ -21,7 +22,11 @@ Implement New button functionality
 Add "MODIFIED" label to title when editing existing order
 Doors should calculate for edgebanding, even though it is specified as "None".
 Hide back thickness selection for corner cabinets
-When clicking on cabinet list, run dimensions thru converter to display in user's selected units before populating form fields
+When clicking on cabinet list, run dimensions thru converter to display in user's selected units before populating form fields -- DONE
+Panel thickness dropdown needs to change based on dimension format. As is, it won't populate properly. -- DONE
+Update is not working anymore? Only main dimensions seem to be updating. Need to check. Try starting fresh and saving a new job file. Seems to be working... test more. 
+	Worse: It seems sporadic, and clicking on the cabinet in the list doesn't seem to be reliably updating either.
+	MapModelToViewModel seems to be working properly. But it is not updating all form fields. Haven't found a pattern yet. -- DONE
 
 OPTIONAL: Add thumbnail images in ListCabinetView
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview

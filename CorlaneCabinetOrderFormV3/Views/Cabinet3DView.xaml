@@ -103,7 +103,6 @@
         Margin="20,180,20,20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
-
-
+        
     </Grid>
 </UserControl>

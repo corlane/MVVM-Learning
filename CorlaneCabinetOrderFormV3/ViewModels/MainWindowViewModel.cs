@@ -27,8 +27,8 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
     {
         var dialog = new SaveFileDialog
         {
-            Filter = "JSON Files (*.json)|*.json",
-            DefaultExt = "json"
+            Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
+            DefaultExt = "cor"
         };
 
         if (dialog.ShowDialog() == true)
@@ -51,7 +51,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
     {
         var dialog = new OpenFileDialog
         {
-            Filter = "JSON Files (*.json)|*.json"
+            Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor"
         };
 
         if (dialog.ShowDialog() == true)

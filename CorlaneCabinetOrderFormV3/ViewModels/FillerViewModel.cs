@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
@@ -20,7 +21,7 @@ public partial class FillerViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
-
+    private bool _isMapping;
     public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService;
@@ -91,29 +92,22 @@ public partial class FillerViewModel : ObservableValidator
         "Custom"
     ];
 
-    private void LoadSelectedIfMine()
+    private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
-        if (_mainVm.SelectedCabinet is FillerModel filler)
-        {
-            Width = filler.Width;
-            Height = filler.Height;
-            Depth = filler.Depth;
-            Species = filler.Species;
-            EBSpecies = filler.EBSpecies;
-            Name = filler.Name;
-            Qty = filler.Qty;
-            Notes = filler.Notes;
+        string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
 
+        if (_mainVm is not null && _mainVm.SelectedCabinet is FillerModel filler)
+        {
+            // Map model -> VM with proper formatting for dimension properties
+            MapModelToViewModel(filler, dimFormat);
+
+            // Any additional logic that must run after loading (visibility, resize, preview)
             UpdatePreview();
         }
-        else if (_mainVm.SelectedCabinet == null)
+        else
         {
-            // Optional: clear fields when nothing selected
-            //Width = Height = Depth = ToeKickHeight = "";
-            // clear all
+            //LoadDefaults();
         }
-
-
     }
 
 
@@ -122,9 +116,9 @@ public partial class FillerViewModel : ObservableValidator
     {
         var newCabinet = new FillerModel
         {
-            Width = Width,
-            Height = Height,
-            Depth = Depth,
+            Width = ConvertDimension.FractionToDouble(Width).ToString(),
+            Height = ConvertDimension.FractionToDouble(Height).ToString(),
+            Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
             EBSpecies = EBSpecies,
             Name = Name,
@@ -141,14 +135,16 @@ public partial class FillerViewModel : ObservableValidator
     {
         if (_mainVm!.SelectedCabinet is FillerModel selected)
         {
-            selected.Width = Width;
-            selected.Height = Height;
-            selected.Depth = Depth;
+            selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
+            selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
+            selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
             selected.EBSpecies = EBSpecies;
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;
+
+            _mainVm?.Notify("Cabinet Updated");
         }
 
         // Optional: clear selection after update
@@ -163,6 +159,81 @@ public partial class FillerViewModel : ObservableValidator
         EBSpecies = _defaults.DefaultEBSpecies;
         
         // etc.
+    }
+
+
+    // Helper: property name set that should be treated as a "dimension" (string -> numeric -> formatted string)
+    private static readonly HashSet<string> s_dimensionProperties = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Width","Height","Depth"
+    };
+
+    private void MapModelToViewModel(FillerModel model, string dimFormat)
+    {
+        if (model is null) return;
+
+        _isMapping = true;
+        try
+        {
+            var vmType = GetType();
+            var modelType = model.GetType();
+
+            // iterate model public instance properties and copy to VM where names match
+            foreach (var modelProp in modelType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                var vmProp = vmType.GetProperty(modelProp.Name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (vmProp is null || !vmProp.CanWrite) continue;
+
+                var modelValue = modelProp.GetValue(model);
+                if (modelValue is null)
+                {
+                    vmProp.SetValue(this, null);
+                    continue;
+                }
+
+                // string properties: either dimension-formatted or direct copy
+                if (vmProp.PropertyType == typeof(string))
+                {
+                    var raw = modelValue.ToString() ?? "";
+
+                    if (s_dimensionProperties.Contains(modelProp.Name))
+                    {
+                        double numeric = ConvertDimension.FractionToDouble(raw);
+
+                        if (string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
+                        {
+                            vmProp.SetValue(this, ConvertDimension.DoubleToFraction(numeric));
+                        }
+                        else
+                        {
+                            vmProp.SetValue(this, numeric.ToString());
+                        }
+                    }
+                    else
+                    {
+                        vmProp.SetValue(this, raw);
+                    }
+                }
+                else if (vmProp.PropertyType == typeof(int))
+                {
+                    if (modelValue is int i) vmProp.SetValue(this, i);
+                    else if (int.TryParse(modelValue.ToString(), out var v)) vmProp.SetValue(this, v);
+                }
+                else if (vmProp.PropertyType == typeof(bool))
+                {
+                    if (modelValue is bool b) vmProp.SetValue(this, b);
+                    else if (bool.TryParse(modelValue.ToString(), out var vb)) vmProp.SetValue(this, vb);
+                }
+                else
+                {
+                    vmProp.SetValue(this, modelValue);
+                }
+            }
+        }
+        finally
+        {
+            _isMapping = false;
+        }
     }
 
 

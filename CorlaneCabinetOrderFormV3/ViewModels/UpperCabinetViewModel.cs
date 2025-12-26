@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
@@ -18,6 +19,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
+    private bool _isMapping;
 
     public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
@@ -45,6 +47,15 @@ public partial class UpperCabinetViewModel : ObservableValidator
         RightBackWidth = "24";
 
         ValidateAllProperties();
+
+        if (_defaults != null)
+        {
+            _defaults.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+                    OnPropertyChanged(nameof(ListBackThickness));
+            };
+        }
     }
 
 
@@ -56,9 +67,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
     // Common properties from CabinetModel
     [ObservableProperty] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string value)
     {
+        if (_isMapping) return;
         StandardDimsVisibility = value == Style1;
         Corner90DimsVisibility = value == Style2;
         Corner45DimsVisibility = value == Style3;
+        BackThicknessVisible = (value == Style1);
+
         LoadDefaults();
     }
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
@@ -149,41 +163,55 @@ public partial class UpperCabinetViewModel : ObservableValidator
         "Wood Mahogany",
         "Custom"
     ];
-    public List<string> ListBackThickness { get; } =
-        [
-            "0.25",
-            "0.75"
-        ];
+    public List<string> ListBackThickness
+    {
+        get
+        {
+            var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
+            bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
 
+            string thin = useFraction
+                ? ConvertDimension.DoubleToFraction(0.25)
+                : 0.25.ToString();
+
+            string thick = useFraction
+                ? ConvertDimension.DoubleToFraction(0.75)
+                : 0.75.ToString();
+
+            return new List<string> { thin, thick };
+        }
+    }
 
     // Visibility properties
     [ObservableProperty] public partial bool StandardDimsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool Corner90DimsVisibility { get; set; } = false;
     [ObservableProperty] public partial bool Corner45DimsVisibility { get; set; } = false;
     [ObservableProperty] public partial bool ShowRevealSettings { get; set; } = true;
+    [ObservableProperty] public partial bool BackThicknessVisible { get; set; } = true;
+
 
     [RelayCommand]
     private void AddCabinet()
     {
         var newCabinet = new UpperCabinetModel
         {
-            Width = Width,
-            Height = Height,
-            Depth = Depth,
+            Width = ConvertDimension.FractionToDouble(Width).ToString(),
+            Height = ConvertDimension.FractionToDouble(Height).ToString(),
+            Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
             EBSpecies = EBSpecies,
             Name = Name,
             Qty = Qty,
             Notes = Notes,
             Style = Style,
-            LeftBackWidth = LeftBackWidth,
-            RightBackWidth = RightBackWidth,
-            LeftFrontWidth = LeftFrontWidth,
-            RightFrontWidth = RightFrontWidth,
-            LeftDepth = LeftDepth,
-            RightDepth = RightDepth,
+            LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString(),
+            RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString(),
+            LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString(),
+            RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString(),
+            LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString(),
+            RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString(),
             DoorSpecies = DoorSpecies,
-            BackThickness = BackThickness,
+            BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString(),
             ShelfCount = ShelfCount,
             DrillShelfHoles = DrillShelfHoles,
             DoorCount = DoorCount,
@@ -191,82 +219,55 @@ public partial class UpperCabinetViewModel : ObservableValidator
             IncDoorsInList = IncDoorsInList,
             IncDoors = IncDoors,
             DrillHingeHoles = DrillHingeHoles,
-            LeftReveal = LeftReveal,
-            RightReveal = RightReveal,
-            TopReveal = TopReveal,
-            BottomReveal = BottomReveal,
-            GapWidth = GapWidth
+            LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString(),
+            RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString(),
+            TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString(),
+            BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString(),
+            GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString()
         };
 
         _cabinetService?.Add(newCabinet); // Add to shared service
     }
 
-    private void LoadSelectedIfMine()
+    private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
-        if (_mainVm.SelectedCabinet is UpperCabinetModel upperCab)
-        {
-            Width = upperCab.Width;
-            Height = upperCab.Height;
-            Depth = upperCab.Depth;
-            Species = upperCab.Species;
-            EBSpecies = upperCab.EBSpecies;
-            Name = upperCab.Name;
-            Qty = upperCab.Qty;
-            Notes = upperCab.Notes;
-            Style = upperCab.Style;
-            LeftBackWidth = upperCab.LeftBackWidth;
-            RightBackWidth = upperCab.RightBackWidth;
-            LeftFrontWidth = upperCab.LeftFrontWidth;
-            RightFrontWidth = upperCab.RightFrontWidth;
-            LeftDepth = upperCab.LeftDepth;
-            RightDepth = upperCab.RightDepth;
-            DoorSpecies = upperCab.DoorSpecies;
-            BackThickness = upperCab.BackThickness;
-            ShelfCount = upperCab.ShelfCount;
-            DrillShelfHoles = upperCab.DrillShelfHoles;
-            DoorCount = upperCab.DoorCount;
-            DoorGrainDir = upperCab.DoorGrainDir;   
-            IncDoorsInList = upperCab.IncDoorsInList;
-            IncDoors = upperCab.IncDoors;
-            DrillHingeHoles = upperCab.DrillHingeHoles;
-            LeftReveal = upperCab.LeftReveal;
-            RightReveal = upperCab.RightReveal;
-            TopReveal = upperCab.TopReveal;
-            BottomReveal = upperCab.BottomReveal;
-            GapWidth = upperCab.GapWidth;
+        string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
 
+        if (_mainVm is not null && _mainVm.SelectedCabinet is UpperCabinetModel upperCab)
+        {
+            // Map model -> VM with proper formatting for dimension properties
+            MapModelToViewModel(upperCab, dimFormat);
+
+            // Any additional logic that must run after loading (visibility, resize, preview)
             UpdatePreview();
         }
-        else if (_mainVm.SelectedCabinet == null)
+        else
         {
-            // Optional: clear fields when nothing selected
-            //Width = Height = Depth = ToeKickHeight = "";
-            // clear all
+            //LoadDefaults();
         }
-
-
     }
+
 
     [RelayCommand]
     private void UpdateCabinet()
     {
         if (_mainVm.SelectedCabinet is UpperCabinetModel selected)
         {
-            selected.Width = Width;
-            selected.Height = Height;
-            selected.Depth = Depth;
+            selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
+            selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
+            selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
             selected.EBSpecies = EBSpecies;
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;
             selected.Style = Style;
-            selected.LeftBackWidth = LeftBackWidth;
-            selected.RightBackWidth = RightBackWidth;
-            selected.LeftFrontWidth = LeftFrontWidth;
-            selected.RightFrontWidth = RightFrontWidth;
-            selected.LeftDepth = LeftDepth;
-            selected.RightDepth = RightDepth;
+            selected.LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString();
+            selected.RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString();
+            selected.LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString();
+            selected.RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString();
+            selected.LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString();
+            selected.RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString();
             selected.DoorSpecies = DoorSpecies;
             selected.BackThickness = BackThickness;
             selected.ShelfCount = ShelfCount;
@@ -276,11 +277,14 @@ public partial class UpperCabinetViewModel : ObservableValidator
             selected.IncDoorsInList = IncDoorsInList;
             selected.IncDoors = IncDoors;
             selected.DrillHingeHoles = DrillHingeHoles;
-            selected.LeftReveal = LeftReveal;
-            selected.RightReveal = RightReveal;
-            selected.TopReveal = TopReveal;
-            selected.BottomReveal = BottomReveal;
-            selected.GapWidth = GapWidth;
+            selected.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
+            selected.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
+            selected.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
+            selected.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
+            selected.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
+
+            _mainVm?.Notify("Cabinet Updated");
+
 
             // copy every property back
 
@@ -311,6 +315,86 @@ public partial class UpperCabinetViewModel : ObservableValidator
         BottomReveal = _defaults.DefaultUpperBottomReveal;
         GapWidth = _defaults.DefaultGapWidth;
         // etc.
+    }
+
+
+    // Helper: property name set that should be treated as a "dimension" (string -> numeric -> formatted string)
+    private static readonly HashSet<string> s_dimensionProperties = new(StringComparer.OrdinalIgnoreCase)
+{
+    "Width","Height","Depth","TKHeight","TKDepth",
+    "LeftBackWidth","RightBackWidth","LeftFrontWidth","RightFrontWidth",
+    "LeftDepth","RightDepth","BackThickness","ShelfDepth",
+    "OpeningHeight1","OpeningHeight2","OpeningHeight3","OpeningHeight4",
+    "DrwFrontHeight1","DrwFrontHeight2","DrwFrontHeight3","DrwFrontHeight4",
+    "LeftReveal","RightReveal","TopReveal","BottomReveal","GapWidth"
+};
+
+    private void MapModelToViewModel(UpperCabinetModel model, string dimFormat)
+    {
+        if (model is null) return;
+
+        _isMapping = true;
+        try
+        {
+            var vmType = GetType();
+            var modelType = model.GetType();
+
+            // iterate model public instance properties and copy to VM where names match
+            foreach (var modelProp in modelType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                var vmProp = vmType.GetProperty(modelProp.Name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (vmProp is null || !vmProp.CanWrite) continue;
+
+                var modelValue = modelProp.GetValue(model);
+                if (modelValue is null)
+                {
+                    vmProp.SetValue(this, null);
+                    continue;
+                }
+
+                // string properties: either dimension-formatted or direct copy
+                if (vmProp.PropertyType == typeof(string))
+                {
+                    var raw = modelValue.ToString() ?? "";
+
+                    if (s_dimensionProperties.Contains(modelProp.Name))
+                    {
+                        double numeric = ConvertDimension.FractionToDouble(raw);
+
+                        if (string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
+                        {
+                            vmProp.SetValue(this, ConvertDimension.DoubleToFraction(numeric));
+                        }
+                        else
+                        {
+                            vmProp.SetValue(this, numeric.ToString());
+                        }
+                    }
+                    else
+                    {
+                        vmProp.SetValue(this, raw);
+                    }
+                }
+                else if (vmProp.PropertyType == typeof(int))
+                {
+                    if (modelValue is int i) vmProp.SetValue(this, i);
+                    else if (int.TryParse(modelValue.ToString(), out var v)) vmProp.SetValue(this, v);
+                }
+                else if (vmProp.PropertyType == typeof(bool))
+                {
+                    if (modelValue is bool b) vmProp.SetValue(this, b);
+                    else if (bool.TryParse(modelValue.ToString(), out var vb)) vmProp.SetValue(this, vb);
+                }
+                else
+                {
+                    vmProp.SetValue(this, modelValue);
+                }
+            }
+        }
+        finally
+        {
+            _isMapping = false;
+        }
     }
 
 
@@ -351,5 +435,4 @@ public partial class UpperCabinetViewModel : ObservableValidator
         // Request preview using the tab index owner token (Upper tab = 1)
         previewSvc.RequestPreview(1, model);
     }
-
 }

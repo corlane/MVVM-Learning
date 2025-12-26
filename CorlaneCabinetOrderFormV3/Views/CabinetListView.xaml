@@ -67,6 +67,74 @@
                     <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+
+                    <GridViewColumn Header="LeftBackWidth" DisplayMemberBinding="{Binding LeftBackWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="RightBackWidth" DisplayMemberBinding="{Binding RightBackWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="LeftFrontWidth" DisplayMemberBinding="{Binding LeftFrontWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="RightFrontWidth" DisplayMemberBinding="{Binding RightFrontWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="LeftDepth" DisplayMemberBinding="{Binding LeftDepth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="RightDepth" DisplayMemberBinding="{Binding RightDepth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="HasTK" DisplayMemberBinding="{Binding HasTK}" Width="Auto"/>
+                    <GridViewColumn Header="TKHeight" DisplayMemberBinding="{Binding TKHeight, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="TKDepth" DisplayMemberBinding="{Binding TKDepth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="DoorSpecies" DisplayMemberBinding="{Binding DoorSpecies}" Width="Auto"/>
+                    <GridViewColumn Header="BackThickness" DisplayMemberBinding="{Binding BackThickness, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="TopType" DisplayMemberBinding="{Binding TopType}" Width="Auto"/>
+                    <GridViewColumn Header="ShelfCount" DisplayMemberBinding="{Binding ShelfCount}" Width="Auto"/>
+                    <GridViewColumn Header="ShelfDepth" DisplayMemberBinding="{Binding ShelfDepth}" Width="Auto"/>
+                    <GridViewColumn Header="DrillShelfHoles" DisplayMemberBinding="{Binding DrillShelfHoles}" Width="Auto"/>
+                    <GridViewColumn Header="DoorCount" DisplayMemberBinding="{Binding DoorCount}" Width="Auto"/>
+                    <GridViewColumn Header="DoorGrainDir" DisplayMemberBinding="{Binding DoorGrainDir}" Width="Auto"/>
+                    <GridViewColumn Header="IncDoorsInList" DisplayMemberBinding="{Binding IncDoorsInList}" Width="Auto"/>
+                    <GridViewColumn Header="IncDoors" DisplayMemberBinding="{Binding IncDoors}" Width="Auto"/>
+                    <GridViewColumn Header="DrillHingeHoles" DisplayMemberBinding="{Binding DrillHingeHoles}" Width="Auto"/>
+                    <GridViewColumn Header="DrwFrontGrainDir" DisplayMemberBinding="{Binding DrwFrontGrainDir}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFrontsInList" DisplayMemberBinding="{Binding IncDrwFrontsInList}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFronts" DisplayMemberBinding="{Binding IncDrwFronts}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxesInList" DisplayMemberBinding="{Binding IncDrwBoxesInList}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxes" DisplayMemberBinding="{Binding IncDrwBoxes}" Width="Auto"/>
+                    <GridViewColumn Header="DrillSlideHoles" DisplayMemberBinding="{Binding DrillSlideHoles}" Width="Auto"/>
+                    <GridViewColumn Header="DrwCount" DisplayMemberBinding="{Binding DrwCount}" Width="Auto"/>
+                    <GridViewColumn Header="DrwStyle" DisplayMemberBinding="{Binding DrwStyle}" Width="Auto"/>
+                    <GridViewColumn Header="OpeningHeight1" DisplayMemberBinding="{Binding OpeningHeight1, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="OpeningHeight2" DisplayMemberBinding="{Binding OpeningHeight2, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="OpeningHeight3" DisplayMemberBinding="{Binding OpeningHeight3, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="OpeningHeight4" DisplayMemberBinding="{Binding OpeningHeight4, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxOpening1" DisplayMemberBinding="{Binding IncDrwBoxOpening1}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxOpening2" DisplayMemberBinding="{Binding IncDrwBoxOpening2}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxOpening3" DisplayMemberBinding="{Binding IncDrwBoxOpening3}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxOpening4" DisplayMemberBinding="{Binding IncDrwBoxOpening4}" Width="Auto"/>
+                    <GridViewColumn Header="DrillSlideHolesOpening1" DisplayMemberBinding="{Binding DrillSlideHolesOpening1}" Width="Auto"/>
+                    <GridViewColumn Header="DrillSlideHolesOpening2" DisplayMemberBinding="{Binding DrillSlideHolesOpening2}" Width="Auto"/>
+                    <GridViewColumn Header="DrillSlideHolesOpening3" DisplayMemberBinding="{Binding DrillSlideHolesOpening3}" Width="Auto"/>
+                    <GridViewColumn Header="DrillSlideHolesOpening4" DisplayMemberBinding="{Binding DrillSlideHolesOpening4}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxInListOpening1" DisplayMemberBinding="{Binding IncDrwBoxInListOpening1}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxInListOpening2" DisplayMemberBinding="{Binding IncDrwBoxInListOpening2}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxInListOpening3" DisplayMemberBinding="{Binding IncDrwBoxInListOpening3}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwBoxInListOpening4" DisplayMemberBinding="{Binding IncDrwBoxInListOpening4}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFront1" DisplayMemberBinding="{Binding IncDrwFront1}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFront2" DisplayMemberBinding="{Binding IncDrwFront2}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFront3" DisplayMemberBinding="{Binding IncDrwFront3}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFront4" DisplayMemberBinding="{Binding IncDrwFront4}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFrontInList1" DisplayMemberBinding="{Binding IncDrwFrontInList1}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFrontInList2" DisplayMemberBinding="{Binding IncDrwFrontInList2}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFrontInList3" DisplayMemberBinding="{Binding IncDrwFrontInList3}" Width="Auto"/>
+                    <GridViewColumn Header="IncDrwFrontInList4" DisplayMemberBinding="{Binding IncDrwFrontInList4}" Width="Auto"/>
+                    <GridViewColumn Header="IncRollouts" DisplayMemberBinding="{Binding IncRollouts}" Width="Auto"/>
+                    <GridViewColumn Header="IncRolloutsInList" DisplayMemberBinding="{Binding IncRolloutsInList}" Width="Auto"/>
+                    <GridViewColumn Header="RolloutCount" DisplayMemberBinding="{Binding RolloutCount}" Width="Auto"/>
+                    <GridViewColumn Header="Species" DisplayMemberBinding="{Binding Species}" Width="Auto"/>
+                    <GridViewColumn Header="EBSpecies" DisplayMemberBinding="{Binding EBSpecies}" Width="Auto"/>
+
+                    <GridViewColumn Header="LeftReveal" DisplayMemberBinding="{Binding LeftReveal, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="RightReveal" DisplayMemberBinding="{Binding RightReveal, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="TopReveal" DisplayMemberBinding="{Binding TopReveal, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="BottomReveal" DisplayMemberBinding="{Binding BottomReveal, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="GapWidth" DisplayMemberBinding="{Binding GapWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="MaterialThickness34" DisplayMemberBinding="{Binding MaterialThickness34, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="MaterialThickness14" DisplayMemberBinding="{Binding MaterialThickness14, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+
+
                 </GridView>
             </ListView.View>
         </ListView>

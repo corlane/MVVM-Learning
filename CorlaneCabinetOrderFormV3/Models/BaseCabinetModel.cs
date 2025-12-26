@@ -67,4 +67,7 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial string TopReveal { get; set; }
     [ObservableProperty] public partial string BottomReveal { get; set; }
     [ObservableProperty] public partial string GapWidth { get; set; }
-}
+    [ObservableProperty] public partial bool IncRollouts { get; set; }
+    [ObservableProperty] public partial bool IncRolloutsInList { get; set; }
+    [ObservableProperty] public partial int RolloutCount { get; set; }
+    }

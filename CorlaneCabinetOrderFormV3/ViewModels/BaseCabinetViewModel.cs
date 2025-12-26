@@ -5,6 +5,7 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,6 +23,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
     private bool _isResizing;
+    private bool _isMapping; // true while MapModelToViewModel is running
 
     public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
@@ -35,7 +37,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         _mainVm.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
-                LoadSelectedIfMine();
+            LoadSelectedIfMine();
         };
 
         Width = "18";
@@ -45,8 +47,19 @@ public partial class BaseCabinetViewModel : ObservableValidator
         RightFrontWidth = "12";
         LeftDepth = "24";
         RightDepth = "24";
+        LeftBackWidth = "36";
+        RightBackWidth = "36";
         Style = Style1;
         ValidateAllProperties();
+
+        if (_defaults != null)
+        {
+            _defaults.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+                    OnPropertyChanged(nameof(ListBackThickness));
+            };
+        }
     }
 
 
@@ -59,6 +72,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Common properties from CabinetModel
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             // Update visibility based on selected type
@@ -70,6 +85,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GroupCabinetTopTypeVisibility = (newValue == Style1 || newValue == Style2);
             GroupDrawerFrontHeightsVisibility = (newValue == Style1 || newValue == Style2);
             GroupDoorsVisibility = (newValue == Style1 || newValue == Style3 || newValue == Style4);
+            BackThicknessVisible = (newValue == Style1 || newValue == Style2);
 
             if (newValue == Style2)
             {
@@ -427,6 +443,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeDrwFrontHeights();
         }
     }
+    [ObservableProperty] public partial bool IncRollouts { get; set; } = false;
+    [ObservableProperty] public partial bool IncRolloutsInList { get; set; } = false;
+    [ObservableProperty] public partial int RolloutCount { get; set; } = 0;
+
 
     // Reveal and gap properties
     [ObservableProperty] public partial string LeftReveal { get; set; } = "";
@@ -514,17 +534,32 @@ public partial class BaseCabinetViewModel : ObservableValidator
             "Half Depth",
             "Full Depth"
         ];
-    public List<string> ListBackThickness { get; } =
-        [
-            "0.25",
-            "0.75"
-        ];
+    public List<string> ListBackThickness
+    {
+        get
+        {
+            var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
+            bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
+
+            string thin = useFraction
+                ? ConvertDimension.DoubleToFraction(0.25)
+                : 0.25.ToString();
+
+            string thick = useFraction
+                ? ConvertDimension.DoubleToFraction(0.75)
+                : 0.75.ToString();
+
+            return new List<string> { thin, thick };
+        }
+    }
     public List<string> ListTopType { get; } =
         [
             "Stretcher",
             "Full"
         ];
     [ObservableProperty] public partial ObservableCollection<int> ListDrwCount { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<int> ListRolloutCount { get; set; } = [];
+
 
     // Visibility properties
     [ObservableProperty] public partial bool DrawersStackPanelVisible { get; set; } = true;
@@ -562,6 +597,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool Opening2PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool Opening3PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
+    [ObservableProperty] public partial bool BackThicknessVisible { get; set; } = true;
 
 
     private void ResizeOpeningHeights()
@@ -768,81 +804,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
+        string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
+
         if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel baseCab)
-        {   
-            Style = baseCab.Style;
-            Width = baseCab.Width;
-            Height = baseCab.Height;
-            Depth = baseCab.Depth;
-            Species = baseCab.Species;
-            EBSpecies = baseCab.EBSpecies;
-            Name = baseCab.Name;
-            Qty = baseCab.Qty;
-            Notes = baseCab.Notes;
-            TKHeight = baseCab.TKHeight;  // Subtype-specific
-            LeftBackWidth = baseCab.LeftBackWidth;
-            RightBackWidth = baseCab.RightBackWidth;
-            LeftFrontWidth = baseCab.LeftFrontWidth;
-            RightFrontWidth = baseCab.RightFrontWidth;
-            LeftDepth = baseCab.LeftDepth;
-            RightDepth = baseCab.RightDepth;
-            HasTK = baseCab.HasTK;
-            TKDepth = baseCab.TKDepth;
-            DoorSpecies = baseCab.DoorSpecies;
-            BackThickness = baseCab.BackThickness;
-            TopType = baseCab.TopType;
-            ShelfCount = baseCab.ShelfCount;
-            ShelfDepth = baseCab.ShelfDepth;
-            DrillShelfHoles = baseCab.DrillShelfHoles;
-            DoorCount = baseCab.DoorCount;
-            DoorGrainDir = baseCab.DoorGrainDir;
-            IncDoorsInList = baseCab.IncDoorsInList;
-            IncDoors = baseCab.IncDoors;
-            DrillHingeHoles = baseCab.DrillHingeHoles;
-            DrwCount = baseCab.DrwCount;
-            DrwStyle = baseCab.DrwStyle;
-            DrwFrontGrainDir = baseCab.DrwFrontGrainDir;
-            IncDrwFrontsInList = baseCab.IncDrwFrontsInList;
-            IncDrwFrontInList1 = baseCab.IncDrwFrontInList1;
-            IncDrwFrontInList2 = baseCab.IncDrwFrontInList2;
-            IncDrwFrontInList3 = baseCab.IncDrwFrontInList3;
-            IncDrwFrontInList4 = baseCab.IncDrwFrontInList4;
-            IncDrwFronts = baseCab.IncDrwFronts;
-            IncDrwFront1 = baseCab.IncDrwFront1;
-            IncDrwFront2 = baseCab.IncDrwFront2;
-            IncDrwFront3 = baseCab.IncDrwFront3;
-            IncDrwFront4 = baseCab.IncDrwFront4;
-            IncDrwBoxesInList = baseCab.IncDrwBoxesInList;
-            IncDrwBoxInListOpening1 = baseCab.IncDrwBoxInListOpening1;
-            IncDrwBoxInListOpening2 = baseCab.IncDrwBoxInListOpening2;
-            IncDrwBoxInListOpening3 = baseCab.IncDrwBoxInListOpening3;
-            IncDrwBoxInListOpening4 = baseCab.IncDrwBoxInListOpening4;
-            IncDrwBoxes = baseCab.IncDrwBoxes;
-            IncDrwBoxOpening1 = baseCab.IncDrwBoxOpening1;
-            IncDrwBoxOpening2 = baseCab.IncDrwBoxOpening2;
-            IncDrwBoxOpening3 = baseCab.IncDrwBoxOpening3;
-            IncDrwBoxOpening4 = baseCab.IncDrwBoxOpening4;
-            DrillSlideHoles = baseCab.DrillSlideHoles;
-            DrillSlideHolesOpening1 = baseCab.DrillSlideHolesOpening1;
-            DrillSlideHolesOpening2 = baseCab.DrillSlideHolesOpening2;
-            DrillSlideHolesOpening3 = baseCab.DrillSlideHolesOpening3;
-            DrillSlideHolesOpening4 = baseCab.DrillSlideHolesOpening4;
-            OpeningHeight1 = baseCab.OpeningHeight1;
-            OpeningHeight2 = baseCab.OpeningHeight2;
-            OpeningHeight3 = baseCab.OpeningHeight3;
-            OpeningHeight4 = baseCab.OpeningHeight4;
-            DrwFrontHeight1 = baseCab.DrwFrontHeight1;
-            DrwFrontHeight2 = baseCab.DrwFrontHeight2;
-            DrwFrontHeight3 = baseCab.DrwFrontHeight3;
-            DrwFrontHeight4 = baseCab.DrwFrontHeight4;
-            LeftReveal = baseCab.LeftReveal;
-            RightReveal = baseCab.RightReveal;
-            TopReveal = baseCab.TopReveal;
-            BottomReveal = baseCab.BottomReveal;
-            GapWidth = baseCab.GapWidth;
+        {
+            // Map model -> VM with proper formatting for dimension properties
+            MapModelToViewModel(baseCab, dimFormat);
 
             UpdatePreview();
-
         }
         else
         {
@@ -850,36 +819,36 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
-    // Commands
+
     [RelayCommand]
     private void AddCabinet()
     {
         var newCabinet = new BaseCabinetModel
         {
-            Width = Width,
-            Height = Height,
-            Depth = Depth,
+            Width = ConvertDimension.FractionToDouble(Width).ToString(),
+            Height = ConvertDimension.FractionToDouble(Height).ToString(),
+            Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
             EBSpecies = EBSpecies,
             Name = Name,
             Qty = Qty,
             Notes = Notes,
 
-            TKHeight = TKHeight,  // Subtype-specific
+            TKHeight = ConvertDimension.FractionToDouble(TKHeight).ToString(),  // Subtype-specific
             Style = Style,
-            LeftBackWidth = LeftBackWidth,
-            RightBackWidth = RightBackWidth,
-            LeftFrontWidth = LeftFrontWidth,
-            RightFrontWidth = RightFrontWidth,
-            LeftDepth = LeftDepth,
-            RightDepth = RightDepth,
+            LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString(),
+            RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString(),
+            LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString(),
+            RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString(),
+            LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString(),
+            RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString(),
             HasTK = HasTK,
-            TKDepth = TKDepth,
+            TKDepth = ConvertDimension.FractionToDouble(TKDepth).ToString(),
             DoorSpecies = DoorSpecies,
-            BackThickness = BackThickness,
+            BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString(),
             TopType = TopType,
             ShelfCount = ShelfCount,
-            ShelfDepth = ShelfDepth,
+            ShelfDepth = ConvertDimension.FractionToDouble(ShelfDepth).ToString(),
             DrillShelfHoles = DrillShelfHoles,
             DoorCount = DoorCount,
             DoorGrainDir = DoorGrainDir,
@@ -894,10 +863,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             DrillSlideHoles = DrillSlideHoles,
             DrwCount = DrwCount,
             DrwStyle = DrwStyle,
-            OpeningHeight1 = OpeningHeight1,
-            OpeningHeight2 = OpeningHeight2,
-            OpeningHeight3 = OpeningHeight3,
-            OpeningHeight4 = OpeningHeight4,
+            OpeningHeight1 = ConvertDimension.FractionToDouble(OpeningHeight1).ToString(),
+            OpeningHeight2 = ConvertDimension.FractionToDouble(OpeningHeight2).ToString(),
+            OpeningHeight3 = ConvertDimension.FractionToDouble(OpeningHeight3).ToString(),
+            OpeningHeight4 = ConvertDimension.FractionToDouble(OpeningHeight4).ToString(),
             IncDrwBoxOpening1 = IncDrwBoxOpening1,
             IncDrwBoxOpening2 = IncDrwBoxOpening2,
             IncDrwBoxOpening3 = IncDrwBoxOpening3,
@@ -910,10 +879,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2,
             IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3,
             IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4,
-            DrwFrontHeight1 = DrwFrontHeight1,
-            DrwFrontHeight2 = DrwFrontHeight2,
-            DrwFrontHeight3 = DrwFrontHeight3,
-            DrwFrontHeight4 = DrwFrontHeight4,
+            DrwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1).ToString(),
+            DrwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2).ToString(),
+            DrwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3).ToString(),
+            DrwFrontHeight4 = ConvertDimension.FractionToDouble(DrwFrontHeight4).ToString(),
             IncDrwFront1 = IncDrwFront1,
             IncDrwFront2 = IncDrwFront2,
             IncDrwFront3 = IncDrwFront3,
@@ -922,11 +891,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwFrontInList2 = IncDrwFrontInList2,
             IncDrwFrontInList3 = IncDrwFrontInList3,
             IncDrwFrontInList4 = IncDrwFrontInList4,
-            LeftReveal = LeftReveal,
-            RightReveal = RightReveal,
-            TopReveal = TopReveal,
-            BottomReveal = BottomReveal,
-            GapWidth = GapWidth
+            LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString(),
+            RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString(),
+            TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString(),
+            BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString(),
+            GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString(),
+            IncRollouts = IncRollouts,
+            IncRolloutsInList = IncRolloutsInList,
+            RolloutCount = RolloutCount
         };
 
         _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
@@ -938,29 +910,29 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel selected)
         {
-            selected.Width = Width;
-            selected.Height = Height;
-            selected.Depth = Depth;
+            selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
+            selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
+            selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
             selected.EBSpecies = EBSpecies;
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;
-            selected.TKHeight = TKHeight;  // Subtype-specific
+            selected.TKHeight = ConvertDimension.FractionToDouble(TKHeight).ToString();  // Subtype-specific
             selected.Style = Style;
-            selected.LeftBackWidth = LeftBackWidth;
-            selected.RightBackWidth = RightBackWidth;
-            selected.LeftFrontWidth = LeftFrontWidth;
-            selected.RightFrontWidth = RightFrontWidth;
-            selected.LeftDepth = LeftDepth;
-            selected.RightDepth = RightDepth;
+            selected.LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString();
+            selected.RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString();
+            selected.LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString();
+            selected.RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString();
+            selected.LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString();
+            selected.RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString();
             selected.HasTK = HasTK;
-            selected.TKDepth = TKDepth;
+            selected.TKDepth = ConvertDimension.FractionToDouble(TKDepth).ToString();
             selected.DoorSpecies = DoorSpecies;
-            selected.BackThickness = BackThickness;
+            selected.BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString();
             selected.TopType = TopType;
             selected.ShelfCount = ShelfCount;
-            selected.ShelfDepth = ShelfDepth;
+            selected.ShelfDepth = ConvertDimension.FractionToDouble(ShelfDepth).ToString();
             selected.DrillShelfHoles = DrillShelfHoles;
             selected.DoorCount = DoorCount;
             selected.DoorGrainDir = DoorGrainDir;
@@ -975,10 +947,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.DrillSlideHoles = DrillSlideHoles;
             selected.DrwCount = DrwCount;
             selected.DrwStyle = DrwStyle;
-            selected.OpeningHeight1 = OpeningHeight1;
-            selected.OpeningHeight2 = OpeningHeight2;
-            selected.OpeningHeight3 = OpeningHeight3;
-            selected.OpeningHeight4 = OpeningHeight4;
+            selected.OpeningHeight1 = ConvertDimension.FractionToDouble(OpeningHeight1).ToString();
+            selected.OpeningHeight2 = ConvertDimension.FractionToDouble(OpeningHeight2).ToString();
+            selected.OpeningHeight3 = ConvertDimension.FractionToDouble(OpeningHeight3).ToString();
+            selected.OpeningHeight4 = ConvertDimension.FractionToDouble(OpeningHeight4).ToString();
             selected.IncDrwBoxOpening1 = IncDrwBoxOpening1;
             selected.IncDrwBoxOpening2 = IncDrwBoxOpening2;
             selected.IncDrwBoxOpening3 = IncDrwBoxOpening3;
@@ -991,10 +963,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2;
             selected.IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3;
             selected.IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4;
-            selected.DrwFrontHeight1 = DrwFrontHeight1;
-            selected.DrwFrontHeight2 = DrwFrontHeight2;
-            selected.DrwFrontHeight3 = DrwFrontHeight3;
-            selected.DrwFrontHeight4 = DrwFrontHeight4;
+            selected.DrwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1).ToString();
+            selected.DrwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2).ToString();
+            selected.DrwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3).ToString();
+            selected.DrwFrontHeight4 = ConvertDimension.FractionToDouble(DrwFrontHeight4).ToString();
             selected.IncDrwFront1 = IncDrwFront1;
             selected.IncDrwFront2 = IncDrwFront2;
             selected.IncDrwFront3 = IncDrwFront3;
@@ -1003,16 +975,20 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncDrwFrontInList2 = IncDrwFrontInList2;
             selected.IncDrwFrontInList3 = IncDrwFrontInList3;
             selected.IncDrwFrontInList4 = IncDrwFrontInList4;
-            selected.LeftReveal = LeftReveal;
-            selected.RightReveal = RightReveal;
-            selected.TopReveal = TopReveal;
-            selected.BottomReveal = BottomReveal;
-            selected.GapWidth = GapWidth;
-
+            selected.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
+            selected.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
+            selected.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
+            selected.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
+            selected.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
+            selected.IncRollouts = IncRollouts;
+            selected.IncRolloutsInList = IncRolloutsInList;
+            selected.RolloutCount = RolloutCount;
+            _mainVm?.Notify("Cabinet Updated");
         }
 
         // Optional: clear selection after update
         //_mainVm.SelectedCabinet = null;
+
     }
 
     [RelayCommand]
@@ -1126,10 +1102,93 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RightReveal = RightReveal,
             TopReveal = TopReveal,
             BottomReveal = BottomReveal,
-            GapWidth = GapWidth
+            GapWidth = GapWidth,
+            IncRollouts = IncRollouts,
+            RolloutCount = RolloutCount
         };
 
         // Request preview using the tab index owner token (Base tab = 0)
         previewSvc.RequestPreview(0, model);
+    }
+
+
+    // Helper: property name set that should be treated as a "dimension" (string -> numeric -> formatted string)
+    private static readonly HashSet<string> s_dimensionProperties = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Width","Height","Depth","TKHeight","TKDepth",
+        "LeftBackWidth","RightBackWidth","LeftFrontWidth","RightFrontWidth",
+        "LeftDepth","RightDepth","BackThickness",
+        "OpeningHeight1","OpeningHeight2","OpeningHeight3","OpeningHeight4",
+        "DrwFrontHeight1","DrwFrontHeight2","DrwFrontHeight3","DrwFrontHeight4",
+        "LeftReveal","RightReveal","TopReveal","BottomReveal","GapWidth"
+    };
+
+
+    private void MapModelToViewModel(BaseCabinetModel model, string dimFormat)
+    {
+        if (model is null) return;
+
+        _isMapping = true;
+        try
+        {
+            var vmType = GetType();
+            var modelType = model.GetType();
+
+            // iterate model public instance properties and copy to VM where names match
+            foreach (var modelProp in modelType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                var vmProp = vmType.GetProperty(modelProp.Name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (vmProp is null || !vmProp.CanWrite) continue;
+
+                var modelValue = modelProp.GetValue(model);
+                if (modelValue is null)
+                {
+                    vmProp.SetValue(this, null);
+                    continue;
+                }
+
+                // string properties: either dimension-formatted or direct copy
+                if (vmProp.PropertyType == typeof(string))
+                {
+                    var raw = modelValue.ToString() ?? "";
+
+                    if (s_dimensionProperties.Contains(modelProp.Name))
+                    {
+                        double numeric = ConvertDimension.FractionToDouble(raw);
+
+                        if (string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
+                        {
+                            vmProp.SetValue(this, ConvertDimension.DoubleToFraction(numeric));
+                        }
+                        else
+                        {
+                            vmProp.SetValue(this, numeric.ToString());
+                        }
+                    }
+                    else
+                    {
+                        vmProp.SetValue(this, raw);
+                    }
+                }
+                else if (vmProp.PropertyType == typeof(int))
+                {
+                    if (modelValue is int i) vmProp.SetValue(this, i);
+                    else if (int.TryParse(modelValue.ToString(), out var v)) vmProp.SetValue(this, v);
+                }
+                else if (vmProp.PropertyType == typeof(bool))
+                {
+                    if (modelValue is bool b) vmProp.SetValue(this, b);
+                    else if (bool.TryParse(modelValue.ToString(), out var vb)) vmProp.SetValue(this, vb);
+                }
+                else
+                {
+                    vmProp.SetValue(this, modelValue);
+                }
+            }
+        }
+        finally
+        {
+            _isMapping = false;
+        }
     }
 }

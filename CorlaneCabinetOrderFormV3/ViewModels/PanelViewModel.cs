@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
@@ -21,6 +22,7 @@ public partial class PanelViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
+    private bool _isMapping;
 
     public PanelViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
@@ -29,7 +31,29 @@ public partial class PanelViewModel : ObservableValidator
         _defaults = defaults;
 
         // Subscribe to ALL property changes in this ViewModel
-        this.PropertyChanged += (_, __) => UpdatePreview();
+        this.PropertyChanged += (_, e) =>
+        {
+            // keep preview updated
+            UpdatePreview();
+
+            // when material-thickness properties change, update the list so bound ComboBox refreshes
+            if (e.PropertyName == nameof(MaterialThickness14) || e.PropertyName == nameof(MaterialThickness34))
+            {
+                OnPropertyChanged(nameof(ListPanelDepths));
+            }
+        };
+
+        // react when DefaultDimensionFormat changes so ListPanelDepths updates
+        if (_defaults != null)
+        {
+            _defaults.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+                {
+                    OnPropertyChanged(nameof(ListPanelDepths));
+                }
+            };
+        }
 
         _mainVm.PropertyChanged += (_, e) =>
         {
@@ -97,37 +121,42 @@ public partial class PanelViewModel : ObservableValidator
         "Wood Mahogany",
         "Custom"
     ];
-    public List<string> ListPanelDepths { get; } =
-    [
-        "0.25",
-        "0.75"
-    ];
 
-
-    private void LoadSelectedIfMine()
+    // ListPanelDepths is now computed from the current default format and the material thickness values.
+    public List<string> ListPanelDepths
     {
-        if (_mainVm!.SelectedCabinet is PanelModel panel)
+        get
         {
-            Width = panel.Width;
-            Height = panel.Height;
-            Depth = panel.Depth;
-            Species = panel.Species;
-            Name = panel.Name;
-            Qty = panel.Qty;
-            Notes = panel.Notes;
-            PanelEBTop = panel.PanelEBTop;
-            PanelEBBottom = panel.PanelEBBottom;
-            PanelEBLeft = panel.PanelEBLeft;
-            PanelEBRight = panel.PanelEBRight;
-            PanelEBBottom = panel.PanelEBBottom;
+            var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
+            bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
 
+            string first = useFraction
+                ? ConvertDimension.DoubleToFraction(MaterialThickness14)
+                : MaterialThickness14.ToString();
+
+            string second = useFraction
+                ? ConvertDimension.DoubleToFraction(MaterialThickness34)
+                : MaterialThickness34.ToString();
+
+            return new List<string> { first, second };
+        }
+    }
+
+    private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
+    {
+        string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
+
+        if (_mainVm is not null && _mainVm.SelectedCabinet is PanelModel panel)
+        {
+            // Map model -> VM with proper formatting for dimension properties
+            MapModelToViewModel(panel, dimFormat);
+
+            // Any additional logic that must run after loading (visibility, resize, preview)
             UpdatePreview();
         }
-        else if (_mainVm.SelectedCabinet == null)
+        else
         {
-            // Optional: clear fields when nothing selected
-            //Width = Height = Depth = ToeKickHeight = "";
-            // clear all
+            //LoadDefaults();
         }
     }
 
@@ -137,9 +166,9 @@ public partial class PanelViewModel : ObservableValidator
     {
         var newCabinet = new PanelModel
         {
-            Width = Width,
-            Height = Height,
-            Depth = Depth,
+            Width = ConvertDimension.FractionToDouble(Width).ToString(),
+            Height = ConvertDimension.FractionToDouble(Height).ToString(),
+            Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
             EBSpecies = EBSpecies,
             Name = Name,
@@ -160,9 +189,9 @@ public partial class PanelViewModel : ObservableValidator
     {
         if (_mainVm!.SelectedCabinet is PanelModel selected)
         {
-            selected.Width = Width;
-            selected.Height = Height;
-            selected.Depth = Depth;
+            selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
+            selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
+            selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
             selected.Name = Name;
             selected.Qty = Qty;
@@ -171,6 +200,9 @@ public partial class PanelViewModel : ObservableValidator
             selected.PanelEBBottom = PanelEBBottom;
             selected.PanelEBLeft = PanelEBLeft;
             selected.PanelEBRight = PanelEBRight;
+
+            _mainVm?.Notify("Cabinet Updated");
+
 
             // copy every property back
 
@@ -188,6 +220,81 @@ public partial class PanelViewModel : ObservableValidator
         EBSpecies = _defaults.DefaultEBSpecies;
 
         // etc.
+    }
+
+
+    // Helper: property name set that should be treated as a "dimension" (string -> numeric -> formatted string)
+    private static readonly HashSet<string> s_dimensionProperties = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Width","Height","Depth"
+    };
+
+    private void MapModelToViewModel(PanelModel model, string dimFormat)
+    {
+        if (model is null) return;
+
+        _isMapping = true;
+        try
+        {
+            var vmType = GetType();
+            var modelType = model.GetType();
+
+            // iterate model public instance properties and copy to VM where names match
+            foreach (var modelProp in modelType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+            {
+                var vmProp = vmType.GetProperty(modelProp.Name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (vmProp is null || !vmProp.CanWrite) continue;
+
+                var modelValue = modelProp.GetValue(model);
+                if (modelValue is null)
+                {
+                    vmProp.SetValue(this, null);
+                    continue;
+                }
+
+                // string properties: either dimension-formatted or direct copy
+                if (vmProp.PropertyType == typeof(string))
+                {
+                    var raw = modelValue.ToString() ?? "";
+
+                    if (s_dimensionProperties.Contains(modelProp.Name))
+                    {
+                        double numeric = ConvertDimension.FractionToDouble(raw);
+
+                        if (string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
+                        {
+                            vmProp.SetValue(this, ConvertDimension.DoubleToFraction(numeric));
+                        }
+                        else
+                        {
+                            vmProp.SetValue(this, numeric.ToString());
+                        }
+                    }
+                    else
+                    {
+                        vmProp.SetValue(this, raw);
+                    }
+                }
+                else if (vmProp.PropertyType == typeof(int))
+                {
+                    if (modelValue is int i) vmProp.SetValue(this, i);
+                    else if (int.TryParse(modelValue.ToString(), out var v)) vmProp.SetValue(this, v);
+                }
+                else if (vmProp.PropertyType == typeof(bool))
+                {
+                    if (modelValue is bool b) vmProp.SetValue(this, b);
+                    else if (bool.TryParse(modelValue.ToString(), out var vb)) vmProp.SetValue(this, vb);
+                }
+                else
+                {
+                    vmProp.SetValue(this, modelValue);
+                }
+            }
+        }
+        finally
+        {
+            _isMapping = false;
+        }
     }
 
     private void UpdatePreview()

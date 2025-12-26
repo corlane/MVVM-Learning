@@ -198,7 +198,26 @@
                 </Grid.RowDefinitions>
                 <views:Cabinet3DView Grid.Column="0" Grid.Row="0"/>
                 <views:CabinetListView Grid.Column="0" Grid.Row="1"/>
-            </Grid>
-        
+
+            <Border Grid.Row="0" Grid.Column="1"
+            Background="{DynamicResource ABrush.AccentTone1.Background.Static}"
+            Padding="20,10,20,10"
+            CornerRadius="6"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Margin="20"
+            Visibility="{Binding IsNotificationVisible, Converter={StaticResource B2VConverter}}"
+            Opacity="0.95"
+            Panel.ZIndex="999">
+                <TextBlock
+            Text="{Binding NotificationMessage}"
+            Foreground="{DynamicResource ABrush.Foreground.Static}"
+            FontWeight="SemiBold"
+            TextWrapping="Wrap"
+            HorizontalAlignment="Center"/>
+            </Border>
+
+        </Grid>
+
     </Grid>
 </Window>

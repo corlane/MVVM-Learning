@@ -216,7 +216,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Back Thickness" Grid.Row="0" Grid.Column="0" Margin="5,270,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2">
+        <GroupBox Header="Back Thickness" Grid.Row="0" Grid.Column="0" Margin="5,270,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2" Visibility="{Binding BackThicknessVisible, Converter={StaticResource BoolToVisibilityConverter}}">
             <ComboBox x:Name="comboUpperBackThickness" Width="110" Margin="5" ItemsSource="{Binding ListBackThickness}" SelectedItem="{Binding BackThickness}"/>
         </GroupBox>
 
@@ -241,8 +241,8 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     </StackPanel>
-                    <CheckBox x:Name="checkIncludeDoorsInSizesList" Content="Include Doors In Sizes List" Margin="5" IsChecked="{Binding IncDoorsInList}"/>
                     <CheckBox x:Name="checkIncludeDoorsWithCabinet" Content="Supply Slab Doors With Cabinet" Margin="5" IsChecked="{Binding IncDoors}"/>
+                    <CheckBox x:Name="checkIncludeDoorsInSizesList" Content="Include Doors In Sizes List" Margin="5" IsChecked="{Binding IncDoorsInList}"/>
                     <CheckBox x:Name="checkDrillHingePlateHoles" Content="Drill Hinge Plate Mounting Holes" Margin="5" IsChecked="{Binding DrillHingeHoles}"/>
                     <StackPanel Orientation="Horizontal">
                     </StackPanel>
