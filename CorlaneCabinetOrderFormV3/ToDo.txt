@@ -43,3 +43,8 @@ Add tab or window for order processing
 Save customer information & quoted price in job file
 Set up clickonce installer
 Add icon
+
+
+BUGS:
+
+Load the test job. Click on 1st cabinet. Then click 2nd cabinet. The preview is incorrect. Clicking on the 3rd cabinet and then 2nd cabinet shows correctly. WTF
