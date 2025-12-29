@@ -20,7 +20,7 @@ namespace CorlaneCabinetOrderFormV3.Views
         public PlaceOrderView()
         {
             InitializeComponent();
-            DataContext = App.ServiceProvider.GetRequiredService<PlaceOrderViewModel>();
+            //DataContext = App.ServiceProvider.GetRequiredService<PlaceOrderViewModel>();
         }
 
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)

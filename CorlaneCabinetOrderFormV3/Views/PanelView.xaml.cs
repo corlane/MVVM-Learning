@@ -23,7 +23,7 @@ namespace CorlaneCabinetOrderFormV3.Views
         public PanelView()
         {
             InitializeComponent();
-            DataContext = App.ServiceProvider.GetRequiredService<PanelViewModel>();
+            //DataContext = App.ServiceProvider.GetRequiredService<PanelViewModel>();
         }
 
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)

@@ -13,7 +13,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class BaseCabinetViewModel : ObservableValidator
 {
-
     public BaseCabinetViewModel()
     {
         // empty constructor for design-time support
@@ -49,12 +48,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
         RightDepth = "24";
         LeftBackWidth = "36";
         RightBackWidth = "36";
+        BackThickness = "0.75";
         Style = Style1;
 
         // Testing for validation:
 
 
         // End test
+        LoadDefaults();
         ValidateAllProperties();
 
         if (_defaults != null)
@@ -106,6 +107,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeOpeningHeights();
             ResizeDrwFrontHeights();
             UpdatePreview();
+            RunValidationVisible();
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
@@ -118,9 +120,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = "";
-    [ObservableProperty] public partial string EBSpecies { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required, Range(1,100)] public partial int Qty { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required, Range(1, 100)] public partial int Qty { get; set; } = 1;
     [ObservableProperty] public partial string Notes { get; set; } = "";
 
     // Type-specific properties for BaseCabinetModel
@@ -133,13 +135,20 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = "";
 
-    [ObservableProperty] public partial string BackThickness { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BackThickness { get; set; } = ""; partial void OnBackThicknessChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            RunValidationVisible();
+        }
+    }
     [ObservableProperty] public partial string TopType { get; set; } = "";
 
     // Toekick-specific properties
     [ObservableProperty] public partial bool HasTK { get; set; } partial void OnHasTKChanged(bool oldValue, bool newValue)
     {
         ResizeOpeningHeights();
+        RunValidationVisible();
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 8)] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
     {
@@ -413,7 +422,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight4 { get; set; } = ""; partial void OnOpeningHeight4Changed(string oldValue, string newValue)
+    [ObservableProperty] public partial string OpeningHeight4 { get; set; } = ""; partial void OnOpeningHeight4Changed(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
@@ -454,9 +463,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
 
     // Reveal and gap properties
-    [ObservableProperty] public partial string LeftReveal { get; set; } = "";
-    [ObservableProperty] public partial string RightReveal { get; set; } = "";
-    [ObservableProperty] public partial string TopReveal { get; set; } = ""; partial void OnTopRevealChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string LeftReveal { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string RightReveal { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string TopReveal { get; set; } = ""; partial void OnTopRevealChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
@@ -464,7 +473,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             //ResizeDrwFrontHeights();
         }
     }
-    [ObservableProperty] public partial string BottomReveal { get; set; } = ""; partial void OnBottomRevealChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BottomReveal { get; set; } = ""; partial void OnBottomRevealChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
@@ -472,7 +481,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             //ResizeDrwFrontHeights();
         }
     }
-    [ObservableProperty] public partial string GapWidth { get; set; } = ""; partial void OnGapWidthChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string GapWidth { get; set; } = ""; partial void OnGapWidthChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
@@ -604,7 +613,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool BackThicknessVisible { get; set; } = true;
 
-
+    //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()
     {
         // Prevent re-entrancy caused by property-change handlers
@@ -992,7 +1001,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
 
         // Optional: clear selection after update
-        //_mainVm.SelectedCabinet = null;
+        _mainVm!.SelectedCabinet = null;
 
     }
 
@@ -1023,7 +1032,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         IncDoors = _defaults.DefaultIncDoors;
         DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
         DoorSpecies = _defaults.DefaultDoorDrwSpecies;
-        BackThickness = _defaults.DefaultBaseBackThickness;
+        if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultBaseBackThickness; }
+        else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultBaseBackThickness)); }
+        //BackThickness = _defaults.DefaultBaseBackThickness;
         TopType = _defaults.DefaultTopType;
         ShelfCount = _defaults.DefaultShelfCount;
         ShelfDepth = _defaults.DefaultShelfDepth;
@@ -1109,7 +1120,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             BottomReveal = BottomReveal,
             GapWidth = GapWidth,
             IncRollouts = IncRollouts,
-            RolloutCount = RolloutCount
+            RolloutCount = RolloutCount,
+            DrwStyle = DrwStyle
+
         };
 
         // Request preview using the tab index owner token (Base tab = 0)

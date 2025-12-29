@@ -2,13 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
-using CorlaneCabinetOrderFormV3.Themes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
-using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -19,8 +15,26 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
         // empty constructor for design-time support
     }
 
+    private readonly ICabinetService _cabinet_service = cabinetService;
 
-    private readonly ICabinetService _cabinetService = cabinetService;
+    // Lazy-resolved tab viewmodels — resolve once and reuse so validation runs against the same instances
+    private BaseCabinetViewModel? _baseCabinetVm;
+    public BaseCabinetViewModel BaseCabinetVm => _baseCabinetVm ??= App.ServiceProvider.GetRequiredService<BaseCabinetViewModel>();
+
+    private UpperCabinetViewModel? _upperCabinetVm;
+    public UpperCabinetViewModel UpperCabinetVm => _upperCabinetVm ??= App.ServiceProvider.GetRequiredService<UpperCabinetViewModel>();
+
+    private FillerViewModel? _fillerVm;
+    public FillerViewModel FillerVm => _fillerVm ??= App.ServiceProvider.GetRequiredService<FillerViewModel>();
+
+    private PanelViewModel? _panelVm;
+    public PanelViewModel PanelVm => _panelVm ??= App.ServiceProvider.GetRequiredService<PanelViewModel>();
+
+    private PlaceOrderViewModel? _placeOrderVm;
+    public PlaceOrderViewModel PlaceOrderVm => _placeOrderVm ??= App.ServiceProvider.GetRequiredService<PlaceOrderViewModel>();
+
+    private DefaultSettingsViewModel? _defaultsVm;
+    public DefaultSettingsViewModel DefaultsVm => _defaultsVm ??= App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
 
     [RelayCommand]
     private async Task SaveJob()
@@ -35,7 +49,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
         {
             try
             {
-                await _cabinetService.SaveAsync(dialog.FileName);
+                await _cabinet_service.SaveAsync(dialog.FileName);
                 MessageBox.Show("Job saved successfully!", "Success");
                 CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
             }
@@ -58,7 +72,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
         {
             try
             {
-                await _cabinetService.LoadAsync(dialog.FileName);
+                await _cabinet_service.LoadAsync(dialog.FileName);
                 //MessageBox.Show("Job loaded successfully!", "Success");
                 CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
             }
@@ -85,8 +99,37 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
     partial void OnSelectedTabIndexChanged(int value)
     {
         var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-        // Use the tab index as the owner token (or map index → viewmodel instance)
         previewSvc.SetActiveOwner(value);
+
+        try
+        {
+            // Validate the actual instances the views are bound to (cached properties),
+            // so ClearErrors() / ValidateVisible affects the UI instance.
+            switch (value)
+            {
+                case 0:
+                    (BaseCabinetVm as IValidatableViewModel)?.RunValidationVisible();
+                    break;
+                case 1:
+                    (UpperCabinetVm as IValidatableViewModel)?.RunValidationVisible();
+                    break;
+                case 2:
+                    (FillerVm as IValidatableViewModel)?.RunValidationVisible();
+                    break;
+                case 3:
+                    (PanelVm as IValidatableViewModel)?.RunValidationVisible();
+                    break;
+                case 4:
+                    (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch
+        {
+            // Swallow: validation should be best-effort and not break tab switching.
+        }
     }
 
     // When the user clicks the list (SelectedCabinet set), you may want to force preview:

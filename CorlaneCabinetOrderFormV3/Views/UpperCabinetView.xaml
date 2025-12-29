@@ -20,6 +20,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Converters:BoolInverter x:Key="BoolInverter"/>
+        <Converters:StringToIntConverter x:Key="StringToIntConverter"/>
     </UserControl.Resources>
 
 
@@ -307,19 +308,23 @@
                     <Button x:Name="buttonLoadDefaults" Content="Load Defaults" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,125,5" Command="{Binding LoadDefaultsCommand, Mode=OneWay}"/>
 
                     <Label Content="Quantity:" Margin="5"/>
-                    <TextBox x:Name="textQtyUpper" Width="40" Height="25" VerticalAlignment="Center" Margin="0" 
-                                             Text="{Binding Qty, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                    <TextBox x:Name="textQty" Width="40" Height="25" VerticalAlignment="Center" Margin="0" 
+             Text="{Binding Qty,
+                            UpdateSourceTrigger=PropertyChanged,
+                            Converter={StaticResource StringToIntConverter}}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
-
+                <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" HorizontalAlignment="Right"
+                                               Visibility="{Binding (Validation.HasError), ElementName=textQty, Converter={StaticResource BoolToVisibilityConverter}}"
+                                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textQty, FallbackValue=''}"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top">
                     <Label Content="Name:" VerticalAlignment="Top" Margin="5"/>
                     <TextBox x:Name="textNameUpper" Width="140" Height="25" VerticalAlignment="Center" Margin="0" 
                                              Text="{Binding Name}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>
 
-                <Button x:Name="buttonAddUpper" Content="Add to List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
+                <Button x:Name="buttonAddUpper" Content="Add to List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" IsEnabled="{Binding HasErrors, Converter={StaticResource BoolInverter}}"
                                             Command="{Binding AddCabinetCommand}"/>
-                <Button x:Name="buttonUpdateUpper" Content="Update in List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" 
+                <Button x:Name="buttonUpdateUpper" Content="Update in List" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Padding="5" IsEnabled="{Binding HasErrors, Converter={StaticResource BoolInverter}}"
                                             Command="{Binding UpdateCabinetCommand}"/>
             </StackPanel>
         </StackPanel>

@@ -54,7 +54,7 @@ public partial class FillerViewModel : ObservableValidator
     [ObservableProperty] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
-    [ObservableProperty] public partial int Qty { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required, Range(1, 100)] public partial int Qty { get; set; } = 1;
     [ObservableProperty] public partial string Notes { get; set; } = "";
 
     // Combo box lists
@@ -148,7 +148,7 @@ public partial class FillerViewModel : ObservableValidator
         }
 
         // Optional: clear selection after update
-        //_mainVm.SelectedCabinet = null;
+        _mainVm!.SelectedCabinet = null;
     }
 
 

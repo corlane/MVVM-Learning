@@ -35,7 +35,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
                 LoadSelectedIfMine();
         };
-
+        Style = Style1; // Default style
         Width = "16";
         Height = "42";
         Depth = "12";
@@ -46,6 +46,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         LeftBackWidth = "24";
         RightBackWidth = "24";
 
+        LoadDefaults();
         ValidateAllProperties();
 
         if (_defaults != null)
@@ -74,6 +75,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         BackThicknessVisible = (value == Style1);
 
         LoadDefaults();
+        RunValidationVisible();
     }
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
     [ObservableProperty] public partial double MaterialThickness14 { get; set; } = 0.25;
@@ -83,7 +85,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial string Species { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
-    [ObservableProperty] public partial int Qty { get; set; }
+    [ObservableProperty, NotifyDataErrorInfo, Required, Range(1, 100)] public partial int Qty { get; set; } = 1;
     [ObservableProperty] public partial string Notes { get; set; } = "";
 
 
@@ -95,8 +97,13 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string DoorSpecies { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string BackThickness { get; set; } = "";
-
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BackThickness { get; set; } = ""; partial void OnBackThicknessChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            RunValidationVisible();
+        }
+    }
 
 
     [ObservableProperty] public partial int ShelfCount { get; set; }
@@ -109,11 +116,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
 
 
-    [ObservableProperty] public partial string LeftReveal { get; set; } = "";
-    [ObservableProperty] public partial string RightReveal { get; set; } = "";
-    [ObservableProperty] public partial string TopReveal { get; set; } = "";
-    [ObservableProperty] public partial string BottomReveal { get; set; } = "";
-    [ObservableProperty] public partial string GapWidth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string LeftReveal { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string RightReveal { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string TopReveal { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BottomReveal { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string GapWidth { get; set; } = "";
 
 
     // Combobox options
@@ -178,7 +185,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
                 ? ConvertDimension.DoubleToFraction(0.75)
                 : 0.75.ToString();
 
-            return new List<string> { thin, thick };
+            return [thin, thick];
         }
     }
 
@@ -292,17 +299,20 @@ public partial class UpperCabinetViewModel : ObservableValidator
         }
 
         // Optional: clear selection after update
-        //_mainVm.SelectedCabinet = null;
+        _mainVm!.SelectedCabinet = null;
     }
 
     [RelayCommand]
     private void LoadDefaults()
     {
+        if (_defaults is null) return;
         Species = _defaults.DefaultSpecies;
         EBSpecies = _defaults.DefaultEBSpecies;
         ShelfCount = _defaults.DefaultShelfCount;
         DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
-        BackThickness = _defaults.DefaultUpperBackThickness;
+        if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultBaseBackThickness; }
+        else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultBaseBackThickness)); }
+        //BackThickness = _defaults.DefaultUpperBackThickness;
         DoorCount = _defaults.DefaultDoorCount;
         IncDoors = _defaults.DefaultIncDoors;
         IncDoorsInList = _defaults.DefaultIncDoorsInList;

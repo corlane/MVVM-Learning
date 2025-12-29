@@ -10,7 +10,7 @@ public partial class UpperCabinetView : UserControl
     public UpperCabinetView()
     {
         InitializeComponent();
-        DataContext = App.ServiceProvider.GetRequiredService<UpperCabinetViewModel>();
+        //DataContext = App.ServiceProvider.GetRequiredService<UpperCabinetViewModel>();
     }
 
     private void TextBoxGotFocus(object sender, RoutedEventArgs e)

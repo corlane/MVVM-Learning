@@ -5,12 +5,12 @@ User side:
 
 Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
 Finish validation (don't foget to disable add, place order buttons etc. on invalid form)
-	Run Validation on tab change too
-Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2.
+	Run Validation on tab change too -- shit doesn't work. The only thing that works is the validation textblocks. So be it. -- DONE. Most validation seems To work as intended. Check more via beta-testing.
+Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2. -- Looks like it is working on bedroom computer. Leave as is and check later.
 Implement FTP connection for order submission and material price retrieval
 Change pricing method to use material prices from FTP server
 Implement order status indicator
-Add drawer box and rollout 3D models and incorporate into material yield calculations
+Add drawer box and rollout 3D models and incorporate into material yield calculations  -- Drw boxes done. Rollouts next
 Add Sink Cabinet checkbox, and add special sink stretchers
 Add rollouts option	*** Working on this ***
 	Add some option to specify rollouts

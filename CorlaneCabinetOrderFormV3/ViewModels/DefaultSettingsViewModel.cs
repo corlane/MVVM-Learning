@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -25,12 +26,18 @@ public partial class DefaultSettingsViewModel : ObservableObject
                 ? "Light Theme"
                 : _defaults.DefaultTheme;
         }
+
+        // Listen for changes on the underlying defaults so computed/display properties update.
+        if (_defaults != null)
+        {
+            _defaults.PropertyChanged += Defaults_PropertyChanged;
+        }
     }
 
 
     private readonly DefaultSettingsService? _defaults;
 
-
+    
     // Mirror every default as a bindable property
 
     // Dimension Format
@@ -44,8 +51,41 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultTopType { get => _defaults.DefaultTopType; set => _defaults.DefaultTopType = value; }
 
     // Back
-    public string DefaultBaseBackThickness { get => _defaults.DefaultBaseBackThickness; set => _defaults.DefaultBaseBackThickness = value; }
-    public string DefaultUpperBackThickness { get => _defaults.DefaultUpperBackThickness; set => _defaults.DefaultUpperBackThickness = value; }
+    // Back - store in defaults as canonical numeric string, but expose formatted strings for UI.
+    public string DefaultBaseBackThickness
+    {
+        get
+        {
+            if (_defaults == null) return "0.75";
+            double numeric = ConvertDimension.FractionToDouble(_defaults.DefaultBaseBackThickness);
+            return string.Equals(_defaults.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase) ? ConvertDimension.DoubleToFraction(numeric) : numeric.ToString();
+        }
+        set
+        {
+            if (_defaults == null) return;
+            double numeric = ConvertDimension.FractionToDouble(value);
+            _defaults.DefaultBaseBackThickness = numeric.ToString();
+            OnPropertyChanged(nameof(DefaultBaseBackThickness));
+        }
+    }
+    public string DefaultUpperBackThickness
+    {
+        get
+        {
+            if (_defaults == null) return "0.75";
+            double numeric = ConvertDimension.FractionToDouble(_defaults.DefaultUpperBackThickness);
+            return string.Equals(_defaults.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase)
+                ? ConvertDimension.DoubleToFraction(numeric)
+                : numeric.ToString();
+        }
+        set
+        {
+            if (_defaults == null) return;
+            double numeric = ConvertDimension.FractionToDouble(value);
+            _defaults.DefaultUpperBackThickness = numeric.ToString();
+            OnPropertyChanged(nameof(DefaultUpperBackThickness));
+        }
+    }
 
     //Toekick
     public bool DefaultHasTK { get => _defaults.DefaultHasTK; set => _defaults.DefaultHasTK = value; }
@@ -178,7 +218,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
             string thick = useFraction
                 ? ConvertDimension.DoubleToFraction(0.75)
                 : 0.75.ToString();
-
+            
             return new List<string> { thin, thick };
         }
     }
@@ -230,4 +270,22 @@ public partial class DefaultSettingsViewModel : ObservableObject
         // Optional: show toast/message
     }
 
+    private void Defaults_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        // When dimension format changes, recompute display lists and formatted properties
+        if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+        {
+            OnPropertyChanged(nameof(ListBackThickness));
+            OnPropertyChanged(nameof(DefaultBaseBackThickness));
+            OnPropertyChanged(nameof(DefaultUpperBackThickness));
+        }
+        else if (e.PropertyName == nameof(DefaultSettingsService.DefaultBaseBackThickness))
+        {
+            OnPropertyChanged(nameof(DefaultBaseBackThickness));
+        }
+        else if (e.PropertyName == nameof(DefaultSettingsService.DefaultUpperBackThickness))
+        {
+            OnPropertyChanged(nameof(DefaultUpperBackThickness));
+        }
+    }
 }

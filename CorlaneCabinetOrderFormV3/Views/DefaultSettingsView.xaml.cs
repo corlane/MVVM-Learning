@@ -23,7 +23,7 @@ namespace CorlaneCabinetOrderFormV3.Views
         public DefaultSettingsView()
         {
             InitializeComponent();
-            DataContext = App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
+            //DataContext = App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
         }
 
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)

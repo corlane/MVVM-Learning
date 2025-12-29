@@ -23,7 +23,7 @@ namespace CorlaneCabinetOrderFormV3.Views
         public FillerView()
         {
             InitializeComponent();
-            DataContext = App.ServiceProvider.GetRequiredService<FillerViewModel>();
+            //DataContext = App.ServiceProvider.GetRequiredService<FillerViewModel>();
         }
 
         private void TextBoxGotFocus(object sender, RoutedEventArgs e)
