@@ -23,7 +23,7 @@ public partial class Cabinet3DViewModel : ObservableObject
     }
 
     //private readonly MainWindowViewModel? _mainVm;
-    private readonly IPreviewService _previewSvc;
+    private readonly IPreviewService? _previewSvc;
 
     // Constructor used by DI - MainWindowViewModel and IPreviewService injected
     public Cabinet3DViewModel(IPreviewService previewSvc)
@@ -110,7 +110,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         var group = new Model3DGroup();
 
         // Read preview cabinet from the centralized preview service
-        var cab = _previewSvc.CurrentPreviewCabinet;
+        var cab = _previewSvc!.CurrentPreviewCabinet;
 
         if (cab is CabinetModel cabinetModel)
         {
@@ -2520,7 +2520,7 @@ public partial class Cabinet3DViewModel : ObservableObject
     {
         // No-op for trivial requests
         if (radius <= double.Epsilon || segments < 1 || polygonPoints == null || polygonPoints.Count < 3)
-            return [.. polygonPoints];
+            return [.. polygonPoints!];
 
         var result = new List<Point3D>();
         int n = polygonPoints.Count;

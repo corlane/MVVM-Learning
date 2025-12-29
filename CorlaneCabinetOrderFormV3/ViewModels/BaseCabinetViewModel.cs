@@ -184,12 +184,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Opening2Visible = newValue >= 2;
             Opening3Visible = newValue >= 3;
             Opening4Visible = newValue == 4;
-            OpeningHeight1 = _defaults.DefaultDrwFrontHeight1;
-            OpeningHeight2 = _defaults.DefaultDrwFrontHeight2;
-            OpeningHeight3 = _defaults.DefaultDrwFrontHeight3;
-            DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-            DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
-            DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+            if (_defaults != null)
+            {
+                // Load default drawer front heights for the new drawer count
+                OpeningHeight1 = _defaults.DefaultDrwFrontHeight1;
+                OpeningHeight2 = _defaults.DefaultDrwFrontHeight2;
+                OpeningHeight3 = _defaults.DefaultDrwFrontHeight3;
+                DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+                DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
+                DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+            }
             ResizeOpeningHeights();
             ResizeDrwFrontHeights();
         }
@@ -563,7 +567,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 ? ConvertDimension.DoubleToFraction(0.75)
                 : 0.75.ToString();
 
-            return new List<string> { thin, thick };
+            return [thin, thick];
         }
     }
     public List<string> ListTopType { get; } =
@@ -1065,7 +1069,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // For 3D model:
     private void UpdatePreview() // Update 3D cabinet model preview
     {
-        // _mainVm.CurrentPreviewCabinet = new BaseCabinetModel() --- Original before Preview Service
         var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
 
         var model = new BaseCabinetModel
@@ -1122,7 +1125,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncRollouts = IncRollouts,
             RolloutCount = RolloutCount,
             DrwStyle = DrwStyle
-
         };
 
         // Request preview using the tab index owner token (Base tab = 0)
