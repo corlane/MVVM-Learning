@@ -292,9 +292,10 @@ public partial class Cabinet3DViewModel : ObservableObject
         double dbxWidth = interiorWidth;
         double dbxHeight;
         double dbxDepth = interiorDepth - 1; // TODO SET THIS TO THE CORRECT VALUE LATER
-        double tandemSideSpacing = .5; // TODO confirm and set to proper value
-        double tandemTopSpacing = .5; // TODO confirm and set to proper value
-        double tandemBottomSpacing = .5; // TODO confirm and set to proper value
+        double tandemSideSpacing = .4; // TODO confirm and set to proper value
+        double tandemTopSpacing = .375;
+        double tandemBottomSpacing = .5906; // This is for top & bottom drws. Middle drws will have .375 additional (.9656) bottom spacing 
+        double tandemMidDrwBottomSpacingAdjustment = .375; // see above
         double accurideSideSpacing = 1; // TODO confirm and set to proper value
         double accurideTopSpacing = .5; // TODO confirm and set to proper value
         double accurideBottomSpacing = .5; // TODO confirm and set to proper value
@@ -302,37 +303,37 @@ public partial class Cabinet3DViewModel : ObservableObject
         string panelEBEdges = "";
 
         stretcherPoints =
-            [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,StretcherWidth,0),
-                new (0,StretcherWidth,0)
-            ];
+        [
+            new (0,0,0),
+            new (interiorWidth,0,0),
+            new (interiorWidth,StretcherWidth,0),
+            new (0,StretcherWidth,0)
+        ];
 
         shelfPoints =
-            [
-                new (0,0,0),
-                new (interiorWidth-.125,0,0),
-                new (interiorWidth-.125,shelfDepth,0),
-                new (0,shelfDepth,0)
-            ];
+        [
+            new (0,0,0),
+            new (interiorWidth-.125,0,0),
+            new (interiorWidth-.125,shelfDepth,0),
+            new (0,shelfDepth,0)
+        ];
 
 
         if (baseCab.HasTK)
         {
             endPanelPoints =
-                [
-                    new (depth,tk_Height,0),
-                    new (depth,height,0),
-                    new (0,height,0),
-                    new (0,0,0),
-                    new (3,0,0),
-                    new (3,.5,0),
-                    new (depth-tk_Depth-3,.5,0),
-                    new (depth-tk_Depth-3,0,0),
-                    new (depth-tk_Depth,0,0),
-                    new (depth-tk_Depth,tk_Height,0)
-                ];
+            [
+                new (depth,tk_Height,0),
+                new (depth,height,0),
+                new (0,height,0),
+                new (0,0,0),
+                new (3,0,0),
+                new (3,.5,0),
+                new (depth-tk_Depth-3,.5,0),
+                new (depth-tk_Depth-3,0,0),
+                new (depth-tk_Depth,0,0),
+                new (depth-tk_Depth,tk_Height,0)
+            ];
         }
         else
         {
@@ -340,12 +341,12 @@ public partial class Cabinet3DViewModel : ObservableObject
             tk_Depth = 0;
 
             endPanelPoints =
-                [
-                    new (depth,0,0),
-                    new (depth,height,0),
-                    new (0,height,0),
-                    new (0,0,0)
-                ];
+            [
+                new (depth,0,0),
+                new (depth,height,0),
+                new (0,height,0),
+                new (0,0,0)
+            ];
         }
 
         interiorHeight = height - doubleMaterialThickness34 - tk_Height;
@@ -457,42 +458,46 @@ public partial class Cabinet3DViewModel : ObservableObject
 
             if (cabType == style2)
             {
+                double opening1HeightAdjusted = opening1Height;
+                double opening2HeightAdjusted = opening2Height;
+                double opening3HeightAdjusted = opening3Height;
+
                 if (baseCab.DrwCount == 2)
                 {
-                    opening1Height += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
+                    opening1HeightAdjusted += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height, 270, 0, 0);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
 
                 if (baseCab.DrwCount == 3)
                 {
-                    opening1Height += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
+                    opening1HeightAdjusted += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height, 270, 0, 0);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
 
-                    opening2Height += MaterialThickness34; // moves the reference to the bottom of the stretcher
+                    opening2HeightAdjusted += MaterialThickness34; // moves the reference to the bottom of the stretcher
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height - opening2Height, 270, 0, 0);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
 
                 if (baseCab.DrwCount == 4)
                 {
-                    opening1Height += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
+                    opening1HeightAdjusted += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height, 270, 0, 0);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
 
-                    opening2Height += MaterialThickness34; // moves the reference to the bottom of the stretcher
+                    opening2HeightAdjusted += MaterialThickness34; // moves the reference to the bottom of the stretcher
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height - opening2Height, 270, 0, 0);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
 
-                    opening3Height += MaterialThickness34; // moves the reference to the bottom of the stretcher
+                    opening3HeightAdjusted += MaterialThickness34; // moves the reference to the bottom of the stretcher
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1Height - opening2Height - opening3Height, 270, 0, 0);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted - opening3HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
             }
@@ -733,12 +738,6 @@ public partial class Cabinet3DViewModel : ObservableObject
             {
                 if (baseCab.IncDrwBoxOpening1 || baseCab.IncDrwBoxOpening2 || baseCab.IncDrwBoxOpening3 || baseCab.IncDrwBoxOpening4)
                 {
-                    if (baseCab.Style == style2)
-                    {
-                        opening1Height -= MaterialThickness34 * 2; // un-adjust for the stretcher that was adjusted for above...this is dumb but it works.
-                        opening2Height -= MaterialThickness34; // un-adjust for the stretcher that was adjusted for above
-                        opening3Height -= MaterialThickness34; // un-adjust for the stretcher that was adjusted for above
-                    }
                     //double sideSpacing;
                     double topSpacing = 0;
                     double bottomSpacing = 0;
@@ -768,34 +767,35 @@ public partial class Cabinet3DViewModel : ObservableObject
                     if (baseCab.IncDrwBoxOpening1)
                     {
                         dbxHeight = opening1Height - topSpacing - bottomSpacing;
+                        Debug.WriteLine($"Drw box 1 height {dbxHeight}");
 
                         dbxSidePoints =
-                    [
-                        new (dbxDepth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxDepth,0,0)
-                    ];
-                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        [
+                            new (dbxDepth,dbxHeight,0),
+                            new (0,dbxHeight,0),
+                            new (0,0,0),
+                            new (dbxDepth,0,0)
+                        ];
+                            dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
-                        dbxFrontAndBackPoints =
-                    [
-                        new (dbxFrontAndBackWidth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxFrontAndBackWidth,0,0)
-                    ];
-                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxFrontAndBackPoints =
+                        [
+                            new (dbxFrontAndBackWidth,dbxHeight,0),
+                            new (0,dbxHeight,0),
+                            new (0,0,0),
+                            new (dbxFrontAndBackWidth,0,0)
+                        ];
+                            dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
-                        dbxBottomPoints =
-                    [
-                        new (0,0,0),
-                        new (dbxBottomWidth,0,0),
-                        new (dbxBottomWidth,dbxBottomLength,0),
-                        new (0,dbxBottomLength,0)
-                    ];
+                            dbxBottomPoints =
+                        [
+                            new (0,0,0),
+                            new (dbxBottomWidth,0,0),
+                            new (dbxBottomWidth,dbxBottomLength,0),
+                            new (0,dbxBottomLength,0)
+                        ];
                         dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
 
                         // Build box:
@@ -823,34 +823,39 @@ public partial class Cabinet3DViewModel : ObservableObject
                     if (baseCab.IncDrwBoxOpening2 && baseCab.DrwCount > 1)
                     {
                         dbxHeight = opening2Height - topSpacing - bottomSpacing;
+                        if (baseCab.DrwCount > 2) // if true this is a middle drawer and needs additional bottom spacing
+                        {
+                            dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
+                        }
+                        Debug.WriteLine($"Drw box 2 height {dbxHeight}");
 
                         dbxSidePoints =
-                    [
-                        new (dbxDepth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxDepth,0,0)
-                    ];
+                        [
+                            new (dbxDepth,dbxHeight,0),
+                            new (0,dbxHeight,0),
+                            new (0,0,0),
+                            new (dbxDepth,0,0)
+                        ];
                         dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
                         dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
                         dbxFrontAndBackPoints =
-                    [
-                        new (dbxFrontAndBackWidth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxFrontAndBackWidth,0,0)
-                    ];
+                        [
+                            new (dbxFrontAndBackWidth,dbxHeight,0),
+                            new (0,dbxHeight,0),
+                            new (0,0,0),
+                            new (dbxFrontAndBackWidth,0,0)
+                        ];
                         dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
                         dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
                         dbxBottomPoints =
-                    [
-                        new (0,0,0),
-                        new (dbxBottomWidth,0,0),
-                        new (dbxBottomWidth,dbxBottomLength,0),
-                        new (0,dbxBottomLength,0)
-                    ];
+                        [
+                            new (0,0,0),
+                            new (dbxBottomWidth,0,0),
+                            new (dbxBottomWidth,dbxBottomLength,0),
+                            new (0,dbxBottomLength,0)
+                        ];
                         dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
 
                         ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
@@ -876,34 +881,38 @@ public partial class Cabinet3DViewModel : ObservableObject
                     if (baseCab.IncDrwBoxOpening3 && baseCab.DrwCount > 2)
                     {
                         dbxHeight = opening3Height - topSpacing - bottomSpacing;
-
+                        if (baseCab.DrwCount > 3) // if true this is a middle drawer and needs additional bottom spacing
+                        {
+                            dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
+                        }
+                        Debug.WriteLine($"Drw box 3 height {dbxHeight}");
                         dbxSidePoints =
-                    [
-                        new (dbxDepth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxDepth,0,0)
-                    ];
-                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        [
+                            new (dbxDepth,dbxHeight,0),
+                            new (0,dbxHeight,0),
+                            new (0,0,0),
+                            new (dbxDepth,0,0)
+                        ];
+                            dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
-                        dbxFrontAndBackPoints =
-                    [
-                        new (dbxFrontAndBackWidth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxFrontAndBackWidth,0,0)
-                    ];
-                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxFrontAndBackPoints =
+                        [
+                            new (dbxFrontAndBackWidth,dbxHeight,0),
+                            new (0,dbxHeight,0),
+                            new (0,0,0),
+                            new (dbxFrontAndBackWidth,0,0)
+                        ];
+                            dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
-                        dbxBottomPoints =
-                    [
-                        new (0,0,0),
-                        new (dbxBottomWidth,0,0),
-                        new (dbxBottomWidth,dbxBottomLength,0),
-                        new (0,dbxBottomLength,0)
-                    ];
+                            dbxBottomPoints =
+                        [
+                            new (0,0,0),
+                            new (dbxBottomWidth,0,0),
+                            new (dbxBottomWidth,dbxBottomLength,0),
+                            new (0,dbxBottomLength,0)
+                        ];
                         dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
 
                         ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
@@ -929,6 +938,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     if (baseCab.IncDrwBoxOpening4 && baseCab.DrwCount > 3)
                     {
                         dbxHeight = opening4Height - topSpacing - bottomSpacing;
+                        Debug.WriteLine($"Drw box 4 height {dbxHeight}");
 
                         dbxSidePoints =
                     [

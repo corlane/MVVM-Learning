@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -78,7 +80,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Common properties from CabinetModel
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        //if (_isMapping) return;
 
         if (newValue != oldValue)
         {
@@ -103,7 +105,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 // Standard or corner cabinet selected
                 ListDrwCount = [0,1];
             }
-            LoadDefaults();
+            //LoadDefaults();
             ResizeOpeningHeights();
             ResizeDrwFrontHeights();
             UpdatePreview();
@@ -708,7 +710,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         finally
         {
             _isResizing = false;
-
         }
     }
 
@@ -1001,12 +1002,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncRollouts = IncRollouts;
             selected.IncRolloutsInList = IncRolloutsInList;
             selected.RolloutCount = RolloutCount;
-            _mainVm?.Notify("Cabinet Updated");
+            _mainVm?.Notify("Cabinet Updated", Brushes.Green);
+        }
+
+        else
+        {
+            // No cabinet selected or wrong type
+            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red);
+            return;
         }
 
         // Optional: clear selection after update
         _mainVm!.SelectedCabinet = null;
-
     }
 
     [RelayCommand]
@@ -1209,6 +1216,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         finally
         {
             _isMapping = false;
+            OnStyleChanged(model.Style);
         }
     }
 }

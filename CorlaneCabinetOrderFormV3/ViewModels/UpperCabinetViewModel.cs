@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -258,7 +259,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (_mainVm.SelectedCabinet is UpperCabinetModel selected)
+        if (_mainVm!.SelectedCabinet is UpperCabinetModel selected)
         {
             selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
@@ -290,14 +291,15 @@ public partial class UpperCabinetViewModel : ObservableValidator
             selected.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
             selected.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
 
-            _mainVm?.Notify("Cabinet Updated");
-
-
-            // copy every property back
-
-            // No collection replace needed — bindings update instantly
+            _mainVm?.Notify("Cabinet Updated", Brushes.Green);
         }
 
+        else
+        {
+            // No cabinet selected or wrong type
+            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red);
+            return;
+        }
         // Optional: clear selection after update
         _mainVm!.SelectedCabinet = null;
     }
