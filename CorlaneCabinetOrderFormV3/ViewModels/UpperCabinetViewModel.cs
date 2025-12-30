@@ -73,9 +73,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
         StandardDimsVisibility = value == Style1;
         Corner90DimsVisibility = value == Style2;
         Corner45DimsVisibility = value == Style3;
-        BackThicknessVisible = (value == Style1);
+        BackThicknessVisible = value == Style1;
 
-        LoadDefaults();
+        //LoadDefaults();
         RunValidationVisible();
     }
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
@@ -335,9 +335,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 {
     "Width","Height","Depth","TKHeight","TKDepth",
     "LeftBackWidth","RightBackWidth","LeftFrontWidth","RightFrontWidth",
-    "LeftDepth","RightDepth","BackThickness","ShelfDepth",
-    "OpeningHeight1","OpeningHeight2","OpeningHeight3","OpeningHeight4",
-    "DrwFrontHeight1","DrwFrontHeight2","DrwFrontHeight3","DrwFrontHeight4",
+    "LeftDepth","RightDepth","BackThickness",
     "LeftReveal","RightReveal","TopReveal","BottomReveal","GapWidth"
 };
 

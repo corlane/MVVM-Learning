@@ -9,6 +9,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -104,8 +105,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
             {
                 // Standard or corner cabinet selected
                 ListDrwCount = [0,1];
+                if (DrwCount == 1)
+                {
+                    DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+                }
             }
-            LoadDefaults();
+            //LoadDefaults();
             ResizeOpeningHeights();
             ResizeDrwFrontHeights();
             UpdatePreview();
@@ -411,7 +416,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (newValue != oldValue)
         {
-            Debug.WriteLine($"OnOpening1HeightChanged {OpeningHeight1}");
             ResizeOpeningHeights();
         }
     }
@@ -869,7 +873,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString(),
             TopType = TopType,
             ShelfCount = ShelfCount,
-            ShelfDepth = ConvertDimension.FractionToDouble(ShelfDepth).ToString(),
+            ShelfDepth = ShelfDepth,
             DrillShelfHoles = DrillShelfHoles,
             DoorCount = DoorCount,
             DoorGrainDir = DoorGrainDir,
@@ -953,7 +957,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString();
             selected.TopType = TopType;
             selected.ShelfCount = ShelfCount;
-            selected.ShelfDepth = ConvertDimension.FractionToDouble(ShelfDepth).ToString();
+            selected.ShelfDepth = ShelfDepth;
             selected.DrillShelfHoles = DrillShelfHoles;
             selected.DoorCount = DoorCount;
             selected.DoorGrainDir = DoorGrainDir;
@@ -1061,9 +1065,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (Style == Style1) { DrwCount = _defaults.DefaultStdDrawerCount; }
         if (Style == Style2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
         DrwStyle = _defaults.DefaultDrwStyle;
-        OpeningHeight1 = _defaults.DefaultOpeningHeight1;
-        OpeningHeight2 = _defaults.DefaultOpeningHeight2;
-        OpeningHeight3 = _defaults.DefaultOpeningHeight3;
+        //OpeningHeight1 = _defaults.DefaultOpeningHeight1;
+        //OpeningHeight2 = _defaults.DefaultOpeningHeight2;
+        //OpeningHeight3 = _defaults.DefaultOpeningHeight3;
         DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
         DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
         DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
@@ -1157,6 +1161,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (model is null) return;
 
+        // capture old value so we can call the exact overload of OnStyleChanged afterwards
+        var oldStyle = Style;
+
         _isMapping = true;
         try
         {
@@ -1188,7 +1195,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
                         if (string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
                         {
                             vmProp.SetValue(this, ConvertDimension.DoubleToFraction(numeric));
-                            //Debug.WriteLine($"Mapping dimension property '{modelProp.Name}': raw='{raw}' -> numeric={numeric} -> fraction='{ConvertDimension.DoubleToFraction(numeric)}'");
                         }
                         else
                         {
@@ -1198,7 +1204,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     else
                     {
                         vmProp.SetValue(this, raw);
-                        Debug.WriteLine($"Mapping string property '{modelProp.Name}': value='{raw}'");
                     }
                 }
                 else if (vmProp.PropertyType == typeof(int))
@@ -1220,6 +1225,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         finally
         {
             _isMapping = false;
+
+            OnStyleChanged(oldStyle, model.Style);
         }
     }
 }

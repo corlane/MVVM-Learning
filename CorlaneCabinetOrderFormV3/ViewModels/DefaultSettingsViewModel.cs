@@ -32,12 +32,20 @@ public partial class DefaultSettingsViewModel : ObservableObject
         {
             _defaults.PropertyChanged += Defaults_PropertyChanged;
         }
+
+        // Initialize VM-level formatted values from the backing defaults so ComboBoxes
+        // have matching SelectedItem when the view appears.
+        ApplyDefaultsToViewModel();
     }
 
 
     private readonly DefaultSettingsService? _defaults;
 
-    
+    // Flag used to avoid writing back to _defaults while we are applying values that came from _defaults.
+    // This prevents re-entrant PropertyChanged loops and transient mismatches between SelectedItem and ItemsSource.
+    private bool _isApplyingDefaults;
+
+
     // Mirror every default as a bindable property
 
     // Dimension Format
@@ -52,38 +60,50 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     // Back
     // Back - store in defaults as canonical numeric string, but expose formatted strings for UI.
-    public string DefaultBaseBackThickness
+
+    [ObservableProperty] public partial string DefaultBaseBackThickness { get; set; } = "0.75"; partial void OnDefaultBaseBackThicknessChanged(string value)
     {
-        get
+        Debug.WriteLine($"OnDefaultBaseBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultBaseBackThickness='{_defaults?.DefaultBaseBackThickness}'");
+
+        // If the ComboBox temporarily clears SelectedItem because its ItemsSource changed,
+        // the VM setter can receive an empty string. Don't treat that as a user intent to write back.
+        if (string.IsNullOrWhiteSpace(value))
         {
-            if (_defaults == null) return "0.75";
-            double numeric = ConvertDimension.FractionToDouble(_defaults.DefaultBaseBackThickness);
-            return string.Equals(_defaults.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase) ? ConvertDimension.DoubleToFraction(numeric) : numeric.ToString();
+            Debug.WriteLine("Ignoring empty/whitespace DefaultBaseBackThickness change (likely ItemsSource update).");
+            return;
         }
-        set
+
+        // When we're applying defaults we must not write back into the defaults service
+        // otherwise we create re-entrant PropertyChanged loops and transient mismatches.
+        if (_isApplyingDefaults) return;
+
+        if (_defaults != null)
         {
-            if (_defaults == null) return;
-            double numeric = ConvertDimension.FractionToDouble(value);
-            _defaults.DefaultBaseBackThickness = numeric.ToString();
-            OnPropertyChanged(nameof(DefaultBaseBackThickness));
+            _defaults.DefaultBaseBackThickness = ConvertDimension.FractionToDouble(value).ToString();
+            // Persist directly on the service (fire-and-forget) rather than invoking the VM command
+            _ = _defaults.SaveAsync();
+            Debug.WriteLine($"Wrote to _defaults.DefaultBaseBackThickness='{_defaults.DefaultBaseBackThickness}'");
         }
     }
-    public string DefaultUpperBackThickness
+
+    [ObservableProperty] public partial string DefaultUpperBackThickness { get; set; } = "0.75"; partial void OnDefaultUpperBackThicknessChanged(string value)
     {
-        get
+        Debug.WriteLine($"OnDefaultUpperBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultUpperBackThickness='{_defaults?.DefaultUpperBackThickness}'");
+
+        // Same guard for the upper thickness: ignore transient empty changes from ItemsSource swap.
+        if (string.IsNullOrWhiteSpace(value))
         {
-            if (_defaults == null) return "0.75";
-            double numeric = ConvertDimension.FractionToDouble(_defaults.DefaultUpperBackThickness);
-            return string.Equals(_defaults.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase)
-                ? ConvertDimension.DoubleToFraction(numeric)
-                : numeric.ToString();
+            Debug.WriteLine("Ignoring empty/whitespace DefaultUpperBackThickness change (likely ItemsSource update).");
+            return;
         }
-        set
+
+        if (_isApplyingDefaults) return;
+
+        if (_defaults != null)
         {
-            if (_defaults == null) return;
-            double numeric = ConvertDimension.FractionToDouble(value);
-            _defaults.DefaultUpperBackThickness = numeric.ToString();
-            OnPropertyChanged(nameof(DefaultUpperBackThickness));
+            _defaults.DefaultUpperBackThickness = ConvertDimension.FractionToDouble(value).ToString();
+            _ = _defaults.SaveAsync();
+            Debug.WriteLine($"Wrote to _defaults.DefaultUpperBackThickness='{_defaults.DefaultUpperBackThickness}'");
         }
     }
 
@@ -97,10 +117,10 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultShelfDepth { get => _defaults.DefaultShelfDepth; set => _defaults.DefaultShelfDepth = value; }
     public bool DefaultDrillShelfHoles { get => _defaults.DefaultDrillShelfHoles; set => _defaults.DefaultDrillShelfHoles = value; }
 
-    // Openings
-    public string DefaultOpeningHeight1 { get => _defaults.DefaultOpeningHeight1; set => _defaults.DefaultOpeningHeight1 = value; }
-    public string DefaultOpeningHeight2 { get => _defaults.DefaultOpeningHeight2; set => _defaults.DefaultOpeningHeight2 = value; }
-    public string DefaultOpeningHeight3 { get => _defaults.DefaultOpeningHeight3; set => _defaults.DefaultOpeningHeight3 = value; }
+    // Openings  --- Getting rid of Default Opening Heights. Only allow setting default Drw Front heights. Let's see how this flies.
+    //public string DefaultOpeningHeight1 { get => _defaults.DefaultOpeningHeight1; set => _defaults.DefaultOpeningHeight1 = value; }
+    //public string DefaultOpeningHeight2 { get => _defaults.DefaultOpeningHeight2; set => _defaults.DefaultOpeningHeight2 = value; }
+    //public string DefaultOpeningHeight3 { get => _defaults.DefaultOpeningHeight3; set => _defaults.DefaultOpeningHeight3 = value; }
 
 
     // Doors
@@ -134,7 +154,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultUpperLeftReveal { get => _defaults.DefaultUpperLeftReveal; set => _defaults.DefaultUpperLeftReveal = value; }
     public string DefaultUpperRightReveal { get => _defaults.DefaultUpperRightReveal; set => _defaults.DefaultUpperRightReveal = value; }
     public string DefaultUpperTopReveal { get => _defaults.DefaultUpperTopReveal; set => _defaults.DefaultUpperTopReveal = value; }
-    public string DefaultUpperBottomReveal { get => _defaults.DefaultUpperBottomReveal; set => _defaults.DefaultUpperBottomReveal = value; }
+    public string DefaultUpperBottomReveal { get => _defaults.DefaultUpperBackThickness; set => _defaults.DefaultUpperBackThickness = value; }
 
     public string DefaultGapWidth { get => _defaults.DefaultGapWidth; set => _defaults.DefaultGapWidth = value; }
 
@@ -146,7 +166,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
     [
         "Fraction",
         "Decimal"
-    ];      
+    ];
     public List<int> ListShelfCount { get; } = [0, 1, 2, 3, 4, 5];
     public List<int> ListStdDrwCount { get; } = [0, 1];
     public List<int> ListDrwStackDrwCount { get; } = [1, 2, 3, 4];
@@ -218,7 +238,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
             string thick = useFraction
                 ? ConvertDimension.DoubleToFraction(0.75)
                 : 0.75.ToString();
-            
+
             return new List<string> { thin, thick };
         }
     }
@@ -272,20 +292,95 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     private void Defaults_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
+        Debug.WriteLine($"Defaults_PropertyChanged: PropertyName={e.PropertyName}, defaults.DimensionFormat='{_defaults?.DefaultDimensionFormat}', defaults.BaseBack='{_defaults?.DefaultBaseBackThickness}', defaults.UpperBack='{_defaults?.DefaultUpperBackThickness}'");
+
         // When dimension format changes, recompute display lists and formatted properties
         if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
         {
             OnPropertyChanged(nameof(ListBackThickness));
-            OnPropertyChanged(nameof(DefaultBaseBackThickness));
-            OnPropertyChanged(nameof(DefaultUpperBackThickness));
         }
-        else if (e.PropertyName == nameof(DefaultSettingsService.DefaultBaseBackThickness))
+
+        if (_defaults == null) return;
+
+        try
         {
-            OnPropertyChanged(nameof(DefaultBaseBackThickness));
+            _isApplyingDefaults = true;
+
+            var listValues = ListBackThickness;
+            Debug.WriteLine($"ListBackThickness items BEFORE assignment: [{string.Join(", ", listValues)}]");
+
+            if (_defaults.DefaultDimensionFormat == "Fraction")
+            {
+                try
+                {
+                    var baseConv = Convert.ToDouble(_defaults.DefaultBaseBackThickness);
+                    DefaultBaseBackThickness = ConvertDimension.DoubleToFraction(baseConv);
+                    Debug.WriteLine($"Assigned DefaultBaseBackThickness (fraction) = '{DefaultBaseBackThickness}' (from '{_defaults.DefaultBaseBackThickness}')");
+                }
+                catch (Exception ex)
+                {
+                    DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
+                    Debug.WriteLine($"Exception converting base back to fraction: {ex}. Falling back to '{DefaultBaseBackThickness}'");
+                }
+
+                try
+                {
+                    var upperConv = Convert.ToDouble(_defaults.DefaultUpperBackThickness);
+                    DefaultUpperBackThickness = ConvertDimension.DoubleToFraction(upperConv);
+                    Debug.WriteLine($"Assigned DefaultUpperBackThickness (fraction) = '{DefaultUpperBackThickness}' (from '{_defaults.DefaultUpperBackThickness}')");
+                }
+                catch (Exception ex)
+                {
+                    DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
+                    Debug.WriteLine($"Exception converting upper back to fraction: {ex}. Falling back to '{DefaultUpperBackThickness}'");
+                }
+            }
+            else
+            {
+                DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
+                DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
+                Debug.WriteLine($"Assigned decimal Base='{DefaultBaseBackThickness}' Upper='{DefaultUpperBackThickness}'");
+            }
+
+            Debug.WriteLine($"ListBackThickness items AFTER assignment: [{string.Join(", ", ListBackThickness)}]");
         }
-        else if (e.PropertyName == nameof(DefaultSettingsService.DefaultUpperBackThickness))
+        finally
         {
-            OnPropertyChanged(nameof(DefaultUpperBackThickness));
+            _isApplyingDefaults = false;
+        }
+    }
+
+    // Helper: initialize VM fields from _defaults so ItemsSource and SelectedItem match on startup.
+    private void ApplyDefaultsToViewModel()
+    {
+        if (_defaults == null) return;
+
+        try
+        {
+            _isApplyingDefaults = true;
+
+            if (string.Equals(_defaults.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
+            {
+                // Convert stored canonical numeric strings into the fraction display strings
+                if (double.TryParse(_defaults.DefaultBaseBackThickness, out var b))
+                    DefaultBaseBackThickness = ConvertDimension.DoubleToFraction(b);
+                else
+                    DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
+
+                if (double.TryParse(_defaults.DefaultUpperBackThickness, out var u))
+                    DefaultUpperBackThickness = ConvertDimension.DoubleToFraction(u);
+                else
+                    DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
+            }
+            else
+            {
+                DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
+                DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
+            }
+        }
+        finally
+        {
+            _isApplyingDefaults = false;
         }
     }
 }

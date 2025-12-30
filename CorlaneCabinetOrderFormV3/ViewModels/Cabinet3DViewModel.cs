@@ -291,7 +291,14 @@ public partial class Cabinet3DViewModel : ObservableObject
         int shelfCount = baseCab.ShelfCount;
         double dbxWidth = interiorWidth;
         double dbxHeight;
-        double dbxDepth = interiorDepth - 1; // TODO SET THIS TO THE CORRECT VALUE LATER
+        double dbxDepth = interiorDepth - 1;
+        if (depth >= 10.625 && depth < 13.625) dbxDepth = 9;
+        if (depth >= 13.625 && depth < 16.625) dbxDepth = 12;
+        if (depth >= 16.625 && depth < 19.625) dbxDepth = 15;
+        if (depth >= 19.625 && depth < 22.625) dbxDepth = 18;
+        if (depth >= 22.625) dbxDepth = 21;
+        Debug.WriteLine($"Depth is {depth}");
+        Debug.WriteLine($"Drw box depth is {dbxDepth}");
         double tandemSideSpacing = .4; // TODO confirm and set to proper value
         double tandemTopSpacing = .375;
         double tandemBottomSpacing = .5906; // This is for top & bottom drws. Middle drws will have .375 additional (.9656) bottom spacing 
@@ -815,7 +822,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         // Position Box in Cabinet:
                         Model3DGroup dbx1 = new();
                         dbx1.Children.Add(dbx1rotate);
-                        ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - topSpacing, dbxDepth + backThickness + 1, 0, 0, 0);
+                        ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
                         cabinet.Children.Add(dbx1);
                     }
 

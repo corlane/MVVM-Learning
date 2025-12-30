@@ -7,6 +7,7 @@
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="920" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
@@ -41,7 +42,13 @@
 
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Base Cabinet Style" Margin="5,5,5,5" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-            <ComboBox Name="comboCabType" Width="132" Margin="0,15,0,10" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Style, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Name="comboCabType" Width="132" Margin="0,15,0,10" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Style, UpdateSourceTrigger=PropertyChanged}">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="DropDownClosed">
+                        <behaviors:InvokeCommandAction Command="{Binding LoadDefaultsCommand}"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+            </ComboBox>
         </GroupBox>
 
         <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseDimensions" Header="Dimensions" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
