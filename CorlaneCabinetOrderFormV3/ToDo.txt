@@ -55,3 +55,5 @@ Load the test job. Click on 1st cabinet. Then click 2nd cabinet. The preview is 
 	ResizeOpeningHeights If Style = Style2 is running even when Style = Style1. WTF?
 	Style is being set as Style2 when it should be Style1 - demonstrate by putting break in resize opening heights and resize drawer front heights. Is it bounce?
 	FIXED! Added if (_isMapping) return; to ResizeOpeningHeights and ResizeDrawerFrontHeights. -- DONE
+
+	Drw Count not being set when clicking on cabinet in list. More mapping problems?
