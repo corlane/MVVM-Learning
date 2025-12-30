@@ -52,3 +52,6 @@ Load the test job. Click on 1st cabinet. Then click 2nd cabinet. The preview is 
 	Removed if (_isMapping) return; from OnStyleChanged - that fixed the problem, but has it introduced other problems? Let's find out. NOPE --
 	The problem is LoadDefaults being called when Type changes. Works fine for choosing a type from the dropdown, but not good if selecting a cabinet in the list. It resets reveals etc.
 	What is overriding opening1height when clicking on cabinet list? 
+	ResizeOpeningHeights If Style = Style2 is running even when Style = Style1. WTF?
+	Style is being set as Style2 when it should be Style1 - demonstrate by putting break in resize opening heights and resize drawer front heights. Is it bounce?
+	FIXED! Added if (_isMapping) return; to ResizeOpeningHeights and ResizeDrawerFrontHeights. -- DONE

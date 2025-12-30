@@ -297,7 +297,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         else
         {
             // No cabinet selected or wrong type
-            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red);
+            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
             return;
         }
         // Optional: clear selection after update

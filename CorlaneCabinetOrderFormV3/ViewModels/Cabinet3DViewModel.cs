@@ -767,7 +767,6 @@ public partial class Cabinet3DViewModel : ObservableObject
                     if (baseCab.IncDrwBoxOpening1)
                     {
                         dbxHeight = opening1Height - topSpacing - bottomSpacing;
-                        Debug.WriteLine($"Drw box 1 height {dbxHeight}");
 
                         dbxSidePoints =
                         [
@@ -827,7 +826,6 @@ public partial class Cabinet3DViewModel : ObservableObject
                         {
                             dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
                         }
-                        Debug.WriteLine($"Drw box 2 height {dbxHeight}");
 
                         dbxSidePoints =
                         [
@@ -885,7 +883,6 @@ public partial class Cabinet3DViewModel : ObservableObject
                         {
                             dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
                         }
-                        Debug.WriteLine($"Drw box 3 height {dbxHeight}");
                         dbxSidePoints =
                         [
                             new (dbxDepth,dbxHeight,0),
@@ -938,7 +935,6 @@ public partial class Cabinet3DViewModel : ObservableObject
                     if (baseCab.IncDrwBoxOpening4 && baseCab.DrwCount > 3)
                     {
                         dbxHeight = opening4Height - topSpacing - bottomSpacing;
-                        Debug.WriteLine($"Drw box 4 height {dbxHeight}");
 
                         dbxSidePoints =
                     [

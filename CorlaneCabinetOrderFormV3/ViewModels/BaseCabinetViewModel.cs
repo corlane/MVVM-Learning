@@ -80,7 +80,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Common properties from CabinetModel
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string oldValue, string newValue)
     {
-        //if (_isMapping) return;
+        if (_isMapping) return;
 
         if (newValue != oldValue)
         {
@@ -105,7 +105,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 // Standard or corner cabinet selected
                 ListDrwCount = [0,1];
             }
-            //LoadDefaults();
+            LoadDefaults();
             ResizeOpeningHeights();
             ResizeDrwFrontHeights();
             UpdatePreview();
@@ -411,6 +411,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (newValue != oldValue)
         {
+            Debug.WriteLine($"OnOpening1HeightChanged {OpeningHeight1}");
             ResizeOpeningHeights();
         }
     }
@@ -624,6 +625,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         // Prevent re-entrancy caused by property-change handlers
         if (_isResizing) return;
+        if (_isMapping) return;
 
         double opening1Height = ConvertDimension.FractionToDouble(OpeningHeight1);
         double opening2Height = ConvertDimension.FractionToDouble(OpeningHeight2);
@@ -702,11 +704,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     DrwFrontHeight3 = (opening3Height + (MaterialThickness34) - gapWidth).ToString();
                     DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
                 }
-
             }
 
             UpdatePreview();
         }
+
         finally
         {
             _isResizing = false;
@@ -717,6 +719,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
         // Prevent re-entrancy caused by property-change handlers
         if (_isResizing) return;
+        if (_isMapping) return;
 
         const double MaterialThickness34 = 0.75; // 3/4" material thickness
 
@@ -764,7 +767,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     OpeningHeight1 = opening1Height.ToString();
                     DrwFrontHeight1 = (opening1Height + (2 * MaterialThickness34) - topReveal - bottomReveal).ToString();
                     DrwFront1Disabled = true;
-                    OpeningHeight1 = opening1Height.ToString();
                 }
 
 
@@ -1008,7 +1010,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         else
         {
             // No cabinet selected or wrong type
-            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red);
+            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
             return;
         }
 
@@ -1186,6 +1188,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                         if (string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
                         {
                             vmProp.SetValue(this, ConvertDimension.DoubleToFraction(numeric));
+                            //Debug.WriteLine($"Mapping dimension property '{modelProp.Name}': raw='{raw}' -> numeric={numeric} -> fraction='{ConvertDimension.DoubleToFraction(numeric)}'");
                         }
                         else
                         {
@@ -1195,6 +1198,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     else
                     {
                         vmProp.SetValue(this, raw);
+                        Debug.WriteLine($"Mapping string property '{modelProp.Name}': value='{raw}'");
                     }
                 }
                 else if (vmProp.PropertyType == typeof(int))
@@ -1216,7 +1220,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         finally
         {
             _isMapping = false;
-            OnStyleChanged(model.Style);
         }
     }
 }
