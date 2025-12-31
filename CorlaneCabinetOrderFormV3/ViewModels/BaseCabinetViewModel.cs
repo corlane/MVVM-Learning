@@ -927,6 +927,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         };
 
         _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
+        _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
 
     }
 

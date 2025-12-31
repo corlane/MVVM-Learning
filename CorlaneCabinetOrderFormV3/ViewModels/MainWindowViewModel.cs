@@ -5,6 +5,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using System.Windows;
+using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -50,7 +51,7 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             try
             {
                 await _cabinet_service.SaveAsync(dialog.FileName);
-                MessageBox.Show("Job saved successfully!", "Success");
+                Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Saved", Brushes.Green, 4000);
                 CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
             }
             catch (Exception ex)
@@ -73,8 +74,10 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
             try
             {
                 await _cabinet_service.LoadAsync(dialog.FileName);
+                Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Loaded", Brushes.Green, 4000);
                 //MessageBox.Show("Job loaded successfully!", "Success");
                 CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+                
             }
             catch (Exception ex)
             {

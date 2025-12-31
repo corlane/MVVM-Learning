@@ -196,8 +196,22 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <views:Cabinet3DView Grid.Column="0" Grid.Row="0"/>
-                <views:CabinetListView Grid.Column="0" Grid.Row="1"/>
+            
+            <views:Cabinet3DView Grid.Column="0" Grid.Row="0"/>
+            
+            <TabControl Grid.Row="1" Grid.Column="0">
+                <TabItem Header="Cabinet List" Padding="10">
+                    <views:CabinetListView/>
+                </TabItem>
+
+                <TabItem Header="Door Sizes List">
+                    
+                </TabItem>
+
+                <TabItem Header="Drawer Box Sizes List">
+                    
+                </TabItem>
+            </TabControl>
 
             <!--Notification Message-->
             <Border Grid.Row="0" Grid.Column="1"
@@ -220,6 +234,26 @@
             </Border>
 
         </Grid>
+
+        <Border Grid.Row="0" Grid.Column="0"
+            Background="{Binding Notification2Background}"
+            Padding="40,10,40,10"
+            CornerRadius="6"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Margin="0"
+            Visibility="{Binding IsNotification2Visible, Converter={StaticResource B2VConverter}}"
+            Opacity="0.95"
+            Panel.ZIndex="999">
+            <TextBlock
+            Text="{Binding NotificationMessage2}"
+            Foreground="AntiqueWhite"
+            FontSize="16"
+            FontWeight="SemiBold"
+            TextWrapping="Wrap"
+            HorizontalAlignment="Center"/>
+        </Border>
+
 
     </Grid>
 </Window>
