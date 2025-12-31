@@ -53,6 +53,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         RightBackWidth = "36";
         BackThickness = "0.75";
         Style = Style1;
+        ListRolloutCount = [1, 2];
 
         // Testing for validation:
 
@@ -95,11 +96,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GroupDrawerFrontHeightsVisibility = (newValue == Style1 || newValue == Style2);
             GroupDoorsVisibility = (newValue == Style1 || newValue == Style3 || newValue == Style4);
             BackThicknessVisible = (newValue == Style1 || newValue == Style2);
+            GroupRolloutsVisible = (newValue == Style1);
 
             if (newValue == Style2)
             {
                 // Drawer cabinet selected
                 ListDrwCount = [1,2,3,4];
+                RolloutCount = 0;
             }
             else if (newValue == Style1)
             {
@@ -122,6 +125,52 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (newValue != oldValue)
         {
+            ListRolloutCount = [0];
+            RolloutCount = 0;
+            IncRollouts = false;
+
+            if (Style == Style1)
+            {
+                double interiorHeight = ConvertDimension.FractionToDouble(newValue) - (2 * 0.75);
+                if (DrwCount == 1)
+                {
+                    interiorHeight -= ConvertDimension.FractionToDouble(OpeningHeight1) - 0.75;
+                }
+
+                if (interiorHeight < 12)
+                {
+                    ListRolloutCount = [1, 2];
+                }
+                else if (interiorHeight >= 12 && interiorHeight < 24)
+                {
+                    ListRolloutCount = [1, 2, 3];
+                }
+                else if (interiorHeight >= 24 && interiorHeight < 36)
+                {
+                    ListRolloutCount = [1, 2, 3, 4, 5];
+                }
+                else if (interiorHeight >= 36 && interiorHeight < 48)
+                {
+                    ListRolloutCount = [1, 2, 3, 4, 5, 6];
+                }
+                else if (interiorHeight >= 48 && interiorHeight < 60)
+                {
+                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7];
+                }
+                else if (interiorHeight >= 60 && interiorHeight < 72)
+                {
+                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8];
+                }
+                else if (interiorHeight >= 72 && interiorHeight < 84)
+                {
+                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                }
+                else if (interiorHeight >= 84 && interiorHeight < 96)
+                {
+                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                }              
+            }
+
             ResizeOpeningHeights();
         }
     }
@@ -470,7 +519,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial bool IncRollouts { get; set; } = false;
     [ObservableProperty] public partial bool IncRolloutsInList { get; set; } = false;
-    [ObservableProperty] public partial int RolloutCount { get; set; } = 0;
+    [ObservableProperty] public partial int RolloutCount { get; set; } = 0; partial void OnRolloutCountChanged(int oldValue, int newValue)
+    {
+        if (newValue != oldValue)
+        {
+            if (RolloutCount > 0)
+            {
+                ShelfCount = 0;
+            }
+        }
+    }
 
 
     // Reveal and gap properties
@@ -623,6 +681,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool Opening3PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool BackThicknessVisible { get; set; } = true;
+    [ObservableProperty] public partial bool GroupRolloutsVisible { get; set; } = true;
 
     //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()

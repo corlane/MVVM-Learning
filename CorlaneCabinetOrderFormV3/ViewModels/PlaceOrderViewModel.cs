@@ -186,6 +186,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                         {
                             var species = kv.Key;
                             var areaFt2 = kv.Value;
+                            Debug.WriteLine($"[Pricing] Cabinet {cab.Name}: Species '{species}' Area: {areaFt2} ft²");
                             decimal rate = GetRateForSpecies(species);
                             total += rate * (decimal)areaFt2;
                             total = total * cab.Qty;
@@ -199,13 +200,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                             {
                                 var ebSpecies = kv.Key;
                                 var feet = kv.Value;
+                                Debug.WriteLine($"[Pricing] Cabinet {cab.Name}: Edgeband Species '{ebSpecies}' Length: {feet} ft");
                                 decimal ebRate = GetEdgeBandRateForSpecies(ebSpecies);
                                 total += ebRate * (decimal)feet;
                                 totalEdgeBandingLength += feet * cab.Qty;
                             }
                         }
                     }
-
                 }
                 catch
                 {
@@ -216,7 +217,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             decimal sheetCost = sheetCount * 55; // price to cut a 4x8 sheet of plywood
             total += sheetCost;
 
-            Debug.WriteLine($"[Pricing] Total area: {totalArea} ft², Total edge length: {totalEdgeBandingLength} ft, Sheet count: {sheetCount}");
+            //Debug.WriteLine($"[Pricing] Total area: {totalArea} ft², Total edge length: {totalEdgeBandingLength} ft, Sheet count: {sheetCount}");
 
             return Math.Round(total, 2);
         }

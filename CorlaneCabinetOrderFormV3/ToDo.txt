@@ -4,42 +4,75 @@
 User side:
 
 Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
+
 Finish validation (don't foget to disable add, place order buttons etc. on invalid form) -- DONE. Most validation seems To work as intended. Check more via beta-testing.
 	Run Validation on tab change too -- shit doesn't work. The only thing that works is the validation textblocks. So be it. -- DONE. Most validation seems To work as intended. Check more via beta-testing.
+
 Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2. -- Looks like it is working on bedroom computer. Leave as is and check later.
+
 Implement FTP connection for order submission and material price retrieval
+
 Change pricing method to use material prices from FTP server
+
 Implement order status indicator
-Add drawer box and rollout 3D models and incorporate into material yield calculations  -- Drw boxes done. Rollouts next
-Add Sink Cabinet checkbox, and add special sink stretchers
-Add rollouts option	*** Working on this ***
-Add option for trash drawer
+
+Add drawer box and rollout 3D models and incorporate into material yield calculations  -- DONE
+
+Add Sink Cabinet checkbox, and add special sink stretchers (if possible)
+
+Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk about whether to allow adjustable shelves simultaneously
+
+Add option for trash drawer - could be just a rollout with a tall front
+
 Hide cabinet preview window when Defaults or Place Order tabs are active
+
 Implement Print button functionality
+
 Add Door Sizes List
+
 Add Drawer Box Sizes List
+
 Implement New button functionality
+
 Add "MODIFIED" label to title when editing existing order
+
 Doors should calculate for edgebanding, even though it is specified as "None".
+
 Hide back thickness selection for corner cabinets -- DONE
+
 When clicking on cabinet list, run dimensions thru converter to display in user's selected units before populating form fields -- DONE
+
 Panel thickness dropdown needs to change based on dimension format. As is, it won't populate properly. -- DONE
+
 Move UI elements to be more consistent across tabs
+
 Add separate selection for shelf count for uppers and lowers in Defaults
+
 Implement half-depth shelves for 90 deg corner cabinets
+
 If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on wheter cab has drws
+
 Add nailer on cabs with 1/4" back
+
+
 
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
 
 
+
 Corlane side:
 
+Get material yield correct -- *** WORKING ON THIS ***
+
 Add tab or window for order processing
+
 Save customer information & quoted price in job file
+
 Set up clickonce installer
+
 Add icon
+
 
 
 BUGS:
