@@ -36,7 +36,7 @@ Implement New button functionality
 
 Add "MODIFIED" label to title when editing existing order
 
-Doors should calculate for edgebanding, even though it is specified as "None".
+Doors should calculate for edgebanding, even though it is specified as "None". Currently they get 1 edge of "None". Needs to be 4 edges matching the door species. -- DONE
 
 Hide back thickness selection for corner cabinets -- DONE
 
@@ -102,3 +102,13 @@ When changing from Drawer to Std 1 drw cabinet, opening1 height is populated wit
 	NOTE: Should apply this to combobox types for upper cabinets too. -- DONE
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck.
+
+Account for edgebanding on bottom edge of upper end panels
+
+
+
+
+TESTING NOTES:
+
+Added Debug.writeline statements to Cab3Dviewmodel & PlaceOrderViewModel to log panel creation for material yield checking. Looks dead on accurate so far. Even accounts for toekick notches etc. Great!
+	Next will be to check edgebanding similarly. It was already there and commented out lol. So far looks to be perfect as well.

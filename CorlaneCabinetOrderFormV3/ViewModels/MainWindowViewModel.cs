@@ -37,6 +37,9 @@ public partial class MainWindowViewModel(ICabinetService cabinetService) : Obser
     private DefaultSettingsViewModel? _defaultsVm;
     public DefaultSettingsViewModel DefaultsVm => _defaultsVm ??= App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
 
+    private ProcessOrderViewModel? _processOrderVm;
+    public ProcessOrderViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<ProcessOrderViewModel>();
+
     [RelayCommand]
     private async Task SaveJob()
     {
