@@ -235,6 +235,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         };
 
         _cabinetService?.Add(newCabinet); // Add to shared service
+        _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
+        _mainVm?.IsModified = true;
     }
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
@@ -292,6 +294,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             selected.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
 
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
+            _mainVm?.IsModified = true;
         }
 
         else

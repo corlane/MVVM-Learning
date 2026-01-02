@@ -18,7 +18,7 @@ Implement order status indicator
 
 Add drawer box and rollout 3D models and incorporate into material yield calculations  -- DONE
 
-Add Sink Cabinet checkbox, and add special sink stretchers (if possible)
+Add Sink Cabinet checkbox, and add special sink stretchers (if possible). Will also need to add false front, and false front backing stretcher.
 
 Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk about whether to allow adjustable shelves simultaneously
 
@@ -28,13 +28,13 @@ Hide cabinet preview window when Defaults or Place Order tabs are active
 
 Implement Print button functionality
 
-Add Door Sizes List
+Add Door Sizes List -- *** WORKING ON THIS ***... functioning, but not accounting for reveals on drw fronts, also door count should be 0 for drawer cabinets.
 
 Add Drawer Box Sizes List
 
-Implement New button functionality
+Implement New button functionality -- DONE
 
-Add "MODIFIED" label to title when editing existing order
+Add "MODIFIED" label to title when editing existing order -- DONE
 
 Doors should calculate for edgebanding, even though it is specified as "None". Currently they get 1 edge of "None". Needs to be 4 edges matching the door species. -- DONE
 

@@ -1,0 +1,24 @@
+<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.DoorSizesListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid Background="Transparent">
+        <ListView x:Name="ListViewItems" ItemsSource="{Binding Items}" IsSynchronizedWithCurrentItem="True" Margin="4">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Cab#" Width="48" DisplayMemberBinding="{Binding CabinetNumber}"/>
+                    <GridViewColumn Header="Cabinet Name" Width="160" DisplayMemberBinding="{Binding CabinetName}"/>
+                    <GridViewColumn Header="Qty" Width="48" DisplayMemberBinding="{Binding Qty}"/>
+                    <GridViewColumn Header="Item" Width="140" DisplayMemberBinding="{Binding ItemType}"/>
+                    <GridViewColumn Header="Width" Width="100" DisplayMemberBinding="{Binding Width}"/>
+                    <GridViewColumn Header="Height" Width="100" DisplayMemberBinding="{Binding Height}"/>
+                    <GridViewColumn Header="Species" Width="140" DisplayMemberBinding="{Binding Species}"/>
+                    <GridViewColumn Header="Grain" Width="100" DisplayMemberBinding="{Binding GrainDirection}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>

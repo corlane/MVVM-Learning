@@ -181,6 +181,7 @@ public partial class CabinetListViewModel : ObservableValidator
         if (result == MessageBoxResult.Yes)
         {
             _cabinetService?.Remove(cabinet);
+            _mainVm?.IsModified = true;
         }
     }
 }

@@ -10,7 +10,7 @@
         xmlns:themes="clr-namespace:CorlaneCabinetOrderFormV3.Themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" 
+        Title="{Binding AppTitle}" 
         Height="1065" Width="1800"
         MinHeight="1065" MinWidth="1800"
         Background="{DynamicResource ABrush.Tone1.Background.Static}"
@@ -160,7 +160,7 @@
                 </Viewbox>
             </Button>
             <Label Content="Current Job:" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16"/>
-            <Label Content="{Binding CurrentJobName}" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="16" FontWeight="Bold"/>
+            <Label Content="{Binding DisplayJobName}" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="16" FontWeight="Bold"/>
         </StackPanel>
 
         <TabControl Grid.Row="1" Grid.Column="0" SelectedIndex="{Binding SelectedTabIndex}">
@@ -207,11 +207,11 @@
                     <views:CabinetListView/>
                 </TabItem>
 
-                <TabItem Header="Door Sizes List">
-                    
+                <TabItem Header="Door Sizes List" Padding="10">
+                    <views:DoorSizesListView/>
                 </TabItem>
 
-                <TabItem Header="Drawer Box Sizes List">
+                <TabItem Header="Drawer Box Sizes List" Padding="10">
                     
                 </TabItem>
             </TabControl>

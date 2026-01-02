@@ -182,6 +182,8 @@ public partial class PanelViewModel : ObservableValidator
         };
 
         _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
+        _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
+        _mainVm?.IsModified = true;
 
     }
 
@@ -203,6 +205,7 @@ public partial class PanelViewModel : ObservableValidator
             selected.PanelEBRight = PanelEBRight;
 
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
+            _mainVm?.IsModified = true;
         }
 
         else

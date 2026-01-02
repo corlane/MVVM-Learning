@@ -36,6 +36,7 @@ public partial class App : Application
                 services.AddTransient<Cabinet3DViewModel>();
                 services.AddTransient<PlaceOrderViewModel>();
                 services.AddTransient<ProcessOrderViewModel>();
+                services.AddTransient<DoorSizesListViewModel>();
             })
             .Build();
 
