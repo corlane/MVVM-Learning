@@ -9,18 +9,18 @@ using System.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
-public sealed partial class DoorSizesListViewModel : ObservableObject
+public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
 {
     private readonly ICabinetService _cabinetService;
     private readonly Cabinet3DViewModel _cabinet3D;
     private readonly DefaultSettingsService _defaults;
 
-    public DoorSizesListViewModel()
+    public DrawerBoxSizesListViewModel()
     {
         // Parameterless constructor for design-time support
     }
 
-    public DoorSizesListViewModel(ICabinetService cabinetService, Cabinet3DViewModel cabinet3D, DefaultSettingsService defaults)
+    public DrawerBoxSizesListViewModel(ICabinetService cabinetService, Cabinet3DViewModel cabinet3D, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService;
         _cabinet3D = cabinet3D;
@@ -37,7 +37,7 @@ public sealed partial class DoorSizesListViewModel : ObservableObject
         Rebuild();
     }
 
-    public ObservableCollection<FrontPartRow> DoorSizes { get; } = [];
+    public ObservableCollection<DrawerBoxRow> DrawerBoxSizes { get; } = [];
 
     private void Defaults_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -105,7 +105,7 @@ public sealed partial class DoorSizesListViewModel : ObservableObject
 
     public void Rebuild()
     {
-        DoorSizes.Clear();
+        DrawerBoxSizes.Clear();
 
         for (int i = 0; i < _cabinetService.Cabinets.Count; i++)
         {
@@ -115,18 +115,15 @@ public sealed partial class DoorSizesListViewModel : ObservableObject
 
             _cabinet3D.AccumulateMaterialAndEdgeTotals(cab);
 
-            foreach (var row in cab.FrontParts)
+            foreach (var row in cab.DrawerBoxes)
             {
-                var w = FormatDimension(row.Width);
-                var h = FormatDimension(row.Height);
-
-                DoorSizes.Add(row with
+                DrawerBoxSizes.Add(row with
                 {
                     CabinetNumber = cabinetNumber,
                     CabinetName = cabinetName,
-                    DisplayWidth = w,
-                    DisplayHeight = h,
-                    DisplaySize = $"{w} x {h}"
+                    DisplayHeight = FormatDimension(row.Height),
+                    DisplayWidth = FormatDimension(row.Width),
+                    DisplayLength = FormatDimension(row.Length)
                 });
             }
         }

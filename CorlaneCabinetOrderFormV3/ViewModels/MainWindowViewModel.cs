@@ -30,7 +30,8 @@ public partial class MainWindowViewModel : ObservableValidator
     {
         // design-time: nothing extra required here
     }
-  
+
+    [ObservableProperty] public partial bool ViewportVisible { get; set; } = true;
 
     // Lazy-resolved tab viewmodels — resolve once and reuse so validation runs against the same instances
     private BaseCabinetViewModel? _baseCabinetVm;
@@ -246,19 +247,33 @@ public partial class MainWindowViewModel : ObservableValidator
             {
                 case 0:
                     (BaseCabinetVm as IValidatableViewModel)?.RunValidationVisible();
+                    ViewportVisible = true;
                     break;
                 case 1:
                     (UpperCabinetVm as IValidatableViewModel)?.RunValidationVisible();
+                    ViewportVisible = true;
                     break;
                 case 2:
                     (FillerVm as IValidatableViewModel)?.RunValidationVisible();
+                    ViewportVisible = true;
                     break;
                 case 3:
                     (PanelVm as IValidatableViewModel)?.RunValidationVisible();
+                    ViewportVisible = true;
                     break;
                 case 4:
                     (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
+                    ViewportVisible = false;
                     break;
+                case 5:
+                    (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
+                    ViewportVisible = false;
+                    break;
+                case 6:
+                    (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
+                    ViewportVisible = false;
+                    break;
+
                 default:
                     break;
             }

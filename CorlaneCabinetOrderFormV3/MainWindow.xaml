@@ -8,6 +8,7 @@
         xmlns:views="clr-namespace:CorlaneCabinetOrderFormV3.Views"
         xmlns:b="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         xmlns:themes="clr-namespace:CorlaneCabinetOrderFormV3.Themes"
+        xmlns:converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="{Binding AppTitle}" 
@@ -20,6 +21,10 @@
     <d:Window.DataContext>
         <viewmodels:MainWindowViewModel/>
     </d:Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -94,7 +99,17 @@
                     </Rectangle>
                 </Viewbox>
             </Button>
-            <Button Width="42" Height="42" Margin="5,5,0,10" Command="{Binding PrintCommand}" HorizontalAlignment="Left">
+            <Button Width="42" Height="42" Margin="5,5,0,10" HorizontalAlignment="Left"
+                    Click="PrintButton_Click">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Print Cabinet List" Command="{Binding PrintCabinetListCommand}" />
+                        <MenuItem Header="Print Door List" Command="{Binding PrintDoorListCommand}" />
+                        <MenuItem Header="Print Drawer Box List" Command="{Binding PrintDrawerBoxListCommand}" />
+                    </ContextMenu>
+                </Button.ContextMenu>
+
+                <!-- keep your existing icon content exactly as-is -->
                 <Viewbox Width="30" Height="30" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                     <Rectangle Width="16 " Height="16">
                         <Rectangle.Resources>
@@ -128,9 +143,7 @@
                         </Rectangle.Fill>
                     </Rectangle>
                 </Viewbox>
-
-            </Button>
-
+            </Button>                
             <Button Width="42" Height="42" Margin="5,5,0,10" Command="{Binding NewJobCommand}" HorizontalAlignment="Left">
                 <Viewbox Width="30 " Height="30" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                     <Rectangle Width="16 " Height="16">
@@ -199,8 +212,10 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-            
-            <views:Cabinet3DView Grid.Column="0" Grid.Row="0"/>
+
+            <views:Cabinet3DView Grid.Column="0" Grid.Row="0" Visibility="{Binding DataContext.ViewportVisible,
+                     RelativeSource={RelativeSource AncestorType=Window},
+                     Converter={StaticResource BooleanToVisibilityConverter}}"/>
             
             <TabControl Grid.Row="1" Grid.Column="0">
                 <TabItem Header="Cabinet List" Padding="10">
@@ -212,7 +227,7 @@
                 </TabItem>
 
                 <TabItem Header="Drawer Box Sizes List" Padding="10">
-                    
+                    <views:DrawerBoxSizesListView/>
                 </TabItem>
             </TabControl>
 

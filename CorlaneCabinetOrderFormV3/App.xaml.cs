@@ -24,6 +24,7 @@ public partial class App : Application
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<DefaultSettingsService>();
                 services.AddSingleton<IPreviewService, PreviewService>();
+                services.AddSingleton<IPrintService, PrintService>();
 
                 // Register ViewModels as transients
                 //services.AddTransient<MainWindowViewModel>();
@@ -37,6 +38,7 @@ public partial class App : Application
                 services.AddTransient<PlaceOrderViewModel>();
                 services.AddTransient<ProcessOrderViewModel>();
                 services.AddTransient<DoorSizesListViewModel>();
+                services.AddTransient<DrawerBoxSizesListViewModel>();
             })
             .Build();
 

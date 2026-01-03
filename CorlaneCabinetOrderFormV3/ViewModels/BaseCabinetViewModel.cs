@@ -60,7 +60,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         // End test
         LoadDefaults();
-        ValidateAllProperties();
+        //ValidateAllProperties();
 
         if (_defaults != null)
         {

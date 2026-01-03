@@ -24,13 +24,13 @@ Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk ab
 
 Add option for trash drawer - could be just a rollout with a tall front
 
-Hide cabinet preview window when Defaults or Place Order tabs are active
+Hide cabinet preview window when Defaults or Place Order tabs are active -- DONE
 
-Implement Print button functionality
+Implement Print button functionality -- DONE
 
-Add Door Sizes List -- *** WORKING ON THIS ***... functioning, but not accounting for reveals on drw fronts, also door count should be 0 for drawer cabinets.
+Add Door Sizes List -- DONE
 
-Add Drawer Box Sizes List
+Add Drawer Box Sizes List -- DONE
 
 Implement New button functionality -- DONE
 
@@ -50,9 +50,9 @@ Add separate selection for shelf count for uppers and lowers in Defaults
 
 Implement half-depth shelves for 90 deg corner cabinets
 
-If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on wheter cab has drws
+If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on whether cab has drws
 
-Add nailer on cabs with 1/4" back
+Add nailer on cabs with 1/4" back, base and upper
 
 
 
@@ -104,7 +104,6 @@ When changing from Drawer to Std 1 drw cabinet, opening1 height is populated wit
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck.
 
 Account for edgebanding on bottom edge of upper end panels
-
 
 
 
