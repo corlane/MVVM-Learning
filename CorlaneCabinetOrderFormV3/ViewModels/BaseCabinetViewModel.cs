@@ -42,6 +42,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             LoadSelectedIfMine();
         };
 
+
         Width = "18";
         Height = "34.5";
         Depth = "24";
@@ -51,7 +52,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         RightDepth = "24";
         LeftBackWidth = "36";
         RightBackWidth = "36";
-        BackThickness = "0.75";
+        //BackThickness = "0.75";
         Style = Style1;
         ListRolloutCount = [1, 2];
 
@@ -70,6 +71,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     OnPropertyChanged(nameof(ListBackThickness));
             };
         }
+
+        LoadDefaults();
     }
 
 
@@ -114,6 +117,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 }
             }
             //LoadDefaults();
+            RecalculateFrontWidth();
             ResizeOpeningHeights();
             ResizeDrwFrontHeights();
             UpdatePreview();
@@ -184,12 +188,73 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Type-specific properties for BaseCabinetModel
 
     // Corner Cab specific properties
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            RecalculateFrontWidth();
+            RunValidationVisible();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; } = ""; partial void OnRightBackWidthChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            RecalculateFrontWidth();
+            RunValidationVisible();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; } = ""; partial void OnLeftFrontWidthChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
+            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
+            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateFrontWidth();
+            RunValidationVisible();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; } = ""; partial void OnRightFrontWidthChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
+            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
+            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateFrontWidth();
+            RunValidationVisible();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = ""; partial void OnLeftDepthChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
+            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
+            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateFrontWidth();
+            RunValidationVisible();
+        }
+    }
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = ""; partial void OnRightDepthChanged(string oldValue, string newValue)
+    {
+        if (newValue != oldValue)
+        {
+            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
+            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
+            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateFrontWidth();
+            RunValidationVisible();
+        }
+    }
+    [ObservableProperty] public partial string FrontWidth { get; set; } = "";
+    [ObservableProperty] public partial string LeftBackWidth90 { get; set; } = "";
+    [ObservableProperty] public partial string RightBackWidth90 { get; set; } = "";
 
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BackThickness { get; set; } = ""; partial void OnBackThicknessChanged(string oldValue, string newValue)
     {
@@ -886,6 +951,55 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
+    private void RecalculateFrontWidth()
+    {
+        if (_isResizing || _isMapping)
+            return;
+
+        // Only relevant for "Angle Front" (Style4). Clear it otherwise.
+        if (!string.Equals(Style, Style4, StringComparison.Ordinal))
+        {
+            FrontWidth = string.Empty;
+            return;
+        }
+
+        // For the angle-front cabinet, the polygon edge used in Cabinet3DViewModel is:
+        // p0 = (LeftDepth, 0)
+        // p1 = (RightBackWidth - 3/4, LeftBackWidth - RightDepth)
+        // frontWidth = distance(p0, p1)
+        try
+        {
+            double leftDepth = ConvertDimension.FractionToDouble(LeftDepth);
+            double rightDepth = ConvertDimension.FractionToDouble(RightDepth);
+            double leftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth);
+            double rightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth);
+
+            const double materialThickness34 = 0.75;
+
+            double p0x = leftDepth;
+            double p0y = materialThickness34;
+
+            double p1x = rightBackWidth - materialThickness34;
+            double p1y = leftBackWidth - rightDepth;
+
+            double vx = p1x - p0x;
+            double vy = p1y - p0y;
+
+            double frontWidth = Math.Sqrt((vx * vx) + (vy * vy));
+
+            // Format per default settings
+            string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
+            FrontWidth = string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase)
+                ? ConvertDimension.DoubleToFraction(frontWidth)
+                : frontWidth.ToString("0.####");
+        }
+        catch
+        {
+            // If any inputs are invalid/empty, just clear output.
+            FrontWidth = string.Empty;
+        }
+    }
+
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
         string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
@@ -1211,12 +1325,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         "Width","Height","Depth","TKHeight","TKDepth",
         "LeftBackWidth","RightBackWidth","LeftFrontWidth","RightFrontWidth",
-        "LeftDepth","RightDepth","BackThickness",
+        "LeftDepth","RightDepth","BackThickness", "FrontWidth",
         "OpeningHeight1","OpeningHeight2","OpeningHeight3","OpeningHeight4",
         "DrwFrontHeight1","DrwFrontHeight2","DrwFrontHeight3","DrwFrontHeight4",
         "LeftReveal","RightReveal","TopReveal","BottomReveal","GapWidth"
     };
-
 
     private void MapModelToViewModel(BaseCabinetModel model, string dimFormat)
     {

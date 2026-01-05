@@ -131,11 +131,11 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Left Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="textLeftBackWidthBase" Width="65" Text="CALC" VerticalAlignment="Center" Margin="16,0,0,0" IsReadOnly="True"/>
+                    <TextBox x:Name="textLeftBackWidthBase" Width="65" Text="{Binding LeftBackWidth90}" VerticalAlignment="Center" Margin="16,0,0,0" IsReadOnly="True" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Right Back Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="textRightBackWidthBase" Width="65" Text="CALC" VerticalAlignment="Center" Margin="8,0,0,0" IsReadOnly="True"/>
+                    <TextBox x:Name="textRightBackWidthBase" Width="65" Text="{Binding RightBackWidth90}" VerticalAlignment="Center" Margin="8,0,0,0" IsReadOnly="True" IsEnabled="False"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
@@ -196,7 +196,7 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Front Width" Margin="5,0,0,0" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="textFrontWidth45Base" Width="65" Text="CALC" VerticalAlignment="Center" Margin="35,0,0,0" IsReadOnly="True"/>
+                    <TextBox x:Name="textFrontWidth45Base" Width="65" Text="{Binding FrontWidth}" VerticalAlignment="Center" Margin="35,0,0,0" IsReadOnly="True" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>

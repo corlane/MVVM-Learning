@@ -18,7 +18,7 @@ Implement order status indicator
 
 Add drawer box and rollout 3D models and incorporate into material yield calculations  -- DONE
 
-Add Sink Cabinet checkbox, and add special sink stretchers (if possible). Will also need to add false front, and false front backing stretcher.
+Add Sink Cabinet checkbox or Style dropdown item, and add special sink stretchers (if possible). Will also need to add false front, and false front backing stretcher.
 
 Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk about whether to allow adjustable shelves simultaneously
 
@@ -61,17 +61,26 @@ OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D
 
 
 
+
+
+
 Corlane side:
 
-Get material yield correct -- *** WORKING ON THIS ***
+Get material yield correct -- Seems to be correct so far. Need to do more testing.
 
-Add tab or window for order processing
+Add tab or window for order processing -- DONE-ish. Basic functionality is there, but needs more work.
 
 Save customer information & quoted price in job file
 
 Set up clickonce installer
 
 Add icon
+
+Change image loading in Cabinet3DViewModel to utilize the grain direction setting. This will allow the removal of duplicate material images for horizontal and vertical grain.
+
+Account for edgebanding on bottom edge of upper end panels
+
+NOTE! 45 degree cab shows front width, which is the front width of the deck or top, not the corner-to-corner width. Should we change this? The math will be tricky.
 
 
 
@@ -101,9 +110,9 @@ Drw Count not being set when clicking on cabinet in list. More mapping problems?
 When changing from Drawer to Std 1 drw cabinet, opening1 height is populated with the default drwfront1 height. Fixed by adding LoadDefaults to ComboboxClosed event handler. -- DONE
 	NOTE: Should apply this to combobox types for upper cabinets too. -- DONE
 
-Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck.
+Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-Account for edgebanding on bottom edge of upper end panels
+
 
 
 

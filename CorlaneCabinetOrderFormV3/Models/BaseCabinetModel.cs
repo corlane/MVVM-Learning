@@ -12,6 +12,7 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial string RightFrontWidth { get; set; }
     [ObservableProperty] public partial string LeftDepth { get; set; }
     [ObservableProperty] public partial string RightDepth { get; set; }
+    [ObservableProperty] public partial string FrontWidth { get; set; }
     [ObservableProperty] public partial bool HasTK { get; set; }
     [ObservableProperty] public partial string TKHeight { get; set; }
     [ObservableProperty] public partial string TKDepth { get; set; }
@@ -70,4 +71,4 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool IncRollouts { get; set; }
     [ObservableProperty] public partial bool IncRolloutsInList { get; set; }
     [ObservableProperty] public partial int RolloutCount { get; set; }
-    }
+}
