@@ -101,6 +101,7 @@ public sealed class PrintService : IPrintService
 
     private static void AddCabinetTable(FlowDocument doc, IReadOnlyList<CabinetModel> cabinets, string dimensionFormat)
     {
+        int qtyTotal = cabinets.Sum(c => c.Qty);
         var table = CreateTable(
             headers:
             [
@@ -110,7 +111,7 @@ public sealed class PrintService : IPrintService
                 "Name",
                 "Width",
                 "Height",
-                "Depth"
+                "Depth",
             ],
             columnWidths:
             [
@@ -120,7 +121,7 @@ public sealed class PrintService : IPrintService
                 170,
                 80,
                 80,
-                80
+                80,
             ]);
 
         foreach (var cab in cabinets)
@@ -139,7 +140,7 @@ public sealed class PrintService : IPrintService
 
         doc.Blocks.Add(table);
 
-        doc.Blocks.Add(new Paragraph(new Run($"Total cabinets: {cabinets.Count}"))
+        doc.Blocks.Add(new Paragraph(new Run($"Total cabinets: {qtyTotal}"))
         {
             Margin = new Thickness(0, 8, 0, 0),
             FontStyle = FontStyles.Italic

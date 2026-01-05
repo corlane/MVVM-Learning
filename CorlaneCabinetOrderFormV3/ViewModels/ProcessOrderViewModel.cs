@@ -37,7 +37,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         // Example command if you later want to refresh from the PlaceOrderViewModel
         [RelayCommand]
-        private void RefreshFromPlaceOrder()
+        private static void RefreshFromPlaceOrder()
         {
             // If you add logic later (for example re-aggregate), you can call into the PlaceOrderViewModel.
             // Currently the MaterialTotals collection is shared, so UI updates as PlaceOrderViewModel mutates it.

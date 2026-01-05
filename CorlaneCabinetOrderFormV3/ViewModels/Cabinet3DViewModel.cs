@@ -227,6 +227,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         List<Point3D> toekickPoints;
         List<Point3D> backPoints;
         List<Point3D> stretcherPoints;
+        List<Point3D> sinkStretcherPoints;
         List<Point3D> shelfPoints;
         List<Point3D> doorPoints;
         List<Point3D> drwFrontPoints;
@@ -470,12 +471,12 @@ public partial class Cabinet3DViewModel : ObservableObject
                 //Debug.WriteLine("Back");
 
                 backPoints =
-                    [
-                        new (0,0,0),
-                        new (interiorWidth,0,0),
-                        new (interiorWidth,interiorHeight,0),
-                        new (0,interiorHeight,0)
-                    ];
+                [
+                    new (0,0,0),
+                    new (interiorWidth,0,0),
+                    new (interiorWidth,interiorHeight,0),
+                    new (0,interiorHeight,0)
+                ];
                 back = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34 + tk_Height, 0, 0, 0, 0);
             }
@@ -484,13 +485,13 @@ public partial class Cabinet3DViewModel : ObservableObject
                 //Debug.WriteLine("Back");
 
                 backPoints =
-                    [
-                        new (0,0,0),
-                        new (width,0,0),
-                        new (width,height-tk_Height,0),
-                        new (0,height-tk_Height,0)
-                    ];
-                back = CreatePanel(backPoints, MaterialThickness14, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                [
+                    new (0,0,0),
+                    new (width,0,0),
+                    new (width,height-tk_Height,0),
+                    new (0,height-tk_Height,0)
+                ];
+                back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
             }
 
@@ -504,6 +505,23 @@ public partial class Cabinet3DViewModel : ObservableObject
                 stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
                 cabinet.Children.Add(stretcher);
+
+                if (baseCab.SinkCabinet)
+                {
+                    //Debug.WriteLine("Sink Stretcher");
+
+                    sinkStretcherPoints =
+                    [
+                        new (0,0,0),
+                        new (interiorWidth,0,0),
+                        new (interiorWidth,opening1Height,0),
+                        new (0,opening1Height,0)
+                    ];
+
+                    stretcher = CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
+                    cabinet.Children.Add(stretcher);
+                }
             }
 
             if (cabType == style2)
@@ -560,6 +578,23 @@ public partial class Cabinet3DViewModel : ObservableObject
                     opening3HeightAdjusted += MaterialThickness34; // moves the reference to the bottom of the stretcher
                     stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted - opening3HeightAdjusted, 270, 0, 0);
+                    cabinet.Children.Add(stretcher);
+                }
+
+                if (baseCab.SinkCabinet)
+                {
+                    //Debug.WriteLine("Sink Stretcher");
+
+                    sinkStretcherPoints =
+                    [
+                        new (0,0,0),
+                        new (interiorWidth,0,0),
+                        new (interiorWidth,opening1Height,0),
+                        new (0,opening1Height,0)
+                    ];
+
+                    stretcher = CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
             }
@@ -1945,7 +1980,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (width,height,0),
                         new (0,height,0)
                     ];
-                back = CreatePanel(backPoints, MaterialThickness14, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+                back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(back, -(width / 2), 0, -MaterialThickness14, 0, 0, 0);
             }
 

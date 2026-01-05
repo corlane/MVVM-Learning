@@ -18,11 +18,11 @@ Implement order status indicator
 
 Add drawer box and rollout 3D models and incorporate into material yield calculations  -- DONE
 
-Add Sink Cabinet checkbox or Style dropdown item, and add special sink stretchers (if possible). Will also need to add false front, and false front backing stretcher.
+Add Sink Cabinet checkbox. Will also need to add false front, and false front backing stretcher. -- DONE
 
 Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk about whether to allow adjustable shelves simultaneously
 
-Add option for trash drawer - could be just a rollout with a tall front
+Add option for trash drawer - Just a 12" tall drawer box. 
 
 Hide cabinet preview window when Defaults or Place Order tabs are active -- DONE
 
@@ -56,7 +56,7 @@ Add nailer on cabs with 1/4" back, base and upper
 
 
 
-OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later.
+OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
 
 
@@ -82,7 +82,7 @@ Account for edgebanding on bottom edge of upper end panels
 
 NOTE! 45 degree cab shows front width, which is the front width of the deck or top, not the corner-to-corner width. Should we change this? The math will be tricky.
 
-
+1/4" backs need to add 1/4" PFP to material totals
 
 BUGS:
 
@@ -112,8 +112,9 @@ When changing from Drawer to Std 1 drw cabinet, opening1 height is populated wit
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
+Total Cabinets on printed cutlist seems to only be counting line items, not total cabinets including quantities -- DONE
 
-
+Do not allow duplicate cabinet names
 
 
 TESTING NOTES:

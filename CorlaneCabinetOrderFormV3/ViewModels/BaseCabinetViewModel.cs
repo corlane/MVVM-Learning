@@ -124,6 +124,24 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RunValidationVisible();
         }
     }
+    [ObservableProperty] public partial bool SinkCabinet { get; set; } = false; partial void OnSinkCabinetChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            IncDrwBoxInListOpening1 = (!newValue);
+            IncDrwBoxOpening1 = (!newValue);
+            DrillSlideHolesOpening1 = (!newValue);
+            UpdatePreview();
+        }
+
+        if (!newValue)
+        {
+            IncDrwBoxInListOpening1 = (!newValue);
+            IncDrwBoxOpening1 = (!newValue);
+            DrillSlideHolesOpening1 = (!newValue);
+            UpdatePreview();
+        }
+    }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
     {
@@ -1096,7 +1114,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString(),
             IncRollouts = IncRollouts,
             IncRolloutsInList = IncRolloutsInList,
-            RolloutCount = RolloutCount
+            RolloutCount = RolloutCount,
+            SinkCabinet = SinkCabinet
         };
 
         _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
@@ -1182,6 +1201,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncRollouts = IncRollouts;
             selected.IncRolloutsInList = IncRolloutsInList;
             selected.RolloutCount = RolloutCount;
+            selected.SinkCabinet = SinkCabinet;
+
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
         }
@@ -1312,7 +1333,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GapWidth = GapWidth,
             IncRollouts = IncRollouts,
             RolloutCount = RolloutCount,
-            DrwStyle = DrwStyle
+            DrwStyle = DrwStyle,
+            SinkCabinet = SinkCabinet
         };
 
         // Request preview using the tab index owner token (Base tab = 0)

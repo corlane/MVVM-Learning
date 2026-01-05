@@ -257,7 +257,7 @@
             Background="{Binding Notification2Background}"
             Padding="40,10,40,10"
             CornerRadius="6"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Right"
             VerticalAlignment="Center"
             Margin="0"
             Visibility="{Binding IsNotification2Visible, Converter={StaticResource B2VConverter}}"

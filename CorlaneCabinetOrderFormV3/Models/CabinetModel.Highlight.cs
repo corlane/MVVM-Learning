@@ -6,5 +6,5 @@ public partial class CabinetModel
 {
     // Temporary UI-only flag used to animate/highlight a row when recently updated.
     [ObservableProperty]
-    private bool isHighlighted;
+    public partial bool IsHighlighted { get; set; }
 }

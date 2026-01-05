@@ -9,7 +9,7 @@ public partial class MaterialTotal : ObservableObject
     [ObservableProperty] private double _quantity; // ft² for panels, ft for edgebanding
     [ObservableProperty] private string _unit = ""; // "ft²" or "ft"
     [ObservableProperty] private decimal _unitPrice;
-
+    [ObservableProperty] private double _sqFt;
     partial void OnQuantityChanged(double oldValue, double newValue)
     {
         OnPropertyChanged(nameof(LineTotal));

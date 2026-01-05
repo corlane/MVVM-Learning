@@ -42,13 +42,19 @@
 
 
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Base Cabinet Style" Margin="5,5,5,5" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-            <ComboBox Name="comboCabType" Width="132" Margin="0,15,0,10" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Style, UpdateSourceTrigger=PropertyChanged}">
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="DropDownClosed">
-                        <behaviors:InvokeCommandAction Command="{Binding LoadDefaultsCommand}"/>
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
-            </ComboBox>
+            <StackPanel Orientation="Vertical">
+                <Label Content="Cabinet Type:" Margin="0,0,0,-8"/>
+                <ComboBox Name="comboCabType" Width="132" Margin="0,15,0,10" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Style, UpdateSourceTrigger=PropertyChanged}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="DropDownClosed">
+                            <behaviors:InvokeCommandAction Command="{Binding LoadDefaultsCommand}"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </ComboBox>
+
+                <CheckBox x:Name="checkSinkCabinet" Content="Sink Cabinet" Margin="10,5,5,10" IsChecked="{Binding SinkCabinet}"
+                              Visibility="{Binding SinkCabinetVisibility, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </StackPanel>
         </GroupBox>
 
         <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseDimensions" Header="Dimensions" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
@@ -210,7 +216,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="Toekick" Margin="5,100,5,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Toekick" Margin="5,140,5,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkHasTK" Content="Has Toekick" Margin="10,10,10,0" IsChecked="{Binding HasTK}"/>
 
@@ -303,9 +309,9 @@
                                                 Text="{Binding OpeningHeight1, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
                                     <ToggleButton x:Name="checkShowPropertiesOpening1" Grid.Row="0" Grid.Column="2" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding Opening1PropertiesVisible}" IsTabStop="False"/>
                                     <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <ToggleButton x:Name="checkIncDrwBoxOpening1" Content="Supply Drw. Box" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwBoxOpening1}"/>
-                                        <ToggleButton x:Name="checkDrillSlideHolesOpening1" Content="Drill Slide Mounting Holes" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding DrillSlideHolesOpening1}"/>
-                                        <ToggleButton x:Name="checkIncDrwBoxInListOpening1" Content="Incl. Drw. Box in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening1}"/>
+                                        <ToggleButton x:Name="checkIncDrwBoxOpening1" Content="Supply Drw. Box" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwBoxOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}"/>
+                                        <ToggleButton x:Name="checkDrillSlideHolesOpening1" Content="Drill Slide Mounting Holes" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding DrillSlideHolesOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}"/>
+                                        <ToggleButton x:Name="checkIncDrwBoxInListOpening1" Content="Incl. Drw. Box in Sizes List" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}"/>
                                     </StackPanel>
 
                                 </StackPanel>

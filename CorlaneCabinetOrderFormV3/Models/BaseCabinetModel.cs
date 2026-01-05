@@ -71,4 +71,5 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool IncRollouts { get; set; }
     [ObservableProperty] public partial bool IncRolloutsInList { get; set; }
     [ObservableProperty] public partial int RolloutCount { get; set; }
+    [ObservableProperty] public partial bool SinkCabinet { get; set; }
 }
