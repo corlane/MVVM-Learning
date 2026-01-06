@@ -10,7 +10,7 @@ Finish validation (don't foget to disable add, place order buttons etc. on inval
 
 Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2. -- Looks like it is working on bedroom computer. Leave as is and check later.
 
-Implement FTP connection for order submission and material price retrieval
+Implement FTP connection for order submission and material price retrieval *** WORKING ON THIS*** Material prices done...I think.
 
 Change pricing method to use material prices from FTP server
 
@@ -121,3 +121,5 @@ TESTING NOTES:
 
 Added Debug.writeline statements to Cab3Dviewmodel & PlaceOrderViewModel to log panel creation for material yield checking. Looks dead on accurate so far. Even accounts for toekick notches etc. Great!
 	Next will be to check edgebanding similarly. It was already there and commented out lol. So far looks to be perfect as well.
+
+Got material prices upload/download working. Next is to check/implement those prices being used in the pricing calculations.

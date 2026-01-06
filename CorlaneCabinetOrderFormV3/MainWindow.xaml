@@ -202,7 +202,7 @@
                 <views:DefaultSettingsView DataContext="{Binding DefaultsVm}"/>
             </TabItem>
 
-            <TabItem Header="Process Order" Padding="10" Width="120">
+            <TabItem Header="Process Order" Padding="10" Width="120" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <views:ProcessOrderView DataContext="{Binding ProcessOrderVm}"/>
             </TabItem>
         </TabControl>

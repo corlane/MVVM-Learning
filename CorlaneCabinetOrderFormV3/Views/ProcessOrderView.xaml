@@ -1,4 +1,4 @@
-﻿            <UserControl x:Class="CorlaneCabinetOrderFormV3.Views.ProcessOrderView"
+﻿            <!--<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.ProcessOrderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,7 +13,7 @@
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
-    <!-- Design-time DataContext so the designer/intellisense shows the columns -->
+    --><!-- Design-time DataContext so the designer/intellisense shows the columns --><!--
     <d:UserControl.DataContext>
         <viewmodels:ProcessOrderViewModel/>
     </d:UserControl.DataContext>
@@ -86,5 +86,119 @@
                 </GridView>
             </ListView.View>
         </ListView>
+    </Grid>
+</UserControl>-->
+
+
+
+
+
+
+
+
+
+
+
+<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.ProcessOrderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="920" d:DesignWidth="1000"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}">
+
+    <d:UserControl.DataContext>
+        <viewmodels:ProcessOrderViewModel/>
+    </d:UserControl.DataContext>
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Download Prices" Padding="16,6" Margin="0,0,10,0"
+                    Command="{Binding DownloadPricesCommand}" />
+            <Button Content="Upload material-prices.json" Padding="16,6" Margin="0,0,10,0"
+                    Command="{Binding UploadPricesCommand}" />
+
+            <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Header="Sheet Materials" Grid.Row="0" Margin="0,0,0,10">
+                <DataGrid ItemsSource="{Binding SheetMaterials}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="True"
+                          CanUserDeleteRows="True"
+                          IsReadOnly="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Species"
+                                            Binding="{Binding Species, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="2*"/>
+
+                        <DataGridTextColumn Header="Price / SqFt"
+                    Binding="{Binding PricePerSqFt, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
+                    Width="*"/>
+
+                        <DataGridTextColumn Header="Sheet Width (in)"
+                    Binding="{Binding SheetWidthIn, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
+                    Width="*"/>
+
+                        <DataGridTextColumn Header="Sheet Length (in)"
+                    Binding="{Binding SheetLengthIn, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
+                    Width="*"/>
+                        
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <GroupBox Header="Edgebanding" Grid.Row="1" Margin="0,0,0,10">
+                <DataGrid ItemsSource="{Binding EdgeBanding}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="True"
+                          CanUserDeleteRows="True"
+                          IsReadOnly="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Species"
+                                            Binding="{Binding Species, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="2*"/>
+
+                        <DataGridTextColumn Header="Price / Ft"
+                    Binding="{Binding PricePerFt, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
+                    Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+                <Label Content="CNC Price / Sheet:" VerticalAlignment="Center" />
+                <TextBox Width="120" Margin="8,0,20,0"
+         Text="{Binding CncPricePerSheet, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}" />
+
+                <Label Content="Default Yield:" VerticalAlignment="Center" />
+                <TextBox Width="120" Margin="8,0,0,0"
+         Text="{Binding DefaultSheetYield, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}" />
+            </StackPanel>
+
+            <GroupBox Header="Yield Override (JSON Dictionary)" Grid.Row="3">
+                <TextBox Text="{Binding YieldBySpeciesJson, UpdateSourceTrigger=PropertyChanged}"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         TextWrapping="NoWrap" />
+            </GroupBox>
+        </Grid>
     </Grid>
 </UserControl>

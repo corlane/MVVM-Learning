@@ -31,6 +31,9 @@ public partial class MainWindowViewModel : ObservableValidator
         // design-time: nothing extra required here
     }
 
+    [ObservableProperty]
+    public partial bool IsAdmin { get; set; } = true;
+
     [ObservableProperty] public partial bool ViewportVisible { get; set; } = true;
 
     // Lazy-resolved tab viewmodels — resolve once and reuse so validation runs against the same instances
