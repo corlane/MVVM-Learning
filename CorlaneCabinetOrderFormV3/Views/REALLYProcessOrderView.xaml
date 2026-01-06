@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.REALLYProcessOrderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             xmlns:views="clr-namespace:CorlaneCabinetOrderFormV3.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="920" d:DesignWidth="1000"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}">
+
+    <d:UserControl.DataContext>
+        <viewmodels:REALLYProcessOrderViewModel/>
+    </d:UserControl.DataContext>
+    
+    <Grid>
+        <TabControl Margin="0,10,0,0">
+            
+            <TabItem Header="Customer Info" Padding="10">
+                <views:POCustomerInfoView DataContext="{Binding POCustomerInfoVm}"/>
+            </TabItem>
+
+            <TabItem Header="Batch List" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Job Material List" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Toekick" Padding="10">
+                
+            </TabItem>
+
+            <TabItem Header="Edgebanding" Padding="10">
+                
+            </TabItem>
+
+            <TabItem Header="Hinge Holes" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Drawer Boxes" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Cabinet Species" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Include Doors" Padding="10">
+
+            </TabItem>
+            
+            <TabItem Header="Door Species" Padding="10">
+
+            </TabItem>
+            
+            <TabItem Header="Corner Cabinet Dims" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Notes" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Reveals/Gaps" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Door/Drw Grain Dir." Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Opening/Drw Front Heights" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Edgebanding Species" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Door/Drw Front Species" Padding="10">
+
+            </TabItem>
+
+            <TabItem Header="Base Cab Top Type" Padding="10">
+
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Media;
 using System;
+using CorlaneCabinetOrderFormV3.Views;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -36,6 +37,8 @@ public partial class MainWindowViewModel : ObservableValidator
 
     [ObservableProperty] public partial bool ViewportVisible { get; set; } = true;
 
+    [ObservableProperty] public partial bool CabinetListVisible { get; set; } = true;
+
     // Lazy-resolved tab viewmodels — resolve once and reuse so validation runs against the same instances
     private BaseCabinetViewModel? _baseCabinetVm;
     public BaseCabinetViewModel BaseCabinetVm => _baseCabinetVm ??= App.ServiceProvider.GetRequiredService<BaseCabinetViewModel>();
@@ -58,6 +61,12 @@ public partial class MainWindowViewModel : ObservableValidator
     private ProcessOrderViewModel? _processOrderVm;
     public ProcessOrderViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<ProcessOrderViewModel>();
 
+    private REALLYProcessOrderViewModel? _reallyProcessOrderVm;
+    public REALLYProcessOrderViewModel REALLYProcessOrderVm => _reallyProcessOrderVm ??= App.ServiceProvider.GetRequiredService<REALLYProcessOrderViewModel>();
+
+    private POCustomerInfoViewModel? _poCustomerInfoVm;
+    public POCustomerInfoViewModel POCustomerInfoVm => _poCustomerInfoVm ??= App.ServiceProvider.GetRequiredService<POCustomerInfoViewModel>();
+
     [RelayCommand]
     private async Task SaveJob()
     {
@@ -74,7 +83,19 @@ public partial class MainWindowViewModel : ObservableValidator
                 _suppressIsModified = true;
                 try
                 {
-                    await _cabinet_service.SaveAsync(dialog.FileName);
+                    var customer = new JobCustomerInfo
+                    {
+                        CompanyName = POCustomerInfoVm.CompanyName,
+                        ContactName = POCustomerInfoVm.ContactName,
+                        PhoneNumber = POCustomerInfoVm.PhoneNumber,
+                        EMail = POCustomerInfoVm.EMail,
+                        Street = POCustomerInfoVm.Street,
+                        City = POCustomerInfoVm.City,
+                        ZipCode = POCustomerInfoVm.ZipCode
+                    };
+
+                    await _cabinet_service.SaveAsync(dialog.FileName, customer, POCustomerInfoVm.QuotedTotalPrice);
+
                     Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Saved", Brushes.Green, 4000);
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     IsModified = false;
@@ -91,6 +112,7 @@ public partial class MainWindowViewModel : ObservableValidator
         }
     }
 
+
     [RelayCommand]
     private async Task LoadJob()
     {
@@ -106,7 +128,20 @@ public partial class MainWindowViewModel : ObservableValidator
             {
                 try
                 {
-                    await _cabinet_service.LoadAsync(dialog.FileName);
+                    var job = await _cabinet_service.LoadAsync(dialog.FileName);
+
+                    if (job != null)
+                    {
+                        POCustomerInfoVm.CompanyName = job.CustomerInfo.CompanyName;
+                        POCustomerInfoVm.ContactName = job.CustomerInfo.ContactName;
+                        POCustomerInfoVm.PhoneNumber = job.CustomerInfo.PhoneNumber;
+                        POCustomerInfoVm.EMail = job.CustomerInfo.EMail;
+                        POCustomerInfoVm.Street = job.CustomerInfo.Street;
+                        POCustomerInfoVm.City = job.CustomerInfo.City;
+                        POCustomerInfoVm.ZipCode = job.CustomerInfo.ZipCode;
+                        POCustomerInfoVm.QuotedTotalPrice = job.QuotedTotalPrice;
+                    }
+
                     Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Loaded", Brushes.Green, 4000);
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     IsModified = false;
@@ -122,6 +157,7 @@ public partial class MainWindowViewModel : ObservableValidator
             }
         }
     }
+
 
     // New: Create a fresh job state — clear cabinets, reset UI state and recreate tab VMs so they match freshly booted defaults.
     [RelayCommand]
@@ -182,6 +218,7 @@ public partial class MainWindowViewModel : ObservableValidator
             _placeOrderVm = null;
             _defaultsVm = null;
             _processOrderVm = null;
+            _reallyProcessOrderVm = null;
 
             OnPropertyChanged(nameof(BaseCabinetVm));
             OnPropertyChanged(nameof(UpperCabinetVm));
@@ -190,6 +227,7 @@ public partial class MainWindowViewModel : ObservableValidator
             OnPropertyChanged(nameof(PlaceOrderVm));
             OnPropertyChanged(nameof(DefaultsVm));
             OnPropertyChanged(nameof(ProcessOrderVm));
+            OnPropertyChanged(nameof(REALLYProcessOrderVm));
 
             // 5) Ensure PlaceOrder tab's transient state is fresh (material totals, pricing)
             try
@@ -251,30 +289,37 @@ public partial class MainWindowViewModel : ObservableValidator
                 case 0:
                     (BaseCabinetVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
+                    CabinetListVisible = true;
                     break;
                 case 1:
                     (UpperCabinetVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
+                    CabinetListVisible = true;
                     break;
                 case 2:
                     (FillerVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
+                    CabinetListVisible = true;
                     break;
                 case 3:
                     (PanelVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
+                    CabinetListVisible = true;
                     break;
                 case 4:
                     (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
+                    CabinetListVisible = true;
                     break;
                 case 5:
-                    (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
+                    (DefaultsVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
+                    CabinetListVisible = true;
                     break;
-                case 6:
-                    (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
+                case 7:
+                    (REALLYProcessOrderVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
+                    CabinetListVisible = false;
                     break;
 
                 default:

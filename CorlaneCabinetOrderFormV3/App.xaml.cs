@@ -25,6 +25,8 @@ public partial class App : Application
                 services.AddSingleton<DefaultSettingsService>();
                 services.AddSingleton<IPreviewService, PreviewService>();
                 services.AddSingleton<IPrintService, PrintService>();
+                services.AddSingleton<IMaterialPricesService, MaterialPricesService>();
+                services.AddSingleton<POCustomerInfoViewModel>();
 
                 // Register ViewModels as transients
                 //services.AddTransient<MainWindowViewModel>();
@@ -37,6 +39,7 @@ public partial class App : Application
                 services.AddTransient<Cabinet3DViewModel>();
                 services.AddTransient<PlaceOrderViewModel>();
                 services.AddTransient<ProcessOrderViewModel>();
+                services.AddTransient<REALLYProcessOrderViewModel>();
                 services.AddTransient<DoorSizesListViewModel>();
                 services.AddTransient<DrawerBoxSizesListViewModel>();
             })
@@ -45,6 +48,17 @@ public partial class App : Application
         ServiceProvider = host.Services;
         var defaults = ServiceProvider.GetRequiredService<DefaultSettingsService>();
         await defaults.LoadAsync();
+
+        // NEW: best-effort material prices refresh on startup
+        try
+        {
+            var prices = ServiceProvider.GetRequiredService<IMaterialPricesService>();
+            await prices.RefreshFromServerAsync();
+        }
+        catch
+        {
+            // ignore: app can run offline
+        }
 
         // Apply persisted theme (if any) before creating/showing MainWindow
         if (!string.IsNullOrWhiteSpace(defaults.DefaultTheme))

@@ -1,67 +1,4 @@
-﻿//using CorlaneCabinetOrderFormV3.Models;
-//using System.Collections.ObjectModel;
-//using System.IO;
-//using System.Text.Json;
-//using System.Threading.Tasks;
-
-//namespace CorlaneCabinetOrderFormV3.Services;
-
-//public class CabinetService : ICabinetService
-//{
-//    public ObservableCollection<CabinetModel> Cabinets { get; } = new();  // Holds mixed subtypes
-
-//    public void Add(CabinetModel cabinet)  // Works for any subtype
-//    {
-//        Cabinets.Add(cabinet);
-//    }
-
-//    public void Remove(CabinetModel cabinet)
-//    {
-//        Cabinets.Remove(cabinet);
-//    }
-
-
-//    public async Task SaveAsync(string filePath)
-//    {
-//        var options = new JsonSerializerOptions
-//        {
-//            WriteIndented = true,  // Pretty-print JSON for readability
-//            IncludeFields = true,   // If needed for any fields
-//        };
-//        var json = JsonSerializer.Serialize(Cabinets, options);
-//        await File.WriteAllTextAsync(filePath, json);
-//    }
-
-//    public async Task LoadAsync(string filePath)
-//    {
-//        if (!File.Exists(filePath)) return;
-
-//        var json = await File.ReadAllTextAsync(filePath);
-//        var loadedCabinets = JsonSerializer.Deserialize<ObservableCollection<CabinetModel>>(json);
-//        if (loadedCabinets != null)
-//        {
-//            Cabinets.Clear();
-//            foreach (var cabinet in loadedCabinets)
-//            {
-//                Cabinets.Add(cabinet);  // Auto-deserializes to correct subtypes
-//            }
-//        }
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
@@ -83,7 +20,7 @@ public class CabinetService : ICabinetService
         Cabinets.Remove(cabinet);
     }
 
-    public async Task SaveAsync(string filePath)
+    public async Task SaveAsync(string filePath, JobCustomerInfo customerInfo, decimal quotedTotalPrice)
     {
         var options = new JsonSerializerOptions
         {
@@ -91,20 +28,49 @@ public class CabinetService : ICabinetService
             IncludeFields = true,
         };
 
-        var json = JsonSerializer.Serialize(Cabinets, options);
-        await File.WriteAllTextAsync(filePath, json);
+        var job = new JobFileModel
+        {
+            Cabinets = new ObservableCollection<CabinetModel>(Cabinets.ToList()),
+            CustomerInfo = customerInfo ?? new JobCustomerInfo(),
+            QuotedTotalPrice = quotedTotalPrice
+        };
+
+        var json = JsonSerializer.Serialize(job, options);
+        await File.WriteAllTextAsync(filePath, json).ConfigureAwait(false);
     }
 
-    public async Task LoadAsync(string filePath)
+    public async Task<JobFileModel?> LoadAsync(string filePath)
     {
-        if (!File.Exists(filePath)) return;
+        if (!File.Exists(filePath)) return null;
 
-        var json = await File.ReadAllTextAsync(filePath);
-        var loadedCabinets = JsonSerializer.Deserialize<ObservableCollection<CabinetModel>>(json);
-        if (loadedCabinets == null) return;
+        var options = new JsonSerializerOptions
+        {
+            IncludeFields = true,
+        };
 
-        // IMPORTANT: Prevent UI churn and container glitches by doing the update on the UI thread,
-        // and by letting WPF process the Reset before adding items.
+        var json = await File.ReadAllTextAsync(filePath).ConfigureAwait(false);
+        if (string.IsNullOrWhiteSpace(json)) return null;
+
+        JobFileModel? loadedJob;
+
+        // Backward compat: old files were just an array of cabinets.
+        if (json.TrimStart().StartsWith('['))
+        {
+            var loadedCabinets = JsonSerializer.Deserialize<ObservableCollection<CabinetModel>>(json, options) ?? new();
+            loadedJob = new JobFileModel
+            {
+                Cabinets = loadedCabinets,
+                CustomerInfo = new JobCustomerInfo(),
+                QuotedTotalPrice = 0m
+            };
+        }
+        else
+        {
+            loadedJob = JsonSerializer.Deserialize<JobFileModel>(json, options);
+        }
+
+        if (loadedJob == null) return null;
+
         if (System.Windows.Application.Current?.Dispatcher != null)
         {
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
@@ -114,7 +80,7 @@ public class CabinetService : ICabinetService
 
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                foreach (var cabinet in loadedCabinets)
+                foreach (var cabinet in loadedJob.Cabinets)
                 {
                     Cabinets.Add(cabinet);
                 }
@@ -123,10 +89,12 @@ public class CabinetService : ICabinetService
         else
         {
             Cabinets.Clear();
-            foreach (var cabinet in loadedCabinets)
+            foreach (var cabinet in loadedJob.Cabinets)
             {
                 Cabinets.Add(cabinet);
             }
         }
+
+        return loadedJob;
     }
 }

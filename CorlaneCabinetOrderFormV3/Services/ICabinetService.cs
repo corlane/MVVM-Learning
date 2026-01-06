@@ -9,6 +9,6 @@ public interface ICabinetService
     void Add(CabinetModel cabinet);
     void Remove(CabinetModel cabinet);
 
-    Task SaveAsync(string filePath);  // New: Save to file
-    Task LoadAsync(string filePath);  // New: Load from file
+    Task SaveAsync(string filePath, JobCustomerInfo customerInfo, decimal quotedTotalPrice);
+    Task<JobFileModel?> LoadAsync(string filePath);
 }

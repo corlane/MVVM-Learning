@@ -202,9 +202,14 @@
                 <views:DefaultSettingsView DataContext="{Binding DefaultsVm}"/>
             </TabItem>
 
-            <TabItem Header="Process Order" Padding="10" Width="120" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <TabItem Header="Material Prices" Padding="10" Width="120" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <views:ProcessOrderView DataContext="{Binding ProcessOrderVm}"/>
             </TabItem>
+
+            <TabItem Header="Process Order" Padding="10" Width="120" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <views:REALLYProcessOrderView DataContext="{Binding REALLYProcessOrderVm}"/>
+            </TabItem>
+            
         </TabControl>
 
         <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="0,10,0,0">

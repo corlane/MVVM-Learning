@@ -3,11 +3,11 @@
 namespace CorlaneCabinetOrderFormV3.Views
 {
     /// <summary>
-    /// Interaction logic for ProcessOrderView.xaml
+    /// Interaction logic for REALLYProcessOrderView.xaml
     /// </summary>
-    public partial class ProcessOrderView : UserControl
+    public partial class REALLYProcessOrderView : UserControl
     {
-        public ProcessOrderView()
+        public REALLYProcessOrderView()
         {
             InitializeComponent();
         }

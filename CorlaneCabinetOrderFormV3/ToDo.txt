@@ -10,9 +10,9 @@ Finish validation (don't foget to disable add, place order buttons etc. on inval
 
 Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2. -- Looks like it is working on bedroom computer. Leave as is and check later.
 
-Implement FTP connection for order submission and material price retrieval *** WORKING ON THIS*** Material prices done...I think.
+Implement connection for order submission and material price retrieval -- DONE
 
-Change pricing method to use material prices from FTP server
+Change pricing method to use material prices from server -- DONE
 
 Implement order status indicator
 
@@ -70,7 +70,7 @@ Get material yield correct -- Seems to be correct so far. Need to do more testin
 
 Add tab or window for order processing -- DONE-ish. Basic functionality is there, but needs more work.
 
-Save customer information & quoted price in job file
+Save customer information & quoted price in job file -- DONE
 
 Set up clickonce installer
 
@@ -83,6 +83,9 @@ Account for edgebanding on bottom edge of upper end panels
 NOTE! 45 degree cab shows front width, which is the front width of the deck or top, not the corner-to-corner width. Should we change this? The math will be tricky.
 
 1/4" backs need to add 1/4" PFP to material totals
+
+
+
 
 BUGS:
 
@@ -116,6 +119,23 @@ Total Cabinets on printed cutlist seems to only be counting line items, not tota
 
 Do not allow duplicate cabinet names
 
+
+Make these tabs for global item mods, default hidden, only shown when job contains the relavent modifications:
+    Toekick
+	Edgebanding
+	Hinge Holes
+	Drawer Slide Holes
+	Drawer Boxes
+	Species
+	Include Doors
+	Door Species
+	Corner Cabinet Dims
+	Notes
+	Reveals/Gaps
+	Door/Drw Grain Dir.
+	Opening Heights/Drw Front Heights
+
+	
 
 TESTING NOTES:
 
