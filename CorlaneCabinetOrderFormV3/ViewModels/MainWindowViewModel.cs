@@ -129,6 +129,7 @@ public partial class MainWindowViewModel : ObservableValidator
                 try
                 {
                     var job = await _cabinet_service.LoadAsync(dialog.FileName);
+                    PlaceOrderVm.OrderedAtLocal = job?.OrderedAtLocal;
 
                     if (job != null)
                     {
@@ -219,6 +220,18 @@ public partial class MainWindowViewModel : ObservableValidator
             _defaultsVm = null;
             _processOrderVm = null;
             _reallyProcessOrderVm = null;
+
+            // Reset persistent "ordered" state for the new job
+            _cabinet_service.OrderedAtLocal = null;
+
+            try
+            {
+                PlaceOrderVm.OrderedAtLocal = null;
+            }
+            catch
+            {
+                // ignore
+            }
 
             OnPropertyChanged(nameof(BaseCabinetVm));
             OnPropertyChanged(nameof(UpperCabinetVm));

@@ -51,7 +51,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             _mainVm = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
             _defaults = defaults;
             _materialPrices = materialPrices ?? throw new ArgumentNullException(nameof(materialPrices));
-
+            OrderedAtLocal = _cabinetService.OrderedAtLocal;
             CompanyName = _defaults.CompanyName;
             ContactName = _defaults.ContactName;
             PhoneNumber = _defaults.PhoneNumber;
@@ -128,12 +128,31 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                     ZipCode = ZipCode
                 };
 
+                var orderedAt = DateTime.Now;
+
+                _cabinetService.OrderedAtLocal = orderedAt;
+                OrderedAtLocal = orderedAt;
+
                 await _cabinetService.SaveAsync(dialog.FileName, customer, TotalPrice).ConfigureAwait(false);
 
                 try
                 {
                     await UploadJobToWebsiteAsync(dialog.FileName).ConfigureAwait(false);
-                    _mainVm.Notify2("Order placed. Job saved and uploaded.", Brushes.Green, 4000);
+                    _mainVm.Notify2("Order placed. Job saved and sent to Corlane. Thank you!", Brushes.Green, 5000);
+
+                    if (Application.Current?.Dispatcher == null)
+                    {
+                        OrderStatusBackground = new SolidColorBrush(Color.FromRgb(146, 250, 153));
+                        OrderStatusText = $"Job ordered on {orderedAt:d}";
+                    }
+                    else
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            OrderStatusBackground = new SolidColorBrush(Color.FromRgb(146, 250, 153));
+                            OrderStatusText = $"Job ordered on {orderedAt:d}";
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -148,6 +167,35 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 MessageBox.Show($"Error placing order: {ex.Message}", "Error");
             }
         }
+
+
+
+        [ObservableProperty]
+        private DateTime? orderedAtLocal;
+
+        partial void OnOrderedAtLocalChanged(DateTime? oldValue, DateTime? newValue)
+        {
+            UpdateOrderStatusUi(newValue);
+        }
+
+        private void UpdateOrderStatusUi(DateTime? orderedAt)
+        {
+            if (orderedAt.HasValue)
+            {
+                OrderStatusBackground = new SolidColorBrush(Color.FromRgb(146, 250, 153));
+                OrderStatusText = $"Job ordered on {orderedAt.Value:d}";
+                return;
+            }
+
+            OrderStatusBackground = new SolidColorBrush(Color.FromRgb(255, 88, 113));
+            OrderStatusText = "NOT ORDERED";
+        }
+
+
+
+
+
+
 
         private static async Task UploadJobToWebsiteAsync(string jobFilePath)
         {
@@ -486,5 +534,11 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 Application.Current.Dispatcher.Invoke(() => IsInternetConnected = connected);
             }
         }
+
+        [ObservableProperty]
+        private string orderStatusText = "NOT ORDERED";
+
+        [ObservableProperty]
+        private SolidColorBrush orderStatusBackground = new SolidColorBrush(Color.FromRgb(255, 88, 113));
     }
 }

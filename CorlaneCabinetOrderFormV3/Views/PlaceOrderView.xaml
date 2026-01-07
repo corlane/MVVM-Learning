@@ -103,7 +103,7 @@
 
                 <Label Content="Order Status:" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
                 <TextBlock Grid.Row="3" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="48 5 48 5"
-                                   Text="NOT ORDERED" Background="#FFFF5871" Foreground="#FF0F0F0F"/>
+                                   Text="{Binding OrderStatusText}" Background="{Binding OrderStatusBackground}" Foreground="#FF0F0F0F"/>
 
                 <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="60,15,5,15" Grid.ColumnSpan="2"
                                 Command="{Binding PlaceOrderCommand}"/>

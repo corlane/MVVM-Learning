@@ -14,7 +14,7 @@ Implement connection for order submission and material price retrieval -- DONE
 
 Change pricing method to use material prices from server -- DONE
 
-Implement order status indicator
+Implement order status indicator -- DONE
 
 Add drawer box and rollout 3D models and incorporate into material yield calculations  -- DONE
 
@@ -52,7 +52,7 @@ Implement half-depth shelves for 90 deg corner cabinets
 
 If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on whether cab has drws
 
-Add nailer on cabs with 1/4" back, base and upper
+Add nailers on cabs with 1/4" back, base and upper
 
 
 
@@ -82,7 +82,7 @@ Account for edgebanding on bottom edge of upper end panels
 
 NOTE! 45 degree cab shows front width, which is the front width of the deck or top, not the corner-to-corner width. Should we change this? The math will be tricky.
 
-1/4" backs need to add 1/4" PFP to material totals
+1/4" backs need to add 1/4" PFP to material totals -- DONE
 
 
 
@@ -142,4 +142,3 @@ TESTING NOTES:
 Added Debug.writeline statements to Cab3Dviewmodel & PlaceOrderViewModel to log panel creation for material yield checking. Looks dead on accurate so far. Even accounts for toekick notches etc. Great!
 	Next will be to check edgebanding similarly. It was already there and commented out lol. So far looks to be perfect as well.
 
-Got material prices upload/download working. Next is to check/implement those prices being used in the pricing calculations.

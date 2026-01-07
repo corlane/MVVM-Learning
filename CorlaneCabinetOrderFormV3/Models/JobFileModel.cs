@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 
 namespace CorlaneCabinetOrderFormV3.Models;
@@ -9,4 +10,6 @@ public sealed class JobFileModel
     public JobCustomerInfo CustomerInfo { get; set; } = new();
 
     public decimal QuotedTotalPrice { get; set; }
+
+    public DateTime? OrderedAtLocal { get; set; }
 }

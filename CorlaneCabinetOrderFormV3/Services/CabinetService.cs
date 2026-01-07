@@ -1,4 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
@@ -9,6 +10,8 @@ namespace CorlaneCabinetOrderFormV3.Services;
 public class CabinetService : ICabinetService
 {
     public ObservableCollection<CabinetModel> Cabinets { get; } = new();  // Holds mixed subtypes
+
+    public DateTime? OrderedAtLocal { get; set; }
 
     public void Add(CabinetModel cabinet)
     {
@@ -32,7 +35,8 @@ public class CabinetService : ICabinetService
         {
             Cabinets = new ObservableCollection<CabinetModel>(Cabinets.ToList()),
             CustomerInfo = customerInfo ?? new JobCustomerInfo(),
-            QuotedTotalPrice = quotedTotalPrice
+            QuotedTotalPrice = quotedTotalPrice,
+            OrderedAtLocal = OrderedAtLocal
         };
 
         var json = JsonSerializer.Serialize(job, options);
@@ -61,7 +65,8 @@ public class CabinetService : ICabinetService
             {
                 Cabinets = loadedCabinets,
                 CustomerInfo = new JobCustomerInfo(),
-                QuotedTotalPrice = 0m
+                QuotedTotalPrice = 0m,
+                OrderedAtLocal = null
             };
         }
         else
@@ -70,6 +75,8 @@ public class CabinetService : ICabinetService
         }
 
         if (loadedJob == null) return null;
+
+        OrderedAtLocal = loadedJob.OrderedAtLocal;
 
         if (System.Windows.Application.Current?.Dispatcher != null)
         {
