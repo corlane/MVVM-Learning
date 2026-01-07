@@ -67,7 +67,7 @@ public partial class App : Application
             ThemeType t = theme switch
             {
                 "Soft Dark" => ThemeType.SoftDark,
-                "Red Black Theme" => ThemeType.RedBlackTheme,
+                //"Red Black Theme" => ThemeType.RedBlackTheme,
                 "Deep Dark" => ThemeType.DeepDark,
                 "Grey Theme" => ThemeType.GreyTheme,
                 "Dark Grey Theme" => ThemeType.DarkGreyTheme,

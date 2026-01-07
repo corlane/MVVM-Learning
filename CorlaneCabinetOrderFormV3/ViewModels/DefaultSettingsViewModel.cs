@@ -254,7 +254,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
         "Dark Grey Theme",
         "Grey Theme",
         "Light Theme",
-        "Red Black Theme"
+        //"Red Black Theme"
     };
 
     [ObservableProperty]

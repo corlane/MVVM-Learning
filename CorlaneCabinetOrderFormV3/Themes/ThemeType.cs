@@ -19,7 +19,7 @@ namespace CorlaneCabinetOrderFormV3.Themes
             switch (type)
             {
                 case ThemeType.SoftDark: return "SoftDark";
-                case ThemeType.RedBlackTheme: return "RedBlackTheme";
+                //case ThemeType.RedBlackTheme: return "RedBlackTheme";
                 case ThemeType.DeepDark: return "DeepDark";
                 case ThemeType.GreyTheme: return "GreyTheme";
                 case ThemeType.DarkGreyTheme: return "DarkGreyTheme";
