@@ -26,69 +26,112 @@
             </TabItem>
 
             <TabItem Header="Job Material List" Padding="10">
-
+                <views:POJobMaterialListView DataContext="{Binding POJobMaterialListVm}"/>
             </TabItem>
 
-            <TabItem Header="Toekick" Padding="10">
-                
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Toekick"
+                   Foreground="{Binding POToekickVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:POToekickView DataContext="{Binding POToekickVm}"/>
             </TabItem>
 
-            <TabItem Header="Edgebanding" Padding="10">
-                
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Edgebanding"
+                               Foreground="{Binding POEdgebandingVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:POEdgebandingView DataContext="{Binding POEdgebandingVm}"/>
             </TabItem>
 
-            <TabItem Header="Hinge Holes" Padding="10">
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Hinge Holes"
+                               Foreground="{Binding POHingeHolesVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
+                <views:POHingeHolesView DataContext="{Binding POHingeHolesVm}"/>
             </TabItem>
 
             <TabItem Header="Drawer Boxes" Padding="10">
 
             </TabItem>
 
-            <TabItem Header="Cabinet Species" Padding="10">
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Cabinet Species"
+                   Foreground="{Binding POCabinetSpeciesVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
+                <views:POCabinetSpeciesView DataContext="{Binding POCabinetSpeciesVm}"/>
             </TabItem>
 
-            <TabItem Header="Include Doors" Padding="10">
-
-            </TabItem>
-            
-            <TabItem Header="Door Species" Padding="10">
-
-            </TabItem>
-            
-            <TabItem Header="Corner Cabinet Dims" Padding="10">
-
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Include Doors"
+                   Foreground="{Binding POIncludeDoorsVm.TabHeaderBrush}"/>
+                </TabItem.Header>
+                <views:POIncludeDoorsView DataContext="{Binding POIncludeDoorsVm}"/>
             </TabItem>
 
-            <TabItem Header="Notes" Padding="10">
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Door Species"
+                   Foreground="{Binding PODoorSpeciesVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
+                <views:PODoorSpeciesView DataContext="{Binding PODoorSpeciesVm}"/>
             </TabItem>
 
-            <TabItem Header="Reveals/Gaps" Padding="10">
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Corner Cabinet Dims"
+                   Foreground="{Binding POCornerCabinetDimsVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
+                <views:POCornerCabinetDimsView DataContext="{Binding POCornerCabinetDimsVm}"/>
             </TabItem>
 
-            <TabItem Header="Door/Drw Grain Dir." Padding="10">
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Notes"
+                               Foreground="{Binding PONotesVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:PONotesView DataContext="{Binding PONotesVm}"/>
+            </TabItem>
 
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Reveals/Gaps"
+                               Foreground="{Binding PORevealsGapsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:PORevealsGapsView DataContext="{Binding PORevealsGapsVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Door/Drw Grain Dir."
+                               Foreground="{Binding PODoorDrwGrainDirVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:PODoorDrwGrainDirView DataContext="{Binding PODoorDrwGrainDirVm}"/>
             </TabItem>
 
             <TabItem Header="Opening/Drw Front Heights" Padding="10">
 
             </TabItem>
 
-            <TabItem Header="Edgebanding Species" Padding="10">
-
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Base Cab Top Type"
+                               Foreground="{Binding POBaseCabTopTypeVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:POBaseCabTopTypeView DataContext="{Binding POBaseCabTopTypeVm}"/>
             </TabItem>
-
-            <TabItem Header="Door/Drw Front Species" Padding="10">
-
-            </TabItem>
-
-            <TabItem Header="Base Cab Top Type" Padding="10">
-
-            </TabItem>
-
         </TabControl>
     </Grid>
 </UserControl>

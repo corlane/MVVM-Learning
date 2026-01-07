@@ -1,0 +1,123 @@
+<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POToekickView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="920"
+             d:DesignWidth="1000"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}">
+
+    <d:UserControl.DataContext>
+        <viewmodels:POToekickViewModel />
+    </d:UserControl.DataContext>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Toekick Exceptions"
+                   FontSize="18"
+                   FontWeight="SemiBold"
+                   />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Text="Compare to TK Height:"
+                       FontWeight="SemiBold"/>
+
+            <TextBox Grid.Column="1"
+                     Text="{Binding DefaultTkHeight, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="6,0,0,0"/>
+
+            <TextBlock Grid.Column="3"
+                       VerticalAlignment="Center"
+                       Text="Compare to TK Depth:"
+                       FontWeight="SemiBold"/>
+
+            <TextBox Grid.Column="4"
+                     Text="{Binding DefaultTkDepth, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="6,0,0,0"/>
+        </Grid>
+
+        <DataGrid Grid.Row="4"
+                  ItemsSource="{Binding ToekickDimensionsToChange}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="False"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal"
+                  FontSize="16">
+            <DataGrid.Columns>
+
+                <!-- Done toggle -->
+                <DataGridTemplateColumn Header="" Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ToggleButton Content="Done"
+                                          IsChecked="{Binding IsDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Padding="8,2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Cab #"
+                                    Binding="{Binding CabinetNumber}"
+                                    IsReadOnly="True"
+                                    Width="70"/>
+
+                <DataGridTextColumn Header="Cabinet Name"
+                                    Binding="{Binding CabinetName}"
+                                    IsReadOnly="True"
+                                    Width="2*"/>
+
+                <DataGridTextColumn Header="TK Height"
+                                    Binding="{Binding TkHeight}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="TK Depth"
+                                    Binding="{Binding TkDepth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Default Height"
+                                    Binding="{Binding DefaultTkHeight}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Default Depth"
+                                    Binding="{Binding DefaultTkDepth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,8,0,0">
+            <TextBlock Text="Total cabinets needing change: " FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding TotalCabsNeedingChange}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,212 @@
+<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.PORevealsGapsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="920"
+             d:DesignWidth="1000"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}">
+
+    <d:UserControl.DataContext>
+        <viewmodels:PORevealsGapsViewModel />
+    </d:UserControl.DataContext>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Text="Reveals / Gaps Exceptions"
+                   FontSize="18"
+                   FontWeight="SemiBold"/>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="8"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="8"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Base Top:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="1" Text="{Binding DefaultBaseTopReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+
+                <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="Base Left:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="4" Text="{Binding DefaultBaseLeftReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+
+                <TextBlock Grid.Column="6" VerticalAlignment="Center" Text="Base Right:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="7" Text="{Binding DefaultBaseRightReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+
+                <TextBlock Grid.Column="9" VerticalAlignment="Center" Text="Base Bottom:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="10" Text="{Binding DefaultBaseBottomReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="18"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Upper Top:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="1" Text="{Binding DefaultUpperTopReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+
+                <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="Upper Bottom:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="4" Text="{Binding DefaultUpperBottomReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+
+                <TextBlock Grid.Column="6" VerticalAlignment="Center" Text="Upper Left:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="7" Text="{Binding DefaultUpperLeftReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+
+                <TextBlock Grid.Column="9" VerticalAlignment="Center" Text="Upper Right:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="10" Text="{Binding DefaultUpperRightReveal, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,0,0"/>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Gaps:"
+                           FontWeight="SemiBold"/>
+
+                <TextBox Grid.Column="1"
+                         Text="{Binding DefaultGapWidth, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="6,0,0,0"/>
+            </Grid>
+        </Grid>
+
+        <DataGrid Grid.Row="4"
+                  ItemsSource="{Binding RevealsGapsToChange}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="False"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal"
+                  FontSize="16">
+            <DataGrid.Columns>
+
+                <DataGridTemplateColumn Header="" Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ToggleButton Content="Done"
+                                          IsChecked="{Binding IsDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Padding="8,2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Cab #"
+                                    Binding="{Binding CabinetNumber}"
+                                    IsReadOnly="True"
+                                    Width="70"/>
+
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding CabinetName}"
+                                    IsReadOnly="True"
+                                    Width="2*"/>
+
+                <DataGridTextColumn Header="Type"
+                                    Binding="{Binding CabinetType}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Top"
+                                    Binding="{Binding TopReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Bottom"
+                                    Binding="{Binding BottomReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Left"
+                                    Binding="{Binding LeftReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Right"
+                                    Binding="{Binding RightReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Gap"
+                                    Binding="{Binding GapWidth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Def Top"
+                                    Binding="{Binding DefaultTopReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Def Bottom"
+                                    Binding="{Binding DefaultBottomReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Def Left"
+                                    Binding="{Binding DefaultLeftReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Def Right"
+                                    Binding="{Binding DefaultRightReveal}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Def Gap"
+                                    Binding="{Binding DefaultGapWidth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,8,0,0">
+            <TextBlock Text="Total cabinets needing change: " FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding TotalCabsNeedingChange}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

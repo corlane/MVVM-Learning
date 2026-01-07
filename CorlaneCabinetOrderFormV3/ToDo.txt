@@ -54,7 +54,9 @@ If cabinet depth is too shallow for drw, display warning - remove drws and hide 
 
 Add nailers on cabs with 1/4" back, base and upper
 
+In Defaults: Remove 2nd and 3rd default drw front heights.
 
+On base cab drw front section, add "Equalize" for bottom drw equalization, and an "Equalize All" button to duh make all drw fronts equal.
 
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview

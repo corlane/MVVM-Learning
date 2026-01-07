@@ -27,6 +27,7 @@ public partial class App : Application
                 services.AddSingleton<IPrintService, PrintService>();
                 services.AddSingleton<IMaterialPricesService, MaterialPricesService>();
                 services.AddSingleton<POCustomerInfoViewModel>();
+                services.AddTransient<POJobMaterialListViewModel>();
 
                 // Register ViewModels as transients
                 //services.AddTransient<MainWindowViewModel>();
@@ -42,6 +43,17 @@ public partial class App : Application
                 services.AddTransient<REALLYProcessOrderViewModel>();
                 services.AddTransient<DoorSizesListViewModel>();
                 services.AddTransient<DrawerBoxSizesListViewModel>();
+                services.AddTransient<POToekickViewModel>();
+                services.AddTransient<POEdgebandingViewModel>();
+                services.AddTransient<POHingeHolesViewModel>();
+                services.AddTransient<POCabinetSpeciesViewModel>();
+                services.AddSingleton<POIncludeDoorsViewModel>();
+                services.AddTransient<PODoorSpeciesViewModel>();
+                services.AddTransient<PODoorDrwGrainDirViewModel>();
+                services.AddTransient<PORevealsGapsViewModel>();
+                services.AddTransient<POCornerCabinetDimsViewModel>();
+                services.AddTransient<POBaseCabTopTypeViewModel>();
+                services.AddTransient<PONotesViewModel>();
             })
             .Build();
 
