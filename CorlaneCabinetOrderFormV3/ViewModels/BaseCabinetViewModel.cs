@@ -626,31 +626,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
             double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
             double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
 
-            double totalDrwFrontHeight = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1)) - ConvertDimension.FractionToDouble(DrwFrontHeight1) - (gapWidth /2);
+            double totalDrwFrontHeight = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1)) - ConvertDimension.FractionToDouble(DrwFrontHeight1);
 
             double equalDrwFrontHeight = totalDrwFrontHeight / (DrwCount - 1);
 
             DrwFrontHeight2 = equalDrwFrontHeight.ToString();
             DrwFrontHeight3 = equalDrwFrontHeight.ToString();
 
-            Opening1Disabled = true;
-            Opening2Disabled = true;
-            Opening3Disabled = true;
-            DrwFront1Disabled = true;
-            DrwFront2Disabled = true;
-            DrwFront3Disabled = true;
+        }
 
-            ResizeDrwFrontHeights();
-        }
-        else
-        {
-            Opening1Disabled = false;
-            Opening2Disabled = false;
-            Opening3Disabled = false;
-            DrwFront1Disabled = false;
-            DrwFront2Disabled = false;
-            DrwFront3Disabled = false;
-        }
+        ResizeDrwFrontHeights();
     }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; } = false; partial void OnEqualizeAllDrwFrontsChanged(bool oldValue, bool newValue)
     {
@@ -673,8 +658,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             DrwFrontHeight2 = equalDrwFrontHeight.ToString();
             DrwFrontHeight3 = equalDrwFrontHeight.ToString();
 
-            ResizeDrwFrontHeights();
         }
+
+        ResizeDrwFrontHeights();
     }
 
     // Reveal and gap properties
@@ -962,6 +948,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             if (DrwCount == 1)
             {
                 Opening1Disabled = false;
+                DrwFront1Disabled = false;
                 opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
                 OpeningHeight1 = opening1Height.ToString();
                 DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
@@ -983,7 +970,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
                 if (DrwCount == 2)
                 {
-                    if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts)
+                    if (EqualizeAllDrwFronts)
+                    {
+                        DrwFront1Disabled = true;
+                        DrwFront2Disabled = true;
+                    }
+                    else
                     {
                         DrwFront1Disabled = false;
                         DrwFront2Disabled = true;

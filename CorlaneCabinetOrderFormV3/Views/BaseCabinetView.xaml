@@ -287,13 +287,13 @@
                                               ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DrwFrontGrainDir}"/>
                         </StackPanel>
 
-                    <ToggleButton x:Name="checkIncludeDrwFrontsWithCabinet" Content="Supply Slab Drawer Fronts With Cabinet" Margin="5,10,5,5" IsChecked="{Binding IncDrwFronts}"/>
-                    <ToggleButton x:Name="checkIncludeDrwFrontsInSizesList" Content="Include Drawer Fronts In Sizes List" Margin="5" IsChecked="{Binding IncDrwFrontsInList}"/>
+                    <CheckBox x:Name="checkIncludeDrwFrontsWithCabinet" Content="Supply Slab Drawer Fronts With Cabinet" Margin="5,10,5,5" IsChecked="{Binding IncDrwFronts}"/>
+                    <CheckBox x:Name="checkIncludeDrwFrontsInSizesList" Content="Include Drawer Fronts In Sizes List" Margin="5" IsChecked="{Binding IncDrwFrontsInList}"/>
                         <Separator Margin="5,0,5,0"/>
 
-                        <ToggleButton x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}"/>
-                        <ToggleButton x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}"/>
-                        <ToggleButton x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}"/>
+                    <CheckBox x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}"/>
+                    <CheckBox x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}"/>
+                    <CheckBox x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}"/>
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Drawer Style:" Margin="0"  VerticalAlignment="Center"/>

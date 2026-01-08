@@ -4,6 +4,7 @@ using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using HelixToolkit.Wpf;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
@@ -940,7 +941,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
                     double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
 
-                    if (baseCab.IncDrwBoxInListOpening1 && baseCab.DrwCount > 0)  // WORKING HERE. Need to account for how many drawers the cabinet actually has, not just the status of the IncDrwBoxInListOpening1 boolean
+                    if (baseCab.IncDrwBoxInListOpening1 && baseCab.DrwCount > 0) 
                     {
                         dbxHeight = opening1Height - topSpacing - bottomSpacing;
                         AddDrawerBoxRow(baseCab, "Drawer Box 1", dbxHeight, dbxWidth, dbxDepth);
@@ -1007,11 +1008,11 @@ public partial class Cabinet3DViewModel : ObservableObject
                         cabinet.Children.Add(dbx1);
                     }
 
-                    if (baseCab.IncDrwBoxInListOpening2 && baseCab.DrwCount > 1)
-                    {
-                        dbxHeight = opening2Height - topSpacing - bottomSpacing;
-                        AddDrawerBoxRow(baseCab, "Drawer Box 2", dbxHeight, dbxWidth, dbxDepth);
-                    }
+                    //if (baseCab.IncDrwBoxInListOpening2 && baseCab.DrwCount > 1)
+                    //{
+                    //    //dbxHeight = opening2Height - topSpacing - bottomSpacing;
+                    //    AddDrawerBoxRow(baseCab, "Drawer Box 2", dbxHeight, dbxWidth, dbxDepth);
+                    //}
 
 
                     if (baseCab.IncDrwBoxOpening2 && baseCab.DrwCount > 1)
@@ -1041,8 +1042,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (0,0,0),
                             new (dbxFrontAndBackWidth,0,0)
                         ];
-                        //Debug.WriteLine("Drw Box Front and Back");
-
+                        Debug.WriteLine("Drw Box Front and Back");
+                        Debug.WriteLine($"dbx 2 Height: {dbxHeight}");
                         dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
                         dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
@@ -1075,13 +1076,15 @@ public partial class Cabinet3DViewModel : ObservableObject
                         dbx2.Children.Add(dbx1rotate);
                         ApplyTransform(dbx2, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
                         cabinet.Children.Add(dbx2);
+
+                        if (baseCab.IncDrwBoxInListOpening2 && baseCab.DrwCount > 1)
+                        {
+                            //dbxHeight = opening2Height - topSpacing - bottomSpacing;
+                            AddDrawerBoxRow(baseCab, "Drawer Box 2", dbxHeight, dbxWidth, dbxDepth);
+                        }
+
                     }
 
-                    if (baseCab.IncDrwBoxInListOpening3 && baseCab.DrwCount > 2)
-                    {
-                        dbxHeight = opening3Height - topSpacing - bottomSpacing;
-                        AddDrawerBoxRow(baseCab, "Drawer Box 3", dbxHeight, dbxWidth, dbxDepth);
-                    }
 
                     if (baseCab.IncDrwBoxOpening3 && baseCab.DrwCount > 2)
                     {
@@ -1143,6 +1146,13 @@ public partial class Cabinet3DViewModel : ObservableObject
                         dbx3.Children.Add(dbx1rotate);
                         ApplyTransform(dbx3, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - opening2Height - MaterialThickness34 - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
                         cabinet.Children.Add(dbx3);
+
+                        if (baseCab.IncDrwBoxInListOpening3 && baseCab.DrwCount > 2)
+                        {
+                            //dbxHeight = opening2Height - topSpacing - bottomSpacing;
+                            AddDrawerBoxRow(baseCab, "Drawer Box 2", dbxHeight, dbxWidth, dbxDepth);
+                        }
+
                     }
 
                     if (baseCab.IncDrwBoxInListOpening4 && baseCab.DrwCount > 3)
