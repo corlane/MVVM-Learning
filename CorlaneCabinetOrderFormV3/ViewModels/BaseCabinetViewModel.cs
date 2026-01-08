@@ -617,7 +617,39 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (newValue)
         {
             EqualizeAllDrwFronts = false;
+
+            double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
+            if (!HasTK) { tkHeight = 0; }
+            double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
+
+            double topReveal = ConvertDimension.FractionToDouble(TopReveal);
+            double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
+            double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
+
+            double totalDrwFrontHeight = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1)) - ConvertDimension.FractionToDouble(DrwFrontHeight1) - (gapWidth /2);
+
+            double equalDrwFrontHeight = totalDrwFrontHeight / (DrwCount - 1);
+
+            DrwFrontHeight2 = equalDrwFrontHeight.ToString();
+            DrwFrontHeight3 = equalDrwFrontHeight.ToString();
+
+            Opening1Disabled = true;
+            Opening2Disabled = true;
+            Opening3Disabled = true;
+            DrwFront1Disabled = true;
+            DrwFront2Disabled = true;
+            DrwFront3Disabled = true;
+
             ResizeDrwFrontHeights();
+        }
+        else
+        {
+            Opening1Disabled = false;
+            Opening2Disabled = false;
+            Opening3Disabled = false;
+            DrwFront1Disabled = false;
+            DrwFront2Disabled = false;
+            DrwFront3Disabled = false;
         }
     }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; } = false; partial void OnEqualizeAllDrwFrontsChanged(bool oldValue, bool newValue)
@@ -625,6 +657,22 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (newValue)
         {
             EqualizeBottomDrwFronts = false;
+
+            double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
+            if (!HasTK) { tkHeight = 0; }
+            double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
+
+            double topReveal = ConvertDimension.FractionToDouble(TopReveal);
+            double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
+            double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
+
+            double totalDrwFrontHeight = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1));
+            double equalDrwFrontHeight = totalDrwFrontHeight / DrwCount;
+
+            DrwFrontHeight1 = equalDrwFrontHeight.ToString();
+            DrwFrontHeight2 = equalDrwFrontHeight.ToString();
+            DrwFrontHeight3 = equalDrwFrontHeight.ToString();
+
             ResizeDrwFrontHeights();
         }
     }
@@ -752,9 +800,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = true;
-    [ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
-    [ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
-    [ObservableProperty] public partial bool DrwFrontHeight3Enabled { get; set; }
+    //[ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
+    //[ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
+    //[ObservableProperty] public partial bool DrwFrontHeight3Enabled { get; set; }
     [ObservableProperty] public partial bool BaseShowRevealSettings { get; set; }
     [ObservableProperty] public partial bool DrwFront1Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront2Visible { get; set; } = true;
@@ -907,132 +955,86 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         try
         {
-            _isResizing = true;
+        _isResizing = true;
 
-            if (Style == Style1)
+        if (Style == Style1)
+        {
+            if (DrwCount == 1)
             {
+                Opening1Disabled = false;
+                opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                OpeningHeight1 = opening1Height.ToString();
+                DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
+            }
+        }
+
+        if (Style == Style2)
+        {
                 if (DrwCount == 1)
                 {
-                    Opening1Disabled = false;
-                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                    OpeningHeight1 = opening1Height.ToString();
-                    DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
-                }
-            }
+                    DrwFront1Disabled = true;
 
-            if (Style == Style2)
-            {
-                if (EqualizeAllDrwFronts)
-                {
-                    double equalHeight = (height - topDeckAndStretcherThickness - topReveal - bottomReveal - ((DrwCount + 1) * gapWidth)) / DrwCount;
-                    opening1Height = equalHeight + .375;
+                    opening1Height = height - (2 * MaterialThickness34);
                     OpeningHeight1 = opening1Height.ToString();
-                    DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
-                    if (DrwCount >= 2)
-                    {
-                        opening2Height = equalHeight;
-                        OpeningHeight2 = opening2Height.ToString();
-                        DrwFrontHeight2 = (opening2Height + (1.5 * MaterialThickness34) - gapWidth).ToString();
-                    }
-                    if (DrwCount >= 3)
-                    {
-                        opening3Height = equalHeight;
-                        OpeningHeight3 = opening3Height.ToString();
-                        DrwFrontHeight3 = (opening3Height + (1.5 * MaterialThickness34) - gapWidth).ToString();
-                    }
-                    if (DrwCount == 4)
-                    {
-                        opening4Height = equalHeight;
-                        OpeningHeight4 = opening4Height.ToString();
-                        DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
-                    }
+                    DrwFrontHeight1 = (opening1Height + (2 * MaterialThickness34) - topReveal - bottomReveal).ToString();
                 }
 
-                else if (EqualizeBottomDrwFronts && DrwCount > 1)
+
+
+                if (DrwCount == 2)
                 {
-                    double totalTopHeight = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                    double remainingHeight = height - topDeckAndStretcherThickness - totalTopHeight - ((DrwCount) * gapWidth);
-                    double equalBottomHeight = remainingHeight / (DrwCount - 1);
-                    opening1Height = totalTopHeight;
-                    OpeningHeight1 = opening1Height.ToString();
-                    DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
-                    if (DrwCount >= 2)
-                    {
-                        opening2Height = equalBottomHeight;
-                        OpeningHeight2 = opening2Height.ToString();
-                        DrwFrontHeight2 = (opening2Height + (1.5 * MaterialThickness34) - gapWidth).ToString();
-                    }
-                    if (DrwCount >= 3)
-                    {
-                        opening3Height = equalBottomHeight;
-                        OpeningHeight3 = opening3Height.ToString();
-                        DrwFrontHeight3 = (opening3Height + (1.5 * MaterialThickness34) - gapWidth).ToString();
-                    }
-                    if (DrwCount == 4)
-                    {
-                        opening4Height = equalBottomHeight;
-                        OpeningHeight4 = opening4Height.ToString();
-                        DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
-                    }
-                }
-
-                else if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts)
-                {
-                    if (DrwCount == 1)
-                    {
-                        opening1Height = height - (2 * MaterialThickness34);
-                        OpeningHeight1 = opening1Height.ToString();
-                        DrwFrontHeight1 = (opening1Height + (2 * MaterialThickness34) - topReveal - bottomReveal).ToString();
-                        DrwFront1Disabled = true;
-                    }
-
-
-
-                    if (DrwCount == 2)
+                    if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts)
                     {
                         DrwFront1Disabled = false;
                         DrwFront2Disabled = true;
-                        opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                        opening2Height = height - topDeckAndStretcherThickness - opening1Height;// - opening2Height - opening3Height;
-                        OpeningHeight1 = opening1Height.ToString();
-                        OpeningHeight2 = opening2Height.ToString();
-                        DrwFrontHeight2 = (opening2Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
-
                     }
 
-                    if (DrwCount == 3)
+                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                    opening2Height = height - topDeckAndStretcherThickness - opening1Height;// - opening2Height - opening3Height;
+                    OpeningHeight1 = opening1Height.ToString();
+                    OpeningHeight2 = opening2Height.ToString();
+                    DrwFrontHeight2 = (opening2Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
+
+                }
+
+                if (DrwCount == 3)
+                {
+                    if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts)
                     {
                         DrwFront1Disabled = false;
                         DrwFront2Disabled = false;
                         DrwFront3Disabled = true;
-                        opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                        opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
-                        opening3Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height;// - opening3Height;
-                        OpeningHeight1 = opening1Height.ToString();
-                        OpeningHeight2 = opening2Height.ToString();
-                        OpeningHeight3 = opening3Height.ToString();
-                        DrwFrontHeight3 = (opening3Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
-
                     }
 
-                    if (DrwCount == 4)
+                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                    opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
+                    opening3Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height;// - opening3Height;
+                    OpeningHeight1 = opening1Height.ToString();
+                    OpeningHeight2 = opening2Height.ToString();
+                    OpeningHeight3 = opening3Height.ToString();
+                    DrwFrontHeight3 = (opening3Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
+
+                }
+
+                if (DrwCount == 4)
+                {
+                    if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts)
                     {
                         DrwFront1Disabled = false;
                         DrwFront2Disabled = false;
                         DrwFront3Disabled = false;
-                        opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                        opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
-                        opening3Height = drwFrontHeight3 + gapWidth - (MaterialThickness34);
-                        opening4Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height - opening3Height;
-                        OpeningHeight1 = opening1Height.ToString();
-                        OpeningHeight2 = opening2Height.ToString();
-                        OpeningHeight3 = opening3Height.ToString();
-                        OpeningHeight4 = opening4Height.ToString();
-                        DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
                     }
-                }
-                
 
+                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                    opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
+                    opening3Height = drwFrontHeight3 + gapWidth - (MaterialThickness34);
+                    opening4Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height - opening3Height;
+                    OpeningHeight1 = opening1Height.ToString();
+                    OpeningHeight2 = opening2Height.ToString();
+                    OpeningHeight3 = opening3Height.ToString();
+                    OpeningHeight4 = opening4Height.ToString();
+                    DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
+                }
             }
 
             UpdatePreview();
@@ -1296,6 +1298,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     private void LoadDefaults()
     {
         if (_defaults is null) return;
+
+        EqualizeAllDrwFronts = false;
+        EqualizeBottomDrwFronts = false;
 
         if (Style == Style2)
         {
