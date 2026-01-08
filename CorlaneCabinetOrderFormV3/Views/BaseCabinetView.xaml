@@ -287,18 +287,20 @@
                                               ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DrwFrontGrainDir}"/>
                         </StackPanel>
 
-                    <CheckBox x:Name="checkIncludeDrwFrontsWithCabinet" Content="Supply Slab Drawer Fronts With Cabinet" Margin="5,10,5,5" IsChecked="{Binding IncDrwFronts}"/>
-                    <CheckBox x:Name="checkIncludeDrwFrontsInSizesList" Content="Include Drawer Fronts In Sizes List" Margin="5" IsChecked="{Binding IncDrwFrontsInList}"/>
+                    <ToggleButton x:Name="checkIncludeDrwFrontsWithCabinet" Content="Supply Slab Drawer Fronts With Cabinet" Margin="5,10,5,5" IsChecked="{Binding IncDrwFronts}"/>
+                    <ToggleButton x:Name="checkIncludeDrwFrontsInSizesList" Content="Include Drawer Fronts In Sizes List" Margin="5" IsChecked="{Binding IncDrwFrontsInList}"/>
                         <Separator Margin="5,0,5,0"/>
 
-                        <CheckBox x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}"/>
-                        <CheckBox x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}"/>
-                        <CheckBox x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}"/>
+                        <ToggleButton x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}"/>
+                        <ToggleButton x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}"/>
+                        <ToggleButton x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}"/>
 
-
-                        <Label Content="Drawer Style:" Margin="0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Drawer Style:" Margin="0"  VerticalAlignment="Center"/>
                         <ComboBox x:Name="comboDrwStyle" Width="245" Margin="5" HorizontalAlignment="Left"
                                           ItemsSource="{Binding ListDrawerStyle}" SelectedValue="{Binding DrwStyle, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    </StackPanel>
 
 
                         <GroupBox x:Name="groupOpeningHeights" Grid.Row="1" Grid.Column="0" Header="Opening Heights" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5">
@@ -357,7 +359,9 @@
                         <GroupBox x:Name="groupDrawerFrontHeights" Grid.Row="0" Grid.Column="0" Header="Drw. Front Heights" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5"
                                     Visibility="{Binding GroupDrawerFrontHeightsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                             <StackPanel Orientation="Vertical" Margin="0,0,10,0">
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <ToggleButton Content="Equalize Bottom Drw. Fronts" IsChecked="{Binding EqualizeBottomDrwFronts}" Margin="0,5,0,5"/>
+                            <ToggleButton Content="Equalize All Drw. Fronts" IsChecked="{Binding EqualizeAllDrwFronts}"/>
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Label Content="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                     <TextBox x:Name="textDrwFrontHeight1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding DrwFront1Disabled}"
                                             Text="{Binding DrwFrontHeight1, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
