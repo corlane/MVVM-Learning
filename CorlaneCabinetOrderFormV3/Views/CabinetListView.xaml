@@ -76,7 +76,7 @@
                     <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="Sink" DisplayMemberBinding="{Binding SinkCabinet}" Width="Auto"/>
 
-                    <GridViewColumn Header="LeftBackWidth" DisplayMemberBinding="{Binding LeftBackWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <!--<GridViewColumn Header="LeftBackWidth" DisplayMemberBinding="{Binding LeftBackWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="RightBackWidth" DisplayMemberBinding="{Binding RightBackWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="LeftFrontWidth" DisplayMemberBinding="{Binding LeftFrontWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="RightFrontWidth" DisplayMemberBinding="{Binding RightFrontWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
@@ -140,7 +140,7 @@
                     <GridViewColumn Header="BottomReveal" DisplayMemberBinding="{Binding BottomReveal, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="GapWidth" DisplayMemberBinding="{Binding GapWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="MaterialThickness34" DisplayMemberBinding="{Binding MaterialThickness34, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
-                    <GridViewColumn Header="MaterialThickness14" DisplayMemberBinding="{Binding MaterialThickness14, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
+                    <GridViewColumn Header="MaterialThickness14" DisplayMemberBinding="{Binding MaterialThickness14, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>-->
 
 
                 </GridView>

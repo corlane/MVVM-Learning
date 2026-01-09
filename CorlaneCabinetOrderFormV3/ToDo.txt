@@ -46,7 +46,7 @@ Panel thickness dropdown needs to change based on dimension format. As is, it wo
 
 Move UI elements to be more consistent across tabs
 
-Add separate selection for shelf count for uppers and lowers in Defaults
+Add separate selection for shelf count for uppers and lowers in Defaults -- HODL
 
 Implement half-depth shelves for 90 deg corner cabinets
 
@@ -54,9 +54,9 @@ If cabinet depth is too shallow for drw, display warning - remove drws and hide 
 
 Add nailers on cabs with 1/4" back, base and upper
 
-In Defaults: Remove 2nd and 3rd default drw front heights.
-
 On base cab drw front section, add "Equalize" for bottom drw equalization, and an "Equalize All" button to duh make all drw fronts equal.
+
+Do not allow duplicate cabinet names -- DONE
 
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
@@ -119,7 +119,8 @@ Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab d
 
 Total Cabinets on printed cutlist seems to only be counting line items, not total cabinets including quantities -- DONE
 
-Do not allow duplicate cabinet names
+
+1/4" backs are not showing the proper material texture. WTF?
 
 
 Make these tabs for global item mods, default hidden, only shown when job contains the relavent modifications:
