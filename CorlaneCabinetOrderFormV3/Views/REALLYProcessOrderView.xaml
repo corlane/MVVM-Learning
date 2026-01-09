@@ -22,7 +22,7 @@
             </TabItem>
 
             <TabItem Header="Batch List" Padding="10">
-
+                <views:POBatchListView DataContext="{Binding POBatchListVm}"/>
             </TabItem>
 
             <TabItem Header="Job Material List" Padding="10">
@@ -56,8 +56,13 @@
                 <views:POHingeHolesView DataContext="{Binding POHingeHolesVm}"/>
             </TabItem>
 
-            <TabItem Header="Drawer Boxes" Padding="10">
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Drawer Boxes"
+                   Foreground="{Binding PODrawerBoxesVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
+                <views:PODrawerBoxesView DataContext="{Binding PODrawerBoxesVm}"/>
             </TabItem>
 
             <TabItem Padding="10">
@@ -121,8 +126,13 @@
                 <views:PODoorDrwGrainDirView DataContext="{Binding PODoorDrwGrainDirVm}"/>
             </TabItem>
 
-            <TabItem Header="Opening/Drw Front Heights" Padding="10">
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Opening/Drw Front Heights"
+                               Foreground="{Binding POOpeningDrwFrontHeightsVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
+                <views:POOpeningDrwFrontHeightsView DataContext="{Binding POOpeningDrwFrontHeightsVm}"/>
             </TabItem>
 
             <TabItem Padding="10">

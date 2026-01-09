@@ -70,7 +70,7 @@ Corlane side:
 
 Get material yield correct -- Seems to be correct so far. Need to do more testing.
 
-Add tab or window for order processing -- DONE-ish. Basic functionality is there, but needs more work.
+Add tab or window for order processing -- DONE
 
 Save customer information & quoted price in job file -- DONE
 
@@ -86,7 +86,9 @@ NOTE! 45 degree cab shows front width, which is the front width of the deck or t
 
 1/4" backs need to add 1/4" PFP to material totals -- DONE
 
+Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
+Change directory name creation in Batch List viewmodel to delve into the proper directories based on cabinet Type and Style
 
 
 BUGS:
@@ -144,4 +146,24 @@ TESTING NOTES:
 
 Added Debug.writeline statements to Cab3Dviewmodel & PlaceOrderViewModel to log panel creation for material yield checking. Looks dead on accurate so far. Even accounts for toekick notches etc. Great!
 	Next will be to check edgebanding similarly. It was already there and commented out lol. So far looks to be perfect as well.
+
+
+
+Cabinet Model Name Template:
+
+Type,	Style,	Sink,	Toekick,	DoorCount,	DrwCount,	AdjShelfCount,	RolloutCount,	TopType,	BackThickness
+									
+base,	Std,	y/n,	y/n,	0-2,	0-4,	0-?,	0-?,	s/f,	1 or 3
+		Drawer								
+		90 Corner								
+		Angle Front								
+									
+upper
+		90 Corner								
+		Angle Front								
+									
+									
+filler									
+panel									
+									
 

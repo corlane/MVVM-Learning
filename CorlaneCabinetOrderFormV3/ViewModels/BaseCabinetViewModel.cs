@@ -1991,8 +1991,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
                 DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
             }
-            ResizeOpeningHeights();
-            ResizeDrwFrontHeights();
+            // Style2: "Drawer" cabinets
+            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+            {
+                ApplyDrawerFrontEqualization();
+                ResizeDrwFrontHeights();
+            }
+            else
+            {
+                ResizeOpeningHeights();
+                ResizeDrwFrontHeights();
+            }
+            RunValidationVisible();
         }
     }
     [ObservableProperty] public partial string DrwStyle { get; set; } = "";
@@ -2867,6 +2877,32 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
+        if (Style == Style2)
+        {
+            DoorCount = 0;
+        }
+
+        if (Style == Style2)
+        {
+            RolloutCount = 0;
+            ShelfCount = 0;
+        }
+
+        if (Style == Style3)
+        {
+            if (DoorCount == 1)
+            { DoorCount = 2; }
+            DrwCount = 0;
+            TopType = "Full";
+        }
+
+        if (Style == Style4)
+        {
+            DrwCount = 0;
+            RolloutCount = 0;
+            TopType = "Full";
+        }
+
         var newCabinet = new BaseCabinetModel
         {
             Width = ConvertDimension.FractionToDouble(Width).ToString(),

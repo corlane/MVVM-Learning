@@ -54,6 +54,9 @@ public partial class App : Application
                 services.AddTransient<POCornerCabinetDimsViewModel>();
                 services.AddTransient<POBaseCabTopTypeViewModel>();
                 services.AddTransient<PONotesViewModel>();
+                services.AddTransient<POOpeningDrwFrontHeightsViewModel>();
+                services.AddTransient<PODrawerBoxesViewModel>();
+                services.AddTransient<POBatchListViewModel>();
             })
             .Build();
 
