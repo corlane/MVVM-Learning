@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -145,57 +146,71 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
     {
-        if (newValue != oldValue)
+        if (newValue == oldValue) return;
+
+        ListRolloutCount = [0];
+        RolloutCount = 0;
+        IncRollouts = false;
+
+        if (Style == Style1)
         {
-            ListRolloutCount = [0];
-            RolloutCount = 0;
-            IncRollouts = false;
-
-            if (Style == Style1)
+            double interiorHeight = ConvertDimension.FractionToDouble(newValue) - (2 * 0.75);
+            if (DrwCount == 1)
             {
-                double interiorHeight = ConvertDimension.FractionToDouble(newValue) - (2 * 0.75);
-                if (DrwCount == 1)
-                {
-                    interiorHeight -= ConvertDimension.FractionToDouble(OpeningHeight1) - 0.75;
-                }
+                interiorHeight -= ConvertDimension.FractionToDouble(OpeningHeight1) - 0.75;
+            }
 
-                if (interiorHeight < 12)
-                {
-                    ListRolloutCount = [1, 2];
-                }
-                else if (interiorHeight >= 12 && interiorHeight < 24)
-                {
-                    ListRolloutCount = [1, 2, 3];
-                }
-                else if (interiorHeight >= 24 && interiorHeight < 36)
-                {
-                    ListRolloutCount = [1, 2, 3, 4, 5];
-                }
-                else if (interiorHeight >= 36 && interiorHeight < 48)
-                {
-                    ListRolloutCount = [1, 2, 3, 4, 5, 6];
-                }
-                else if (interiorHeight >= 48 && interiorHeight < 60)
-                {
-                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7];
-                }
-                else if (interiorHeight >= 60 && interiorHeight < 72)
-                {
-                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8];
-                }
-                else if (interiorHeight >= 72 && interiorHeight < 84)
-                {
-                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-                }
-                else if (interiorHeight >= 84 && interiorHeight < 96)
-                {
-                    ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-                }              
+            if (interiorHeight < 12)
+            {
+                ListRolloutCount = [1, 2];
+            }
+            else if (interiorHeight >= 12 && interiorHeight < 24)
+            {
+                ListRolloutCount = [1, 2, 3];
+            }
+            else if (interiorHeight >= 24 && interiorHeight < 36)
+            {
+                ListRolloutCount = [1, 2, 3, 4, 5];
+            }
+            else if (interiorHeight >= 36 && interiorHeight < 48)
+            {
+                ListRolloutCount = [1, 2, 3, 4, 5, 6];
+            }
+            else if (interiorHeight >= 48 && interiorHeight < 60)
+            {
+                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7];
+            }
+            else if (interiorHeight >= 60 && interiorHeight < 72)
+            {
+                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8];
+            }
+            else if (interiorHeight >= 72 && interiorHeight < 84)
+            {
+                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            }
+            else if (interiorHeight >= 84 && interiorHeight < 96)
+            {
+                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             }
 
             ResizeOpeningHeights();
+            return;
         }
+
+        // Style2: "Drawer" cabinets
+        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+        {
+            ApplyDrawerFrontEqualization();
+            ResizeDrwFrontHeights();
+        }
+        else
+        {
+            ResizeOpeningHeights();
+            ResizeDrwFrontHeights();
+        }
+
     }
+
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string EBSpecies { get; set; } = "";
@@ -286,12 +301,31 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Toekick-specific properties
     [ObservableProperty] public partial bool HasTK { get; set; } partial void OnHasTKChanged(bool oldValue, bool newValue)
     {
-        ResizeOpeningHeights();
+        // Style2: "Drawer" cabinets
+        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+        {
+            ApplyDrawerFrontEqualization();
+            ResizeDrwFrontHeights();
+        }
+        else
+        {
+            ResizeOpeningHeights();
+            ResizeDrwFrontHeights();
+        }
         RunValidationVisible();
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 8)] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
     {
-        ResizeOpeningHeights();
+        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+        {
+            ApplyDrawerFrontEqualization();
+            ResizeDrwFrontHeights();
+        }
+        else
+        {
+            ResizeOpeningHeights();
+            ResizeDrwFrontHeights();
+        }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 8)] public partial string TKDepth { get; set; } = "";
 
@@ -618,24 +652,27 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             EqualizeAllDrwFronts = false;
 
-            double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
-            if (!HasTK) { tkHeight = 0; }
-            double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
+            ApplyDrawerFrontEqualization();
+            ResizeDrwFrontHeights();
 
-            double topReveal = ConvertDimension.FractionToDouble(TopReveal);
-            double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
-            double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
+            DrwFront1Disabled = false;
+            DrwFront2Disabled = true;
+            DrwFront3Disabled = true;
 
-            double totalDrwFrontHeight = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1)) - ConvertDimension.FractionToDouble(DrwFrontHeight1);
-
-            double equalDrwFrontHeight = totalDrwFrontHeight / (DrwCount - 1);
-
-            DrwFrontHeight2 = equalDrwFrontHeight.ToString();
-            DrwFrontHeight3 = equalDrwFrontHeight.ToString();
-
+            Opening1Disabled = false;
+            Opening2Disabled = true;
+            Opening3Disabled = true;
         }
+        else
+        {
+            DrwFront1Disabled = false;
+            DrwFront2Disabled = false;
+            DrwFront3Disabled = false;
 
-        ResizeDrwFrontHeights();
+            Opening1Disabled = false;
+            Opening2Disabled = false;
+            Opening3Disabled = false;
+        }
     }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; } = false; partial void OnEqualizeAllDrwFrontsChanged(bool oldValue, bool newValue)
     {
@@ -643,24 +680,27 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             EqualizeBottomDrwFronts = false;
 
-            double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
-            if (!HasTK) { tkHeight = 0; }
-            double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
+            ApplyDrawerFrontEqualization();
+            ResizeDrwFrontHeights();
 
-            double topReveal = ConvertDimension.FractionToDouble(TopReveal);
-            double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
-            double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
+            DrwFront1Disabled = true;
+            DrwFront2Disabled = true;
+            DrwFront3Disabled = true;
 
-            double totalDrwFrontHeight = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1));
-            double equalDrwFrontHeight = totalDrwFrontHeight / DrwCount;
-
-            DrwFrontHeight1 = equalDrwFrontHeight.ToString();
-            DrwFrontHeight2 = equalDrwFrontHeight.ToString();
-            DrwFrontHeight3 = equalDrwFrontHeight.ToString();
-
+            Opening1Disabled = true;
+            Opening2Disabled = true;
+            Opening3Disabled = true;
         }
+        else
+        {
+            DrwFront1Disabled = false;
+            DrwFront2Disabled = false;
+            DrwFront3Disabled = false;
 
-        ResizeDrwFrontHeights();
+            Opening1Disabled = false;
+            Opening2Disabled = false;
+            Opening3Disabled = false;
+        }
     }
 
     // Reveal and gap properties
@@ -670,24 +710,51 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (newValue != oldValue)
         {
-            ResizeOpeningHeights();
-            //ResizeDrwFrontHeights();
+            // Style2: "Drawer" cabinets
+            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+            {
+                ApplyDrawerFrontEqualization();
+                ResizeDrwFrontHeights();
+            }
+            else
+            {
+                ResizeOpeningHeights();
+                ResizeDrwFrontHeights();
+            }
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BottomReveal { get; set; } = ""; partial void OnBottomRevealChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
-            ResizeOpeningHeights();
-            //ResizeDrwFrontHeights();
+            // Style2: "Drawer" cabinets
+            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+            {
+                ApplyDrawerFrontEqualization();
+                ResizeDrwFrontHeights();
+            }
+            else
+            {
+                ResizeOpeningHeights();
+                ResizeDrwFrontHeights();
+            }
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string GapWidth { get; set; } = ""; partial void OnGapWidthChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
         {
-            ResizeOpeningHeights();
-            //ResizeDrwFrontHeights();
+            // Style2: "Drawer" cabinets
+            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+            {
+                ApplyDrawerFrontEqualization();
+                ResizeDrwFrontHeights();
+            }
+            else
+            {
+                ResizeOpeningHeights();
+                ResizeDrwFrontHeights();
+            }
         }
     }
 
@@ -899,6 +966,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     DrwFrontHeight3 = (opening3Height + (MaterialThickness34) - gapWidth).ToString();
                     DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
                 }
+
             }
 
             UpdatePreview();
@@ -941,22 +1009,23 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         try
         {
-        _isResizing = true;
+            _isResizing = true;
 
-        if (Style == Style1)
-        {
-            if (DrwCount == 1)
+            if (Style == Style1)
             {
-                Opening1Disabled = false;
-                DrwFront1Disabled = false;
-                opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                OpeningHeight1 = opening1Height.ToString();
-                DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
+                if (DrwCount == 1)
+                {
+                    Opening1Disabled = false;
+                    DrwFront1Disabled = false;
+                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
+                    OpeningHeight1 = opening1Height.ToString();
+                    DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
+                }
             }
-        }
 
-        if (Style == Style2)
-        {
+            if (Style == Style2)
+            {
+                
                 if (DrwCount == 1)
                 {
                     DrwFront1Disabled = true;
@@ -970,16 +1039,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
                 if (DrwCount == 2)
                 {
-                    if (EqualizeAllDrwFronts)
-                    {
-                        DrwFront1Disabled = true;
-                        DrwFront2Disabled = true;
-                    }
-                    else
-                    {
-                        DrwFront1Disabled = false;
-                        DrwFront2Disabled = true;
-                    }
+                    DrwFront1Disabled = false;
+                    DrwFront2Disabled = true;
 
                     opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
                     opening2Height = height - topDeckAndStretcherThickness - opening1Height;// - opening2Height - opening3Height;
@@ -991,12 +1052,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
                 if (DrwCount == 3)
                 {
-                    if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts)
-                    {
-                        DrwFront1Disabled = false;
-                        DrwFront2Disabled = false;
-                        DrwFront3Disabled = true;
-                    }
+                    DrwFront1Disabled = false;
+                    DrwFront2Disabled = false;
+                    DrwFront3Disabled = true;
 
                     opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
                     opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
@@ -1010,12 +1068,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
                 if (DrwCount == 4)
                 {
-                    if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts)
-                    {
-                        DrwFront1Disabled = false;
-                        DrwFront2Disabled = false;
-                        DrwFront3Disabled = false;
-                    }
+                    DrwFront1Disabled = false;
+                    DrwFront2Disabled = false;
+                    DrwFront3Disabled = false;
 
                     opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
                     opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
@@ -1030,6 +1085,62 @@ public partial class BaseCabinetViewModel : ObservableValidator
             }
 
             UpdatePreview();
+        }
+        finally
+        {
+            _isResizing = false;
+        }
+    }
+
+    private void ApplyDrawerFrontEqualization()
+    {
+        // Prevent re-entrancy caused by property-change handlers / equalize assignments
+        if (_isResizing) return;
+        if (_isMapping) return;
+
+        if (Style != Style2) return;
+        if (DrwCount <= 0) return;
+
+        // Nothing to do if no equalize mode active
+        if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts) return;
+
+        double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
+        if (!HasTK) tkHeight = 0;
+
+        double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
+
+        double topReveal = ConvertDimension.FractionToDouble(TopReveal);
+        double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
+        double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
+
+        try
+        {
+            _isResizing = true;
+
+            if (EqualizeAllDrwFronts)
+            {
+                if (DrwCount <= 0) return;
+
+                double total = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1));
+                double each = total / DrwCount;
+
+                DrwFrontHeight1 = each.ToString();
+                DrwFrontHeight2 = each.ToString();
+                DrwFrontHeight3 = each.ToString();
+                if (DrwCount >= 4) DrwFrontHeight4 = each.ToString();
+            }
+            else if (EqualizeBottomDrwFronts)
+            {
+                if (DrwCount <= 1) return;
+
+                double top = ConvertDimension.FractionToDouble(DrwFrontHeight1);
+                double total = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1)) - top;
+                double eachBottom = total / (DrwCount - 1);
+
+                if (DrwCount >= 2) DrwFrontHeight2 = eachBottom.ToString();
+                if (DrwCount >= 3) DrwFrontHeight3 = eachBottom.ToString();
+                if (DrwCount >= 4) DrwFrontHeight4 = eachBottom.ToString();
+            }
         }
         finally
         {

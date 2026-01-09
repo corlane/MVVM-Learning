@@ -1042,8 +1042,6 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (0,0,0),
                             new (dbxFrontAndBackWidth,0,0)
                         ];
-                        Debug.WriteLine("Drw Box Front and Back");
-                        Debug.WriteLine($"dbx 2 Height: {dbxHeight}");
                         dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
                         dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
 
