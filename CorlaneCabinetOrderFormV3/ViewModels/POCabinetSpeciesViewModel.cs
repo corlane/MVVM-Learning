@@ -12,7 +12,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class POCabinetSpeciesViewModel : ObservableObject
 {
-    private static readonly SolidColorBrush s_okGreen = new(Color.FromRgb(146, 250, 153));
+    private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;

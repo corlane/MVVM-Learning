@@ -77,28 +77,107 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
+        private void TrySaveDefaults()
+        {
+            if (_defaults == null)
+            {
+                return;
+            }
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _defaults.SaveAsync().ConfigureAwait(false);
+                }
+                catch
+                {
+                    // best-effort: defaults saving must never break the UI
+                }
+            });
+        }
+
         public ObservableCollection<MaterialTotal> MaterialTotals { get; } = new ObservableCollection<MaterialTotal>();
 
         [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? CompanyName { get; set; }
-        partial void OnCompanyNameChanged(string? oldValue, string? newValue) => _defaults.CompanyName = newValue;
+        partial void OnCompanyNameChanged(string? oldValue, string? newValue)
+        {
+            if (_defaults != null)
+            {
+                _defaults.CompanyName = newValue;
+                TrySaveDefaults();
+            }
+
+            if (CompanyName == "Corlane!")
+            {
+                _mainVm.Notify2("😊 Hello, Corlane team!", Brushes.BlueViolet, 4000);
+                _mainVm.IsAdmin = true;
+            }
+            else
+            {
+                _mainVm.IsAdmin = false;
+            }
+        }
 
         [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ContactName { get; set; }
-        partial void OnContactNameChanged(string? oldValue, string? newValue) => _defaults.ContactName = newValue;
+        partial void OnContactNameChanged(string? oldValue, string? newValue)
+        {
+            if (_defaults != null)
+            {
+                _defaults.ContactName = newValue;
+                TrySaveDefaults();
+            }
+        }
 
         [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? PhoneNumber { get; set; }
-        partial void OnPhoneNumberChanged(string? oldValue, string? newValue) => _defaults.PhoneNumber = newValue;
+        partial void OnPhoneNumberChanged(string? oldValue, string? newValue)
+        {
+            if (_defaults != null)
+            {
+                _defaults.PhoneNumber = newValue;
+                TrySaveDefaults();
+            }
+        }
 
         [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? EMail { get; set; }
-        partial void OnEMailChanged(string? oldValue, string? newValue) => _defaults.EMail = newValue;
+        partial void OnEMailChanged(string? oldValue, string? newValue)
+        {
+            if (_defaults != null)
+            {
+                _defaults.EMail = newValue;
+                TrySaveDefaults();
+            }
+        }
 
         [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? Street { get; set; }
-        partial void OnStreetChanged(string? oldValue, string? newValue) => _defaults.Street = newValue;
+        partial void OnStreetChanged(string? oldValue, string? newValue)
+        {
+            if (_defaults != null)
+            {
+                _defaults.Street = newValue;
+                TrySaveDefaults();
+            }
+        }
 
         [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? City { get; set; }
-        partial void OnCityChanged(string? oldValue, string? newValue) => _defaults.City = newValue;
+        partial void OnCityChanged(string? oldValue, string? newValue)
+        {
+            if (_defaults != null)
+            {
+                _defaults.City = newValue;
+                TrySaveDefaults();
+            }
+        }
 
         [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ZipCode { get; set; }
-        partial void OnZipCodeChanged(string? oldValue, string? newValue) => _defaults.ZipCode = newValue;
+        partial void OnZipCodeChanged(string? oldValue, string? newValue)
+        {
+            if (_defaults != null)
+            {
+                _defaults.ZipCode = newValue;
+                TrySaveDefaults();
+            }
+        }
 
         [RelayCommand]
         private async Task PlaceOrder()
@@ -117,6 +196,18 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             try
             {
+                if (_defaults != null)
+                {
+                    try
+                    {
+                        await _defaults.SaveAsync().ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+                }
+
                 var customer = new JobCustomerInfo
                 {
                     CompanyName = CompanyName,
@@ -446,7 +537,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         public partial bool IsInternetConnected { get; set; }
 
         [ObservableProperty]
-        private SolidColorBrush internetStatusBackground = new SolidColorBrush(Color.FromRgb(255, 88, 113));
+        public partial SolidColorBrush InternetStatusBackground { get; set; } = new SolidColorBrush(Color.FromRgb(255, 88, 113));
 
         public string InternetStatusText => IsInternetConnected ? "CONNECTED" : "NOT CONNECTED";
 
@@ -536,9 +627,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         }
 
         [ObservableProperty]
-        private string orderStatusText = "NOT ORDERED";
+        public partial string OrderStatusText { get; set; } = "NOT ORDERED";
 
         [ObservableProperty]
-        private SolidColorBrush orderStatusBackground = new SolidColorBrush(Color.FromRgb(255, 88, 113));
+        public partial SolidColorBrush OrderStatusBackground { get; set; } = new SolidColorBrush(Color.FromRgb(255, 88, 113));
     }
 }

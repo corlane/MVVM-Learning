@@ -54,7 +54,7 @@ If cabinet depth is too shallow for drw, display warning - remove drws and hide 
 
 Add nailers on cabs with 1/4" back, base and upper
 
-On base cab drw front section, add "Equalize" for bottom drw equalization, and an "Equalize All" button to duh make all drw fronts equal.
+On base cab drw front section, add "Equalize" for bottom drw equalization, and an "Equalize All" button to duh make all drw fronts equal. -- DONE
 
 Do not allow duplicate cabinet names -- DONE
 
@@ -122,10 +122,10 @@ Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab d
 Total Cabinets on printed cutlist seems to only be counting line items, not total cabinets including quantities -- DONE
 
 
-1/4" backs are not showing the proper material texture. WTF?
+1/4" backs are not showing the proper material texture. WTF? Told to use same texture as PFP in material loading method. -- DONE
 
 
-Make these tabs for global item mods, default hidden, only shown when job contains the relavent modifications:
+Make these tabs for global item mods, default hidden, only shown when job contains the relavent modifications: -- DONE
     Toekick
 	Edgebanding
 	Hinge Holes
@@ -133,13 +133,12 @@ Make these tabs for global item mods, default hidden, only shown when job contai
 	Drawer Boxes
 	Species
 	Include Doors
-	Door Species
+	Door Species																					
 	Corner Cabinet Dims
 	Notes
 	Reveals/Gaps
 	Door/Drw Grain Dir.
-	Opening Heights/Drw Front Heights
-
+	Opening Heights/Drw Front Heights 
 	
 
 TESTING NOTES:

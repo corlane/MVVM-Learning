@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
-                   Text="Notes Exceptions"
+                   Text="Notes"
                    FontSize="18"
                    FontWeight="SemiBold"/>
 

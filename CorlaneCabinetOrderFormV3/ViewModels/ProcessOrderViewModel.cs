@@ -12,6 +12,20 @@ using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
+
+
+
+
+
+// THIS IS ACTUALLY THE MATERIAL PRICES TAB VIEWMODEL. RENAMING IT WOULD BREAK A LOT OF THINGS SO WHATEVER.
+// THE ACTUAL PROCESS ORDER VIEWMODEL IS REALLYProcessOrderViewModel.
+
+
+
+
+
+
+
 public partial class ProcessOrderViewModel : ObservableValidator
 {
     private static readonly HttpClient s_httpClient = new()

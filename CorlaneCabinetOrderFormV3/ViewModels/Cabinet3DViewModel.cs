@@ -2866,6 +2866,7 @@ public partial class Cabinet3DViewModel : ObservableObject
             panelSpecies = "Prefinished Ply";
         if (string.IsNullOrWhiteSpace(grainDirection))
             grainDirection = "Horizontal";
+        if (panelSpecies == "PFP 1/4") panelSpecies = "Prefinished Ply"; // Use the same texture for 1/4" and 3/4" prefinished ply
 
         string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
 

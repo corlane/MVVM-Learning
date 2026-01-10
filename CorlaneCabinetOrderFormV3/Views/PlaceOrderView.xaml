@@ -52,31 +52,31 @@
 
                 <Label Content="Company Name" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                 <TextBox x:Name="textCompanyName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
-                                 Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding CompanyName, UpdateSourceTrigger=LostFocus}"/>
 
                 <Label Content="Contact Name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                 <TextBox x:Name="textContactName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
-                                 Text="{Binding ContactName, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding ContactName, UpdateSourceTrigger=LostFocus}"/>
 
                 <Label Content="Phone Number" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                 <TextBox x:Name="textPhoneNumber" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
-                                 Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding PhoneNumber, UpdateSourceTrigger=LostFocus}"/>
 
                 <Label Content="E-Mail Address" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                 <TextBox x:Name="textEmailAddress" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
-                                 Text="{Binding EMail, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding EMail, UpdateSourceTrigger=LostFocus}"/>
 
                 <Label Content="Street" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                 <TextBox x:Name="textStreet" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
-                                 Text="{Binding Street, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding Street, UpdateSourceTrigger=LostFocus}"/>
 
                 <Label Content="City" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                 <TextBox x:Name="textCity" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
-                                 Text="{Binding City, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding City, UpdateSourceTrigger=LostFocus}"/>
 
                 <Label Content="Zip Code" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
                 <TextBox x:Name="textZipCode" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
-                                 Text="{Binding ZipCode, UpdateSourceTrigger=PropertyChanged}"/>
+                                 Text="{Binding ZipCode, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </GroupBox>
 
