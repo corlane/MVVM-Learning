@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POJobMaterialListView"
+﻿<!--<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POJobMaterialListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -26,6 +26,143 @@
                    FontSize="18"
                    FontWeight="SemiBold"
                    />
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            --><!-- Sheet goods --><!--
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="6"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Sheet Goods"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           />
+
+                <DataGrid Grid.Row="2"
+                          ItemsSource="{Binding SheetGoods}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Species" Binding="{Binding Species}" Width="2*"/>
+                        <DataGridTextColumn Header="Sq Ft" Binding="{Binding SqFt, StringFormat=N2}" Width="*"/>
+                        <DataGridTextColumn Header="Sheets" Binding="{Binding Sheets}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="3"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,8,0,0">
+                    <TextBlock Text="Total: " FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding TotalSheetGoodsSqFt, StringFormat=N2}"/>
+                    <TextBlock Text=" sq ft, " />
+                    <TextBlock Text="{Binding TotalSheetGoodsSheets}" />
+                    <TextBlock Text=" sheets" />
+                </StackPanel>
+            </Grid>
+
+            --><!-- Edgebanding --><!--
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="6"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Edgebanding"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           />
+
+                <DataGrid Grid.Row="2"
+                          ItemsSource="{Binding EdgeBanding}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Species" Binding="{Binding Species}" Width="2*"/>
+                        <DataGridTextColumn Header="Linear Ft" Binding="{Binding LinearFeet, StringFormat=N2}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <StackPanel Grid.Row="3"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="0,8,0,0">
+                    <TextBlock Text="Total: " FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding TotalEdgeBandingFeet, StringFormat=N2}"/>
+                    <TextBlock Text=" ft" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POJobMaterialListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="920"
+             d:DesignWidth="1000"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}">
+
+    <d:UserControl.DataContext>
+        <viewmodels:POJobMaterialListViewModel />
+    </d:UserControl.DataContext>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <Button DockPanel.Dock="Right"
+                    Content="Refresh"
+                    Padding="10,4"
+                    Command="{Binding RefreshCommand}" />
+            <TextBlock Text="Job Material Breakdown"
+                       FontSize="18"
+                       FontWeight="SemiBold" />
+        </DockPanel>
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

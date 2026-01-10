@@ -2674,6 +2674,18 @@ public partial class Cabinet3DViewModel : ObservableObject
                     // accumulate edgeband length for this edge (non-panel path)
                     edgeBandLengthInches += sideLengths[edgeFace];
                 }
+                //################################################################################## Add check for upper cabinet here and add edgebanding to edgeFace == 1. This works but species can't be changed per edge.
+                //else if (cab.CabinetType == "Upper Cabinet" && edgeFace == 3)
+                //{
+                //    specialBuilder.AddQuad(
+                //    mainBuilder.Positions[b0],
+                //    mainBuilder.Positions[b1],
+                //    mainBuilder.Positions[t1],
+                //    mainBuilder.Positions[t0],
+                //    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                //    edgeBandLengthInches += sideLengths[edgeFace];
+                //}
+
                 else
                 {
                     mainBuilder.AddQuad(
