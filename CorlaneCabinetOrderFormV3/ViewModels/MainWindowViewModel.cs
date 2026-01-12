@@ -15,7 +15,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.0.0";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3 BETA TESTING ONLY";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -33,7 +33,7 @@ public partial class MainWindowViewModel : ObservableValidator
     }
 
     [ObservableProperty]
-    public partial bool IsAdmin { get; set; } = true;
+    public partial bool IsAdmin { get; set; } = false;
 
     [ObservableProperty] public partial bool ViewportVisible { get; set; } = true;
 

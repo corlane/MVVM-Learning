@@ -59,6 +59,12 @@ On base cab drw front section, add "Equalize" for bottom drw equalization, and a
 
 Do not allow duplicate cabinet names -- DONE
 
+If job is modified, warn before closing without saving
+
+
+
+
+
 
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
@@ -91,6 +97,12 @@ NOTE! 45 degree cab shows front width, which is the front width of the deck or t
 Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
 Change directory name creation in Batch List viewmodel to delve into the proper directories based on cabinet Type and Style
+
+Change material to allow for UP and DOWN versions of each raw plywood species. Change individual cabinet parts to be made of the appropriate UP or DOWN material.
+
+CNC prie needs to be calcuated by sq ft instead of per sheet.
+
+
 
 
 BUGS:

@@ -154,7 +154,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultUpperLeftReveal { get => _defaults.DefaultUpperLeftReveal; set => _defaults.DefaultUpperLeftReveal = value; }
     public string DefaultUpperRightReveal { get => _defaults.DefaultUpperRightReveal; set => _defaults.DefaultUpperRightReveal = value; }
     public string DefaultUpperTopReveal { get => _defaults.DefaultUpperTopReveal; set => _defaults.DefaultUpperTopReveal = value; }
-    public string DefaultUpperBottomReveal { get => _defaults.DefaultUpperBackThickness; set => _defaults.DefaultUpperBackThickness = value; }
+    public string DefaultUpperBottomReveal { get => _defaults.DefaultUpperBottomReveal; set => _defaults.DefaultUpperBottomReveal = value; }
 
     public string DefaultGapWidth { get => _defaults.DefaultGapWidth; set => _defaults.DefaultGapWidth = value; }
 

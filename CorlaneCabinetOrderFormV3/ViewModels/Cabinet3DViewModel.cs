@@ -244,8 +244,6 @@ public partial class Cabinet3DViewModel : ObservableObject
         double MaterialThickness14 = 0.25;
         double halfMaterialThickness34 = MaterialThickness34 / 2; // This is to make door calcs etc. more straightforward
         double doubleMaterialThickness34 = MaterialThickness34 * 2; // This is to make door calcs etc. more straightforward
-        //double tripleMaterialThickness34 = MaterialThickness34 * 3; // This is to make door calcs etc. more straightforward
-        //double quadrupleMaterialThickness34 = MaterialThickness34 * 4; // This is to make door calcs etc. more straightforward
 
         double backLegWidth = 3;
         double StretcherWidth = 6;
