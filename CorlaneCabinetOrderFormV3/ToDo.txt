@@ -65,7 +65,6 @@ If job is modified, warn before closing without saving
 
 
 
-
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
 OPTIONAL: Change image loading in Cabinet3DViewModel to utilize the grain direction setting. This will allow the removal of duplicate material images for horizontal and vertical grain.

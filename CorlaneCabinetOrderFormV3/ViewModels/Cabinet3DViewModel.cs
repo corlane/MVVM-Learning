@@ -381,8 +381,8 @@ public partial class Cabinet3DViewModel : ObservableObject
 
         //Debug.WriteLine($"End Panels:");
 
-        leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
-        rightEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+        leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+        rightEnd = CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
         if (cabType == style1 || cabType == style2)
         {
@@ -402,7 +402,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 new (interiorWidth,depth,0),
                 new (0,depth,0)
             ];
-            deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+            deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
             ApplyTransform(deck, -(interiorWidth / 2), -depth, tk_Height, 270, 0, 0);
 
             // Full Top
@@ -417,7 +417,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (interiorWidth,depth,0),
                     new (0,depth,0)
                 ];
-                top = CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                top = CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
             }
 
@@ -442,8 +442,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                 ];
 
 
-                topStretcherFront = CreatePanel(topStretcherFrontPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                topStretcherBack = CreatePanel(topStretcherBackPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                topStretcherFront = CreatePanel(topStretcherFrontPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
+                topStretcherBack = CreatePanel(topStretcherBackPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
 
                 ApplyTransform(topStretcherFront, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
                 ApplyTransform(topStretcherBack, -(interiorWidth / 2), -topStretcherBackWidth, height - MaterialThickness34, 270, 0, 0);
@@ -463,7 +463,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (interiorWidth,tk_Height-.5,0),
                         new (0,tk_Height-.5,0)
                     ];
-                toekick = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                toekick = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(toekick, -(interiorWidth / 2), 0.5, depth - tk_Depth - MaterialThickness34, 0, 0, 0); // The hardcoded 1/2" here is because the actual toekick board is 1/2" narrower than the specified toekick height
             }
 
@@ -479,7 +479,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (interiorWidth,interiorHeight,0),
                     new (0,interiorHeight,0)
                 ];
-                back = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                back = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34 + tk_Height, 0, 0, 0, 0);
             }
             else
@@ -493,7 +493,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (width,height-tk_Height,0),
                     new (0,height-tk_Height,0)
                 ];
-                back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
 
                 nailerPoints =
@@ -504,7 +504,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (0,StretcherWidth,0)
                 ];
 
-                nailer = CreatePanel(nailerPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
                 cabinet.Children.Add(nailer);
             }
@@ -516,7 +516,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                 double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
 
-                stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
                 cabinet.Children.Add(stretcher);
 
@@ -532,7 +532,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (0,opening1Height,0)
                     ];
 
-                    stretcher = CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
@@ -549,7 +549,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     //Debug.WriteLine("Drw Stretcher");
 
                     opening1HeightAdjusted += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
-                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
@@ -559,14 +559,14 @@ public partial class Cabinet3DViewModel : ObservableObject
                     //Debug.WriteLine("Drw Stretcher");
 
                     opening1HeightAdjusted += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
-                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
 
                     //Debug.WriteLine("Drw Stretcher");
 
                     opening2HeightAdjusted += MaterialThickness34; // moves the reference to the bottom of the stretcher
-                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
@@ -576,21 +576,21 @@ public partial class Cabinet3DViewModel : ObservableObject
                     //Debug.WriteLine("Drw Stretcher");
 
                     opening1HeightAdjusted += doubleMaterialThickness34; // moves the reference to the bottom of the stretcher
-                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
 
                     //Debug.WriteLine("Drw Stretcher");
 
                     opening2HeightAdjusted += MaterialThickness34; // moves the reference to the bottom of the stretcher
-                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
 
                     //Debug.WriteLine("Drw Stretcher");
 
                     opening3HeightAdjusted += MaterialThickness34; // moves the reference to the bottom of the stretcher
-                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted - opening3HeightAdjusted, 270, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
@@ -607,7 +607,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (0,opening1Height,0)
                     ];
 
-                    stretcher = CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    stretcher = CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
                     cabinet.Children.Add(stretcher);
                 }
@@ -624,7 +624,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 {
                     //Debug.WriteLine("Shelf");
 
-                    shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                    shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -backThickness - shelfDepth, i * shelfSpacing, 270, 0, 0);
                     cabinet.Children.Add(shelf);
                 }
@@ -661,7 +661,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                     if (baseCab.IncDoors)
                     {
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                         if (!baseCab.HasTK)
                         {
                             ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
@@ -696,11 +696,11 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                     if (baseCab.IncDoors)
                     {
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
 
                         //Debug.WriteLine("Door");
 
-                        door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                        door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                         if (!baseCab.HasTK)
                         {
                             ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
@@ -744,7 +744,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                     if (baseCab.IncDrwFront1)
                     {
-                        drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR");
+                        drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
                         cabinet.Children.Add(drwFront1);
                     }
@@ -772,7 +772,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                         if (baseCab.IncDrwFront1)
                         {
-                            drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR");
+                            drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                             ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
                             cabinet.Children.Add(drwFront1);
                         }
@@ -801,7 +801,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                             if (baseCab.IncDrwFront1)
                             {
-                                drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR");
+                                drwFront1 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                                 ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
                                 cabinet.Children.Add(drwFront1);
                             }
@@ -832,7 +832,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                             if (baseCab.IncDrwFront2)
                             {
-                                drwFront2 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR");
+                                drwFront2 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                                 ApplyTransform(drwFront2,
                                     -(width / 2) + doorLeftReveal,
                                     height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height,
@@ -869,7 +869,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                                 if (baseCab.IncDrwFront3)
                                 {
-                                    drwFront3 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR");
+                                    drwFront3 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                                     ApplyTransform(drwFront3,
                                         -(width / 2) + doorLeftReveal,
                                         height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height - baseDoorGap - drwFront3Height,
@@ -908,7 +908,7 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                                 if (baseCab.IncDrwFront4)
                                 {
-                                    drwFront4 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR");
+                                    drwFront4 = CreatePanel(drwFrontPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                                     ApplyTransform(drwFront4,
                                         -(width / 2) + doorLeftReveal,
                                         height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height - baseDoorGap - drwFront3Height - baseDoorGap - drwFront4Height,
@@ -973,8 +973,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Sides");
 
-                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxFrontAndBackPoints =
                         [
@@ -985,8 +985,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Front and Back");
 
-                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxBottomPoints =
                         [
@@ -997,7 +997,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Bottom");
 
-                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
 
                         // Build box:
                         ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
@@ -1045,8 +1045,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Sides");
 
-                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxFrontAndBackPoints =
                         [
@@ -1055,8 +1055,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (0,0,0),
                             new (dbxFrontAndBackWidth,0,0)
                         ];
-                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxBottomPoints =
                         [
@@ -1067,7 +1067,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Bottom");
 
-                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
 
                         ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
                         ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
@@ -1113,8 +1113,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Sides");
 
-                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxFrontAndBackPoints =
                         [
@@ -1125,8 +1125,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Front and Back");
 
-                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxBottomPoints =
                         [
@@ -1137,7 +1137,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Bottom");
 
-                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
 
                         ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
                         ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
@@ -1185,8 +1185,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Sides");
 
-                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxFrontAndBackPoints =
                         [
@@ -1197,8 +1197,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Box Front and Back");
 
-                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                        dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                         dbxBottomPoints =
                         [
@@ -1209,7 +1209,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         ];
                         //Debug.WriteLine("Drw Bottom");
 
-                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                        dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
 
                         ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
                         ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
@@ -1271,8 +1271,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (0,0,0),
                             new (dbxDepth,0,0)
                             ];
-                            dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                            dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                            dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                             dbxFrontAndBackPoints =
                         [
@@ -1281,8 +1281,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (0,0,0),
                             new (dbxFrontAndBackWidth,0,0)
                         ];
-                            dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
-                            dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+                            dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                             dbxBottomPoints =
                         [
@@ -1291,7 +1291,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (dbxBottomWidth,dbxBottomLength,0),
                             new (0,dbxBottomLength,0)
                         ];
-                            dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                            dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
 
                             // Build box:
                             ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
@@ -1391,8 +1391,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (0,0,0)
                     ];
             }
-            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
-            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
             ApplyTransform(leftEnd, 0, 0, 0, 0, 270, 0);
             ApplyTransform(rightEnd, -(rightDepth - MaterialThickness34) - leftFrontWidth, 0, -leftDepth - rightFrontWidth, 0, 180, 0);
@@ -1407,8 +1407,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new ((leftFrontWidth - MaterialThickness34) + rightDepth - (doubleMaterialThickness34),-leftDepth + doubleMaterialThickness34,0),
                     new (0,-leftDepth + doubleMaterialThickness34,0),
                 ];
-            deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, true, isPanel, panelEBEdges);
-            top = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, true, isPanel, panelEBEdges);
+            deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false);
+            top = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false);
 
             ApplyTransform(top, 0, leftDepth, -height, 90, 0, 0);
             ApplyTransform(deck, 0, leftDepth, -tk_Height - MaterialThickness34, 90, 0, 0);
@@ -1438,7 +1438,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (0,height,0)
                     ];
             }
-            leftBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+            leftBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(leftBack, 0, tk_Height, MaterialThickness34, 0, 0, 0);
 
             // Right Back
@@ -1449,7 +1449,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (leftDepth+rightFrontWidth - MaterialThickness34 - doubleMaterialThickness34,height-tk_Height,0),
                     new (0,height-tk_Height,0),
                 ];
-            rightBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+            rightBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, tk_Height, leftFrontWidth + rightDepth - doubleMaterialThickness34 - .75, 0, 90, 0);
 
 
@@ -1463,7 +1463,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (leftFrontWidth - MaterialThickness34 + tk_Depth,tk_Height-.5,0),
                         new (0,tk_Height-.5,0)
                     ];
-                toekick1 = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                toekick1 = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(toekick1, 0, 0.5, leftDepth - tk_Depth - MaterialThickness34, 0, 0, 0); // The hardcoded 1/2" here is because the actual toekick board is 1/2" narrower than the specified toekick height
                 cabinet.Children.Add(toekick1);
 
@@ -1474,7 +1474,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (rightFrontWidth + tk_Depth,tk_Height-.5,0),
                         new (0,tk_Height-.5,0)
                     ];
-                toekick2 = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                toekick2 = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(toekick2, -leftDepth - rightFrontWidth + MaterialThickness34, 0.5, leftFrontWidth + tk_Depth - MaterialThickness34, 0, 90, 0); // The hardcoded 1/2" here is because the actual toekick board is 1/2" narrower than the specified toekick height
                 cabinet.Children.Add(toekick2);
             }
@@ -1497,7 +1497,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,-leftDepth + doubleMaterialThickness34 + gap,0),
                             new (0,-leftDepth + doubleMaterialThickness34 + gap,0),
                         ];
-                    shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, true, isPanel, panelEBEdges);
+                    shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(shelf, 0 + .0625, leftDepth, -i * shelfSpacing - tk_Height, 90, 0, 0);
                     cabinet.Children.Add(shelf);
                 }
@@ -1529,7 +1529,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (0,doorHeight,0)
                     ];
 
-                    door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                    door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
 
                     doorPoints =
                         [
@@ -1538,7 +1538,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (door2Width,doorHeight,0),
                             new (0,doorHeight,0)
                         ];
-                    door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                    door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
 
 
                     if (!baseCab.HasTK)
@@ -1622,8 +1622,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                     ];
             }
 
-            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
-            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
             ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 90, 0);
             ApplyTransform(rightEnd, -leftBackWidth, 0, -rightBackWidth, 0, 0, 0);
@@ -1668,8 +1668,8 @@ public partial class Cabinet3DViewModel : ObservableObject
             }
 
             // Create deck/top from normalized polygon (edge[0] now runs from (0,0,0) -> (edgeLen,0,0))
-            deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, isPanel, panelEBEdges, ((angle * 180) / Math.PI) - 45);
-            top = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, isPanel, panelEBEdges, ((angle * 180) / Math.PI) - 45);
+            deck = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, isPanel, panelEBEdges, isFaceUp: false, ((angle * 180) / Math.PI) - 45);
+            top = CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, isPanel, panelEBEdges, isFaceUp: false, ((angle * 180) / Math.PI) - 45);
 
             // Apply the same world transforms as before
             ApplyTransform(top, 0, 0, 0, -90, ((angle * 180) / Math.PI) + 90, 0);
@@ -1694,7 +1694,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (frontWidth + tk_Depth,tk_Height-.5,0),
                     new (-tk_Depth,tk_Height-.5,0)
                 ];
-                toekick = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
+                toekick = CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(toekick, 0, 0, -tk_Depth, 0, ((angle * 180) / Math.PI) + 90, 0);
                 var toekickRotated = new Model3DGroup();
                 toekickRotated.Children.Add(toekick);
@@ -1732,7 +1732,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 ];
             }
 
-            leftBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+            leftBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(leftBack, -leftBackWidth + .25, 0, -MaterialThickness34 - .25, 0, 0, 0);
 
             // Right Back
@@ -1743,7 +1743,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 new (rightBackWidth - doubleMaterialThickness34 - .25,height,0),
                 new (0,height,0)
             ];
-            rightBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+            rightBack = CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(rightBack, MaterialThickness34 + .25, 0, -leftBackWidth + .25, 0, 90, 0);
 
 
@@ -1763,7 +1763,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (MaterialThickness34 + .25 + gap, leftBackWidth - MaterialThickness34 - .25 - gap,0),
                             new (MaterialThickness34 + .25 + gap, MaterialThickness34 + gap,0),
                         ];
-                    shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, true, isPanel, panelEBEdges, 45);
+                    shelf = CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false, 45);
                     ApplyTransform(shelf, 0, gap / 2, +i * shelfSpacing, 90, 90, 180);
                     cabinet.Children.Add(shelf);
                 }
@@ -1792,7 +1792,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (door1Width,doorHeight,0),
                         new (0,doorHeight,0)
                         ];
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
                         var door1Rotated = new Model3DGroup();
                         door1Rotated.Children.Add(door1);
@@ -1820,7 +1820,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (door1Width,doorHeight,0),
                         new (0,doorHeight,0)
                         ];
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
                         var door1Rotated = new Model3DGroup();
                         door1Rotated.Children.Add(door1);
@@ -1834,7 +1834,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (door2Width,doorHeight,0),
                         new (0,doorHeight,0)
                         ];
-                        door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR");
+                        door2 = CreatePanel(doorPoints, MaterialThickness34, baseCab.DoorSpecies, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door2, door1Width + doorLeftReveal + baseDoorGap, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
                         var door2Rotated = new Model3DGroup();
                         door2Rotated.Children.Add(door2);
@@ -1947,8 +1947,8 @@ public partial class Cabinet3DViewModel : ObservableObject
             new (0,0,0)
         ];
 
-        leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
-        rightEnd = CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+        leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+        rightEnd = CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
         if (cabType.Contains(style1))
         {
@@ -1967,7 +1967,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (interiorWidth,depth,0),
                     new (0,depth,0)
                 ];
-            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges);
+            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
             ApplyTransform(deck, -(interiorWidth / 2), -depth, 0, 270, 0, 0);
 
             // Full Top
@@ -1978,7 +1978,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (interiorWidth,depth,0),
                     new (0,depth,0)
                 ];
-            top = CreatePanel(topPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges);
+            top = CreatePanel(topPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
             ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
 
 
@@ -1992,7 +1992,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (interiorWidth,interiorHeight,0),
                         new (0,interiorHeight,0)
                     ];
-                back = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+                back = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34, 0, 0, 0, 0);
             }
             else
@@ -2004,7 +2004,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (width,height,0),
                         new (0,height,0)
                     ];
-                back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+                back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(back, -(width / 2), 0, -MaterialThickness14, 0, 0, 0);
 
 
@@ -2016,11 +2016,11 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (0,StretcherWidth,0)
                 ];
 
-                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges);
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
                 cabinet.Children.Add(nailer);
 
-                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges);
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(nailer, -(interiorWidth / 2), 0 + MaterialThickness34, 0, 0, 0, 0);
                 cabinet.Children.Add(nailer);
 
@@ -2041,7 +2041,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (interiorWidth-.125,shelfDepth,0),
                         new (0,shelfDepth,0)
                     ];
-                shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges);
+                shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -MaterialThickness34 - shelfDepth, i * shelfSpacing, 270, 0, 0);
                 cabinet.Children.Add(shelf);
             }
@@ -2070,7 +2070,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (doorWidth,doorHeight,0),
                             new (0,doorHeight,0)
                         ];
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
 
                         cabinet.Children.Add(door1);
@@ -2097,8 +2097,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (doorWidth, doorHeight, 0),
                             new (0,doorHeight,0)
                         ];
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
-                        door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
+                        door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
                         ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal, depth, 0, 0, 0);
 
@@ -2138,8 +2138,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (0,0,0)
                 ];
 
-            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
-            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
             ApplyTransform(leftEnd, 0, 0, 0, 0, 270, 0);
             ApplyTransform(rightEnd, -(rightDepth - MaterialThickness34) - leftFrontWidth, 0, -leftDepth - rightFrontWidth, 0, 180, 0);
@@ -2154,8 +2154,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new ((leftFrontWidth - MaterialThickness34) + rightDepth - (doubleMaterialThickness34),-leftDepth + doubleMaterialThickness34,0),
                     new (0,-leftDepth + doubleMaterialThickness34,0),
                 ];
-            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, true, isPanel, panelEBEdges);
-            top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, true, isPanel, panelEBEdges);
+            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, true, isPanel, panelEBEdges, isFaceUp: false);
+            top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, true, isPanel, panelEBEdges, isFaceUp: false);
 
             ApplyTransform(top, 0, leftDepth, -height, 90, 0, 0);
             ApplyTransform(deck, 0, leftDepth, -MaterialThickness34, 90, 0, 0);
@@ -2171,7 +2171,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (leftFrontWidth + rightDepth - MaterialThickness34  - MaterialThickness34,height,0),
                     new (0,height,0)
                 ];
-            leftBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+            leftBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(leftBack, 0, 0, MaterialThickness34, 0, 0, 0);
 
             // Right Back
@@ -2182,7 +2182,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (leftDepth+rightFrontWidth - MaterialThickness34 - doubleMaterialThickness34,height,0),
                     new (0,height,0),
                 ];
-            rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+            rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, 0, leftFrontWidth + rightDepth - doubleMaterialThickness34 - .75, 0, 90, 0);
 
 
@@ -2203,7 +2203,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,-leftDepth + doubleMaterialThickness34 + gap,0),
                             new (0,-leftDepth + doubleMaterialThickness34 + gap,0),
                         ];
-                    shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, true, isPanel, panelEBEdges);
+                    shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, true, isPanel, panelEBEdges, isFaceUp: false);
                     ApplyTransform(shelf, 0 + .0625, leftDepth, -i * shelfSpacing, 90, 0, 0);
                     cabinet.Children.Add(shelf);
                 }
@@ -2234,7 +2234,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (door1Width,doorHeight,0),
                         new (0,doorHeight,0)
                     ];
-                    door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
+                    door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
 
                     doorPoints =
                         [
@@ -2243,7 +2243,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         new (door2Width,doorHeight,0),
                         new (0,doorHeight,0)
                         ];
-                    door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
+                    door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
 
                     ApplyTransform(door1, -MaterialThickness34 + doorLeftReveal, doorBottomReveal, leftDepth, 0, 0, 0);
                     ApplyTransform(door2, -leftDepth - door2Width - cornerCabDoorOpenSideReveal, doorBottomReveal, leftFrontWidth - (doubleMaterialThickness34), 0, 90, 0);
@@ -2285,8 +2285,8 @@ public partial class Cabinet3DViewModel : ObservableObject
                 new (0,0,0)
             ];
 
-            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
-            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+            leftEnd = CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+            rightEnd = CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
             ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 90, 0);
             ApplyTransform(rightEnd, -leftBackWidth, 0, -rightBackWidth, 0, 0, 0);
@@ -2331,8 +2331,8 @@ public partial class Cabinet3DViewModel : ObservableObject
             }
 
             // Create deck/top from normalized polygon (edge[0] now runs from (0,0,0) -> (edgeLen,0,0))
-            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, ((angle * 180) / Math.PI) - 45);
-            top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, ((angle * 180) / Math.PI) - 45);
+            deck = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, isFaceUp: false, ((angle * 180) / Math.PI) - 45);
+            top = CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, false, isPanel, panelEBEdges, isFaceUp: false, ((angle * 180) / Math.PI) - 45);
 
             // Apply the same world transforms as before
             ApplyTransform(top, 0, 0, 0, -90, ((angle * 180) / Math.PI) + 90, 0);
@@ -2358,7 +2358,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 new (leftBackWidth - MaterialThickness34 - .25,height,0),
                 new (0,height,0)
             ];
-            leftBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+            leftBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(leftBack, -leftBackWidth + .25, 0, -MaterialThickness34 - .25, 0, 0, 0);
 
             // Right Back
@@ -2369,7 +2369,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                 new (rightBackWidth - doubleMaterialThickness34 - .25,height,0),
                 new (0,height,0)
             ];
-            rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+            rightBack = CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
             ApplyTransform(rightBack, MaterialThickness34 + .25, 0, -leftBackWidth + .25, 0, 90, 0);
 
 
@@ -2389,7 +2389,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (MaterialThickness34 + .25 + gap, leftBackWidth - MaterialThickness34 - .25 - gap,0),
                             new (MaterialThickness34 + .25 + gap, MaterialThickness34 + gap,0),
                         ];
-                    shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, true, isPanel, panelEBEdges, 45);
+                    shelf = CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, true, isPanel, panelEBEdges, isFaceUp: false, 45);
                     ApplyTransform(shelf, 0, gap / 2, +i * shelfSpacing, 90, 90, 180);
                     cabinet.Children.Add(shelf);
                 }
@@ -2417,7 +2417,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (door1Width,doorHeight,0),
                             new (0,doorHeight,0)
                         ];
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
                         var door1Rotated = new Model3DGroup();
                         door1Rotated.Children.Add(door1);
@@ -2445,7 +2445,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (door1Width,doorHeight,0),
                             new (0,doorHeight,0)
                         ];
-                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
+                        door1 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
                         var door1Rotated = new Model3DGroup();
                         door1Rotated.Children.Add(door1);
@@ -2459,7 +2459,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                             new (door2Width,doorHeight,0),
                             new (0,doorHeight,0)
                         ];
-                        door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR");
+                        door2 = CreatePanel(doorPoints, MaterialThickness34, upperCab.DoorSpecies, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false);
                         ApplyTransform(door2, door1Width + doorLeftReveal + upperDoorGap, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
                         var door2Rotated = new Model3DGroup();
                         door2Rotated.Children.Add(door2);
@@ -2515,7 +2515,7 @@ public partial class Cabinet3DViewModel : ObservableObject
             new (0,0,0)
         ];
 
-        leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, topDeck90, isPanel, panelEBEdges);
+        leftEnd = CreatePanel(endPanelPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
         ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 270, 0);
 
         backPoints =
@@ -2526,7 +2526,7 @@ public partial class Cabinet3DViewModel : ObservableObject
             new (0,height,0)
         ];
 
-        back = CreatePanel(backPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, topDeck90, isPanel, panelEBEdges);
+        back = CreatePanel(backPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
         ApplyTransform(back, 0, 0, depth, 0, 0, 0);
 
         cabinet.Children.Add(leftEnd);
@@ -2567,14 +2567,25 @@ public partial class Cabinet3DViewModel : ObservableObject
             new (0,height,0)
         ];
 
-        back = CreatePanel(backPoints, depth, panel.Species, panel.EBSpecies, "Vertical", panel, topDeck90, isPanel, panelEBEdges);
+        back = CreatePanel(backPoints, depth, panel.Species, panel.EBSpecies, "Vertical", panel, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
         ApplyTransform(back, 0, 0, depth / 2, 0, 0, 0);
 
         cabinet.Children.Add(back);
     }
 
 
-    private static Model3DGroup CreatePanel(List<Point3D> polygonPoints, double matlThickness, string panelSpecies, string edgebandingSpecies, string grainDirection, CabinetModel cab, bool topDeck90, bool isPanel, string panelEBEdges, double plywoodTextureRotationDegrees = 0)
+    private static Model3DGroup CreatePanel(
+        List<Point3D> polygonPoints,
+        double matlThickness,
+        string panelSpecies,
+        string edgebandingSpecies,
+        string grainDirection,
+        CabinetModel cab,
+        bool topDeck90,
+        bool isPanel,
+        string panelEBEdges,
+        bool isFaceUp,
+        double plywoodTextureRotationDegrees = 0)
     {
         double thickness = matlThickness;
 
@@ -2589,24 +2600,46 @@ public partial class Cabinet3DViewModel : ObservableObject
         areaSqIn = Math.Abs(areaSqIn) * 0.5;
         double areaFt2 = areaSqIn / 144.0; // convert in^2 -> ft^2
 
+        static string BuildFaceKey(string species, bool faceUp)
+        {
+            var baseKey = string.IsNullOrWhiteSpace(species) ? "None" : species.Trim();
+            if (string.Equals(baseKey, "None", StringComparison.OrdinalIgnoreCase))
+            {
+                return "None";
+            }
+
+            // Materials where face orientation should be ignored (legacy behavior)
+            if (string.Equals(baseKey, "Prefinished Ply", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(baseKey, "PFP 1/4", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(baseKey, "MDF", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(baseKey, "Melamine", StringComparison.OrdinalIgnoreCase))
+            {
+                return baseKey;
+            }
+
+            return faceUp ? $"{baseKey} UP" : $"{baseKey} DOWN";
+        }
+
         try
         {
             if (cab != null)
             {
-                var speciesKey = string.IsNullOrWhiteSpace(panelSpecies) ? "None" : panelSpecies;
-                if (cab.MaterialAreaBySpecies.ContainsKey(speciesKey))
-                    cab.MaterialAreaBySpecies[speciesKey] += areaFt2;
-                else
-                    cab.MaterialAreaBySpecies[speciesKey] = areaFt2;
-                //Debug.WriteLine($"Part area {areaSqIn} sq inches. Material {panelSpecies}");
+                var speciesKey = BuildFaceKey(panelSpecies, isFaceUp);
 
+                if (cab.MaterialAreaBySpecies.ContainsKey(speciesKey))
+                {
+                    cab.MaterialAreaBySpecies[speciesKey] += areaFt2;
+                }
+                else
+                {
+                    cab.MaterialAreaBySpecies[speciesKey] = areaFt2;
+                }
             }
         }
         catch
         {
             // Keep CreatePanel robust - don't let accumulation failures break the preview
         }
-
 
         // Create a MeshBuilder with textures enabled (second param true)
         var mainBuilder = new MeshBuilder(false, true);
@@ -2835,6 +2868,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         var specialMesh = specialBuilder.ToMesh(true);
 
         // Create a material with texture: pass plywood rotation through to GetPlywoodSpecies
+        // IMPORTANT: still use base species for textures so you don't need separate images for UP/DOWN.
         var material = GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
         var specialMaterial = GetEdgeBandingSpecies(edgebandingSpecies);
         if (edgebandingSpecies == "None")
@@ -2842,17 +2876,20 @@ public partial class Cabinet3DViewModel : ObservableObject
             specialMaterial = GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
         }
 
-        // Create a GeometryModel3D
         var panelModel = new GeometryModel3D
         {
             Geometry = mesh,
             Material = material,
-            BackMaterial = material // Visible from both sides
+            BackMaterial = material
         };
 
-        var edgebandingModel = new GeometryModel3D { Geometry = specialMesh, Material = specialMaterial, BackMaterial = specialMaterial };
+        var edgebandingModel = new GeometryModel3D
+        {
+            Geometry = specialMesh,
+            Material = specialMaterial,
+            BackMaterial = specialMaterial
+        };
 
-        // Create a ModelVisual3D and add to the viewport
         var partModel = new Model3DGroup();
         partModel.Children.Add(panelModel);
         partModel.Children.Add(edgebandingModel);
