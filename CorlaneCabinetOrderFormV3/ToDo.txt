@@ -76,10 +76,11 @@ Add tab or window for order processing -- DONE
 
 Save customer information & quoted price in job file -- DONE
 
-Set up clickonce installer
-	https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_Setup.zip
+Set up clickonce installer -- DONE
+	https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_V3_Setup.zip Corlane_Cabinet_Order_Form_V3_Setup <-- copy this text to rename the created zip file
 
-Add icon
+
+Add icon -- DONE
 
 Account for edgebanding on bottom edge of upper end panels -- DIFFICULT, since edgebanding routine does not allow for 2 different edgebanding values on a single panel.
 

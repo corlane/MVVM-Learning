@@ -506,7 +506,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (0,StretcherWidth,0)
                 ];
 
-                nailer = CreatePanel(nailerPoints, MaterialThickness34, baseCab.Species, "Hardrock Maple", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, baseCab.Species, "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
                 cabinet.Children.Add(nailer);
             }
@@ -2018,11 +2018,11 @@ public partial class Cabinet3DViewModel : ObservableObject
                     new (0,StretcherWidth,0)
                 ];
 
-                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "Hardrock Maple", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
                 cabinet.Children.Add(nailer);
 
-                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "Hardrock Maple", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(nailer, -(interiorWidth / 2), 0 + MaterialThickness34, 0, 0, 0, 0);
                 cabinet.Children.Add(nailer);
 
