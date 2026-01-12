@@ -77,10 +77,11 @@ Add tab or window for order processing -- DONE
 Save customer information & quoted price in job file -- DONE
 
 Set up clickonce installer
+	https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_Setup.zip
 
 Add icon
 
-Account for edgebanding on bottom edge of upper end panels -- DIFFICULT
+Account for edgebanding on bottom edge of upper end panels -- DIFFICULT, since edgebanding routine does not allow for 2 different edgebanding values on a single panel.
 
 NOTE! 45 degree cab shows front width, which is the front width of the deck or top, not the corner-to-corner width. Should we change this? The math will be tricky.
 
