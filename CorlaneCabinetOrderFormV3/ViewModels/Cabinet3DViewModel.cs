@@ -215,6 +215,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         Model3DGroup dbxFront;
         Model3DGroup dbxBack;
         Model3DGroup dbxBottom;
+        Model3DGroup nailer;
 
 
 
@@ -235,6 +236,8 @@ public partial class Cabinet3DViewModel : ObservableObject
         List<Point3D> dbxSidePoints;
         List<Point3D> dbxFrontAndBackPoints;
         List<Point3D> dbxBottomPoints;
+        List<Point3D> nailerPoints;
+
 
 
         double MaterialThickness34 = 0.75;
@@ -494,6 +497,18 @@ public partial class Cabinet3DViewModel : ObservableObject
                 ];
                 back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
+
+                nailerPoints =
+                [
+                    new (0,0,0),
+                    new (interiorWidth,0,0),
+                    new (interiorWidth,StretcherWidth,0),
+                    new (0,StretcherWidth,0)
+                ];
+
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, baseCab.Species, "Hardrock Maple", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges);
+                ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
+                cabinet.Children.Add(nailer);
             }
 
             // Drawer Stretchers
@@ -1854,6 +1869,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         Model3DGroup rightBack;
         Model3DGroup door1;
         Model3DGroup door2;
+        Model3DGroup nailer;
 
         List<Point3D> endPanelPoints;
         List<Point3D> leftEndPanelPoints;
@@ -1863,6 +1879,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         List<Point3D> backPoints;
         List<Point3D> shelfPoints;
         List<Point3D> doorPoints;
+        List<Point3D> nailerPoints;
 
         double MaterialThickness34 = 0.75;
         double MaterialThickness14 = 0.25;
@@ -1900,6 +1917,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         double doorTopReveal = ConvertDimension.FractionToDouble(upperCab.TopReveal);
         double doorBottomReveal = ConvertDimension.FractionToDouble(upperCab.BottomReveal);
         double doorSideReveal = (doorLeftReveal + doorRightReveal) / 2; // this averages the potentially different left and right reveals so that the door creation calc can use just one variable instead of two.
+        double StretcherWidth = 6;
         bool topDeck90 = false; // This is sent to the panel creator to let it know if it is a top or deck at 90 degrees so it cab have 2 edgebanded edges
         bool isPanel = false; // This is sent to the panel creator to let it know if it is a panel (true) or a shelf/deck/top/toekick (false) so it can have edgebanding applied correctly.
         string panelEBEdges = "";
@@ -1990,6 +2008,24 @@ public partial class Cabinet3DViewModel : ObservableObject
                     ];
                 back = CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
                 ApplyTransform(back, -(width / 2), 0, -MaterialThickness14, 0, 0, 0);
+
+
+                nailerPoints =
+                [
+                    new (0,0,0),
+                    new (interiorWidth,0,0),
+                    new (interiorWidth,StretcherWidth,0),
+                    new (0,StretcherWidth,0)
+                ];
+
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "Hardrock Maple", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+                ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
+                cabinet.Children.Add(nailer);
+
+                nailer = CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, "Hardrock Maple", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges);
+                ApplyTransform(nailer, -(interiorWidth / 2), 0 + MaterialThickness34, 0, 0, 0, 0);
+                cabinet.Children.Add(nailer);
+
             }
 
 

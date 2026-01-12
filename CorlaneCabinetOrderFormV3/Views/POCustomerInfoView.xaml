@@ -80,7 +80,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox x:Name="groupOrderSummary" Grid.Column="1" Header="Order Summary" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20">
+        <GroupBox x:Name="groupOrderSummary" Grid.Column="1" Header="Quoted Price" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>

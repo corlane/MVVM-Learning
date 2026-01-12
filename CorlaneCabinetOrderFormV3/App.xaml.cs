@@ -18,7 +18,7 @@ public partial class App : Application
 
         var host = Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
-            {
+            {   
                 // Register the shared service as singleton
                 services.AddSingleton<ICabinetService, CabinetService>();
                 services.AddSingleton<MainWindowViewModel>();
@@ -26,6 +26,7 @@ public partial class App : Application
                 services.AddSingleton<IPreviewService, PreviewService>();
                 services.AddSingleton<IPrintService, PrintService>();
                 services.AddSingleton<IMaterialPricesService, MaterialPricesService>();
+                services.AddSingleton<IPriceBreakdownService, PriceBreakdownService>();
                 services.AddSingleton<POCustomerInfoViewModel>();
                 services.AddTransient<POJobMaterialListViewModel>();
 

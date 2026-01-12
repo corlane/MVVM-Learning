@@ -21,7 +21,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private readonly DefaultSettingsService? _defaults;
         private readonly ICabinetService _cabinetService;
         private readonly MainWindowViewModel _mainVm;
-        private readonly IMaterialPricesService _materialPrices;
+        private readonly IPriceBreakdownService _priceBreakdownService;
 
         private const int PlaceOrderTabIndex = 4;
 
@@ -45,12 +45,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             ICabinetService cabinetService,
             MainWindowViewModel mainVm,
             DefaultSettingsService defaults,
-            IMaterialPricesService materialPrices)
+            IPriceBreakdownService priceBreakdownService)
         {
             _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
             _mainVm = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
             _defaults = defaults;
-            _materialPrices = materialPrices ?? throw new ArgumentNullException(nameof(materialPrices));
+            _priceBreakdownService = priceBreakdownService ?? throw new ArgumentNullException(nameof(priceBreakdownService));
+
             OrderedAtLocal = _cabinetService.OrderedAtLocal;
             CompanyName = _defaults.CompanyName;
             ContactName = _defaults.ContactName;
@@ -414,123 +415,14 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             MaterialTotals.Clear();
 
-            decimal total = 0m;
-            int totalSheetsTally = 0;
+            var breakdown = _priceBreakdownService.Build(materials, edgebanding);
 
-            foreach (var kv in materials.OrderBy(k => k.Key))
+            foreach (var line in breakdown.Lines)
             {
-                var species = kv.Key;
-                var qtySqFt = kv.Value;
-
-                var sheetAreaSqFt = GetSheetAreaSqFt(species);
-                var yield = GetYield(species);
-
-                int sheetQty = (int)Math.Ceiling((qtySqFt / yield) / sheetAreaSqFt);
-                totalSheetsTally += sheetQty;
-
-                var unitPricePerSheet = GetSheetPricePerSqFt(species) * (decimal)sheetAreaSqFt;
-
-                var line = new MaterialTotal
-                {
-                    Species = species,
-                    Quantity = sheetQty,
-                    Unit = "Sheets",
-                    UnitPrice = unitPricePerSheet,
-                    SqFt = qtySqFt
-                };
-
                 MaterialTotals.Add(line);
-                total += line.LineTotal;
             }
 
-            foreach (var kv in edgebanding.OrderBy(k => k.Key))
-            {
-                var species = kv.Key;
-                var qtyFt = kv.Value;
-
-                var unitPrice = GetEdgeBandPricePerFt(species);
-
-                var line = new MaterialTotal
-                {
-                    Species = species,
-                    Quantity = qtyFt,
-                    Unit = "ft",
-                    UnitPrice = unitPrice
-                };
-
-                MaterialTotals.Add(line);
-                total += line.LineTotal;
-            }
-
-            if (totalSheetsTally > 0)
-            {
-                var cnc = new MaterialTotal
-                {
-                    Species = "Sheets of CNC cutting",
-                    Quantity = totalSheetsTally,
-                    Unit = "Sheets",
-                    UnitPrice = _materialPrices.CncPricePerSheet
-                };
-
-                MaterialTotals.Add(cnc);
-                total += cnc.LineTotal;
-            }
-
-            return Math.Round(total, 2);
-        }
-
-        private decimal GetSheetPricePerSqFt(string? species)
-        {
-            if (string.IsNullOrWhiteSpace(species) || string.Equals(species, "None", StringComparison.OrdinalIgnoreCase))
-            {
-                return 0m;
-            }
-
-            if (_materialPrices.TryGetSheetMaterial(species, out var row))
-            {
-                return row.PricePerSqFt;
-            }
-
-            return 0m;
-        }
-
-        private decimal GetEdgeBandPricePerFt(string? species)
-        {
-            if (string.IsNullOrWhiteSpace(species) || string.Equals(species, "None", StringComparison.OrdinalIgnoreCase))
-            {
-                return 0m;
-            }
-
-            if (_materialPrices.TryGetEdgeBand(species, out var row))
-            {
-                return row.PricePerFt;
-            }
-
-            return 0m;
-        }
-
-        private double GetYield(string species)
-        {
-            if (_materialPrices.TryGetYield(species, out var y))
-            {
-                return y;
-            }
-
-            return _materialPrices.DefaultSheetYield;
-        }
-
-        private double GetSheetAreaSqFt(string species)
-        {
-            if (_materialPrices.TryGetSheetMaterial(species, out var row))
-            {
-                var areaSqIn = row.SheetWidthIn * row.SheetLengthIn;
-                if (areaSqIn > 0)
-                {
-                    return areaSqIn / 144.0;
-                }
-            }
-
-            return 32.0;
+            return breakdown.Total;
         }
 
         [ObservableProperty]

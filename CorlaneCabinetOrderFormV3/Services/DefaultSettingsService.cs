@@ -26,7 +26,7 @@ public partial class DefaultSettingsService : ObservableObject
     //Toekick
     [ObservableProperty] public partial bool DefaultHasTK { get; set; } = true;
     [ObservableProperty] public partial string DefaultTKHeight { get; set; } = "4";
-    [ObservableProperty] public partial string DefaultTKDepth { get; set; } = "3";
+    [ObservableProperty] public partial string DefaultTKDepth { get; set; } = "3.75";
 
     // Shelves
     [ObservableProperty] public partial int DefaultShelfCount { get; set; } = 1;
