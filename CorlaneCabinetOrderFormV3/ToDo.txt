@@ -23,7 +23,7 @@ Add Sink Cabinet checkbox. Will also need to add false front, and false front ba
 
 Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk about whether to allow adjustable shelves simultaneously
 
-Add option for trash drawer - Just a 12" tall drawer box. 
+Add checkbox for trash drawer - Just a 12" tall drawer box. Should be unavailable if cabinet is too narrow.
 
 Hide cabinet preview window when Defaults or Place Order tabs are active -- DONE
 
@@ -61,6 +61,11 @@ Do not allow duplicate cabinet names -- DONE
 
 If job is modified, warn before closing without saving
 
+Filler/End and Panel should have Default species (a single dropdown for both of them)
+
+Panel needs a Default thickness (steal from back thickness I hope, to avoid default dimension headache)
+
+When clicking Save, auto populate filename if job has been saved before
 
 
 
@@ -101,6 +106,8 @@ Change material to allow for UP and DOWN versions of each raw plywood species. C
 
 CNC prie needs to be calcuated by sq ft instead of per sheet.
 
+On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
+
 
 
 
@@ -136,6 +143,18 @@ Total Cabinets on printed cutlist seems to only be counting line items, not tota
 
 
 1/4" backs are not showing the proper material texture. WTF? Told to use same texture as PFP in material loading method. -- DONE
+
+Drawer fronts not obeying Defaults setting for Include/Exclude Doors/Drw Fronts
+
+
+
+
+
+
+
+
+
+
 
 
 Make these tabs for global item mods, default hidden, only shown when job contains the relavent modifications: -- DONE

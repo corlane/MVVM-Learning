@@ -676,7 +676,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
     [ObservableProperty] public partial double MaterialThickness14 { get; set; } = 0.25;
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 60)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty] public partial string Species { get; set; } = "";
@@ -1047,8 +1047,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         EBSpecies = _defaults.DefaultEBSpecies;
         ShelfCount = _defaults.DefaultShelfCount;
         DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
-        if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultBaseBackThickness; }
-        else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultBaseBackThickness)); }
+        if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultUpperBackThickness; }
+        else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultUpperBackThickness)); }
         //BackThickness = _defaults.DefaultUpperBackThickness;
         DoorCount = _defaults.DefaultDoorCount;
         IncDoors = _defaults.DefaultIncDoors;
