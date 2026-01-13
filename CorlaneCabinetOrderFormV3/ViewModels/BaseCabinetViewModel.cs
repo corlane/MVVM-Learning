@@ -227,20 +227,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (newValue)
         {
-            IncDrwBoxInListOpening1 = (!newValue);
-            IncDrwBoxOpening1 = (!newValue);
-            DrillSlideHolesOpening1 = (!newValue);
+            ShelfCount = 0;
+            DrillShelfHoles = false;
+            RolloutCount = 0;
+    
             UpdatePreview();
         }
+
         if (!newValue)
         {
-            IncDrwBoxInListOpening1 = (!newValue);
-            IncDrwBoxOpening1 = (!newValue);
-            DrillSlideHolesOpening1 = (!newValue);
             UpdatePreview();
         }
     }
-    [ObservableProperty] public partial bool TrashDrawerEnabled { get; set; } = true;
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
@@ -938,6 +936,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool Opening4PropertiesVisible { get; set; } = false;
     [ObservableProperty] public partial bool BackThicknessVisible { get; set; } = true;
     [ObservableProperty] public partial bool GroupRolloutsVisible { get; set; } = true;
+    [ObservableProperty] public partial bool TrashDrawerEnabled { get; set; } = true;
 
     //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()
@@ -1377,7 +1376,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncRollouts = IncRollouts,
             IncRolloutsInList = IncRolloutsInList,
             RolloutCount = RolloutCount,
-            SinkCabinet = SinkCabinet
+            SinkCabinet = SinkCabinet,
+            TrashDrawer = TrashDrawer,
         };
 
         try
@@ -1491,7 +1491,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncRolloutsInList = IncRolloutsInList;
             selected.RolloutCount = RolloutCount;
             selected.SinkCabinet = SinkCabinet;
-
+            selected.TrashDrawer = TrashDrawer;
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
         }
@@ -1546,7 +1546,22 @@ public partial class BaseCabinetViewModel : ObservableValidator
         DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
         DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
         IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
-        IncDrwFronts = _defaults.DefaultIncDrwFronts;
+        IncDrwFronts = _defaults.DefaultIncDoors;
+        if (IncDrwFronts)
+        {
+            IncDrwFront1 = true;
+            IncDrwFront2 = true;
+            IncDrwFront3 = true;
+            IncDrwFront4 = true;
+        }
+        else
+        {
+            IncDrwFront1 = false;
+            IncDrwFront2 = false;
+            IncDrwFront3 = false;
+            IncDrwFront4 = false;
+        }
+
         IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
         IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
         DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
@@ -1626,7 +1641,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncRollouts = IncRollouts,
             RolloutCount = RolloutCount,
             DrwStyle = DrwStyle,
-            SinkCabinet = SinkCabinet
+            SinkCabinet = SinkCabinet,
+            TrashDrawer = TrashDrawer
         };
 
         // Request preview using the tab index owner token (Base tab = 0)

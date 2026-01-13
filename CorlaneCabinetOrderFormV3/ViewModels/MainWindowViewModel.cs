@@ -73,7 +73,8 @@ public partial class MainWindowViewModel : ObservableValidator
         var dialog = new SaveFileDialog
         {
             Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
-            DefaultExt = "cor"
+            DefaultExt = "cor",
+            FileName = CurrentJobName + ".cor"
         };
 
         if (dialog.ShowDialog() == true)

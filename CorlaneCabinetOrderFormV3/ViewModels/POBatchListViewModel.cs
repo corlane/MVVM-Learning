@@ -177,8 +177,9 @@ public partial class POBatchListViewModel : ObservableObject
 
     private static string BuildModelName(CabinetModel cab)
     {
-        // Format (10 columns, no delimiters):
+        // Format (13 columns, no delimiters):
         // Type + Style + Sink(Y/N) + Toekick(Y/N) + DoorCount + DrwCount + AdjShelfCount + RolloutCount + TopType(S/F) + BackThickness(1/3)
+        // + ShelfDepth(H/F) + DrillShelfHoles(Y/N) + TrashDrawer(Y/N)
 
         static string BoolYN(bool value) => value ? "Y" : "N";
 
@@ -316,6 +317,29 @@ public partial class POBatchListViewModel : ObservableObject
             return "X";
         }
 
+        static string ShelfDepthCode(string? style, string? shelfDepth)
+        {
+            if (string.IsNullOrWhiteSpace(style))
+            {
+                return "F";
+            }
+
+            bool supportsHalfDepth =
+                style.Contains("Standard", StringComparison.OrdinalIgnoreCase) ||
+                style.Contains("90", StringComparison.OrdinalIgnoreCase) ||
+                style.Contains("Corner", StringComparison.OrdinalIgnoreCase) ||
+                style.Contains("Angle", StringComparison.OrdinalIgnoreCase);
+
+            if (!supportsHalfDepth)
+            {
+                return "F";
+            }
+
+            return string.Equals(shelfDepth?.Trim(), "Half Depth", StringComparison.OrdinalIgnoreCase)
+                ? "H"
+                : "F";
+        }
+
         var type = TypeCode(cab);
         var styleCode = StyleCode(cab);
         var topType = TopTypeCode(cab);
@@ -328,6 +352,9 @@ public partial class POBatchListViewModel : ObservableObject
         var shelfCount = 0;
         var rolloutCount = 0;
         var backThickness = "X";
+        var shelfDepthCode = type is "B" or "U" ? "F" : "X";
+        var drillShelfHolesCode = "N";
+        var trashDrawerCode = "N";
 
         switch (cab)
         {
@@ -339,12 +366,19 @@ public partial class POBatchListViewModel : ObservableObject
                 shelfCount = ClampNonNegative(b.ShelfCount);
                 rolloutCount = ClampNonNegative(b.RolloutCount);
                 backThickness = BackThicknessCode(b.BackThickness);
+
+                shelfDepthCode = ShelfDepthCode(b.Style, b.ShelfDepth);
+                drillShelfHolesCode = BoolYN(b.DrillShelfHoles);
+                trashDrawerCode = BoolYN(b.TrashDrawer);
                 break;
 
             case UpperCabinetModel u:
                 doorCount = ClampNonNegative(u.DoorCount);
                 shelfCount = ClampNonNegative(u.ShelfCount);
                 backThickness = BackThicknessCode(u.BackThickness);
+
+                shelfDepthCode = "F";
+                drillShelfHolesCode = BoolYN(u.DrillShelfHoles);
                 break;
 
             case FillerModel:
@@ -368,7 +402,10 @@ public partial class POBatchListViewModel : ObservableObject
             shelfCount.ToString(CultureInfo.InvariantCulture),
             rolloutCount.ToString(CultureInfo.InvariantCulture),
             topType,
-            backThickness
+            backThickness,
+            shelfDepthCode,
+            drillShelfHolesCode,
+            trashDrawerCode
         );
     }
 

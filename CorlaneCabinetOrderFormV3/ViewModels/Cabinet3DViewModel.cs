@@ -954,7 +954,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                     double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
                     double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
 
-                    if (baseCab.IncDrwBoxInListOpening1 && baseCab.DrwCount > 0) 
+                    if (baseCab.IncDrwBoxInListOpening1 && baseCab.DrwCount > 0)
                     {
                         dbxHeight = opening1Height - topSpacing - bottomSpacing;
                         AddDrawerBoxRow(baseCab, "Drawer Box 1", dbxHeight, dbxWidth, dbxDepth);
@@ -1246,15 +1246,15 @@ public partial class Cabinet3DViewModel : ObservableObject
                             {
                                 dbxWidth -= tandemSideSpacing;
                                 //sideSpacing = tandemSideSpacing;
-                                topSpacing = tandemTopSpacing;
-                                bottomSpacing = tandemBottomSpacing;
+                                //topSpacing = tandemTopSpacing;
+                                //bottomSpacing = tandemBottomSpacing;
                             }
                             else if (baseCab.DrwStyle.Contains("Accuride"))
                             {
                                 dbxWidth -= accurideSideSpacing;
                                 //sideSpacing = accurideSideSpacing;
-                                topSpacing = accurideTopSpacing;
-                                bottomSpacing = accurideBottomSpacing;
+                                //topSpacing = accurideTopSpacing;
+                                //bottomSpacing = accurideBottomSpacing;
                             }
                         }
 
@@ -1264,7 +1264,11 @@ public partial class Cabinet3DViewModel : ObservableObject
 
                         if (baseCab.RolloutCount >= 1 || baseCab.TrashDrawer)
                         {
-                            // ####################################### IF ROLLOUT, HEIGHT = 12, ELSE HEIGHT = ROLLOUT HEIGHT #######################################
+                            if (baseCab.TrashDrawer)
+                            {
+                                dbxHeight = 12;
+                            }
+
                             dbxSidePoints =
                             [
                                 new (dbxDepth,dbxHeight,0),
@@ -1330,15 +1334,33 @@ public partial class Cabinet3DViewModel : ObservableObject
                             }
                             if (baseCab.TrashDrawer)
                             {
-                                // Position Box in Cabinet:
-                                Model3DGroup dbx1 = new();
-                                dbx1.Children.Add(dbx1rotate);
-                                ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (baseCab.RolloutCount * 6), interiorDepth + backThickness - .25, 0, 0, 0); // set trash drawer .25" back from front of cabinet
-                                cabinet.Children.Add(dbx1);
+                                if (baseCab.IncDrwBoxesInList)
+                                {
+                                    AddDrawerBoxRow(baseCab, "Trash Drawer", dbxHeight, dbxWidth, dbxDepth);
+                                }
+
+                                if (baseCab.IncDrwBoxes)
+                                {
+                                    // Position Box in Cabinet:
+                                    Model3DGroup trashDrawer = new();
+                                    trashDrawer.Children.Add(dbx1rotate);
+                                    ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0); // set trash drawer .25" back from front of cabinet
+                                    cabinet.Children.Add(trashDrawer);
+                                }
                             }
+                        }
                     }
                 }
             }
+
+
+            if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
+            if (!RightEndHidden) cabinet.Children.Add(rightEnd);
+            if (!DeckHidden) cabinet.Children.Add(deck);
+            if (!TopHidden) cabinet.Children.Add(top);
+            cabinet.Children.Add(back);
+            cabinet.Children.Add(toekick);
+        }
 
 
 
