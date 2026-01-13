@@ -58,8 +58,8 @@
                                            Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightUpper, FallbackValue=''}"/>
 
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Thickness" Margin="5,0,4,0" HorizontalAlignment="Left"/>
-                    <ComboBox x:Name="comboDepth" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding ListPanelDepths}"
+                    <Label Content="Thickness" Margin="5,0,4,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="comboDepth" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" ItemsSource="{Binding ListPanelDepths}" Margin="0,5,10,10"
                                                  Text="{Binding Depth, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 

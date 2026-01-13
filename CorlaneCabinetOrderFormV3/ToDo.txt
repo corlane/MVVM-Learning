@@ -59,11 +59,11 @@ On base cab drw front section, add "Equalize" for bottom drw equalization, and a
 
 Do not allow duplicate cabinet names -- DONE
 
-If job is modified, warn before closing without saving
+If job is modified, warn before closing without saving -- DONE
 
-Filler/End and Panel should have Default species (a single dropdown for both of them)
+Filler/End and Panel should have Default species (a single dropdown for both of them) -- DONE
 
-Panel needs a Default thickness (steal from back thickness I hope, to avoid default dimension headache)
+Panel needs a Default thickness (steal from back thickness I hope, to avoid default dimension headache) -- DONE
 
 When clicking Save, auto populate filename if job has been saved before
 
@@ -102,7 +102,7 @@ Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
 Change directory name creation in Batch List viewmodel to delve into the proper directories based on cabinet Type and Style
 
-Change material to allow for UP and DOWN versions of each raw plywood species. Change individual cabinet parts to be made of the appropriate UP or DOWN material.
+Change material to allow for UP and DOWN versions of each raw plywood species. Change individual cabinet parts to be made of the appropriate UP or DOWN material. -- DONE
 
 CNC prie needs to be calcuated by sq ft instead of per sheet.
 

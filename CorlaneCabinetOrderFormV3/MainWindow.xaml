@@ -15,6 +15,7 @@
         Height="1100" Width="1800"
         MinHeight="1100" MinWidth="1800"
         Background="{DynamicResource ABrush.Tone1.Background.Static}"
+        Closing="MainWindow_Closing"
         >
 
     <!-- Design-time DataContext (add this block) -->

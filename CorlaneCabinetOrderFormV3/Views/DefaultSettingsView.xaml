@@ -9,7 +9,7 @@
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="900" d:DesignWidth="1200"
+             d:DesignHeight="920" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}"             
              >
@@ -35,7 +35,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width=".8*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -65,11 +65,17 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Base Cabinet Top Type" Grid.Row="1" Grid.Column="2" Margin="5,170,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
+        <GroupBox Header="Panel Thickness" Grid.Row="0" Grid.Column="0" Margin="185,200,5,5" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical">
+                <ComboBox x:Name="comboDefaultPanelThickness" Margin="5" ItemsSource="{Binding ListBackThickness}" SelectedItem="{Binding DefaultPanelThickness}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Base Cabinet Top Type" Grid.Row="1" Grid.Column="2" Margin="5,240,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
             <ComboBox x:Name="comboDefaultTopType" Margin="5" ItemsSource="{Binding ListTopType}" SelectedItem="{Binding DefaultTopType}"/>
         </GroupBox>
 
-        <GroupBox x:Name="groupDefaultDrawerFrontHeights" Grid.Row="2" Grid.Column="2" Header="Drw. Front Heights" Margin="5,25,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2">
+        <GroupBox x:Name="groupDefaultDrawerFrontHeights" Grid.Row="2" Grid.Column="2" Header="Drw. Front Heights" Margin="5,85,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="65"/>
@@ -121,16 +127,27 @@
         </GroupBox>-->
 
 
-        <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" >
-            <StackPanel Orientation="Vertical">
-                <Label Content="Species:" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboCabinetSpecies" Margin="5" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DefaultSpecies}"/>
-                <Label Content="Edgebanding" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboEBSpecies" Margin="5" Width="190" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding DefaultEBSpecies}"/>
+        <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="-25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Species:" Margin="0,0,0,-8"/>
+                    <ComboBox Name="comboCabinetSpecies" Margin="5" Width="170" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DefaultSpecies}"/>
+                    <Label Content="Edgebanding" Margin="0,0,0,-8"/>
+                    <ComboBox Name="comboEBSpecies" Margin="5" Width="170" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding DefaultEBSpecies}"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Filler Species:" Margin="0,0,0,-8"/>
+                    <ComboBox Name="comboFillerSpecies" Margin="5" Width="170" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DefaultFillerSpecies}"/>
+                    <Label Content="Panel Species:" Margin="0,0,0,-8"/>
+                    <ComboBox Name="comboPanelSpecies" Margin="5" Width="170" ItemsSource="{Binding ListCabSpecies}" SelectedValue="{Binding DefaultPanelSpecies}"/>
+                    <Label Content="Panel Edgebanding Species:" Margin="0,0,0,-8"/>
+                    <ComboBox Name="comboPanelEBSpecies" Margin="5" Width="170" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding DefaultPanelEBSpecies}"/>
+                </StackPanel>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Toekick" Grid.Row="1" Grid.Column="2" Margin="5,-15,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <GroupBox Header="Toekick" Grid.Row="1" Grid.Column="2" Margin="5,60,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="defaultCheckHasTK" Margin="10" Content="Has Toekick" IsChecked="{Binding DefaultHasTK}"/>
                 <Label Content="Toekick Height" Margin="5,5,5,0" HorizontalAlignment="Left"/>
@@ -200,7 +217,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Drawers" Grid.Row="2" Grid.Column="1" Margin="5 5 20 5" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <GroupBox Header="Drawers" Grid.Row="2" Grid.Column="1" Margin="5 40 20 5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
@@ -224,7 +241,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Doors/Drawer Fronts" Grid.Row="0" Grid.Column="1" Margin="5 155 20 5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2">
+        <GroupBox Header="Doors/Drawer Fronts" Grid.Row="0" Grid.Column="1" Margin="5 205 20 5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="3">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkDefaultIncludeDoorsInSizesList" Content="Include Doors/Drw Fronts In Door Sizes List" Margin="5" 
                                           IsChecked="{Binding DefaultIncDoorsInList}"/>
@@ -249,16 +266,22 @@
 
         <GroupBox Header="Shelves" Grid.Row="0" Grid.Column="2" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2">
             <StackPanel Orientation="Vertical">
+                <Label Content="Base Shelf Count:"/>
                 <ComboBox x:Name="comboDefaultShelves" Width="80" HorizontalAlignment="Left" Margin="5" ItemsSource="{Binding ListShelfCount}" 
                                           SelectedValue="{Binding DefaultShelfCount}"/>
                 <ComboBox x:Name="comboDefaultShelfDepth" Margin="5" ItemsSource="{Binding ListShelfDepth}" SelectedItem="{Binding DefaultShelfDepth}"/>
-                <CheckBox x:Name="checkDefaultDrillShelfHoles" Content="Drill Shelf Holes" Margin="5" IsChecked="{Binding DefaultDrillShelfHoles}"/>
                 <TextBlock Text="Shelf Depth only applies to Base cabinet types." Width="100" TextWrapping="Wrap" Margin="5"/>
+
+                <Label Content="Upper Shelf Count:"/>
+                <ComboBox x:Name="comboDefaultUpperShelves" Width="80" HorizontalAlignment="Left" Margin="5" ItemsSource="{Binding ListShelfCount}" 
+                                          SelectedValue="{Binding DefaultUpperShelfCount}"/>
+
+                <CheckBox x:Name="checkDefaultDrillShelfHoles" Content="Drill Shelf Holes" IsChecked="{Binding DefaultDrillShelfHoles}" Margin="5,10,5,5"/>
             </StackPanel>
         </GroupBox>
 
 
-        <GroupBox Header="NOTES:" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"  Margin="15" FontSize="16" HorizontalAlignment="Left">
+        <GroupBox Header="NOTES:" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"  Margin="15,40,15,15" FontSize="16" HorizontalAlignment="Left">
             <TextBlock x:Name="textDefaultsNotes" HorizontalAlignment="Left" Height="Auto" TextWrapping="Wrap" Margin="5" Padding="5" FontSize="12">
 							Toekick Height only applies to base cabinets with integrated toekicks. It does not apply to "No Toekick" cabinets.
 							Toekick Depth does not include the thickness of any applied face frame or toekick skin board.

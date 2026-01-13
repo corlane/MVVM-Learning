@@ -9,7 +9,7 @@
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
-             d:DesignHeight="920" d:DesignWidth="1000"
+             d:DesignHeight="960" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}"
              >
@@ -44,7 +44,7 @@
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Base Cabinet Style" Margin="5,5,5,5" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <StackPanel Orientation="Vertical">
                 <Label Content="Cabinet Type:" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboCabType" Width="132" Margin="0,15,0,10" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Style, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox Name="comboCabType" Width="132" Margin="0,6,0,10" ItemsSource="{Binding TypeList}" SelectedValue="{Binding Style, UpdateSourceTrigger=PropertyChanged}">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger EventName="DropDownClosed">
                             <behaviors:InvokeCommandAction Command="{Binding LoadDefaultsCommand}"/>
@@ -52,8 +52,9 @@
                     </behaviors:Interaction.Triggers>
                 </ComboBox>
 
-                <CheckBox x:Name="checkSinkCabinet" Content="Sink Cabinet" Margin="10,5,5,10" IsChecked="{Binding SinkCabinet}"
-                              Visibility="{Binding SinkCabinetVisibility, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <CheckBox x:Name="checkSinkCabinet" Content="Sink Cabinet" Margin="10,5,5,10" IsChecked="{Binding SinkCabinet}"/>
+
+                <CheckBox x:Name="checkTrashDrawer" Content="Trash Drawer" Margin="10,5,5,10" IsChecked="{Binding TrashDrawer}" IsEnabled="{Binding TrashDrawerEnabled}"/>
             </StackPanel>
         </GroupBox>
 
@@ -216,7 +217,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="Toekick" Margin="5,140,5,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Toekick" Margin="5,160,5,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkHasTK" Content="Has Toekick" Margin="10,10,10,0" IsChecked="{Binding HasTK}"/>
 

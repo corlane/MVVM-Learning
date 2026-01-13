@@ -15,6 +15,10 @@ public partial class DefaultSettingsService : ObservableObject
     // Species
     [ObservableProperty] public partial string DefaultSpecies { get; set; } = "Prefinished Ply";
     [ObservableProperty] public partial string DefaultEBSpecies { get; set; } = "Wood Maple";
+    [ObservableProperty] public partial string DefaultFillerSpecies { get; set; } = "Maple Ply";
+    [ObservableProperty] public partial string DefaultPanelSpecies { get; set; } = "Maple Ply";
+    [ObservableProperty] public partial string DefaultPanelEBSpecies { get; set; } = "Wood Maple";
+
 
     //Top
     [ObservableProperty] public partial string DefaultTopType { get; set; } = "Stretcher";
@@ -23,6 +27,9 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial string DefaultBaseBackThickness { get; set; } = "0.75";
     [ObservableProperty] public partial string DefaultUpperBackThickness { get; set; } = "0.75";
 
+    // Panel Thickness
+    [ObservableProperty] public partial string DefaultPanelThickness { get; set; } = "0.75";
+
     //Toekick
     [ObservableProperty] public partial bool DefaultHasTK { get; set; } = true;
     [ObservableProperty] public partial string DefaultTKHeight { get; set; } = "4";
@@ -30,6 +37,8 @@ public partial class DefaultSettingsService : ObservableObject
 
     // Shelves
     [ObservableProperty] public partial int DefaultShelfCount { get; set; } = 1;
+    [ObservableProperty] public partial int DefaultUpperShelfCount { get; set; } = 2;
+
     [ObservableProperty] public partial string DefaultShelfDepth { get; set; } = "Half Depth";
     [ObservableProperty] public partial bool DefaultDrillShelfHoles { get; set; } = true;
 

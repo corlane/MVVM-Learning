@@ -101,6 +101,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GroupDoorsVisibility = (newValue == Style1 || newValue == Style3 || newValue == Style4);
             BackThicknessVisible = (newValue == Style1 || newValue == Style2);
             GroupRolloutsVisible = (newValue == Style1);
+            TrashDrawerEnabled = (newValue == Style1);
+            TrashDrawer = (newValue != Style1) ? false : TrashDrawer;
 
             if (newValue == Style2)
             {
@@ -123,24 +125,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeDrwFrontHeights();
             UpdatePreview();
             RunValidationVisible();
-        }
-    }
-    [ObservableProperty] public partial bool SinkCabinet { get; set; } = false; partial void OnSinkCabinetChanged(bool oldValue, bool newValue)
-    {
-        if (newValue)
-        {
-            IncDrwBoxInListOpening1 = (!newValue);
-            IncDrwBoxOpening1 = (!newValue);
-            DrillSlideHolesOpening1 = (!newValue);
-            UpdatePreview();
-        }
-
-        if (!newValue)
-        {
-            IncDrwBoxInListOpening1 = (!newValue);
-            IncDrwBoxOpening1 = (!newValue);
-            DrillSlideHolesOpening1 = (!newValue);
-            UpdatePreview();
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
@@ -221,6 +205,42 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Type-specific properties for BaseCabinetModel
 
     // Corner Cab specific properties
+    [ObservableProperty] public partial bool SinkCabinet { get; set; } = false; partial void OnSinkCabinetChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            IncDrwBoxInListOpening1 = (!newValue);
+            IncDrwBoxOpening1 = (!newValue);
+            DrillSlideHolesOpening1 = (!newValue);
+            UpdatePreview();
+        }
+
+        if (!newValue)
+        {
+            IncDrwBoxInListOpening1 = (!newValue);
+            IncDrwBoxOpening1 = (!newValue);
+            DrillSlideHolesOpening1 = (!newValue);
+            UpdatePreview();
+        }
+    }
+    [ObservableProperty] public partial bool TrashDrawer { get; set; } = false; partial void OnTrashDrawerChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            IncDrwBoxInListOpening1 = (!newValue);
+            IncDrwBoxOpening1 = (!newValue);
+            DrillSlideHolesOpening1 = (!newValue);
+            UpdatePreview();
+        }
+        if (!newValue)
+        {
+            IncDrwBoxInListOpening1 = (!newValue);
+            IncDrwBoxOpening1 = (!newValue);
+            DrillSlideHolesOpening1 = (!newValue);
+            UpdatePreview();
+        }
+    }
+    [ObservableProperty] public partial bool TrashDrawerEnabled { get; set; } = true;
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)

@@ -66,7 +66,7 @@
 
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Depth" Margin="5,0,4,0" HorizontalAlignment="Left"/>
-                    <TextBox x:Name="textDepthUpper" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"
+                    <TextBox x:Name="textDepthUpper" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus" Margin="-1,5,10,10"
                                                  Text="{Binding Depth, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
