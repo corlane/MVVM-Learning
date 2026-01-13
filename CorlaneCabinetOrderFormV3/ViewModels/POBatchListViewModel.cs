@@ -19,6 +19,7 @@ public partial class POBatchListViewModel : ObservableObject
     private const string CsvTypeConstant = "Cabinet";
 
     private readonly ICabinetService? _cabinetService;
+    private readonly MainWindowViewModel? _mainVm;
 
     public POBatchListViewModel()
     {
@@ -26,9 +27,10 @@ public partial class POBatchListViewModel : ObservableObject
         Refresh();
     }
 
-    public POBatchListViewModel(ICabinetService cabinetService)
+    public POBatchListViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
     {
         _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
+        _mainVm = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
 
         if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
         {
@@ -111,12 +113,17 @@ public partial class POBatchListViewModel : ObservableObject
     [RelayCommand]
     private void SaveCsv()
     {
+        var jobNameStem = GetSafeFileStem(_mainVm?.CurrentJobName);
+        var defaultFileName = string.IsNullOrWhiteSpace(jobNameStem)
+            ? "BatchList.csv"
+            : $"{jobNameStem}-BatchList.csv";
+
         var dlg = new SaveFileDialog
         {
             Title = "Save Batch List",
             Filter = "CSV (*.csv)|*.csv",
             DefaultExt = "csv",
-            FileName = "BatchList.csv"
+            FileName = defaultFileName
         };
 
         if (dlg.ShowDialog() != true)
@@ -133,6 +140,24 @@ public partial class POBatchListViewModel : ObservableObject
         {
             MessageBox.Show($"Error saving CSV: {ex.Message}", "Error");
         }
+    }
+
+    private static string GetSafeFileStem(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return "";
+        }
+
+        var invalid = Path.GetInvalidFileNameChars();
+        var sb = new StringBuilder(value.Length);
+
+        foreach (var ch in value.Trim())
+        {
+            sb.Append(Array.IndexOf(invalid, ch) >= 0 ? '_' : ch);
+        }
+
+        return sb.ToString().Trim();
     }
 
     private string BuildCsv()
