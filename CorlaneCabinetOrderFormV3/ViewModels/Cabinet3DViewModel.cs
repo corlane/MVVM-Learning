@@ -1232,12 +1232,12 @@ public partial class Cabinet3DViewModel : ObservableObject
                     }
 
 
-                    // Rollouts
-                    if (baseCab.IncRollouts || baseCab.IncRolloutsInList)
+                    // Rollouts or Trash Drawer
+                    if (baseCab.IncRollouts || baseCab.IncRolloutsInList || baseCab.TrashDrawer)
                     {
                         //double sideSpacing;
-                        topSpacing = 0;
-                        bottomSpacing = 0;
+                        //topSpacing = 0;
+                        //bottomSpacing = 0;
                         dbxHeight = rolloutHeight;
 
                         if (baseCab.DrwStyle is not null)
@@ -1262,35 +1262,39 @@ public partial class Cabinet3DViewModel : ObservableObject
                         dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
                         dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
 
-                        if (baseCab.RolloutCount >= 1)
+                        if (baseCab.RolloutCount >= 1 || baseCab.TrashDrawer)
                         {
+                            // ####################################### IF ROLLOUT, HEIGHT = 12, ELSE HEIGHT = ROLLOUT HEIGHT #######################################
                             dbxSidePoints =
                             [
                                 new (dbxDepth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxDepth,0,0)
+                                new (0,dbxHeight,0),
+                                new (0,0,0),
+                                new (dbxDepth,0,0)
                             ];
+
                             dbxLeftSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
                             dbxRightSide = CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                             dbxFrontAndBackPoints =
-                        [
-                            new (dbxFrontAndBackWidth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxFrontAndBackWidth,0,0)
-                        ];
+                            [
+                                new (dbxFrontAndBackWidth,dbxHeight,0),
+                                new (0,dbxHeight,0),
+                                new (0,0,0),
+                                new (dbxFrontAndBackWidth,0,0)
+                            ];
+
                             dbxFront = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
                             dbxBack = CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
 
                             dbxBottomPoints =
-                        [
-                            new (0,0,0),
-                            new (dbxBottomWidth,0,0),
-                            new (dbxBottomWidth,dbxBottomLength,0),
-                            new (0,dbxBottomLength,0)
-                        ];
+                            [
+                                new (0,0,0),
+                                new (dbxBottomWidth,0,0),
+                                new (dbxBottomWidth,dbxBottomLength,0),
+                                new (0,dbxBottomLength,0)
+                            ];
+
                             dbxBottom = CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
 
                             // Build box:
@@ -1308,32 +1312,34 @@ public partial class Cabinet3DViewModel : ObservableObject
                             dbx1rotate.Children.Add(dbxBottom);
                             ApplyTransform(dbx1rotate, 0, 0, 0, 0, 90, 0);
 
-                            for (int r = 0; r < baseCab.RolloutCount; r++)
+                            if (baseCab.IncRollouts)
                             {
-                                if (baseCab.IncRolloutsInList)
+                                for (int r = 0; r < baseCab.RolloutCount; r++)
                                 {
-                                    AddDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
-                                }
+                                    if (baseCab.IncRolloutsInList)
+                                    {
+                                        AddDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
+                                    }
 
+                                    // Position Box in Cabinet:
+                                    Model3DGroup dbx1 = new();
+                                    dbx1.Children.Add(dbx1rotate);
+                                    ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (r * 6), interiorDepth + backThickness - .25, 0, 0, 0); // set rollout .25" back from front of cabinet
+                                    cabinet.Children.Add(dbx1);
+                                }
+                            }
+                            if (baseCab.TrashDrawer)
+                            {
                                 // Position Box in Cabinet:
                                 Model3DGroup dbx1 = new();
                                 dbx1.Children.Add(dbx1rotate);
-                                ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (r * 6), interiorDepth + backThickness - .25, 0, 0, 0); // set rollout .25" back from front of cabinet
+                                ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (baseCab.RolloutCount * 6), interiorDepth + backThickness - .25, 0, 0, 0); // set trash drawer .25" back from front of cabinet
                                 cabinet.Children.Add(dbx1);
                             }
-                        }
                     }
                 }
             }
 
-
-            if (!LeftEndHidden) cabinet.Children.Add(leftEnd);
-            if (!RightEndHidden) cabinet.Children.Add(rightEnd);
-            if (!DeckHidden) cabinet.Children.Add(deck);
-            if (!TopHidden) cabinet.Children.Add(top);
-            cabinet.Children.Add(toekick);
-            cabinet.Children.Add(back);
-        }
 
 
         // 90 deg. Corner Cabinets Style 3
