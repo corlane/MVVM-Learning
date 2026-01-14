@@ -127,7 +127,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RunValidationVisible();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Width { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 95)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
     {
         if (newValue == oldValue) return;
@@ -220,22 +220,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwBoxInListOpening1 = (!newValue);
             IncDrwBoxOpening1 = (!newValue);
             DrillSlideHolesOpening1 = (!newValue);
-            UpdatePreview();
-        }
-    }
-    [ObservableProperty] public partial bool TrashDrawer { get; set; } = false; partial void OnTrashDrawerChanged(bool oldValue, bool newValue)
-    {
-        if (newValue)
-        {
-            ShelfCount = 0;
-            DrillShelfHoles = false;
-            RolloutCount = 0;
-    
-            UpdatePreview();
-        }
-
-        if (!newValue)
-        {
             UpdatePreview();
         }
     }
@@ -333,7 +317,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         RunValidationVisible();
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 8)] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(2, 8)] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
     {
         if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
         {
@@ -346,7 +330,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeDrwFrontHeights();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 8)] public partial string TKDepth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(0, 8)] public partial string TKDepth { get; set; } = "";
 
     // Shelf-specific properties
     [ObservableProperty] public partial int ShelfCount { get; set; }
@@ -689,7 +673,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeDrwFrontHeights();
         }
     }
-    [ObservableProperty] public partial bool IncRollouts { get; set; } = false;
+    [ObservableProperty] public partial bool IncRollouts { get; set; } = false; partial void OnIncRolloutsChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            TrashDrawer = false;
+            TrashDrawerEnabled = false;
+        }
+        else
+        {
+            TrashDrawerEnabled = true;
+        }
+    }
     [ObservableProperty] public partial bool IncRolloutsInList { get; set; } = false;
     [ObservableProperty] public partial int RolloutCount { get; set; } = 0; partial void OnRolloutCountChanged(int oldValue, int newValue)
     {
@@ -699,6 +694,27 @@ public partial class BaseCabinetViewModel : ObservableValidator
             {
                 ShelfCount = 0;
             }
+        }
+    }
+    [ObservableProperty] public partial bool TrashDrawer { get; set; } = false; partial void OnTrashDrawerChanged(bool oldValue, bool newValue)
+    {
+        if (newValue)
+        {
+            ShelfCount = 0;
+            DrillShelfHoles = false;
+            RolloutCount = 0;
+            IncRollouts = false;
+            IncRolloutsInList = false;
+            IncRolloutsEnabled = false;
+            IncRolloutsInListEnabled = false;
+            UpdatePreview();
+        }
+
+        if (!newValue)
+        {
+            IncRolloutsEnabled = true;
+            IncRolloutsInListEnabled = true;
+            UpdatePreview();
         }
     }
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; } = false; partial void OnEqualizeBottomDrwFrontsChanged(bool oldValue, bool newValue)
@@ -937,6 +953,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool BackThicknessVisible { get; set; } = true;
     [ObservableProperty] public partial bool GroupRolloutsVisible { get; set; } = true;
     [ObservableProperty] public partial bool TrashDrawerEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool IncRolloutsEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool IncRolloutsInListEnabled { get; set; } = true;
 
     //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()
@@ -1579,7 +1597,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         TopReveal = _defaults.DefaultBaseTopReveal;
         BottomReveal = _defaults.DefaultBaseBottomReveal;
         GapWidth = _defaults.DefaultGapWidth;
-
+        SinkCabinet = false;
+        TrashDrawer = false;
     }
 
     // For 3D model:

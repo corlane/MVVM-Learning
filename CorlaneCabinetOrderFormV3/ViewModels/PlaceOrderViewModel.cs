@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Win32;
@@ -9,8 +10,8 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Media;
 
@@ -362,15 +363,63 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
+        //private (Dictionary<string, double> materials, Dictionary<string, double> edgebanding) AggregateTotals()
+        //{
+        //    var aggMaterials = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+        //    var aggEdgebanding = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+
+        //    foreach (var cab in _cabinetService.Cabinets)
+        //    {
+        //        try
+        //        {
+        //            if (cab.MaterialAreaBySpecies != null)
+        //            {
+        //                foreach (var kv in cab.MaterialAreaBySpecies)
+        //                {
+        //                    var species = string.IsNullOrWhiteSpace(kv.Key) ? "None" : kv.Key;
+        //                    var areaFt2TimesQty = kv.Value * cab.Qty;
+        //                    if (aggMaterials.ContainsKey(species))
+        //                        aggMaterials[species] += areaFt2TimesQty;
+        //                    else
+        //                        aggMaterials[species] = areaFt2TimesQty;
+        //                }
+        //            }
+
+        //            if (cab.EdgeBandingLengthBySpecies != null)
+        //            {
+        //                foreach (var kv in cab.EdgeBandingLengthBySpecies)
+        //                {
+        //                    var eb = string.IsNullOrWhiteSpace(kv.Key) ? "None" : kv.Key;
+        //                    var feetTimesQty = kv.Value * cab.Qty;
+        //                    if (aggEdgebanding.ContainsKey(eb))
+        //                        aggEdgebanding[eb] += feetTimesQty;
+        //                    else
+        //                        aggEdgebanding[eb] = feetTimesQty;
+        //                }
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            // best-effort
+        //        }
+        //    }
+
+        //    return (aggMaterials, aggEdgebanding);
+        //}
+
         private (Dictionary<string, double> materials, Dictionary<string, double> edgebanding) AggregateTotals()
         {
             var aggMaterials = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
             var aggEdgebanding = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
 
+            // Configure this however you want (settings, UI, default, etc.)
+
             foreach (var cab in _cabinetService.Cabinets)
             {
                 try
                 {
+                    string upperCabExtraEbSpecies = GetMatchingEdgebandingSpecies(cab.Species); // sets species extra banding on bottom of upper cabinet end panels
+
                     if (cab.MaterialAreaBySpecies != null)
                     {
                         foreach (var kv in cab.MaterialAreaBySpecies)
@@ -396,6 +445,22 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                                 aggEdgebanding[eb] = feetTimesQty;
                         }
                     }
+
+                    // Pricing-only adjustment: + (2 * Depth) per Upper Cabinet (goes to a chosen EB species)
+                    if (cab is UpperCabinetModel)
+                    {
+                        var depthIn = ConvertDimension.FractionToDouble(cab.Depth);
+                        var extraFeetTimesQty = ((2.0 * depthIn) / 12.0) * cab.Qty;
+
+                        if (extraFeetTimesQty > 0 && !string.IsNullOrWhiteSpace(upperCabExtraEbSpecies) &&
+                            !string.Equals(upperCabExtraEbSpecies, "None", StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (aggEdgebanding.ContainsKey(upperCabExtraEbSpecies))
+                                aggEdgebanding[upperCabExtraEbSpecies] += extraFeetTimesQty;
+                            else
+                                aggEdgebanding[upperCabExtraEbSpecies] = extraFeetTimesQty;
+                        }
+                    }
                 }
                 catch
                 {
@@ -404,6 +469,31 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
 
             return (aggMaterials, aggEdgebanding);
+        }
+
+        private static string GetMatchingEdgebandingSpecies(string? species) // Helper to map common species/material names to edgebanding names
+        {
+            return species switch
+            {
+                null or "" => "None",
+
+                // Match common species/material names -> edgebanding names
+                string s when s.Contains("Alder", StringComparison.OrdinalIgnoreCase) => "Wood Alder",
+                string s when s.Contains("Cherry", StringComparison.OrdinalIgnoreCase) => "Wood Cherry",
+                string s when s.Contains("Hickory", StringComparison.OrdinalIgnoreCase) => "Wood Hickory",
+                string s when s.Contains("Mahogany", StringComparison.OrdinalIgnoreCase) => "Wood Mahogany",
+                string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
+                string s when s.Contains("Maply Ply", StringComparison.OrdinalIgnoreCase) => "Wood Maple", // your example
+                string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
+                string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "PVC Custom",
+                string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "PVC Hardrock Maple",
+                string s when s.Contains("PFP 1/4", StringComparison.OrdinalIgnoreCase) => "None",
+                string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
+                string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
+                string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
+
+                _ => "None"
+            };
         }
 
         private decimal UpdateMaterialTotalsAndReturnTotal(Dictionary<string, double> materials, Dictionary<string, double> edgebanding)
@@ -424,6 +514,10 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             return breakdown.Total;
         }
+
+
+
+
 
         [ObservableProperty]
         public partial bool IsInternetConnected { get; set; }

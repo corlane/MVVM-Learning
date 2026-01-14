@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System;
@@ -145,7 +146,30 @@ public partial class POJobMaterialListViewModel : ObservableObject
                     edgebanding[species] = feet;
                 }
             }
+
+            if (cab is UpperCabinetModel)
+            {
+                string upperCabExtraEbSpecies = GetMatchingEdgebandingSpecies(cab.Species); // sets species extra banding on bottom of upper cabinet end panels
+
+                var depthIn = ConvertDimension.FractionToDouble(cab.Depth);
+                var extraFeet = ((2.0 * depthIn) / 12.0) * qty;
+
+                if (extraFeet > 0 &&
+                    !string.IsNullOrWhiteSpace(upperCabExtraEbSpecies) &&
+                    !string.Equals(upperCabExtraEbSpecies, "None", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (edgebanding.TryGetValue(upperCabExtraEbSpecies, out var existing))
+                    {
+                        edgebanding[upperCabExtraEbSpecies] = existing + extraFeet;
+                    }
+                    else
+                    {
+                        edgebanding[upperCabExtraEbSpecies] = extraFeet;
+                    }
+                }
+            }
         }
+
 
         // Price breakdown: KEEP AS-IS for now (will price UP/DOWN separately unless you also collapse there).
         var breakdown = _priceBreakdownService.Build(materials, edgebanding);
@@ -221,6 +245,11 @@ public partial class POJobMaterialListViewModel : ObservableObject
             });
 
             TotalEdgeBandingFeet += feet;
+
+            if (kv.Key == "None") // Remove "None" from total
+            {
+                TotalEdgeBandingFeet -= feet;
+            }
         }
 
         TotalSheetGoodsSqFt = Math.Round(TotalSheetGoodsSqFt, 2);
@@ -251,4 +280,32 @@ public partial class POJobMaterialListViewModel : ObservableObject
         // fallback 4x8
         return 32.0;
     }
+
+
+
+    private static string GetMatchingEdgebandingSpecies(string? species) // Helper to map common species/material names to edgebanding names
+    {
+        return species switch
+        {
+            null or "" => "None",
+
+            // Match common species/material names -> edgebanding names
+            string s when s.Contains("Alder", StringComparison.OrdinalIgnoreCase) => "Wood Alder",
+            string s when s.Contains("Cherry", StringComparison.OrdinalIgnoreCase) => "Wood Cherry",
+            string s when s.Contains("Hickory", StringComparison.OrdinalIgnoreCase) => "Wood Hickory",
+            string s when s.Contains("Mahogany", StringComparison.OrdinalIgnoreCase) => "Wood Mahogany",
+            string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
+            string s when s.Contains("Maply Ply", StringComparison.OrdinalIgnoreCase) => "Wood Maple", // your example
+            string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
+            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "PVC Custom",
+            string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "PVC Hardrock Maple",
+            string s when s.Contains("PFP 1/4", StringComparison.OrdinalIgnoreCase) => "None",
+            string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
+            string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
+            string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
+
+            _ => "None"
+        };
+    }
+
 }
