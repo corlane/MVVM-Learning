@@ -67,7 +67,7 @@ Panel needs a Default thickness (steal from back thickness I hope, to avoid defa
 
 When clicking Save, auto populate filename if job has been saved before -- DONE
 
-
+When opening job, do not allow if current file is unsaved
 
 
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
@@ -104,7 +104,7 @@ Change directory name creation in Batch List viewmodel to delve into the proper 
 
 Change material to allow for UP and DOWN versions of each raw plywood species. Change individual cabinet parts to be made of the appropriate UP or DOWN material. -- DONE
 
-CNC prie needs to be calcuated by sq ft instead of per sheet.
+CNC price needs to be calcuated by sq ft instead of per sheet. -- DONE
 
 On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
 
@@ -112,7 +112,7 @@ If cabinet is 1 door cabinet and doors are NOT supplied, have batch list load a 
 
 Add 3 characters to model name for Shelf Depth and Drill Shelf Holes and Trash Drawer. -- DONE
 
-
+Use Notify for uploading material prices - the small text notification doesn't grab enough attention. -- DONE
 
 
 
