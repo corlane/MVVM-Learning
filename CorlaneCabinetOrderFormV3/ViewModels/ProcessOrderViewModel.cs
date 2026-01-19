@@ -3,13 +3,14 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
+using System.Media;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows;
-
+using System.Windows.Media;
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 
@@ -28,6 +29,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class ProcessOrderViewModel : ObservableValidator
 {
+    private readonly MainWindowViewModel _mainVm;
+
+    public ProcessOrderViewModel(MainWindowViewModel mainVm)
+    {
+        _mainVm = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
+    }
+
     private static readonly HttpClient s_httpClient = new()
     {
         Timeout = TimeSpan.FromSeconds(15)
@@ -60,7 +68,7 @@ public partial class ProcessOrderViewModel : ObservableValidator
     [RelayCommand]
     private async Task DownloadPrices()
     {
-        SetStatusUi("Downloading...");
+        _mainVm.Notify2("Downloading...", Brushes.MediumBlue);
 
         try
         {
@@ -69,7 +77,7 @@ public partial class ProcessOrderViewModel : ObservableValidator
             var dto = JsonSerializer.Deserialize<MaterialPricesDto>(json, s_jsonOptions);
             if (dto == null)
             {
-                SetStatusUi("Failed to parse JSON.");
+                _mainVm.Notify2("Failed to parse JSON.", Brushes.Red);
                 return;
             }
 
@@ -110,11 +118,11 @@ public partial class ProcessOrderViewModel : ObservableValidator
                 YieldBySpeciesJson = JsonSerializer.Serialize(y, s_jsonOptions);
             });
 
-            SetStatusUi("Download complete.");
+            _mainVm.Notify2("Download complete.", Brushes.Green);
         }
         catch (Exception ex)
         {
-            SetStatusUi($"Download failed: {ex.Message}");
+            _mainVm.Notify2($"Download failed: {ex.Message}", Brushes.Red);
         }
     }
 
@@ -124,18 +132,18 @@ public partial class ProcessOrderViewModel : ObservableValidator
         var userName = Interaction.InputBox("Admin username:", "Upload Prices", "");
         if (string.IsNullOrWhiteSpace(userName))
         {
-            SetStatusUi("Upload canceled.");
+            _mainVm.Notify2("Upload canceled.", Brushes.Red);
             return;
         }
 
         var password = Interaction.InputBox("Admin password:", "Upload Prices", "");
         if (string.IsNullOrWhiteSpace(password))
         {
-            SetStatusUi("Upload canceled.");
+            _mainVm.Notify2("Upload canceled.", Brushes.Red);
             return;
         }
 
-        SetStatusUi("Uploading...");
+        _mainVm.Notify2("Uploading...", Brushes.MediumBlue);
 
         try
         {
@@ -147,7 +155,7 @@ public partial class ProcessOrderViewModel : ObservableValidator
             }
             catch (Exception ex)
             {
-                SetStatusUi($"Yield JSON is invalid: {ex.Message}");
+                _mainVm.Notify2($"Yield JSON is invalid: {ex.Message}", Brushes.Red);
                 return;
             }
 
@@ -188,15 +196,15 @@ public partial class ProcessOrderViewModel : ObservableValidator
 
             if (!response.IsSuccessStatusCode)
             {
-                SetStatusUi($"Upload failed ({(int)response.StatusCode}): {body}");
+                _mainVm.Notify2($"Upload failed ({(int)response.StatusCode}): {body}", Brushes.Red);
                 return;
             }
 
-            SetStatusUi("Upload succeeded. material-prices.json updated.");
+            _mainVm.Notify2("Upload succeeded. material-prices.json updated.", Brushes.Green);
         }
         catch (Exception ex)
         {
-            SetStatusUi($"Upload failed: {ex.Message}");
+            _mainVm.Notify2($"Upload failed: {ex.Message}", Brushes.Red);
         }
     }
 

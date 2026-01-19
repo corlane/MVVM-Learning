@@ -117,6 +117,16 @@ public partial class MainWindowViewModel : ObservableValidator
     [RelayCommand]
     private async Task LoadJob()
     {
+        if (IsModified)
+        {
+            var res = MessageBox.Show(
+                "The current job has unsaved changes. Loading a new job will discard these changes. Do you want to continue?",
+                "Unsaved Changes",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+            if (res != MessageBoxResult.Yes) return;
+        }
+
         var dialog = new OpenFileDialog
         {
             Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor"
