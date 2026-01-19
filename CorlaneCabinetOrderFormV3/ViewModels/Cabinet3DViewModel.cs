@@ -77,14 +77,32 @@ public partial class Cabinet3DViewModel : ObservableObject
 
 
 
+    //private void PreviewSvc_PreviewChanged(object? sender, EventArgs e)
+    //{
+    //    // Ensure RebuildPreview runs on UI thread and with Render priority.
+    //    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
+    //    {
+    //        RebuildPreview();
+    //    }));
+    //}
+
     private void PreviewSvc_PreviewChanged(object? sender, EventArgs e)
     {
-        // Ensure RebuildPreview runs on UI thread and with Render priority.
-        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, new Action(() =>
-        {
-            RebuildPreview();
-        }));
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher == null)
+            return;
+
+        dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(RebuildPreview));
     }
+
+
+
+
+
+
+
+
+
 
     [ObservableProperty]
     public partial Model3DGroup? PreviewModel { get; set; }
@@ -103,64 +121,194 @@ public partial class Cabinet3DViewModel : ObservableObject
         RebuildPreview();
     }
 
+    //public void RebuildPreview()
+    //{
+    //    var group = new Model3DGroup();
+
+    //    // Read preview cabinet from the centralized preview service
+    //    var cab = _previewSvc!.CurrentPreviewCabinet;
+
+    //    if (cab is CabinetModel cabinetModel)
+    //    {
+    //        // Reset accumulators so rebuild produces fresh material/edge totals
+    //        cabinetModel.ResetAllMaterialAndEdgeTotals();
+
+    //        var built = BuildCabinet(cabinetModel);
+    //        group.Children.Add(built);
+    //    }
+    //    else
+    //    {
+    //        // No preview to show - group will contain only lighting.
+    //    }
+
+    //    // Lights
+    //    group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
+
+    //    PreviewModel = group;
+    //}
+
+    //public void RebuildPreview()
+    //{
+    //    var dispatcher = Application.Current?.Dispatcher;
+    //    if (dispatcher != null && !dispatcher.CheckAccess())
+    //    {
+    //        dispatcher.Invoke(RebuildPreview, DispatcherPriority.Render);
+    //        return;
+    //    }
+
+    //    var group = new Model3DGroup();
+
+    //    // Read preview cabinet from the centralized preview service
+    //    var cab = _previewSvc!.CurrentPreviewCabinet;
+
+    //    if (cab is CabinetModel cabinetModel)
+    //    {
+    //        // Reset accumulators so rebuild produces fresh material/edge totals
+    //        cabinetModel.ResetAllMaterialAndEdgeTotals();
+
+    //        var built = BuildCabinet(cabinetModel);
+    //        group.Children.Add(built);
+    //    }
+
+    //    // Lights
+    //    group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
+
+    //    PreviewModel = group;
+    //}
+
+
+
     public void RebuildPreview()
     {
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher != null && !dispatcher.CheckAccess())
+        {
+            // Avoid synchronous re-entrancy during generator/layout/render.
+            dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(RebuildPreview));
+            return;
+        }
+
         var group = new Model3DGroup();
 
-        // Read preview cabinet from the centralized preview service
         var cab = _previewSvc!.CurrentPreviewCabinet;
 
         if (cab is CabinetModel cabinetModel)
         {
-            // Reset accumulators so rebuild produces fresh material/edge totals
             cabinetModel.ResetAllMaterialAndEdgeTotals();
 
             var built = BuildCabinet(cabinetModel);
             group.Children.Add(built);
         }
-        else
-        {
-            // No preview to show - group will contain only lighting.
-        }
 
-        // Lights
         group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
 
         PreviewModel = group;
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
     // Public helper: force the 3D builder to (re)compute material / edgeband accumulators for a CabinetModel instance.
     // This does NOT change the preview; it simply runs the same BuildCabinet pipeline that populates the
     // CabinetModel.MaterialAreaBySpecies and CabinetModel.EdgeBandingLengthBySpecies dictionaries.
+    //public void AccumulateMaterialAndEdgeTotals(CabinetModel? cab)
+    //{
+    //    if (cab == null) return;
+
+    //    // Clear previous totals
+    //    cab.ResetAllMaterialAndEdgeTotals();
+
+    //    // BuildCabinet will call CreatePanel(...) which accumulates into the provided cab.
+    //    // Run on the UI thread because some HelixToolkit operations expect a Dispatcher (and to be safe).
+    //    if (Application.Current?.Dispatcher == null)
+    //    {
+    //        try { _ = BuildCabinet(cab); } catch { /* best-effort */ }
+    //    }
+    //    else
+    //    {
+    //        try
+    //        {
+    //            Application.Current.Dispatcher.Invoke(() =>
+    //            {
+    //                try { _ = BuildCabinet(cab); } catch { /* swallow */ }
+    //            }, DispatcherPriority.Render);
+    //        }
+    //        catch
+    //        {
+    //            // swallow - best-effort
+    //        }
+    //    }
+    //}
+
+    //public void AccumulateMaterialAndEdgeTotals(CabinetModel? cab)
+    //{
+    //    if (cab == null) return;
+
+    //    cab.ResetAllMaterialAndEdgeTotals();
+
+    //    var dispatcher = Application.Current?.Dispatcher;
+    //    if (dispatcher == null)
+    //    {
+    //        return; // no safe UI thread available
+    //    }
+
+    //    try
+    //    {
+    //        dispatcher.Invoke(() =>
+    //        {
+    //            try { _ = BuildCabinet(cab); } catch { /* best-effort */ }
+    //        }, DispatcherPriority.Render);
+    //    }
+    //    catch
+    //    {
+    //        // swallow - best-effort
+    //    }
+    //}
+
     public void AccumulateMaterialAndEdgeTotals(CabinetModel? cab)
     {
         if (cab == null) return;
 
-        // Clear previous totals
-        cab.ResetAllMaterialAndEdgeTotals();
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher == null)
+            return;
 
-        // BuildCabinet will call CreatePanel(...) which accumulates into the provided cab.
-        // Run on the UI thread because some HelixToolkit operations expect a Dispatcher (and to be safe).
-        if (Application.Current?.Dispatcher == null)
+        dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
         {
-            try { _ = BuildCabinet(cab); } catch { /* best-effort */ }
-        }
-        else
-        {
+            cab.ResetAllMaterialAndEdgeTotals();
+
             try
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    try { _ = BuildCabinet(cab); } catch { /* swallow */ }
-                }, DispatcherPriority.Render);
+                _ = BuildCabinet(cab);
             }
             catch
             {
-                // swallow - best-effort
+                // best-effort
             }
-        }
+        }));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private Model3DGroup BuildCabinet(CabinetModel cab)
@@ -2647,6 +2795,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         bool isFaceUp,
         double plywoodTextureRotationDegrees = 0)
     {
+        var dispatcher = Application.Current?.Dispatcher;
         double thickness = matlThickness;
 
         // --- compute polygon area (shoelace) in square inches and accumulate into cabinet totals ---
@@ -2999,9 +3148,54 @@ public partial class Cabinet3DViewModel : ObservableObject
     }
 
 
+    //private static DiffuseMaterial GetPlywoodSpecies(string? panelSpecies, string? grainDirection, double rotationDegrees = 0)
+    //{
+    //    // Provide defaults if null or empty
+    //    panelSpecies ??= "Prefinished Ply";
+    //    grainDirection ??= "Horizontal";
+
+    //    if (string.IsNullOrWhiteSpace(panelSpecies))
+    //        panelSpecies = "Prefinished Ply";
+    //    if (string.IsNullOrWhiteSpace(grainDirection))
+    //        grainDirection = "Horizontal";
+    //    if (panelSpecies == "PFP 1/4") panelSpecies = "Prefinished Ply"; // Use the same texture for 1/4" and 3/4" prefinished ply
+
+    //    string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
+
+    //    try
+    //    {
+    //        var bitmap = new BitmapImage();
+    //        bitmap.BeginInit();
+    //        bitmap.UriSource = new Uri(resourcePath);
+    //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+    //        bitmap.EndInit();
+    //        bitmap.Freeze();
+
+    //        var brush = new ImageBrush(bitmap)
+    //        {
+    //            TileMode = TileMode.Tile,
+    //            ViewportUnits = BrushMappingMode.Absolute,
+    //            Viewport = new Rect(0, 0, .5, 1)
+    //        };
+
+    //        // Apply rotation about the brush center using RelativeTransform.
+    //        // RelativeTransform uses 0..1 coordinates, so center = (0.5, 0.5).
+    //        if (Math.Abs(rotationDegrees) > 1e-6)
+    //        {
+    //            brush.RelativeTransform = new RotateTransform(rotationDegrees, 0.5, 0.5);
+    //        }
+
+    //        return new DiffuseMaterial(brush);
+    //    }
+    //    catch
+    //    {
+    //        // Fallback to solid color
+    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
+    //    }
+    //}
+
     private static DiffuseMaterial GetPlywoodSpecies(string? panelSpecies, string? grainDirection, double rotationDegrees = 0)
     {
-        // Provide defaults if null or empty
         panelSpecies ??= "Prefinished Ply";
         grainDirection ??= "Horizontal";
 
@@ -3009,7 +3203,7 @@ public partial class Cabinet3DViewModel : ObservableObject
             panelSpecies = "Prefinished Ply";
         if (string.IsNullOrWhiteSpace(grainDirection))
             grainDirection = "Horizontal";
-        if (panelSpecies == "PFP 1/4") panelSpecies = "Prefinished Ply"; // Use the same texture for 1/4" and 3/4" prefinished ply
+        if (panelSpecies == "PFP 1/4") panelSpecies = "Prefinished Ply";
 
         string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
 
@@ -3029,28 +3223,79 @@ public partial class Cabinet3DViewModel : ObservableObject
                 Viewport = new Rect(0, 0, .5, 1)
             };
 
-            // Apply rotation about the brush center using RelativeTransform.
-            // RelativeTransform uses 0..1 coordinates, so center = (0.5, 0.5).
             if (Math.Abs(rotationDegrees) > 1e-6)
             {
-                brush.RelativeTransform = new RotateTransform(rotationDegrees, 0.5, 0.5);
+                var rt = new RotateTransform(rotationDegrees, 0.5, 0.5);
+                rt.Freeze();
+                brush.RelativeTransform = rt;
             }
 
-            return new DiffuseMaterial(brush);
+            brush.Freeze();
+
+            var material = new DiffuseMaterial(brush);
+            material.Freeze();
+
+            return material;
         }
         catch
         {
-            // Fallback to solid color
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
+            var fallbackBrush = new SolidColorBrush(Color.FromRgb(200, 200, 200));
+            fallbackBrush.Freeze();
+
+            var fallbackMaterial = new DiffuseMaterial(fallbackBrush);
+            fallbackMaterial.Freeze();
+
+            return fallbackMaterial;
         }
     }
 
+
+    //private static DiffuseMaterial GetEdgeBandingSpecies(string? species)
+    //{
+    //    // Handle "None" or null
+    //    if (string.IsNullOrWhiteSpace(species) || species == "None")
+    //    {
+    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19))); // Wood brown
+    //    }
+
+    //    string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
+
+    //    try
+    //    {
+    //        var bitmap = new BitmapImage();
+    //        bitmap.BeginInit();
+    //        bitmap.UriSource = new Uri(resourcePath);
+    //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+    //        bitmap.EndInit();
+    //        bitmap.Freeze();
+
+    //        var brush = new ImageBrush(bitmap)
+    //        {
+    //            TileMode = TileMode.Tile,
+    //            ViewportUnits = BrushMappingMode.Absolute,
+    //            Viewport = new Rect(0, 0, 1, 1)
+    //        };
+
+    //        return new DiffuseMaterial(brush);
+    //    }
+    //    catch
+    //    {
+    //        // Fallback to solid color
+    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19)));
+    //    }
+    //}
+
     private static DiffuseMaterial GetEdgeBandingSpecies(string? species)
     {
-        // Handle "None" or null
         if (string.IsNullOrWhiteSpace(species) || species == "None")
         {
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19))); // Wood brown
+            var solid = new SolidColorBrush(Color.FromRgb(139, 69, 19));
+            solid.Freeze();
+
+            var mat = new DiffuseMaterial(solid);
+            mat.Freeze();
+
+            return mat;
         }
 
         string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
@@ -3071,14 +3316,29 @@ public partial class Cabinet3DViewModel : ObservableObject
                 Viewport = new Rect(0, 0, 1, 1)
             };
 
-            return new DiffuseMaterial(brush);
+            brush.Freeze();
+
+            var material = new DiffuseMaterial(brush);
+            material.Freeze();
+
+            return material;
         }
         catch
         {
-            // Fallback to solid color
-            return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19)));
+            var solid = new SolidColorBrush(Color.FromRgb(139, 69, 19));
+            solid.Freeze();
+
+            var mat = new DiffuseMaterial(solid);
+            mat.Freeze();
+
+            return mat;
         }
     }
+
+
+
+
+
 
 
     private static void AddFrontPartRow(

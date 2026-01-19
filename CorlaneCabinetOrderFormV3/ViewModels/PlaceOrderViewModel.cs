@@ -202,7 +202,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 {
                     try
                     {
-                        await _defaults.SaveAsync().ConfigureAwait(false);
+                        await _defaults.SaveAsync();
                     }
                     catch
                     {
@@ -226,26 +226,18 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 _cabinetService.OrderedAtLocal = orderedAt;
                 OrderedAtLocal = orderedAt;
 
-                await _cabinetService.SaveAsync(dialog.FileName, customer, TotalPrice).ConfigureAwait(false);
+                await _cabinetService.SaveAsync(dialog.FileName, customer, TotalPrice);
 
                 try
                 {
-                    await UploadJobToWebsiteAsync(dialog.FileName).ConfigureAwait(false);
+                    await UploadJobToWebsiteAsync(dialog.FileName);
                     _mainVm.Notify2("Order placed. Job saved and sent to Corlane. Thank you!", Brushes.Green, 5000);
 
-                    if (Application.Current?.Dispatcher == null)
+                    Application.Current.Dispatcher.BeginInvoke(() =>
                     {
                         OrderStatusBackground = new SolidColorBrush(Color.FromRgb(146, 250, 153));
                         OrderStatusText = $"Job ordered on {orderedAt:d}";
-                    }
-                    else
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            OrderStatusBackground = new SolidColorBrush(Color.FromRgb(146, 250, 153));
-                            OrderStatusText = $"Job ordered on {orderedAt:d}";
-                        });
-                    }
+                    });
                 }
                 catch (Exception ex)
                 {
@@ -260,8 +252,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 MessageBox.Show($"Error placing order: {ex.Message}", "Error");
             }
         }
-
-
 
         [ObservableProperty]
         private DateTime? orderedAtLocal;
@@ -283,12 +273,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             OrderStatusBackground = new SolidColorBrush(Color.FromRgb(255, 88, 113));
             OrderStatusText = "NOT ORDERED";
         }
-
-
-
-
-
-
 
         private static async Task UploadJobToWebsiteAsync(string jobFilePath)
         {
@@ -346,66 +330,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         public void CalculatePrices()
         {
-            if (Application.Current?.Dispatcher == null)
+            Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 var totals = AggregateTotals();
                 TotalPrice = UpdateMaterialTotalsAndReturnTotal(totals.materials, totals.edgebanding);
                 OnPropertyChanged(nameof(FormattedTotal));
-            }
-            else
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    var totals = AggregateTotals();
-                    TotalPrice = UpdateMaterialTotalsAndReturnTotal(totals.materials, totals.edgebanding);
-                    OnPropertyChanged(nameof(FormattedTotal));
-                });
-            }
+            });
         }
-
-        //private (Dictionary<string, double> materials, Dictionary<string, double> edgebanding) AggregateTotals()
-        //{
-        //    var aggMaterials = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-        //    var aggEdgebanding = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-
-        //    foreach (var cab in _cabinetService.Cabinets)
-        //    {
-        //        try
-        //        {
-        //            if (cab.MaterialAreaBySpecies != null)
-        //            {
-        //                foreach (var kv in cab.MaterialAreaBySpecies)
-        //                {
-        //                    var species = string.IsNullOrWhiteSpace(kv.Key) ? "None" : kv.Key;
-        //                    var areaFt2TimesQty = kv.Value * cab.Qty;
-        //                    if (aggMaterials.ContainsKey(species))
-        //                        aggMaterials[species] += areaFt2TimesQty;
-        //                    else
-        //                        aggMaterials[species] = areaFt2TimesQty;
-        //                }
-        //            }
-
-        //            if (cab.EdgeBandingLengthBySpecies != null)
-        //            {
-        //                foreach (var kv in cab.EdgeBandingLengthBySpecies)
-        //                {
-        //                    var eb = string.IsNullOrWhiteSpace(kv.Key) ? "None" : kv.Key;
-        //                    var feetTimesQty = kv.Value * cab.Qty;
-        //                    if (aggEdgebanding.ContainsKey(eb))
-        //                        aggEdgebanding[eb] += feetTimesQty;
-        //                    else
-        //                        aggEdgebanding[eb] = feetTimesQty;
-        //                }
-        //            }
-        //        }
-        //        catch
-        //        {
-        //            // best-effort
-        //        }
-        //    }
-
-        //    return (aggMaterials, aggEdgebanding);
-        //}
 
         private (Dictionary<string, double> materials, Dictionary<string, double> edgebanding) AggregateTotals()
         {
@@ -498,7 +429,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         private decimal UpdateMaterialTotalsAndReturnTotal(Dictionary<string, double> materials, Dictionary<string, double> edgebanding)
         {
-            if (Application.Current?.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess())
+            if (!Application.Current.Dispatcher.CheckAccess())
             {
                 return Application.Current.Dispatcher.Invoke(() => UpdateMaterialTotalsAndReturnTotal(materials, edgebanding));
             }
@@ -515,10 +446,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             return breakdown.Total;
         }
 
-
-
-
-
         [ObservableProperty]
         public partial bool IsInternetConnected { get; set; }
 
@@ -529,23 +456,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         partial void OnIsInternetConnectedChanged(bool oldValue, bool newValue)
         {
-            if (Application.Current?.Dispatcher == null)
+            Application.Current.Dispatcher.BeginInvoke(() =>
             {
                 InternetStatusBackground = newValue
                     ? new SolidColorBrush(Color.FromRgb(146, 250, 153))
                     : new SolidColorBrush(Color.FromRgb(255, 88, 113));
                 OnPropertyChanged(nameof(InternetStatusText));
-            }
-            else
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    InternetStatusBackground = newValue
-                        ? new SolidColorBrush(Color.FromRgb(146, 250, 153))
-                        : new SolidColorBrush(Color.FromRgb(255, 88, 113));
-                    OnPropertyChanged(nameof(InternetStatusText));
-                });
-            }
+            });
         }
 
         private void InitializeNetworkMonitoring()
@@ -602,14 +519,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 connected = false;
             }
 
-            if (Application.Current?.Dispatcher == null)
-            {
-                IsInternetConnected = connected;
-            }
-            else
-            {
-                Application.Current.Dispatcher.Invoke(() => IsInternetConnected = connected);
-            }
+            Application.Current.Dispatcher.BeginInvoke(() => IsInternetConnected = connected);
         }
 
         [ObservableProperty]
