@@ -3148,52 +3148,6 @@ public partial class Cabinet3DViewModel : ObservableObject
     }
 
 
-    //private static DiffuseMaterial GetPlywoodSpecies(string? panelSpecies, string? grainDirection, double rotationDegrees = 0)
-    //{
-    //    // Provide defaults if null or empty
-    //    panelSpecies ??= "Prefinished Ply";
-    //    grainDirection ??= "Horizontal";
-
-    //    if (string.IsNullOrWhiteSpace(panelSpecies))
-    //        panelSpecies = "Prefinished Ply";
-    //    if (string.IsNullOrWhiteSpace(grainDirection))
-    //        grainDirection = "Horizontal";
-    //    if (panelSpecies == "PFP 1/4") panelSpecies = "Prefinished Ply"; // Use the same texture for 1/4" and 3/4" prefinished ply
-
-    //    string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
-
-    //    try
-    //    {
-    //        var bitmap = new BitmapImage();
-    //        bitmap.BeginInit();
-    //        bitmap.UriSource = new Uri(resourcePath);
-    //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-    //        bitmap.EndInit();
-    //        bitmap.Freeze();
-
-    //        var brush = new ImageBrush(bitmap)
-    //        {
-    //            TileMode = TileMode.Tile,
-    //            ViewportUnits = BrushMappingMode.Absolute,
-    //            Viewport = new Rect(0, 0, .5, 1)
-    //        };
-
-    //        // Apply rotation about the brush center using RelativeTransform.
-    //        // RelativeTransform uses 0..1 coordinates, so center = (0.5, 0.5).
-    //        if (Math.Abs(rotationDegrees) > 1e-6)
-    //        {
-    //            brush.RelativeTransform = new RotateTransform(rotationDegrees, 0.5, 0.5);
-    //        }
-
-    //        return new DiffuseMaterial(brush);
-    //    }
-    //    catch
-    //    {
-    //        // Fallback to solid color
-    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(200, 200, 200)));
-    //    }
-    //}
-
     private static DiffuseMaterial GetPlywoodSpecies(string? panelSpecies, string? grainDirection, double rotationDegrees = 0)
     {
         panelSpecies ??= "Prefinished Ply";
@@ -3249,41 +3203,6 @@ public partial class Cabinet3DViewModel : ObservableObject
         }
     }
 
-
-    //private static DiffuseMaterial GetEdgeBandingSpecies(string? species)
-    //{
-    //    // Handle "None" or null
-    //    if (string.IsNullOrWhiteSpace(species) || species == "None")
-    //    {
-    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19))); // Wood brown
-    //    }
-
-    //    string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
-
-    //    try
-    //    {
-    //        var bitmap = new BitmapImage();
-    //        bitmap.BeginInit();
-    //        bitmap.UriSource = new Uri(resourcePath);
-    //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-    //        bitmap.EndInit();
-    //        bitmap.Freeze();
-
-    //        var brush = new ImageBrush(bitmap)
-    //        {
-    //            TileMode = TileMode.Tile,
-    //            ViewportUnits = BrushMappingMode.Absolute,
-    //            Viewport = new Rect(0, 0, 1, 1)
-    //        };
-
-    //        return new DiffuseMaterial(brush);
-    //    }
-    //    catch
-    //    {
-    //        // Fallback to solid color
-    //        return new DiffuseMaterial(new SolidColorBrush(Color.FromRgb(139, 69, 19)));
-    //    }
-    //}
 
     private static DiffuseMaterial GetEdgeBandingSpecies(string? species)
     {

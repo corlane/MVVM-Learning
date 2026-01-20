@@ -54,7 +54,10 @@ public partial class FillerViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty] public partial string Species { get; set; } = "";
+    [ObservableProperty] public partial string CustomSpecies { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
+    [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
+
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required, Range(1, 100)] public partial int Qty { get; set; } = 1;
     [ObservableProperty] public partial string Notes { get; set; } = "";
@@ -122,6 +125,7 @@ public partial class FillerViewModel : ObservableValidator
             Height = ConvertDimension.FractionToDouble(Height).ToString(),
             Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
+            CustomSpecies = CustomSpecies,
             EBSpecies = EBSpecies,
             Name = Name,
             Qty = Qty,
@@ -131,6 +135,7 @@ public partial class FillerViewModel : ObservableValidator
         try
         {
             _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
+            _mainVm!.SelectedCabinet = newCabinet;
         }
         catch (InvalidOperationException ex)
         {
@@ -170,6 +175,7 @@ public partial class FillerViewModel : ObservableValidator
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
             selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
+            selected.CustomSpecies = CustomSpecies;
             selected.EBSpecies = EBSpecies;
             selected.Name = Name;
             selected.Qty = Qty;

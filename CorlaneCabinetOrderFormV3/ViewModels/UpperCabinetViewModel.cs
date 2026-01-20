@@ -88,7 +88,10 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty] public partial string Species { get; set; } = "";
+    [ObservableProperty] public partial string CustomSpecies { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
+    [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
+
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required, Range(1, 100)] public partial int Qty { get; set; } = 1;
     [ObservableProperty] public partial string Notes { get; set; } = "";
@@ -163,7 +166,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial string LeftBackWidth90 { get; set; } = "";
     [ObservableProperty] public partial string RightBackWidth90 { get; set; } = "";
 
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string DoorSpecies { get; set; } = "";
+    [ObservableProperty] public partial string DoorSpecies { get; set; } = "";
+    [ObservableProperty] public partial string CustomDoorSpecies { get; set; } = "";
+
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BackThickness { get; set; } = ""; partial void OnBackThicknessChanged(string oldValue, string newValue)
     {
         if (newValue != oldValue)
@@ -176,7 +181,15 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial int ShelfCount { get; set; }
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }
 
-    [ObservableProperty] public partial int DoorCount { get; set; }
+    [ObservableProperty] public partial int DoorCount { get; set; } partial void OnDoorCountChanged(int oldValue, int newValue)
+    {
+        if (newValue == 0)
+        {
+            IncDoors = false;
+            IncDoorsInList = false;
+            DrillHingeHoles = false;
+        }
+    }
     [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";
     [ObservableProperty] public partial bool IncDoorsInList { get; set; }
     [ObservableProperty] public partial bool IncDoors { get; set; }
@@ -273,7 +286,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
             Height = ConvertDimension.FractionToDouble(Height).ToString(),
             Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
+            CustomSpecies = CustomSpecies,
             EBSpecies = EBSpecies,
+            CustomEBSpecies = CustomEBSpecies,
             Name = Name,
             Qty = Qty,
             Notes = Notes,
@@ -285,6 +300,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString(),
             RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString(),
             DoorSpecies = DoorSpecies,
+            CustomDoorSpecies = CustomDoorSpecies,
             BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString(),
             ShelfCount = ShelfCount,
             DrillShelfHoles = DrillShelfHoles,
@@ -303,6 +319,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         try
         {
             _cabinetService?.Add(newCabinet); // Add to shared service
+            _mainVm!.SelectedCabinet = newCabinet;
         }
         catch (InvalidOperationException ex)
         {
@@ -407,7 +424,10 @@ public partial class UpperCabinetViewModel : ObservableValidator
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
             selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
+            selected.CustomSpecies = CustomSpecies;
             selected.EBSpecies = EBSpecies;
+            selected.CustomEBSpecies = CustomEBSpecies;
+            selected.CustomDoorSpecies = CustomDoorSpecies;
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;

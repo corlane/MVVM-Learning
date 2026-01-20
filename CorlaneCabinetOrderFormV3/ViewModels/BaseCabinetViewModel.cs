@@ -53,9 +53,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         RightDepth = "24";
         LeftBackWidth = "36";
         RightBackWidth = "36";
-        //BackThickness = "0.75";
         Style = Style1;
-        ListRolloutCount = [1, 2];
+        ListRolloutCount = [0, 1, 2];
 
         // Testing for validation:
 
@@ -146,35 +145,35 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
             if (interiorHeight < 12)
             {
-                ListRolloutCount = [1, 2];
+                ListRolloutCount = [0, 1, 2];
             }
             else if (interiorHeight >= 12 && interiorHeight < 24)
             {
-                ListRolloutCount = [1, 2, 3];
+                ListRolloutCount = [0, 1, 2, 3];
             }
             else if (interiorHeight >= 24 && interiorHeight < 36)
             {
-                ListRolloutCount = [1, 2, 3, 4, 5];
+                ListRolloutCount = [0, 1, 2, 3, 4, 5];
             }
             else if (interiorHeight >= 36 && interiorHeight < 48)
             {
-                ListRolloutCount = [1, 2, 3, 4, 5, 6];
+                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6];
             }
             else if (interiorHeight >= 48 && interiorHeight < 60)
             {
-                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7];
+                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7];
             }
             else if (interiorHeight >= 60 && interiorHeight < 72)
             {
-                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8];
+                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7, 8];
             }
             else if (interiorHeight >= 72 && interiorHeight < 84)
             {
-                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
             }
             else if (interiorHeight >= 84 && interiorHeight < 96)
             {
-                ListRolloutCount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             }
 
             ResizeOpeningHeights();
@@ -194,10 +193,31 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
 
     }
-
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string EBSpecies { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomCabSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomCabSpeciesEnabled = false;
+        }
+    }
+    [ObservableProperty] public partial string CustomSpecies { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required] public partial string EBSpecies { get; set; } = ""; partial void OnEBSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomEBSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomEBSpeciesEnabled = false;
+        }
+    }
+    [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required, Range(1, 100)] public partial int Qty { get; set; } = 1;
     [ObservableProperty] public partial string Notes { get; set; } = "";
@@ -338,8 +358,27 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }
 
     // Door-specific properties
-    [ObservableProperty] public partial string DoorSpecies { get; set; } = "";
-    [ObservableProperty] public partial int DoorCount { get; set; }
+    [ObservableProperty] public partial string DoorSpecies { get; set; } = ""; partial void OnDoorSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomDoorSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomDoorSpeciesEnabled = false;
+        }
+    }
+    [ObservableProperty] public partial string CustomDoorSpecies { get; set; } = "";
+    [ObservableProperty] public partial int DoorCount { get; set; } partial void OnDoorCountChanged(int oldValue, int newValue)
+    {
+        if (newValue == 0)
+        {
+            IncDoors = false;
+            IncDoorsInList = false;
+            DrillHingeHoles = false;
+        }
+    }
     [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
     [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";
     [ObservableProperty] public partial bool IncDoorsInList { get; set; }
@@ -694,6 +733,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
             {
                 ShelfCount = 0;
             }
+            else
+            { 
+                IncRollouts = false;
+                IncRolloutsInList = false;
+            }
         }
     }
     [ObservableProperty] public partial bool TrashDrawer { get; set; } = false; partial void OnTrashDrawerChanged(bool oldValue, bool newValue)
@@ -955,6 +999,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool TrashDrawerEnabled { get; set; } = true;
     [ObservableProperty] public partial bool IncRolloutsEnabled { get; set; } = true;
     [ObservableProperty] public partial bool IncRolloutsInListEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
+    [ObservableProperty] public partial bool CustomEBSpeciesEnabled { get; set; } = false;
+    [ObservableProperty] public partial bool CustomDoorSpeciesEnabled { get; set; } = false;
+
 
     //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()
@@ -1292,6 +1340,27 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
+        if (Species == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(DoorSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+        {
+            // Prompt for custom edge band species
+            MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        
         if (Style == Style2)
         {
             DoorCount = 0;
@@ -1324,7 +1393,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Height = ConvertDimension.FractionToDouble(Height).ToString(),
             Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
+            CustomSpecies = CustomSpecies,
             EBSpecies = EBSpecies,
+            CustomEBSpecies = CustomEBSpecies,
             Name = Name,
             Qty = Qty,
             Notes = Notes,
@@ -1340,6 +1411,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             HasTK = HasTK,
             TKDepth = ConvertDimension.FractionToDouble(TKDepth).ToString(),
             DoorSpecies = DoorSpecies,
+            CustomDoorSpecies = CustomDoorSpecies,
             BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString(),
             TopType = TopType,
             ShelfCount = ShelfCount,
@@ -1401,6 +1473,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         try
         {
             _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
+            _mainVm!.SelectedCabinet = newCabinet;
         }
         catch (InvalidOperationException ex)
         {
@@ -1417,6 +1490,27 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel selected)
         {
+            if (Species == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+            {
+                // Prompt for custom species
+                MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(DoorSpecies))
+            {
+                // Prompt for custom door species
+                MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+            {
+                // Prompt for custom edge band species
+                MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
             var newName = Name;
 
             if (!string.IsNullOrWhiteSpace(newName))
@@ -1439,7 +1533,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
             selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
+            selected.CustomSpecies = CustomSpecies;
             selected.EBSpecies = EBSpecies;
+            selected.CustomEBSpecies = CustomEBSpecies;
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;
@@ -1454,6 +1550,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.HasTK = HasTK;
             selected.TKDepth = ConvertDimension.FractionToDouble(TKDepth).ToString();
             selected.DoorSpecies = DoorSpecies;
+            selected.CustomDoorSpecies = CustomDoorSpecies;
             selected.BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString();
             selected.TopType = TopType;
             selected.ShelfCount = ShelfCount;

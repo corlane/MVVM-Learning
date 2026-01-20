@@ -72,13 +72,18 @@
         <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="-25,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top" >
             <StackPanel Orientation="Vertical">
                 <Label Content="Species:" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboFillerCabinetSpecies" Margin="5" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}"/>
+                <ComboBox Name="comboBaseCabinetSpecies" Margin="5" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}" HorizontalAlignment="Left" Width="190"/>
+                <Label Content="Custom Species:" Margin="0,-8,0,-8"/>
+                <TextBox Margin="5" Text="{Binding CustomSpecies}" HorizontalAlignment="Left" Width="190" IsEnabled="{Binding CustomCabSpeciesEnabled}"/>
+                <Separator/>
                 <Label Content="Edgebanding" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboFillerEBSpecies" Margin="5" Width="190" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding EBSpecies}"/>
+                <ComboBox Name="comboBaseEBSpecies" Margin="5" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding EBSpecies}" HorizontalAlignment="Left" Width="190"/>
+                <Label Content="Custom Edgebanding Species:" Margin="0,-8,0,-8"/>
+                <TextBox Margin="5" Text="{Binding CustomEBSpecies}" HorizontalAlignment="Left" Width="190" IsEnabled="{Binding CustomEBSpeciesEnabled}"/>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Select Edges To Be Edgebanded" Grid.Row="1" Grid.Column="1" Margin="5,-100,5,5" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <GroupBox Header="Select Edges To Be Edgebanded" Grid.Row="1" Grid.Column="1" Margin="-25,-50,5,5" VerticalAlignment="Top" HorizontalAlignment="Left">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkEBPanelTop" Content="Top" HorizontalAlignment="Center" Margin="0,15,0,5" IsChecked="{Binding PanelEBTop}"/>
                 <StackPanel Orientation="Horizontal">

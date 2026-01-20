@@ -12,6 +12,7 @@ public partial class UpperCabinetModel : CabinetModel
     [ObservableProperty] public partial string LeftDepth { get; set; } = "";
     [ObservableProperty] public partial string RightDepth { get; set; } = "";
     [ObservableProperty] public partial string DoorSpecies { get; set; } = "";
+    [ObservableProperty] public partial string CustomDoorSpecies { get; set; } = "";
     [ObservableProperty] public partial string BackThickness { get; set; } = "";
     [ObservableProperty] public partial int ShelfCount { get; set; }
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }

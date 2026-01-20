@@ -67,13 +67,28 @@ Panel needs a Default thickness (steal from back thickness I hope, to avoid defa
 
 When clicking Save, auto populate filename if job has been saved before -- DONE
 
-When opening job, do not allow if current file is unsaved
+When opening job, do not allow if current file is unsaved -- DONE
+
+Implement Custom material. Currently you can choose custom, but not enter a name. -- DONE
+
+After adding  cabinet, it should be selected in the list automatically -- DONE
+
+Selecting 0 doors or drawers should disable the Supply and IncInList checkboxes for those items -- DONE
+
+
+
+
+
+
 
 
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
 OPTIONAL: Change image loading in Cabinet3DViewModel to utilize the grain direction setting. This will allow the removal of duplicate material images for horizontal and vertical grain.
 	Have already added material images to image folder with Horizontal and Vertical suffixes removed.
+
+
+
 
 
 
@@ -114,6 +129,15 @@ Add 3 characters to model name for Shelf Depth and Drill Shelf Holes and Trash D
 
 Use Notify for uploading material prices - the small text notification doesn't grab enough attention. -- DONE
 
+Account for Custom material in price calc. -- DONE
+
+
+
+
+
+
+
+
 
 
 BUGS:
@@ -151,6 +175,9 @@ Total Cabinets on printed cutlist seems to only be counting line items, not tota
 
 Drawer fronts not obeying Defaults setting for Include/Exclude Doors/Drw Fronts -- DONE
 
+Rollout selection not updating properly when clicking around in the list. Will continue to show 1 rollout, and then checking Inc Rollouts will not do anything. -- NEED MOAR INFO TO REPRODUCE
+
+Rollouts need a 0 selection in the dropdown. -- DONE
 
 
 

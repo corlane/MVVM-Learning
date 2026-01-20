@@ -79,7 +79,10 @@
         <GroupBox Header="Species" Grid.Row="0" Grid.Column="1" Margin="-45,5,5,5" HorizontalAlignment="Left" VerticalAlignment="Top">
             <StackPanel Orientation="Vertical">
                 <Label Content="Species:" Margin="0,0,0,-8"/>
-                <ComboBox Name="comboFillerCabinetSpecies" Margin="5,5,5,10" Width="190" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}"/>
+                <ComboBox Name="comboBaseCabinetSpecies" Margin="5" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}" HorizontalAlignment="Left" Width="190"/>
+                <Label Content="Custom Species:" Margin="0,-8,0,-8"/>
+                <TextBox Margin="5" Text="{Binding CustomSpecies}" HorizontalAlignment="Left" Width="190" IsEnabled="{Binding CustomCabSpeciesEnabled}"/>
+                <Separator/>
             </StackPanel>
         </GroupBox>
 

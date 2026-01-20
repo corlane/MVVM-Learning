@@ -239,15 +239,22 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="2" Header="Species" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="210">
+        <GroupBox Grid.Row="0" Grid.Column="2" Header="Species" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="210">
             <StackPanel Orientation="Vertical">
                 <Label Content="Species:" Margin="0,0,0,-8"/>
                 <ComboBox Name="comboBaseCabinetSpecies" Margin="5" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}" HorizontalAlignment="Left" Width="190"/>
+                <Label Content="Custom Species:" Margin="0,-8,0,-8"/>
+                <TextBox Margin="5" Text="{Binding CustomSpecies}" HorizontalAlignment="Left" Width="190" IsEnabled="{Binding CustomCabSpeciesEnabled}"/>
+                <Separator/>
                 <Label Content="Edgebanding" Margin="0,0,0,-8"/>
                 <ComboBox Name="comboBaseEBSpecies" Margin="5" ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding EBSpecies}" HorizontalAlignment="Left" Width="190"/>
+                <Label Content="Custom Edgebanding Species:" Margin="0,-8,0,-8"/>
+                <TextBox Margin="5" Text="{Binding CustomEBSpecies}" HorizontalAlignment="Left" Width="190" IsEnabled="{Binding CustomEBSpeciesEnabled}"/>
+                <Separator/>
                 <Label Content="Door / Drw. Front Species:"/>
                 <ComboBox x:Name="comboDoorSpecies" Width="190" HorizontalAlignment="Left" Margin="5,-3,5,5" ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DoorSpecies}"/>
-
+                <Label Content="Custom Door / Drw. Front Species:" Margin="0,-8,0,-8"/>
+                <TextBox Margin="5" Text="{Binding CustomDoorSpecies}" HorizontalAlignment="Left" Width="190" IsEnabled="{Binding CustomDoorSpeciesEnabled}"/>
             </StackPanel>
         </GroupBox>
 

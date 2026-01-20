@@ -141,6 +141,9 @@
                     <GridViewColumn Header="GapWidth" DisplayMemberBinding="{Binding GapWidth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="MaterialThickness34" DisplayMemberBinding="{Binding MaterialThickness34, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="MaterialThickness14" DisplayMemberBinding="{Binding MaterialThickness14, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>-->
+                    <GridViewColumn Header="CustomSpecies" DisplayMemberBinding="{Binding CustomSpecies}" Width="Auto"/>
+                    <GridViewColumn Header="CustomEBSpecies" DisplayMemberBinding="{Binding CustomEBSpecies}" Width="Auto"/>
+                    <GridViewColumn Header="CustomDoorSpecies" DisplayMemberBinding="{Binding CustomDoorSpecies}" Width="Auto"/>
 
 
                 </GridView>

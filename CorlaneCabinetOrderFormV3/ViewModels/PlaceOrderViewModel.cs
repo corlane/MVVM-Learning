@@ -35,6 +35,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         // Replace with a strong random value and keep it consistent with the PHP script.
         private const string UploadApiKey = "corlanejobupload";
 
+        private const string CustomPricingMessage = "CUSTOM MATERIAL - AUTOMATIC PRICING NOT AVAILABLE";
+
         private CancellationTokenSource? _networkCts;
 
         public PlaceOrderViewModel()
@@ -76,6 +78,70 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             if (_mainVm.SelectedTabIndex == PlaceOrderTabIndex)
             {
                 CalculatePrices();
+            }
+        }
+
+        // --- Pricing display helpers ---
+
+        public string QuotedPriceText => HasCustomOrUnknownMaterialsInJob()
+            ? CustomPricingMessage
+            : FormattedTotal;
+
+        private bool HasCustomOrUnknownMaterialsInJob()
+        {
+            if (_cabinetService?.Cabinets == null)
+            {
+                return false;
+            }
+
+            // Use the same “available species” lists the UI uses.
+            // (They’re duplicated across VMs, but values are consistent.)
+            var cabSpecies = new HashSet<string>(new BaseCabinetViewModel().ListCabSpecies, StringComparer.OrdinalIgnoreCase);
+            var ebSpecies = new HashSet<string>(new BaseCabinetViewModel().ListEBSpecies, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var cab in _cabinetService.Cabinets)
+            {
+                // Cabinet species
+                if (IsCustomOrUnknown(cab.Species, cabSpecies))
+                    return true;
+
+                // Edgebanding species
+                if (IsCustomOrUnknown(cab.EBSpecies, ebSpecies))
+                    return true;
+
+                // Door species (only exists on base/upper)
+                switch (cab)
+                {
+                    case BaseCabinetModel b:
+                        if (IsCustomOrUnknown(b.DoorSpecies, cabSpecies))
+                            return true;
+                        break;
+
+                    case UpperCabinetModel u:
+                        if (IsCustomOrUnknown(u.DoorSpecies, cabSpecies))
+                            return true;
+                        break;
+                }
+            }
+
+            return false;
+
+            static bool IsCustomOrUnknown(string? value, HashSet<string> allowed)
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    // Treat blank as unknown (per requirement: “not equal to any available species”)
+                    return true;
+                }
+
+                var v = value.Trim();
+
+                if (string.Equals(v, "Custom", StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                return !allowed.Contains(v);
             }
         }
 
@@ -315,6 +381,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         {
             if (_mainVm.SelectedTabIndex == PlaceOrderTabIndex)
                 CalculatePrices();
+
+            OnPropertyChanged(nameof(QuotedPriceText));
         }
 
         private void MainVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -324,6 +392,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 if (_mainVm.SelectedTabIndex == PlaceOrderTabIndex)
                 {
                     CalculatePrices();
+                    OnPropertyChanged(nameof(QuotedPriceText));
                 }
             }
         }
@@ -335,6 +404,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 var totals = AggregateTotals();
                 TotalPrice = UpdateMaterialTotalsAndReturnTotal(totals.materials, totals.edgebanding);
                 OnPropertyChanged(nameof(FormattedTotal));
+                OnPropertyChanged(nameof(QuotedPriceText));
             });
         }
 

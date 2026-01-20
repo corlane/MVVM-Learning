@@ -19,7 +19,9 @@ public abstract partial class CabinetModel : ObservableObject
     [ObservableProperty] public partial string Height { get; set; }
     [ObservableProperty] public partial string Depth { get; set; }
     [ObservableProperty] public partial string Species { get; set; }
+    [ObservableProperty] public partial string CustomSpecies { get; set; }
     [ObservableProperty] public partial string EBSpecies { get; set; }
+    [ObservableProperty] public partial string CustomEBSpecies { get; set; }
     [ObservableProperty] public partial string Name { get; set; }
     [ObservableProperty] public partial int Qty { get; set; }
     [ObservableProperty] public partial string Notes { get; set; }

@@ -17,6 +17,7 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial string TKHeight { get; set; }
     [ObservableProperty] public partial string TKDepth { get; set; }
     [ObservableProperty] public partial string DoorSpecies { get; set; }
+    [ObservableProperty] public partial string CustomDoorSpecies { get; set; }
     [ObservableProperty] public partial string BackThickness { get; set; }
     [ObservableProperty] public partial string TopType { get; set; }
     [ObservableProperty] public partial int ShelfCount { get; set; }

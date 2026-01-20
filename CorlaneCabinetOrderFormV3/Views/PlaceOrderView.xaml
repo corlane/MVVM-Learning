@@ -80,7 +80,7 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox x:Name="groupOrderSummary" Grid.Column="1" Header="Order Summary" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20">
+        <GroupBox x:Name="groupOrderSummary" Grid.Column="1" Header="Order Summary" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20" Width="Auto">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -90,12 +90,12 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="120"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Label Content="Price:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
-                <Label Content="{Binding FormattedTotal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Margin="2"/>
+                <Label Content="{Binding QuotedPriceText}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Margin="2"/>
                 
                 <Label Content="Internet Status:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
                 <TextBlock Grid.Row="2" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="40,5,40,5"
@@ -105,7 +105,7 @@
                 <TextBlock Grid.Row="3" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="48 5 48 5"
                                    Text="{Binding OrderStatusText}" Background="{Binding OrderStatusBackground}" Foreground="#FF0F0F0F"/>
 
-                <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="60,15,5,15" Grid.ColumnSpan="2"
+                <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="20,15,5,15"
                                 Command="{Binding PlaceOrderCommand}"/>
 
 
