@@ -690,6 +690,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (newValue != oldValue)
         {
+            ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
         }
     }

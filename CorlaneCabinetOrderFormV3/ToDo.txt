@@ -137,7 +137,7 @@ DRW BOX SIZING RULES:
 
 Defaults page: Change default drw front heights to also include equalize bottom and equalize all buttons. -- DONE
 
-Openings Exception Tab needs to report ALL opening sizes, not just the ones that deviate from default.
+Openings Exception Tab needs to report ALL opening sizes, not just the ones that deviate from default. -- DONE
 
 
 
