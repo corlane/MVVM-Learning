@@ -198,7 +198,7 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                 continue;
             }
 
-            // Show only the opening heights that correspond to the failing drawer fronts.
+            // Flagged cabinet: show ALL opening heights (not just the ones related to failing drawer fronts).
             var row = new OpeningDrwFrontHeightExceptionRow
             {
                 CabinetNumber = cabNumber,
@@ -206,10 +206,10 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                 Style = baseCab.Style ?? "",
                 DrwCount = drwCount,
 
-                OpeningHeight1 = oh1NeedsChange ? (baseCab.OpeningHeight1 ?? "") : "",
-                OpeningHeight2 = oh2NeedsChange ? (baseCab.OpeningHeight2 ?? "") : "",
-                OpeningHeight3 = oh3NeedsChange ? (baseCab.OpeningHeight3 ?? "") : "",
-                OpeningHeight4 = oh4NeedsChange ? (baseCab.OpeningHeight4 ?? "") : "",
+                OpeningHeight1 = baseCab.OpeningHeight1 ?? "",
+                OpeningHeight2 = baseCab.OpeningHeight2 ?? "",
+                OpeningHeight3 = baseCab.OpeningHeight3 ?? "",
+                OpeningHeight4 = baseCab.OpeningHeight4 ?? "",
 
                 DefaultDrwFront1Height = DefaultDrwFront1Height ?? "",
                 Reason = reason,

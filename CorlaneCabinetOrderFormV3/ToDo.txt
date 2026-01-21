@@ -137,6 +137,10 @@ DRW BOX SIZING RULES:
 
 Defaults page: Change default drw front heights to also include equalize bottom and equalize all buttons. -- DONE
 
+Openings Exception Tab needs to report ALL opening sizes, not just the ones that deviate from default.
+
+
+
 
 
 
@@ -184,8 +188,7 @@ Doors and Drw boxes not showing in list with 1 cabinet in job. It seems the last
 Doors & drw front Custom material name not showing in JOb Material list
 	Have added helper method ResolveDoorSpeciesForTotals, next is modifying all CreatePanel calls in door creation methods. SEE AI CHAT LOG FOR DETAILS. -- DONE
 
-
-
+Changing Drw Front height with Equalize checked does not re-equalize remaining drw fronts.
 
 
 
