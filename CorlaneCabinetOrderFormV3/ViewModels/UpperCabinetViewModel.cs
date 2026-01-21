@@ -7,6 +7,7 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -280,6 +281,27 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
+        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomDoorSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
+        {
+            // Prompt for custom edge band species
+            MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
         var newCabinet = new UpperCabinetModel
         {
             Width = ConvertDimension.FractionToDouble(Width).ToString(),
@@ -400,6 +422,27 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
+        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomDoorSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
+        {
+            // Prompt for custom edge band species
+            MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
         if (_mainVm!.SelectedCabinet is UpperCabinetModel selected)
         {
             var newName = Name;

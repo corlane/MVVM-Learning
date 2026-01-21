@@ -69,13 +69,13 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     [ObservableProperty] public partial string DefaultBaseBackThickness { get; set; } = "0.75"; partial void OnDefaultBaseBackThicknessChanged(string value)
     {
-        Debug.WriteLine($"OnDefaultBaseBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultBaseBackThickness='{_defaults?.DefaultBaseBackThickness}'");
+        //Debug.WriteLine($"OnDefaultBaseBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultBaseBackThickness='{_defaults?.DefaultBaseBackThickness}'");
 
         // If the ComboBox temporarily clears SelectedItem because its ItemsSource changed,
         // the VM setter can receive an empty string. Don't treat that as a user intent to write back.
         if (string.IsNullOrWhiteSpace(value))
         {
-            Debug.WriteLine("Ignoring empty/whitespace DefaultBaseBackThickness change (likely ItemsSource update).");
+            //Debug.WriteLine("Ignoring empty/whitespace DefaultBaseBackThickness change (likely ItemsSource update).");
             return;
         }
 
@@ -88,18 +88,18 @@ public partial class DefaultSettingsViewModel : ObservableObject
             _defaults.DefaultBaseBackThickness = ConvertDimension.FractionToDouble(value).ToString();
             // Persist directly on the service (fire-and-forget) rather than invoking the VM command
             _ = _defaults.SaveAsync();
-            Debug.WriteLine($"Wrote to _defaults.DefaultBaseBackThickness='{_defaults.DefaultBaseBackThickness}'");
+            //Debug.WriteLine($"Wrote to _defaults.DefaultBaseBackThickness='{_defaults.DefaultBaseBackThickness}'");
         }
     }
 
     [ObservableProperty] public partial string DefaultUpperBackThickness { get; set; } = "0.75"; partial void OnDefaultUpperBackThicknessChanged(string value)
     {
-        Debug.WriteLine($"OnDefaultUpperBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultUpperBackThickness='{_defaults?.DefaultUpperBackThickness}'");
+        //Debug.WriteLine($"OnDefaultUpperBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultUpperBackThickness='{_defaults?.DefaultUpperBackThickness}'");
 
         // Same guard for the upper thickness: ignore transient empty changes from ItemsSource swap.
         if (string.IsNullOrWhiteSpace(value))
         {
-            Debug.WriteLine("Ignoring empty/whitespace DefaultUpperBackThickness change (likely ItemsSource update).");
+            //Debug.WriteLine("Ignoring empty/whitespace DefaultUpperBackThickness change (likely ItemsSource update).");
             return;
         }
 
@@ -109,7 +109,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
         {
             _defaults.DefaultUpperBackThickness = ConvertDimension.FractionToDouble(value).ToString();
             _ = _defaults.SaveAsync();
-            Debug.WriteLine($"Wrote to _defaults.DefaultUpperBackThickness='{_defaults.DefaultUpperBackThickness}'");
+            //Debug.WriteLine($"Wrote to _defaults.DefaultUpperBackThickness='{_defaults.DefaultUpperBackThickness}'");
         }
     }
 
@@ -152,6 +152,68 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultDrwFrontHeight1 { get => _defaults.DefaultDrwFrontHeight1; set => _defaults.DefaultDrwFrontHeight1 = value; }
     public string DefaultDrwFrontHeight2 { get => _defaults.DefaultDrwFrontHeight2; set => _defaults.DefaultDrwFrontHeight2 = value; }
     public string DefaultDrwFrontHeight3 { get => _defaults.DefaultDrwFrontHeight3; set => _defaults.DefaultDrwFrontHeight3 = value; }
+    //public bool DefaultEqualizeBottomDrwFronts { get => _defaults.DefaultEqualizeBottomDrwFronts; set => _defaults.DefaultEqualizeBottomDrwFronts = value; }
+    //public bool DefaultEqualizeAllDrwFronts { get => _defaults.DefaultEqualizeAllDrwFronts; set => _defaults.DefaultEqualizeAllDrwFronts = value; }
+
+    // Replace the two existing pass-through properties with these:
+
+    public bool DefaultEqualizeBottomDrwFronts
+    {
+        get => _defaults.DefaultEqualizeBottomDrwFronts;
+        set
+        {
+            if (_defaults.DefaultEqualizeBottomDrwFronts == value) return;
+
+            _defaults.DefaultEqualizeBottomDrwFronts = value;
+
+            if (!_isApplyingDefaults && value)
+            {
+                // mutually exclusive
+                _defaults.DefaultEqualizeAllDrwFronts = false;
+
+                // clear + persist (these are disabled in the UI anyway)
+                //_defaults.DefaultDrwFrontHeight2 = string.Empty;
+                //_defaults.DefaultDrwFrontHeight3 = string.Empty;
+
+                _ = _defaults.SaveAsync();
+            }
+
+            OnPropertyChanged(nameof(DefaultEqualizeBottomDrwFronts));
+            OnPropertyChanged(nameof(DefaultEqualizeAllDrwFronts));
+            OnPropertyChanged(nameof(DefaultDrwFrontHeight2));
+            OnPropertyChanged(nameof(DefaultDrwFrontHeight3));
+        }
+    }
+
+    public bool DefaultEqualizeAllDrwFronts
+    {
+        get => _defaults.DefaultEqualizeAllDrwFronts;
+        set
+        {
+            if (_defaults.DefaultEqualizeAllDrwFronts == value) return;
+
+            _defaults.DefaultEqualizeAllDrwFronts = value;
+
+            if (!_isApplyingDefaults && value)
+            {
+                // mutually exclusive
+                _defaults.DefaultEqualizeBottomDrwFronts = false;
+
+                // clear + persist (these are disabled in the UI anyway)
+                //_defaults.DefaultDrwFrontHeight1 = string.Empty;
+                //_defaults.DefaultDrwFrontHeight2 = string.Empty;
+                //_defaults.DefaultDrwFrontHeight3 = string.Empty;
+
+                _ = _defaults.SaveAsync();
+            }
+
+            OnPropertyChanged(nameof(DefaultEqualizeAllDrwFronts));
+            OnPropertyChanged(nameof(DefaultEqualizeBottomDrwFronts));
+            OnPropertyChanged(nameof(DefaultDrwFrontHeight1));
+            OnPropertyChanged(nameof(DefaultDrwFrontHeight2));
+            OnPropertyChanged(nameof(DefaultDrwFrontHeight3));
+        }
+    }
 
     // Reveals and Gaps
     public string DefaulBasetLeftReveal { get => _defaults.DefaultBaseLeftReveal; set => _defaults.DefaultBaseLeftReveal = value; }
@@ -300,7 +362,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     private void Defaults_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        Debug.WriteLine($"Defaults_PropertyChanged: PropertyName={e.PropertyName}, defaults.DimensionFormat='{_defaults?.DefaultDimensionFormat}', defaults.BaseBack='{_defaults?.DefaultBaseBackThickness}', defaults.UpperBack='{_defaults?.DefaultUpperBackThickness}'");
+        //Debug.WriteLine($"Defaults_PropertyChanged: PropertyName={e.PropertyName}, defaults.DimensionFormat='{_defaults?.DefaultDimensionFormat}', defaults.BaseBack='{_defaults?.DefaultBaseBackThickness}', defaults.UpperBack='{_defaults?.DefaultUpperBackThickness}'");
 
         // When dimension format changes, recompute display lists and formatted properties
         if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
@@ -315,7 +377,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
             _isApplyingDefaults = true;
 
             var listValues = ListBackThickness;
-            Debug.WriteLine($"ListBackThickness items BEFORE assignment: [{string.Join(", ", listValues)}]");
+            //Debug.WriteLine($"ListBackThickness items BEFORE assignment: [{string.Join(", ", listValues)}]");
 
             if (_defaults.DefaultDimensionFormat == "Fraction")
             {
@@ -323,34 +385,34 @@ public partial class DefaultSettingsViewModel : ObservableObject
                 {
                     var baseConv = Convert.ToDouble(_defaults.DefaultBaseBackThickness);
                     DefaultBaseBackThickness = ConvertDimension.DoubleToFraction(baseConv);
-                    Debug.WriteLine($"Assigned DefaultBaseBackThickness (fraction) = '{DefaultBaseBackThickness}' (from '{_defaults.DefaultBaseBackThickness}')");
+                    //Debug.WriteLine($"Assigned DefaultBaseBackThickness (fraction) = '{DefaultBaseBackThickness}' (from '{_defaults.DefaultBaseBackThickness}')");
                 }
                 catch (Exception ex)
                 {
                     DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
-                    Debug.WriteLine($"Exception converting base back to fraction: {ex}. Falling back to '{DefaultBaseBackThickness}'");
+                    //Debug.WriteLine($"Exception converting base back to fraction: {ex}. Falling back to '{DefaultBaseBackThickness}'");
                 }
 
                 try
                 {
                     var upperConv = Convert.ToDouble(_defaults.DefaultUpperBackThickness);
                     DefaultUpperBackThickness = ConvertDimension.DoubleToFraction(upperConv);
-                    Debug.WriteLine($"Assigned DefaultUpperBackThickness (fraction) = '{DefaultUpperBackThickness}' (from '{_defaults.DefaultUpperBackThickness}')");
+                    //Debug.WriteLine($"Assigned DefaultUpperBackThickness (fraction) = '{DefaultUpperBackThickness}' (from '{_defaults.DefaultUpperBackThickness}')");
                 }
                 catch (Exception ex)
                 {
                     DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
-                    Debug.WriteLine($"Exception converting upper back to fraction: {ex}. Falling back to '{DefaultUpperBackThickness}'");
+                    //Debug.WriteLine($"Exception converting upper back to fraction: {ex}. Falling back to '{DefaultUpperBackThickness}'");
                 }
             }
             else
             {
                 DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
                 DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
-                Debug.WriteLine($"Assigned decimal Base='{DefaultBaseBackThickness}' Upper='{DefaultUpperBackThickness}'");
+                //Debug.WriteLine($"Assigned decimal Base='{DefaultBaseBackThickness}' Upper='{DefaultUpperBackThickness}'");
             }
 
-            Debug.WriteLine($"ListBackThickness items AFTER assignment: [{string.Join(", ", ListBackThickness)}]");
+            //Debug.WriteLine($"ListBackThickness items AFTER assignment: [{string.Join(", ", ListBackThickness)}]");
         }
         finally
         {

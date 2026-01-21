@@ -454,19 +454,54 @@ public partial class POJobMaterialListViewModel : ObservableObject
         static string NormalizeBlankToNone(string? s) =>
             string.IsNullOrWhiteSpace(s) ? "None" : s.Trim();
 
+        //static string ResolveCustomSpeciesKey(string keyFromTotals, CabinetModel cab)
+        //{
+        //    var key = NormalizeBlankToNone(keyFromTotals);
+
+        //    if (!IsCustomToken(key))
+        //    {
+        //        return key;
+        //    }
+
+        //    // If the totals dictionary used "Custom", replace it with the cab's actual entered custom name.
+        //    // Fall back to "Custom" only if they somehow didn't enter a name.
+        //    var custom = NormalizeBlankToNone(cab.CustomSpecies);
+        //    return string.Equals(custom, "None", StringComparison.OrdinalIgnoreCase) ? "Custom" : custom;
+        //}
+
         static string ResolveCustomSpeciesKey(string keyFromTotals, CabinetModel cab)
         {
-            var key = NormalizeBlankToNone(keyFromTotals);
+            var rawKey = NormalizeBlankToNone(keyFromTotals);
 
-            if (!IsCustomToken(key))
+            // Detect and preserve face suffix.
+            string suffix = "";
+            string baseKey = rawKey;
+
+            if (baseKey.EndsWith(" UP", StringComparison.OrdinalIgnoreCase))
             {
-                return key;
+                suffix = " UP";
+                baseKey = baseKey[..^3].TrimEnd();
+            }
+            else if (baseKey.EndsWith(" DOWN", StringComparison.OrdinalIgnoreCase))
+            {
+                suffix = " DOWN";
+                baseKey = baseKey[..^5].TrimEnd();
             }
 
-            // If the totals dictionary used "Custom", replace it with the cab's actual entered custom name.
-            // Fall back to "Custom" only if they somehow didn't enter a name.
+            // If not Custom, return original key unchanged.
+            if (!IsCustomToken(baseKey))
+            {
+                return rawKey;
+            }
+
+            // Replace Custom with the user-entered custom name, then re-apply UP/DOWN suffix.
             var custom = NormalizeBlankToNone(cab.CustomSpecies);
-            return string.Equals(custom, "None", StringComparison.OrdinalIgnoreCase) ? "Custom" : custom;
+            if (string.Equals(custom, "None", StringComparison.OrdinalIgnoreCase))
+            {
+                custom = "Custom";
+            }
+
+            return $"{custom}{suffix}";
         }
 
         static string ResolveCustomEdgebandingKey(string keyFromTotals, CabinetModel cab)

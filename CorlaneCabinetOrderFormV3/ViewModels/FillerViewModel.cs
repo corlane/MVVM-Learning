@@ -119,6 +119,13 @@ public partial class FillerViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
+        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
         var newCabinet = new FillerModel
         {
             Width = ConvertDimension.FractionToDouble(Width).ToString(),
@@ -151,6 +158,13 @@ public partial class FillerViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
+        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
+        {
+            // Prompt for custom species
+            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
         if (_mainVm!.SelectedCabinet is FillerModel selected)
         {
             var newName = Name;

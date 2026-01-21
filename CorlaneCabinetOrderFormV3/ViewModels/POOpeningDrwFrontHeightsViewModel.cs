@@ -90,54 +90,126 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                 continue;
             }
 
-            // Exclusion: Style2 with DrwCount = 1 is NOT applicable to any of these flags.
-            if (isStyle2 && baseCab.DrwCount == 1)
+            int drwCount = baseCab.DrwCount;
+            if (drwCount <= 0)
             {
                 continue;
             }
 
-            if (baseCab.DrwCount == 0)
+            // Drawer front heights (used for comparisons)
+            double dh1 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1 ?? "");
+            double dh2 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight2 ?? "");
+            double dh3 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight3 ?? "");
+            double dh4 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight4 ?? "");
+
+            bool oh1NeedsChange = false;
+            bool oh2NeedsChange = false;
+            bool oh3NeedsChange = false;
+            bool oh4NeedsChange = false;
+
+            string reason = "";
+
+            if (isStyle1)
             {
-                continue; // never flag drawers/openings when there are zero drawers
+                // Style1 + DrwCount > 0 + DF1 != default => flag OH1
+                if (!NearlyEqual(dh1, defaultFront1))
+                {
+                    oh1NeedsChange = true;
+                    reason = "Style1: Drw Front 1 differs from default";
+                }
+            }
+            else if (isStyle2)
+            {
+                if (drwCount == 2)
+                {
+                    // DF1 and DF2 must be equal => if not, flag OH1, OH2
+                    if (!NearlyEqual(dh1, dh2))
+                    {
+                        oh1NeedsChange = true;
+                        oh2NeedsChange = true;
+                        reason = "Style2 (2 drawers): Drw Front 1 and 2 must be equal";
+                    }
+                }
+                else if (drwCount == 3)
+                {
+                    // DF1 != default OR DF2 and DF3 not equal
+                    bool df1Differs = !NearlyEqual(dh1, defaultFront1);
+                    bool df23Differs = !NearlyEqual(dh2, dh3);
+
+                    if (df1Differs)
+                    {
+                        oh1NeedsChange = true;
+                    }
+
+                    if (df23Differs)
+                    {
+                        oh2NeedsChange = true;
+                        oh3NeedsChange = true;
+                    }
+
+                    if (df1Differs && df23Differs)
+                    {
+                        reason = "Style2 (3 drawers): Drw Front 1 differs from default; Drw Front 2 and 3 must be equal";
+                    }
+                    else if (df1Differs)
+                    {
+                        reason = "Style2 (3 drawers): Drw Front 1 differs from default";
+                    }
+                    else if (df23Differs)
+                    {
+                        reason = "Style2 (3 drawers): Drw Front 2 and 3 must be equal";
+                    }
+                }
+                else if (drwCount == 4)
+                {
+                    // DF1 != default OR DF2/DF3/DF4 not all equal
+                    bool df1Differs = !NearlyEqual(dh1, defaultFront1);
+                    bool df234NotAllEqual = !NearlyEqual(dh2, dh3) || !NearlyEqual(dh3, dh4);
+
+                    if (df1Differs)
+                    {
+                        oh1NeedsChange = true;
+                    }
+
+                    if (df234NotAllEqual)
+                    {
+                        oh2NeedsChange = true;
+                        oh3NeedsChange = true;
+                        oh4NeedsChange = true;
+                    }
+
+                    if (df1Differs && df234NotAllEqual)
+                    {
+                        reason = "Style2 (4 drawers): Drw Front 1 differs from default; Drw Front 2, 3, and 4 must be equal";
+                    }
+                    else if (df1Differs)
+                    {
+                        reason = "Style2 (4 drawers): Drw Front 1 differs from default";
+                    }
+                    else if (df234NotAllEqual)
+                    {
+                        reason = "Style2 (4 drawers): Drw Front 2, 3, and 4 must be equal";
+                    }
+                }
             }
 
-            string h1 = baseCab.DrwFrontHeight1 ?? "";
-            string h2 = baseCab.DrwFrontHeight2 ?? "";
-            string h3 = baseCab.DrwFrontHeight3 ?? "";
-            string h4 = baseCab.DrwFrontHeight4 ?? "";
-
-            double dh1 = ConvertDimension.FractionToDouble(h1);
-            double dh2 = ConvertDimension.FractionToDouble(h2);
-            double dh3 = ConvertDimension.FractionToDouble(h3);
-            double dh4 = ConvertDimension.FractionToDouble(h4);
-
-            // Baseline deviation applies to Style1 + Style2 (no DrwCount gating; you requested it should still flag)
-            bool baselineDiffers = !NearlyEqual(dh1, defaultFront1);
-
-            // Additional Style2 rules:
-            bool style2Mismatch =
-                isStyle2
-                && ((baseCab.DrwCount == 3 && !NearlyEqual(dh2, dh3))
-                    || (baseCab.DrwCount == 4 && (!NearlyEqual(dh2, dh3) || !NearlyEqual(dh3, dh4))));
-
-            if (!baselineDiffers && !style2Mismatch)
+            if (!oh1NeedsChange && !oh2NeedsChange && !oh3NeedsChange && !oh4NeedsChange)
             {
                 continue;
             }
 
-            string reason = BuildReason(isStyle2, baseCab.DrwCount, baselineDiffers, style2Mismatch);
-
+            // Show only the opening heights that correspond to the failing drawer fronts.
             var row = new OpeningDrwFrontHeightExceptionRow
             {
                 CabinetNumber = cabNumber,
                 CabinetName = baseCab.Name ?? "",
                 Style = baseCab.Style ?? "",
-                DrwCount = baseCab.DrwCount,
+                DrwCount = drwCount,
 
-                DrwFrontHeight1 = h1,
-                DrwFrontHeight2 = h2,
-                DrwFrontHeight3 = h3,
-                DrwFrontHeight4 = h4,
+                OpeningHeight1 = oh1NeedsChange ? (baseCab.OpeningHeight1 ?? "") : "",
+                OpeningHeight2 = oh2NeedsChange ? (baseCab.OpeningHeight2 ?? "") : "",
+                OpeningHeight3 = oh3NeedsChange ? (baseCab.OpeningHeight3 ?? "") : "",
+                OpeningHeight4 = oh4NeedsChange ? (baseCab.OpeningHeight4 ?? "") : "",
 
                 DefaultDrwFront1Height = DefaultDrwFront1Height ?? "",
                 Reason = reason,
@@ -157,33 +229,6 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
         }
 
         UpdateTabHeaderBrush();
-    }
-
-    private static string BuildReason(bool isStyle2, int drwCount, bool baselineDiffers, bool style2Mismatch)
-    {
-        if (!isStyle2)
-        {
-            return baselineDiffers ? "Drw Front 1 differs from default" : "";
-        }
-
-        if (baselineDiffers && style2Mismatch)
-        {
-            return "Drw Front 1 differs from default; bottom drawer fronts not equal";
-        }
-
-        if (baselineDiffers)
-        {
-            return "Drw Front 1 differs from default";
-        }
-
-        if (style2Mismatch)
-        {
-            return drwCount == 3
-                ? "Drw Front 2 and 3 must be equal"
-                : "Drw Front 2, 3, and 4 must be equal";
-        }
-
-        return "";
     }
 
     private void UpdateTabHeaderBrush()
@@ -210,10 +255,11 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
         [ObservableProperty] public partial string Style { get; set; } = "";
         [ObservableProperty] public partial int DrwCount { get; set; }
 
-        [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = "";
-        [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = "";
-        [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = "";
-        [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = "";
+        // Replaces DF1..DF4 in the grid
+        [ObservableProperty] public partial string OpeningHeight1 { get; set; } = "";
+        [ObservableProperty] public partial string OpeningHeight2 { get; set; } = "";
+        [ObservableProperty] public partial string OpeningHeight3 { get; set; } = "";
+        [ObservableProperty] public partial string OpeningHeight4 { get; set; } = "";
 
         [ObservableProperty] public partial string DefaultDrwFront1Height { get; set; } = "";
         [ObservableProperty] public partial string Reason { get; set; } = "";

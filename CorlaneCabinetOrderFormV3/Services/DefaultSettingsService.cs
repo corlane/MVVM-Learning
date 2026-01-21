@@ -224,7 +224,8 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial string DefaultDrwFrontHeight1 { get; set; } = "7";
     [ObservableProperty] public partial string DefaultDrwFrontHeight2 { get; set; } = "7";
     [ObservableProperty] public partial string DefaultDrwFrontHeight3 { get; set; } = "7";
-
+    [ObservableProperty] public partial bool DefaultEqualizeBottomDrwFronts { get; set; } = true;
+    [ObservableProperty] public partial bool DefaultEqualizeAllDrwFronts { get; set; } = false;
     // Reveals and Gaps
     [ObservableProperty] public partial string DefaultBaseLeftReveal { get; set; } = ".0625";
     [ObservableProperty] public partial string DefaultBaseRightReveal { get; set; } = ".0625";

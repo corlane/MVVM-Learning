@@ -86,23 +86,23 @@
                                     IsReadOnly="True"
                                     Width="70"/>
 
-                <DataGridTextColumn Header="DF1"
-                                    Binding="{Binding DrwFrontHeight1}"
+                <DataGridTextColumn Header="OH1"
+                                    Binding="{Binding OpeningHeight1}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="DF2"
-                                    Binding="{Binding DrwFrontHeight2}"
+                <DataGridTextColumn Header="OH2"
+                                    Binding="{Binding OpeningHeight2}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="DF3"
-                                    Binding="{Binding DrwFrontHeight3}"
+                <DataGridTextColumn Header="OH3"
+                                    Binding="{Binding OpeningHeight3}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="DF4"
-                                    Binding="{Binding DrwFrontHeight4}"
+                <DataGridTextColumn Header="OH4"
+                                    Binding="{Binding OpeningHeight4}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
@@ -127,3 +127,5 @@
         </StackPanel>
     </Grid>
 </UserControl>
+    
+    

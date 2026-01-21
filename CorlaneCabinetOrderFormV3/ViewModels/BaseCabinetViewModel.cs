@@ -183,8 +183,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // Style2: "Drawer" cabinets
         if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
         {
-            ApplyDrawerFrontEqualization();
+
+            ResizeOpeningHeights();
             ResizeDrwFrontHeights();
+            ApplyDrawerFrontEqualization();
         }
         else
         {
@@ -1205,7 +1207,17 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
                 }
             }
-
+            if (EqualizeBottomDrwFronts)
+            {
+                DrwFront2Disabled = true;
+                DrwFront3Disabled = true;
+            }
+            if (EqualizeAllDrwFronts)
+            {
+                DrwFront1Disabled = true;
+                DrwFront2Disabled = true;
+                DrwFront3Disabled = true;
+            }
             UpdatePreview();
         }
         finally
@@ -1237,7 +1249,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         try
         {
-            _isResizing = true;
+            _isResizing = false; // _isResizing = true breaks this, because the openings won't resize. Try like this and see how it does. So far it seems to work.
 
             if (EqualizeAllDrwFronts)
             {
@@ -1340,21 +1352,21 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
-        if (Species == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies)) 
         {
             // Prompt for custom species
             MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
-        if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(DoorSpecies))
+        if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomDoorSpecies))
         {
             // Prompt for custom species
             MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
-        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
         {
             // Prompt for custom edge band species
             MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -1490,21 +1502,21 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel selected)
         {
-            if (Species == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+            if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
             {
                 // Prompt for custom species
                 MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(DoorSpecies))
+            if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomDoorSpecies))
             {
-                // Prompt for custom door species
+                // Prompt for custom species
                 MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(EBSpecies))
+            if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
             {
                 // Prompt for custom edge band species
                 MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -1627,9 +1639,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_defaults is null) return;
 
-        EqualizeAllDrwFronts = false;
-        EqualizeBottomDrwFronts = false;
-
         if (Style == Style2)
         {
             // Drawer cabinet selected
@@ -1689,6 +1698,24 @@ public partial class BaseCabinetViewModel : ObservableValidator
         DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
         DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
         DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+
+        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
+        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
+
+        if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
+        {
+            DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+            DrwFrontHeight2 = "7"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+            DrwFrontHeight3 = "7";
+        }
+        if (_defaults.DefaultEqualizeAllDrwFronts && Style == Style2)
+        {
+            DrwFrontHeight1 = "3"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+            DrwFrontHeight2 = "3";
+            DrwFrontHeight3 = "3";
+            DrwFrontHeight4 = "3";
+        }
+
         LeftReveal = _defaults.DefaultBaseLeftReveal;
         RightReveal = _defaults.DefaultBaseRightReveal;
         TopReveal = _defaults.DefaultBaseTopReveal;
@@ -1696,6 +1723,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
         GapWidth = _defaults.DefaultGapWidth;
         SinkCabinet = false;
         TrashDrawer = false;
+
+
+        ApplyDrawerFrontEqualization();
+        ResizeDrwFrontHeights();
     }
 
     // For 3D model:

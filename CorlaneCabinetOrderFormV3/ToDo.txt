@@ -131,11 +131,11 @@ Use Notify for uploading material prices - the small text notification doesn't g
 
 Account for Custom material in price calc. -- DONE
 
+Opening size Exception Tab needs to report OPENING SIZES, not DF sizes. -- DONE
+DRW BOX SIZING RULES:
+	If drw front sizes deviate from the seed cabinet size, flag to change opening/front sizes. -- DONE
 
-
-
-
-
+Defaults page: Change default drw front heights to also include equalize bottom and equalize all buttons. -- DONE
 
 
 
@@ -179,7 +179,10 @@ Rollout selection not updating properly when clicking around in the list. Will c
 
 Rollouts need a 0 selection in the dropdown. -- DONE
 
+Doors and Drw boxes not showing in list with 1 cabinet in job. It seems the last cabinet in the list is not having its doors/drw boxes added to the list. -- DONE
 
+Doors & drw front Custom material name not showing in JOb Material list
+	Have added helper method ResolveDoorSpeciesForTotals, next is modifying all CreatePanel calls in door creation methods. SEE AI CHAT LOG FOR DETAILS. -- DONE
 
 
 
