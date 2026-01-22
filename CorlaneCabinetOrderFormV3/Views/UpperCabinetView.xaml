@@ -49,7 +49,7 @@
             </ComboBox>
         </GroupBox>
 
-        <GroupBox x:Name="groupUpperDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
+        <GroupBox x:Name="groupUpperDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5" VerticalAlignment="Top"
                                       Visibility="{Binding StandardDimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
@@ -82,7 +82,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox x:Name="groupUpper90CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
+        <GroupBox x:Name="groupUpper90CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5" VerticalAlignment="Top"
                                       Visibility="{Binding Corner90DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
@@ -147,7 +147,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox x:Name="groupUpper45CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
+        <GroupBox x:Name="groupUpper45CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5" VerticalAlignment="Top"
 									      Visibility="{Binding Corner45DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
@@ -269,7 +269,7 @@
 
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="3" Header="Door Reveals" Margin="-30,250,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
+        <GroupBox Grid.Row="0" Grid.Column="3" Header="Door Reveals" Margin="-30,200,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="2">
             <StackPanel Orientation="Vertical">
                 <Grid>
                     <Grid.ColumnDefinitions>

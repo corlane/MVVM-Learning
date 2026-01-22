@@ -1730,6 +1730,56 @@ public partial class BaseCabinetViewModel : ObservableValidator
         ResizeDrwFrontHeights();
     }
 
+    [RelayCommand]
+    private void LoadDefaultDrwSettings()
+    {
+        if (_defaults is null) return;
+        //DrwStyle = _defaults.DefaultDrwStyle;
+        //DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
+        //IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
+        //IncDrwFronts = _defaults.DefaultIncDoors;
+        //if (IncDrwFronts)
+        //{
+        //    IncDrwFront1 = true;
+        //    IncDrwFront2 = true;
+        //    IncDrwFront3 = true;
+        //    IncDrwFront4 = true;
+        //}
+        //else
+        //{
+        //    IncDrwFront1 = false;
+        //    IncDrwFront2 = false;
+        //    IncDrwFront3 = false;
+        //    IncDrwFront4 = false;
+        //}
+        //IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
+        //IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
+        //DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
+        DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+        DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
+        DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+
+        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
+        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
+
+        if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
+        {
+            DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+            DrwFrontHeight2 = "7"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+            DrwFrontHeight3 = "7";
+        }
+        if (_defaults.DefaultEqualizeAllDrwFronts && Style == Style2)
+        {
+            DrwFrontHeight1 = "3"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+            DrwFrontHeight2 = "3";
+            DrwFrontHeight3 = "3";
+            DrwFrontHeight4 = "3";
+        }
+
+        ApplyDrawerFrontEqualization();
+        ResizeDrwFrontHeights();
+    }
+
     // For 3D model:
     private void UpdatePreview() // Update 3D cabinet model preview
     {

@@ -58,7 +58,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseDimensions" Header="Dimensions" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+        <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseDimensions" Header="Dimensions" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Stretch"
                               Visibility="{Binding StdOrDrwBaseVisibility, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel x:Name="stackPanel" Orientation="Vertical">
 
@@ -92,7 +92,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseCorner90Dimensions" Header="Dimensions" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+        <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseCorner90Dimensions" Header="Dimensions" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Top"
                               Visibility="{Binding Corner90Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
 
             <StackPanel Orientation="Vertical">
@@ -158,7 +158,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox x:Name="groupBase45CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5"
+        <GroupBox x:Name="groupBase45CornerDimensions" Grid.Column="1" Grid.Row="0" Header="Dimensions" Margin="5" VerticalAlignment="Top"
                               Visibility="{Binding Corner45Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
@@ -367,8 +367,13 @@
                         <GroupBox x:Name="groupDrawerFrontHeights" Grid.Row="0" Grid.Column="0" Header="Drw. Front Heights" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" Padding="5"
                                     Visibility="{Binding GroupDrawerFrontHeightsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                             <StackPanel Orientation="Vertical" Margin="0,0,10,0">
-                            <ToggleButton Content="Equalize Bottom Drw. Fronts" IsChecked="{Binding EqualizeBottomDrwFronts}" Margin="0,5,0,5"/>
-                            <ToggleButton Content="Equalize All Drw. Fronts" IsChecked="{Binding EqualizeAllDrwFronts}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <ToggleButton Content="Equalize Bottom Drw. Fronts" IsChecked="{Binding EqualizeBottomDrwFronts}" Margin="5,5,0,5" HorizontalAlignment="Left" Padding="5,0,5,0"/>
+                                <Button Content="Load Default Drw Front Settings" Command="{Binding LoadDefaultDrwSettingsCommand}" HorizontalAlignment="Left" Margin="5,5,5,0" Padding="5,0,5,0"/>
+                            </StackPanel>
+                            <ToggleButton Content="Equalize All Drw. Fronts" IsChecked="{Binding EqualizeAllDrwFronts}" Margin="5,0,5,0" HorizontalAlignment="Left" Padding="5,0,5,0"/>
+
+                            <Separator Margin="5,5,5,0"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Label Content="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                     <TextBox x:Name="textDrwFrontHeight1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding DrwFront1Disabled}"
@@ -478,7 +483,7 @@
 
         </GroupBox>
 
-        <GroupBox Header="Rollout Shelves" Grid.Row="1" Grid.Column="3" Margin="5,30,5,5" Width="Auto" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding GroupRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+        <GroupBox Header="Rollout Shelves" Grid.Row="0" Grid.Column="3" Margin="5,330,5,5" Width="Auto" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2" Visibility="{Binding GroupRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkIncludeRolloutsWithCabinet" Content="Supply Rollouts With Cabinet" Margin="5,10,5,5" IsChecked="{Binding IncRollouts}" IsEnabled="{Binding IncRolloutsEnabled}"/>
                 <CheckBox x:Name="checkIncludeRolloutsInSizesList" Content="Include Rollouts In Sizes List" Margin="5" IsChecked="{Binding IncRolloutsInList}" IsEnabled="{Binding IncRolloutsInListEnabled}"/>

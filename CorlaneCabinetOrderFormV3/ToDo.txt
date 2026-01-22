@@ -107,7 +107,7 @@ Set up clickonce installer -- DONE
 
 Add icon -- DONE
 
-Account for edgebanding on bottom edge of upper end panels -- DIFFICULT, since edgebanding routine does not allow for 2 different edgebanding values on a single panel.
+Account for edgebanding on bottom edge of upper end panels -- DIFFICULT, since edgebanding routine does not allow for 2 different edgebanding values on a single panel. -- DONE
 
 NOTE! 45 degree cab shows front width, which is the front width of the deck or top, not the corner-to-corner width. Should we change this? The math will be tricky. -- NOT NECESSARY
 

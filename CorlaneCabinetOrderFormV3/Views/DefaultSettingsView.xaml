@@ -315,7 +315,7 @@
                           SelectedValue="{Binding DefaultShelfCount}"/>
                 <ComboBox x:Name="comboDefaultShelfDepth" Margin="5" ItemsSource="{Binding ListShelfDepth}" SelectedItem="{Binding DefaultShelfDepth}"/>
                 <TextBlock Text="Shelf Depth only applies to Base cabinet types." Width="100" TextWrapping="Wrap" Margin="5"/>
-
+                <Separator Margin="5,0,5,0"/>
                 <Label Content="Upper Shelf Count:"/>
                 <ComboBox x:Name="comboDefaultUpperShelves" Width="80" HorizontalAlignment="Left" Margin="5" ItemsSource="{Binding ListShelfCount}"
                           SelectedValue="{Binding DefaultUpperShelfCount}"/>
