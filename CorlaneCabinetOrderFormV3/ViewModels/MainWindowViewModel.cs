@@ -15,7 +15,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.2";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.3";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -302,6 +302,7 @@ public partial class MainWindowViewModel : ObservableValidator
     [ObservableProperty]
     public partial CabinetModel? SelectedCabinet { get; set; }
 
+    [ObservableProperty] public partial int MainTabControlWidth { get; set; } = 1000;
     partial void OnSelectedTabIndexChanged(int value)
     {
         var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
@@ -317,36 +318,54 @@ public partial class MainWindowViewModel : ObservableValidator
                     (BaseCabinetVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
+                    MainTabControlWidth = 1000;
                     break;
                 case 1:
                     (UpperCabinetVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
+                    MainTabControlWidth = 1000;
+
                     break;
                 case 2:
                     (FillerVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
+                    MainTabControlWidth = 1000;
+
                     break;
                 case 3:
                     (PanelVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
+                    MainTabControlWidth = 1000;
+
                     break;
                 case 4:
                     (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
                     CabinetListVisible = true;
+                    MainTabControlWidth = 1000;
+
                     break;
                 case 5:
                     (DefaultsVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
                     CabinetListVisible = true;
+                    MainTabControlWidth = 1000;
                     break;
+
+                case 6:
+                        ViewportVisible = false;
+                        CabinetListVisible = false;
+                        MainTabControlWidth = 1000;
+                    break;
+
                 case 7:
                     (REALLYProcessOrderVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
                     CabinetListVisible = false;
+                    MainTabControlWidth = 1790;
                     break;
 
                 default:
