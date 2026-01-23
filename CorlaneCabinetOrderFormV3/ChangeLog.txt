@@ -1,0 +1,6 @@
+.
+.
+.
+.
+3.0.1.1 Changed ZoomExtents helper to allow a threshold before zooming to extents. Also disabled ResetToFrontView for the Hide buttons. Now cabinet doesn't jump around when hiding/adding/removing parts.
+

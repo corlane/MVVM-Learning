@@ -37,6 +37,7 @@
 
         <HelixToolkit:HelixViewport3D x:Name="viewport" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Margin="0"
                                helpers:ZoomExtentsHelper.Bounds="{Binding PreviewBounds}"
+                               helpers:ZoomExtentsHelper.BoundsChangeTolerance="1"
 							   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
 							   BorderThickness="5" BorderBrush="#FF555555"
 							   ShowCameraTarget="False"
@@ -69,7 +70,6 @@
         Cursor="Hand"/>
 
         <ToggleButton Content="{Binding HideLeftEndText}" IsChecked="{Binding LeftEndHidden}"
-        Click="ResetToFrontView_Click"
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
@@ -78,7 +78,6 @@
         Cursor="Hand"/>
 
         <ToggleButton Content="{Binding HideRightEndText}" IsChecked="{Binding RightEndHidden}"
-        Click="ResetToFrontView_Click"
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
@@ -87,7 +86,6 @@
         Cursor="Hand"/>
 
         <ToggleButton Content="{Binding HideTopText}" IsChecked="{Binding TopHidden}"
-        Click="ResetToFrontView_Click"
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
@@ -96,7 +94,6 @@
         Cursor="Hand"/>
 
         <ToggleButton Content="{Binding HideDeckText}" IsChecked="{Binding DeckHidden}"
-        Click="ResetToFrontView_Click"
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"

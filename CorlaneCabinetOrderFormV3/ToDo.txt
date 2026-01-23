@@ -95,7 +95,7 @@ OPTIONAL: Change image loading in Cabinet3DViewModel to utilize the grain direct
 
 Corlane side:
 
-Get material yield correct -- Seems to be correct so far. Need to do more testing.
+Get material yield correct -- Seems to be correct so far. Need to do more testing. -- DONE
 
 Add tab or window for order processing -- DONE
 
