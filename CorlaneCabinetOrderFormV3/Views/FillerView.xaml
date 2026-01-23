@@ -108,7 +108,7 @@
                                            Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textQty, FallbackValue=''}"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Top">
-                    <Label Content="Name:" VerticalAlignment="Top" Margin="5"/>
+                    <Label Content="Name (Optional):" VerticalAlignment="Top" Margin="5"/>
                     <TextBox x:Name="textNameUpper" Width="140" Height="25" VerticalAlignment="Center" Margin="0" 
                                              Text="{Binding Name}" GotFocus="TextBoxGotFocus"/>
                 </StackPanel>

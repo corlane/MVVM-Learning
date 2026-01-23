@@ -15,7 +15,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class POBatchListViewModel : ObservableObject
 {
-    private const string CsvDirectoryPlaceholder = "TODO";
+    private readonly string RootDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    private string CabinetStyle = "";
+
     private const string CsvTypeConstant = "Cabinet";
 
     private readonly ICabinetService? _cabinetService;
@@ -63,6 +65,8 @@ public partial class POBatchListViewModel : ObservableObject
 
         for (int i = 0; i < _cabinetService.Cabinets.Count; i++)
         {
+            string CabinetDirectory = "corlane system\\";
+
             var cab = _cabinetService.Cabinets[i];
 
             var modelName = BuildModelName(cab);
@@ -76,10 +80,62 @@ public partial class POBatchListViewModel : ObservableObject
             var width = isCornerOrAngleFront ? 0d : ToDouble(cab.Width);
             var depth = isCornerOrAngleFront ? 0d : ToDouble(cab.Depth);
 
+            if (cab.CabinetType.Contains("Base"))
+            {
+                CabinetDirectory += "base\\";
+                if (cab.Style.Contains("Standard"))
+                {
+                    CabinetStyle = "standard";
+                }
+                if (cab.Style.Contains("Drawer"))
+                {
+                    CabinetStyle = "drawer";
+                }
+                if (cab.Style.Contains("90"))
+                {
+                    CabinetStyle = "90 corner";
+                }
+                if (cab.Style.Contains("Angle"))
+                {
+                    CabinetStyle = "angle front";
+                }
+
+            }
+
+            if (cab.CabinetType.Contains("Upper"))
+            {
+                CabinetDirectory += "upper\\";
+                if (cab.Style.Contains("Standard"))
+                {
+                    CabinetStyle = "standard";
+                }
+                if (cab.Style.Contains("90"))
+                {
+                    CabinetStyle = "90 corner";
+                }
+                if (cab.Style.Contains("Angle"))
+                {
+                    CabinetStyle = "angle front";
+                }
+
+            }
+
+            if (cab.CabinetType.Contains("Filler"))
+            {
+                CabinetDirectory += "filler";
+                CabinetStyle = "";
+            }
+
+            if (cab.CabinetType.Contains("Panel"))
+            {
+                CabinetDirectory += "panel";
+                CabinetStyle = "";
+            }
+
             Rows.Add(new BatchListRow
             {
                 Name = modelName,
-                Directory = CsvDirectoryPlaceholder,
+                Directory = CabinetDirectory + CabinetStyle,
                 Type = CsvTypeConstant,
                 Quantity = qty,
                 Height = height,
@@ -342,11 +398,21 @@ public partial class POBatchListViewModel : ObservableObject
             return "X";
         }
 
-        static string ShelfDepthCode(string? style, string? shelfDepth)
+        static string ShelfDepthCode(string? style, string? shelfDepth, int shelfCount)
         {
             if (string.IsNullOrWhiteSpace(style))
             {
                 return "F";
+            }
+
+            if (shelfCount == 0)
+            {
+                return "X";
+            }
+
+            if (style.Contains("Drawer", StringComparison.OrdinalIgnoreCase))
+            {
+                return "X";
             }
 
             bool supportsHalfDepth =
@@ -359,12 +425,12 @@ public partial class POBatchListViewModel : ObservableObject
             {
                 return "F";
             }
-
+            
             return string.Equals(shelfDepth?.Trim(), "Half Depth", StringComparison.OrdinalIgnoreCase)
                 ? "H"
                 : "F";
         }
-
+        
         var type = TypeCode(cab);
         var styleCode = StyleCode(cab);
         var topType = TopTypeCode(cab);
@@ -392,7 +458,7 @@ public partial class POBatchListViewModel : ObservableObject
                 rolloutCount = ClampNonNegative(b.RolloutCount);
                 backThickness = BackThicknessCode(b.BackThickness);
 
-                shelfDepthCode = ShelfDepthCode(b.Style, b.ShelfDepth);
+                shelfDepthCode = ShelfDepthCode(b.Style, b.ShelfDepth, b.ShelfCount);
                 drillShelfHolesCode = BoolYN(b.DrillShelfHoles);
                 trashDrawerCode = BoolYN(b.TrashDrawer);
                 break;

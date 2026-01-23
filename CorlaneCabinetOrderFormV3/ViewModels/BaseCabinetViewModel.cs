@@ -102,6 +102,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GroupRolloutsVisible = (newValue == Style1);
             TrashDrawerEnabled = (newValue == Style1);
             TrashDrawer = (newValue != Style1) ? false : TrashDrawer;
+            SinkCabinetEnabled = (newValue == Style1 || newValue == Style3 || newValue == Style4);
 
             if (newValue == Style2)
             {
@@ -1005,7 +1006,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
     [ObservableProperty] public partial bool CustomEBSpeciesEnabled { get; set; } = false;
     [ObservableProperty] public partial bool CustomDoorSpeciesEnabled { get; set; } = false;
-
+    [ObservableProperty] public partial bool SinkCabinetEnabled { get; set; } = true;
 
     //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()
@@ -1377,10 +1378,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (Style == Style2)
         {
             DoorCount = 0;
-        }
-
-        if (Style == Style2)
-        {
+            DrillHingeHoles = false;
+            DrillShelfHoles = false;
             RolloutCount = 0;
             ShelfCount = 0;
         }

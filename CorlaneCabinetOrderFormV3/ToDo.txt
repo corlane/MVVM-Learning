@@ -115,7 +115,7 @@ NOTE! 45 degree cab shows front width, which is the front width of the deck or t
 
 Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
-Change directory name creation in Batch List viewmodel to delve into the proper directories based on cabinet Type and Style
+Change directory name creation in Batch List viewmodel to delve into the proper directories based on cabinet Type and Style -- DONE
 
 Change material to allow for UP and DOWN versions of each raw plywood species. Change individual cabinet parts to be made of the appropriate UP or DOWN material. -- DONE
 
