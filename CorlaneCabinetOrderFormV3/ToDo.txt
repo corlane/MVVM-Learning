@@ -139,7 +139,7 @@ Defaults page: Change default drw front heights to also include equalize bottom 
 
 Openings Exception Tab needs to report ALL opening sizes, not just the ones that deviate from default. -- DONE
 
-
+change cabinet list to respond to click instead of onselectedchanged
 
 
 

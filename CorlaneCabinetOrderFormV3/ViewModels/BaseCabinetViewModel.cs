@@ -898,8 +898,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         "Vertical"
     ];
     public List<string> ListCabSpecies { get; } =
-[
-    "Prefinished Ply",
+    [
+        "Prefinished Ply",
         "Maple Ply",
         "Red Oak Ply",
         "White Oak Ply",
@@ -911,7 +911,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         "MDF",
         "Melamine",
         "Custom"
-];
+    ];
     public List<string> ListEBSpecies { get; } =
     [
         "None",

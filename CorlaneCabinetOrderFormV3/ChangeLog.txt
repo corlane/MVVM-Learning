@@ -14,4 +14,4 @@
 	Added place order confirmation dialog.
 
 3.0.1.4
-	
+	Fixed bug with Filler breaking price and showing "Custom material" price notification.
