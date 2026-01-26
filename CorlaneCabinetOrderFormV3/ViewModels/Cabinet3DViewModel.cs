@@ -336,11 +336,11 @@ public partial class Cabinet3DViewModel : ObservableObject
             string s when s.Contains("Mahogany", StringComparison.OrdinalIgnoreCase) => "Wood Mahogany",
             string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
             string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "PVC Custom",
+            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "Melamine",
             string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "Wood Prefinished Maple",
             string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
             string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
-            string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood Oak",
+            string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
             _ => "None"
         };
 
@@ -2137,11 +2137,11 @@ public partial class Cabinet3DViewModel : ObservableObject
             string s when s.Contains("Mahogany", StringComparison.OrdinalIgnoreCase) => "Wood Mahogany",
             string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
             string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "PVC Custom",
+            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "Melamine",
             string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "Wood Prefinished Maple",
             string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
             string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
-            string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood Oak",
+            string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
             _ => "None"
         };
 
@@ -2756,7 +2756,7 @@ public partial class Cabinet3DViewModel : ObservableObject
             string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
             string s when s.Contains("Maply Ply", StringComparison.OrdinalIgnoreCase) => "Wood Maple", // your example
             string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "PVC Custom",
+            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "Melamine",
             string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "PVC Hardrock Maple",
             string s when s.Contains("PFP 1/4", StringComparison.OrdinalIgnoreCase) => "None",
             string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",

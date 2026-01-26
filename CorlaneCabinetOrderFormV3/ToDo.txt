@@ -75,7 +75,7 @@ After adding  cabinet, it should be selected in the list automatically -- DONE
 
 Selecting 0 doors or drawers should disable the Supply and IncInList checkboxes for those items -- DONE
 
-
+Add extra "Are you sure you wish to place this order?" confirmation dialog before final submission -- DONE
 
 
 
@@ -190,9 +190,9 @@ Doors & drw front Custom material name not showing in JOb Material list
 
 Changing Drw Front height with Equalize checked does not re-equalize remaining drw fronts. -- DONE
 
+Click equalize all drw fronts, then uncheck. Click load defaults, and default drw front heights don't work. Click it again and it does work. -- DONE
 
-
-
+"Custom material, no price" message is not getting cleared when changing material from Custom to standard species. Tried reproducing and couldn't. More testing necessary.
 
 
 

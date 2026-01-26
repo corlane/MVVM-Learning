@@ -9,4 +9,9 @@
 	Changed Main Tab Control to go full window width when the Process Order Tab is clicked.
 
 3.0.1.3
+	Added "Loading Job" and "Saving Job" status messages to the status bar, so when Windows is a POS and freezes on load or save, at least the user knows something is happening.
+	Fixed bug where drawer fronts would not resize properly when clicking Load Defaults.
+	Added place order confirmation dialog.
+
+3.0.1.4
 	

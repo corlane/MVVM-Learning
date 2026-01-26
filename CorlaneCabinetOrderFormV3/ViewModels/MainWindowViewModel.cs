@@ -1,21 +1,19 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
-using System;
-using CorlaneCabinetOrderFormV3.Views;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.3";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.4";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -77,6 +75,8 @@ public partial class MainWindowViewModel : ObservableValidator
             FileName = CurrentJobName + ".cor"
         };
 
+        Notify2("Saving job...", Brushes.Blue, 100000); // yes, 100 seconds - will be cleared on success
+
         if (dialog.ShowDialog() == true)
         {
             try
@@ -117,6 +117,7 @@ public partial class MainWindowViewModel : ObservableValidator
     [RelayCommand]
     private async Task LoadJob()
     {
+
         if (IsModified)
         {
             var res = MessageBox.Show(
@@ -132,9 +133,10 @@ public partial class MainWindowViewModel : ObservableValidator
             Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor"
         };
 
+        Notify2("Loading job...", Brushes.Blue, 100000); // yes, 100 seconds - will be cleared on success
+
         if (dialog.ShowDialog() == true)
         {
-            Notify2("Loading job...", Brushes.Blue);
 
             _suppressIsModified = true;
 

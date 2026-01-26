@@ -1692,15 +1692,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (Style == Style1) { DrwCount = _defaults.DefaultStdDrawerCount; }
         if (Style == Style2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
         DrwStyle = _defaults.DefaultDrwStyle;
-        //OpeningHeight1 = _defaults.DefaultOpeningHeight1;
-        //OpeningHeight2 = _defaults.DefaultOpeningHeight2;
-        //OpeningHeight3 = _defaults.DefaultOpeningHeight3;
+
+        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
+        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
+
         DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
         DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
         DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
 
-        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
-        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
 
         if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
         {
@@ -1733,33 +1732,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
     private void LoadDefaultDrwSettings()
     {
         if (_defaults is null) return;
-        //DrwStyle = _defaults.DefaultDrwStyle;
-        //DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
-        //IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
-        //IncDrwFronts = _defaults.DefaultIncDoors;
-        //if (IncDrwFronts)
-        //{
-        //    IncDrwFront1 = true;
-        //    IncDrwFront2 = true;
-        //    IncDrwFront3 = true;
-        //    IncDrwFront4 = true;
-        //}
-        //else
-        //{
-        //    IncDrwFront1 = false;
-        //    IncDrwFront2 = false;
-        //    IncDrwFront3 = false;
-        //    IncDrwFront4 = false;
-        //}
-        //IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
-        //IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
-        //DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
+
+        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
+        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
+
         DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
         DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
         DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
 
-        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
-        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
 
         if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
         {

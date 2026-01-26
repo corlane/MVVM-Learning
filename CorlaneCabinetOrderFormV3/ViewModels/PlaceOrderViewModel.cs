@@ -250,6 +250,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         [RelayCommand]
         private async Task PlaceOrder()
         {
+            var conf = MessageBox.Show("At this point, you will be prompted to save the job, then the order will be sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?", "Place Order", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (conf != MessageBoxResult.Yes) return;
+
             // Snapshot a current quote at the moment the user clicks Place Order.
             CalculatePrices();
 
