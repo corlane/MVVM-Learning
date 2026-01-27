@@ -26,5 +26,7 @@
 	Added notification when canceling a load or save dialog
 	Changed hinge holes exception tab to ignore Drawer cabinets
 
+3.0.1.7
+	Fixed copy-paste error where Drw Box 3 was called Drw Box 2 in the Box Size List
 
 

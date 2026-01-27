@@ -3,6 +3,7 @@
 ## General Guidelines
 - First general instruction
 - Second general instruction
+- Use concise, informal acknowledgments for simple bug identifications (e.g., 'classic copy-paste error').
 
 ## Code Style
 - Use specific formatting rules

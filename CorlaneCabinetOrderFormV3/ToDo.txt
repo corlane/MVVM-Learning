@@ -51,8 +51,7 @@ Adjustable shelf not accounting for back thickness in 3D view. Always spaced for
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-Drawer base cabinets are reporting to remove hinge plate mounting holes. 
-
+On Drawer cabinet in Box Size List, drw box 2 is being reported twice.
 
 
 

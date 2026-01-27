@@ -997,101 +997,6 @@ public partial class Cabinet3DViewModel : ObservableObject
                 }
             }
 
-
-
-
-
-            // NEW DRW BOX CALCULATION AND BUILDING
-            //if (baseCab.DrwCount > 0)
-            //{
-            //    double topSpacing = 0;
-            //    double bottomSpacing = 0;
-
-            //    if (baseCab.DrwStyle.Contains("Blum"))
-            //    {
-            //        dbxWidth -= tandemSideSpacing;
-            //        //sideSpacing = tandemSideSpacing;
-            //        topSpacing = tandemTopSpacing;
-            //        bottomSpacing = tandemBottomSpacing;
-            //    }
-            //    else if (baseCab.DrwStyle.Contains("Accuride"))
-            //    {
-            //        dbxWidth -= accurideSideSpacing;
-            //        //sideSpacing = accurideSideSpacing;
-            //        topSpacing = accurideTopSpacing;
-            //        bottomSpacing = accurideBottomSpacing;
-            //    }
-
-                
-
-            //    if (cabType == style1)
-            //    {
-
-            //    }
-
-
-
-            //    if (cabType == style2)
-            //    {
-
-            //    }
-            //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             // Drawer Boxes
             if (baseCab.DrwCount > 0)
             {
@@ -1329,7 +1234,7 @@ public partial class Cabinet3DViewModel : ObservableObject
                         if (baseCab.IncDrwBoxInListOpening3 && baseCab.DrwCount > 2)
                         {
                             //dbxHeight = opening2Height - topSpacing - bottomSpacing;
-                            AddDrawerBoxRow(baseCab, "Drawer Box 2", dbxHeight, dbxWidth, dbxDepth);
+                            AddDrawerBoxRow(baseCab, "Drawer Box 3", dbxHeight, dbxWidth, dbxDepth);
                         }
 
                     }
