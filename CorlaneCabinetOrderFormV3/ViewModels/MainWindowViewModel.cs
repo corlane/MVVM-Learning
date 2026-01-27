@@ -14,7 +14,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.5";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.6";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -112,6 +112,11 @@ public partial class MainWindowViewModel : ObservableValidator
                 MessageBox.Show($"Error saving job: {ex.Message}", "Error");
             }
         }
+        else
+        {
+            // User cancelled save
+            Notify2("Save canceled", Brushes.Red, 2000);
+        }
     }
 
 
@@ -173,6 +178,11 @@ public partial class MainWindowViewModel : ObservableValidator
             {
                 _suppressIsModified = false;
             }
+        }
+        else
+        {
+            // User cancelled load
+            Notify2("Load canceled", Brushes.Red, 2000);
         }
     }
 

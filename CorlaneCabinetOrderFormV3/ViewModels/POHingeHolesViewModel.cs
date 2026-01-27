@@ -74,6 +74,13 @@ public partial class POHingeHolesViewModel : ObservableObject
         {
             cabNumber++;
 
+            // Base Type2 (Drawer) must ignore hinge holes entirely.
+            if (cab is BaseCabinetModel b2 &&
+                string.Equals(b2.Style, "Drawer", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             bool drillHingeHoles = cab switch
             {
                 BaseCabinetModel b => b.DrillHingeHoles,

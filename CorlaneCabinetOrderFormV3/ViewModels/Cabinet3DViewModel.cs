@@ -2121,7 +2121,7 @@ public partial class Cabinet3DViewModel : ObservableObject
         double doorTopReveal = ConvertDimension.FractionToDouble(upperCab.TopReveal);
         double doorBottomReveal = ConvertDimension.FractionToDouble(upperCab.BottomReveal);
         double doorSideReveal = (doorLeftReveal + doorRightReveal) / 2; // this averages the potentially different left and right reveals so that the door creation calc can use just one variable instead of two.
-        double StretcherWidth = 6;
+        double StretcherWidth = 4;
         bool topDeck90 = false; // This is sent to the panel creator to let it know if it is a top or deck at 90 degrees so it cab have 2 edgebanded edges
         bool isPanel = false; // This is sent to the panel creator to let it know if it is a panel (true) or a shelf/deck/top/toekick (false) so it can have edgebanding applied correctly.
         string panelEBEdges = "";

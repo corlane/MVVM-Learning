@@ -20,4 +20,11 @@
 	Added view manipulation help text to viewport
 	Added Help button to open website help page
 
+3.0.1.6
+	Changed upper Nailers to 4"
+	Changed color of Help button image to be more visible in all themes
+	Added notification when canceling a load or save dialog
+	Changed hinge holes exception tab to ignore Drawer cabinets
+
+
 

@@ -11,81 +11,14 @@ Finish validation (don't foget to disable add, place order buttons etc. on inval
 Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2. -- Looks like it is working on bedroom computer. Leave as is and check later.
 	It is *NOT* working consistently, even on bedroom computer.
 
-Implement connection for order submission and material price retrieval -- DONE
-
-Change pricing method to use material prices from server -- DONE
-
-Implement order status indicator -- DONE
-
-Add drawer box and rollout 3D models and incorporate into material yield calculations  -- DONE
-
-Add Sink Cabinet checkbox. Will also need to add false front, and false front backing stretcher. -- DONE
-
 Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk about whether to allow adjustable shelves simultaneously
-
-Add checkbox for trash drawer - Just a 12" tall drawer box. Should be unavailable if cabinet is too narrow. -- DONE
-
-Hide cabinet preview window when Defaults or Place Order tabs are active -- DONE
-
-Implement Print button functionality -- DONE
-
-Add Door Sizes List -- DONE
-
-Add Drawer Box Sizes List -- DONE
-
-Implement New button functionality -- DONE
-
-Add "MODIFIED" label to title when editing existing order -- DONE
-
-Doors should calculate for edgebanding, even though it is specified as "None". Currently they get 1 edge of "None". Needs to be 4 edges matching the door species. -- DONE
-
-Hide back thickness selection for corner cabinets -- DONE
-
-When clicking on cabinet list, run dimensions thru converter to display in user's selected units before populating form fields -- DONE
-
-Panel thickness dropdown needs to change based on dimension format. As is, it won't populate properly. -- DONE
-
-Move UI elements to be more consistent across tabs -- DONE
-
-Add separate selection for shelf count for uppers and lowers in Defaults -- HODL
 
 Implement half-depth shelves for 90 deg corner cabinets
 
 If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on whether cab has drws
 
-Add nailers on cabs with 1/4" back, base and upper cabs -- DONE
-
-On base cab drw front section, add "Equalize" for bottom drw equalization, and an "Equalize All" button to duh make all drw fronts equal. -- DONE
-
-Do not allow duplicate cabinet names -- DONE
-
-If job is modified, warn before closing without saving -- DONE
-
-Filler/End and Panel should have Default species (a single dropdown for both of them) -- DONE
-
-Panel needs a Default thickness (steal from back thickness I hope, to avoid default dimension headache) -- DONE
-
-When clicking Save, auto populate filename if job has been saved before -- DONE
-
-When opening job, do not allow if current file is unsaved -- DONE
-
-Implement Custom material. Currently you can choose custom, but not enter a name. -- DONE
-
-After adding  cabinet, it should be selected in the list automatically -- DONE
-
-Selecting 0 doors or drawers should disable the Supply and IncInList checkboxes for those items -- DONE
-
-Add extra "Are you sure you wish to place this order?" confirmation dialog before final submission -- DONE
-
-Add view manipulation help text to viewport -- DONE
 
 
-
-
-OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
-OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
-OPTIONAL: Change image loading in Cabinet3DViewModel to utilize the grain direction setting. This will allow the removal of duplicate material images for horizontal and vertical grain.
-	Have already added material images to image folder with Horizontal and Vertical suffixes removed.
 
 
 
@@ -95,51 +28,19 @@ OPTIONAL: Change image loading in Cabinet3DViewModel to utilize the grain direct
 
 Corlane side:
 
-Get material yield correct -- Seems to be correct so far. Need to do more testing. -- DONE
-
-Add tab or window for order processing -- DONE
-
-Save customer information & quoted price in job file -- DONE
-
 Set up clickonce installer -- DONE
 	https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_V3_Setup.zip Corlane_Cabinet_Order_Form_V3_Setup <-- copy this text to rename the created zip file
 
-
-Add icon -- DONE
-
-Account for edgebanding on bottom edge of upper end panels -- DIFFICULT, since edgebanding routine does not allow for 2 different edgebanding values on a single panel. -- DONE
-
-NOTE! 45 degree cab shows front width, which is the front width of the deck or top, not the corner-to-corner width. Should we change this? The math will be tricky. -- NOT NECESSARY
-
-1/4" backs need to add 1/4" PFP to material totals -- DONE
-
 Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
-
-Change directory name creation in Batch List viewmodel to delve into the proper directories based on cabinet Type and Style -- DONE
-
-Change material to allow for UP and DOWN versions of each raw plywood species. Change individual cabinet parts to be made of the appropriate UP or DOWN material. -- DONE
-
-CNC price needs to be calcuated by sq ft instead of per sheet. -- DONE
 
 On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
 
-If cabinet is 1 door cabinet and doors are NOT supplied, have batch list load a 2 door cabinet. -- HODL
-
-Add 3 characters to model name for Shelf Depth and Drill Shelf Holes and Trash Drawer. -- DONE
-
-Use Notify for uploading material prices - the small text notification doesn't grab enough attention. -- DONE
-
-Account for Custom material in price calc. -- DONE
-
-Opening size Exception Tab needs to report OPENING SIZES, not DF sizes. -- DONE
-DRW BOX SIZING RULES:
-	If drw front sizes deviate from the seed cabinet size, flag to change opening/front sizes. -- DONE
-
-Defaults page: Change default drw front heights to also include equalize bottom and equalize all buttons. -- DONE
-
-Openings Exception Tab needs to report ALL opening sizes, not just the ones that deviate from default. -- DONE
-
 Change cabinet list to respond to click instead of onselectedchanged
+
+
+
+
+
 
 
 
@@ -148,80 +49,31 @@ BUGS:
 
 Adjustable shelf not accounting for back thickness in 3D view. Always spaced for 3/4" back -- DONE-ish.
 
-Shelf depth should be all Half or Full. In some places, it is being treated as a number and set to 0. -- DONE
-
-
-Load the test job. Click on 1st cabinet. Then click 2nd cabinet. The preview is incorrect. Clicking on the 3rd cabinet and then 2nd cabinet shows correctly. WTF
-	The problem is going from a Drawer cabinet to a Std 1 Drw cabinet. OpeningHeight1 is not being populated properly.
-	Looks like the problem stems from MapModelToViewModel not changing the comboboxes etc.
-	Removed if (_isMapping) return; from OnStyleChanged - that fixed the problem, but has it introduced other problems? Let's find out. NOPE --
-	The problem is LoadDefaults being called when Type changes. Works fine for choosing a type from the dropdown, but not good if selecting a cabinet in the list. It resets reveals etc.
-	What is overriding opening1height when clicking on cabinet list? 
-	ResizeOpeningHeights If Style = Style2 is running even when Style = Style1. WTF?
-	Style is being set as Style2 when it should be Style1 - demonstrate by putting break in resize opening heights and resize drawer front heights. Is it bounce?
-	FIXED! Added if (_isMapping) return; to ResizeOpeningHeights and ResizeDrawerFrontHeights. -- DONE
-
-Drw Count not being set when clicking on cabinet in list. More mapping problems? Yes. OnStyleChanged not running because IsMapping is true. Even calling it explicitly after IsMapping is set to false, somehow IsMapping is true when it reaches it.
-	Added OnStyleChanged(oldStyle, model.Style); to the end of the mapping method after capturing the old style at the beginning. Seems like one of those whack-a-mole fixes... let's see what other problems creep up. Too many more and I will
-	ditch the whole mapping method and just explicitly set each property to avoid these hard-to-trace headaches.
-	Had to remove LoadDefaults from OnStyleChanged again to avoid resetting reveals etc. when clicking on cabinet list. Probably better this way anyway.
-	Added LoadDefaults to the Style combobox Closed event handler to set proper defaults when changing styles from the dropdown. -- DONE
-
-When changing from Drawer to Std 1 drw cabinet, opening1 height is populated with the default drwfront1 height. Fixed by adding LoadDefaults to ComboboxClosed event handler. -- DONE
-	NOTE: Should apply this to combobox types for upper cabinets too. -- DONE
-
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-Total Cabinets on printed cutlist seems to only be counting line items, not total cabinets including quantities -- DONE
-
-
-1/4" backs are not showing the proper material texture. WTF? Told to use same texture as PFP in material loading method. -- DONE
-
-Drawer fronts not obeying Defaults setting for Include/Exclude Doors/Drw Fronts -- DONE
-
-Rollout selection not updating properly when clicking around in the list. Will continue to show 1 rollout, and then checking Inc Rollouts will not do anything. -- NEED MOAR INFO TO REPRODUCE
-
-Rollouts need a 0 selection in the dropdown. -- DONE
-
-Doors and Drw boxes not showing in list with 1 cabinet in job. It seems the last cabinet in the list is not having its doors/drw boxes added to the list. -- DONE
-
-Doors & drw front Custom material name not showing in JOb Material list
-	Have added helper method ResolveDoorSpeciesForTotals, next is modifying all CreatePanel calls in door creation methods. SEE AI CHAT LOG FOR DETAILS. -- DONE
-
-Changing Drw Front height with Equalize checked does not re-equalize remaining drw fronts. -- DONE
-
-Click equalize all drw fronts, then uncheck. Click load defaults, and default drw front heights don't work. Click it again and it does work. -- DONE
-
-"Custom material, no price" message is not getting cleared when changing material from Custom to standard species. Tried reproducing and couldn't. More testing necessary. Problem was edgebanding not being specified. -- DONE
+Drawer base cabinets are reporting to remove hinge plate mounting holes. 
 
 
 
 
+
+
+
+
+
+
+OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
+OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
+OPTIONAL: Change image loading in Cabinet3DViewModel to utilize the grain direction setting. This will allow the removal of duplicate material images for horizontal and vertical grain.
+	Have already added material images to image folder with Horizontal and Vertical suffixes removed.
 
 	
 
+
+
+
+
+
 TESTING NOTES:
-
-Added Debug.writeline statements to Cab3Dviewmodel & PlaceOrderViewModel to log panel creation for material yield checking. Looks dead on accurate so far. Even accounts for toekick notches etc. Great!
-	Next will be to check edgebanding similarly. It was already there and commented out lol. So far looks to be perfect as well.
-
-
-
-Cabinet Model Name Template:
-
-Type,	Style,	Sink,	Toekick,	DoorCount,	DrwCount,	AdjShelfCount,	RolloutCount,	TopType,	BackThickness
-									
-base,	Std,	y/n,	y/n,	0-2,	0-4,	0-?,	0-?,	s/f,	1 or 3
-		Drawer								
-		90 Corner								
-		Angle Front								
-									
-upper
-		90 Corner								
-		Angle Front								
-									
-									
-filler									
-panel									
 									
 
