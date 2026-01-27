@@ -15,3 +15,9 @@
 
 3.0.1.4
 	Fixed bug with Filler breaking price and showing "Custom material" price notification.
+
+3.0.1.5
+	Added view manipulation help text to viewport
+	Added Help button to open website help page
+
+

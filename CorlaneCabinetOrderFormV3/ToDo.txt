@@ -77,7 +77,7 @@ Selecting 0 doors or drawers should disable the Supply and IncInList checkboxes 
 
 Add extra "Are you sure you wish to place this order?" confirmation dialog before final submission -- DONE
 
-
+Add view manipulation help text to viewport -- DONE
 
 
 
@@ -139,7 +139,7 @@ Defaults page: Change default drw front heights to also include equalize bottom 
 
 Openings Exception Tab needs to report ALL opening sizes, not just the ones that deviate from default. -- DONE
 
-change cabinet list to respond to click instead of onselectedchanged
+Change cabinet list to respond to click instead of onselectedchanged
 
 
 
@@ -192,7 +192,7 @@ Changing Drw Front height with Equalize checked does not re-equalize remaining d
 
 Click equalize all drw fronts, then uncheck. Click load defaults, and default drw front heights don't work. Click it again and it does work. -- DONE
 
-"Custom material, no price" message is not getting cleared when changing material from Custom to standard species. Tried reproducing and couldn't. More testing necessary.
+"Custom material, no price" message is not getting cleared when changing material from Custom to standard species. Tried reproducing and couldn't. More testing necessary. Problem was edgebanding not being specified. -- DONE
 
 
 

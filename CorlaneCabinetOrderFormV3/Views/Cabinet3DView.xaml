@@ -100,6 +100,9 @@
         Margin="20,180,20,20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
-        
+
+        <Label Content="Rotate: Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,60,5,5"/>
+        <Label Content="Pan: Shift + Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,80,5,5"/>
+        <Label Content="Zoom: Ctrl + Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,100,5,5"/>
     </Grid>
 </UserControl>

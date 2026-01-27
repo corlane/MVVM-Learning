@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -13,7 +14,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.4";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.5";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -488,5 +489,24 @@ public partial class MainWindowViewModel : ObservableValidator
 
         // Any property change on an item marks the job modified.
         IsModified = true;
+    }
+
+    [RelayCommand]
+    private void Help()
+    {
+        const string helpUrl = "https://corlanecabinetry.com/cabinet-order-form-help/";
+
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = helpUrl,
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Unable to open help page.\n\n{ex.Message}", "Help", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
