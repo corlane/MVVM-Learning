@@ -79,10 +79,30 @@ public partial class PanelViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 48)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 120)] public partial string Height { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Depth { get; set; } = "";
-    [ObservableProperty] public partial string Species { get; set; } = "";
+    [ObservableProperty] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomCabSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomCabSpeciesEnabled = false;
+        }
+    }
     [ObservableProperty] public partial string CustomSpecies { get; set; } = "";
 
-    [ObservableProperty] public partial string EBSpecies { get; set; } = "";
+    [ObservableProperty] public partial string EBSpecies { get; set; } = ""; partial void OnEBSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomEBSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomEBSpeciesEnabled = false;
+        }
+    }
     [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
 
     [ObservableProperty] public partial string Name { get; set; } = "";
@@ -94,6 +114,11 @@ public partial class PanelViewModel : ObservableValidator
     [ObservableProperty] public partial bool PanelEBBottom { get; set; }
     [ObservableProperty] public partial bool PanelEBLeft { get; set; }
     [ObservableProperty] public partial bool PanelEBRight { get; set; }
+
+
+    [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
+    [ObservableProperty] public partial bool CustomEBSpeciesEnabled { get; set; } = false;
+
 
     // Combo box lists
     public List<string> ListCabSpecies { get; } =

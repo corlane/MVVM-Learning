@@ -21,8 +21,7 @@ On leaving a dimension box, its dimension should immediately convert to the defa
 
 Make sure ALL dimension boxes show default format. Reveals, for example do not automatically convert.
 
-
-
+Change the fugly Custom color to something besides blood red.
 
 
 
@@ -50,8 +49,10 @@ Adjustable shelf not accounting for back thickness in 3D view. Always spaced for
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-On Drawer cabinet in Box Size List, drw box 2 is being reported twice.
+Using 3022 Silt studio job, click from sink cabinet to 3 drw cabinet: top drawer appears. Will disappear if you click on another 3 drw cabinet and stay gone - until you click on the sink cabinet again. Investigate.
 
+On Standard 1-drawer cabinet, DrawerFrontHeight1 isn't accepting decimal, space, or slash, because of the way the value is written back to the textbox because of updatesourcetrigger = propertychanged.
+	Have implemented a hacky workaround by changing to LostFocus update trigger. It works, but is not ideal. -- DONE-ish.
 
 
 

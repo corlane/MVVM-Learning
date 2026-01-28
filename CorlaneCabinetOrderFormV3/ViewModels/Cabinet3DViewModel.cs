@@ -121,63 +121,6 @@ public partial class Cabinet3DViewModel : ObservableObject
         RebuildPreview();
     }
 
-    //public void RebuildPreview()
-    //{
-    //    var group = new Model3DGroup();
-
-    //    // Read preview cabinet from the centralized preview service
-    //    var cab = _previewSvc!.CurrentPreviewCabinet;
-
-    //    if (cab is CabinetModel cabinetModel)
-    //    {
-    //        // Reset accumulators so rebuild produces fresh material/edge totals
-    //        cabinetModel.ResetAllMaterialAndEdgeTotals();
-
-    //        var built = BuildCabinet(cabinetModel);
-    //        group.Children.Add(built);
-    //    }
-    //    else
-    //    {
-    //        // No preview to show - group will contain only lighting.
-    //    }
-
-    //    // Lights
-    //    group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
-
-    //    PreviewModel = group;
-    //}
-
-    //public void RebuildPreview()
-    //{
-    //    var dispatcher = Application.Current?.Dispatcher;
-    //    if (dispatcher != null && !dispatcher.CheckAccess())
-    //    {
-    //        dispatcher.Invoke(RebuildPreview, DispatcherPriority.Render);
-    //        return;
-    //    }
-
-    //    var group = new Model3DGroup();
-
-    //    // Read preview cabinet from the centralized preview service
-    //    var cab = _previewSvc!.CurrentPreviewCabinet;
-
-    //    if (cab is CabinetModel cabinetModel)
-    //    {
-    //        // Reset accumulators so rebuild produces fresh material/edge totals
-    //        cabinetModel.ResetAllMaterialAndEdgeTotals();
-
-    //        var built = BuildCabinet(cabinetModel);
-    //        group.Children.Add(built);
-    //    }
-
-    //    // Lights
-    //    group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
-
-    //    PreviewModel = group;
-    //}
-
-
-
     public void RebuildPreview()
     {
         var dispatcher = Application.Current?.Dispatcher;
@@ -228,8 +171,6 @@ public partial class Cabinet3DViewModel : ObservableObject
             }
         }, DispatcherPriority.Background);
     }
-
-
 
 
 

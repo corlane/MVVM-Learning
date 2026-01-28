@@ -88,9 +88,29 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 60)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
-    [ObservableProperty] public partial string Species { get; set; } = "";
+    [ObservableProperty] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomCabSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomCabSpeciesEnabled = false;
+        }
+    }
     [ObservableProperty] public partial string CustomSpecies { get; set; } = "";
-    [ObservableProperty] public partial string EBSpecies { get; set; } = "";
+    [ObservableProperty] public partial string EBSpecies { get; set; } = ""; partial void OnEBSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomEBSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomEBSpeciesEnabled = false;
+        }
+    }
     [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
 
     [ObservableProperty] public partial string Name { get; set; } = "";
@@ -167,7 +187,17 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial string LeftBackWidth90 { get; set; } = "";
     [ObservableProperty] public partial string RightBackWidth90 { get; set; } = "";
 
-    [ObservableProperty] public partial string DoorSpecies { get; set; } = "";
+    [ObservableProperty] public partial string DoorSpecies { get; set; } = ""; partial void OnDoorSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomDoorSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomDoorSpeciesEnabled = false;
+        }
+    }
     [ObservableProperty] public partial string CustomDoorSpecies { get; set; } = "";
 
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BackThickness { get; set; } = ""; partial void OnBackThicknessChanged(string oldValue, string newValue)
@@ -276,6 +306,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool Corner45DimsVisibility { get; set; } = false;
     [ObservableProperty] public partial bool ShowRevealSettings { get; set; } = true;
     [ObservableProperty] public partial bool BackThicknessVisible { get; set; } = true;
+    [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
+    [ObservableProperty] public partial bool CustomEBSpeciesEnabled { get; set; } = false;
+    [ObservableProperty] public partial bool CustomDoorSpeciesEnabled { get; set; } = false;
 
 
     [RelayCommand]

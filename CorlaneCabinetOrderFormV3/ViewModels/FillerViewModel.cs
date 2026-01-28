@@ -53,7 +53,17 @@ public partial class FillerViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(3, 48)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string Depth { get; set; } = "";
-    [ObservableProperty] public partial string Species { get; set; } = "";
+    [ObservableProperty] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
+    {
+        if (newValue == "Custom")
+        {
+            CustomCabSpeciesEnabled = true;
+        }
+        else
+        {
+            CustomCabSpeciesEnabled = false;
+        }
+    }
     [ObservableProperty] public partial string CustomSpecies { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = "";
     [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
@@ -61,6 +71,10 @@ public partial class FillerViewModel : ObservableValidator
     [ObservableProperty] public partial string Name { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required, Range(1, 100)] public partial int Qty { get; set; } = 1;
     [ObservableProperty] public partial string Notes { get; set; } = "";
+
+
+    [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
+
 
     // Combo box lists
     public List<string> ListCabSpecies { get; } =

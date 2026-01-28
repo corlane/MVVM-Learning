@@ -375,8 +375,17 @@
                             <Separator Margin="5,5,5,0"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}">
                                     <Label Content="1" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                                    <TextBox x:Name="textDrwFrontHeight1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding DrwFront1Disabled}"
-                                            Text="{Binding DrwFrontHeight1, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>
+                                    <!--<TextBox x:Name="textDrwFrontHeight1" VerticalAlignment="Center" HorizontalAlignment="Left" Width="60" Margin="3" IsReadOnly="{Binding DrwFront1Disabled}"
+                                            Text="{Binding DrwFrontHeight1, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBoxGotFocus"/>-->
+                                <TextBox x:Name="textDrwFrontHeight1"
+         VerticalAlignment="Center"
+         HorizontalAlignment="Left"
+         Width="60"
+         Margin="3"
+         IsReadOnly="{Binding DrwFront1Disabled}"
+         Text="{Binding DrwFrontHeight1, UpdateSourceTrigger=LostFocus}"
+         GotFocus="TextBoxGotFocus"
+         LostFocus="DrwFrontHeight1_LostFocus"/>
                                     <ToggleButton x:Name="checkShowPropertiesDrwFront1" Content="Show Options" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5" IsChecked="{Binding DrwFront1PropertiesVisible}" IsTabStop="False"/>
                                     <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1PropertiesVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                                         <ToggleButton x:Name="checkIncDrwFront1" Content="Supply Slab Drw. Front" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IncDrwFront1}"/>
