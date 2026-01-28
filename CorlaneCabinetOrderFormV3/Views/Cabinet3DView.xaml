@@ -49,6 +49,7 @@
 							   ViewCubeTopText = "T"
 							   IsHeadLightEnabled="True"
 							   >
+
             <HelixToolkit:HelixViewport3D.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF1D1B1B" Offset="1"/>
@@ -58,8 +59,8 @@
             <HelixToolkit:DirectionalHeadLight Brightness="0.2"/>
 
             <ModelVisual3D Content="{Binding PreviewModel}"/>
-
         </HelixToolkit:HelixViewport3D>
+        
         <Button Content="Reset View" 
         Click="ResetToFrontView_Click"
         Width="100" Height="30"

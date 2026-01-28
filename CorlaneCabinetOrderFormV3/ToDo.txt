@@ -17,7 +17,9 @@ Implement half-depth shelves for 90 deg corner cabinets
 
 If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on whether cab has drws
 
+On leaving a dimension box, its dimension should immediately convert to the default format.
 
+Make sure ALL dimension boxes show default format. Reveals, for example do not automatically convert.
 
 
 
@@ -36,9 +38,6 @@ Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
 
 Change cabinet list to respond to click instead of onselectedchanged
-
-
-
 
 
 

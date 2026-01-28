@@ -100,6 +100,15 @@ public partial class POBatchListViewModel : ObservableObject
                     CabinetStyle = "angle front";
                 }
 
+                var baseCab = cab as BaseCabinetModel;
+                if (baseCab.BackThickness == "0.25" || baseCab.BackThickness == "1/4")
+                {
+                    CabinetStyle += "\\1-4";
+                }
+                else if (baseCab.BackThickness == "0.75" || baseCab.BackThickness == "3/4")
+                {
+                    CabinetStyle += "\\3-4";
+                }
             }
 
             if (cab.CabinetType.Contains("Upper"))
@@ -116,6 +125,16 @@ public partial class POBatchListViewModel : ObservableObject
                 if (cab.Style.Contains("Angle"))
                 {
                     CabinetStyle = "angle front";
+                }
+
+                var upperCab = cab as UpperCabinetModel;
+                if (upperCab.BackThickness == "0.25" || upperCab.BackThickness == "1/4")
+                {
+                    CabinetStyle += "\\1-4";
+                }
+                else if (upperCab.BackThickness == "0.75" || upperCab.BackThickness == "3/4")
+                {
+                    CabinetStyle += "\\3-4";
                 }
 
             }

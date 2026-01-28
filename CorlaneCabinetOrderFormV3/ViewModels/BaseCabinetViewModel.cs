@@ -127,8 +127,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RunValidationVisible();
         }
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 95)] public partial string Width { get; set; } = "";
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(7, 95)] public partial string Width { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(6, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
     {
         if (newValue == oldValue) return;
 
@@ -1390,6 +1390,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             { DoorCount = 2; }
             DrwCount = 0;
             TopType = "Full";
+            BackThickness = "0.75"; // Force 3/4" back
         }
 
         if (Style == Style4)
@@ -1397,6 +1398,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             DrwCount = 0;
             RolloutCount = 0;
             TopType = "Full";
+            BackThickness = "0.75"; // Force 3/4" back
         }
 
         var newCabinet = new BaseCabinetModel
@@ -1540,6 +1542,33 @@ public partial class BaseCabinetViewModel : ObservableValidator
                     return;
                 }
             }
+
+            if (Style == Style2)
+            {
+                DoorCount = 0;
+                DrillHingeHoles = false;
+                DrillShelfHoles = false;
+                RolloutCount = 0;
+                ShelfCount = 0;
+            }
+
+            if (Style == Style3)
+            {
+                if (DoorCount == 1)
+                { DoorCount = 2; }
+                DrwCount = 0;
+                TopType = "Full";
+                BackThickness = "0.75"; // Force 3/4" back
+            }
+
+            if (Style == Style4)
+            {
+                DrwCount = 0;
+                RolloutCount = 0;
+                TopType = "Full";
+                BackThickness = "0.75"; // Force 3/4" back
+            }
+
 
             selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();

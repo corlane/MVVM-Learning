@@ -302,6 +302,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
             return;
         }
 
+        if (Style == Style2 || Style == Style3)
+        {
+            BackThickness = "0.75"; // Force 3/4" back
+        }
+
         var newCabinet = new UpperCabinetModel
         {
             Width = ConvertDimension.FractionToDouble(Width).ToString(),
@@ -461,6 +466,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
                     _mainVm?.Notify("Duplicate cabinet names are not allowed.", Brushes.Red, 3000);
                     return;
                 }
+            }
+
+            if (Style == Style2 || Style == Style3)
+            {
+                BackThickness = "0.75"; // Force 3/4" back
             }
 
             selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
