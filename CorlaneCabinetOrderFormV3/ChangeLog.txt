@@ -37,3 +37,6 @@
 3.0.1.9
 	Hacky bugfix for drawerfrontheight1 textbox. Had to change update trigger to lostfocus to avoid issues with invalid input preventing updates.
 	Prevent entering custom species names when Custom isn't chosen for remainging cabinet types. Base cabinets were already done.
+
+3.0.1.10
+	Fixed infinite loop in ConvertDimension when numerator = 0
