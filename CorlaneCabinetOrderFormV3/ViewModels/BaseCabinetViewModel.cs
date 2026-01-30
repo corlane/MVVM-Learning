@@ -53,12 +53,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         Style = Style1;
         ListRolloutCount = [0, 1, 2];
 
-        // Testing for validation:
-
-
-        // End test
         LoadDefaults();
-        //ValidateAllProperties();
 
         if (_defaults != null)
         {
@@ -878,22 +873,26 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Combobox options
     public List<int> ComboShelfCount { get; } = [0, 1, 2, 3, 4, 5];
     public static List<string> TypeList => [Style1, Style2, Style3, Style4];
+
     public List<string> ListDrawerStyle { get; } =
     [
         "Blum Tandem H/Equivalent Undermount",
         "Accuride/Equivalent Sidemount"
     ];
+
     public List<int> ListDoorCount { get; } =
     [
         0,
         1,
         2
     ];
+
     public List<string> ListGrainDirection { get; } =
     [
         "Horizontal",
         "Vertical"
     ];
+
     public List<string> ListCabSpecies { get; } =
     [
         "Prefinished Ply",
@@ -909,6 +908,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         "Melamine",
         "Custom"
     ];
+
     public List<string> ListEBSpecies { get; } =
     [
         "None",
@@ -927,11 +927,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
         "Wood Mahogany",
         "Custom"
     ];
+
     public List<string> ListShelfDepth { get; } =
-        [
-            "Half Depth",
-            "Full Depth"
-        ];
+    [
+        CabinetOptions.ShelfDepth.HalfDepth,
+        CabinetOptions.ShelfDepth.FullDepth
+    ];
+
     public List<string> ListBackThickness
     {
         get
@@ -950,11 +952,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
             return [thin, thick];
         }
     }
+
     public List<string> ListTopType { get; } =
-        [
-            "Stretcher",
-            "Full"
-        ];
+    [
+        CabinetOptions.TopType.Stretcher,
+        CabinetOptions.TopType.Full
+    ];
+
     [ObservableProperty] public partial ObservableCollection<int> ListDrwCount { get; set; } = [];
     [ObservableProperty] public partial ObservableCollection<int> ListRolloutCount { get; set; } = [];
 
@@ -1386,7 +1390,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             if (DoorCount == 1)
             { DoorCount = 2; }
             DrwCount = 0;
-            TopType = "Full";
+            TopType = CabinetOptions.TopType.Full;
             BackThickness = "0.75"; // Force 3/4" back
         }
 
@@ -1394,7 +1398,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             DrwCount = 0;
             RolloutCount = 0;
-            TopType = "Full";
+            TopType = CabinetOptions.TopType.Full;
             BackThickness = "0.75"; // Force 3/4" back
         }
 
@@ -1554,7 +1558,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 if (DoorCount == 1)
                 { DoorCount = 2; }
                 DrwCount = 0;
-                TopType = "Full";
+                TopType = CabinetOptions.TopType.Full;
                 BackThickness = "0.75"; // Force 3/4" back
             }
 
@@ -1562,7 +1566,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             {
                 DrwCount = 0;
                 RolloutCount = 0;
-                TopType = "Full";
+                TopType = CabinetOptions.TopType.Full;
                 BackThickness = "0.75"; // Force 3/4" back
             }
 
@@ -1937,5 +1941,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 }
+
 
 

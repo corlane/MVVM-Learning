@@ -288,12 +288,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
             bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
 
             string thin = useFraction
-                ? ConvertDimension.DoubleToFraction(0.25)
-                : 0.25.ToString();
+                ? CabinetOptions.BackThickness.QuarterFraction
+                : CabinetOptions.BackThickness.QuarterDecimal;
 
             string thick = useFraction
-                ? ConvertDimension.DoubleToFraction(0.75)
-                : 0.75.ToString();
+                ? CabinetOptions.BackThickness.ThreeQuarterFraction
+                : CabinetOptions.BackThickness.ThreeQuarterDecimal;
 
             return [thin, thick];
         }
@@ -336,7 +336,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         if (Style == Style2 || Style == Style3)
         {
-            BackThickness = "0.75"; // Force 3/4" back
+            BackThickness = CabinetOptions.BackThickness.ThreeQuarterDecimal; // Force 3/4" back
         }
 
         var newCabinet = new UpperCabinetModel
@@ -502,7 +502,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
             if (Style == Style2 || Style == Style3)
             {
-                BackThickness = "0.75"; // Force 3/4" back
+                BackThickness = CabinetOptions.BackThickness.ThreeQuarterDecimal; // Force 3/4" back
             }
 
             selected.Width = ConvertDimension.FractionToDouble(Width).ToString();

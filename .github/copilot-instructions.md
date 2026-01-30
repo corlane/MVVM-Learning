@@ -1,10 +1,11 @@
-# Copilot Instructions
+﻿# Copilot Instructions
 
 ## General Guidelines
 - First general instruction
 - Second general instruction
 - Use concise, informal acknowledgments for simple bug identifications (e.g., 'classic copy-paste error').
 - Prefer minimal, low-impact code changes; avoid adding/changing too much code when addressing issues.
+- When generating patches, keep changes minimal and avoid accidental deletions of unrelated members (e.g., LoadDefaults/LoadSelectedIfMine). Aim for targeted diffs that only touch the requested areas.
 - Use a golden commit plus a refactor branch to safely perform potentially risky refactors with easy rollback.
 
 ## Code Style
