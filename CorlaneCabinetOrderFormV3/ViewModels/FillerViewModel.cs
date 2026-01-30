@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using CorlaneCabinetOrderFormV3.Rendering;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -147,7 +148,7 @@ public partial class FillerViewModel : ObservableValidator
             Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
             Species = Species,
             CustomSpecies = CustomSpecies,
-            EBSpecies = GetMatchingEdgebandingSpecies(Species),
+            EBSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(Species),
             Name = Name,
             Qty = Qty,
             Notes = Notes,
@@ -204,7 +205,7 @@ public partial class FillerViewModel : ObservableValidator
             selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
             selected.Species = Species;
             selected.CustomSpecies = CustomSpecies;
-            selected.EBSpecies = GetMatchingEdgebandingSpecies(Species);
+            selected.EBSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(Species);
             selected.Name = Name;
             selected.Qty = Qty;
             selected.Notes = Notes;
@@ -326,31 +327,4 @@ public partial class FillerViewModel : ObservableValidator
         // Request preview using the tab index owner token (Filler tab = 2)
         previewSvc.RequestPreview(2, model);
     }
-
-
-    private static string GetMatchingEdgebandingSpecies(string? fillerSpecies) // Helper to map common species/material names to edgebanding names
-    {
-        return fillerSpecies switch
-        {
-            null or "" => "None",
-
-            // Match common species/material names -> edgebanding names
-            string s when s.Contains("Alder", StringComparison.OrdinalIgnoreCase) => "Wood Alder",
-            string s when s.Contains("Cherry", StringComparison.OrdinalIgnoreCase) => "Wood Cherry",
-            string s when s.Contains("Hickory", StringComparison.OrdinalIgnoreCase) => "Wood Hickory",
-            string s when s.Contains("Mahogany", StringComparison.OrdinalIgnoreCase) => "Wood Mahogany",
-            string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-            string s when s.Contains("Maply Ply", StringComparison.OrdinalIgnoreCase) => "Wood Maple", // your example
-            string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "Melamine",
-            string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "PVC Hardrock Maple",
-            string s when s.Contains("PFP 1/4", StringComparison.OrdinalIgnoreCase) => "None",
-            string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
-            string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
-            string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
-
-            _ => "None"
-        };
-    }
-
 }

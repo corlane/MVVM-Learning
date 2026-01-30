@@ -1,4 +1,4 @@
-namespace CorlaneCabinetOrderFormV3.Models;
+﻿namespace CorlaneCabinetOrderFormV3.Models;
 
 public static class CabinetOptions
 {
@@ -11,6 +11,7 @@ public static class CabinetOptions
     public static class ShelfDepth
     {
         public const string HalfDepth = "Half Depth";
+        public const string FullDepth = "Full Depth";
     }
 
     public static class BackThickness
