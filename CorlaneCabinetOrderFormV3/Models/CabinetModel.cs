@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
 using System.Text.Json.Serialization;  // For polymorphism in save/load
 
 namespace CorlaneCabinetOrderFormV3.Models;
@@ -8,8 +9,6 @@ namespace CorlaneCabinetOrderFormV3.Models;
 [JsonDerivedType(typeof(UpperCabinetModel), "UpperCabinet")]
 [JsonDerivedType(typeof(FillerModel), "Filler")]
 [JsonDerivedType(typeof(PanelModel), "Panel")]
-// Add entries for future subtypes as you create them
-
 public abstract partial class CabinetModel : ObservableObject
 {
     // These properties are common to all cabinet types
@@ -26,6 +25,41 @@ public abstract partial class CabinetModel : ObservableObject
     [ObservableProperty] public partial int Qty { get; set; }
     [ObservableProperty] public partial string Notes { get; set; }
     [ObservableProperty] public partial string Style { get; set; }
+
+    [JsonIgnore]
+    public int GeometryVersion { get; private set; }
+
+    protected CabinetModel()
+    {
+        PropertyChanged += OnAnyPropertyChanged;
+    }
+
+    protected void BumpGeometryVersion()
+    {
+        GeometryVersion++;
+    }
+
+    private void OnAnyPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        // Avoid infinite loop: changing GeometryVersion would raise PropertyChanged again.
+        if (string.Equals(e.PropertyName, nameof(GeometryVersion), StringComparison.Ordinal))
+            return;
+
+        // Base geometry-affecting properties
+        if (e.PropertyName is nameof(Width)
+            or nameof(Height)
+            or nameof(Depth)
+            or nameof(Species)
+            or nameof(CustomSpecies)
+            or nameof(EBSpecies)
+            or nameof(CustomEBSpecies)
+            or nameof(Style)
+            or nameof(MaterialThickness34)
+            or nameof(MaterialThickness14))
+        {
+            BumpGeometryVersion();
+        }
+    }
 
     public virtual string CabinetType =>
         this switch
@@ -45,7 +79,6 @@ public abstract partial class CabinetModel : ObservableObject
     [JsonIgnore]
     public Dictionary<string, double> EdgeBandingLengthBySpecies { get; } = new(StringComparer.OrdinalIgnoreCase);
 
-    // Door Sizes accumulator (populated by the 3D builder)
     [JsonIgnore]
     public List<FrontPartRow> FrontParts { get; } = new();
 
@@ -62,7 +95,7 @@ public abstract partial class CabinetModel : ObservableObject
         FrontParts.Clear();
         DrawerBoxes.Clear();
     }
-    // Convenience computed totals
+
     [JsonIgnore]
     public double TotalMaterialAreaFt2 => MaterialAreaBySpecies.Values.Sum();
 

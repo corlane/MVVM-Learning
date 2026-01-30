@@ -40,3 +40,6 @@
 
 3.0.1.10
 	Fixed infinite loop in ConvertDimension when numerator = 0
+
+3.0.1.11
+	

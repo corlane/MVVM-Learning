@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CorlaneCabinetOrderFormV3.ViewModels;
 
 namespace CorlaneCabinetOrderFormV3.Models;
 
@@ -75,4 +74,41 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool SinkCabinet { get; set; }
     [ObservableProperty] public partial bool TrashDrawer { get; set; }
 
+    private void BumpGeometry() => BumpGeometryVersion();
+
+    partial void OnLeftBackWidthChanged(string value) => BumpGeometry();
+    partial void OnRightBackWidthChanged(string value) => BumpGeometry();
+    partial void OnLeftFrontWidthChanged(string value) => BumpGeometry();
+    partial void OnRightFrontWidthChanged(string value) => BumpGeometry();
+    partial void OnLeftDepthChanged(string value) => BumpGeometry();
+    partial void OnRightDepthChanged(string value) => BumpGeometry();
+    partial void OnHasTKChanged(bool value) => BumpGeometry();
+    partial void OnTKHeightChanged(string value) => BumpGeometry();
+    partial void OnTKDepthChanged(string value) => BumpGeometry();
+    partial void OnBackThicknessChanged(string value) => BumpGeometry();
+    partial void OnTopTypeChanged(string value) => BumpGeometry();
+    partial void OnShelfCountChanged(int value) => BumpGeometry();
+    partial void OnShelfDepthChanged(string value) => BumpGeometry();
+
+    partial void OnDoorCountChanged(int value) => BumpGeometry();
+    partial void OnDoorSpeciesChanged(string value) => BumpGeometry();
+    partial void OnCustomDoorSpeciesChanged(string value) => BumpGeometry();
+    partial void OnDoorGrainDirChanged(string value) => BumpGeometry();
+
+    partial void OnDrwCountChanged(int value) => BumpGeometry();
+    partial void OnDrwStyleChanged(string value) => BumpGeometry();
+    partial void OnOpeningHeight1Changed(string value) => BumpGeometry();
+    partial void OnOpeningHeight2Changed(string value) => BumpGeometry();
+    partial void OnOpeningHeight3Changed(string value) => BumpGeometry();
+    partial void OnOpeningHeight4Changed(string value) => BumpGeometry();
+    partial void OnDrwFrontHeight1Changed(string value) => BumpGeometry();
+    partial void OnDrwFrontHeight2Changed(string value) => BumpGeometry();
+    partial void OnDrwFrontHeight3Changed(string value) => BumpGeometry();
+    partial void OnDrwFrontHeight4Changed(string value) => BumpGeometry();
+
+    partial void OnLeftRevealChanged(string value) => BumpGeometry();
+    partial void OnRightRevealChanged(string value) => BumpGeometry();
+    partial void OnTopRevealChanged(string value) => BumpGeometry();
+    partial void OnBottomRevealChanged(string value) => BumpGeometry();
+    partial void OnGapWidthChanged(string value) => BumpGeometry();
 }

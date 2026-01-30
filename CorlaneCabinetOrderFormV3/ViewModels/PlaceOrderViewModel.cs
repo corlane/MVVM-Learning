@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
@@ -422,7 +423,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             {
                 try
                 {
-                    string upperCabExtraEbSpecies = GetMatchingEdgebandingSpecies(cab.Species); // sets species extra banding on bottom of upper cabinet end panels
+                    string upperCabExtraEbSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(cab.Species); // sets species extra banding on bottom of upper cabinet end panels
 
                     if (cab.MaterialAreaBySpecies != null)
                     {
@@ -473,31 +474,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
 
             return (aggMaterials, aggEdgebanding);
-        }
-
-        private static string GetMatchingEdgebandingSpecies(string? species) // Helper to map common species/material names to edgebanding names
-        {
-            return species switch
-            {
-                null or "" => "None",
-
-                // Match common species/material names -> edgebanding names
-                string s when s.Contains("Alder", StringComparison.OrdinalIgnoreCase) => "Wood Alder",
-                string s when s.Contains("Cherry", StringComparison.OrdinalIgnoreCase) => "Wood Cherry",
-                string s when s.Contains("Hickory", StringComparison.OrdinalIgnoreCase) => "Wood Hickory",
-                string s when s.Contains("Mahogany", StringComparison.OrdinalIgnoreCase) => "Wood Mahogany",
-                string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-                string s when s.Contains("Maply Ply", StringComparison.OrdinalIgnoreCase) => "Wood Maple", // your example
-                string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-                string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "PVC Custom",
-                string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "PVC Hardrock Maple",
-                string s when s.Contains("PFP 1/4", StringComparison.OrdinalIgnoreCase) => "None",
-                string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
-                string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
-                string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
-
-                _ => "None"
-            };
         }
 
         private decimal UpdateMaterialTotalsAndReturnTotal(Dictionary<string, double> materials, Dictionary<string, double> edgebanding)

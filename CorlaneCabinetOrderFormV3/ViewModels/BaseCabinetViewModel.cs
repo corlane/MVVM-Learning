@@ -5,13 +5,10 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -77,10 +74,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
 
     // Base cabinet type strings
-    public static string Style1 => "Standard";
-    public static string Style2 => "Drawer";
-    public static string Style3 => "90° Corner";
-    public static string Style4 => "Angle Front";
+    public static string Style1 => CabinetStyles.Base.Standard;
+    public static string Style2 => CabinetStyles.Base.Drawer;
+    public static string Style3 => CabinetStyles.Base.Corner90;
+    public static string Style4 => CabinetStyles.Base.AngleFront;
 
     // Common properties from CabinetModel
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string oldValue, string newValue)

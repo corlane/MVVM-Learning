@@ -66,86 +66,60 @@ public partial class POBatchListViewModel : ObservableObject
         for (int i = 0; i < _cabinetService.Cabinets.Count; i++)
         {
             string CabinetDirectory = "corlane system\\";
+            CabinetStyle = "";
 
             var cab = _cabinetService.Cabinets[i];
 
             var modelName = BuildModelName(cab);
             var qty = Math.Max(1, cab.Qty);
 
-            var isCornerOrAngleFront =
-                (cab.Style?.Contains("Corner", StringComparison.OrdinalIgnoreCase) ?? false) ||
-                (cab.Style?.Contains("Angle", StringComparison.OrdinalIgnoreCase) ?? false);
+            var style = cab.Style ?? "";
+
+            var isCornerOrAngleFront = IsCornerOrAngle(style);
 
             var height = ToDouble(cab.Height);
             var width = isCornerOrAngleFront ? 0d : ToDouble(cab.Width);
             var depth = isCornerOrAngleFront ? 0d : ToDouble(cab.Depth);
 
-            if (cab.CabinetType.Contains("Base"))
+            if (cab is BaseCabinetModel baseCab)
             {
                 CabinetDirectory += "base\\";
-                if (cab.Style.Contains("Standard"))
-                {
-                    CabinetStyle = "standard";
-                }
-                if (cab.Style.Contains("Drawer"))
-                {
-                    CabinetStyle = "drawer";
-                }
-                if (cab.Style.Contains("90"))
-                {
-                    CabinetStyle = "90 corner";
-                }
-                if (cab.Style.Contains("Angle"))
-                {
-                    CabinetStyle = "angle front";
-                }
+                CabinetStyle = GetBaseCabinetStyleDirectorySegment(style);
 
-                var baseCab = cab as BaseCabinetModel;
-                if (baseCab.BackThickness == "0.25" || baseCab.BackThickness == "1/4")
+                if (string.Equals(baseCab.BackThickness, "0.25", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(baseCab.BackThickness, "1/4", StringComparison.OrdinalIgnoreCase))
                 {
                     CabinetStyle += "\\1-4";
                 }
-                else if (baseCab.BackThickness == "0.75" || baseCab.BackThickness == "3/4")
+                else if (string.Equals(baseCab.BackThickness, "0.75", StringComparison.OrdinalIgnoreCase) ||
+                         string.Equals(baseCab.BackThickness, "3/4", StringComparison.OrdinalIgnoreCase))
                 {
                     CabinetStyle += "\\3-4";
                 }
             }
-
-            if (cab.CabinetType.Contains("Upper"))
+            else if (cab is UpperCabinetModel upperCab)
             {
                 CabinetDirectory += "upper\\";
-                if (cab.Style.Contains("Standard"))
-                {
-                    CabinetStyle = "standard";
-                }
-                if (cab.Style.Contains("90"))
-                {
-                    CabinetStyle = "90 corner";
-                }
-                if (cab.Style.Contains("Angle"))
-                {
-                    CabinetStyle = "angle front";
-                }
+                CabinetStyle = GetUpperCabinetStyleDirectorySegment(style);
 
-                var upperCab = cab as UpperCabinetModel;
-                if (upperCab.BackThickness == "0.25" || upperCab.BackThickness == "1/4")
+                if (string.Equals(upperCab.BackThickness, "0.25", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(upperCab.BackThickness, "1/4", StringComparison.OrdinalIgnoreCase))
                 {
                     CabinetStyle += "\\1-4";
                 }
-                else if (upperCab.BackThickness == "0.75" || upperCab.BackThickness == "3/4")
+                else if (string.Equals(upperCab.BackThickness, "0.75", StringComparison.OrdinalIgnoreCase) ||
+                         string.Equals(upperCab.BackThickness, "3/4", StringComparison.OrdinalIgnoreCase))
                 {
                     CabinetStyle += "\\3-4";
                 }
 
             }
-
-            if (cab.CabinetType.Contains("Filler"))
+            else if (cab is FillerModel)
             {
                 CabinetDirectory += "filler";
                 CabinetStyle = "";
             }
-
-            if (cab.CabinetType.Contains("Panel"))
+            else if (cab is PanelModel)
             {
                 CabinetDirectory += "panel";
                 CabinetStyle = "";
@@ -165,6 +139,57 @@ public partial class POBatchListViewModel : ObservableObject
 
             TotalCabinetEntries += qty;
         }
+    }
+
+    private static bool IsCornerOrAngle(string style)
+        => string.Equals(style, CabinetStyles.Base.Corner90, StringComparison.OrdinalIgnoreCase) ||
+           string.Equals(style, CabinetStyles.Base.AngleFront, StringComparison.OrdinalIgnoreCase) ||
+           string.Equals(style, CabinetStyles.Upper.Corner90, StringComparison.OrdinalIgnoreCase) ||
+           string.Equals(style, CabinetStyles.Upper.AngleFront, StringComparison.OrdinalIgnoreCase);
+
+    private static string GetBaseCabinetStyleDirectorySegment(string style)
+    {
+        if (string.Equals(style, CabinetStyles.Base.Standard, StringComparison.OrdinalIgnoreCase))
+        {
+            return "standard";
+        }
+
+        if (string.Equals(style, CabinetStyles.Base.Drawer, StringComparison.OrdinalIgnoreCase))
+        {
+            return "drawer";
+        }
+
+        if (string.Equals(style, CabinetStyles.Base.Corner90, StringComparison.OrdinalIgnoreCase))
+        {
+            return "90 corner";
+        }
+
+        if (string.Equals(style, CabinetStyles.Base.AngleFront, StringComparison.OrdinalIgnoreCase))
+        {
+            return "angle front";
+        }
+
+        return "";
+    }
+
+    private static string GetUpperCabinetStyleDirectorySegment(string style)
+    {
+        if (string.Equals(style, CabinetStyles.Upper.Standard, StringComparison.OrdinalIgnoreCase))
+        {
+            return "standard";
+        }
+
+        if (string.Equals(style, CabinetStyles.Upper.Corner90, StringComparison.OrdinalIgnoreCase))
+        {
+            return "90 corner";
+        }
+
+        if (string.Equals(style, CabinetStyles.Upper.AngleFront, StringComparison.OrdinalIgnoreCase))
+        {
+            return "angle front";
+        }
+
+        return "";
     }
 
     private static double ToDouble(string? value)
@@ -305,22 +330,19 @@ public partial class POBatchListViewModel : ObservableObject
 
             var style = c.Style ?? "";
 
-            // Explicit per your rule:
-            // Upper: S=Standard, C=90° Corner, A=Angle Front
             if (c is UpperCabinetModel)
             {
-                if (style.Contains("Standard", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(style, CabinetStyles.Upper.Standard, StringComparison.OrdinalIgnoreCase))
                 {
                     return "S";
                 }
 
-                if (style.Contains("90", StringComparison.OrdinalIgnoreCase) ||
-                    style.Contains("Corner", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(style, CabinetStyles.Upper.Corner90, StringComparison.OrdinalIgnoreCase))
                 {
                     return "C";
                 }
 
-                if (style.Contains("Angle", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(style, CabinetStyles.Upper.AngleFront, StringComparison.OrdinalIgnoreCase))
                 {
                     return "A";
                 }
@@ -328,24 +350,22 @@ public partial class POBatchListViewModel : ObservableObject
                 return "X";
             }
 
-            // Base: S=Standard, D=Drawer, C=90° Corner, A=Angle Front
-            if (style.Contains("Standard", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(style, CabinetStyles.Base.Standard, StringComparison.OrdinalIgnoreCase))
             {
                 return "S";
             }
 
-            if (style.Contains("Drawer", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(style, CabinetStyles.Base.Drawer, StringComparison.OrdinalIgnoreCase))
             {
                 return "D";
             }
 
-            if (style.Contains("90", StringComparison.OrdinalIgnoreCase) ||
-                style.Contains("Corner", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(style, CabinetStyles.Base.Corner90, StringComparison.OrdinalIgnoreCase))
             {
                 return "C";
             }
 
-            if (style.Contains("Angle", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(style, CabinetStyles.Base.AngleFront, StringComparison.OrdinalIgnoreCase))
             {
                 return "A";
             }
@@ -363,24 +383,16 @@ public partial class POBatchListViewModel : ObservableObject
 
             if (c is BaseCabinetModel b)
             {
-                var topType = b.TopType ?? "";
+                var topType = (b.TopType ?? "").Trim();
 
-                if (topType.Contains("Stretcher", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(topType, CabinetOptions.TopType.Stretcher, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(topType, "S", StringComparison.OrdinalIgnoreCase))
                 {
                     return "S";
                 }
 
-                if (topType.Contains("Full", StringComparison.OrdinalIgnoreCase))
-                {
-                    return "F";
-                }
-
-                if (string.Equals(topType.Trim(), "S", StringComparison.OrdinalIgnoreCase))
-                {
-                    return "S";
-                }
-
-                if (string.Equals(topType.Trim(), "F", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(topType, CabinetOptions.TopType.Full, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(topType, "F", StringComparison.OrdinalIgnoreCase))
                 {
                     return "F";
                 }
@@ -399,17 +411,17 @@ public partial class POBatchListViewModel : ObservableObject
             var t = backThickness.Trim();
 
             if (string.Equals(t, "1", StringComparison.OrdinalIgnoreCase) ||
-                t.Contains("1/4", StringComparison.OrdinalIgnoreCase) ||
-                t.Contains(".25", StringComparison.OrdinalIgnoreCase) ||
-                t.Contains("0.25", StringComparison.OrdinalIgnoreCase))
+                string.Equals(t, CabinetOptions.BackThickness.QuarterFraction, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(t, CabinetOptions.BackThickness.QuarterDecimal, StringComparison.OrdinalIgnoreCase) ||
+                t.Contains(".25", StringComparison.OrdinalIgnoreCase)) // keep supporting this legacy input
             {
                 return "1";
             }
 
             if (string.Equals(t, "3", StringComparison.OrdinalIgnoreCase) ||
-                t.Contains("3/4", StringComparison.OrdinalIgnoreCase) ||
-                t.Contains(".75", StringComparison.OrdinalIgnoreCase) ||
-                t.Contains("0.75", StringComparison.OrdinalIgnoreCase))
+                string.Equals(t, CabinetOptions.BackThickness.ThreeQuarterFraction, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(t, CabinetOptions.BackThickness.ThreeQuarterDecimal, StringComparison.OrdinalIgnoreCase) ||
+                t.Contains(".75", StringComparison.OrdinalIgnoreCase)) // keep supporting this legacy input
             {
                 return "3";
             }
@@ -429,27 +441,29 @@ public partial class POBatchListViewModel : ObservableObject
                 return "X";
             }
 
-            if (style.Contains("Drawer", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(style, CabinetStyles.Base.Drawer, StringComparison.OrdinalIgnoreCase))
             {
                 return "X";
             }
 
             bool supportsHalfDepth =
-                style.Contains("Standard", StringComparison.OrdinalIgnoreCase) ||
-                style.Contains("90", StringComparison.OrdinalIgnoreCase) ||
-                style.Contains("Corner", StringComparison.OrdinalIgnoreCase) ||
-                style.Contains("Angle", StringComparison.OrdinalIgnoreCase);
+                string.Equals(style, CabinetStyles.Base.Standard, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(style, CabinetStyles.Base.Corner90, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(style, CabinetStyles.Base.AngleFront, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(style, CabinetStyles.Upper.Standard, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(style, CabinetStyles.Upper.Corner90, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(style, CabinetStyles.Upper.AngleFront, StringComparison.OrdinalIgnoreCase);
 
             if (!supportsHalfDepth)
             {
                 return "F";
             }
-            
-            return string.Equals(shelfDepth?.Trim(), "Half Depth", StringComparison.OrdinalIgnoreCase)
+
+            return string.Equals(shelfDepth?.Trim(), CabinetOptions.ShelfDepth.HalfDepth, StringComparison.OrdinalIgnoreCase)
                 ? "H"
                 : "F";
         }
-        
+
         var type = TypeCode(cab);
         var styleCode = StyleCode(cab);
         var topType = TopTypeCode(cab);

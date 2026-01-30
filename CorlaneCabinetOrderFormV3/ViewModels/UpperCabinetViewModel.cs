@@ -6,7 +6,6 @@ using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -67,9 +66,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
 
     // Upper cabinet type strings
-    public static string Style1 => "Standard";
-    public static string Style2 => "90° Corner";
-    public static string Style3 => "Angle Front";
+    public static string Style1 => CabinetStyles.Upper.Standard;
+    public static string Style2 => CabinetStyles.Upper.Corner90;
+    public static string Style3 => CabinetStyles.Upper.AngleFront;
 
     // Common properties from CabinetModel
     [ObservableProperty] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string value)
