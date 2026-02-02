@@ -12,8 +12,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="{Binding AppTitle}" 
-        Height="1100" Width="1800"
-        MinHeight="1100" MinWidth="1800"
+        Height="1000" Width="1800"
+        MinHeight="800" MinWidth="1800"
         Background="{DynamicResource ABrush.Tone1.Background.Static}"
         Closing="MainWindow_Closing"
         >
@@ -107,6 +107,9 @@
                         <MenuItem Header="Print Cabinet List" Command="{Binding PrintCabinetListCommand}" FontSize="16" Margin="5"/>
                         <MenuItem Header="Print Door List" Command="{Binding PrintDoorListCommand}" FontSize="16" Margin="5"/>
                         <MenuItem Header="Print Drawer Box List" Command="{Binding PrintDrawerBoxListCommand}" FontSize="16" Margin="5"/>
+                        <MenuItem Header="Export Cabinet List to *.csv (will allow opening in Excel, etc.)" Command="{Binding ExportCabinetListCommand}" FontSize="16" Margin="5"/>
+                        <MenuItem Header="Export Door List to *.csv (will allow opening in Excel, etc.)" Command="{Binding ExportDoorListCommand}" FontSize="16" Margin="5"/>
+                        <MenuItem Header="Export Drawer Box List to *.csv (will allow opening in Excel, etc.)" Command="{Binding ExportDrawerBoxListCommand}" FontSize="16" Margin="5"/>
                     </ContextMenu>
                 </Button.ContextMenu>
 
