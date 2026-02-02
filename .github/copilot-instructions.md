@@ -12,6 +12,7 @@
 - Use specific formatting rules
 - Follow naming conventions
 - Refactor helper/rendering code into internal static classes under the CorlaneCabinetOrderFormV3.Rendering namespace. User confirmed preference to place rendering/geometry helpers in these classes.
+- Prefer small helpers (e.g., ApplyTransformAndAdd) to reduce duplicated CreatePanel + ApplyTransform + Add patterns.
 
 ## Project-Specific Rules
 - When Door/Drawer size lists depend on CabinetModel accumulators, ensure that AccumulateMaterialAndEdgeTotals runs synchronously (using Dispatcher.Invoke) to avoid missing the last/only cabinet due to BeginInvoke timing.
@@ -19,3 +20,4 @@
 - Ensure drawer front height TextBox inputs maintain `UpdateSourceTrigger=PropertyChanged` while allowing in-progress fraction states (e.g., "1/", "1 1/") without being overwritten by recalculation logic.
 - When refactoring rendering/geometry logic, place it in internal static classes under the CorlaneCabinetOrderFormV3.Rendering namespace.
 - Hidden cabinet parts are visual-only; however, they must still contribute to material and edge totals. When building material/edge totals, always include all cabinet parts; BOM calculations should ignore preview hide flags, and totals must always be computed for the full cabinet regardless of hidden parts. User confirmed requirement: preview hide toggles are visualization-only; material/edge totals must always include hidden parts.
+- Avoid sharing Model3DGroup instances across multiple parents.
