@@ -13,7 +13,7 @@
 - Follow naming conventions
 - Refactor helper/rendering code into internal static classes under the CorlaneCabinetOrderFormV3.Rendering namespace. User confirmed preference to place rendering/geometry helpers in these classes.
 - Prefer small helpers (e.g., ApplyTransformAndAdd) to reduce duplicated CreatePanel + ApplyTransform + Add patterns.
-- Do not introduce a combined helper `CreatePanelAndTransform`; prefer explicit `CabinetPartFactory.CreatePanel` followed by `ModelTransforms.ApplyTransform` for readability in BaseCabinetBuilder.cs.
+- Do not introduce a combined helper `CreatePanelAndTransform`; prefer explicit `CabinetPartFactory.CreatePanel` followed by `ModelTransforms.ApplyTransform` for readability in BaseCabinetBuilder.cs. Additionally, do not replace rotation angle literals (e.g., 90) with named constants; prefer literal angles for readability.
 
 ## Project-Specific Rules
 - When Door/Drawer size lists depend on CabinetModel accumulators, ensure that AccumulateMaterialAndEdgeTotals runs synchronously (using Dispatcher.Invoke) to avoid missing the last/only cabinet due to BeginInvoke timing.

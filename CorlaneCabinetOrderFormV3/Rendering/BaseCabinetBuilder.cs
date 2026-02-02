@@ -2,6 +2,7 @@
 using CorlaneCabinetOrderFormV3.Models;
 using System.Windows.Media.Media3D;
 
+
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static class BaseCabinetBuilder
@@ -538,213 +539,52 @@ internal static class BaseCabinetBuilder
             }
 
 
-            // Drawer Fronts
+            // Drawer Fronts (grouped)
             double drwFrontWidth = width - (doorSideReveal * 2);
 
-            if (baseCab.IncDrwFront1 || baseCab.IncDrwFront2 || baseCab.IncDrwFront3 || baseCab.IncDrwFront4 || baseCab.IncDrwFrontInList1 || baseCab.IncDrwFrontInList2 || baseCab.IncDrwFrontInList3 || baseCab.IncDrwFrontInList4)
+            // Only group and emit fronts up to the drawer count (max 4)
+            var doorSpeciesForTotalsForDrw = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
+
+            double[] drwHeights = new[] { drwFront1Height, drwFront2Height, drwFront3Height, drwFront4Height };
+            bool[] incFront = new[] { baseCab.IncDrwFront1, baseCab.IncDrwFront2, baseCab.IncDrwFront3, baseCab.IncDrwFront4 };
+            bool[] incFrontInList = new[] { baseCab.IncDrwFrontInList1, baseCab.IncDrwFrontInList2, baseCab.IncDrwFrontInList3, baseCab.IncDrwFrontInList4 };
+
+            int maxFronts = Math.Min(4, Math.Max(0, baseCab.DrwCount));
+            for (int fi = 0; fi < maxFronts; fi++)
             {
-                var doorSpeciesForTotals = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
+                double h = drwHeights[fi];
 
-                if (cabType == style1 && baseCab.DrwCount == 1 && baseCab.IncDrwFront1 || cabType == style1 && baseCab.DrwCount == 1 && baseCab.IncDrwFrontInList1)
+                // Add to front list if requested
+                if (incFrontInList[fi])
                 {
-                    drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1);
-
-                    drwFrontPoints =
-                    [
-                        new (0,0,0),
-                        new (drwFrontWidth,0,0),
-                        new (drwFrontWidth,drwFront1Height,0),
-                        new (0,drwFront1Height,0)
-                    ];
-
-                    //Debug.WriteLine("Drw Front");
-                    if (baseCab.IncDrwFrontInList1)
-                    {
-                        addFrontPartRow(baseCab, "Drawer Front 1", drwFront1Height, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
-                    }
-
-                    if (baseCab.IncDrwFront1)
-                    {
-                        drwFront1 = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
-                        ModelTransforms.ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
-                        cabinet.Children.Add(drwFront1);
-                    }
+                    addFrontPartRow(baseCab, $"Drawer Front {fi + 1}", h, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
                 }
 
-                if (cabType == "Drawer")
-                {
-                    if (baseCab.DrwCount == 1 && baseCab.IncDrwFront1 || baseCab.DrwCount == 1 && baseCab.IncDrwFrontInList1)
-                    {
-                        drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1);
+                if (!incFront[fi]) continue;
 
-                        drwFrontPoints =
-                        [
-                            new (0,0,0),
-                            new (drwFrontWidth,0,0),
-                            new (drwFrontWidth,drwFront1Height,0),
-                            new (0,drwFront1Height,0)
-                        ];
-                        //Debug.WriteLine("Drw Front");
+                // Build points for this drawer front
+                drwFrontPoints =
+                [
+                    new (0,0,0),
+                    new (drwFrontWidth,0,0),
+                    new (drwFrontWidth,h,0),
+                    new (0,h,0)
+                ];
 
-                        if (baseCab.IncDrwFrontInList1)
-                        {
-                            addFrontPartRow(baseCab, "Drawer Front 1", drwFront1Height, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
-                        }
+                // cumulative height from top including this front
+                double cumulativeHeight = 0;
+                for (int k = 0; k <= fi; k++) cumulativeHeight += drwHeights[k];
 
-                        if (baseCab.IncDrwFront1)
-                        {
-                            drwFront1 = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
-                            ModelTransforms.ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
-                            cabinet.Children.Add(drwFront1);
-                        }
-                    }
+                // Y position: top origin minus topReveal minus cumulative heights minus gaps between fronts
+                double yPos = height - doorTopReveal - cumulativeHeight - (fi * baseDoorGap);
 
-                    if (baseCab.DrwCount > 1)
-                    {
-                        // Top Drawer
-                        if (baseCab.IncDrwFront1 || baseCab.IncDrwFrontInList1)
-                        {
-                            drwFront1Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1);
-
-                            drwFrontPoints =
-                            [
-                                new (0,0,0),
-                                new (drwFrontWidth,0,0),
-                                new (drwFrontWidth,drwFront1Height,0),
-                                new (0,drwFront1Height,0)
-                            ];
-                            //Debug.WriteLine("Drw Front");
-
-                            if (baseCab.IncDrwFrontInList1)
-                            {
-                                addFrontPartRow(baseCab, "Drawer Front 1", drwFront1Height, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
-                            }
-
-                            if (baseCab.IncDrwFront1)
-                            {
-                                drwFront1 = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
-                                ModelTransforms.ApplyTransform(drwFront1, -(width / 2) + doorLeftReveal, height - drwFront1Height - doorTopReveal, depth, 0, 0, 0);
-                                cabinet.Children.Add(drwFront1);
-                            }
-                        }
-
-                        // Second Drawer
-
-                        if (baseCab.IncDrwFront2 || baseCab.IncDrwFrontInList2)
-                        {
-                            if (baseCab.DrwCount == 2) // if true, this is the bottom drawer
-                            {
-                                drwFront2Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight2);
-                            }
-
-                            drwFrontPoints =
-                            [
-                                new (0,0,0),
-                                new (drwFrontWidth,0,0),
-                                new (drwFrontWidth,drwFront2Height,0),
-                                new (0,drwFront2Height,0)
-                            ];
-                            //Debug.WriteLine("Drw Front");
-
-                            if (baseCab.IncDrwFrontInList2)
-                            {
-                                addFrontPartRow(baseCab, "Drawer Front 2", drwFront2Height, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
-                            }
-
-                            if (baseCab.IncDrwFront2)
-                            {
-                                drwFront2 = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
-                                ModelTransforms.ApplyTransform(drwFront2,
-                                    -(width / 2) + doorLeftReveal,
-                                    height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height,
-                                    depth,
-                                    0, 0, 0);
-
-                                cabinet.Children.Add(drwFront2);
-                            }
-                        }
-
-                        if (baseCab.DrwCount > 2)
-                        {
-                            // Third Drawer
-                            if (baseCab.IncDrwFront3 || baseCab.IncDrwFrontInList3)
-                            {
-                                if (baseCab.DrwCount == 3) // if true, this is the bottom drawer
-                                {
-                                    drwFront3Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight3);
-                                }
-
-                                drwFrontPoints =
-                                [
-                                    new (0,0,0),
-                                    new (drwFrontWidth,0,0),
-                                    new (drwFrontWidth,drwFront3Height,0),
-                                    new (0,drwFront3Height,0)
-                                ];
-                                //Debug.WriteLine("Drw Front");
-
-                                if (baseCab.IncDrwFrontInList3)
-                                {
-                                    addFrontPartRow(baseCab, "Drawer Front 3", drwFront3Height, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
-                                }
-
-                                if (baseCab.IncDrwFront3)
-                                {
-                                    drwFront3 = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
-                                    ModelTransforms.ApplyTransform(drwFront3,
-                                        -(width / 2) + doorLeftReveal,
-                                        height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height - baseDoorGap - drwFront3Height,
-                                        depth,
-                                        0, 0, 0);
-
-                                    cabinet.Children.Add(drwFront3);
-                                }
-                            }
-
-                        }
-
-                        // Fourth Drawer
-                        if (baseCab.DrwCount > 3)
-                        {
-                            if (baseCab.IncDrwFront4 || baseCab.IncDrwFrontInList4)
-                            {
-                                if (baseCab.DrwCount == 4) // if true, this is the bottom drawer
-                                {
-                                    drwFront4Height = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight4);
-                                }
-
-                                drwFrontPoints =
-                                [
-                                    new (0,0,0),
-                                    new (drwFrontWidth,0,0),
-                                    new (drwFrontWidth,drwFront4Height,0),
-                                    new (0,drwFront4Height,0)
-                                ];
-                                //Debug.WriteLine("Drw Front");
-
-                                if (baseCab.IncDrwFrontInList4)
-                                {
-                                    addFrontPartRow(baseCab, "Drawer Front 4", drwFront4Height, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
-                                }
-
-                                if (baseCab.IncDrwFront4)
-                                {
-                                    drwFront4 = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
-                                    ModelTransforms.ApplyTransform(drwFront4,
-                                        -(width / 2) + doorLeftReveal,
-                                        height - doorTopReveal - drwFront1Height - baseDoorGap - drwFront2Height - baseDoorGap - drwFront3Height - baseDoorGap - drwFront4Height,
-                                        depth,
-                                        0, 0, 0);
-
-                                    cabinet.Children.Add(drwFront4);
-                                }
-                            }
-                        }
-                    }
-                }
+                var front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false);
+                ModelTransforms.ApplyTransform(front, -(width / 2) + doorLeftReveal, yPos, depth, 0, 0, 0);
+                cabinet.Children.Add(front);
             }
 
-            // Drawer Boxes
+
+            // Drawer Boxes (grouped)
             if (baseCab.DrwCount > 0)
             {
                 if (baseCab.IncDrwBoxOpening1 || baseCab.IncDrwBoxOpening2 || baseCab.IncDrwBoxOpening3 || baseCab.IncDrwBoxOpening4 || baseCab.IncDrwBoxInListOpening1 || baseCab.IncDrwBoxInListOpening2 || baseCab.IncDrwBoxInListOpening3 || baseCab.IncDrwBoxInListOpening4)
@@ -771,86 +611,48 @@ internal static class BaseCabinetBuilder
                         }
                     }
 
-                    dbxHeight = opening1Height - topSpacing - bottomSpacing;
+                    // Prepare arrays for opening heights and flags
+                    double[] openingHeights = new[] { opening1Height, opening2Height, opening3Height, opening4Height };
+                    bool[] incBoxOpening = new[] { baseCab.IncDrwBoxOpening1, baseCab.IncDrwBoxOpening2, baseCab.IncDrwBoxOpening3, baseCab.IncDrwBoxOpening4 };
+                    bool[] incBoxInList = new[] { baseCab.IncDrwBoxInListOpening1, baseCab.IncDrwBoxInListOpening2, baseCab.IncDrwBoxInListOpening3, baseCab.IncDrwBoxInListOpening4 };
 
-                    if (baseCab.IncDrwBoxInListOpening1 && baseCab.DrwCount > 0)
+                    // Loop openings 1..4
+                    for (int oi = 0; oi < 4; oi++)
                     {
-                        addDrawerBoxRow(baseCab, "Drawer Box 1", dbxHeight, dbxWidth, dbxDepth);
-                    }
+                        int openingIndex = oi + 1;
+                        if (baseCab.DrwCount < openingIndex) break; // no more openings than drawer count
 
-                    if (baseCab.IncDrwBoxOpening1)
-                    {
-                        // Build drawer box rotate-group and position it (encapsulated)
-                        var dbx1rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
-                        Model3DGroup dbx1 = new();
-                        dbx1.Children.Add(dbx1rotate);
-                        ModelTransforms.ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
-                        cabinet.Children.Add(dbx1);
-                    }
+                        // compute dbxHeight for this opening
+                        dbxHeight = openingHeights[oi] - topSpacing - bottomSpacing;
 
-                    //if (baseCab.IncDrwBoxInListOpening2 && baseCab.DrwCount > 1)
-                    //{ ... }
-
-                    if (baseCab.IncDrwBoxOpening2 && baseCab.DrwCount > 1)
-                    {
-                        dbxHeight = opening2Height - topSpacing - bottomSpacing;
-                        if (baseCab.DrwCount > 2) // if true this is a middle drawer and needs additional bottom spacing
+                        // middle-drawer adjustments: if there are drawers below this opening, apply the special bottom spacing adjustment
+                        if (baseCab.DrwCount > openingIndex)
                         {
                             dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
                         }
 
-                        var dbx2rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
-                        Model3DGroup dbx2 = new();
-                        dbx2.Children.Add(dbx2rotate);
-                        ModelTransforms.ApplyTransform(dbx2, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
-                        cabinet.Children.Add(dbx2);
-
-                        if (baseCab.IncDrwBoxInListOpening2 && baseCab.DrwCount > 1)
+                        // add to list if requested (keeps previous behavior of listing even if model not created)
+                        if (incBoxInList[oi])
                         {
-                            //dbxHeight = opening2Height - topSpacing - bottomSpacing;
-                            addDrawerBoxRow(baseCab, "Drawer Box 2", dbxHeight, dbxWidth, dbxDepth);
+                            addDrawerBoxRow(baseCab, $"Drawer Box {openingIndex}", dbxHeight, dbxWidth, dbxDepth);
                         }
 
-                    }
+                        // create model if requested
+                        if (!incBoxOpening[oi]) continue;
 
+                        var dbxRotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
+                        Model3DGroup dbxGroup = new();
+                        dbxGroup.Children.Add(dbxRotate);
 
-                    if (baseCab.IncDrwBoxOpening3 && baseCab.DrwCount > 2)
-                    {
-                        dbxHeight = opening3Height - topSpacing - bottomSpacing;
-                        if (baseCab.DrwCount > 3) // if true this is a middle drawer and needs additional bottom spacing
-                        {
-                            dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
-                        }
+                        // compute Y placement: base formula matches original pattern
+                        // y = height - dbxHeight - MaterialThickness34 - topSpacing - sum(prev openings) - MaterialThickness34 * (number of previous openings)
+                        double prevOpeningsSum = 0;
+                        for (int p = 0; p < oi; p++) prevOpeningsSum += openingHeights[p];
 
-                        var dbx3rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
-                        Model3DGroup dbx3 = new();
-                        dbx3.Children.Add(dbx3rotate);
-                        ModelTransforms.ApplyTransform(dbx3, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - opening2Height - MaterialThickness34 - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
-                        cabinet.Children.Add(dbx3);
+                        double y = height - dbxHeight - MaterialThickness34 - topSpacing - prevOpeningsSum - (MaterialThickness34 * oi);
 
-                        if (baseCab.IncDrwBoxInListOpening3 && baseCab.DrwCount > 2)
-                        {
-                            //dbxHeight = opening2Height - topSpacing - bottomSpacing;
-                            addDrawerBoxRow(baseCab, "Drawer Box 3", dbxHeight, dbxWidth, dbxDepth);
-                        }
-
-                    }
-
-                    if (baseCab.IncDrwBoxInListOpening4 && baseCab.DrwCount > 3)
-                    {
-                        dbxHeight = opening4Height - topSpacing - bottomSpacing;
-                        addDrawerBoxRow(baseCab, "Drawer Box 4", dbxHeight, dbxWidth, dbxDepth);
-                    }
-
-                    if (baseCab.IncDrwBoxOpening4 && baseCab.DrwCount > 3)
-                    {
-                        dbxHeight = opening4Height - topSpacing - bottomSpacing;
-
-                        var dbx4rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
-                        Model3DGroup dbx4 = new();
-                        dbx4.Children.Add(dbx4rotate);
-                        ModelTransforms.ApplyTransform(dbx4, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - opening2Height - opening3Height - MaterialThickness34 - MaterialThickness34 - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
-                        cabinet.Children.Add(dbx4);
+                        ModelTransforms.ApplyTransform(dbxGroup, (dbxWidth / 2) - MaterialThickness34, y, interiorDepth + backThickness, 0, 0, 0);
+                        cabinet.Children.Add(dbxGroup);
                     }
                 }
             }
@@ -1521,5 +1323,4 @@ internal static class BaseCabinetBuilder
         parent.Children.Add(child);
     }
 }
-
 
