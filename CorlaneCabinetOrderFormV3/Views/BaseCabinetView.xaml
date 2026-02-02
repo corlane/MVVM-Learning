@@ -24,7 +24,7 @@
         <Converters:BoolInverter x:Key="BoolInverter"/>
         <Converters:StringToIntConverter x:Key="StringToIntConverter"/>
     </UserControl.Resources>
-
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="155"/>
@@ -539,4 +539,6 @@
         </StackPanel>
 
     </Grid>
+
+    </ScrollViewer>
 </UserControl>
