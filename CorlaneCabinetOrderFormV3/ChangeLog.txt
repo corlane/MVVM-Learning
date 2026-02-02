@@ -1,4 +1,4 @@
-.
+﻿.
 .
 .
 .
@@ -40,3 +40,5 @@
 
 3.0.1.10
 	Fixed infinite loop in ConvertDimension when numerator = 0
+	Allowed shorter window height and auto scrollbars to accommodate Fisher Price's My First Computer (tm).
+	Added export to csv options under Print button for the Lists.
