@@ -21,8 +21,6 @@ On leaving a dimension box, its dimension should immediately convert to the defa
 
 Make sure ALL dimension boxes show default format. Reveals, for example do not automatically convert.
 
-Change the fugly Custom color to something besides blood red.
-
 
 
 
