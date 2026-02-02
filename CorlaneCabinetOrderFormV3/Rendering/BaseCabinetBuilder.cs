@@ -784,57 +784,8 @@ internal static class BaseCabinetBuilder
 
                     if (baseCab.IncDrwBoxOpening1)
                     {
-                        dbxSidePoints =
-                        [
-                            new (dbxDepth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxDepth,0,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Sides");
-
-                        dbxLeftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxRightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxFrontAndBackPoints =
-                        [
-                            new (dbxFrontAndBackWidth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxFrontAndBackWidth,0,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Front and Back");
-
-                        dbxFront = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxBack = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxBottomPoints =
-                        [
-                            new (0,0,0),
-                            new (dbxBottomWidth,0,0),
-                            new (dbxBottomWidth,dbxBottomLength,0),
-                            new (0,dbxBottomLength,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Bottom");
-
-                        dbxBottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
-
-                        // Build box:
-                        ModelTransforms.ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
-                        ModelTransforms.ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBack, 0, 0, dbxDepth - MaterialThickness34, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBottom, 0, MaterialThickness34, -MaterialThickness34 - .5, 90, 90, 0);
-
-                        // Rotate Box:
-                        Model3DGroup dbx1rotate = new();
-                        dbx1rotate.Children.Add(dbxLeftSide);
-                        dbx1rotate.Children.Add(dbxRightSide);
-                        dbx1rotate.Children.Add(dbxFront);
-                        dbx1rotate.Children.Add(dbxBack);
-                        dbx1rotate.Children.Add(dbxBottom);
-                        ModelTransforms.ApplyTransform(dbx1rotate, 0, 0, 0, 0, 90, 0);
-
-                        // Position Box in Cabinet:
+                        // Build drawer box rotate-group and position it (encapsulated)
+                        var dbx1rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
                         Model3DGroup dbx1 = new();
                         dbx1.Children.Add(dbx1rotate);
                         ModelTransforms.ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
@@ -842,11 +793,7 @@ internal static class BaseCabinetBuilder
                     }
 
                     //if (baseCab.IncDrwBoxInListOpening2 && baseCab.DrwCount > 1)
-                    //{
-                    //    //dbxHeight = opening2Height - topSpacing - bottomSpacing;
-                    //    addDrawerBoxRow(baseCab, "Drawer Box 2", dbxHeight, dbxWidth, dbxDepth);
-                    //}
-
+                    //{ ... }
 
                     if (baseCab.IncDrwBoxOpening2 && baseCab.DrwCount > 1)
                     {
@@ -856,55 +803,9 @@ internal static class BaseCabinetBuilder
                             dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
                         }
 
-                        dbxSidePoints =
-                        [
-                            new (dbxDepth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxDepth,0,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Sides");
-
-                        dbxLeftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxRightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxFrontAndBackPoints =
-                        [
-                            new (dbxFrontAndBackWidth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxFrontAndBackWidth,0,0)
-                        ];
-                        dbxFront = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxBack = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxBottomPoints =
-                        [
-                            new (0,0,0),
-                            new (dbxBottomWidth,0,0),
-                            new (dbxBottomWidth,dbxBottomLength,0),
-                            new (0,dbxBottomLength,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Bottom");
-
-                        dbxBottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
-
-                        ModelTransforms.ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
-                        ModelTransforms.ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBack, 0, 0, dbxDepth - MaterialThickness34, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBottom, 0, MaterialThickness34, -MaterialThickness34 - .5, 90, 90, 0);
-
-                        Model3DGroup dbx1rotate = new();
-                        dbx1rotate.Children.Add(dbxLeftSide);
-                        dbx1rotate.Children.Add(dbxRightSide);
-                        dbx1rotate.Children.Add(dbxFront);
-                        dbx1rotate.Children.Add(dbxBack);
-                        dbx1rotate.Children.Add(dbxBottom);
-
-                        ModelTransforms.ApplyTransform(dbx1rotate, 0, 0, 0, 0, 90, 0);
-
+                        var dbx2rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
                         Model3DGroup dbx2 = new();
-                        dbx2.Children.Add(dbx1rotate);
+                        dbx2.Children.Add(dbx2rotate);
                         ModelTransforms.ApplyTransform(dbx2, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
                         cabinet.Children.Add(dbx2);
 
@@ -924,57 +825,10 @@ internal static class BaseCabinetBuilder
                         {
                             dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
                         }
-                        dbxSidePoints =
-                        [
-                            new (dbxDepth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxDepth,0,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Sides");
 
-                        dbxLeftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxRightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxFrontAndBackPoints =
-                        [
-                            new (dbxFrontAndBackWidth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxFrontAndBackWidth,0,0)
-                        ];
-                        //Debug.WriteLine("Drw Front and Back");
-
-                        dbxFront = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxBack = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxBottomPoints =
-                        [
-                            new (0,0,0),
-                            new (dbxBottomWidth,0,0),
-                            new (dbxBottomWidth,dbxBottomLength,0),
-                            new (0,dbxBottomLength,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Bottom");
-
-                        dbxBottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
-
-                        ModelTransforms.ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
-                        ModelTransforms.ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBack, 0, 0, dbxDepth - MaterialThickness34, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBottom, 0, MaterialThickness34, -MaterialThickness34 - .5, 90, 90, 0);
-
-                        Model3DGroup dbx1rotate = new();
-                        dbx1rotate.Children.Add(dbxLeftSide);
-                        dbx1rotate.Children.Add(dbxRightSide);
-                        dbx1rotate.Children.Add(dbxFront);
-                        dbx1rotate.Children.Add(dbxBack);
-                        dbx1rotate.Children.Add(dbxBottom);
-
-                        ModelTransforms.ApplyTransform(dbx1rotate, 0, 0, 0, 0, 90, 0);
-
+                        var dbx3rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
                         Model3DGroup dbx3 = new();
-                        dbx3.Children.Add(dbx1rotate);
+                        dbx3.Children.Add(dbx3rotate);
                         ModelTransforms.ApplyTransform(dbx3, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - opening2Height - MaterialThickness34 - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
                         cabinet.Children.Add(dbx3);
 
@@ -996,57 +850,9 @@ internal static class BaseCabinetBuilder
                     {
                         dbxHeight = opening4Height - topSpacing - bottomSpacing;
 
-                        dbxSidePoints =
-                        [
-                            new (dbxDepth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxDepth,0,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Sides");
-
-                        dbxLeftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxRightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxFrontAndBackPoints =
-                        [
-                            new (dbxFrontAndBackWidth,dbxHeight,0),
-                            new (0,dbxHeight,0),
-                            new (0,0,0),
-                            new (dbxFrontAndBackWidth,0,0)
-                        ];
-                        //Debug.WriteLine("Drw Box Front and Back");
-
-                        dbxFront = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                        dbxBack = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                        dbxBottomPoints =
-                        [
-                            new (0,0,0),
-                            new (dbxBottomWidth,0,0),
-                            new (dbxBottomWidth,dbxBottomLength,0),
-                            new (0,dbxBottomLength,0)
-                        ];
-                        //Debug.WriteLine("Drw Bottom");
-
-                        dbxBottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
-
-                        ModelTransforms.ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
-                        ModelTransforms.ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBack, 0, 0, dbxDepth - MaterialThickness34, 0, 90, 0);
-                        ModelTransforms.ApplyTransform(dbxBottom, 0, MaterialThickness34, -MaterialThickness34 - .5, 90, 90, 0);
-
-                        Model3DGroup dbx1rotate = new();
-                        dbx1rotate.Children.Add(dbxLeftSide);
-                        dbx1rotate.Children.Add(dbxRightSide);
-                        dbx1rotate.Children.Add(dbxFront);
-                        dbx1rotate.Children.Add(dbxBack);
-                        dbx1rotate.Children.Add(dbxBottom);
-
-                        ModelTransforms.ApplyTransform(dbx1rotate, 0, 0, 0, 0, 90, 0);
-
+                        var dbx4rotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
                         Model3DGroup dbx4 = new();
-                        dbx4.Children.Add(dbx1rotate);
+                        dbx4.Children.Add(dbx4rotate);
                         ModelTransforms.ApplyTransform(dbx4, (dbxWidth / 2) - MaterialThickness34, height - dbxHeight - MaterialThickness34 - opening1Height - opening2Height - opening3Height - MaterialThickness34 - MaterialThickness34 - MaterialThickness34 - topSpacing, interiorDepth + backThickness, 0, 0, 0);
                         cabinet.Children.Add(dbx4);
                     }
@@ -1056,11 +862,7 @@ internal static class BaseCabinetBuilder
             // Rollouts or Trash Drawer
             if (baseCab.IncRollouts || baseCab.IncRolloutsInList || baseCab.TrashDrawer)
             {
-                double rolloutMountBracketSpacing = 1.2; // Thickness of Blum Tandem Rollout Mounting Bracket - Gus uses 3/4"
-
-                //double sideSpacing;
-                //topSpacing = 0;
-                //bottomSpacing = 0;
+                const double rolloutMountBracketSpacing = 1.2; // Thickness of Blum Tandem Rollout Mounting Bracket - Gus uses 3/4"
                 dbxHeight = rolloutHeight;
 
                 if (baseCab.DrwStyle is not null)
@@ -1068,16 +870,10 @@ internal static class BaseCabinetBuilder
                     if (baseCab.DrwStyle.Contains("Blum"))
                     {
                         dbxWidth = interiorWidth - tandemSideSpacing;
-                        //sideSpacing = tandemSideSpacing;
-                        //topSpacing = tandemTopSpacing;
-                        //bottomSpacing = tandemBottomSpacing;
                     }
                     else if (baseCab.DrwStyle.Contains("Accuride"))
                     {
                         dbxWidth = interiorWidth - accurideSideSpacing;
-                        //sideSpacing = accurideSideSpacing;
-                        //topSpacing = accurideTopSpacing;
-                        //bottomSpacing = accurideBottomSpacing;
                     }
                 }
 
@@ -1086,11 +882,6 @@ internal static class BaseCabinetBuilder
                     dbxWidth -= rolloutMountBracketSpacing * baseCab.DoorCount;
                 }
 
-
-                double dbxFrontAndBackWidth = dbxWidth - (MaterialThickness34 * 2);
-                double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
-                double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
-
                 if (baseCab.RolloutCount >= 1 || baseCab.TrashDrawer)
                 {
                     if (baseCab.TrashDrawer)
@@ -1098,54 +889,7 @@ internal static class BaseCabinetBuilder
                         dbxHeight = 12;
                     }
 
-                    dbxSidePoints =
-                    [
-                        new (dbxDepth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxDepth,0,0)
-                    ];
-
-                    dbxLeftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                    dbxRightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-
-                    dbxFrontAndBackPoints =
-                    [
-                        new (dbxFrontAndBackWidth,dbxHeight,0),
-                        new (0,dbxHeight,0),
-                        new (0,0,0),
-                        new (dbxFrontAndBackWidth,0,0)
-                    ];
-
-                    dbxFront = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-                    dbxBack = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, MaterialThickness34, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
-
-                    dbxBottomPoints =
-                    [
-                        new (0,0,0),
-                        new (dbxBottomWidth,0,0),
-                        new (dbxBottomWidth,dbxBottomLength,0),
-                        new (0,dbxBottomLength,0)
-                    ];
-
-                    dbxBottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, MaterialThickness34, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
-
-                    // Build box:
-                    ModelTransforms.ApplyTransform(dbxLeftSide, 0, 0, -(dbxWidth - MaterialThickness34), 0, 0, 0);
-                    ModelTransforms.ApplyTransform(dbxFront, 0, 0, 0, 0, 90, 0);
-                    ModelTransforms.ApplyTransform(dbxBack, 0, 0, dbxDepth - MaterialThickness34, 0, 90, 0);
-                    ModelTransforms.ApplyTransform(dbxBottom, 0, MaterialThickness34, -MaterialThickness34 - .5, 90, 90, 0);
-
-                    // Rotate Box:
-                    Model3DGroup dbx1rotate = new();
-                    dbx1rotate.Children.Add(dbxLeftSide);
-                    dbx1rotate.Children.Add(dbxRightSide);
-                    dbx1rotate.Children.Add(dbxFront);
-                    dbx1rotate.Children.Add(dbxBack);
-                    dbx1rotate.Children.Add(dbxBottom);
-                    ModelTransforms.ApplyTransform(dbx1rotate, 0, 0, 0, 0, 90, 0);
-
+                    // Build per-placement (do NOT reuse the same Model3DGroup instance)
                     if (baseCab.IncRollouts)
                     {
                         for (int r = 0; r < baseCab.RolloutCount; r++)
@@ -1155,13 +899,14 @@ internal static class BaseCabinetBuilder
                                 addDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
                             }
 
-                            // Position Box in Cabinet:
-                            Model3DGroup dbx1 = new();
-                            dbx1.Children.Add(dbx1rotate);
-                            ModelTransforms.ApplyTransform(dbx1, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (r * 6), interiorDepth + backThickness - .25, 0, 0, 0); // set rollout .25" back from front of cabinet
-                            cabinet.Children.Add(dbx1);
+                            var rotateGroup = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
+                            var placement = new Model3DGroup();
+                            placement.Children.Add(rotateGroup);
+                            ModelTransforms.ApplyTransform(placement, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (r * 6), interiorDepth + backThickness - .25, 0, 0, 0); // set rollout .25" back from front of cabinet
+                            cabinet.Children.Add(placement);
                         }
                     }
+
                     if (baseCab.TrashDrawer)
                     {
                         if (baseCab.IncDrwBoxesInList)
@@ -1171,9 +916,9 @@ internal static class BaseCabinetBuilder
 
                         if (baseCab.IncDrwBoxes)
                         {
-                            // Position Box in Cabinet:
-                            Model3DGroup trashDrawer = new();
-                            trashDrawer.Children.Add(dbx1rotate);
+                            var rotateGroup = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
+                            var trashDrawer = new Model3DGroup();
+                            trashDrawer.Children.Add(rotateGroup);
                             ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0); // set trash drawer .25" back from front of cabinet
                             cabinet.Children.Add(trashDrawer);
                         }
@@ -1311,6 +1056,8 @@ internal static class BaseCabinetBuilder
             // Toekick
             if (baseCab.HasTK)
             {
+                //Debug.WriteLine("Toekick");
+
                 toekickPoints =
                     [
                         new (0,0,0),
@@ -1704,11 +1451,84 @@ internal static class BaseCabinetBuilder
 
             if (!leftEndHidden) cabinet.Children.Add(leftEnd);
             if (!rightEndHidden) cabinet.Children.Add(rightEnd);
-            if (!deckHidden) cabinet.Children.Add(deckRotated);
-            if (!topHidden) cabinet.Children.Add(topRotated);
+            if (!deckHidden) cabinet.Children.Add(deck);
+            if (!topHidden) cabinet.Children.Add(top);
             cabinet.Children.Add(leftBack);
             cabinet.Children.Add(rightBack);
             ModelTransforms.ApplyTransform(cabinet, 0, 0, 0, 0, -135, 0);
         }
     }
+
+    // Helper: builds the drawer box rotate-group (the group that contains sides/front/back/bottom rotated as in original code)
+    // Returns the rotate-group (equivalent of original dbx1rotate) ready for placement by the caller.
+    private static Model3DGroup BuildDrawerBoxRotateGroup(double dbxWidth, double dbxHeight, double dbxDepth, double materialThickness, BaseCabinetModel baseCab, string panelEBEdges, bool topDeck90)
+    {
+        // Parts use "Prefinished Ply" / "PVC Hardrock Maple" and orientation "Horizontal"/"Vertical" as in original code.
+        var dbxSidePoints = new List<Point3D>
+        {
+            new(dbxDepth, dbxHeight, 0),
+            new(0, dbxHeight, 0),
+            new(0, 0, 0),
+            new(dbxDepth, 0, 0)
+        };
+
+        var dbxFrontAndBackPoints = new List<Point3D>
+        {
+            new(dbxWidth - (materialThickness * 2), dbxHeight, 0),
+            new(0, dbxHeight, 0),
+            new(0, 0, 0),
+            new(dbxWidth - (materialThickness * 2), 0, 0)
+        };
+
+        var dbxBottomPoints = new List<Point3D>
+        {
+            new(0, 0, 0),
+            new(dbxWidth - (materialThickness * 2), 0, 0),
+            new(dbxWidth - (materialThickness * 2), dbxDepth - (materialThickness * 2), 0),
+            new(0, dbxDepth - (materialThickness * 2), 0)
+        };
+
+        var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true);
+        var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true);
+        var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true);
+        var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true);
+        var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, true, panelEBEdges, isFaceUp: false);
+
+        // Apply local transforms to assemble the box (same as original)
+        ModelTransforms.ApplyTransform(leftSide, 0, 0, -(dbxWidth - materialThickness), 0, 0, 0);
+        ModelTransforms.ApplyTransform(front, 0, 0, 0, 0, 90, 0);
+        ModelTransforms.ApplyTransform(back, 0, 0, dbxDepth - materialThickness, 0, 90, 0);
+        ModelTransforms.ApplyTransform(bottom, 0, materialThickness, -materialThickness - .5, 90, 90, 0);
+
+        var rotateGroup = new Model3DGroup();
+        rotateGroup.Children.Add(leftSide);
+        rotateGroup.Children.Add(rightSide);
+        rotateGroup.Children.Add(front);
+        rotateGroup.Children.Add(back);
+        rotateGroup.Children.Add(bottom);
+
+        // Rotate to match original orientation (dbx1rotate had a rotation applied)
+        ModelTransforms.ApplyTransform(rotateGroup, 0, 0, 0, 0, 90, 0);
+
+        return rotateGroup;
+    }
+
+    // Small helper to apply transform and add to parent
+    // keeps transform-and-add pattern in one place
+    private static void ApplyTransformAndAdd(Model3DGroup parent, Model3DGroup child, double tx, double ty, double tz, double rx, double ry, double rz)
+    {
+        ModelTransforms.ApplyTransform(child, tx, ty, tz, rx, ry, rz);
+        parent.Children.Add(child);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
