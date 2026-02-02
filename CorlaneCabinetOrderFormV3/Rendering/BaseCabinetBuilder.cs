@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Converters;
+﻿using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using System.Windows.Media.Media3D;
 
@@ -18,18 +18,6 @@ internal static class BaseCabinetBuilder
         Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow,
         Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow)
     {
-        // Paste the entire body of Cabinet3DViewModel.BuildBase here and apply only these mechanical substitutions:
-        // - leftEndHidden -> leftEndHidden
-        // - rightEndHidden -> rightEndHidden
-        // - deckHidden -> deckHidden
-        // - topHidden -> topHidden
-        // - getMatchingEdgebandingSpecies(...) -> getMatchingEdgebandingSpecies(...)
-        // - resolveDoorSpeciesForTotals(...) -> resolveDoorSpeciesForTotals(...)
-        // - addFrontPartRow(...) -> addFrontPartRow(...)
-        // - addDrawerBoxRow(...) -> addDrawerBoxRow(...)
-        //
-        // Everything else stays the same, including local vars, math, and panel creation calls.
-
         Model3DGroup leftEnd;
         Model3DGroup rightEnd;
         Model3DGroup deck;
