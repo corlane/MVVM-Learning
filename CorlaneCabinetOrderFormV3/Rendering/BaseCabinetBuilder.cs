@@ -773,10 +773,6 @@ internal static class BaseCabinetBuilder
 
                     dbxHeight = opening1Height - topSpacing - bottomSpacing;
 
-                    double dbxFrontAndBackWidth = dbxWidth - (MaterialThickness34 * 2);
-                    double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
-                    double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
-
                     if (baseCab.IncDrwBoxInListOpening1 && baseCab.DrwCount > 0)
                     {
                         addDrawerBoxRow(baseCab, "Drawer Box 1", dbxHeight, dbxWidth, dbxDepth);
@@ -882,6 +878,10 @@ internal static class BaseCabinetBuilder
                     dbxWidth -= rolloutMountBracketSpacing * baseCab.DoorCount;
                 }
 
+                double dbxFrontAndBackWidth = dbxWidth - (MaterialThickness34 * 2);
+                double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
+                double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
+
                 if (baseCab.RolloutCount >= 1 || baseCab.TrashDrawer)
                 {
                     if (baseCab.TrashDrawer)
@@ -889,7 +889,7 @@ internal static class BaseCabinetBuilder
                         dbxHeight = 12;
                     }
 
-                    // Build per-placement (do NOT reuse the same Model3DGroup instance)
+                    // Create a fresh rotate-group for each placement to avoid reusing a Model3DGroup across parents
                     if (baseCab.IncRollouts)
                     {
                         for (int r = 0; r < baseCab.RolloutCount; r++)
@@ -1521,6 +1521,16 @@ internal static class BaseCabinetBuilder
         parent.Children.Add(child);
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
