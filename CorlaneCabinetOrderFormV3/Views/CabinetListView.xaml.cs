@@ -37,6 +37,16 @@ public partial class CabinetListView : UserControl
     private DispatcherTimer? _postChangeTimer;
     private bool _pendingScrollToEnd;
 
+    // Drag auto-scroll
+    private ScrollViewer? _listScrollViewer;
+    private const double DragAutoScrollThresholdPx = 24.0;
+
+    // Scrolling felt too fast because DragOver fires very frequently.
+    // Throttle the scroll and make the speed proportional to edge proximity.
+    private static readonly TimeSpan DragAutoScrollMinInterval = TimeSpan.FromMilliseconds(16); // ~60Hz
+    private DateTime _lastAutoScrollTimeUtc = DateTime.MinValue;
+    private const double DragAutoScrollMaxStepPx = 6.0;
+
     public CabinetListView()
     {
         InitializeComponent();
@@ -56,6 +66,8 @@ public partial class CabinetListView : UserControl
             };
             _postChangeTimer.Tick += PostChangeTimer_Tick;
         }
+
+        _listScrollViewer ??= FindDescendant<ScrollViewer>(ListViewItems);
 
         if (DataContext is CabinetListViewModel vm)
         {
@@ -278,6 +290,9 @@ public partial class CabinetListView : UserControl
 
         e.Effects = DragDropEffects.Move;
 
+        _listScrollViewer ??= FindDescendant<ScrollViewer>(ListViewItems);
+        PerformDragAutoScroll(e);
+
         if (_dragGhost != null)
         {
             var pos = e.GetPosition(ListViewItems);
@@ -327,6 +342,52 @@ public partial class CabinetListView : UserControl
         }
 
         e.Handled = true;
+    }
+
+    private void PerformDragAutoScroll(DragEventArgs e)
+    {
+        if (_listScrollViewer == null) return;
+
+        var nowUtc = DateTime.UtcNow;
+        if (nowUtc - _lastAutoScrollTimeUtc < DragAutoScrollMinInterval)
+            return;
+
+        var pos = e.GetPosition(ListViewItems);
+
+        // Within the threshold area, scroll proportionally:
+        // closer to the edge => larger step, farther => smaller step.
+        if (pos.Y < DragAutoScrollThresholdPx)
+        {
+            double ratio = (DragAutoScrollThresholdPx - pos.Y) / DragAutoScrollThresholdPx; // 0..1
+            double step = Math.Max(.2, DragAutoScrollMaxStepPx * ratio);
+            _listScrollViewer.ScrollToVerticalOffset(_listScrollViewer.VerticalOffset - step);
+            _lastAutoScrollTimeUtc = nowUtc;
+        }
+        else if (pos.Y > ListViewItems.ActualHeight - DragAutoScrollThresholdPx)
+        {
+            double distanceFromBottom = ListViewItems.ActualHeight - pos.Y;
+            double ratio = (DragAutoScrollThresholdPx - distanceFromBottom) / DragAutoScrollThresholdPx; // 0..1
+            double step = Math.Max(.2, DragAutoScrollMaxStepPx * ratio);
+            _listScrollViewer.ScrollToVerticalOffset(_listScrollViewer.VerticalOffset + step);
+            _lastAutoScrollTimeUtc = nowUtc;
+        }
+    }
+
+    private static T? FindDescendant<T>(DependencyObject? root) where T : DependencyObject
+    {
+        if (root == null) return null;
+
+        int count = VisualTreeHelper.GetChildrenCount(root);
+        for (int i = 0; i < count; i++)
+        {
+            var child = VisualTreeHelper.GetChild(root, i);
+            if (child is T t) return t;
+
+            var match = FindDescendant<T>(child);
+            if (match != null) return match;
+        }
+
+        return null;
     }
 
     private void ListView_Drop(object sender, DragEventArgs e)

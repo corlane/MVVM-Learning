@@ -50,3 +50,8 @@
 
 3.0.1.13
 	Added "ordered with" text to POCustomerInfo to show version of app the job was ordered with.
+
+3.0.1.14
+	Dragging and dropping a cabinet now triggers the Modified flag.
+	Cabinet list now auto-scrolls when dragging and dropping to a position outside of the visible area. Scrolling speed is adjustable. CabinetListView.xaml.cs is where it lives.
+

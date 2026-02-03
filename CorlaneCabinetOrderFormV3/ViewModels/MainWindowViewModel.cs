@@ -14,7 +14,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.13";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.14";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -468,11 +468,12 @@ public partial class MainWindowViewModel : ObservableValidator
     {
         if (_suppressIsModified) return;
 
-        // Mark modified for add/remove/reset (user changed the collection)
+        // Mark modified for add/remove/reset/move (user changed the collection)
         if (e.Action == NotifyCollectionChangedAction.Add ||
             e.Action == NotifyCollectionChangedAction.Remove ||
             e.Action == NotifyCollectionChangedAction.Replace ||
-            e.Action == NotifyCollectionChangedAction.Reset)
+            e.Action == NotifyCollectionChangedAction.Reset ||
+            e.Action == NotifyCollectionChangedAction.Move)
         {
             IsModified = true;
         }
