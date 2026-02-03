@@ -296,14 +296,18 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 _cabinetService.OrderedAtLocal = orderedAt;
                 OrderedAtLocal = orderedAt;
 
-                await _cabinetService.SaveAsync(dialog.FileName, customer, TotalPrice);
+                await _cabinetService.SaveAsync(
+                    dialog.FileName,
+                    customer,
+                    TotalPrice,
+                    submittedWithAppTitle: _mainVm.AppTitle);
 
                 try
                 {
                     await UploadJobToWebsiteAsync(dialog.FileName);
                     _mainVm.Notify2("Order placed. Job saved and sent to Corlane. Thank you!", Brushes.Green, 5000);
 
-                    Application.Current.Dispatcher.BeginInvoke(() =>
+                    _ = Application.Current.Dispatcher.BeginInvoke(() =>
                     {
                         OrderStatusBackground = new SolidColorBrush(Color.FromRgb(146, 250, 153));
                         OrderStatusText = $"Job ordered on {orderedAt:d}";

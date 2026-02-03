@@ -37,7 +37,11 @@ public class CabinetService : ICabinetService
         Cabinets.Remove(cabinet);
     }
 
-    public async Task SaveAsync(string filePath, JobCustomerInfo customerInfo, decimal quotedTotalPrice)
+    public async Task SaveAsync(
+        string filePath,
+        JobCustomerInfo customerInfo,
+        decimal quotedTotalPrice,
+        string? submittedWithAppTitle)
     {
         var options = new JsonSerializerOptions
         {
@@ -50,7 +54,9 @@ public class CabinetService : ICabinetService
             Cabinets = new ObservableCollection<CabinetModel>(Cabinets.ToList()),
             CustomerInfo = customerInfo ?? new JobCustomerInfo(),
             QuotedTotalPrice = quotedTotalPrice,
-            OrderedAtLocal = OrderedAtLocal
+            OrderedAtLocal = OrderedAtLocal,
+
+            SubmittedWithAppTitle = submittedWithAppTitle
         };
 
         var json = JsonSerializer.Serialize(job, options);
@@ -80,7 +86,8 @@ public class CabinetService : ICabinetService
                 Cabinets = loadedCabinets,
                 CustomerInfo = new JobCustomerInfo(),
                 QuotedTotalPrice = 0m,
-                OrderedAtLocal = null
+                OrderedAtLocal = null,
+                SubmittedWithAppTitle = null
             };
         }
         else

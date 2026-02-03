@@ -14,7 +14,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.12";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.13";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -66,6 +66,7 @@ public partial class MainWindowViewModel : ObservableValidator
     private POCustomerInfoViewModel? _poCustomerInfoVm;
     public POCustomerInfoViewModel POCustomerInfoVm => _poCustomerInfoVm ??= App.ServiceProvider.GetRequiredService<POCustomerInfoViewModel>();
 
+
     [RelayCommand]
     private async Task SaveJob()
     {
@@ -76,7 +77,7 @@ public partial class MainWindowViewModel : ObservableValidator
             FileName = CurrentJobName + ".cor"
         };
 
-        Notify2("Saving job...", Brushes.Blue, 100000); // yes, 100 seconds - will be cleared on success
+        Notify2("Saving job...", Brushes.Blue, 100000);
 
         if (dialog.ShowDialog() == true)
         {
@@ -96,7 +97,11 @@ public partial class MainWindowViewModel : ObservableValidator
                         ZipCode = POCustomerInfoVm.ZipCode
                     };
 
-                    await _cabinet_service.SaveAsync(dialog.FileName, customer, POCustomerInfoVm.QuotedTotalPrice);
+                    await _cabinet_service.SaveAsync(
+                        dialog.FileName,
+                        customer,
+                        POCustomerInfoVm.QuotedTotalPrice,
+                        submittedWithAppTitle: AppTitle);
 
                     Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Saved", Brushes.Green, 4000);
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
@@ -114,7 +119,6 @@ public partial class MainWindowViewModel : ObservableValidator
         }
         else
         {
-            // User cancelled save
             Notify2("Save canceled", Brushes.Red, 2000);
         }
     }
@@ -163,6 +167,7 @@ public partial class MainWindowViewModel : ObservableValidator
                         POCustomerInfoVm.City = job.CustomerInfo.City;
                         POCustomerInfoVm.ZipCode = job.CustomerInfo.ZipCode;
                         POCustomerInfoVm.QuotedTotalPrice = job.QuotedTotalPrice;
+                        POCustomerInfoVm.SubmittedWithAppTitle = job.SubmittedWithAppTitle;
                     }
 
                     Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Loaded", Brushes.Green, 4000);

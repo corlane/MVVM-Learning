@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -13,6 +13,9 @@ public partial class POCustomerInfoViewModel : ObservableObject
     [ObservableProperty] public partial string? ZipCode { get; set; }
 
     [ObservableProperty] public partial decimal QuotedTotalPrice { get; set; }
+
+    // New: loaded from the job file
+    [ObservableProperty] public partial string? SubmittedWithAppTitle { get; set; }
 
     public string FormattedTotal => QuotedTotalPrice.ToString("C2");
 

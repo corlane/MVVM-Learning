@@ -12,6 +12,11 @@ public interface ICabinetService
 
     DateTime? OrderedAtLocal { get; set; }
 
-    Task SaveAsync(string filePath, JobCustomerInfo customerInfo, decimal quotedTotalPrice);
+    Task SaveAsync(
+        string filePath,
+        JobCustomerInfo customerInfo,
+        decimal quotedTotalPrice,
+        string? submittedWithAppTitle);
+
     Task<JobFileModel?> LoadAsync(string filePath);
 }

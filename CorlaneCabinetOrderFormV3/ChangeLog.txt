@@ -47,3 +47,6 @@
 	Large refactor. Broke cabinet3dviewmodel into Rendering folder mostly.
 	Changed awful color of Custom material.
 	Changed POCabspecies, POEdgebanding, and PODoorspecies to show custom material name when Custom is selected.
+
+3.0.1.13
+	Added "ordered with" text to POCustomerInfo to show version of app the job was ordered with.

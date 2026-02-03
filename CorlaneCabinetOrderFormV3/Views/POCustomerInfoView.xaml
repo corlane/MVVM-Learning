@@ -97,6 +97,9 @@
                 <Label Content="Price:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
                 <Label Content="{Binding FormattedTotal}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Margin="2"/>
 
+                <Label Content="Submitted With:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2"/>
+                <Label Content="{Binding SubmittedWithAppTitle}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2"/>
+
             </Grid>
         </GroupBox>
     </Grid>

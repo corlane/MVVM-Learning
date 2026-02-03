@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 
 namespace CorlaneCabinetOrderFormV3.Models;
@@ -12,4 +12,7 @@ public sealed class JobFileModel
     public decimal QuotedTotalPrice { get; set; }
 
     public DateTime? OrderedAtLocal { get; set; }
+
+    // Saved metadata (optional -> backward compatible with older files)
+    public string? SubmittedWithAppTitle { get; set; }
 }
