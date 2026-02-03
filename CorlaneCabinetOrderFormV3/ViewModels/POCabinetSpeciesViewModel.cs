@@ -1,10 +1,7 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Services;
-using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -77,6 +74,16 @@ public partial class POCabinetSpeciesViewModel : ObservableObject
             cabNumber++;
 
             var cabSpecies = (cab.Species ?? "").Trim();
+
+            // If species is the literal "Custom", prefer the user-entered custom species if present.
+            if (string.Equals(cabSpecies, "Custom", StringComparison.OrdinalIgnoreCase))
+            {
+                var custom = (cab.CustomSpecies ?? "").Trim();
+                if (!string.IsNullOrEmpty(custom))
+                {
+                    cabSpecies = custom;
+                }
+            }
 
             if (string.Equals(cabSpecies, defaultSpecies, StringComparison.OrdinalIgnoreCase))
             {

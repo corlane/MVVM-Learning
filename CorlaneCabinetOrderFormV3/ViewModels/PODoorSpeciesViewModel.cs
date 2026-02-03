@@ -1,10 +1,8 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
-using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -88,11 +86,26 @@ public partial class PODoorSpeciesViewModel : ObservableObject
                                        baseCab.IncDrwFront3 ||
                                        baseCab.IncDrwFront4;
                 doorSpecies = (baseCab.DoorSpecies ?? "").Trim();
+
+                // If door species is "Custom", prefer the user-entered CustomDoorSpecies
+                if (string.Equals(doorSpecies, "Custom", StringComparison.OrdinalIgnoreCase))
+                {
+                    var custom = (baseCab.CustomDoorSpecies ?? "").Trim();
+                    if (!string.IsNullOrEmpty(custom))
+                        doorSpecies = custom;
+                }
             }
             else if (cab is UpperCabinetModel upperCab)
             {
                 hasDoorOrDrawerFront = upperCab.IncDoors;
                 doorSpecies = (upperCab.DoorSpecies ?? "").Trim();
+
+                if (string.Equals(doorSpecies, "Custom", StringComparison.OrdinalIgnoreCase))
+                {
+                    var custom = (upperCab.CustomDoorSpecies ?? "").Trim();
+                    if (!string.IsNullOrEmpty(custom))
+                        doorSpecies = custom;
+                }
             }
 
             // Skip if no doors/drawer fronts are included

@@ -22,3 +22,4 @@
 - When refactoring rendering/geometry logic, place it in internal static classes under the CorlaneCabinetOrderFormV3.Rendering namespace.
 - Hidden cabinet parts are visual-only; however, they must still contribute to material and edge totals. When building material/edge totals, always include all cabinet parts; BOM calculations should ignore preview hide flags, and totals must always be computed for the full cabinet regardless of hidden parts. User confirmed requirement: preview hide toggles are visualization-only; material/edge totals must always include hidden parts.
 - Avoid sharing Model3DGroup instances across multiple parents.
+- Display the user-entered custom species name when a cabinet's species is set to "Custom" instead of showing the literal word "Custom".

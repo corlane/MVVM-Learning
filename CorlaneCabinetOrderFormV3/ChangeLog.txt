@@ -42,3 +42,8 @@
 	Fixed infinite loop in ConvertDimension when numerator = 0
 	Allowed shorter window height and auto scrollbars to accommodate Fisher Price's My First Computer (tm).
 	Added export to csv options under Print button for the Lists.
+
+3.0.1.12
+	Large refactor. Broke cabinet3dviewmodel into Rendering folder mostly.
+	Changed awful color of Custom material.
+	Changed POCabspecies, POEdgebanding, and PODoorspecies to show custom material name when Custom is selected.

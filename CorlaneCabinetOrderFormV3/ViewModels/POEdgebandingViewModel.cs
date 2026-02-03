@@ -1,10 +1,7 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Services;
-using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -78,10 +75,20 @@ public partial class POEdgebandingViewModel : ObservableObject
 
             var cabSpecies = (cab.EBSpecies ?? "").Trim();
 
-            // Treat blank as "None" to match other parts of the app.
+            // If EB species is blank treat as "None"
             if (string.IsNullOrWhiteSpace(cabSpecies))
             {
                 cabSpecies = "None";
+            }
+
+            // If user chose "Custom" for EBSpecies prefer the user-entered CustomEBSpecies
+            if (string.Equals(cabSpecies, "Custom", StringComparison.OrdinalIgnoreCase))
+            {
+                var custom = (cab.CustomEBSpecies ?? "").Trim();
+                if (!string.IsNullOrEmpty(custom))
+                {
+                    cabSpecies = custom;
+                }
             }
 
             if (string.Equals(cabSpecies, defaultSpecies, StringComparison.OrdinalIgnoreCase))
