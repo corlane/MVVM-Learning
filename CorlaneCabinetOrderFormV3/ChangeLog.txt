@@ -58,4 +58,4 @@
 	Fixed bug where base Angle Front top and deck were not positioned correctly. (Add Children was adding deck and top, not deckRotated and topRotated)
 
 3.0.1.15
-	
+	Added "debouce" routine to DrwFrontHeight1 so it "live-updates", without needing to tab out of the box to update the value. This could cause other problems, but seems to work. Revert back to 3.0.1.14 if it does, since this is the only change, nothing else will be lost.
