@@ -54,4 +54,5 @@
 3.0.1.14
 	Dragging and dropping a cabinet now triggers the Modified flag.
 	Cabinet list now auto-scrolls when dragging and dropping to a position outside of the visible area. Scrolling speed is adjustable. CabinetListView.xaml.cs is where it lives.
+	Fixed bug where upper cabinet style dimensions were not showing when changing style from the cabinet list. (added onstylechanged to maptoviewmodel. It surely was there before, but got AI'd out at some point)
 

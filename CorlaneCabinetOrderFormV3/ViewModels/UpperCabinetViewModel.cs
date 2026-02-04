@@ -652,6 +652,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         finally
         {
             _isMapping = false;
+
+            OnStyleChanged(model.Style);
         }
     }
 
