@@ -1253,8 +1253,8 @@ internal static class BaseCabinetBuilder
 
             if (!leftEndHidden) cabinet.Children.Add(leftEnd);
             if (!rightEndHidden) cabinet.Children.Add(rightEnd);
-            if (!deckHidden) cabinet.Children.Add(deck);
-            if (!topHidden) cabinet.Children.Add(top);
+            if (!deckHidden) cabinet.Children.Add(deckRotated);
+            if (!topHidden) cabinet.Children.Add(topRotated);
             cabinet.Children.Add(leftBack);
             cabinet.Children.Add(rightBack);
             ModelTransforms.ApplyTransform(cabinet, 0, 0, 0, 0, -135, 0);

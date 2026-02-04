@@ -50,8 +50,6 @@ Using 3022 Silt studio job, click from sink cabinet to 3 drw cabinet: top drawer
 On Standard 1-drawer cabinet, DrawerFrontHeight1 isn't accepting decimal, space, or slash, because of the way the value is written back to the textbox because of updatesourcetrigger = propertychanged.
 	Have implemented a hacky workaround by changing to LostFocus update trigger. It works, but is not ideal. -- DONE-ish.
 
-Base angle front is fucked up. The top isn't being positioned properly
-
 
 
 
