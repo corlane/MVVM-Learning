@@ -56,3 +56,6 @@
 	Cabinet list now auto-scrolls when dragging and dropping to a position outside of the visible area. Scrolling speed is adjustable. CabinetListView.xaml.cs is where it lives.
 	Fixed bug where upper cabinet style dimensions were not showing when changing style from the cabinet list. (added onstylechanged to maptoviewmodel. It surely was there before, but got AI'd out at some point)
 	Fixed bug where base Angle Front top and deck were not positioned correctly. (Add Children was adding deck and top, not deckRotated and topRotated)
+
+3.0.1.15
+	

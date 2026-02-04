@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using System.Windows.Media;
+using System.Timers;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -679,8 +680,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = ""; partial void OnDrwFrontHeight1Changed(string oldValue, string newValue)
+    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = "";
+    partial void OnDrwFrontHeight1Changed(string oldValue, string newValue)
     {
+        // Keep edit buffer synced when not typing; never overwrite while user is mid-edit.
+        if (!_suppressEditSync && !_isEditingDrwFrontHeight1)
+            DrwFrontHeight1Edit = newValue;
+
         if (newValue != oldValue)
         {
             ApplyDrawerFrontEqualization();
@@ -1469,10 +1475,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwFront2 = IncDrwFront2,
             IncDrwFront3 = IncDrwFront3,
             IncDrwFront4 = IncDrwFront4,
-            IncDrwFrontInList1 = IncDrwFrontInList1,
-            IncDrwFrontInList2 = IncDrwFrontInList2,
-            IncDrwFrontInList3 = IncDrwFrontInList3,
-            IncDrwFrontInList4 = IncDrwFrontInList4,
             LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString(),
             RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString(),
             TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString(),
@@ -1635,10 +1637,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncDrwFront2 = IncDrwFront2;
             selected.IncDrwFront3 = IncDrwFront3;
             selected.IncDrwFront4 = IncDrwFront4;
-            selected.IncDrwFrontInList1 = IncDrwFrontInList1;
-            selected.IncDrwFrontInList2 = IncDrwFrontInList2;
-            selected.IncDrwFrontInList3 = IncDrwFrontInList3;
-            selected.IncDrwFrontInList4 = IncDrwFrontInList4;
             selected.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
             selected.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
             selected.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
@@ -1756,6 +1754,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         ApplyDrawerFrontEqualization();
         ResizeDrwFrontHeights();
+        DrwFrontHeight1Edit = DrwFrontHeight1;
     }
 
     [RelayCommand]
@@ -1940,7 +1939,67 @@ public partial class BaseCabinetViewModel : ObservableValidator
             OnStyleChanged(oldStyle, model.Style);
         }
     }
+
+    private readonly System.Timers.Timer _drwFrontHeight1DebounceTimer = new(90) { AutoReset = false };
+    private bool _suppressEditSync;
+    private bool _isEditingDrwFrontHeight1;
+
+    [ObservableProperty]
+    public partial string DrwFrontHeight1Edit { get; set; } = "";
+
+    partial void OnDrwFrontHeight1EditChanged(string oldValue, string newValue)
+    {
+        _isEditingDrwFrontHeight1 = true;
+
+        _drwFrontHeight1DebounceTimer.Stop();
+        _drwFrontHeight1DebounceTimer.Elapsed -= DrwFrontHeight1DebounceTimer_Elapsed;
+        _drwFrontHeight1DebounceTimer.Elapsed += DrwFrontHeight1DebounceTimer_Elapsed;
+        _drwFrontHeight1DebounceTimer.Start();
+    }
+
+    private void DrwFrontHeight1DebounceTimer_Elapsed(object? sender, ElapsedEventArgs e)
+    {
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            if (!TryParsePositiveDimension(DrwFrontHeight1Edit, out _))
+                return; // Option 1: keep last valid preview
+
+            try
+            {
+                _suppressEditSync = true;
+                DrwFrontHeight1 = DrwFrontHeight1Edit; // triggers your existing OnDrwFrontHeight1Changed -> Resize -> UpdatePreview
+                _isEditingDrwFrontHeight1 = false;
+            }
+            finally
+            {
+                _suppressEditSync = false;
+            }
+        });
+    }
+
+    private static bool TryParsePositiveDimension(string? text, out double value)
+    {
+        value = 0;
+
+        if (string.IsNullOrWhiteSpace(text))
+            return false;
+
+        // ConvertDimension returns 0 on invalid input AND for "0", so gate by allowing 0 explicitly if you want it.
+        value = ConvertDimension.FractionToDouble(text);
+
+        if (value > 0)
+            return true;
+
+        // if you actually want to allow 0, handle it here; for cabinet dimensions it’s typically invalid:
+        return false;
+    }
 }
+
+
+
+
+
+
 
 
 
