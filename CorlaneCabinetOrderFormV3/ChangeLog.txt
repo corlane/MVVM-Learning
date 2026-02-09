@@ -40,7 +40,7 @@
 
 3.0.1.10
 	Fixed infinite loop in ConvertDimension when numerator = 0
-	Allowed shorter window height and auto scrollbars to accommodate Fisher Price's My First Computer (tm).
+	Allowed shorter window height and auto scrollbars to accommodate Fisher Price's My First Computer(tm).
 	Added export to csv options under Print button for the Lists.
 
 3.0.1.12
@@ -58,4 +58,8 @@
 	Fixed bug where base Angle Front top and deck were not positioned correctly. (Add Children was adding deck and top, not deckRotated and topRotated)
 
 3.0.1.15
-	Added "debouce" routine to DrwFrontHeight1 so it "live-updates", without needing to tab out of the box to update the value. This could cause other problems, but seems to work. Revert back to 3.0.1.14 if it does, since this is the only change, nothing else will be lost.
+	Added "debouce" routine to DrwFrontHeight1 so it "live-updates", without needing to tab out of the box to update the value. This could cause other problems, but seems to work. Revert back to 3.0.1.14 if it does, since this is the only change, nothing else will be lost. NOTE: GPT 5.2 was used to help with this.
+
+3.0.1.16
+	Adjusted UI to accommodate smaller vertical window height without UI elements overlapping.
+	Got rid of "vertical" and "horizontal" images, and added check in CabinetMaterials.cs to substitute rotation angle for horizontal and vertical.

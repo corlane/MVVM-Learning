@@ -83,7 +83,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Select Edges To Be Edgebanded" Grid.Row="1" Grid.Column="1" Margin="-25,-50,5,5" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <GroupBox Header="Select Edges To Be Edgebanded" Grid.Row="0" Grid.Column="1" Margin="-25,240,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.RowSpan="3">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkEBPanelTop" Content="Top" HorizontalAlignment="Center" Margin="0,15,0,5" IsChecked="{Binding PanelEBTop}"/>
                 <StackPanel Orientation="Horizontal">

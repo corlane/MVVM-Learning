@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
@@ -18,7 +18,11 @@ internal static class CabinetMaterials
             grainDirection = "Horizontal";
         if (panelSpecies == "PFP 1/4") panelSpecies = "Prefinished Ply";
 
-        string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
+        //string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies} - {grainDirection}.png";
+
+        string resourcePath = $"pack://application:,,,/Images/Plywood/{panelSpecies}.png";
+        if (grainDirection == "Horizontal") { rotationDegrees = 90; }
+        if (grainDirection == "Vertical") { rotationDegrees = 0; }
 
         try
         {

@@ -19,7 +19,7 @@ If cabinet depth is too shallow for drw, display warning - remove drws and hide 
 
 On leaving a dimension box, its dimension should immediately convert to the default format.
 
-Make sure ALL dimension boxes show default format. Reveals, for example do not automatically convert.
+Make sure ALL dimension boxes show default format. Reveals, for example do not automatically convert. - Reveals maybe should stay decimal to avoid rounding/creeping.
 
 
 
@@ -45,10 +45,6 @@ Adjustable shelf not accounting for back thickness in 3D view. Always spaced for
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-Using 3022 Silt studio job, click from sink cabinet to 3 drw cabinet: top drawer appears. Will disappear if you click on another 3 drw cabinet and stay gone - until you click on the sink cabinet again. Investigate.
-
-On Standard 1-drawer cabinet, DrawerFrontHeight1 isn't accepting decimal, space, or slash, because of the way the value is written back to the textbox because of updatesourcetrigger = propertychanged.
-	Have implemented a hacky workaround by changing to LostFocus update trigger. It works, but is not ideal. -- DONE-ish.
 
 
 
@@ -57,8 +53,6 @@ On Standard 1-drawer cabinet, DrawerFrontHeight1 isn't accepting decimal, space,
 
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
-OPTIONAL: Change image loading in Cabinet3DViewModel to utilize the grain direction setting. This will allow the removal of duplicate material images for horizontal and vertical grain.
-	Have already added material images to image folder with Horizontal and Vertical suffixes removed.
 
 	
 
