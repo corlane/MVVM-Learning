@@ -1,4 +1,131 @@
-﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.PlaceOrderView"
+﻿<!--<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.PlaceOrderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views"
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
+             xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
+             xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
+             mc:Ignorable="d" 
+             d:DesignHeight="920" d:DesignWidth="1000"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}"             
+             >
+
+    --><!-- Design-time DataContext (so intellisense will work) --><!--
+    <d:UserControl.DataContext>
+        <viewmodels:PlaceOrderViewModel/>
+    </d:UserControl.DataContext>
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Converters:BoolInverter x:Key="BoolInverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+
+        <GroupBox x:Name="groupCompanyInfo" Grid.Column="0" Header="Your Company Info" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,5,5" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Company Name" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textCompanyName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                                 Text="{Binding CompanyName, UpdateSourceTrigger=LostFocus}"/>
+
+                <Label Content="Contact Name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textContactName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                                 Text="{Binding ContactName, UpdateSourceTrigger=LostFocus}"/>
+
+                <Label Content="Phone Number" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textPhoneNumber" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                                 Text="{Binding PhoneNumber, UpdateSourceTrigger=LostFocus}"/>
+
+                <Label Content="E-Mail Address" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textEmailAddress" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                                 Text="{Binding EMail, UpdateSourceTrigger=LostFocus}"/>
+
+                <Label Content="Street" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textStreet" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                                 Text="{Binding Street, UpdateSourceTrigger=LostFocus}"/>
+
+                <Label Content="City" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textCity" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                                 Text="{Binding City, UpdateSourceTrigger=LostFocus}"/>
+
+                <Label Content="Zip Code" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
+                <TextBox x:Name="textZipCode" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                                 Text="{Binding ZipCode, UpdateSourceTrigger=LostFocus}"/>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel Orientation="Vertical" Grid.Column="1">
+            <GroupBox x:Name="groupOrderSummary" Header="Order Summary" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20" Width="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Content="Price:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <Label Content="{Binding QuotedPriceText}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Margin="2"/>
+
+                    <Label Content="Internet Status:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="40,5,40,5"
+                                   Text="{Binding InternetStatusText}" Background="{Binding InternetStatusBackground}" Foreground="#FF0F0F0F"/>
+
+                    <Label Content="Order Status:" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="48 5 48 5"
+                                   Text="{Binding OrderStatusText}" Background="{Binding OrderStatusBackground}" Foreground="#FF0F0F0F"/>
+
+                    <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="20,15,5,15"
+                                Command="{Binding PlaceOrderCommand}"/>
+
+                </Grid>
+            </GroupBox>
+            <Label Content="Rate your experience with our Order Form!" FontSize="18"/>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton x:Name="radioGood" Content="Great!" FontSize="22" Margin="20"/>
+                <RadioButton x:Name="radioBad" Content="Bad!" FontSize="22" Margin="20" IsTabStop="False"/>
+            </StackPanel>
+            
+        </StackPanel>
+
+    </Grid>
+</UserControl>-->
+
+<!-- Original code is above. Fun behavior added to the "Bad" radio button below. -->
+
+
+<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.PlaceOrderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -80,37 +207,46 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox x:Name="groupOrderSummary" Grid.Column="1" Header="Order Summary" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20" Width="Auto">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Column="1">
+            <GroupBox x:Name="groupOrderSummary" Header="Order Summary" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,20,20,5" Padding="20" Width="Auto">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Content="Price:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
-                <Label Content="{Binding QuotedPriceText}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Margin="2"/>
-                
-                <Label Content="Internet Status:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
-                <TextBlock Grid.Row="2" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="40,5,40,5"
+                    <Label Content="Price:" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <Label Content="{Binding QuotedPriceText}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold" Margin="2"/>
+
+                    <Label Content="Internet Status:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="40,5,40,5"
                                    Text="{Binding InternetStatusText}" Background="{Binding InternetStatusBackground}" Foreground="#FF0F0F0F"/>
 
-                <Label Content="Order Status:" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
-                <TextBlock Grid.Row="3" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="48 5 48 5"
+                    <Label Content="Order Status:" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1"  Margin="2,2,10,2" HorizontalAlignment="Center" VerticalAlignment="Stretch" Padding="48 5 48 5"
                                    Text="{Binding OrderStatusText}" Background="{Binding OrderStatusBackground}" Foreground="#FF0F0F0F"/>
 
-                <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="20,15,5,15"
+                    <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="20,15,5,15"
                                 Command="{Binding PlaceOrderCommand}"/>
 
+                </Grid>
+            </GroupBox>
+            <Label Content="Rate your experience with our Order Form!" FontSize="18"/>
+            <!-- Replaced StackPanel with a Canvas so the 'Bad!' radio can be moved freely -->
+            <Canvas x:Name="ratingCanvas" Height="80" VerticalAlignment="Top">
+                <RadioButton x:Name="radioGood" Content="Great!" FontSize="22" Canvas.Left="20" Canvas.Top="18"/>
+                <RadioButton x:Name="radioBad" Content="Bad!" FontSize="22" Canvas.Left="180" Canvas.Top="18" IsTabStop="False"
+                             MouseEnter="RadioBad_MouseEnter"/>
+            </Canvas>
 
+        </StackPanel>
 
-            </Grid>
-        </GroupBox>
     </Grid>
 </UserControl>

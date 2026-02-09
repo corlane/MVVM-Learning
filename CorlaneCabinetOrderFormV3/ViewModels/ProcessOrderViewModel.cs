@@ -29,6 +29,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class ProcessOrderViewModel : ObservableValidator
 {
+    public ProcessOrderViewModel()
+    {
+        // empty constructor for design-time data in XAML.
+    }
+
+
+
     private readonly MainWindowViewModel _mainVm;
 
     public ProcessOrderViewModel(MainWindowViewModel mainVm)

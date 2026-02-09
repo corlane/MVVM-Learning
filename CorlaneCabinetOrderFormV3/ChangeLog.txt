@@ -63,3 +63,7 @@
 3.0.1.16
 	Adjusted UI to accommodate smaller vertical window height without UI elements overlapping.
 	Got rid of "vertical" and "horizontal" images, and added check in CabinetMaterials.cs to substitute rotation angle for horizontal and vertical.
+
+3.0.1.17
+	Added User Feedback to Place Order Tab. ;^)
+
