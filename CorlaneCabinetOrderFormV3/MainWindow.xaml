@@ -248,7 +248,7 @@
             </TabItem>
 
             <TabItem Header="Process Order" Padding="10" Width="120" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <views:REALLYProcessOrderView DataContext="{Binding REALLYProcessOrderVm}"/>
+                <views:REALLYProcessOrderView DataContext="{Binding REALLYProcessOrderVm}" HorizontalAlignment="Stretch"/>
             </TabItem>
             
         </TabControl>

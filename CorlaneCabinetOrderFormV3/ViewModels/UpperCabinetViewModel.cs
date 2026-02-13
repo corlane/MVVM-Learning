@@ -5,6 +5,7 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using System.Windows.Media;
@@ -22,6 +23,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
     private bool _isMapping;
+
+    private readonly IMaterialLookupService _lookups;
+    public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
+    public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
+
 
     public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
@@ -247,39 +253,44 @@ public partial class UpperCabinetViewModel : ObservableValidator
         "Horizontal",
         "Vertical"
     ];
-    public List<string> ListCabSpecies { get; } =
-[
-    "Prefinished Ply",
-        "Maple Ply",
-        "Red Oak Ply",
-        "White Oak Ply",
-        "Cherry Ply",
-        "Alder Ply",
-        "Mahogany Ply",
-        "Walnut Ply",
-        "Hickory Ply",
-        "MDF",
-        "Melamine",
-        "Custom"
-];
-    public List<string> ListEBSpecies { get; } =
-    [
-        "None",
-        "PVC White",
-        "PVC Black",
-        "PVC Hardrock Maple",
-        "PVC Paint Grade",
-        "Wood Prefinished Maple",
-        "Wood Maple",
-        "Wood Red Oak",
-        "Wood White Oak",
-        "Wood Walnut",
-        "Wood Cherry",
-        "Wood Alder",
-        "Wood Hickory",
-        "Wood Mahogany",
-        "Custom"
-    ];
+
+//    public List<string> ListCabSpecies { get; } =
+//[
+//    "Prefinished Ply",
+//        "Maple Ply",
+//        "Red Oak Ply",
+//        "White Oak Ply",
+//        "Cherry Ply",
+//        "Alder Ply",
+//        "Mahogany Ply",
+//        "Walnut Ply",
+//        "Hickory Ply",
+//        "MDF",
+//        "Melamine",
+//        "Custom"
+//];
+//    public List<string> ListEBSpecies { get; } =
+//    [
+//        "None",
+//        "PVC White",
+//        "PVC Black",
+//        "PVC Hardrock Maple",
+//        "PVC Paint Grade",
+//        "Wood Prefinished Maple",
+//        "Wood Maple",
+//        "Wood Red Oak",
+//        "Wood White Oak",
+//        "Wood Walnut",
+//        "Wood Cherry",
+//        "Wood Alder",
+//        "Wood Hickory",
+//        "Wood Mahogany",
+//        "Custom"
+//    ];
+
+
+
+
     public List<string> ListBackThickness
     {
         get

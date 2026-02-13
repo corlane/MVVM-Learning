@@ -68,4 +68,4 @@
 	Added User Feedback to Place Order Tab. ;^)
 
 3.0.1.18
-	
+	Fixed bug in dimension conversion where negative numbers wouldn't convert properly to fractional.

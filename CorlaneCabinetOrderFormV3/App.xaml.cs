@@ -28,6 +28,7 @@ public partial class App : Application
                 services.AddSingleton<IMaterialPricesService, MaterialPricesService>();
                 services.AddSingleton<IPriceBreakdownService, PriceBreakdownService>();
                 services.AddSingleton<POCustomerInfoViewModel>();
+                services.AddSingleton<IMaterialLookupService, MaterialLookupService>();
                 services.AddTransient<POJobMaterialListViewModel>();
 
                 // Register ViewModels as transients

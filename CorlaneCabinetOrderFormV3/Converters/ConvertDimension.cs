@@ -24,6 +24,10 @@ public static class ConvertDimension
                     int c;
                     if (int.TryParse(split[2], out c))
                     {
+                        // Handle mixed numbers with a possibly negative whole part correctly.
+                        // e.g. "-1 1/2" should be -1.5, not -0.5.
+                        if (a < 0)
+                            return a - (double)b / c;
                         return a + (double)b / c;
                     }
                 }
@@ -36,35 +40,35 @@ public static class ConvertDimension
 
     public static string DoubleToFraction(double dimension)
     {
-        // This will round DOWN to the nearest 32nd
-        string fraction = "";
-        int intPart = (int)dimension;
-        double decimalPart = (dimension - intPart);
+        // This will round DOWN to the nearest 32nd.
+        // Handle sign separately so the fractional component is always positive.
+        bool isNegative = dimension < 0;
+        double absDim = Math.Abs(dimension);
+
+        int intPart = (int)absDim;
+        double decimalPart = (absDim - intPart);
         if (decimalPart == 0)
         {
-            fraction = intPart.ToString();
-            return fraction;
+            return (isNegative ? "-" : "") + intPart.ToString();
         }
-        double denominator = 32;
-        double numerator = decimalPart * denominator;
 
-        numerator = (int)numerator;
+        int denominator = 32;
+        int numerator = (int)(decimalPart * denominator);
 
         // If it rounds down to 0/32, there is no fractional component to display.
         if (numerator == 0)
         {
-            return intPart.ToString();
+            return (isNegative ? "-" : "") + intPart.ToString();
         }
 
-        if (numerator % 2 == 0)
+        // Reduce fraction by dividing out factors of 2.
+        while (numerator % 2 == 0 && denominator % 2 == 0)
         {
-            do
-            {
-                numerator /= 2;
-                denominator /= 2;
-            }
-            while (numerator % 2 == 0);
+            numerator /= 2;
+            denominator /= 2;
         }
+
+        string fraction;
         if (intPart == 0)
         {
             fraction = numerator + "/" + denominator;
@@ -73,6 +77,10 @@ public static class ConvertDimension
         {
             fraction = intPart + " " + numerator + "/" + denominator;
         }
+
+        if (isNegative)
+            return "-" + fraction;
+
         return fraction;
     }
 }
