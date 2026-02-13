@@ -69,3 +69,4 @@
 
 3.0.1.18
 	Fixed bug in dimension conversion where negative numbers wouldn't convert properly to fractional.
+	Added material service so that all plywood species and edgebanding species are pulled from the same place.

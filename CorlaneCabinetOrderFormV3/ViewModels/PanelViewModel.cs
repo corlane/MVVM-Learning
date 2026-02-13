@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
@@ -19,6 +20,8 @@ public partial class PanelViewModel : ObservableValidator
     public PanelViewModel()
     {
         // empty constructor for design-time support
+        _lookups = new MaterialLookupService();
+
     }
 
     // Example: BaseCabinetViewModel.cs (copy to all input VMs)
@@ -28,11 +31,18 @@ public partial class PanelViewModel : ObservableValidator
     private readonly DefaultSettingsService? _defaults;
     private bool _isMapping;
 
-    public PanelViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
+    private readonly IMaterialLookupService _lookups;
+    public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
+    public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
+
+
+
+    public PanelViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
         _defaults = defaults;
+        _lookups = lookups;
 
         // Subscribe to ALL property changes in this ViewModel
         this.PropertyChanged += (_, e) =>
@@ -118,42 +128,6 @@ public partial class PanelViewModel : ObservableValidator
 
     [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
     [ObservableProperty] public partial bool CustomEBSpeciesEnabled { get; set; } = false;
-
-
-    // Combo box lists
-    public List<string> ListCabSpecies { get; } =
-    [
-        "Prefinished Ply",
-        "Maple Ply",
-        "Red Oak Ply",
-        "White Oak Ply",
-        "Cherry Ply",
-        "Alder Ply",
-        "Mahogany Ply",
-        "Walnut Ply",
-        "Hickory Ply",
-        "MDF",
-        "Melamine",
-        "Custom"
-    ];
-    public List<string> ListEBSpecies { get; } =
-    [
-        "None",
-        "PVC White",
-        "PVC Black",
-        "PVC Hardrock Maple",
-        "PVC Paint Grade",
-        "Wood Prefinished Maple",
-        "Wood Maple",
-        "Wood Red Oak",
-        "Wood White Oak",
-        "Wood Walnut",
-        "Wood Cherry",
-        "Wood Alder",
-        "Wood Hickory",
-        "Wood Mahogany",
-        "Custom"
-    ];
 
     // ListPanelDepths is now computed from the current default format and the material thickness values.
     public List<string> ListPanelDepths

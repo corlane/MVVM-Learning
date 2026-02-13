@@ -11,7 +11,6 @@ public class MaterialLookupService : IMaterialLookupService
 
     public MaterialLookupService()
     {
-        // seed defaults or load from persisted store (JSON, appsettings, DB)
         CabinetSpecies.Add("Prefinished Ply");
         CabinetSpecies.Add("Maple Ply");
         CabinetSpecies.Add("Red Oak Ply");

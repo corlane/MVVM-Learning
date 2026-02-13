@@ -39,7 +39,7 @@ Change cabinet list to respond to click instead of onselectedchanged
 Upper cabinets and Base cabinets with NO toekick are showing toekick mods in Toekick exception tab. Need to perform checks for this before checking toekick dimensions.
 
 Add Prefinished Wood versions of the common species of edgebanding. (We already have Wood Prefinished Maple)
-
+Edgebanding species service needs to translate the new species names into the correct names so the images load.
 
 
 

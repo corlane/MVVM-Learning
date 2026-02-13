@@ -17,6 +17,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
     public UpperCabinetViewModel()
     {
         // empty constructor for design-time support
+        // Provide a simple concrete lookup service so design-time and parameterless scenarios
+        // don't hit a null reference when binding to the collections.
+        _lookups = new MaterialLookupService();
     }
 
     private readonly ICabinetService? _cabinetService;
@@ -29,11 +32,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
 
-    public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
+    public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
         _defaults = defaults;
+        _lookups = lookups;
 
         // Subscribe to ALL property changes in this ViewModel
         this.PropertyChanged += (_, __) => UpdatePreview();
@@ -253,43 +257,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
         "Horizontal",
         "Vertical"
     ];
-
-//    public List<string> ListCabSpecies { get; } =
-//[
-//    "Prefinished Ply",
-//        "Maple Ply",
-//        "Red Oak Ply",
-//        "White Oak Ply",
-//        "Cherry Ply",
-//        "Alder Ply",
-//        "Mahogany Ply",
-//        "Walnut Ply",
-//        "Hickory Ply",
-//        "MDF",
-//        "Melamine",
-//        "Custom"
-//];
-//    public List<string> ListEBSpecies { get; } =
-//    [
-//        "None",
-//        "PVC White",
-//        "PVC Black",
-//        "PVC Hardrock Maple",
-//        "PVC Paint Grade",
-//        "Wood Prefinished Maple",
-//        "Wood Maple",
-//        "Wood Red Oak",
-//        "Wood White Oak",
-//        "Wood Walnut",
-//        "Wood Cherry",
-//        "Wood Alder",
-//        "Wood Hickory",
-//        "Wood Mahogany",
-//        "Custom"
-//    ];
-
-
-
 
     public List<string> ListBackThickness
     {

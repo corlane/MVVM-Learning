@@ -2,15 +2,16 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using CorlaneCabinetOrderFormV3.Rendering;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -19,17 +20,26 @@ public partial class FillerViewModel : ObservableValidator
     public FillerViewModel()
     {
         // empty constructor for design-time support
+        _lookups = new MaterialLookupService();
     }
 
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
+    
     private bool _isMapping;
-    public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
+
+    private readonly IMaterialLookupService _lookups;
+    public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
+    public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
+
+
+    public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
         _defaults = defaults;
+        _lookups = lookups;
 
         // Subscribe to ALL property changes in this ViewModel
         this.PropertyChanged += (_, __) => UpdatePreview();
@@ -75,42 +85,6 @@ public partial class FillerViewModel : ObservableValidator
 
 
     [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
-
-
-    // Combo box lists
-    public List<string> ListCabSpecies { get; } =
-    [
-        "Prefinished Ply",
-        "Maple Ply",
-        "Red Oak Ply",
-        "White Oak Ply",
-        "Cherry Ply",
-        "Alder Ply",
-        "Mahogany Ply",
-        "Walnut Ply",
-        "Hickory Ply",
-        "MDF",
-        "Melamine",
-        "Custom"
-    ];
-    public List<string> ListEBSpecies { get; } =
-    [
-        "None",
-        "PVC White",
-        "PVC Black",
-        "PVC Hardrock Maple",
-        "PVC Paint Grade",
-        "Wood Prefinished Maple",
-        "Wood Maple",
-        "Wood Red Oak",
-        "Wood White Oak",
-        "Wood Walnut",
-        "Wood Cherry",
-        "Wood Alder",
-        "Wood Hickory",
-        "Wood Mahogany",
-        "Custom"
-    ];
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
