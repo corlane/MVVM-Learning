@@ -79,6 +79,16 @@ internal static class CabinetMaterials
             return mat;
         }
 
+        // Normalize species name for image lookup: remove the word "Prefinished" if present
+        // so entries like "Wood Prefinished Maple" or "Prefinished Maple" map to the image name
+        // without the redundant word.
+        species = species.Trim();
+        if (species.Contains(" Prefinished", StringComparison.OrdinalIgnoreCase))
+        {
+            species = species.Replace(" Prefinished", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+            //MessageBox.Show($"Normalized edge banding species to '{species}' for image lookup.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
         string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
 
         try

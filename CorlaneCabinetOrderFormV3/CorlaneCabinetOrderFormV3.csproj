@@ -96,9 +96,6 @@
     <Resource Include="Images\Edgebanding\Wood Maple.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\Edgebanding\Wood Prefinished Maple.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Images\Edgebanding\Wood Red Oak.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

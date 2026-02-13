@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using HelixToolkit.Wpf;
 using System.Windows;
 using System.Windows.Media;
@@ -279,6 +279,7 @@ internal static class CabinetPartFactory
 
         var material = CabinetMaterials.GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
         var specialMaterial = CabinetMaterials.GetEdgeBandingSpecies(edgebandingSpecies);
+
         if (edgebandingSpecies == "None")
         {
             specialMaterial = CabinetMaterials.GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
