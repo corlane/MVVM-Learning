@@ -45,7 +45,7 @@ Adjustable shelf not accounting for back thickness in 3D view. Always spaced for
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-
+Negative reveal values don't work properly with Fractional dimensions.
 
 
 
