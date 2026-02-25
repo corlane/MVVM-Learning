@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
@@ -305,6 +305,7 @@ public partial class POBatchListViewModel : ObservableObject
         // Format (13 columns, no delimiters):
         // Type + Style + Sink(Y/N) + Toekick(Y/N) + DoorCount + DrwCount + AdjShelfCount + RolloutCount + TopType(S/F) + BackThickness(1/3)
         // + ShelfDepth(H/F) + DrillShelfHoles(Y/N) + TrashDrawer(Y/N)
+
 
         static string BoolYN(bool value) => value ? "Y" : "N";
 

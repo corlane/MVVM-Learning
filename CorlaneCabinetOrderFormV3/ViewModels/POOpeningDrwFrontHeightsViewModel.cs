@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
@@ -75,12 +75,13 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
 
         foreach (var cab in _cabinetService.Cabinets)
         {
+            cabNumber++;
+
             if (cab is not BaseCabinetModel baseCab)
             {
                 continue;
             }
 
-            cabNumber++;
 
             bool isStyle1 = string.Equals(baseCab.Style, BaseCabinetViewModel.Style1, StringComparison.Ordinal);
             bool isStyle2 = string.Equals(baseCab.Style, BaseCabinetViewModel.Style2, StringComparison.Ordinal);

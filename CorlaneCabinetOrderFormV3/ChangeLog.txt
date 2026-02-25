@@ -70,3 +70,8 @@
 3.0.1.18
 	Fixed bug in dimension conversion where negative numbers wouldn't convert properly to fractional.
 	Added material service so that all plywood species and edgebanding species are pulled from the same place.
+
+3.0.1.19
+	Trash Drawer now creates a full depth shelf above on a 1 drw base.
+	Several of the PO viewmodels weren't showing the correct cabinet numbers - fixed.
+

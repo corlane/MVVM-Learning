@@ -58,6 +58,7 @@ internal static class BaseCabinetBuilder
         List<Point3D> toekickPoints;
         List<Point3D> backPoints;
         List<Point3D> stretcherPoints;
+        List<Point3D> trashRolloutStretcherPoints;
         List<Point3D> sinkStretcherPoints;
         List<Point3D> shelfPoints;
         List<Point3D> doorPoints;
@@ -156,6 +157,14 @@ internal static class BaseCabinetBuilder
             new (interiorWidth,0,0),
             new (interiorWidth,StretcherWidth,0),
             new (0,StretcherWidth,0)
+        ];
+
+        trashRolloutStretcherPoints =
+        [
+            new (0,0,0),
+            new (interiorWidth,0,0),
+            new (interiorWidth,interiorDepth,0),
+            new (0,interiorDepth,0)
         ];
 
         shelfPoints =
@@ -333,6 +342,11 @@ internal static class BaseCabinetBuilder
                 //Debug.WriteLine("Drw Stretcher");
 
                 double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
+
+                if (baseCab.TrashDrawer)
+                {
+                    stretcherPoints = trashRolloutStretcherPoints;
+                }
 
                 stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
                 ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);

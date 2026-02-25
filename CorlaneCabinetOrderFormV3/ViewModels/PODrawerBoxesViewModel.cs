@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
@@ -81,12 +81,13 @@ public partial class PODrawerBoxesViewModel : ObservableObject
 
         foreach (var cab in _cabinetService.Cabinets)
         {
+            cabNumber++;
+
             if (cab is not BaseCabinetModel baseCab)
             {
                 continue;
             }
 
-            cabNumber++;
 
             // Only drawer boxes coming from base cabinets with IncDrwBoxes == true.
             if (!baseCab.IncDrwBoxes)

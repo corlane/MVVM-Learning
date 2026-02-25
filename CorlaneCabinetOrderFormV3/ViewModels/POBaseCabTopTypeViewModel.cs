@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System;
@@ -74,12 +74,13 @@ public partial class POBaseCabTopTypeViewModel : ObservableObject
 
         foreach (var cab in _cabinetService.Cabinets)
         {
+            cabNumber++;
+
             if (cab is not BaseCabinetModel baseCab)
             {
                 continue;
             }
 
-            cabNumber++;
 
             var cabTopType = (baseCab.TopType ?? "").Trim();
 

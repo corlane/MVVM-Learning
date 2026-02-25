@@ -21,6 +21,9 @@ On leaving a dimension box, its dimension should immediately convert to the defa
 
 Make sure ALL dimension boxes show default format. Reveals, for example do not automatically convert. - Reveals maybe should stay decimal to avoid rounding/creeping.
 
+Add fixed shelf option (FULL DEPTH ONLY) - This will introduce the possibility of splitting the cabinet into more than 1 opening: Allow adjustable shelves and doors per opening? That's CAD territory...
+
+If trash drawer is selected on a 1 drw base, make drw stretcher full depth.
 
 
 
@@ -49,7 +52,6 @@ Adjustable shelf not accounting for back thickness in 3D view. Always spaced for
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-Negative reveal values don't work properly with Fractional dimensions.
 
 
 
