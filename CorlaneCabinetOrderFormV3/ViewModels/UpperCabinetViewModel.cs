@@ -218,7 +218,19 @@ public partial class UpperCabinetViewModel : ObservableValidator
     }
 
 
-    [ObservableProperty] public partial int ShelfCount { get; set; }
+    [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
+    {
+        if (value == 0)
+        {
+            DrillShelfHoles = false;
+        }
+
+        if (value > 0)
+        {
+            DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
+        }
+    }
+
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }
 
     [ObservableProperty] public partial int DoorCount { get; set; } partial void OnDoorCountChanged(int oldValue, int newValue)

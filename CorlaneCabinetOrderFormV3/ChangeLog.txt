@@ -75,3 +75,6 @@
 	Trash Drawer now creates a full depth shelf above on a 1 drw base.
 	Several of the PO viewmodels weren't showing the correct cabinet numbers - fixed.
 
+3.0.1.20
+	Drill Shelf Holes now unchecks when 0 shelves are selected. Will recheck if shelf count > 0 AND default drill shelf holes is true.
+	

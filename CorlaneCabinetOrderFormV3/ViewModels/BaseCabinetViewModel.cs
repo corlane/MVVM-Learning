@@ -356,7 +356,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(0, 8)] public partial string TKDepth { get; set; } = "";
 
     // Shelf-specific properties
-    [ObservableProperty] public partial int ShelfCount { get; set; }
+    [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
+    {
+        if (value == 0)
+        {
+            DrillShelfHoles = false;
+        }
+
+        if (value > 0)
+        {
+            DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
+        }
+    }
     [ObservableProperty] public partial string ShelfDepth { get; set; } = "";
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }
 
