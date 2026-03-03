@@ -7,6 +7,7 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
@@ -60,26 +61,38 @@ public partial class PanelViewModel : ObservableValidator
         // react when DefaultDimensionFormat changes so ListPanelDepths updates
         if (_defaults != null)
         {
-            _defaults.PropertyChanged += (_, e) =>
-            {
-                if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
-                {
-                    OnPropertyChanged(nameof(ListPanelDepths));
-                }
-            };
+            PropertyChangedEventManager.AddHandler(
+                _defaults,
+                Defaults_PropertyChanged,
+                nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
 
-        _mainVm.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
-                LoadSelectedIfMine();
-        };
+        PropertyChangedEventManager.AddHandler(
+            _mainVm,
+            MainVm_PropertyChanged,
+            nameof(MainWindowViewModel.SelectedCabinet));
 
         Width = "16";
         Height = "32";
         Depth = "0.75";
         LoadDefaults();
         ValidateAllProperties();
+    }
+
+    private void Defaults_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+        {
+            OnPropertyChanged(nameof(ListPanelDepths));
+        }
+    }
+
+    private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+        {
+            LoadSelectedIfMine();
+        }
     }
 
 

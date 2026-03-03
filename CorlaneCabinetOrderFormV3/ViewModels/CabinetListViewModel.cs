@@ -31,19 +31,27 @@ public partial class CabinetListViewModel : ObservableValidator
         // React to default dimension format changes so list updates immediately
         if (_defaults != null)
         {
-            _defaults.PropertyChanged += DefaultSettings_PropertyChanged;
+            PropertyChangedEventManager.AddHandler(
+                _defaults,
+                DefaultSettings_PropertyChanged,
+                nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
 
         // Subscribe to MainWindowViewModel's SelectedCabinet changes to keep in sync
         if (_mainVm != null)
         {
-            _mainVm.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
-                {
-                    OnPropertyChanged(nameof(SelectedCabinet));
-                }
-            };
+            PropertyChangedEventManager.AddHandler(
+                _mainVm,
+                MainVm_PropertyChanged,
+                nameof(MainWindowViewModel.SelectedCabinet));
+        }
+    }
+
+    private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+        {
+            OnPropertyChanged(nameof(SelectedCabinet));
         }
     }
 
@@ -104,5 +112,15 @@ public partial class CabinetListViewModel : ObservableValidator
             _cabinetService?.Remove(cabinet);
             _mainVm?.IsModified = true;
         }
+    }
+
+
+
+    public void RefreshSelectedCabinet()
+    {
+        _mainVm?.RefreshSelectedCabinet();
+
+        // Keep this VM's proxy property fresh too
+        OnPropertyChanged(nameof(SelectedCabinet));
     }
 }

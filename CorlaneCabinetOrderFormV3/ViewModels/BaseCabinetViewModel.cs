@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using System.Windows.Media;
@@ -42,11 +43,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // Subscribe to ALL property changes in this ViewModel
         this.PropertyChanged += (_, __) => UpdatePreview();
 
-        _mainVm.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
-                LoadSelectedIfMine();
-        };
+        PropertyChangedEventManager.AddHandler(
+            _mainVm,
+            MainVm_PropertyChanged,
+            nameof(MainWindowViewModel.SelectedCabinet));
 
 
         Width = "18";
@@ -65,14 +65,29 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (_defaults != null)
         {
-            _defaults.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
-                    OnPropertyChanged(nameof(ListBackThickness));
-            };
+            PropertyChangedEventManager.AddHandler(
+                _defaults,
+                Defaults_PropertyChanged,
+                nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
 
         LoadDefaults();
+    }
+
+    private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+        {
+            LoadSelectedIfMine();
+        }
+    }
+
+    private void Defaults_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+        {
+            OnPropertyChanged(nameof(ListBackThickness));
+        }
     }
 
 
@@ -593,6 +608,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 IncDrwBoxOpening2 = false;
                 IncDrwBoxOpening3 = false;
                 IncDrwBoxOpening4 = false;
+            }
+
+            if (SinkCabinet)
+            {
+                IncDrwBoxOpening1 = false;
+                DrillSlideHolesOpening1 = false;
+                IncDrwBoxInListOpening1 = false;
             }
         }
     }

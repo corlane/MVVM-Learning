@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -30,7 +31,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
         // Listen for changes on the underlying defaults so computed/display properties update.
         if (_defaults != null)
         {
-            _defaults.PropertyChanged += Defaults_PropertyChanged;
+            PropertyChangedEventManager.AddHandler(_defaults, Defaults_PropertyChanged, string.Empty);
         }
 
         // Initialize VM-level formatted values from the backing defaults so ComboBoxes

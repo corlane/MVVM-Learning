@@ -14,7 +14,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.20";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.21";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -280,8 +280,10 @@ public partial class MainWindowViewModel : ObservableValidator
                 var po = PlaceOrderVm;
                 po.MaterialTotals.Clear();
                 po.TotalPrice = 0m;
+
                 // Reset customer info to persisted defaults (if any)
                 var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
+
                 po.CompanyName = defaults.CompanyName;
                 po.ContactName = defaults.ContactName;
                 po.PhoneNumber = defaults.PhoneNumber;
@@ -289,8 +291,18 @@ public partial class MainWindowViewModel : ObservableValidator
                 po.Street = defaults.Street;
                 po.City = defaults.City;
                 po.ZipCode = defaults.ZipCode;
-                // Revalidate place order VM
-                //po.ValidateAllProperties();
+
+                // ALSO reset the job-file customer info VM (this is what Load/SaveJob uses)
+                var customerInfo = POCustomerInfoVm;
+                customerInfo.CompanyName = defaults.CompanyName;
+                customerInfo.ContactName = defaults.ContactName;
+                customerInfo.PhoneNumber = defaults.PhoneNumber;
+                customerInfo.EMail = defaults.EMail;
+                customerInfo.Street = defaults.Street;
+                customerInfo.City = defaults.City;
+                customerInfo.ZipCode = defaults.ZipCode;
+                customerInfo.QuotedTotalPrice = 0m;
+                customerInfo.SubmittedWithAppTitle = null;
             }
             catch
             {
@@ -306,6 +318,7 @@ public partial class MainWindowViewModel : ObservableValidator
         // 6) Final user feedback
         Notify2("New job ready", Brushes.Green, 3000);
     }
+
 
     [ObservableProperty] public partial string CurrentJobName { get; set; } = "Untitled Job";
 
@@ -524,5 +537,12 @@ public partial class MainWindowViewModel : ObservableValidator
         {
             MessageBox.Show($"Unable to open help page.\n\n{ex.Message}", "Help", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+    }
+
+
+    public void RefreshSelectedCabinet()
+    {
+        OnPropertyChanged(nameof(SelectedCabinet));
+        OnSelectedCabinetChanged(SelectedCabinet);
     }
 }

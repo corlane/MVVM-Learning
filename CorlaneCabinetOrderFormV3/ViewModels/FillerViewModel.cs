@@ -8,6 +8,7 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Windows;
@@ -44,17 +45,24 @@ public partial class FillerViewModel : ObservableValidator
         // Subscribe to ALL property changes in this ViewModel
         this.PropertyChanged += (_, __) => UpdatePreview();
 
-        _mainVm.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
-                LoadSelectedIfMine();
-        };
+        PropertyChangedEventManager.AddHandler(
+            _mainVm,
+            MainVm_PropertyChanged,
+            nameof(MainWindowViewModel.SelectedCabinet));
 
         Width = "4";
         Height = "34.5";
         Depth = "24";
         LoadDefaults();
         ValidateAllProperties();
+    }
+
+    private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+        {
+            LoadSelectedIfMine();
+        }
     }
 
 

@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using System.Windows.Media;
@@ -38,15 +39,15 @@ public partial class UpperCabinetViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
+        _lookups = lookups;
 
         // Subscribe to ALL property changes in this ViewModel
         this.PropertyChanged += (_, __) => UpdatePreview();
 
-        _mainVm.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
-                LoadSelectedIfMine();
-        };
+        PropertyChangedEventManager.AddHandler(
+            _mainVm,
+            MainVm_PropertyChanged,
+            nameof(MainWindowViewModel.SelectedCabinet));
         Style = Style1; // Default style
         Width = "16";
         Height = "42";
@@ -63,15 +64,30 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         if (_defaults != null)
         {
-            _defaults.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
-                    OnPropertyChanged(nameof(ListBackThickness));
-            };
+            PropertyChangedEventManager.AddHandler(
+                _defaults,
+                Defaults_PropertyChanged,
+                nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
 
         LoadDefaults();
 
+    }
+
+    private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
+        {
+            LoadSelectedIfMine();
+        }
+    }
+
+    private void Defaults_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+        {
+            OnPropertyChanged(nameof(ListBackThickness));
+        }
     }
 
 

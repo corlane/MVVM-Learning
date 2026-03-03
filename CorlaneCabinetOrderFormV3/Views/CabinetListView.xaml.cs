@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Windows.Data;
+using System.Windows.Controls.Primitives;
 
 namespace CorlaneCabinetOrderFormV3.Views;
 
@@ -198,14 +199,38 @@ public partial class CabinetListView : UserControl
 
     private void ListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        //_dragStartPoint = e.GetPosition(null);
+        //_draggedCabinet = null;
+
+        //var element = e.OriginalSource as DependencyObject;
+        //var container = FindAncestor<ListViewItem>(element);
+        //if (container != null)
+        //{
+        //    _draggedCabinet = (CabinetModel?)ListViewItems.ItemContainerGenerator.ItemFromContainer(container);
+        //}
+
+
+
         _dragStartPoint = e.GetPosition(null);
         _draggedCabinet = null;
 
         var element = e.OriginalSource as DependencyObject;
+
+        // Don't treat button clicks (e.g., Delete) as "reselect"
+        if (FindAncestor<ButtonBase>(element) != null)
+            return;
+
         var container = FindAncestor<ListViewItem>(element);
         if (container != null)
         {
             _draggedCabinet = (CabinetModel?)ListViewItems.ItemContainerGenerator.ItemFromContainer(container);
+
+            // If user clicked the already-selected item, WPF won't fire SelectionChanged.
+            // Force a refresh so bound fields + preview update anyway.
+            if (container.IsSelected && DataContext is CabinetListViewModel vm)
+            {
+                vm.RefreshSelectedCabinet();
+            }
         }
     }
 

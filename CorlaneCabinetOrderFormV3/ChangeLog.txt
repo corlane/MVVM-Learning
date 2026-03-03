@@ -78,3 +78,8 @@
 3.0.1.20
 	Drill Shelf Holes now unchecks when 0 shelves are selected. Will recheck if shelf count > 0 AND default drill shelf holes is true.
 	
+3.0.1.21
+	Let GPT 5.2 "clean up" the instantiation of the viewmodels etc... it claimed there were some potential leaks and stuff. Not exactly sure what it did. If any major problems creep up, revert to 3.0.1.20.
+	Clicking on cabinet list is no longer OnPropertyChanged. It will update even when clicking on the previously selected cabinet.
+	If a sink cabinet was chosen, and then Inc Drw Boxes checked, a drawer box would appear in opening 1. Fixed.
+	POCustomerInfo was not clearing on New Job. Fixed.

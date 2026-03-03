@@ -7,6 +7,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Net;
@@ -24,6 +25,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private readonly ICabinetService _cabinetService;
         private readonly MainWindowViewModel _mainVm;
         private readonly IPriceBreakdownService _priceBreakdownService;
+        private readonly IMaterialLookupService? _lookups;
 
         private const int PlaceOrderTabIndex = 4;
 
@@ -43,18 +45,21 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         public PlaceOrderViewModel()
         {
             // empty constructor for design-time support
+            _lookups = new MaterialLookupService();
         }
 
         public PlaceOrderViewModel(
             ICabinetService cabinetService,
             MainWindowViewModel mainVm,
             DefaultSettingsService defaults,
-            IPriceBreakdownService priceBreakdownService)
+            IPriceBreakdownService priceBreakdownService,
+            IMaterialLookupService lookups)
         {
             _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
             _mainVm = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
             _defaults = defaults;
             _priceBreakdownService = priceBreakdownService ?? throw new ArgumentNullException(nameof(priceBreakdownService));
+            _lookups = lookups;
 
             OrderedAtLocal = _cabinetService.OrderedAtLocal;
             CompanyName = _defaults.CompanyName;
@@ -69,10 +74,10 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
             {
-                cc.CollectionChanged += Cabinets_CollectionChanged;
+                CollectionChangedEventManager.AddHandler(cc, Cabinets_CollectionChanged);
             }
 
-            _mainVm.PropertyChanged += MainVm_PropertyChanged;
+            PropertyChangedEventManager.AddHandler(_mainVm, MainVm_PropertyChanged, string.Empty);
 
             InitializeNetworkMonitoring();
 
@@ -96,9 +101,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
 
             // Use the same “available species” lists the UI uses.
-            // (They’re duplicated across VMs, but values are consistent.)
-            var cabSpecies = new HashSet<string>(new BaseCabinetViewModel().ListCabSpecies, StringComparer.OrdinalIgnoreCase);
-            var ebSpecies = new HashSet<string>(new BaseCabinetViewModel().ListEBSpecies, StringComparer.OrdinalIgnoreCase);
+            var cabSpecies = new HashSet<string>(_lookups?.CabinetSpecies ?? [], StringComparer.OrdinalIgnoreCase);
+            var ebSpecies = new HashSet<string>(_lookups?.EBSpecies ?? [], StringComparer.OrdinalIgnoreCase);
 
             foreach (var cab in _cabinetService.Cabinets)
             {
