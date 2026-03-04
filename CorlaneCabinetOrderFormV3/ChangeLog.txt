@@ -83,3 +83,6 @@
 	Clicking on cabinet list is no longer OnPropertyChanged. It will update even when clicking on the previously selected cabinet.
 	If a sink cabinet was chosen, and then Inc Drw Boxes checked, a drawer box would appear in opening 1. Fixed.
 	POCustomerInfo was not clearing on New Job. Fixed.
+
+3.0.1.22
+	Removed drawer box height exception from Drawer Boxes Exceptions tab.

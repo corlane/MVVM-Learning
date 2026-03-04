@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System;
@@ -22,7 +21,6 @@ public partial class PODrawerBoxesViewModel : ObservableObject
     {
         // design-time support
         DefaultDrwStyle = "Blum Tandem H/Equivalent Undermount";
-        DefaultMinDrawerBoxHeight = "4";
         UpdateTabHeaderBrush();
     }
 
@@ -31,7 +29,6 @@ public partial class PODrawerBoxesViewModel : ObservableObject
         _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
 
         DefaultDrwStyle = "Blum Tandem H/Equivalent Undermount";
-        DefaultMinDrawerBoxHeight = "4";
 
         if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
         {
@@ -44,10 +41,6 @@ public partial class PODrawerBoxesViewModel : ObservableObject
     [ObservableProperty]
     public partial string DefaultDrwStyle { get; set; } = "Blum Tandem H/Equivalent Undermount";
     partial void OnDefaultDrwStyleChanged(string value) => Refresh();
-
-    [ObservableProperty]
-    public partial string DefaultMinDrawerBoxHeight { get; set; } = "4";
-    partial void OnDefaultMinDrawerBoxHeightChanged(string value) => Refresh();
 
     public ObservableCollection<DrawerBoxExceptionRow> Exceptions { get; } = new();
 
@@ -75,7 +68,6 @@ public partial class PODrawerBoxesViewModel : ObservableObject
         }
 
         string defaultStyle = (DefaultDrwStyle ?? "").Trim();
-        double minHeight = ConvertDimension.FractionToDouble(DefaultMinDrawerBoxHeight ?? "");
 
         int cabNumber = 0;
 
@@ -88,7 +80,6 @@ public partial class PODrawerBoxesViewModel : ObservableObject
                 continue;
             }
 
-
             // Only drawer boxes coming from base cabinets with IncDrwBoxes == true.
             if (!baseCab.IncDrwBoxes)
             {
@@ -97,42 +88,24 @@ public partial class PODrawerBoxesViewModel : ObservableObject
 
             bool hasDrawerBoxes = baseCab.DrwCount > 0 || cab.DrawerBoxes.Count > 0;
 
-            // Default #1: DrwStyle differs from a required value (only when cabinet actually has drawer boxes)
-            if (hasDrawerBoxes)
+            // Flag when cabinet actually has drawer boxes and slide type differs from required value.
+            if (!hasDrawerBoxes)
             {
-                string actualStyle = (baseCab.DrwStyle ?? "").Trim();
-
-                if (!string.Equals(actualStyle, defaultStyle, StringComparison.OrdinalIgnoreCase))
-                {
-                    AddRow(new DrawerBoxExceptionRow
-                    {
-                        CabinetNumber = cabNumber,
-                        CabinetName = baseCab.Name ?? "",
-                        ExceptionType = "Drawer Slide Type",
-                        DrawerBoxType = "",
-                        Actual = actualStyle,
-                        Default = defaultStyle,
-                        IsDone = false
-                    }, baseCab.Qty);
-                }
+                continue;
             }
 
-            // Default #2: ANY drawer box whose height is less than the default flags
-            foreach (var box in cab.DrawerBoxes)
-            {
-                if (box.Height >= minHeight)
-                {
-                    continue;
-                }
+            string actualStyle = (baseCab.DrwStyle ?? "").Trim();
 
+            if (!string.Equals(actualStyle, defaultStyle, StringComparison.OrdinalIgnoreCase))
+            {
                 AddRow(new DrawerBoxExceptionRow
                 {
                     CabinetNumber = cabNumber,
                     CabinetName = baseCab.Name ?? "",
-                    ExceptionType = "Drawer Box Height",
-                    DrawerBoxType = box.Type ?? "",
-                    Actual = FormatDecimal(box.Height),
-                    Default = DefaultMinDrawerBoxHeight ?? "",
+                    ExceptionType = "Drawer Slide Type",
+                    DrawerBoxType = "",
+                    Actual = actualStyle,
+                    Default = defaultStyle,
                     IsDone = false
                 }, baseCab.Qty);
             }
@@ -154,9 +127,6 @@ public partial class PODrawerBoxesViewModel : ObservableObject
         Exceptions.Add(row);
         TotalCabsNeedingChange += Math.Max(1, qty);
     }
-
-    private static string FormatDecimal(double value)
-        => value.ToString("0.####");
 
     private void UpdateTabHeaderBrush()
     {
