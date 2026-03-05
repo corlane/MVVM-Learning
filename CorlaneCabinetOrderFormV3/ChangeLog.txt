@@ -85,4 +85,4 @@
 	POCustomerInfo was not clearing on New Job. Fixed.
 
 3.0.1.22
-	Removed drawer box height exception from Drawer Boxes Exceptions tab.
+	Removed drawer box height exception from PO Drawer Boxes Exceptions tab.

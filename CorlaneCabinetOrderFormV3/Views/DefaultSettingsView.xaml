@@ -9,7 +9,7 @@
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="920" d:DesignWidth="1000"
+             d:DesignHeight="850" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
@@ -74,7 +74,7 @@
             <ComboBox x:Name="comboDefaultTopType" Margin="5" ItemsSource="{Binding ListTopType}" SelectedItem="{Binding DefaultTopType}"/>
         </GroupBox>
 
-        <GroupBox x:Name="groupDefaultDrawerFrontHeights" Grid.Row="2" Grid.Column="2" Header="Drw. Front Heights" Margin="5,85,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.RowSpan="2">
+        <GroupBox x:Name="groupDefaultDrawerFrontHeights" Grid.Row="2" Grid.Column="2" Header="Drw. Front Heights" Margin="5,105,5,5" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="65"/>
@@ -288,10 +288,15 @@
 
         <GroupBox Header="Doors/Drawer Fronts" Grid.Row="0" Grid.Column="1" Margin="5 205 20 5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="3">
             <StackPanel Orientation="Vertical">
-                <CheckBox x:Name="checkDefaultIncludeDoorsInSizesList" Content="Include Doors/Drw Fronts In Door Sizes List" Margin="5"
+                <CheckBox x:Name="checkDefaultIncludeDoorsInSizesList" Content="Include Doors In Door Sizes List" Margin="5"
                           IsChecked="{Binding DefaultIncDoorsInList}"/>
-                <CheckBox x:Name="checkDefaultIncludeDoorsWithCabinet" Content="Include Slab Doors/Drw Fronts With Cabinet" Margin="5"
+                <CheckBox x:Name="checkDefaultIncludeDoorsWithCabinet" Content="Include Slab Doors With Cabinet" Margin="5"
                           IsChecked="{Binding DefaultIncDoors}"/>
+                <CheckBox x:Name="checkDefaultIncludeDrwFrontsInSizesList" Content="Include Drw Fronts In Door Sizes List" Margin="5"
+                          IsChecked="{Binding DefaultIncDrwFrontsInList}"/>
+                <CheckBox x:Name="checkDefaultIncludeDrwFrontsWithCabinet" Content="Include Slab Drw Fronts With Cabinet" Margin="5"
+                          IsChecked="{Binding DefaultIncDrwFronts}"/>
+
                 <Label Content="Doors/Drw Front Species:"/>
                 <ComboBox x:Name="comboDefaultDoorSpecies" Width="150" HorizontalAlignment="Left" Margin="5,0,5,5"
                           ItemsSource="{Binding ListCabSpecies}" SelectedValue="{Binding DefaultDoorDrwSpecies}"/>

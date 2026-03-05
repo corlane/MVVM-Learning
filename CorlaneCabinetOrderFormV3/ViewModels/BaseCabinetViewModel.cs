@@ -1480,6 +1480,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwFront2 = IncDrwFront2,
             IncDrwFront3 = IncDrwFront3,
             IncDrwFront4 = IncDrwFront4,
+            IncDrwFrontInList1 = IncDrwFrontInList1,
+            IncDrwFrontInList2 = IncDrwFrontInList2,
+            IncDrwFrontInList3 = IncDrwFrontInList3,
+            IncDrwFrontInList4 = IncDrwFrontInList4,
             LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString(),
             RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString(),
             TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString(),
@@ -1642,6 +1646,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncDrwFront2 = IncDrwFront2;
             selected.IncDrwFront3 = IncDrwFront3;
             selected.IncDrwFront4 = IncDrwFront4;
+            selected.IncDrwFrontInList1 = IncDrwFrontInList1;
+            selected.IncDrwFrontInList2 = IncDrwFrontInList2;
+            selected.IncDrwFrontInList3 = IncDrwFrontInList3;
+            selected.IncDrwFrontInList4 = IncDrwFrontInList4;
             selected.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
             selected.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
             selected.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
@@ -1703,7 +1711,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
         DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
         IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
-        IncDrwFronts = _defaults.DefaultIncDoors;
+        IncDrwFronts = _defaults.DefaultIncDrwFronts;
         if (IncDrwFronts)
         {
             IncDrwFront1 = true;
