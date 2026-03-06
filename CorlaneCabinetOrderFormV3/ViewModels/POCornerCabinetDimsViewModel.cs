@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
@@ -24,6 +24,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         DefaultBaseRightFrontWidth = "12";
         DefaultBaseLeftDepth = "24";
         DefaultBaseRightDepth = "24";
+        DefaultBaseLeftBackWidth = "36";
+        DefaultBaseRightBackWidth = "36";
 
         DefaultUpperLeftFrontWidth = "12";
         DefaultUpperRightFrontWidth = "12";
@@ -41,6 +43,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         DefaultBaseRightFrontWidth = "12";
         DefaultBaseLeftDepth = "24";
         DefaultBaseRightDepth = "24";
+        DefaultBaseLeftBackWidth = "36";
+        DefaultBaseRightBackWidth = "36";
 
         DefaultUpperLeftFrontWidth = "12";
         DefaultUpperRightFrontWidth = "12";
@@ -59,6 +63,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
     [ObservableProperty] public partial string DefaultBaseRightFrontWidth { get; set; } = "12";
     [ObservableProperty] public partial string DefaultBaseLeftDepth { get; set; } = "24";
     [ObservableProperty] public partial string DefaultBaseRightDepth { get; set; } = "24";
+    [ObservableProperty] public partial string DefaultBaseLeftBackWidth { get; set; } = "36";
+    [ObservableProperty] public partial string DefaultBaseRightBackWidth { get; set; } = "36";
 
     [ObservableProperty] public partial string DefaultUpperLeftFrontWidth { get; set; } = "12";
     [ObservableProperty] public partial string DefaultUpperRightFrontWidth { get; set; } = "12";
@@ -75,6 +81,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
     partial void OnDefaultBaseRightFrontWidthChanged(string value) => Refresh();
     partial void OnDefaultBaseLeftDepthChanged(string value) => Refresh();
     partial void OnDefaultBaseRightDepthChanged(string value) => Refresh();
+    partial void OnDefaultBaseLeftBackWidthChanged(string value) => Refresh();
+    partial void OnDefaultBaseRightBackWidthChanged(string value) => Refresh();
 
     partial void OnDefaultUpperLeftFrontWidthChanged(string value) => Refresh();
     partial void OnDefaultUpperRightFrontWidthChanged(string value) => Refresh();
@@ -99,14 +107,17 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         }
 
         // IMPORTANT: use the same canonical style strings used by the cabinet entry screens.
-        // This prevents mismatches like "Style3" vs "Style 3" vs "90� Corner".
-        string baseCornerStyle = BaseCabinetViewModel.Style3;
+        // This prevents mismatches like "Style3" vs "Style 3" vs "90° Corner".
+        string baseCorner90Style = BaseCabinetViewModel.Style3;
+        string baseAngleFrontStyle = BaseCabinetViewModel.Style4;
         string upperCornerStyle = UpperCabinetViewModel.Style2;
 
         double defBaseLfw = ConvertDimension.FractionToDouble(DefaultBaseLeftFrontWidth ?? "");
         double defBaseRfw = ConvertDimension.FractionToDouble(DefaultBaseRightFrontWidth ?? "");
         double defBaseLd = ConvertDimension.FractionToDouble(DefaultBaseLeftDepth ?? "");
         double defBaseRd = ConvertDimension.FractionToDouble(DefaultBaseRightDepth ?? "");
+        double defBaseLbw = ConvertDimension.FractionToDouble(DefaultBaseLeftBackWidth ?? "");
+        double defBaseRbw = ConvertDimension.FractionToDouble(DefaultBaseRightBackWidth ?? "");
 
         double defUpperLfw = ConvertDimension.FractionToDouble(DefaultUpperLeftFrontWidth ?? "");
         double defUpperRfw = ConvertDimension.FractionToDouble(DefaultUpperRightFrontWidth ?? "");
@@ -119,55 +130,70 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         {
             cabNumber++;
 
-            bool isBaseCorner = cab is BaseCabinetModel
-                && string.Equals(cab.Style, baseCornerStyle, StringComparison.OrdinalIgnoreCase);
+            bool isBaseCorner90 = cab is BaseCabinetModel
+                && string.Equals(cab.Style, baseCorner90Style, StringComparison.OrdinalIgnoreCase);
+
+            bool isBaseAngleFront = cab is BaseCabinetModel
+                && string.Equals(cab.Style, baseAngleFrontStyle, StringComparison.OrdinalIgnoreCase);
 
             bool isUpperCorner = cab is UpperCabinetModel
                 && string.Equals(cab.Style, upperCornerStyle, StringComparison.OrdinalIgnoreCase);
 
-            if (!isBaseCorner && !isUpperCorner)
+            if (!isBaseCorner90 && !isBaseAngleFront && !isUpperCorner)
             {
                 continue;
             }
 
             string lfw = cab switch
             {
-                BaseCabinetModel b => b.LeftFrontWidth ?? "",
-                UpperCabinetModel u => u.LeftFrontWidth ?? "",
+                BaseCabinetModel baseCab1 => baseCab1.LeftFrontWidth ?? "",
+                UpperCabinetModel upperCab1 => upperCab1.LeftFrontWidth ?? "",
                 _ => ""
             };
 
             string rfw = cab switch
             {
-                BaseCabinetModel b => b.RightFrontWidth ?? "",
-                UpperCabinetModel u => u.RightFrontWidth ?? "",
+                BaseCabinetModel baseCab2 => baseCab2.RightFrontWidth ?? "",
+                UpperCabinetModel upperCab2 => upperCab2.RightFrontWidth ?? "",
                 _ => ""
             };
 
             string ld = cab switch
             {
-                BaseCabinetModel b => b.LeftDepth ?? "",
-                UpperCabinetModel u => u.LeftDepth ?? "",
+                BaseCabinetModel baseCab3 => baseCab3.LeftDepth ?? "",
+                UpperCabinetModel upperCab3 => upperCab3.LeftDepth ?? "",
                 _ => ""
             };
 
             string rd = cab switch
             {
-                BaseCabinetModel b => b.RightDepth ?? "",
-                UpperCabinetModel u => u.RightDepth ?? "",
+                BaseCabinetModel baseCab4 => baseCab4.RightDepth ?? "",
+                UpperCabinetModel upperCab4 => upperCab4.RightDepth ?? "",
                 _ => ""
             };
+
+            BaseCabinetModel? angleBaseCab = isBaseAngleFront ? (cab as BaseCabinetModel) : null;
+            string lbw = angleBaseCab?.LeftBackWidth ?? "";
+            string rbw = angleBaseCab?.RightBackWidth ?? "";
 
             double cabLfw = ConvertDimension.FractionToDouble(lfw);
             double cabRfw = ConvertDimension.FractionToDouble(rfw);
             double cabLd = ConvertDimension.FractionToDouble(ld);
             double cabRd = ConvertDimension.FractionToDouble(rd);
+            double cabLbw = ConvertDimension.FractionToDouble(lbw);
+            double cabRbw = ConvertDimension.FractionToDouble(rbw);
 
-            bool differs = isBaseCorner
-                ? (!NearlyEqual(cabLfw, defBaseLfw)
-                   || !NearlyEqual(cabRfw, defBaseRfw)
-                   || !NearlyEqual(cabLd, defBaseLd)
-                   || !NearlyEqual(cabRd, defBaseRd))
+            bool differs =
+                isBaseCorner90
+                    ? (!NearlyEqual(cabLfw, defBaseLfw)
+                       || !NearlyEqual(cabRfw, defBaseRfw)
+                       || !NearlyEqual(cabLd, defBaseLd)
+                       || !NearlyEqual(cabRd, defBaseRd))
+                : isBaseAngleFront
+                    ? (!NearlyEqual(cabLd, defBaseLd)
+                       || !NearlyEqual(cabRd, defBaseRd)
+                       || !NearlyEqual(cabLbw, defBaseLbw)
+                       || !NearlyEqual(cabRbw, defBaseRbw))
                 : (!NearlyEqual(cabLfw, defUpperLfw)
                    || !NearlyEqual(cabRfw, defUpperRfw)
                    || !NearlyEqual(cabLd, defUpperLd)
@@ -185,15 +211,19 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
                 CabinetType = cab.CabinetType,
                 Style = cab.Style ?? "",
 
-                LeftFrontWidth = lfw,
-                RightFrontWidth = rfw,
+                LeftFrontWidth = isBaseAngleFront ? "" : lfw,
+                RightFrontWidth = isBaseAngleFront ? "" : rfw,
                 LeftDepth = ld,
                 RightDepth = rd,
+                LeftBackWidth = lbw,
+                RightBackWidth = rbw,
 
-                DefaultLeftFrontWidth = isBaseCorner ? (DefaultBaseLeftFrontWidth ?? "") : (DefaultUpperLeftFrontWidth ?? ""),
-                DefaultRightFrontWidth = isBaseCorner ? (DefaultBaseRightFrontWidth ?? "") : (DefaultUpperRightFrontWidth ?? ""),
-                DefaultLeftDepth = isBaseCorner ? (DefaultBaseLeftDepth ?? "") : (DefaultUpperLeftDepth ?? ""),
-                DefaultRightDepth = isBaseCorner ? (DefaultBaseRightDepth ?? "") : (DefaultUpperRightDepth ?? ""),
+                DefaultLeftFrontWidth = isBaseCorner90 ? (DefaultBaseLeftFrontWidth ?? "") : isUpperCorner ? (DefaultUpperLeftFrontWidth ?? "") : "",
+                DefaultRightFrontWidth = isBaseCorner90 ? (DefaultBaseRightFrontWidth ?? "") : isUpperCorner ? (DefaultUpperRightFrontWidth ?? "") : "",
+                DefaultLeftDepth = (isBaseCorner90 || isBaseAngleFront) ? (DefaultBaseLeftDepth ?? "") : (DefaultUpperLeftDepth ?? ""),
+                DefaultRightDepth = (isBaseCorner90 || isBaseAngleFront) ? (DefaultBaseRightDepth ?? "") : (DefaultUpperRightDepth ?? ""),
+                DefaultLeftBackWidth = isBaseAngleFront ? (DefaultBaseLeftBackWidth ?? "") : "",
+                DefaultRightBackWidth = isBaseAngleFront ? (DefaultBaseRightBackWidth ?? "") : "",
 
                 IsDone = false
             };
@@ -241,10 +271,14 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         [ObservableProperty] public partial string RightFrontWidth { get; set; } = "";
         [ObservableProperty] public partial string LeftDepth { get; set; } = "";
         [ObservableProperty] public partial string RightDepth { get; set; } = "";
+        [ObservableProperty] public partial string LeftBackWidth { get; set; } = "";
+        [ObservableProperty] public partial string RightBackWidth { get; set; } = "";
 
         [ObservableProperty] public partial string DefaultLeftFrontWidth { get; set; } = "";
         [ObservableProperty] public partial string DefaultRightFrontWidth { get; set; } = "";
         [ObservableProperty] public partial string DefaultLeftDepth { get; set; } = "";
         [ObservableProperty] public partial string DefaultRightDepth { get; set; } = "";
+        [ObservableProperty] public partial string DefaultLeftBackWidth { get; set; } = "";
+        [ObservableProperty] public partial string DefaultRightBackWidth { get; set; } = "";
     }
 }

@@ -1,4 +1,4 @@
-<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POCornerCabinetDimsView"
+﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POCornerCabinetDimsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,96 +10,113 @@
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
-    <d:UserControl.DataContext>
-        <viewmodels:POCornerCabinetDimsViewModel />
-    </d:UserControl.DataContext>
+	<d:UserControl.DataContext>
+		<viewmodels:POCornerCabinetDimsViewModel />
+	</d:UserControl.DataContext>
 
-    <Grid Margin="16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+	<Grid Margin="16">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="10"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="10"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
+		<TextBlock Grid.Row="0"
                    Text="Corner Cabinet Dimension Exceptions"
                    FontSize="18"
                    FontWeight="SemiBold"/>
 
-        <StackPanel Grid.Row="2"
+		<StackPanel Grid.Row="2"
                     Orientation="Vertical">
 
-            <TextBlock Text="Base cabinets (Style3 - 90 corner) baseline:"
+			<TextBlock Text="Base cabinets (Style3 - 90 corner, Style4 - angle front) baseline:"
                        FontWeight="SemiBold"
                        Margin="0,0,0,6"/>
 
-            <Grid Margin="0,0,0,12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="18"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="18"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="18"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+			<Grid Margin="0,0,0,6">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="18"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="18"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="18"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="L Front Width:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="1" Margin="6,0,0,0" Text="{Binding DefaultBaseLeftFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBlock Grid.Column="0" VerticalAlignment="Center" Text="L Front Width:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="1" Margin="6,0,0,0" Text="{Binding DefaultBaseLeftFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="R Front Width:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="4" Margin="6,0,0,0" Text="{Binding DefaultBaseRightFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBlock Grid.Column="3" VerticalAlignment="Center" Text="R Front Width:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="4" Margin="6,0,0,0" Text="{Binding DefaultBaseRightFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="6" VerticalAlignment="Center" Text="L Depth:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="7" Margin="6,0,0,0" Text="{Binding DefaultBaseLeftDepth, UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBlock Grid.Column="6" VerticalAlignment="Center" Text="L Depth:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="7" Margin="6,0,0,0" Text="{Binding DefaultBaseLeftDepth, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="9" VerticalAlignment="Center" Text="R Depth:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="10" Margin="6,0,0,0" Text="{Binding DefaultBaseRightDepth, UpdateSourceTrigger=PropertyChanged}"/>
-            </Grid>
+				<TextBlock Grid.Column="9" VerticalAlignment="Center" Text="R Depth:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="10" Margin="6,0,0,0" Text="{Binding DefaultBaseRightDepth, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
 
-            <TextBlock Text="Upper cabinets (Style2 - 90 corner) baseline:"
+			<Grid Margin="0,0,0,12">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="18"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<TextBlock Grid.Column="0" VerticalAlignment="Center" Text="L Back Width:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="1" Margin="6,0,0,0" Text="{Binding DefaultBaseLeftBackWidth, UpdateSourceTrigger=PropertyChanged}"/>
+
+				<TextBlock Grid.Column="3" VerticalAlignment="Center" Text="R Back Width:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="4" Margin="6,0,0,0" Text="{Binding DefaultBaseRightBackWidth, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+
+			<TextBlock Text="Upper cabinets (Style2 - 90 corner) baseline:"
                        FontWeight="SemiBold"
                        Margin="0,0,0,6"/>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="18"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="18"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="18"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="18"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="18"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="18"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="110"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="L Front Width:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="1" Margin="6,0,0,0" Text="{Binding DefaultUpperLeftFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBlock Grid.Column="0" VerticalAlignment="Center" Text="L Front Width:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="1" Margin="6,0,0,0" Text="{Binding DefaultUpperLeftFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="R Front Width:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="4" Margin="6,0,0,0" Text="{Binding DefaultUpperRightFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBlock Grid.Column="3" VerticalAlignment="Center" Text="R Front Width:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="4" Margin="6,0,0,0" Text="{Binding DefaultUpperRightFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="6" VerticalAlignment="Center" Text="L Depth:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="7" Margin="6,0,0,0" Text="{Binding DefaultUpperLeftDepth, UpdateSourceTrigger=PropertyChanged}"/>
+				<TextBlock Grid.Column="6" VerticalAlignment="Center" Text="L Depth:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="7" Margin="6,0,0,0" Text="{Binding DefaultUpperLeftDepth, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Grid.Column="9" VerticalAlignment="Center" Text="R Depth:" FontWeight="SemiBold"/>
-                <TextBox Grid.Column="10" Margin="6,0,0,0" Text="{Binding DefaultUpperRightDepth, UpdateSourceTrigger=PropertyChanged}"/>
-            </Grid>
-        </StackPanel>
+				<TextBlock Grid.Column="9" VerticalAlignment="Center" Text="R Depth:" FontWeight="SemiBold"/>
+				<TextBox Grid.Column="10" Margin="6,0,0,0" Text="{Binding DefaultUpperRightDepth, UpdateSourceTrigger=PropertyChanged}"/>
+			</Grid>
+		</StackPanel>
 
-        <DataGrid Grid.Row="4"
+		<DataGrid Grid.Row="4"
                   ItemsSource="{Binding CornerCabinetDimsToChange}"
                   AutoGenerateColumns="False"
                   IsReadOnly="False"
@@ -107,86 +124,107 @@
                   HeadersVisibility="Column"
                   GridLinesVisibility="Horizontal"
                   FontSize="16">
-            <DataGrid.Columns>
+			<DataGrid.Columns>
 
-                <DataGridTemplateColumn Header="" Width="90">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ToggleButton Content="Done"
+				<DataGridTemplateColumn Header="" Width="90">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ToggleButton Content="Done"
                                           IsChecked="{Binding IsDone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           Padding="8,2"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Cab #"
+				<DataGridTextColumn Header="Cab #"
                                     Binding="{Binding CabinetNumber}"
                                     IsReadOnly="True"
                                     Width="70"/>
 
-                <DataGridTextColumn Header="Cabinet Name"
+				<DataGridTextColumn Header="Cabinet Name"
                                     Binding="{Binding CabinetName}"
                                     IsReadOnly="True"
                                     Width="2*"/>
 
-                <DataGridTextColumn Header="Type"
+				<DataGridTextColumn Header="Type"
                                     Binding="{Binding CabinetType}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="Style"
+				<DataGridTextColumn Header="Style"
                                     Binding="{Binding Style}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="L Front W"
+				<DataGridTextColumn Header="L Front W"
                                     Binding="{Binding LeftFrontWidth}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="R Front W"
+				<DataGridTextColumn Header="R Front W"
                                     Binding="{Binding RightFrontWidth}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="L Depth"
+				<DataGridTextColumn Header="L Depth"
                                     Binding="{Binding LeftDepth}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="R Depth"
+				<DataGridTextColumn Header="R Depth"
                                     Binding="{Binding RightDepth}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="Def L Front W"
+				<DataGridTextColumn Header="L Back W"
+                                    Binding="{Binding LeftBackWidth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+				<DataGridTextColumn Header="R Back W"
+                                    Binding="{Binding RightBackWidth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+				<!--<DataGridTextColumn Header="Def L Front W"
                                     Binding="{Binding DefaultLeftFrontWidth}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="Def R Front W"
+				<DataGridTextColumn Header="Def R Front W"
                                     Binding="{Binding DefaultRightFrontWidth}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="Def L Depth"
+				<DataGridTextColumn Header="Def L Depth"
                                     Binding="{Binding DefaultLeftDepth}"
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="Def R Depth"
+				<DataGridTextColumn Header="Def R Depth"
                                     Binding="{Binding DefaultRightDepth}"
                                     IsReadOnly="True"
                                     Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
 
-        <StackPanel Grid.Row="5"
+				<DataGridTextColumn Header="Def L Back W"
+                                    Binding="{Binding DefaultLeftBackWidth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
+				<DataGridTextColumn Header="Def R Back W"
+                                    Binding="{Binding DefaultRightBackWidth}"
+                                    IsReadOnly="True"
+                                    Width="*"/>-->
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<StackPanel Grid.Row="5"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="0,8,0,0">
-            <TextBlock Text="Total cabinets needing change: " FontWeight="SemiBold"/>
-            <TextBlock Text="{Binding TotalCabsNeedingChange}"/>
-        </StackPanel>
-    </Grid>
+			<TextBlock Text="Total cabinets needing change: " FontWeight="SemiBold"/>
+			<TextBlock Text="{Binding TotalCabsNeedingChange}"/>
+		</StackPanel>
+	</Grid>
 </UserControl>
+

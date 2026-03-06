@@ -38,9 +38,7 @@ On stupidly wide cabinets, an Exception tab to notify us to change grain directi
 
 
 
-Clear cabinet note after adding/updating cabinet.
 
-PO Corner Cabinet Dims is not checking angle front cabinets!
 
 
 
@@ -50,7 +48,6 @@ Adjustable shelf not accounting for back thickness in 3D view. Always spaced for
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-It is possible to have a sink cabinet show a false front AND drawer box. Choose sink, then check Inc Drw Boxes checkbox.
 
 
 
