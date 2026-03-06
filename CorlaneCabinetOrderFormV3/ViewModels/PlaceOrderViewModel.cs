@@ -16,10 +16,11 @@ using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels
 {
-    public partial class PlaceOrderViewModel : ObservableValidator
+    public partial class PlaceOrderViewModel : ObservableValidator, IDisposable
     {
         private readonly DefaultSettingsService? _defaults;
         private readonly ICabinetService _cabinetService;
@@ -41,6 +42,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private const string CustomPricingMessage = "CUSTOM MATERIAL - AUTOMATIC PRICING NOT AVAILABLE";
 
         private CancellationTokenSource? _networkCts;
+
+        private readonly Dispatcher? _uiDispatcher = Application.Current?.Dispatcher;
+        private bool _disposed;
 
         public PlaceOrderViewModel()
         {
@@ -557,26 +561,44 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             catch { }
         }
 
+        private void PostToUi(Action action)
+        {
+            var d = _uiDispatcher;
+            if (d is null || d.HasShutdownStarted || d.HasShutdownFinished) return;
+            d.BeginInvoke(action);
+        }
+
         private async Task ProbeInternetAsync()
         {
             bool connected;
-
             try
             {
                 using var request = new HttpRequestMessage(HttpMethod.Get, "https://clients3.google.com/generate_204");
                 request.Headers.Add("Cache-Control", "no-cache");
 
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await s_httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token).ConfigureAwait(false);
+                using var response = await s_httpClient
+                    .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token)
+                    .ConfigureAwait(false);
 
                 connected = response.StatusCode == HttpStatusCode.NoContent || response.IsSuccessStatusCode;
             }
-            catch
-            {
-                connected = false;
-            }
+            catch { connected = false; }
 
-            Application.Current.Dispatcher.BeginInvoke(() => IsInternetConnected = connected);
+            PostToUi(() => IsInternetConnected = connected);
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+            _disposed = true;
+
+            try { NetworkChange.NetworkAvailabilityChanged -= NetworkChange_NetworkAvailabilityChanged; } catch { }
+            try { NetworkChange.NetworkAddressChanged -= NetworkChange_NetworkAddressChanged; } catch { }
+
+            try { _networkCts?.Cancel(); } catch { }
+            try { _networkCts?.Dispose(); } catch { }
+            _networkCts = null;
         }
 
         [ObservableProperty]

@@ -36,7 +36,6 @@ Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
 On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
 
-Include Doors exception tab is not showing drawer fronts from drawer cabinets - working on this. Added checkboxes for Inc Drw Fronts and Inc Drw Fronts in List in default settings. There is no individual IncDrwFrontsInSizes list for drw fronts 1-4 in Add Cabinet method. Just a master IncDrwFrontsInList. Ugh..
 
 Remove door species PO tab, and add door species to the Include Doors tab. Also make sure that the cabinet HAS doors before showing in the list.
 

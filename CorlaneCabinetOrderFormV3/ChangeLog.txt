@@ -86,3 +86,6 @@
 
 3.0.1.22
 	Removed drawer box height exception from PO Drawer Boxes Exceptions tab.
+	Fixed IncDrwFrontsInList not working properly.
+	Drawer fronts for drawer cabinets not showing in Include Doors Exception tab. Fixed.
+	AI fixed occasional crash on close caused by PlaceOrderViewModel not being properly disposed.

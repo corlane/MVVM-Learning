@@ -248,6 +248,7 @@ public partial class MainWindowViewModel : ObservableValidator
             _upperCabinetVm = null;
             _fillerVm = null;
             _panelVm = null;
+            (_placeOrderVm as IDisposable)?.Dispose();
             _placeOrderVm = null;
             _defaultsVm = null;
             _processOrderVm = null;
