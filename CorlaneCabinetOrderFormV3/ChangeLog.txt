@@ -99,4 +99,4 @@
 	Changed min Upper Cab depth to 4.
 	Changed validation on base cab depth to account for toekick depth. Minimum depth is TK depth + 6.5. Minimum depth is 4 if no TK.
 	Top Type automatically changes to Full when base cab depth is < 10 AND the cabinet is added or updated. Cannot immediately take effect when Top Type is chosen because of the OnPropertyChanged on the Depth entry.
-
+	Added Drw Stretcher Width Exception tab: if base cab is <7" and has drawers, exception will be raised so drw stretchers can be made narrower.

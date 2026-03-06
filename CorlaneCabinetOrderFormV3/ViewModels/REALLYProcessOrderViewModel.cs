@@ -18,6 +18,7 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
         POEdgebandingViewModel poEdgebandingVm,
         POHingeHolesViewModel poHingeHolesVm,
         PODrawerBoxesViewModel poDrawerBoxesVm,
+        PODrwStretcherWidthsViewModel poDrwStretcherWidthsVm,
         POCabinetSpeciesViewModel poCabinetSpeciesVm,
         POIncludeDoorsViewModel poIncludeDoorsVm,
         POCornerCabinetDimsViewModel poCornerCabinetDimsVm,
@@ -34,6 +35,7 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
         POEdgebandingVm = poEdgebandingVm ?? throw new ArgumentNullException(nameof(poEdgebandingVm));
         POHingeHolesVm = poHingeHolesVm ?? throw new ArgumentNullException(nameof(poHingeHolesVm));
         PODrawerBoxesVm = poDrawerBoxesVm ?? throw new ArgumentNullException(nameof(poDrawerBoxesVm));
+        PODrwStretcherWidthsVm = poDrwStretcherWidthsVm ?? throw new ArgumentNullException(nameof(poDrwStretcherWidthsVm));
         POCabinetSpeciesVm = poCabinetSpeciesVm ?? throw new ArgumentNullException(nameof(poCabinetSpeciesVm));
         POIncludeDoorsVm = poIncludeDoorsVm ?? throw new ArgumentNullException(nameof(poIncludeDoorsVm));
         POCornerCabinetDimsVm = poCornerCabinetDimsVm ?? throw new ArgumentNullException(nameof(poCornerCabinetDimsVm));
@@ -51,6 +53,7 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
     public POEdgebandingViewModel POEdgebandingVm { get; }
     public POHingeHolesViewModel POHingeHolesVm { get; }
     public PODrawerBoxesViewModel PODrawerBoxesVm { get; }
+    public PODrwStretcherWidthsViewModel PODrwStretcherWidthsVm { get; }
     public POCabinetSpeciesViewModel POCabinetSpeciesVm { get; }
     public POIncludeDoorsViewModel POIncludeDoorsVm { get; }
     public POCornerCabinetDimsViewModel POCornerCabinetDimsVm { get; }

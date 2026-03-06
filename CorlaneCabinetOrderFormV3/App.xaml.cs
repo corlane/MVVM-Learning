@@ -57,6 +57,7 @@ public partial class App : Application
                 services.AddTransient<POOpeningDrwFrontHeightsViewModel>();
                 services.AddTransient<PODrawerBoxesViewModel>();
                 services.AddTransient<POBatchListViewModel>();
+                services.AddTransient<PODrwStretcherWidthsViewModel>();
             })
             .Build();
 

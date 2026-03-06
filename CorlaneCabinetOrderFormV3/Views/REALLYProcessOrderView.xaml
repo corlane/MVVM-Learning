@@ -133,6 +133,14 @@
                 </TabItem.Header>
                 <views:POBaseCabTopTypeView DataContext="{Binding POBaseCabTopTypeVm}"/>
             </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Drw Stretcher Widths"
+                               Foreground="{Binding PODrwStretcherWidthsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:PODrwStretcherWidthsView DataContext="{Binding PODrwStretcherWidthsVm}"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>
