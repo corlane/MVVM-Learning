@@ -32,7 +32,6 @@ public partial class App : Application
                 services.AddTransient<POJobMaterialListViewModel>();
 
                 // Register ViewModels as transients
-                //services.AddTransient<MainWindowViewModel>();
                 services.AddTransient<BaseCabinetViewModel>();
                 services.AddTransient<UpperCabinetViewModel>();
                 services.AddTransient<CabinetListViewModel>();
@@ -50,7 +49,6 @@ public partial class App : Application
                 services.AddTransient<POHingeHolesViewModel>();
                 services.AddTransient<POCabinetSpeciesViewModel>();
                 services.AddSingleton<POIncludeDoorsViewModel>();
-                services.AddTransient<PODoorSpeciesViewModel>();
                 services.AddTransient<PODoorDrwGrainDirViewModel>();
                 services.AddTransient<PORevealsGapsViewModel>();
                 services.AddTransient<POCornerCabinetDimsViewModel>();

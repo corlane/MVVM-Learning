@@ -20,7 +20,6 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
         PODrawerBoxesViewModel poDrawerBoxesVm,
         POCabinetSpeciesViewModel poCabinetSpeciesVm,
         POIncludeDoorsViewModel poIncludeDoorsVm,
-        PODoorSpeciesViewModel poDoorSpeciesVm,
         POCornerCabinetDimsViewModel poCornerCabinetDimsVm,
         PODoorDrwGrainDirViewModel poDoorDrwGrainDirVm,
         PORevealsGapsViewModel poRevealsGapsVm,
@@ -37,7 +36,6 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
         PODrawerBoxesVm = poDrawerBoxesVm ?? throw new ArgumentNullException(nameof(poDrawerBoxesVm));
         POCabinetSpeciesVm = poCabinetSpeciesVm ?? throw new ArgumentNullException(nameof(poCabinetSpeciesVm));
         POIncludeDoorsVm = poIncludeDoorsVm ?? throw new ArgumentNullException(nameof(poIncludeDoorsVm));
-        PODoorSpeciesVm = poDoorSpeciesVm ?? throw new ArgumentNullException(nameof(poDoorSpeciesVm));
         POCornerCabinetDimsVm = poCornerCabinetDimsVm ?? throw new ArgumentNullException(nameof(poCornerCabinetDimsVm));
         PODoorDrwGrainDirVm = poDoorDrwGrainDirVm ?? throw new ArgumentNullException(nameof(poDoorDrwGrainDirVm));
         PORevealsGapsVm = poRevealsGapsVm ?? throw new ArgumentNullException(nameof(poRevealsGapsVm));
@@ -55,7 +53,6 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
     public PODrawerBoxesViewModel PODrawerBoxesVm { get; }
     public POCabinetSpeciesViewModel POCabinetSpeciesVm { get; }
     public POIncludeDoorsViewModel POIncludeDoorsVm { get; }
-    public PODoorSpeciesViewModel PODoorSpeciesVm { get; }
     public POCornerCabinetDimsViewModel POCornerCabinetDimsVm { get; }
     public PODoorDrwGrainDirViewModel PODoorDrwGrainDirVm { get; }
     public PORevealsGapsViewModel PORevealsGapsVm { get; }

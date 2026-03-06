@@ -84,15 +84,6 @@
 
             <TabItem Padding="10">
                 <TabItem.Header>
-                    <TextBlock Text="Door Species"
-                   Foreground="{Binding PODoorSpeciesVm.TabHeaderBrush}" />
-                </TabItem.Header>
-
-                <views:PODoorSpeciesView DataContext="{Binding PODoorSpeciesVm}"/>
-            </TabItem>
-
-            <TabItem Padding="10">
-                <TabItem.Header>
                     <TextBlock Text="Corner Cabinet Dims"
                    Foreground="{Binding POCornerCabinetDimsVm.TabHeaderBrush}" />
                 </TabItem.Header>
