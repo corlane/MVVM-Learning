@@ -81,6 +81,10 @@ public partial class POBaseCabTopTypeViewModel : ObservableObject
                 continue;
             }
 
+            if (cab.Style == CabinetStyles.Base.Corner90 || cab.Style == CabinetStyles.Base.AngleFront)
+            {
+                continue;
+            }
 
             var cabTopType = (baseCab.TopType ?? "").Trim();
 
