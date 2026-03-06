@@ -277,8 +277,8 @@
 
         <GroupBox x:Name="groupCabinetTopType" Grid.Row="0" Grid.Column="3" Header="Cabinet Top Type" Margin="250,150,5,5" VerticalAlignment="Top" HorizontalAlignment="Left"
                               Visibility="{Binding GroupCabinetTopTypeVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
-            <ComboBox x:Name="comboTopType" Margin="5" ItemsSource="{Binding ListTopType}" SelectedItem="{Binding TopType}" Width="120"/>
-        </GroupBox>
+                <ComboBox x:Name="comboTopType" Margin="5" ItemsSource="{Binding ListTopType}" SelectedItem="{Binding TopType}" Width="120"/>
+            </GroupBox>
 
         <GroupBox x:Name="groupDrawers" Grid.Row="1" Grid.Column="0" Header="Drawers" Margin="5,0,0,5" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="3"
                               Visibility="{Binding GroupDrawersVisibility, Converter={StaticResource BoolToVisibilityConverter}}">

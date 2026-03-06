@@ -38,6 +38,8 @@ On stupidly wide cabinets, an Exception tab to notify us to change grain directi
 
 For base cabinet depth, take toekick into account for minimum depth. If no TK, min depth should be 4.
 
+When cab depth is less than 7" AND drw count is > 0, raise exception to change drw stretcher widths. NEED TO ADD EXCEPTION TAB FOR THIS.
+
 
 
 

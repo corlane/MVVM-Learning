@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using System.Windows.Media;
 using System.Timers;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -211,7 +212,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
 
     }
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string Depth { get; set; } = "";
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), BaseCabinetDepthRange(48)] public partial string Depth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
     {
         if (newValue == "Custom")
@@ -338,10 +339,26 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string TopType { get; set; } = "";
 
+
+    private void EnforceTopTypeForShallowDepth()
+    {
+        // If the user chose "Stretcher" but the cabinet is very shallow, force "Full".
+
+        double depth = ConvertDimension.FractionToDouble(Depth);
+
+        if (depth > 0 && depth < 10)
+        { 
+            TopType = CabinetOptions.TopType.Full;
+        }
+    }
+
     // Toekick-specific properties
     [ObservableProperty] public partial bool HasTK { get; set; }
     partial void OnHasTKChanged(bool oldValue, bool newValue)
     {
+        // Depth min depends on HasTK/TKDepth, so revalidate Depth when HasTK changes.
+        ValidateProperty(Depth, nameof(Depth));
+
         // Style2: "Drawer" cabinets
         if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
         {
@@ -355,6 +372,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         RunValidationVisible();
     }
+
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(2, 8)] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
     {
         if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
@@ -368,7 +386,20 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeDrwFrontHeights();
         }
     }
+
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(0, 8)] public partial string TKDepth { get; set; } = "";
+    partial void OnTKDepthChanged(string oldValue, string newValue)
+    {
+        // Depth min depends on TKDepth when HasTK is true, so revalidate Depth when TKDepth changes.
+        ValidateProperty(Depth, nameof(Depth));
+    }
+
+
+
+
+
+
+
 
     // Shelf-specific properties
     [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
@@ -1413,6 +1444,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             BackThickness = "0.75"; // Force 3/4" back
         }
 
+        string tempTopType = TopType; // User-selected top type, which may be overridden by depth-specific rules below
+        EnforceTopTypeForShallowDepth();
+
         var newCabinet = new BaseCabinetModel
         {
             Width = ConvertDimension.FractionToDouble(Width).ToString(),
@@ -1509,6 +1543,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
 
+        TopType = tempTopType; // Restore user's top type choice after forcing a full top for shallow depths
+
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
     }
@@ -1583,6 +1619,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 BackThickness = "0.75"; // Force 3/4" back
             }
 
+            string tempTopType = TopType; // User-selected top type, which may be overridden by depth-specific rules below
+            EnforceTopTypeForShallowDepth();
 
             selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
@@ -1664,6 +1702,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.TrashDrawer = TrashDrawer;
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
+
+            TopType = tempTopType; // Restore user's top type choice after enforcing depth-specific rules
         }
 
         else
