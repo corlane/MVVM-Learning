@@ -91,3 +91,4 @@
 	AI fixed occasional crash on close caused by PlaceOrderViewModel not being properly disposed.
 	Added door species to the Include Doors tab.
 	Removed PO Door Species tab.
+	Clear cabinet note after adding/updating cabinet.

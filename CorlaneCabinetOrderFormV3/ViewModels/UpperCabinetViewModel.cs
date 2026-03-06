@@ -392,6 +392,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
             return;
         }
 
+        Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
+
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
     }
@@ -556,6 +558,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         }
         // Optional: clear selection after update
         _mainVm!.SelectedCabinet = null;
+
+        Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
     }
 
     [RelayCommand]

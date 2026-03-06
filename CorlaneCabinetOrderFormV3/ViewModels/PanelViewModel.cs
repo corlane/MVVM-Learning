@@ -228,6 +228,8 @@ public partial class PanelViewModel : ObservableValidator
             return;
         }
 
+        Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
+
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
 
@@ -288,6 +290,8 @@ public partial class PanelViewModel : ObservableValidator
 
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
+
+            Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
         }
 
         else

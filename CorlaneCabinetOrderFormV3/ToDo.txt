@@ -37,7 +37,6 @@ Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
 
 
-Remove door species PO tab, and add door species to the Include Doors tab.
 
 Clear cabinet note after adding/updating cabinet.
 
