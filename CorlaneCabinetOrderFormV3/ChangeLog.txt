@@ -94,3 +94,7 @@
 	Clear cabinet note after adding/updating cabinet.
 	Fixed PO Corner Cabinet Dims not checking angle front cabinets.
 	Corner cabinets no longer being flagged to change Top Type to Full in PO Base Cab Top Type Exception tab
+
+3.0.1.23
+	Changed min Upper Cab depth to 4.
+
