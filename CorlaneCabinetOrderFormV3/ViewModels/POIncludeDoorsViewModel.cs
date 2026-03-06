@@ -115,6 +115,8 @@ public partial class POIncludeDoorsViewModel : ObservableObject
             or nameof(BaseCabinetModel.IncDrwFront2)
             or nameof(BaseCabinetModel.IncDrwFront3)
             or nameof(BaseCabinetModel.IncDrwFront4)
+            or nameof(BaseCabinetModel.DoorSpecies)
+            or nameof(BaseCabinetModel.CustomDoorSpecies)
             or nameof(CabinetModel.Name)
             or nameof(CabinetModel.Qty))
         {
@@ -138,6 +140,33 @@ public partial class POIncludeDoorsViewModel : ObservableObject
             _refreshQueued = false;
             Refresh();
         }, DispatcherPriority.Background);
+    }
+
+    private static string GetFrontSpecies(CabinetModel cab)
+    {
+        string doorSpecies = cab switch
+        {
+            BaseCabinetModel b => (b.DoorSpecies ?? "").Trim(),
+            UpperCabinetModel u => (u.DoorSpecies ?? "").Trim(),
+            _ => ""
+        };
+
+        if (string.Equals(doorSpecies, "Custom", StringComparison.OrdinalIgnoreCase))
+        {
+            string custom = cab switch
+            {
+                BaseCabinetModel b => (b.CustomDoorSpecies ?? "").Trim(),
+                UpperCabinetModel u => (u.CustomDoorSpecies ?? "").Trim(),
+                _ => ""
+            };
+
+            if (!string.IsNullOrEmpty(custom))
+            {
+                doorSpecies = custom;
+            }
+        }
+
+        return doorSpecies;
     }
 
     public void Refresh()
@@ -177,6 +206,8 @@ public partial class POIncludeDoorsViewModel : ObservableObject
             cabNumber++;
             bool anyRowsAddedForCab = false;
 
+            var frontSpecies = GetFrontSpecies(cab);
+
             // Doors exception (Base/Upper only)
             bool incDoors = cab switch
             {
@@ -194,7 +225,8 @@ public partial class POIncludeDoorsViewModel : ObservableObject
                 {
                     CabinetNumber = cabNumber,
                     CabinetName = cab.Name ?? "",
-                    Type = "Doors",
+                    Type = "Door",
+                    FrontSpecies = frontSpecies,
                     IncDoors = incDoors,
                     DefaultIncDoors = DefaultIncDoors,
                     IsDone = false
@@ -227,6 +259,7 @@ public partial class POIncludeDoorsViewModel : ObservableObject
                         CabinetNumber = cabNumber,
                         CabinetName = cab.Name ?? "",
                         Type = $"Drawer Front {i}",
+                        FrontSpecies = frontSpecies,
                         IncDoors = incDrwFront,
                         DefaultIncDoors = DefaultIncDoors,
                         IsDone = false
@@ -265,7 +298,11 @@ public partial class POIncludeDoorsViewModel : ObservableObject
         [ObservableProperty] public partial string CabinetName { get; set; } = "";
         [ObservableProperty] public partial string Type { get; set; } = "";
 
+        [ObservableProperty] public partial string FrontSpecies { get; set; } = "";
+
         [ObservableProperty] public partial bool IncDoors { get; set; }
         [ObservableProperty] public partial bool DefaultIncDoors { get; set; }
     }
 }
+
+

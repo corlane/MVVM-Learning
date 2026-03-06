@@ -1,4 +1,4 @@
-<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POIncludeDoorsView"
+﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.POIncludeDoorsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -82,6 +82,11 @@
                                     IsReadOnly="True"
                                     Width="*"/>
 
+                <DataGridTextColumn Header="Species"
+                                    Binding="{Binding FrontSpecies}"
+                                    IsReadOnly="True"
+                                    Width="*"/>
+
                 <DataGridCheckBoxColumn Header="Include Doors"
                                         Binding="{Binding IncDoors}"
                                         IsReadOnly="True"
@@ -102,4 +107,8 @@
             <TextBlock Text="{Binding TotalCabsNeedingChange}" />
         </StackPanel>
     </Grid>
-</UserControl>
+</UserControl>    
+    
+    
+    
+    

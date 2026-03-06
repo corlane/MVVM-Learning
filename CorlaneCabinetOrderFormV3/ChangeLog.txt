@@ -89,3 +89,4 @@
 	Fixed IncDrwFrontsInList not working properly.
 	Drawer fronts for drawer cabinets not showing in Include Doors Exception tab. Fixed.
 	AI fixed occasional crash on close caused by PlaceOrderViewModel not being properly disposed.
+	Added door species to the Include Doors tab.
