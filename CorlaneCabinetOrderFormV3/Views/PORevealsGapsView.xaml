@@ -1,4 +1,4 @@
-<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.PORevealsGapsView"
+﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.PORevealsGapsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -29,6 +29,14 @@
                    FontSize="18"
                    FontWeight="SemiBold"/>
 
+		<Button Grid.Row="0"
+	Content="Refresh"
+	Width="100"
+	Margin="220,0,0,0"
+	Padding="12,4"
+	HorizontalAlignment="Left"
+	Command="{Binding RefreshListCommand}"/>
+		
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

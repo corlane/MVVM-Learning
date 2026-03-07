@@ -1,4 +1,5 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System.Collections.ObjectModel;
@@ -111,6 +112,9 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
 
         UpdateTabHeaderBrush();
     }
+
+    [RelayCommand]
+    private void RefreshList() => Refresh();
 
     private void AddDoorExceptionIfNeeded(int cabNumber, string cabName, bool incDoors, int doorCount, string? actualDoorGrainDir, int qty)
     {

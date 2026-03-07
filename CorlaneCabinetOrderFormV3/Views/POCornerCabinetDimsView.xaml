@@ -29,7 +29,15 @@
                    FontSize="18"
                    FontWeight="SemiBold"/>
 
-		<StackPanel Grid.Row="2"
+        <Button Grid.Row="0"
+			Content="Refresh"
+			Width="100"
+			Margin="330,0,0,0"
+			Padding="12,4"
+			HorizontalAlignment="Left"
+			Command="{Binding RefreshListCommand}"/>
+        
+        <StackPanel Grid.Row="2"
                     Orientation="Vertical">
 
 			<TextBlock Text="Base cabinets (Style3 - 90 corner, Style4 - angle front) baseline:"

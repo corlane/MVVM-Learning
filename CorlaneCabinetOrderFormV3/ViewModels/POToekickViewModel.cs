@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
@@ -132,6 +133,9 @@ public partial class POToekickViewModel : ObservableObject
 
         UpdateTabHeaderBrush();
     }
+
+    [RelayCommand]
+    private void RefreshList() => Refresh();
 
     private void UpdateTabHeaderBrush()
     {

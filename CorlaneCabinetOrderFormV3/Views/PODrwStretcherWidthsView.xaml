@@ -29,6 +29,14 @@
 		           FontSize="18"
 		           FontWeight="SemiBold"/>
 
+		<Button Grid.Row="0"
+	Content="Refresh"
+	Width="100"
+	Margin="320,0,0,0"
+	Padding="12,4"
+	HorizontalAlignment="Left"
+	Command="{Binding RefreshListCommand}"/>
+		
         <TextBlock Grid.Row="2"
 		           Text="Rule: If Base Cabinet Depth is less than 7&quot; and Drw Count &gt; 0, update drawer stretcher widths. Reference stretcher width: 6&quot;."
 		           TextWrapping="Wrap"

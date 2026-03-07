@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System;
@@ -277,6 +278,9 @@ public partial class POIncludeDoorsViewModel : ObservableObject
 
         UpdateTabHeaderBrush();
     }
+
+    [RelayCommand]
+    private void RefreshList() => Refresh();
 
     private void UpdateTabHeaderBrush()
     {
