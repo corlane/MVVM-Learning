@@ -103,3 +103,4 @@
 
 3.0.1.24
 	Added Refresh buttons to all the PO Exception tabs.
+	Adjusted Default Settings page to fit Tiny Screenz (tm) better.

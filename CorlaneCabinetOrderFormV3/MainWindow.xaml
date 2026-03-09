@@ -12,8 +12,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="{Binding AppTitle}" 
-        Height="1000" Width="1800"
-        MinHeight="800" MinWidth="1800"
+        Height="900" Width="1440"
+        MinHeight="800" MinWidth="1440"
         Background="{DynamicResource ABrush.Tone1.Background.Static}"
         Closing="MainWindow_Closing"
         >

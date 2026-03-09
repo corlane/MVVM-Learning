@@ -5,12 +5,6 @@ User side:
 
 Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
 
-Finish validation (don't foget to disable add, place order buttons etc. on invalid form) -- DONE. Most validation seems To work as intended. Check more via beta-testing.
-	Run Validation on tab change too -- shit doesn't work. The only thing that works is the validation textblocks. So be it. -- DONE. Most validation seems To work as intended. Check more via beta-testing.
-
-Fix "Connected" indicator. It doesn't seem to update properly. Use whatever method was used in CorlaneCabinetOrderFormV2. -- Looks like it is working on bedroom computer. Leave as is and check later.
-	It is *NOT* working consistently, even on bedroom computer.
-
 Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk about whether to allow adjustable shelves simultaneously
 
 Implement half-depth shelves for 90 deg corner cabinets
@@ -23,7 +17,7 @@ Make sure ALL dimension boxes show default format. Reveals, for example do not a
 
 Add fixed shelf option (FULL DEPTH ONLY) - This will introduce the possibility of splitting the cabinet into more than 1 opening: Allow adjustable shelves and doors per opening? That's CAD territory...
 
-If trash drawer is selected on a 1 drw base, make drw stretcher full depth.
+Window needs to be SMALLER STILL... jesus -- DONE. Will now load at 1440x800.
 
 
 
@@ -47,6 +41,11 @@ BUGS:
 Adjustable shelf not accounting for back thickness in 3D view. Always spaced for 3/4" back -- DONE-ish.
 
 Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
+
+Load 3036 oneta. Click back and forth between cabs 22 and 23 (for instance). Drw front sizes vascillate between correct and incorrect.
+
+
+
 
 
 
