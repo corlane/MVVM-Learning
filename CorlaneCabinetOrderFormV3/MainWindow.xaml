@@ -10,7 +10,7 @@
         xmlns:themes="clr-namespace:CorlaneCabinetOrderFormV3.Themes"
         xmlns:converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
+        
         Title="{Binding AppTitle}" 
         Height="900" Width="1440"
         MinHeight="800" MinWidth="1440"

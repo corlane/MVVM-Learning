@@ -105,6 +105,64 @@ public partial class App : Application
         var mainVm = ServiceProvider.GetRequiredService<MainWindowViewModel>();
         previewSvc.SetActiveOwner(mainVm.SelectedTabIndex);
 
+
+        // Window size/position/state persistence with some sanity checks to help ensure window isn't lost off-screen
+        try
+        {
+            if (defaults.WindowWidth.HasValue && defaults.WindowHeight.HasValue)
+            {
+                if (defaults.WindowWidth > 0 && defaults.WindowHeight > 0)
+                {
+                    mainWindow.Width = defaults.WindowWidth.Value;
+                    mainWindow.Height = defaults.WindowHeight.Value;
+                }
+            }
+
+            if (defaults.WindowLeft.HasValue && defaults.WindowTop.HasValue)
+            {
+                mainWindow.Left = defaults.WindowLeft.Value;
+                mainWindow.Top = defaults.WindowTop.Value;
+            }
+
+            if (!string.IsNullOrWhiteSpace(defaults.WindowState) &&
+                Enum.TryParse<WindowState>(defaults.WindowState, out var ws) &&
+                ws != WindowState.Minimized)
+            {
+                mainWindow.WindowState = ws;
+            }
+
+            // Ensure window is at least mostly visible on the current display(s)
+            void ClampToVirtualScreen(Window w)
+            {
+                var vsLeft = SystemParameters.VirtualScreenLeft;
+                var vsTop = SystemParameters.VirtualScreenTop;
+                var vsWidth = SystemParameters.VirtualScreenWidth;
+                var vsHeight = SystemParameters.VirtualScreenHeight;
+
+                // If window bigger than virtual screen, shrink to fit
+                if (w.Width > vsWidth) w.Width = Math.Max(300, vsWidth);
+                if (w.Height > vsHeight) w.Height = Math.Max(200, vsHeight);
+
+                // Ensure Left/Top are within virtual screen so at least 100px of window is visible
+                var minVisible = 100.0;
+                var maxLeft = vsLeft + vsWidth - minVisible;
+                var maxTop = vsTop + vsHeight - minVisible;
+                var minLeft = vsLeft - w.Width + minVisible;
+                var minTop = vsTop - w.Height + minVisible;
+
+                if (w.Left < minLeft) w.Left = Math.Max(vsLeft, minLeft);
+                if (w.Left > maxLeft) w.Left = maxLeft;
+                if (w.Top < minTop) w.Top = Math.Max(vsTop, minTop);
+                if (w.Top > maxTop) w.Top = maxTop;
+            }
+
+            ClampToVirtualScreen(mainWindow);
+        }
+        catch
+        {
+            // best-effort — ignore any issues applying persisted bounds
+        }
+
         mainWindow.Show();
     }
 

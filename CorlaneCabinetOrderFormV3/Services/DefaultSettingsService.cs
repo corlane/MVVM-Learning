@@ -251,6 +251,15 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial string? City { get; set; }
     [ObservableProperty] public partial string? ZipCode { get; set; }
 
+
+    // Window size and position
+    [ObservableProperty] public partial double? WindowLeft { get; set; }
+    [ObservableProperty] public partial double? WindowTop { get; set; }
+    [ObservableProperty] public partial double? WindowWidth { get; set; }
+    [ObservableProperty] public partial double? WindowHeight { get; set; }
+    [ObservableProperty] public partial string? WindowState { get; set; } = "Normal";
+
+
     public async Task LoadAsync()
     {
         if (!File.Exists(SettingsFilePath)) return;
