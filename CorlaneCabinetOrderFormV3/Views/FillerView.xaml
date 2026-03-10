@@ -25,12 +25,6 @@
         <Converters:StringToIntConverter x:Key="StringToIntConverter"/>
     </UserControl.Resources>
 
-    <Behaviors:Interaction.Triggers>
-        <Behaviors:EventTrigger EventName="Loaded">
-            <Behaviors:InvokeCommandAction Command="{Binding LoadDefaultsCommand}" />
-        </Behaviors:EventTrigger>
-    </Behaviors:Interaction.Triggers>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

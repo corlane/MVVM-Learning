@@ -110,3 +110,4 @@
 
 3.0.1.26
 	Added window size and position saving and loading. Should help with the tiny screen issue, as well as just generally be nice to have.
+	Fillers show maple no matter what species is chosen. Fixed (FillerView.xaml had a Load Defaults section)

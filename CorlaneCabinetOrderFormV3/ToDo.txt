@@ -45,8 +45,6 @@ Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab d
 
 Cabinet with no doors should not show on Reveals/Gap exception tab.
 
-Fillers show maple no matter what species is chosen.
-
 
 
 
