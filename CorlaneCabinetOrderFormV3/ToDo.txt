@@ -17,7 +17,8 @@ Make sure ALL dimension boxes show default format. Reveals, for example do not a
 
 Add fixed shelf option (FULL DEPTH ONLY) - This will introduce the possibility of splitting the cabinet into more than 1 opening: Allow adjustable shelves and doors per opening? That's CAD territory...
 
-Window needs to be SMALLER STILL... jesus -- DONE. Will now load at 1440x800.
+Hide Supply Doors & Drill Hinge Holes on a 0 door cabinet.
+
 
 
 

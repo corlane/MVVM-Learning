@@ -446,6 +446,45 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     // Drawer-specific properties
     [ObservableProperty] public partial int DrwCount { get; set; }
+    //partial void OnDrwCountChanged(int oldValue, int newValue)
+    //{
+    //    if (newValue != oldValue)
+    //    {
+    //        // Update visibility of drawer front height properties based on DrwCount
+    //        DrawersStackPanelVisible = newValue > 0;
+    //        DrwFront1Visible = newValue >= 1;
+    //        DrwFront2Visible = newValue >= 2;
+    //        DrwFront3Visible = newValue >= 3;
+    //        DrwFront4Visible = newValue == 4;
+    //        Opening1Visible = newValue >= 1;
+    //        Opening2Visible = newValue >= 2;
+    //        Opening3Visible = newValue >= 3;
+    //        Opening4Visible = newValue == 4;
+    //        if (_defaults != null)
+    //        {
+    //            // Load default drawer front heights for the new drawer count
+    //            OpeningHeight1 = _defaults.DefaultDrwFrontHeight1;
+    //            OpeningHeight2 = _defaults.DefaultDrwFrontHeight2;
+    //            OpeningHeight3 = _defaults.DefaultDrwFrontHeight3;
+    //            DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+    //            DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
+    //            DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+    //        }
+    //        // Style2: "Drawer" cabinets
+    //        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+    //        {
+    //            ApplyDrawerFrontEqualization();
+    //            ResizeDrwFrontHeights();
+    //        }
+    //        else
+    //        {
+    //            ResizeOpeningHeights();
+    //            ResizeDrwFrontHeights();
+    //        }
+    //        RunValidationVisible();
+    //    }
+    //}
+
     partial void OnDrwCountChanged(int oldValue, int newValue)
     {
         if (newValue != oldValue)
@@ -460,7 +499,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             Opening2Visible = newValue >= 2;
             Opening3Visible = newValue >= 3;
             Opening4Visible = newValue == 4;
-            if (_defaults != null)
+            if (_defaults != null && !_isMapping)
             {
                 // Load default drawer front heights for the new drawer count
                 OpeningHeight1 = _defaults.DefaultDrwFrontHeight1;
@@ -484,6 +523,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RunValidationVisible();
         }
     }
+
+
     [ObservableProperty] public partial string DrwStyle { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontGrainDir { get; set; } = "";
     [ObservableProperty] public partial bool IncDrwFrontsInList { get; set; }
@@ -1376,6 +1417,23 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
+    //private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
+    //{
+    //    string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
+
+    //    if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel baseCab)
+    //    {
+    //        // Map model -> VM with proper formatting for dimension properties
+    //        MapModelToViewModel(baseCab, dimFormat);
+
+    //        UpdatePreview();
+    //    }
+    //    else
+    //    {
+    //        //LoadDefaults();
+    //    }
+    //}
+
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
         string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
@@ -1385,6 +1443,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Map model -> VM with proper formatting for dimension properties
             MapModelToViewModel(baseCab, dimFormat);
 
+            // Kill any stale debounce timer that fired during mapping
+            // and resync the edit buffer to the final correct value.
+            _drwFrontHeight1DebounceTimer.Stop();
+            _isEditingDrwFrontHeight1 = false;
+            DrwFrontHeight1Edit = DrwFrontHeight1;
+
             UpdatePreview();
         }
         else
@@ -1392,7 +1456,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             //LoadDefaults();
         }
     }
-
 
     [RelayCommand]
     private void AddCabinet()
