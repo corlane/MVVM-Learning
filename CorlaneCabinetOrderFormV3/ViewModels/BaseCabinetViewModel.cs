@@ -11,7 +11,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using System.Windows.Media;
 using System.Timers;
-using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -105,31 +104,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            // Update visibility based on selected type
-            StdOrDrwBaseVisibility = (newValue == Style1 || newValue == Style2);
-            Corner90Visibility = (newValue == Style3);
-            Corner45Visibility = (newValue == Style4);
-            GroupShelvesVisibility = (newValue == Style1 || newValue == Style3 || newValue == Style4);
-            GroupDrawersVisibility = (newValue == Style1 || newValue == Style2);
-            GroupCabinetTopTypeVisibility = (newValue == Style1 || newValue == Style2);
-            GroupDrawerFrontHeightsVisibility = (newValue == Style1 || newValue == Style2);
-            GroupDoorsVisibility = (newValue == Style1 || newValue == Style3 || newValue == Style4);
-            BackThicknessVisible = (newValue == Style1 || newValue == Style2);
-            GroupRolloutsVisible = (newValue == Style1);
-            TrashDrawerEnabled = (newValue == Style1);
+            ApplyStyleVisibility(newValue);
+
             TrashDrawer = (newValue != Style1) ? false : TrashDrawer;
-            SinkCabinetEnabled = (newValue == Style1 || newValue == Style3 || newValue == Style4);
 
             if (newValue == Style2)
             {
                 // Drawer cabinet selected
-                ListDrwCount = [1, 2, 3, 4];
                 RolloutCount = 0;
             }
             else if (newValue == Style1)
             {
                 // Standard or corner cabinet selected
-                ListDrwCount = [0, 1];
                 if (DrwCount == 1)
                 {
                     DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
@@ -446,45 +432,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     // Drawer-specific properties
     [ObservableProperty] public partial int DrwCount { get; set; }
-    //partial void OnDrwCountChanged(int oldValue, int newValue)
-    //{
-    //    if (newValue != oldValue)
-    //    {
-    //        // Update visibility of drawer front height properties based on DrwCount
-    //        DrawersStackPanelVisible = newValue > 0;
-    //        DrwFront1Visible = newValue >= 1;
-    //        DrwFront2Visible = newValue >= 2;
-    //        DrwFront3Visible = newValue >= 3;
-    //        DrwFront4Visible = newValue == 4;
-    //        Opening1Visible = newValue >= 1;
-    //        Opening2Visible = newValue >= 2;
-    //        Opening3Visible = newValue >= 3;
-    //        Opening4Visible = newValue == 4;
-    //        if (_defaults != null)
-    //        {
-    //            // Load default drawer front heights for the new drawer count
-    //            OpeningHeight1 = _defaults.DefaultDrwFrontHeight1;
-    //            OpeningHeight2 = _defaults.DefaultDrwFrontHeight2;
-    //            OpeningHeight3 = _defaults.DefaultDrwFrontHeight3;
-    //            DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-    //            DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
-    //            DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
-    //        }
-    //        // Style2: "Drawer" cabinets
-    //        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
-    //        {
-    //            ApplyDrawerFrontEqualization();
-    //            ResizeDrwFrontHeights();
-    //        }
-    //        else
-    //        {
-    //            ResizeOpeningHeights();
-    //            ResizeDrwFrontHeights();
-    //        }
-    //        RunValidationVisible();
-    //    }
-    //}
-
     partial void OnDrwCountChanged(int oldValue, int newValue)
     {
         if (newValue != oldValue)
@@ -1417,23 +1364,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
-    //private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
-    //{
-    //    string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
-
-    //    if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel baseCab)
-    //    {
-    //        // Map model -> VM with proper formatting for dimension properties
-    //        MapModelToViewModel(baseCab, dimFormat);
-
-    //        UpdatePreview();
-    //    }
-    //    else
-    //    {
-    //        //LoadDefaults();
-    //    }
-    //}
-
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
         string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
@@ -1447,7 +1377,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // and resync the edit buffer to the final correct value.
             _drwFrontHeight1DebounceTimer.Stop();
             _isEditingDrwFrontHeight1 = false;
-            DrwFrontHeight1Edit = DrwFrontHeight1;
+            DrwFrontHeight1Edit = DrwFrontHeight1; // restarts timer via OnDrwFrontHeight1EditChanged
+            _drwFrontHeight1DebounceTimer.Stop();  // kill it again immediately
+            _isEditingDrwFrontHeight1 = false;
 
             UpdatePreview();
         }
@@ -1992,9 +1924,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (model is null) return;
 
-        // capture old value so we can call the exact overload of OnStyleChanged afterwards
-        var oldStyle = Style;
-
         _isMapping = true;
         try
         {
@@ -2057,7 +1986,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             _isMapping = false;
 
-            OnStyleChanged(oldStyle, model.Style);
+            // Only update visibility/state — do NOT recalculate values.
+            // The model's values are authoritative after mapping.
+            ApplyStyleVisibility(model.Style);
+            RunValidationVisible();
         }
     }
 
@@ -2113,6 +2045,31 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         // if you actually want to allow 0, handle it here; for cabinet dimensions it’s typically invalid:
         return false;
+    }
+
+    /// <summary>
+    /// Sets visibility/state/list properties that depend on the cabinet style.
+    /// Does NOT modify any dimension values or trigger recalculation.
+    /// </summary>
+    private void ApplyStyleVisibility(string style)
+    {
+        StdOrDrwBaseVisibility = (style == Style1 || style == Style2);
+        Corner90Visibility = (style == Style3);
+        Corner45Visibility = (style == Style4);
+        GroupShelvesVisibility = (style == Style1 || style == Style3 || style == Style4);
+        GroupDrawersVisibility = (style == Style1 || style == Style2);
+        GroupCabinetTopTypeVisibility = (style == Style1 || style == Style2);
+        GroupDrawerFrontHeightsVisibility = (style == Style1 || style == Style2);
+        GroupDoorsVisibility = (style == Style1 || style == Style3 || style == Style4);
+        BackThicknessVisible = (style == Style1 || style == Style2);
+        GroupRolloutsVisible = (style == Style1);
+        TrashDrawerEnabled = (style == Style1);
+        SinkCabinetEnabled = (style == Style1 || style == Style3 || style == Style4);
+
+        if (style == Style2)
+            ListDrwCount = [1, 2, 3, 4];
+        else if (style == Style1)
+            ListDrwCount = [0, 1];
     }
 }
 

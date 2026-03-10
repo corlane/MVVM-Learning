@@ -106,4 +106,4 @@
 	Adjusted Default Settings page to fit Tiny Screenz (tm) better, as well as fixed some overlapping elements.
 
 3.0.1.25
-	
+	Drawer front heights were showing wrong due to bounce in the OnPropertyChanged event. Claude figured it out, and it seems to work now. Loads the model and forces the view to obey it without recalculating during that process.
