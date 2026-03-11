@@ -113,3 +113,4 @@
 	Fillers show maple no matter what species is chosen. Fixed (FillerView.xaml had a Load Defaults section)
 	PO Drw Boxes tab now shows whether to include drawer boxes, not just whether the slides have been changed.
 	Cabinets with 0 doors and/or drawers don't show in PO Reveal exception tab anymore.
+	Added _isMapping to almost every OnXChanged handler in BaseCabViewModel. This seems to have fixed cabinets showing wrong until you click them several times.

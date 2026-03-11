@@ -132,6 +132,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(7, 95)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(6, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue == oldValue) return;
 
         ListRolloutCount = [0];
@@ -232,6 +234,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Corner Cab specific properties
     [ObservableProperty] public partial bool SinkCabinet { get; set; } = false; partial void OnSinkCabinetChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue)
         {
             IncDrwBoxInListOpening1 = (!newValue);
@@ -250,6 +254,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             RecalculateFrontWidth();
@@ -258,6 +264,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; } = ""; partial void OnRightBackWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             RecalculateFrontWidth();
@@ -266,6 +274,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; } = ""; partial void OnLeftFrontWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -278,6 +288,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; } = ""; partial void OnRightFrontWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -290,6 +302,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = ""; partial void OnLeftDepthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -302,6 +316,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = ""; partial void OnRightDepthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -318,6 +334,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BackThickness { get; set; } = ""; partial void OnBackThicknessChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             RunValidationVisible();
@@ -342,6 +360,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool HasTK { get; set; }
     partial void OnHasTKChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         // Depth min depends on HasTK/TKDepth, so revalidate Depth when HasTK changes.
         ValidateProperty(Depth, nameof(Depth));
 
@@ -361,6 +381,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(2, 8)] public partial string TKHeight { get; set; } = ""; partial void OnTKHeightChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
         {
             ApplyDrawerFrontEqualization();
@@ -376,6 +398,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(0, 8)] public partial string TKDepth { get; set; } = "";
     partial void OnTKDepthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         // Depth min depends on TKDepth when HasTK is true, so revalidate Depth when TKDepth changes.
         ValidateProperty(Depth, nameof(Depth));
     }
@@ -390,6 +414,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // Shelf-specific properties
     [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
     {
+        if (_isMapping) return;
+
         if (value == 0)
         {
             DrillShelfHoles = false;
@@ -418,6 +444,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial string CustomDoorSpecies { get; set; } = "";
     [ObservableProperty] public partial int DoorCount { get; set; } partial void OnDoorCountChanged(int oldValue, int newValue)
     {
+        if (_isMapping) return;
+
         if (newValue == 0)
         {
             IncDoors = false;
@@ -434,6 +462,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial int DrwCount { get; set; }
     partial void OnDrwCountChanged(int oldValue, int newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             // Update visibility of drawer front height properties based on DrwCount
@@ -477,6 +507,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDrwFrontsInList { get; set; }
     partial void OnIncDrwFrontsInListChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             if (IncDrwFrontsInList)
@@ -498,30 +530,36 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDrwFrontInList1 { get; set; }
     partial void OnIncDrwFrontInList1Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
         { IncDrwFrontsInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwFrontInList2 { get; set; }
     partial void OnIncDrwFrontInList2Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
         { IncDrwFrontsInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwFrontInList3 { get; set; }
     partial void OnIncDrwFrontInList3Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
         { IncDrwFrontsInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwFrontInList4 { get; set; }
     partial void OnIncDrwFrontInList4Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
         { IncDrwFrontsInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwFronts { get; set; }
     partial void OnIncDrwFrontsChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             if (IncDrwFronts)
@@ -543,30 +581,36 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDrwFront1 { get; set; }
     partial void OnIncDrwFront1Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
         { IncDrwFronts = false; }
     }
     [ObservableProperty] public partial bool IncDrwFront2 { get; set; }
     partial void OnIncDrwFront2Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
         { IncDrwFronts = false; }
     }
     [ObservableProperty] public partial bool IncDrwFront3 { get; set; }
     partial void OnIncDrwFront3Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
         { IncDrwFronts = false; }
     }
     [ObservableProperty] public partial bool IncDrwFront4 { get; set; }
     partial void OnIncDrwFront4Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
         { IncDrwFronts = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxesInList { get; set; }
     partial void OnIncDrwBoxesInListChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             if (IncDrwBoxesInList)
@@ -588,30 +632,36 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDrwBoxInListOpening1 { get; set; }
     partial void OnIncDrwBoxInListOpening1Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
         { IncDrwBoxesInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxInListOpening2 { get; set; }
     partial void OnIncDrwBoxInListOpening2Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
         { IncDrwBoxesInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxInListOpening3 { get; set; }
     partial void OnIncDrwBoxInListOpening3Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
         { IncDrwBoxesInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxInListOpening4 { get; set; }
     partial void OnIncDrwBoxInListOpening4Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
         { IncDrwBoxesInList = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxes { get; set; }
     partial void OnIncDrwBoxesChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             if (IncDrwBoxes)
@@ -640,30 +690,36 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDrwBoxOpening1 { get; set; }
     partial void OnIncDrwBoxOpening1Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
         { IncDrwBoxes = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxOpening2 { get; set; }
     partial void OnIncDrwBoxOpening2Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
         { IncDrwBoxes = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxOpening3 { get; set; }
     partial void OnIncDrwBoxOpening3Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
         { IncDrwBoxes = false; }
     }
     [ObservableProperty] public partial bool IncDrwBoxOpening4 { get; set; }
     partial void OnIncDrwBoxOpening4Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
         if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
         { IncDrwBoxes = false; }
     }
     [ObservableProperty] public partial bool DrillSlideHoles { get; set; }
     partial void OnDrillSlideHolesChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (!newValue)
         {
             DrillSlideHolesOpening1 = false;
@@ -682,6 +738,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillSlideHolesOpening1 { get; set; }
     partial void OnDrillSlideHolesOpening1Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
         {
             DrillSlideHoles = false;
@@ -690,6 +748,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillSlideHolesOpening2 { get; set; }
     partial void OnDrillSlideHolesOpening2Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
         {
             DrillSlideHoles = false;
@@ -698,6 +758,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillSlideHolesOpening3 { get; set; }
     partial void OnDrillSlideHolesOpening3Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
         {
             DrillSlideHoles = false;
@@ -706,6 +768,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillSlideHolesOpening4 { get; set; }
     partial void OnDrillSlideHolesOpening4Changed(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
         {
             DrillSlideHoles = false;
@@ -775,6 +839,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial bool IncRollouts { get; set; } = false; partial void OnIncRolloutsChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue)
         {
             TrashDrawer = false;
@@ -788,6 +854,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncRolloutsInList { get; set; } = false;
     [ObservableProperty] public partial int RolloutCount { get; set; } = 0; partial void OnRolloutCountChanged(int oldValue, int newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             if (RolloutCount > 0)
@@ -803,6 +871,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial bool TrashDrawer { get; set; } = false; partial void OnTrashDrawerChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue)
         {
             ShelfCount = 0;
@@ -824,6 +894,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; } = false; partial void OnEqualizeBottomDrwFrontsChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue)
         {
             EqualizeAllDrwFronts = false;
@@ -852,6 +924,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; } = false; partial void OnEqualizeAllDrwFrontsChanged(bool oldValue, bool newValue)
     {
+        if (_isMapping) return;
+
         if (newValue)
         {
             EqualizeBottomDrwFronts = false;
@@ -884,6 +958,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string RightReveal { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string TopReveal { get; set; } = ""; partial void OnTopRevealChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             // Style2: "Drawer" cabinets
@@ -901,6 +977,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BottomReveal { get; set; } = ""; partial void OnBottomRevealChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             // Style2: "Drawer" cabinets
@@ -918,6 +996,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string GapWidth { get; set; } = ""; partial void OnGapWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             // Style2: "Drawer" cabinets
