@@ -123,6 +123,7 @@ public partial class PORevealsGapsViewModel : ObservableObject
 
     partial void OnDefaultGapWidthChanged(string value) => Refresh();
 
+
     public void Refresh()
     {
         if (Application.Current?.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess())
@@ -162,6 +163,12 @@ public partial class PORevealsGapsViewModel : ObservableObject
             bool isUpper = cab is UpperCabinetModel;
 
             if (!isBase && !isUpper)
+            {
+                continue;
+            }
+
+            // Skip cabinets that don't actually have doors, or have no included fronts (doors + all drawer fronts off).
+            if (!ShouldShowInExceptionList(cab))
             {
                 continue;
             }
@@ -298,5 +305,43 @@ public partial class PORevealsGapsViewModel : ObservableObject
         [ObservableProperty] public partial string DefaultTopReveal { get; set; } = "";
         [ObservableProperty] public partial string DefaultBottomReveal { get; set; } = "";
         [ObservableProperty] public partial string DefaultGapWidth { get; set; } = "";
+    }
+
+    private static bool ShouldShowInExceptionList(CabinetModel cab)
+    {
+        return cab switch
+        {
+            // Uppers: only doors exist, so require doors to exist + be included
+            UpperCabinetModel u => u.DoorCount > 0 && u.IncDoors,
+
+            // Bases: show if (doors exist + included) OR (any drawer front included for existing openings)
+            BaseCabinetModel b => (b.DoorCount > 0 && b.IncDoors) || AnyIncludedDrawerFront(b),
+
+            _ => false
+        };
+    }
+
+    private static bool AnyIncludedDrawerFront(BaseCabinetModel baseCab)
+    {
+        int openingCount = Math.Clamp(baseCab.DrwCount, 0, 4);
+
+        for (int i = 1; i <= openingCount; i++)
+        {
+            bool included = i switch
+            {
+                1 => baseCab.IncDrwFront1,
+                2 => baseCab.IncDrwFront2,
+                3 => baseCab.IncDrwFront3,
+                4 => baseCab.IncDrwFront4,
+                _ => false
+            };
+
+            if (included)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
