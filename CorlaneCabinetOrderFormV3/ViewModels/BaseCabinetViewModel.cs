@@ -102,32 +102,29 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_isMapping) return;
 
-        if (newValue != oldValue)
+        ApplyStyleVisibility(newValue);
+
+        TrashDrawer = (newValue != Style1) ? false : TrashDrawer;
+
+        if (newValue == Style2)
         {
-            ApplyStyleVisibility(newValue);
-
-            TrashDrawer = (newValue != Style1) ? false : TrashDrawer;
-
-            if (newValue == Style2)
-            {
-                // Drawer cabinet selected
-                RolloutCount = 0;
-            }
-            else if (newValue == Style1)
-            {
-                // Standard or corner cabinet selected
-                if (DrwCount == 1)
-                {
-                    DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-                }
-            }
-            //LoadDefaults();
-            RecalculateFrontWidth();
-            ResizeOpeningHeights();
-            ResizeDrwFrontHeights();
-            UpdatePreview();
-            RunValidationVisible();
+            // Drawer cabinet selected
+            RolloutCount = 0;
         }
+        else if (newValue == Style1)
+        {
+            // Standard or corner cabinet selected
+            if (DrwCount == 1)
+            {
+                DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+            }
+        }
+        //LoadDefaults();
+        RecalculateFrontWidth();
+        ResizeOpeningHeights();
+        ResizeDrwFrontHeights();
+        UpdatePreview();
+        RunValidationVisible();
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(7, 95)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(6, 120)] public partial string Height { get; set; } = ""; partial void OnHeightChanged(string oldValue, string newValue)
@@ -406,11 +403,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
 
 
-
-
-
-
-
     // Shelf-specific properties
     [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
     {
@@ -452,6 +444,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDoorsInList = false;
             DrillHingeHoles = false;
         }
+
+        ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
     [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";
@@ -466,42 +460,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            // Update visibility of drawer front height properties based on DrwCount
-            DrawersStackPanelVisible = newValue > 0;
-            DrwFront1Visible = newValue >= 1;
-            DrwFront2Visible = newValue >= 2;
-            DrwFront3Visible = newValue >= 3;
-            DrwFront4Visible = newValue == 4;
-            Opening1Visible = newValue >= 1;
-            Opening2Visible = newValue >= 2;
-            Opening3Visible = newValue >= 3;
-            Opening4Visible = newValue == 4;
-            if (_defaults != null && !_isMapping)
-            {
-                // Load default drawer front heights for the new drawer count
-                OpeningHeight1 = _defaults.DefaultDrwFrontHeight1;
-                OpeningHeight2 = _defaults.DefaultDrwFrontHeight2;
-                OpeningHeight3 = _defaults.DefaultDrwFrontHeight3;
-                DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-                DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
-                DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
-            }
-            // Style2: "Drawer" cabinets
-            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
-            {
-                ApplyDrawerFrontEqualization();
-                ResizeDrwFrontHeights();
-            }
-            else
-            {
-                ResizeOpeningHeights();
-                ResizeDrwFrontHeights();
-            }
+            // Reset drawer front heights / equalization to defaults for the new count.
+            // LoadDefaultDrwSettings already suppresses intermediate resizes,
+            // sets equalization modes, pre-seeds heights, and runs a single
+            // ApplyDrawerFrontEqualization + ResizeDrwFrontHeights pass.
+            LoadDefaultDrwSettings();
             RunValidationVisible();
         }
+
+        ApplyStyleVisibility(Style);
     }
-
-
     [ObservableProperty] public partial string DrwStyle { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontGrainDir { get; set; } = "";
     [ObservableProperty] public partial bool IncDrwFrontsInList { get; set; }
@@ -837,6 +805,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ResizeDrwFrontHeights();
         }
     }
+    [ObservableProperty] public partial string RolloutStyle { get; set; } = "";
     [ObservableProperty] public partial bool IncRollouts { get; set; } = false; partial void OnIncRolloutsChanged(bool oldValue, bool newValue)
     {
         if (_isMapping) return;
@@ -868,7 +837,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 IncRolloutsInList = false;
             }
         }
+
+        ApplyStyleVisibility(Style);
     }
+    [ObservableProperty] public partial bool DrillSlideHolesForRollouts { get; set; } = false;
     [ObservableProperty] public partial bool TrashDrawer { get; set; } = false; partial void OnTrashDrawerChanged(bool oldValue, bool newValue)
     {
         if (_isMapping) return;
@@ -882,6 +854,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncRolloutsInList = false;
             IncRolloutsEnabled = false;
             IncRolloutsInListEnabled = false;
+            GroupRolloutsVisible = false;
             UpdatePreview();
         }
 
@@ -889,6 +862,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             IncRolloutsEnabled = true;
             IncRolloutsInListEnabled = true;
+            GroupRolloutsVisible = true;
             UpdatePreview();
         }
     }
@@ -1083,9 +1057,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool GroupCabinetTopTypeVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = true;
-    //[ObservableProperty] public partial bool DrwFrontHeight1Enabled { get; set; }
-    //[ObservableProperty] public partial bool DrwFrontHeight2Enabled { get; set; }
-    //[ObservableProperty] public partial bool DrwFrontHeight3Enabled { get; set; }
     [ObservableProperty] public partial bool BaseShowRevealSettings { get; set; }
     [ObservableProperty] public partial bool DrwFront1Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront2Visible { get; set; } = true;
@@ -1118,6 +1089,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool CustomEBSpeciesEnabled { get; set; } = false;
     [ObservableProperty] public partial bool CustomDoorSpeciesEnabled { get; set; } = false;
     [ObservableProperty] public partial bool SinkCabinetEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool DoorGrainDirVisible { get; set; } = true;
+    [ObservableProperty] public partial bool SupplySlabDoorsVisible { get; set; } = true;
+    [ObservableProperty] public partial bool IncDoorsInListVisible { get; set; } = true;
+    [ObservableProperty] public partial bool DrillHingeHolesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool IncRolloutsVisible { get; set; } = false;
+    [ObservableProperty] public partial bool IncRolloutsInListVisible { get; set; } = false;
+    [ObservableProperty] public partial bool RolloutStyleVisible { get; set; } = false;
+    [ObservableProperty] public partial bool DrillSlideHolesForRolloutsVisible { get; set; } = false;
 
     //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()
@@ -1601,8 +1580,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncRollouts = IncRollouts,
             IncRolloutsInList = IncRolloutsInList,
             RolloutCount = RolloutCount,
+            RolloutStyle = RolloutStyle,
+            DrillSlideHolesForRollouts = DrillSlideHolesForRollouts,
             SinkCabinet = SinkCabinet,
-            TrashDrawer = TrashDrawer,
+            TrashDrawer = TrashDrawer,        
         };
 
         try
@@ -1773,6 +1754,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.IncRollouts = IncRollouts;
             selected.IncRolloutsInList = IncRolloutsInList;
             selected.RolloutCount = RolloutCount;
+            selected.RolloutStyle = RolloutStyle;
+            selected.DrillSlideHolesForRollouts = DrillSlideHolesForRollouts;
             selected.SinkCabinet = SinkCabinet;
             selected.TrashDrawer = TrashDrawer;
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
@@ -1811,79 +1794,90 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ListDrwCount = [0, 1];
         }
 
-        Species = _defaults.DefaultSpecies;
-        EBSpecies = _defaults.DefaultEBSpecies;
-        HasTK = _defaults.DefaultHasTK;
-        TKHeight = _defaults.DefaultTKHeight;
-        TKDepth = _defaults.DefaultTKDepth;
-        DoorCount = _defaults.DefaultDoorCount;
-        DoorGrainDir = _defaults.DefaultDoorGrainDir;
-        IncDoorsInList = _defaults.DefaultIncDoorsInList;
-        IncDoors = _defaults.DefaultIncDoors;
-        DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
-        DoorSpecies = _defaults.DefaultDoorDrwSpecies;
-        if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultBaseBackThickness; }
-        else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultBaseBackThickness)); }
-        //BackThickness = _defaults.DefaultBaseBackThickness;
-        TopType = _defaults.DefaultTopType;
-        ShelfCount = _defaults.DefaultShelfCount;
-        ShelfDepth = _defaults.DefaultShelfDepth;
-        DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
-        DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
-        IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
-        IncDrwFronts = _defaults.DefaultIncDrwFronts;
-        if (IncDrwFronts)
+        // Suppress intermediate resize calls while batch-setting defaults.
+        // Many of these properties (HasTK, TKHeight, DrwCount, EqualizeAll/Bottom,
+        // DrwFrontHeight*, reveals, GapWidth) fire changed handlers that call
+        // ResizeOpeningHeights / ResizeDrwFrontHeights against partially-updated state.
+        _isResizing = true;
+        try
         {
-            IncDrwFront1 = true;
-            IncDrwFront2 = true;
-            IncDrwFront3 = true;
-            IncDrwFront4 = true;
-        }
-        else
-        {
-            IncDrwFront1 = false;
-            IncDrwFront2 = false;
-            IncDrwFront3 = false;
-            IncDrwFront4 = false;
-        }
+            Species = _defaults.DefaultSpecies;
+            EBSpecies = _defaults.DefaultEBSpecies;
+            HasTK = _defaults.DefaultHasTK;
+            TKHeight = _defaults.DefaultTKHeight;
+            TKDepth = _defaults.DefaultTKDepth;
+            DoorCount = _defaults.DefaultDoorCount;
+            DoorGrainDir = _defaults.DefaultDoorGrainDir;
+            IncDoorsInList = _defaults.DefaultIncDoorsInList;
+            IncDoors = _defaults.DefaultIncDoors;
+            DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
+            DoorSpecies = _defaults.DefaultDoorDrwSpecies;
+            if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultBaseBackThickness; }
+            else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultBaseBackThickness)); }
+            //BackThickness = _defaults.DefaultBaseBackThickness;
+            TopType = _defaults.DefaultTopType;
+            ShelfCount = _defaults.DefaultShelfCount;
+            ShelfDepth = _defaults.DefaultShelfDepth;
+            DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
+            DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
+            IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
+            IncDrwFronts = _defaults.DefaultIncDrwFronts;
+            if (IncDrwFronts)
+            {
+                IncDrwFront1 = true;
+                IncDrwFront2 = true;
+                IncDrwFront3 = true;
+                IncDrwFront4 = true;
+            }
+            else
+            {
+                IncDrwFront1 = false;
+                IncDrwFront2 = false;
+                IncDrwFront3 = false;
+                IncDrwFront4 = false;
+            }
 
-        IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
-        IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
-        DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
-        if (Style == Style1) { DrwCount = _defaults.DefaultStdDrawerCount; }
-        if (Style == Style2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
-        DrwStyle = _defaults.DefaultDrwStyle;
+            IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
+            IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
+            DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
+            if (Style == Style1) { DrwCount = _defaults.DefaultStdDrawerCount; }
+            if (Style == Style2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
+            DrwStyle = _defaults.DefaultDrwStyle;
+            RolloutStyle = _defaults.DefaultDrwStyle;
+            EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
+            EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
 
-        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
-        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
-
-        DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-        DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
-        DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
-
-
-        if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
-        {
             DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-            DrwFrontHeight2 = "7"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
-            DrwFrontHeight3 = "7";
+            DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
+            DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+
+
+            if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
+            {
+                DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+                DrwFrontHeight2 = "7"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+                DrwFrontHeight3 = "7";
+            }
+            if (_defaults.DefaultEqualizeAllDrwFronts && Style == Style2)
+            {
+                DrwFrontHeight1 = "3"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+                DrwFrontHeight2 = "3";
+                DrwFrontHeight3 = "3";
+                DrwFrontHeight4 = "3";
+            }
+
+            LeftReveal = _defaults.DefaultBaseLeftReveal;
+            RightReveal = _defaults.DefaultBaseRightReveal;
+            TopReveal = _defaults.DefaultBaseTopReveal;
+            BottomReveal = _defaults.DefaultBaseBottomReveal;
+            GapWidth = _defaults.DefaultGapWidth;
+            SinkCabinet = false;
+            TrashDrawer = false;
         }
-        if (_defaults.DefaultEqualizeAllDrwFronts && Style == Style2)
+        finally
         {
-            DrwFrontHeight1 = "3"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
-            DrwFrontHeight2 = "3";
-            DrwFrontHeight3 = "3";
-            DrwFrontHeight4 = "3";
+            _isResizing = false;
         }
-
-        LeftReveal = _defaults.DefaultBaseLeftReveal;
-        RightReveal = _defaults.DefaultBaseRightReveal;
-        TopReveal = _defaults.DefaultBaseTopReveal;
-        BottomReveal = _defaults.DefaultBaseBottomReveal;
-        GapWidth = _defaults.DefaultGapWidth;
-        SinkCabinet = false;
-        TrashDrawer = false;
-
 
         ApplyDrawerFrontEqualization();
         ResizeDrwFrontHeights();
@@ -1895,26 +1889,35 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_defaults is null) return;
 
-        EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
-        EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
-
-        DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-        DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
-        DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
-
-
-        if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
+        // Suppress intermediate resize calls while batch-setting defaults.
+        _isResizing = true;
+        try
         {
+            EqualizeAllDrwFronts = _defaults.DefaultEqualizeAllDrwFronts;
+            EqualizeBottomDrwFronts = _defaults.DefaultEqualizeBottomDrwFronts;
+
             DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
-            DrwFrontHeight2 = "7"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
-            DrwFrontHeight3 = "7";
+            DrwFrontHeight2 = _defaults.DefaultDrwFrontHeight2;
+            DrwFrontHeight3 = _defaults.DefaultDrwFrontHeight3;
+
+
+            if (_defaults.DefaultEqualizeBottomDrwFronts && Style == Style2)
+            {
+                DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+                DrwFrontHeight2 = "7"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+                DrwFrontHeight3 = "7";
+            }
+            if (_defaults.DefaultEqualizeAllDrwFronts && Style == Style2)
+            {
+                DrwFrontHeight1 = "3"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
+                DrwFrontHeight2 = "3";
+                DrwFrontHeight3 = "3";
+                DrwFrontHeight4 = "3";
+            }
         }
-        if (_defaults.DefaultEqualizeAllDrwFronts && Style == Style2)
+        finally
         {
-            DrwFrontHeight1 = "3"; // lmao magic numbers. Need to pre-seed these so the resize routine works correctly
-            DrwFrontHeight2 = "3";
-            DrwFrontHeight3 = "3";
-            DrwFrontHeight4 = "3";
+            _isResizing = false;
         }
 
         ApplyDrawerFrontEqualization();
@@ -1979,6 +1982,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GapWidth = GapWidth,
             IncRollouts = IncRollouts,
             RolloutCount = RolloutCount,
+            RolloutStyle = RolloutStyle,
             DrwStyle = DrwStyle,
             SinkCabinet = SinkCabinet,
             TrashDrawer = TrashDrawer
@@ -2150,6 +2154,32 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ListDrwCount = [1, 2, 3, 4];
         else if (style == Style1)
             ListDrwCount = [0, 1];
+
+        // DrwCount-dependent visibility
+        DrawersStackPanelVisible = DrwCount > 0;
+        DrwFront1Visible = DrwCount >= 1;
+        DrwFront2Visible = DrwCount >= 2;
+        DrwFront3Visible = DrwCount >= 3;
+        DrwFront4Visible = DrwCount == 4;
+        Opening1Visible = DrwCount >= 1;
+        Opening2Visible = DrwCount >= 2;
+        Opening3Visible = DrwCount >= 3;
+        Opening4Visible = DrwCount == 4;
+
+        // RolloutCount-dependent visibility
+        IncRolloutsVisible = RolloutCount > 0;
+        IncRolloutsInListVisible = RolloutCount > 0;
+        RolloutStyleVisible = RolloutCount > 0;
+        DrillSlideHolesForRolloutsVisible = RolloutCount > 0;
+
+        // DoorCount-dependent visibility
+        DoorGrainDirVisible = DoorCount > 0;
+        IncDoorsInListVisible = DoorCount > 0;
+        DrillHingeHolesVisible = DoorCount > 0;
+        SupplySlabDoorsVisible = DoorCount > 0;
+
+        // Trash Drawer dependent visibility
+        GroupRolloutsVisible = !TrashDrawer;
     }
 }
 

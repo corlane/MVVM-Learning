@@ -69,8 +69,10 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial string BottomReveal { get; set; }
     [ObservableProperty] public partial string GapWidth { get; set; }
     [ObservableProperty] public partial bool IncRollouts { get; set; }
-    [ObservableProperty] public partial bool IncRolloutsInList { get; set; }
     [ObservableProperty] public partial int RolloutCount { get; set; }
+    [ObservableProperty] public partial string RolloutStyle { get; set; }
+    [ObservableProperty] public partial bool IncRolloutsInList { get; set; }
+    [ObservableProperty] public partial bool DrillSlideHolesForRollouts { get; set; }
     [ObservableProperty] public partial bool SinkCabinet { get; set; }
     [ObservableProperty] public partial bool TrashDrawer { get; set; }
 

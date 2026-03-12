@@ -446,15 +446,15 @@
                                           ItemsSource="{Binding ListDoorCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" SelectedItem="{Binding DoorCount}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Label Content="Door Grain Direction:" VerticalAlignment="Center"/>
+                    <Label Content="Door Grain Direction:" VerticalAlignment="Center" Visibility="{Binding DoorGrainDirVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <ComboBox Name="comboBaseDoorGrainDir" Width="100" HorizontalAlignment="Left" Margin="0,5,0,5"
-                                          ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DoorGrainDir}"/>
+                                          ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DoorGrainDir}" Visibility="{Binding DoorGrainDirVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 </StackPanel>
-                <CheckBox x:Name="checkIncludeDoorsWithCabinet" Content="Supply Slab Doors With Cabinet" Margin="5" IsChecked="{Binding IncDoors}"/>
-                <CheckBox x:Name="checkIncludeDoorsInSizesList" Content="Include Doors In Sizes List" Margin="5" IsChecked="{Binding IncDoorsInList}"/>
-                <CheckBox x:Name="checkDrillHingePlateHoles" Content="Drill Hinge Plate Mounting Holes" Margin="5" IsChecked="{Binding DrillHingeHoles}"/>
+                    <CheckBox x:Name="checkIncludeDoorsWithCabinet" Content="Supply Slab Doors With Cabinet" Margin="5" IsChecked="{Binding IncDoors}" Visibility="{Binding SupplySlabDoorsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <CheckBox x:Name="checkIncludeDoorsInSizesList" Content="Include Doors In Sizes List" Margin="5" IsChecked="{Binding IncDoorsInList}" Visibility="{Binding IncDoorsInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <CheckBox x:Name="checkDrillHingePlateHoles" Content="Drill Hinge Plate Mounting Holes" Margin="5" IsChecked="{Binding DrillHingeHoles}" Visibility="{Binding DrillHingeHolesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 <StackPanel Orientation="Horizontal">
                 </StackPanel>
             </StackPanel>
@@ -498,23 +498,35 @@
 
         <GroupBox Header="Rollout Shelves" Grid.Row="0" Grid.Column="3" Margin="5,330,5,5" Width="Auto" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.RowSpan="2" Visibility="{Binding GroupRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel Orientation="Vertical">
-                <CheckBox x:Name="checkIncludeRolloutsWithCabinet" Content="Supply Rollouts With Cabinet" Margin="5,10,5,5" IsChecked="{Binding IncRollouts}" IsEnabled="{Binding IncRolloutsEnabled}"/>
-                <CheckBox x:Name="checkIncludeRolloutsInSizesList" Content="Include Rollouts In Sizes List" Margin="5" IsChecked="{Binding IncRolloutsInList}" IsEnabled="{Binding IncRolloutsInListEnabled}"/>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Number of Rollouts:" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                    <ComboBox x:Name="comboRolloutCount" Width="45" HorizontalAlignment="Left" Margin="5"
+                        <ComboBox x:Name="comboRolloutCount" Width="45" HorizontalAlignment="Left" Margin="5"
                                       ItemsSource="{Binding ListRolloutCount}" SelectedItem="{Binding RolloutCount}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="checkIncludeRolloutsWithCabinet" Content="Supply Rollouts With Cabinet" Margin="5,10,5,5" IsChecked="{Binding IncRollouts}" IsEnabled="{Binding IncRolloutsEnabled}" 
+                              Visibility="{Binding IncRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <CheckBox x:Name="checkIncludeRolloutsInSizesList" Content="Include Rollouts In Sizes List" Margin="5" IsChecked="{Binding IncRolloutsInList}" IsEnabled="{Binding IncRolloutsInListEnabled}" 
+                              Visibility="{Binding IncRolloutsInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <CheckBox x:Name="checkDrillSlideHolesForRollouts" Content="Drill Slide Holes For Rollouts" Margin="5" IsChecked="{Binding DrillSlideHolesForRollouts}" 
+                              Visibility="{Binding DrillSlideHolesForRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Rollout Style:" Margin="5"  VerticalAlignment="Center" Visibility="{Binding RolloutStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <ComboBox x:Name="comboRolloutStyle" Width="245" Margin="5" HorizontalAlignment="Left"
+                                          ItemsSource="{Binding ListDrawerStyle}" SelectedValue="{Binding RolloutStyle, UpdateSourceTrigger=PropertyChanged}" 
+                                  Visibility="{Binding RolloutStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                    </StackPanel>
 
                 </StackPanel>
-            </StackPanel>
         </GroupBox>
         
 
-        <GroupBox Grid.Row="2" Grid.Column="3" Header="Special instructions/notes for this item" Margin="25,150,10,200" VerticalAlignment="Top" HorizontalAlignment="Right" Width="350" Height="160">
+        <GroupBox Grid.Row="2" Grid.Column="3" Header="Special instructions/notes for this item" Margin="25,170,10,200" VerticalAlignment="Top" HorizontalAlignment="Right" Width="350" Height="160">
             <TextBox x:Name="textBaseCabNotes" Margin="5" IsReadOnly="False" TextWrapping="Wrap" Text="{Binding Notes}"/>
         </GroupBox>
 
-        <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5,320,5,5">
+        <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5,330,5,5">
 
             <StackPanel Orientation="Vertical" Margin="5">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Center">

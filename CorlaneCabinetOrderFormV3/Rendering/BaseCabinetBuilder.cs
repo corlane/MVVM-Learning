@@ -677,13 +677,13 @@ internal static class BaseCabinetBuilder
                 const double rolloutMountBracketSpacing = 1.2; // Thickness of Blum Tandem Rollout Mounting Bracket - Gus uses 3/4"
                 dbxHeight = rolloutHeight;
 
-                if (baseCab.DrwStyle is not null)
+                if (baseCab.RolloutStyle is not null)
                 {
-                    if (baseCab.DrwStyle.Contains("Blum"))
+                    if (baseCab.RolloutStyle.Contains("Blum"))
                     {
                         dbxWidth = interiorWidth - tandemSideSpacing;
                     }
-                    else if (baseCab.DrwStyle.Contains("Accuride"))
+                    else if (baseCab.RolloutStyle.Contains("Accuride"))
                     {
                         dbxWidth = interiorWidth - accurideSideSpacing;
                     }
@@ -720,6 +720,18 @@ internal static class BaseCabinetBuilder
                             placement.Children.Add(rotateGroup);
                             ModelTransforms.ApplyTransform(placement, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (r * 6), interiorDepth + backThickness - .25, 0, 0, 0); // set rollout .25" back from front of cabinet
                             cabinet.Children.Add(placement);
+                        }
+                    }
+
+                    if (baseCab.DrwStyle is not null)
+                    {
+                        if (baseCab.DrwStyle.Contains("Blum"))
+                        {
+                            dbxWidth = interiorWidth - tandemSideSpacing;
+                        }
+                        else if (baseCab.DrwStyle.Contains("Accuride"))
+                        {
+                            dbxWidth = interiorWidth - accurideSideSpacing;
                         }
                     }
 
