@@ -146,6 +146,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
     // Corner Cab specific properties
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             RecalculateFrontWidth();
@@ -154,6 +156,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightBackWidth { get; set; } = ""; partial void OnRightBackWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             RecalculateFrontWidth();
@@ -162,6 +166,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftFrontWidth { get; set; } = ""; partial void OnLeftFrontWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -174,6 +180,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightFrontWidth { get; set; } = ""; partial void OnRightFrontWidthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -186,6 +194,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftDepth { get; set; } = ""; partial void OnLeftDepthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -198,6 +208,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string RightDepth { get; set; } = ""; partial void OnRightDepthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
@@ -227,6 +239,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BackThickness { get; set; } = ""; partial void OnBackThicknessChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (newValue != oldValue)
         {
             RunValidationVisible();
@@ -236,6 +250,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
     {
+        if (_isMapping) return;
+
         if (value == 0)
         {
             DrillShelfHoles = false;
@@ -251,6 +267,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     [ObservableProperty] public partial int DoorCount { get; set; } partial void OnDoorCountChanged(int oldValue, int newValue)
     {
+        if (_isMapping) return;
+
         if (newValue == 0)
         {
             IncDoors = false;
