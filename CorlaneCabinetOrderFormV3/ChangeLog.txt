@@ -119,3 +119,6 @@
 	Added _isMapping to the handlers in UpperCabViewmodel.
 	Fixed DrwCount thrashing the handlers.
 	Overhauled the Rollout section, including slide type and slide holes now.
+
+3.0.1.28
+	Added groupbox around "User Feedback" section of Place Order tab.
