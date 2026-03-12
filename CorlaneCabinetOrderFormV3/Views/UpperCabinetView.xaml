@@ -252,15 +252,15 @@
                                           ItemsSource="{Binding ListDoorCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" SelectedItem="{Binding DoorCount}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <Label Content="Door Grain Direction:" VerticalAlignment="Center"/>
+                            <Label Content="Door Grain Direction:" VerticalAlignment="Center" Visibility="{Binding DoorGrainDirVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                             <ComboBox Name="comboBaseDoorGrainDir" Width="100" HorizontalAlignment="Left" Margin="0,5,5,5"
-                                          ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DoorGrainDir}"/>
+                                          ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DoorGrainDir}" Visibility="{Binding DoorGrainDirVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         </StackPanel>
-                        <CheckBox x:Name="checkIncludeDoorsWithCabinet" Content="Supply Slab Doors With Cabinet" Margin="5" IsChecked="{Binding IncDoors}"/>
-                        <CheckBox x:Name="checkIncludeDoorsInSizesList" Content="Include Doors In Sizes List" Margin="5" IsChecked="{Binding IncDoorsInList}"/>
-                        <CheckBox x:Name="checkDrillHingePlateHoles" Content="Drill Hinge Plate Mounting Holes" Margin="5" IsChecked="{Binding DrillHingeHoles}"/>
+                        <CheckBox x:Name="checkIncludeDoorsWithCabinet" Content="Supply Slab Doors With Cabinet" Margin="5" IsChecked="{Binding IncDoors}" Visibility="{Binding SupplySlabDoorsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <CheckBox x:Name="checkIncludeDoorsInSizesList" Content="Include Doors In Sizes List" Margin="5" IsChecked="{Binding IncDoorsInList}" Visibility="{Binding IncDoorsInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <CheckBox x:Name="checkDrillHingePlateHoles" Content="Drill Hinge Plate Mounting Holes" Margin="5" IsChecked="{Binding DrillHingeHoles}" Visibility="{Binding DrillHingeHolesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         <StackPanel Orientation="Horizontal">
                         </StackPanel>
                     </StackPanel>

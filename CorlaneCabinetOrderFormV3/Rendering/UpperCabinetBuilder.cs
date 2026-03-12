@@ -176,6 +176,9 @@ internal static class UpperCabinetBuilder
 
             for (int i = 1; i < upperCab.ShelfCount + 1; i++)
             {
+                double backThicknessForSpacing = backThickness;
+                if (backThickness == 0.25) { backThicknessForSpacing = 0; }
+
                 shelfPoints =
                 [
                     new (0,0,0),
@@ -184,7 +187,7 @@ internal static class UpperCabinetBuilder
                     new (0,shelfDepth,0)
                 ];
                 shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
-                ModelTransforms.ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -MaterialThickness34 - shelfDepth, i * shelfSpacing, 270, 0, 0);
+                ModelTransforms.ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -backThicknessForSpacing - shelfDepth, i * shelfSpacing, 270, 0, 0);
                 cabinet.Children.Add(shelf);
             }
 

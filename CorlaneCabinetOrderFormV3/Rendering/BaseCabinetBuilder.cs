@@ -122,7 +122,7 @@ internal static class BaseCabinetBuilder
         {
             shelfDepth = interiorDepth;
         }
-        //shelfDepth -= 0.125;
+
         double baseDoorGap = ConvertDimension.FractionToDouble(baseCab.GapWidth);
         double doorLeftReveal = ConvertDimension.FractionToDouble(baseCab.LeftReveal);
         double doorRightReveal = ConvertDimension.FractionToDouble(baseCab.RightReveal);
@@ -455,9 +455,10 @@ internal static class BaseCabinetBuilder
                 for (int i = 1; i < baseCab.ShelfCount + 1; i++)
                 {
                     //Debug.WriteLine("Shelf");
-
+                    double backThicknessForSpacing = backThickness;
+                    if (backThickness == 0.25) { backThicknessForSpacing = 0; }
                     shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
-                    ModelTransforms.ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -backThickness - shelfDepth, i * shelfSpacing, 270, 0, 0);
+                    ModelTransforms.ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -backThicknessForSpacing - shelfDepth, i * shelfSpacing, 270, 0, 0);
                     cabinet.Children.Add(shelf);
                 }
             }

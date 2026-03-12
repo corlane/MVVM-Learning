@@ -122,3 +122,5 @@
 
 3.0.1.28
 	Added groupbox around "User Feedback" section of Place Order tab.
+	Fixed odd shelf positioning when back thickness is 1/4", base and upper.
+	

@@ -126,11 +126,8 @@
                         <RadioButton x:Name="radioBad" Content="Bad!" FontSize="22" Canvas.Left="180" Canvas.Top="18" IsTabStop="False"
                              MouseEnter="RadioBad_MouseEnter"/>
                     </Canvas>
-
                 </Grid>
-
             </GroupBox>
-
         </StackPanel>
 
     </Grid>

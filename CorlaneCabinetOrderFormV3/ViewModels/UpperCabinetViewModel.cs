@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -275,6 +276,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
             IncDoorsInList = false;
             DrillHingeHoles = false;
         }
+
+        // DoorCount-dependent visibility
+        DoorGrainDirVisible = DoorCount > 0;
+        IncDoorsInListVisible = DoorCount > 0;
+        DrillHingeHolesVisible = DoorCount > 0;
+        SupplySlabDoorsVisible = DoorCount > 0;
     }
     [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";
     [ObservableProperty] public partial bool IncDoorsInList { get; set; }
@@ -332,6 +339,10 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;
     [ObservableProperty] public partial bool CustomEBSpeciesEnabled { get; set; } = false;
     [ObservableProperty] public partial bool CustomDoorSpeciesEnabled { get; set; } = false;
+    [ObservableProperty] public partial bool DoorGrainDirVisible { get; set; } = true;
+    [ObservableProperty] public partial bool IncDoorsInListVisible { get; set; } = true;
+    [ObservableProperty] public partial bool DrillHingeHolesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool SupplySlabDoorsVisible { get; set; } = true;
 
 
     [RelayCommand]
@@ -682,12 +693,24 @@ public partial class UpperCabinetViewModel : ObservableValidator
             _isMapping = false;
 
             OnStyleChanged(model.Style);
+            ApplyStyleVisibility(Style);
         }
     }
 
 
-    // For 3D model:
+    private void ApplyStyleVisibility(string style)
+    {
+        BackThicknessVisible = (style == Style1 || style == Style2);
 
+        // DoorCount-dependent visibility
+        DoorGrainDirVisible = DoorCount > 0;
+        IncDoorsInListVisible = DoorCount > 0;
+        DrillHingeHolesVisible = DoorCount > 0;
+        SupplySlabDoorsVisible = DoorCount > 0;
+    }
+
+
+    // For 3D model:
     private void UpdatePreview()
     {
         //_mainVm.CurrentPreviewCabinet = new UpperCabinetModel --- Original before Preview Service
