@@ -12,11 +12,14 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class PODoorDrwGrainDirViewModel : ObservableObject
 {
+    private const string TabId = "GrainDir";
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;
     private readonly DefaultSettingsService? _defaults;
+    private bool _isRefreshing;
 
     public PODoorDrwGrainDirViewModel()
     {
@@ -78,12 +81,16 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
             return;
         }
 
+        _isRefreshing = true;
+        SnapshotDoneKeys();
+
         Exceptions.Clear();
         TotalCabsNeedingChange = 0;
 
         if (_cabinetService == null)
         {
             UpdateTabHeaderBrush();
+            _isRefreshing = false;
             return;
         }
 
@@ -96,27 +103,28 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
 
             if (cab is BaseCabinetModel baseCab)
             {
-                AddDoorExceptionIfNeeded(cabNumber, cabName, baseCab.IncDoors, baseCab.DoorCount, baseCab.DoorGrainDir, baseCab.Qty);
+                AddDoorExceptionIfNeeded(cab.Id, cabNumber, cabName, baseCab.IncDoors, baseCab.DoorCount, baseCab.DoorGrainDir, baseCab.Qty);
 
                 bool anyFrontIncluded = baseCab.IncDrwFront1 || baseCab.IncDrwFront2 || baseCab.IncDrwFront3 || baseCab.IncDrwFront4;
                 if (anyFrontIncluded)
                 {
-                    AddDrawerFrontExceptionIfNeeded(cabNumber, cabName, baseCab.DrwFrontGrainDir, baseCab.Qty);
+                    AddDrawerFrontExceptionIfNeeded(cab.Id, cabNumber, cabName, baseCab.DrwFrontGrainDir, baseCab.Qty);
                 }
             }
             else if (cab is UpperCabinetModel upperCab)
             {
-                AddDoorExceptionIfNeeded(cabNumber, cabName, upperCab.IncDoors, upperCab.DoorCount, upperCab.DoorGrainDir, upperCab.Qty);
+                AddDoorExceptionIfNeeded(cab.Id, cabNumber, cabName, upperCab.IncDoors, upperCab.DoorCount, upperCab.DoorGrainDir, upperCab.Qty);
             }
         }
 
         UpdateTabHeaderBrush();
+        _isRefreshing = false;
     }
 
     [RelayCommand]
     private void RefreshList() => Refresh();
 
-    private void AddDoorExceptionIfNeeded(int cabNumber, string cabName, bool incDoors, int doorCount, string? actualDoorGrainDir, int qty)
+    private void AddDoorExceptionIfNeeded(Guid cabinetId, int cabNumber, string cabName, bool incDoors, int doorCount, string? actualDoorGrainDir, int qty)
     {
         if (!incDoors || doorCount <= 0)
         {
@@ -131,10 +139,10 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
             return;
         }
 
-        AddRow(cabNumber, cabName, "Door(s)", actual, expected, qty);
+        AddRow(cabinetId, cabNumber, cabName, "Door(s)", actual, expected, qty);
     }
 
-    private void AddDrawerFrontExceptionIfNeeded(int cabNumber, string cabName, string? actualDrwFrontGrainDir, int qty)
+    private void AddDrawerFrontExceptionIfNeeded(Guid cabinetId, int cabNumber, string cabName, string? actualDrwFrontGrainDir, int qty)
     {
         string expected = NormalizeToDefault(DefaultDrwFrontGrainDir, DefaultDrwFrontGrainDir);
         string actual = NormalizeToDefault(actualDrwFrontGrainDir, expected);
@@ -144,31 +152,71 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
             return;
         }
 
-        AddRow(cabNumber, cabName, "Drawer Front(s)", actual, expected, qty);
+        AddRow(cabinetId, cabNumber, cabName, "Drawer Front(s)", actual, expected, qty);
     }
 
-    private void AddRow(int cabinetNumber, string cabinetName, string partType, string actual, string expected, int qty)
+    private void AddRow(Guid cabinetId, int cabinetNumber, string cabinetName, string partType, string actual, string expected, int qty)
     {
+        var savedKeys = _cabinetService!.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
+
         var row = new GrainDirExceptionRow
         {
+            CabinetId = cabinetId,
             CabinetNumber = cabinetNumber,
             CabinetName = cabinetName,
             PartType = partType,
             ActualGrainDir = actual,
             DefaultGrainDir = expected,
-            IsDone = false
+            IsDone = savedKeys?.Contains(MakeKey(cabinetId, partType)) == true
         };
 
         row.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(GrainDirExceptionRow.IsDone))
             {
+                if (!_isRefreshing) UpdateDoneKey(row);
                 UpdateTabHeaderBrush();
             }
         };
 
         Exceptions.Add(row);
         TotalCabsNeedingChange += System.Math.Max(1, qty);
+    }
+
+    private static string MakeKey(Guid cabinetId, string partType)
+        => $"{cabinetId:N}|{partType}";
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in Exceptions)
+        {
+            var key = MakeKey(row.CabinetId, row.PartType);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(GrainDirExceptionRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId, row.PartType);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
     }
 
     private static string NormalizeToDefault(string? actualMaybeBlank, string defaultValue)
@@ -188,6 +236,8 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
 
     public sealed partial class GrainDirExceptionRow : ObservableObject
     {
+        public Guid CabinetId { get; set; }
+
         [ObservableProperty] public partial bool IsDone { get; set; }
         [ObservableProperty] public partial int CabinetNumber { get; set; }
         [ObservableProperty] public partial string CabinetName { get; set; } = "";

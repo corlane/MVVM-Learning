@@ -11,6 +11,9 @@ namespace CorlaneCabinetOrderFormV3.Models;
 [JsonDerivedType(typeof(PanelModel), "Panel")]
 public abstract partial class CabinetModel : ObservableObject
 {
+    /// <summary>Stable unique identifier. Auto-generated for new cabinets, persisted in .cor files.</summary>
+    public Guid Id { get; set; } = Guid.NewGuid();
+
     // These properties are common to all cabinet types
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
     [ObservableProperty] public partial double MaterialThickness14 { get; set; } = 0.25;

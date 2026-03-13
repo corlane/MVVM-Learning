@@ -14,10 +14,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class POToekickViewModel : ObservableObject
 {
+    private const string TabId = "Toekick";
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;
+    private bool _isRefreshing;
 
     public POToekickViewModel()
     {
@@ -67,17 +70,23 @@ public partial class POToekickViewModel : ObservableObject
             return;
         }
 
+        _isRefreshing = true;
+        SnapshotDoneKeys();
+
         ToekickDimensionsToChange.Clear();
         TotalCabsNeedingChange = 0;
 
         if (_cabinetService == null)
         {
             UpdateTabHeaderBrush();
+            _isRefreshing = false;
             return;
         }
 
         double defaultHeight = ConvertDimension.FractionToDouble(DefaultTkHeight ?? "");
         double defaultDepth = ConvertDimension.FractionToDouble(DefaultTkDepth ?? "");
+
+        var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
         int cabNumber = 0;
 
@@ -109,19 +118,21 @@ public partial class POToekickViewModel : ObservableObject
 
             var row = new ToekickChangeRow
             {
+                CabinetId = cab.Id,
                 CabinetNumber = cabNumber,
                 CabinetName = baseCab.Name ?? "",
                 TkHeight = baseCab.TKHeight ?? "",
                 TkDepth = baseCab.TKDepth ?? "",
                 DefaultTkHeight = DefaultTkHeight ?? "",
                 DefaultTkDepth = DefaultTkDepth ?? "",
-                IsDone = false
+                IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
             };
 
             row.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(ToekickChangeRow.IsDone))
                 {
+                    if (!_isRefreshing) UpdateDoneKey(row);
                     UpdateTabHeaderBrush();
                 }
             };
@@ -132,16 +143,49 @@ public partial class POToekickViewModel : ObservableObject
         }
 
         UpdateTabHeaderBrush();
+        _isRefreshing = false;
     }
 
     [RelayCommand]
     private void RefreshList() => Refresh();
 
+    private static string MakeKey(Guid cabinetId) => cabinetId.ToString("N");
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in ToekickDimensionsToChange)
+        {
+            var key = MakeKey(row.CabinetId);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(ToekickChangeRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
+    }
+
     private void UpdateTabHeaderBrush()
     {
-        // Two-state:
-        // - green when there are no exceptions OR everything is marked Done
-        // - red when there are exceptions and at least one is not Done
         if (ToekickDimensionsToChange.Count == 0)
         {
             TabHeaderBrush = s_okGreen;
@@ -157,6 +201,8 @@ public partial class POToekickViewModel : ObservableObject
 
     public sealed partial class ToekickChangeRow : ObservableObject
     {
+        public Guid CabinetId { get; set; }
+
         [ObservableProperty] public partial bool IsDone { get; set; }
 
         [ObservableProperty] public partial int CabinetNumber { get; set; }

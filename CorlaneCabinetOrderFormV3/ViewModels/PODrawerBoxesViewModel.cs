@@ -11,10 +11,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class PODrawerBoxesViewModel : ObservableObject
 {
+    private const string TabId = "DrawerBoxes";
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;
+    private bool _isRefreshing;
 
     public PODrawerBoxesViewModel()
     {
@@ -64,16 +67,22 @@ public partial class PODrawerBoxesViewModel : ObservableObject
             return;
         }
 
+        _isRefreshing = true;
+        SnapshotDoneKeys();
+
         Exceptions.Clear();
         TotalCabsNeedingChange = 0;
 
         if (_cabinetService is null)
         {
             UpdateTabHeaderBrush();
+            _isRefreshing = false;
             return;
         }
 
         string defaultStyle = (DefaultDrwStyle ?? "").Trim();
+
+        var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
         int cabNumber = 0;
 
@@ -90,9 +99,6 @@ public partial class PODrawerBoxesViewModel : ObservableObject
 
             int drwCount = Math.Clamp(baseCab.DrwCount, 0, 4);
 
-            // IncDrwBoxes (per-opening): when an opening doesn't match the default, flag it.
-            // Default = true => exceptions when an opening is false (remove drawer box).
-            // Default = false => exceptions when an opening is true (add drawer box).
             if (drwCount > 0)
             {
                 for (int opening = 1; opening <= drwCount; opening++)
@@ -104,22 +110,25 @@ public partial class PODrawerBoxesViewModel : ObservableObject
                         continue;
                     }
 
+                    string exType = "Drawer Box Include";
+                    string drwBoxType = $"Opening {opening}";
+
                     TrackRow(new DrawerBoxExceptionRow
                     {
+                        CabinetId = cab.Id,
                         CabinetNumber = cabNumber,
                         CabinetName = baseCab.Name ?? "",
-                        ExceptionType = "Drawer Box Include",
-                        DrawerBoxType = $"Opening {opening}",
+                        ExceptionType = exType,
+                        DrawerBoxType = drwBoxType,
                         Actual = IncludeLabel(inc),
                         Default = IncludeLabel(DefaultIncDrwBoxes),
-                        IsDone = false
+                        IsDone = savedKeys?.Contains(MakeKey(cab.Id, exType, drwBoxType)) == true
                     });
 
                     anyRowsAddedForCab = true;
                 }
             }
 
-            // Drawer slide type: only relevant if at least one drawer box is included.
             bool anyDrawerBoxIncluded = drwCount > 0
                 && Enumerable.Range(1, drwCount).Any(o => GetIncDrwBoxForOpening(baseCab, o));
 
@@ -129,15 +138,19 @@ public partial class PODrawerBoxesViewModel : ObservableObject
 
                 if (!string.Equals(actualStyle, defaultStyle, StringComparison.OrdinalIgnoreCase))
                 {
+                    string exType = "Drawer Slide Type";
+                    string drwBoxType = "";
+
                     TrackRow(new DrawerBoxExceptionRow
                     {
+                        CabinetId = cab.Id,
                         CabinetNumber = cabNumber,
                         CabinetName = baseCab.Name ?? "",
-                        ExceptionType = "Drawer Slide Type",
-                        DrawerBoxType = "",
+                        ExceptionType = exType,
+                        DrawerBoxType = drwBoxType,
                         Actual = actualStyle,
                         Default = defaultStyle,
-                        IsDone = false
+                        IsDone = savedKeys?.Contains(MakeKey(cab.Id, exType, drwBoxType)) == true
                     });
 
                     anyRowsAddedForCab = true;
@@ -151,6 +164,7 @@ public partial class PODrawerBoxesViewModel : ObservableObject
         }
 
         UpdateTabHeaderBrush();
+        _isRefreshing = false;
     }
 
     [RelayCommand]
@@ -162,11 +176,48 @@ public partial class PODrawerBoxesViewModel : ObservableObject
         {
             if (e.PropertyName == nameof(DrawerBoxExceptionRow.IsDone))
             {
+                if (!_isRefreshing) UpdateDoneKey(row);
                 UpdateTabHeaderBrush();
             }
         };
 
         Exceptions.Add(row);
+    }
+
+    private static string MakeKey(Guid cabinetId, string exceptionType, string drawerBoxType)
+        => $"{cabinetId:N}|{exceptionType}|{drawerBoxType}";
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in Exceptions)
+        {
+            var key = MakeKey(row.CabinetId, row.ExceptionType, row.DrawerBoxType);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(DrawerBoxExceptionRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId, row.ExceptionType, row.DrawerBoxType);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
     }
 
     private static bool GetIncDrwBoxForOpening(BaseCabinetModel baseCab, int opening) => opening switch
@@ -194,6 +245,8 @@ public partial class PODrawerBoxesViewModel : ObservableObject
 
     public sealed partial class DrawerBoxExceptionRow : ObservableObject
     {
+        public Guid CabinetId { get; set; }
+
         [ObservableProperty] public partial bool IsDone { get; set; }
 
         [ObservableProperty] public partial int CabinetNumber { get; set; }

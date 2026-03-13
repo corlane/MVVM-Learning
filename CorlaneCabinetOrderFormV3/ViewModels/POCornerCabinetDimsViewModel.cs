@@ -14,10 +14,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class POCornerCabinetDimsViewModel : ObservableObject
 {
+    private const string TabId = "CornerDims";
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;
+    private bool _isRefreshing;
 
     public POCornerCabinetDimsViewModel()
     {
@@ -98,12 +101,16 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
             return;
         }
 
+        _isRefreshing = true;
+        SnapshotDoneKeys();
+
         CornerCabinetDimsToChange.Clear();
         TotalCabsNeedingChange = 0;
 
         if (_cabinetService is null)
         {
             UpdateTabHeaderBrush();
+            _isRefreshing = false;
             return;
         }
 
@@ -124,6 +131,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         double defUpperRfw = ConvertDimension.FractionToDouble(DefaultUpperRightFrontWidth ?? "");
         double defUpperLd = ConvertDimension.FractionToDouble(DefaultUpperLeftDepth ?? "");
         double defUpperRd = ConvertDimension.FractionToDouble(DefaultUpperRightDepth ?? "");
+
+        var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
         int cabNumber = 0;
 
@@ -207,6 +216,7 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
 
             var row = new CornerCabinetDimsChangeRow
             {
+                CabinetId = cab.Id,
                 CabinetNumber = cabNumber,
                 CabinetName = cab.Name ?? "",
                 CabinetType = cab.CabinetType,
@@ -226,13 +236,14 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
                 DefaultLeftBackWidth = isBaseAngleFront ? (DefaultBaseLeftBackWidth ?? "") : "",
                 DefaultRightBackWidth = isBaseAngleFront ? (DefaultBaseRightBackWidth ?? "") : "",
 
-                IsDone = false
+                IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
             };
 
             row.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(CornerCabinetDimsChangeRow.IsDone))
                 {
+                    if (!_isRefreshing) UpdateDoneKey(row);
                     UpdateTabHeaderBrush();
                 }
             };
@@ -242,10 +253,46 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         }
 
         UpdateTabHeaderBrush();
+        _isRefreshing = false;
     }
 
     [RelayCommand]
     private void RefreshList() => Refresh();
+
+    private static string MakeKey(Guid cabinetId) => cabinetId.ToString("N");
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in CornerCabinetDimsToChange)
+        {
+            var key = MakeKey(row.CabinetId);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(CornerCabinetDimsChangeRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
+    }
 
     private void UpdateTabHeaderBrush()
     {
@@ -264,6 +311,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
 
     public sealed partial class CornerCabinetDimsChangeRow : ObservableObject
     {
+        public Guid CabinetId { get; set; }
+
         [ObservableProperty] public partial bool IsDone { get; set; }
 
         [ObservableProperty] public partial int CabinetNumber { get; set; }

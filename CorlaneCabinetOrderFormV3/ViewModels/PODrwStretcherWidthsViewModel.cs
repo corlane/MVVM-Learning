@@ -14,136 +14,185 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class PODrwStretcherWidthsViewModel : ObservableObject
 {
-	private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
-	private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
+    private const string TabId = "DrwStretchers";
 
-	private const double DepthThresholdIn = 7.0;
-	private const double ReferenceStretcherWidthIn = 6.0;
+    private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
+    private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
-	private readonly ICabinetService? _cabinetService;
+    private const double DepthThresholdIn = 7.0;
+    private const double ReferenceStretcherWidthIn = 6.0;
 
-	public PODrwStretcherWidthsViewModel()
-	{
-		// design-time support
-		UpdateTabHeaderBrush();
-	}
+    private readonly ICabinetService? _cabinetService;
+    private bool _isRefreshing;
 
-	public PODrwStretcherWidthsViewModel(ICabinetService cabinetService)
-	{
-		_cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
+    public PODrwStretcherWidthsViewModel()
+    {
+        // design-time support
+        UpdateTabHeaderBrush();
+    }
 
-		if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
-		{
-			cc.CollectionChanged += (_, __) => Refresh();
-		}
+    public PODrwStretcherWidthsViewModel(ICabinetService cabinetService)
+    {
+        _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
 
-		Refresh();
-	}
+        if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
+        {
+            cc.CollectionChanged += (_, __) => Refresh();
+        }
 
-	public ObservableCollection<DrwStretcherWidthExceptionRow> Exceptions { get; } = new();
+        Refresh();
+    }
 
-	[ObservableProperty]
-	public partial int TotalCabsNeedingChange { get; set; }
+    public ObservableCollection<DrwStretcherWidthExceptionRow> Exceptions { get; } = new();
 
-	[ObservableProperty]
-	public partial Brush TabHeaderBrush { get; set; } = s_okGreen;
+    [ObservableProperty]
+    public partial int TotalCabsNeedingChange { get; set; }
 
-	public void Refresh()
-	{
-		if (Application.Current?.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess())
-		{
-			Application.Current.Dispatcher.Invoke(Refresh);
-			return;
-		}
+    [ObservableProperty]
+    public partial Brush TabHeaderBrush { get; set; } = s_okGreen;
 
-		Exceptions.Clear();
-		TotalCabsNeedingChange = 0;
+    public void Refresh()
+    {
+        if (Application.Current?.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess())
+        {
+            Application.Current.Dispatcher.Invoke(Refresh);
+            return;
+        }
 
-		if (_cabinetService is null)
-		{
-			UpdateTabHeaderBrush();
-			return;
-		}
+        _isRefreshing = true;
+        SnapshotDoneKeys();
 
-		int cabNumber = 0;
+        Exceptions.Clear();
+        TotalCabsNeedingChange = 0;
 
-		foreach (var cab in _cabinetService.Cabinets)
-		{
-			cabNumber++;
+        if (_cabinetService is null)
+        {
+            UpdateTabHeaderBrush();
+            _isRefreshing = false;
+            return;
+        }
 
-			if (cab is not BaseCabinetModel baseCab)
-			{
-				continue;
-			}
+        var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
-			if (baseCab.DrwCount <= 0)
-			{
-				continue;
-			}
+        int cabNumber = 0;
 
-			double depthIn = ConvertDimension.FractionToDouble(baseCab.Depth ?? "");
-			if (depthIn <= 0)
-			{
-				continue;
-			}
+        foreach (var cab in _cabinetService.Cabinets)
+        {
+            cabNumber++;
 
-			if (depthIn >= DepthThresholdIn)
-			{
-				continue;
-			}
+            if (cab is not BaseCabinetModel baseCab)
+            {
+                continue;
+            }
 
-			var row = new DrwStretcherWidthExceptionRow
-			{
-				CabinetNumber = cabNumber,
-				CabinetName = baseCab.Name ?? "",
-				Depth = baseCab.Depth ?? "",
-				DrwCount = baseCab.DrwCount,
-				ReferenceStretcherWidth = ReferenceStretcherWidthIn.ToString("0.##"),
-				Instruction = $"Depth < {DepthThresholdIn:0.##}\" with drawers: change drawer stretcher widths to {ReferenceStretcherWidthIn:0.##}\" (ref).",
-				IsDone = false
-			};
+            if (baseCab.DrwCount <= 0)
+            {
+                continue;
+            }
 
-			row.PropertyChanged += (_, e) =>
-			{
-				if (e.PropertyName == nameof(DrwStretcherWidthExceptionRow.IsDone))
-				{
-					UpdateTabHeaderBrush();
-				}
-			};
+            double depthIn = ConvertDimension.FractionToDouble(baseCab.Depth ?? "");
+            if (depthIn <= 0)
+            {
+                continue;
+            }
 
-			Exceptions.Add(row);
-			TotalCabsNeedingChange += Math.Max(1, baseCab.Qty);
-		}
+            if (depthIn >= DepthThresholdIn)
+            {
+                continue;
+            }
 
-		UpdateTabHeaderBrush();
-	}
+            var row = new DrwStretcherWidthExceptionRow
+            {
+                CabinetId = cab.Id,
+                CabinetNumber = cabNumber,
+                CabinetName = baseCab.Name ?? "",
+                Depth = baseCab.Depth ?? "",
+                DrwCount = baseCab.DrwCount,
+                ReferenceStretcherWidth = ReferenceStretcherWidthIn.ToString("0.##"),
+                Instruction = $"Depth < {DepthThresholdIn:0.##}\" with drawers: change drawer stretcher widths to {ReferenceStretcherWidthIn:0.##}\" (ref).",
+                IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
+            };
 
-	[RelayCommand]
-	private void RefreshList() => Refresh();
+            row.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(DrwStretcherWidthExceptionRow.IsDone))
+                {
+                    if (!_isRefreshing) UpdateDoneKey(row);
+                    UpdateTabHeaderBrush();
+                }
+            };
+
+            Exceptions.Add(row);
+            TotalCabsNeedingChange += Math.Max(1, baseCab.Qty);
+        }
+
+        UpdateTabHeaderBrush();
+        _isRefreshing = false;
+    }
+
+    [RelayCommand]
+    private void RefreshList() => Refresh();
+
+    private static string MakeKey(Guid cabinetId) => cabinetId.ToString("N");
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in Exceptions)
+        {
+            var key = MakeKey(row.CabinetId);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(DrwStretcherWidthExceptionRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
+    }
 
     private void UpdateTabHeaderBrush()
-	{
-		if (Exceptions.Count == 0)
-		{
-			TabHeaderBrush = s_okGreen;
-			return;
-		}
+    {
+        if (Exceptions.Count == 0)
+        {
+            TabHeaderBrush = s_okGreen;
+            return;
+        }
 
-		bool allDone = Exceptions.All(r => r.IsDone);
-		TabHeaderBrush = allDone ? s_okGreen : s_warnRed;
-	}
+        bool allDone = Exceptions.All(r => r.IsDone);
+        TabHeaderBrush = allDone ? s_okGreen : s_warnRed;
+    }
 
-	public sealed partial class DrwStretcherWidthExceptionRow : ObservableObject
-	{
-		[ObservableProperty] public partial bool IsDone { get; set; }
+    public sealed partial class DrwStretcherWidthExceptionRow : ObservableObject
+    {
+        public Guid CabinetId { get; set; }
 
-		[ObservableProperty] public partial int CabinetNumber { get; set; }
-		[ObservableProperty] public partial string CabinetName { get; set; } = "";
+        [ObservableProperty] public partial bool IsDone { get; set; }
 
-		[ObservableProperty] public partial string Depth { get; set; } = "";
-		[ObservableProperty] public partial int DrwCount { get; set; }
+        [ObservableProperty] public partial int CabinetNumber { get; set; }
+        [ObservableProperty] public partial string CabinetName { get; set; } = "";
 
-		[ObservableProperty] public partial string ReferenceStretcherWidth { get; set; } = "";
-		[ObservableProperty] public partial string Instruction { get; set; } = "";
-	}
+        [ObservableProperty] public partial string Depth { get; set; } = "";
+        [ObservableProperty] public partial int DrwCount { get; set; }
+
+        [ObservableProperty] public partial string ReferenceStretcherWidth { get; set; } = "";
+        [ObservableProperty] public partial string Instruction { get; set; } = "";
+    }
 }

@@ -15,11 +15,14 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class PORevealsGapsViewModel : ObservableObject
 {
+    private const string TabId = "RevealsGaps";
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;
     private readonly DefaultSettingsService? _defaults;
+    private bool _isRefreshing;
 
     public PORevealsGapsViewModel()
     {
@@ -132,12 +135,16 @@ public partial class PORevealsGapsViewModel : ObservableObject
             return;
         }
 
+        _isRefreshing = true;
+        SnapshotDoneKeys();
+
         RevealsGapsToChange.Clear();
         TotalCabsNeedingChange = 0;
 
         if (_cabinetService is null)
         {
             UpdateTabHeaderBrush();
+            _isRefreshing = false;
             return;
         }
 
@@ -152,6 +159,8 @@ public partial class PORevealsGapsViewModel : ObservableObject
         double defUpperRight = ConvertDimension.FractionToDouble(DefaultUpperRightReveal ?? "");
 
         double defGap = ConvertDimension.FractionToDouble(DefaultGapWidth ?? "");
+
+        var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
         int cabNumber = 0;
 
@@ -234,6 +243,7 @@ public partial class PORevealsGapsViewModel : ObservableObject
 
             var row = new RevealsGapsChangeRow
             {
+                CabinetId = cab.Id,
                 CabinetNumber = cabNumber,
                 CabinetName = cab.Name ?? "",
                 CabinetType = cab.CabinetType,
@@ -250,13 +260,14 @@ public partial class PORevealsGapsViewModel : ObservableObject
                 DefaultBottomReveal = isBase ? (DefaultBaseBottomReveal ?? "") : (DefaultUpperBottomReveal ?? ""),
                 DefaultGapWidth = DefaultGapWidth ?? "",
 
-                IsDone = false
+                IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
             };
 
             row.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(RevealsGapsChangeRow.IsDone))
                 {
+                    if (!_isRefreshing) UpdateDoneKey(row);
                     UpdateTabHeaderBrush();
                 }
             };
@@ -266,10 +277,46 @@ public partial class PORevealsGapsViewModel : ObservableObject
         }
 
         UpdateTabHeaderBrush();
+        _isRefreshing = false;
     }
 
     [RelayCommand]
     private void RefreshList() => Refresh();
+
+    private static string MakeKey(Guid cabinetId) => cabinetId.ToString("N");
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in RevealsGapsToChange)
+        {
+            var key = MakeKey(row.CabinetId);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(RevealsGapsChangeRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
+    }
 
     private void UpdateTabHeaderBrush()
     {
@@ -288,6 +335,8 @@ public partial class PORevealsGapsViewModel : ObservableObject
 
     public sealed partial class RevealsGapsChangeRow : ObservableObject
     {
+        public Guid CabinetId { get; set; }
+
         [ObservableProperty] public partial bool IsDone { get; set; }
 
         [ObservableProperty] public partial int CabinetNumber { get; set; }

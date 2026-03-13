@@ -15,12 +15,15 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class POIncludeDoorsViewModel : ObservableObject
 {
+    private const string TabId = "IncludeDoors";
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;
 
     private bool _refreshQueued;
+    private bool _isRefreshing;
 
     public POIncludeDoorsViewModel()
     {
@@ -178,14 +181,20 @@ public partial class POIncludeDoorsViewModel : ObservableObject
             return;
         }
 
+        _isRefreshing = true;
+        SnapshotDoneKeys();
+
         DoorsToChange.Clear();
         TotalCabsNeedingChange = 0;
 
         if (_cabinetService == null)
         {
             UpdateTabHeaderBrush();
+            _isRefreshing = false;
             return;
         }
+
+        var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
         void TrackRow(IncDoorsChangeRow row)
         {
@@ -193,6 +202,7 @@ public partial class POIncludeDoorsViewModel : ObservableObject
             {
                 if (e.PropertyName == nameof(IncDoorsChangeRow.IsDone))
                 {
+                    if (!_isRefreshing) UpdateDoneKey(row);
                     UpdateTabHeaderBrush();
                 }
             };
@@ -224,13 +234,14 @@ public partial class POIncludeDoorsViewModel : ObservableObject
             {
                 TrackRow(new IncDoorsChangeRow
                 {
+                    CabinetId = cab.Id,
                     CabinetNumber = cabNumber,
                     CabinetName = cab.Name ?? "",
                     Type = "Door",
                     FrontSpecies = frontSpecies,
                     IncDoors = incDoors,
                     DefaultIncDoors = DefaultIncDoors,
-                    IsDone = false
+                    IsDone = savedKeys?.Contains(MakeKey(cab.Id, "Door")) == true
                 });
 
                 anyRowsAddedForCab = true;
@@ -255,15 +266,18 @@ public partial class POIncludeDoorsViewModel : ObservableObject
                         continue;
                     }
 
+                    string type = $"Drawer Front {i}";
+
                     TrackRow(new IncDoorsChangeRow
                     {
+                        CabinetId = cab.Id,
                         CabinetNumber = cabNumber,
                         CabinetName = cab.Name ?? "",
-                        Type = $"Drawer Front {i}",
+                        Type = type,
                         FrontSpecies = frontSpecies,
                         IncDoors = incDrwFront,
                         DefaultIncDoors = DefaultIncDoors,
-                        IsDone = false
+                        IsDone = savedKeys?.Contains(MakeKey(cab.Id, type)) == true
                     });
 
                     anyRowsAddedForCab = true;
@@ -277,10 +291,47 @@ public partial class POIncludeDoorsViewModel : ObservableObject
         }
 
         UpdateTabHeaderBrush();
+        _isRefreshing = false;
     }
 
     [RelayCommand]
     private void RefreshList() => Refresh();
+
+    private static string MakeKey(Guid cabinetId, string type)
+        => $"{cabinetId:N}|{type}";
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in DoorsToChange)
+        {
+            var key = MakeKey(row.CabinetId, row.Type);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(IncDoorsChangeRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId, row.Type);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
+    }
 
     private void UpdateTabHeaderBrush()
     {
@@ -296,6 +347,8 @@ public partial class POIncludeDoorsViewModel : ObservableObject
 
     public sealed partial class IncDoorsChangeRow : ObservableObject
     {
+        public Guid CabinetId { get; set; }
+
         [ObservableProperty] public partial bool IsDone { get; set; }
 
         [ObservableProperty] public partial int CabinetNumber { get; set; }
@@ -308,5 +361,3 @@ public partial class POIncludeDoorsViewModel : ObservableObject
         [ObservableProperty] public partial bool DefaultIncDoors { get; set; }
     }
 }
-
-

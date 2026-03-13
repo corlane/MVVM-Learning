@@ -10,10 +10,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class POEdgebandingViewModel : ObservableObject
 {
+    private const string TabId = "Edgebanding";
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
     private readonly ICabinetService? _cabinetService;
+    private bool _isRefreshing;
 
     public POEdgebandingViewModel()
     {
@@ -57,16 +60,22 @@ public partial class POEdgebandingViewModel : ObservableObject
             return;
         }
 
+        _isRefreshing = true;
+        SnapshotDoneKeys();
+
         EdgebandingToChange.Clear();
         TotalCabsNeedingChange = 0;
 
         if (_cabinetService == null)
         {
             UpdateTabHeaderBrush();
+            _isRefreshing = false;
             return;
         }
 
         var defaultSpecies = (DefaultEbSpecies ?? "").Trim();
+
+        var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
         int cabNumber = 0;
 
@@ -99,17 +108,19 @@ public partial class POEdgebandingViewModel : ObservableObject
 
             var row = new EdgebandingChangeRow
             {
+                CabinetId = cab.Id,
                 CabinetNumber = cabNumber,
                 CabinetName = cab.Name ?? "",
                 EbSpecies = cabSpecies,
                 DefaultEbSpecies = defaultSpecies,
-                IsDone = false
+                IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
             };
 
             row.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(EdgebandingChangeRow.IsDone))
                 {
+                    if (!_isRefreshing) UpdateDoneKey(row);
                     UpdateTabHeaderBrush();
                 }
             };
@@ -120,10 +131,46 @@ public partial class POEdgebandingViewModel : ObservableObject
         }
 
         UpdateTabHeaderBrush();
+        _isRefreshing = false;
     }
 
     [RelayCommand]
     private void RefreshList() => Refresh();
+
+    private static string MakeKey(Guid cabinetId) => cabinetId.ToString("N");
+
+    private void SnapshotDoneKeys()
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        foreach (var row in EdgebandingToChange)
+        {
+            var key = MakeKey(row.CabinetId);
+            if (row.IsDone) set.Add(key); else set.Remove(key);
+        }
+    }
+
+    private void UpdateDoneKey(EdgebandingChangeRow row)
+    {
+        if (_cabinetService == null) return;
+
+        if (!_cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set))
+        {
+            set = new HashSet<string>();
+            _cabinetService.ExceptionDoneKeys[TabId] = set;
+        }
+
+        var key = MakeKey(row.CabinetId);
+        if (row.IsDone) set.Add(key); else set.Remove(key);
+
+        _cabinetService.RaiseExceptionDoneStateChanged();
+    }
 
     private void UpdateTabHeaderBrush()
     {
@@ -139,6 +186,8 @@ public partial class POEdgebandingViewModel : ObservableObject
 
     public sealed partial class EdgebandingChangeRow : ObservableObject
     {
+        public Guid CabinetId { get; set; }
+
         [ObservableProperty] public partial bool IsDone { get; set; }
 
         [ObservableProperty] public partial int CabinetNumber { get; set; }

@@ -15,4 +15,7 @@ public sealed class JobFileModel
 
     // Saved metadata (optional -> backward compatible with older files)
     public string? SubmittedWithAppTitle { get; set; }
+
+    /// <summary>PO Exception "Done" states, keyed by tab ID → list of row keys. Nullable for backward compat.</summary>
+    public Dictionary<string, List<string>>? ExceptionDoneKeys { get; set; }
 }

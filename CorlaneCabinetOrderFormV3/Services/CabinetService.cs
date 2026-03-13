@@ -11,6 +11,11 @@ public class CabinetService : ICabinetService
 
     public DateTime? OrderedAtLocal { get; set; }
 
+    public Dictionary<string, HashSet<string>> ExceptionDoneKeys { get; } = new();
+
+    public event Action? ExceptionDoneStateChanged;
+    public void RaiseExceptionDoneStateChanged() => ExceptionDoneStateChanged?.Invoke();
+
     public void Add(CabinetModel cabinet)
     {
         if (cabinet is null) throw new ArgumentNullException(nameof(cabinet));
@@ -49,14 +54,26 @@ public class CabinetService : ICabinetService
             IncludeFields = true,
         };
 
+        // Convert HashSet → List for JSON
+        Dictionary<string, List<string>>? doneKeysForFile = null;
+        if (ExceptionDoneKeys.Count > 0)
+        {
+            doneKeysForFile = new();
+            foreach (var kvp in ExceptionDoneKeys)
+            {
+                if (kvp.Value.Count > 0)
+                    doneKeysForFile[kvp.Key] = kvp.Value.ToList();
+            }
+        }
+
         var job = new JobFileModel
         {
             Cabinets = new ObservableCollection<CabinetModel>(Cabinets.ToList()),
             CustomerInfo = customerInfo ?? new JobCustomerInfo(),
             QuotedTotalPrice = quotedTotalPrice,
             OrderedAtLocal = OrderedAtLocal,
-
-            SubmittedWithAppTitle = submittedWithAppTitle
+            SubmittedWithAppTitle = submittedWithAppTitle,
+            ExceptionDoneKeys = doneKeysForFile
         };
 
         var json = JsonSerializer.Serialize(job, options);
@@ -99,6 +116,16 @@ public class CabinetService : ICabinetService
 
         OrderedAtLocal = loadedJob.OrderedAtLocal;
 
+        // Restore Done keys BEFORE adding cabinets (so VMs see them when CollectionChanged fires Refresh)
+        ExceptionDoneKeys.Clear();
+        if (loadedJob.ExceptionDoneKeys != null)
+        {
+            foreach (var kvp in loadedJob.ExceptionDoneKeys)
+            {
+                ExceptionDoneKeys[kvp.Key] = new HashSet<string>(kvp.Value);
+            }
+        }
+
         if (System.Windows.Application.Current?.Dispatcher != null)
         {
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
@@ -126,5 +153,3 @@ public class CabinetService : ICabinetService
         return loadedJob;
     }
 }
-
-

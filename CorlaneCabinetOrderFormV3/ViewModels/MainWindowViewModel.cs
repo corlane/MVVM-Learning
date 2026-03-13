@@ -23,6 +23,12 @@ public partial class MainWindowViewModel : ObservableValidator
     {
         _cabinet_service = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
         InitializeModificationTracking();
+
+        _cabinet_service.ExceptionDoneStateChanged += () =>
+        {
+            if (!_suppressIsModified)
+                IsModified = true;
+        };
     }
 
     // Parameterless ctor for design-time support
@@ -256,6 +262,7 @@ public partial class MainWindowViewModel : ObservableValidator
 
             // Reset persistent "ordered" state for the new job
             _cabinet_service.OrderedAtLocal = null;
+            _cabinet_service.ExceptionDoneKeys.Clear();
 
             try
             {
