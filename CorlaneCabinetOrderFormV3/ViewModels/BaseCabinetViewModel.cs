@@ -1985,7 +1985,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RolloutStyle = RolloutStyle,
             DrwStyle = DrwStyle,
             SinkCabinet = SinkCabinet,
-            TrashDrawer = TrashDrawer
+            TrashDrawer = TrashDrawer,
+            DrillHingeHoles = DrillHingeHoles,
+            DrillShelfHoles = DrillShelfHoles
         };
 
         // Request preview using the tab index owner token (Base tab = 0)

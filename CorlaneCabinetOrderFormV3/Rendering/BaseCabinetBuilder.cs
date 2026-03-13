@@ -151,6 +151,9 @@ internal static class BaseCabinetBuilder
 
         string panelEBEdges = "";
 
+        double holeDiameter = 0.197;               // 5 mm ≈ 0.197"
+        double holeDepth = MaterialThickness34 / 2; // drill halfway through (~0.375")
+
         stretcherPoints =
         [
             new (0,0,0),
@@ -208,10 +211,181 @@ internal static class BaseCabinetBuilder
 
         interiorHeight = height - doubleMaterialThickness34 - tk_Height;
 
-        //Debug.WriteLine($"End Panels:");
+
+
 
         leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
         rightEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+
+
+        // ----------------------------
+        // HOLES (base cabinets)
+        // IMPORTANT: add holes before ApplyTransform(leftEnd/rightEnd, ...)
+        // ----------------------------
+
+        // Construction holes (outside face) - along Depth axis, top & bottom edges
+        {
+            double topConstructionHoleInset = 2; // inset from front and back edges
+
+            double minX = topConstructionHoleInset;          // back inset
+            double maxX = depth - topConstructionHoleInset;  // front inset
+
+            if (maxX < minX)
+            {
+                (minX, maxX) = (maxX, minX);
+            }
+
+            double span = Math.Max(0, maxX - minX);
+
+            int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0));
+            int holeCount = segments + 1;
+
+            for (int i = 0; i < holeCount; i++)
+            {
+                double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
+                double xx = minX + (span * t);
+
+                // Base cab bottom starts at tk_Height (deck reference), not 0.
+                double topYY = (height - (MaterialThickness34 / 2));
+                double bottomYY = tk_Height + (MaterialThickness34 / 2);
+
+                // OUTSIDE face (matches what you did in UpperCabinetBuilder):
+                // left: rimZ=MaterialThickness34, right: rimZ=0
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, MaterialThickness34, holeDepth, holeDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, 0, holeDepth, holeDiameter));
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, MaterialThickness34, holeDepth, holeDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, 0, holeDepth, holeDiameter));
+            }
+        }
+
+        // Back vertical construction holes (outside face) - along Height axis near back edge
+        {
+            // centered on the back thickness (same intent as upper)
+            double x = MaterialThickness34 / 2;
+
+            // Always 2 holes: 3+3/4" down from top, and 3/4" up from bottom (bottom is tk_Height)
+            double topY = height - (3 + MaterialThickness34);
+            double bottomY = tk_Height + MaterialThickness34;
+
+            if (topY < bottomY)
+            {
+                (topY, bottomY) = (bottomY, topY);
+            }
+
+            double spanY = Math.Max(0, topY - bottomY);
+
+            int holeCountY = backThickness == 0.25
+                ? 2
+                : (Math.Max(1, (int)Math.Ceiling(spanY / 10.0)) + 1);
+
+            for (int i = 0; i < holeCountY; i++)
+            {
+                double t = holeCountY == 1 ? 0 : (double)i / (holeCountY - 1);
+                double y = bottomY + (spanY * t);
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, MaterialThickness34, holeDepth, holeDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, 0, holeDepth, holeDiameter));
+            }
+        }
+
+        // Hinge holes (inside face)
+        if (baseCab.DrillHingeHoles)
+        {
+            const double hingeBoreSpacing = 1.26;
+            const double hingeXFromFront = 1.456;
+            const double hingeCenterInset = 2.5197;
+            const double maxHingeCenterSpacing = 40.0;
+
+            double hingeX = depth - hingeXFromFront;
+
+            // hinge centers measured from overall cabinet top/bottom;
+            // bottom is tk_Height for base cabinets.
+            double topCenterY = height - hingeCenterInset;
+            double bottomCenterY = tk_Height + hingeCenterInset;
+
+            if (topCenterY < bottomCenterY)
+            {
+                (topCenterY, bottomCenterY) = (bottomCenterY, topCenterY);
+            }
+
+            double spanY = Math.Max(0, topCenterY - bottomCenterY);
+
+            int hingeCount = Math.Max(2, (int)Math.Ceiling(spanY / maxHingeCenterSpacing) + 1);
+
+            for (int h = 0; h < hingeCount; h++)
+            {
+                double t = hingeCount == 1 ? 0 : (double)h / (hingeCount - 1);
+                double hingeCenterY = bottomCenterY + (spanY * t);
+
+                double y1 = hingeCenterY - (hingeBoreSpacing / 2);
+                double y2 = hingeCenterY + (hingeBoreSpacing / 2);
+
+                // INSIDE faces match your shelf-hole convention:
+                // left inside = rimZ 0, right inside = rimZ MaterialThickness34
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y1, 0, holeDepth, holeDiameter));
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y2, 0, holeDepth, holeDiameter));
+
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y1, MaterialThickness34, holeDepth, holeDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y2, MaterialThickness34, holeDepth, holeDiameter));
+            }
+        }
+
+        // Shelf holes (inside face) - adjust for toekick + half-depth shelves
+        if (baseCab.DrillShelfHoles)
+        {
+            double shelfHoleCount = Math.Round((height - 12) / 1.26);
+
+            // base-cab bottom is tk_Height, so shift the whole pattern up by tk_Height
+            double yStart = tk_Height + 6;
+
+            // Front row should be 1" back from the FRONT of the shelf.
+            // Shelf front (in X) is shelfDepth + backThickness, so hole X is that minus 1"
+            double frontShelfHoleX = shelfDepth + backThickness - 1;
+
+            for (int i = 0; i < shelfHoleCount; i++)
+            {
+                // Left end: rear row
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: 1 + backThickness,
+                    centerY: yStart + (i * 1.26),
+                    rimZ: 0,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                // Left end: front row (adjusted for half-depth shelves)
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: frontShelfHoleX,
+                    centerY: yStart + (i * 1.26),
+                    rimZ: 0,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                // Right end: rear row
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: 1 + backThickness,
+                    centerY: yStart + (i * 1.26),
+                    rimZ: MaterialThickness34,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                // Right end: front row (adjusted for half-depth shelves)
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: frontShelfHoleX,
+                    centerY: yStart + (i * 1.26),
+                    rimZ: MaterialThickness34,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+            }
+        }
+
+
+
+
+
+
+        //Debug.WriteLine($"End Panels:");
+
 
         if (cabType == style1 || cabType == style2)
         {
