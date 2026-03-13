@@ -26,3 +26,4 @@
 - Avoid sharing Model3DGroup instances across multiple parents.
 - Display the user-entered custom species name when a cabinet's species is set to "Custom" instead of showing the literal word "Custom".
 - For cabinet 3D preview holes (shelf pin, assembly), use flat dark disc overlays via `CabinetPartFactory.CreateHole` rather than attempting CSG boolean subtraction or cylinder geometry behind panel faces. The user confirmed the flat disc approach looks great and no 3D holes are needed.
+- Allow intentional flipping of `rimZ` values to place preview holes on the opposite panel face (e.g., outside cabinet).

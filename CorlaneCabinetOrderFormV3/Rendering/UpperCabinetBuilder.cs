@@ -127,23 +127,79 @@ internal static class UpperCabinetBuilder
         for (int i = 0; i < holeCount; i++)
         {
             double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
-            double x = minX + (span * t);
+            double xx = minX + (span * t);
 
-            var leftHole = CabinetPartFactory.CreateHole(
-                centerX: x,
-                centerY: constructionY,
-                rimZ: MaterialThickness34,              // inside face of left end
-                bottomZ: holeDepth,   // drills into +Z
-                diameter: holeDiameter);
-            leftEnd.Children.Add(leftHole);
+            double topYY = height - (MaterialThickness34 / 2);
+            double bottomYY = MaterialThickness34 / 2;
 
-            var rightHole = CabinetPartFactory.CreateHole(
+            // TOP holes (outside face) - your reversed rimZ values
+            leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                centerX: xx,
+                centerY: topYY,
+                rimZ: MaterialThickness34, // outside face for left end (per your change)
+                bottomZ: holeDepth,
+                diameter: holeDiameter));
+
+            rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                centerX: xx,
+                centerY: topYY,
+                rimZ: 0, // outside face for right end (per your change)
+                bottomZ: holeDepth,
+                diameter: holeDiameter));
+
+            // BOTTOM holes (outside face) - same rimZ, different Y
+            leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                centerX: xx,
+                centerY: bottomYY,
+                rimZ: MaterialThickness34, // outside face
+                bottomZ: holeDepth,
+                diameter: holeDiameter));
+
+            rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                centerX: xx,
+                centerY: bottomYY,
+                rimZ: 0, // outside face
+                bottomZ: holeDepth,
+                diameter: holeDiameter));
+        }
+
+        // Back Construction Holes - 2 holes spaced evenly between top and bottom, centered on the back thickness
+        double x = MaterialThickness34 / 2; // 3/8" from cabinet back edge
+
+        double topY = height - ((StretcherWidth / 2) + MaterialThickness34);
+        double bottomY = (StretcherWidth / 2) + MaterialThickness34;
+
+        // Ensure topY >= bottomY (in case a tiny cabinet is entered)
+        if (topY < bottomY)
+        {
+            (topY, bottomY) = (bottomY, topY);
+        }
+
+        double spanY = Math.Max(0, topY - bottomY);
+
+        // If 1/4" back is used, show ONLY the 2 required holes (no intermediates).
+        int holeCountY = backThickness == 0.25
+            ? 2
+            : (Math.Max(1, (int)Math.Ceiling(spanY / 10.0)) + 1);
+
+        for (int i = 0; i < holeCountY; i++)
+        {
+            double t = holeCountY == 1 ? 0 : (double)i / (holeCountY - 1);
+            double y = bottomY + (spanY * t);
+
+            leftEnd.Children.Add(CabinetPartFactory.CreateHole(
                 centerX: x,
-                centerY: constructionY,
-                rimZ: 0, // inside face of right end
-                bottomZ: holeDepth,        // drills into +Z
-                diameter: holeDiameter);
-            rightEnd.Children.Add(rightHole);
+                centerY: y,
+                rimZ: MaterialThickness34, // outside face (left end)
+                bottomZ: holeDepth,
+                diameter: holeDiameter));
+
+            rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                centerX: x,
+                centerY: y,
+                rimZ: 0, // outside face (right end)
+                bottomZ: holeDepth,
+                diameter: holeDiameter));
         }
 
 
@@ -705,4 +761,10 @@ internal static class UpperCabinetBuilder
             ModelTransforms.ApplyTransform(cabinet, 0, 0, 0, 0, -135, 0);
         }
     }
+
+
+    // CONSTRUCTION HOLES AND SHELF HOLES HELPERS
+
+
+
 }
