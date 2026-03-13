@@ -32,6 +32,7 @@ On stupidly wide cabinets, an Exception tab to notify us to change grain directi
 
 Remove Top Type exception tab entirely.
 
+Save state of PO Exception tabs. Mark job modified when they are changed.
 
 
 BUGS:

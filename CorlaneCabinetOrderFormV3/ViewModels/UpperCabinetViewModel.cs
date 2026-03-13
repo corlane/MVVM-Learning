@@ -736,6 +736,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
             DrillShelfHoles = DrillShelfHoles,
             DoorCount = DoorCount,
             DoorGrainDir = DoorGrainDir,
+            DrillHingeHoles = DrillHingeHoles,
             IncDoors = IncDoors,
             LeftReveal = LeftReveal,
             RightReveal = RightReveal,

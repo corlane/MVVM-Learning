@@ -202,6 +202,68 @@ internal static class UpperCabinetBuilder
                 diameter: holeDiameter));
         }
 
+        // Hinge Holes (inside face)
+        if (upperCab.DrillHingeHoles)
+        {
+            const double hingeBoreSpacing = 1.26;     // two holes per hinge, center-to-center
+            const double hingeXFromFront = 1.456;     // from front edge
+            const double hingeCenterInset = 2.5197;   // hinge center from top/bottom
+            const double maxHingeCenterSpacing = 40.0;
+
+            double hingeX = depth - hingeXFromFront;
+
+            // Hinge centers along Height axis
+            double topCenterY = height - hingeCenterInset;
+            double bottomCenterY = hingeCenterInset;
+
+            if (topCenterY < bottomCenterY)
+            {
+                (topCenterY, bottomCenterY) = (bottomCenterY, topCenterY);
+            }
+
+            double spanYY = Math.Max(0, topCenterY - bottomCenterY);
+
+            int hingeCount = Math.Max(2, (int)Math.Ceiling(spanYY / maxHingeCenterSpacing) + 1);
+
+            for (int h = 0; h < hingeCount; h++)
+            {
+                double t = hingeCount == 1 ? 0 : (double)h / (hingeCount - 1);
+                double hingeCenterY = bottomCenterY + (spanYY * t);
+
+                double y1 = hingeCenterY - (hingeBoreSpacing / 2);
+                double y2 = hingeCenterY + (hingeBoreSpacing / 2);
+
+                // Left end: inside face is rimZ = 0 (matches your shelf-hole convention)
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: hingeX,
+                    centerY: y1,
+                    rimZ: 0,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: hingeX,
+                    centerY: y2,
+                    rimZ: 0,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                // Right end: inside face is rimZ = MaterialThickness34 (matches your shelf-hole convention)
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: hingeX,
+                    centerY: y1,
+                    rimZ: MaterialThickness34,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: hingeX,
+                    centerY: y2,
+                    rimZ: MaterialThickness34,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+            }
+        }
 
         // Shelf Holes
         if (drillShelfHoles)
@@ -258,6 +320,10 @@ internal static class UpperCabinetBuilder
                 rightEnd.Children.Add(shelfHole);
             }
         }
+
+
+
+
 
 
         if (string.Equals(cabType, style1, StringComparison.OrdinalIgnoreCase))
