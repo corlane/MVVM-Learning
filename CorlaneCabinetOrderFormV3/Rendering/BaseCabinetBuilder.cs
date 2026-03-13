@@ -304,6 +304,14 @@ internal static class BaseCabinetBuilder
             double topCenterY = height - hingeCenterInset;
             double bottomCenterY = tk_Height + hingeCenterInset;
 
+            // If DrwCount==1, position the UPPER hinge relative to the drawer-stretcher bottom in cabinet-global Y:
+            // upper hinge center must be hingeCenterInset BELOW (Height - Opening1Height - (2 * MaterialThickness34))
+            if (baseCab.DrwCount == 1)
+            {
+                double drawerStretcherBottomY = height - opening1Height - (2 * MaterialThickness34);
+                topCenterY = drawerStretcherBottomY - hingeCenterInset;
+            }
+
             if (topCenterY < bottomCenterY)
             {
                 (topCenterY, bottomCenterY) = (bottomCenterY, topCenterY);
@@ -331,13 +339,22 @@ internal static class BaseCabinetBuilder
             }
         }
 
+
         // Shelf holes (inside face) - adjust for toekick + half-depth shelves
         if (baseCab.DrillShelfHoles)
         {
-            double shelfHoleCount = Math.Round((height - 12) / 1.26);
+            double shelfHoleCount = Math.Round(((height - 12) / 1.26) - tk_Height);
 
             // base-cab bottom is tk_Height, so shift the whole pattern up by tk_Height
             double yStart = tk_Height + 6;
+
+            // If DrwCount==1, shelf holes stop 6" below the bottom of the Drw Stretcher (cabinet-global Y)
+            double? maxShelfHoleY = null;
+            if (baseCab.DrwCount == 1)
+            {
+                double drawerStretcherBottomY = height - opening1Height - (2 * MaterialThickness34);
+                maxShelfHoleY = drawerStretcherBottomY - 6;
+            }
 
             // Front row should be 1" back from the FRONT of the shelf.
             // Shelf front (in X) is shelfDepth + backThickness, so hole X is that minus 1"
@@ -345,10 +362,17 @@ internal static class BaseCabinetBuilder
 
             for (int i = 0; i < shelfHoleCount; i++)
             {
+                double y = yStart + (i * 1.26);
+
+                if (maxShelfHoleY is not null && y > maxShelfHoleY.Value)
+                {
+                    break;
+                }
+
                 // Left end: rear row
                 leftEnd.Children.Add(CabinetPartFactory.CreateHole(
                     centerX: 1 + backThickness,
-                    centerY: yStart + (i * 1.26),
+                    centerY: y,
                     rimZ: 0,
                     bottomZ: holeDepth,
                     diameter: holeDiameter));
@@ -356,7 +380,7 @@ internal static class BaseCabinetBuilder
                 // Left end: front row (adjusted for half-depth shelves)
                 leftEnd.Children.Add(CabinetPartFactory.CreateHole(
                     centerX: frontShelfHoleX,
-                    centerY: yStart + (i * 1.26),
+                    centerY: y,
                     rimZ: 0,
                     bottomZ: holeDepth,
                     diameter: holeDiameter));
@@ -364,7 +388,7 @@ internal static class BaseCabinetBuilder
                 // Right end: rear row
                 rightEnd.Children.Add(CabinetPartFactory.CreateHole(
                     centerX: 1 + backThickness,
-                    centerY: yStart + (i * 1.26),
+                    centerY: y,
                     rimZ: MaterialThickness34,
                     bottomZ: holeDepth,
                     diameter: holeDiameter));
@@ -372,7 +396,7 @@ internal static class BaseCabinetBuilder
                 // Right end: front row (adjusted for half-depth shelves)
                 rightEnd.Children.Add(CabinetPartFactory.CreateHole(
                     centerX: frontShelfHoleX,
-                    centerY: yStart + (i * 1.26),
+                    centerY: y,
                     rimZ: MaterialThickness34,
                     bottomZ: holeDepth,
                     diameter: holeDiameter));
