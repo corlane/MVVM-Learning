@@ -240,6 +240,9 @@ internal static class BaseCabinetBuilder
             int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0));
             int holeCount = segments + 1;
 
+            bool topIsStretcher = string.Equals(baseCab.TopType, CabinetOptions.TopType.Stretcher, StringComparison.OrdinalIgnoreCase);
+            bool onlyEndHolesOnTop = topIsStretcher;
+
             for (int i = 0; i < holeCount; i++)
             {
                 double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
@@ -249,11 +252,16 @@ internal static class BaseCabinetBuilder
                 double topYY = (height - (MaterialThickness34 / 2));
                 double bottomYY = tk_Height + (MaterialThickness34 / 2);
 
-                // OUTSIDE face (matches what you did in UpperCabinetBuilder):
-                // left: rimZ=MaterialThickness34, right: rimZ=0
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, MaterialThickness34, holeDepth, holeDiameter));
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, 0, holeDepth, holeDiameter));
+                // TOP edge: if TopType is stretcher, suppress intermediate holes (keep only the two ends)
+                if (!onlyEndHolesOnTop || i == 0 || i == holeCount - 1)
+                {
+                    // OUTSIDE face (matches what you did in UpperCabinetBuilder):
+                    // left: rimZ=MaterialThickness34, right: rimZ=0
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, MaterialThickness34, holeDepth, holeDiameter));
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, 0, holeDepth, holeDiameter));
+                }
 
+                // BOTTOM edge: unchanged (still includes intermediate holes)
                 leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, MaterialThickness34, holeDepth, holeDiameter));
                 rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, 0, holeDepth, holeDiameter));
             }
