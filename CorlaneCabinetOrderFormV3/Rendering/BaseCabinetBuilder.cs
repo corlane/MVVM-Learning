@@ -298,7 +298,7 @@ internal static class BaseCabinetBuilder
         }
 
         // Hinge holes (inside face)
-        if (baseCab.DrillHingeHoles)
+        if (baseCab.DrillHingeHoles && baseCab.Style != style2)
         {
             const double hingeBoreSpacing = 1.26;
             const double hingeXFromFront = 1.456;
@@ -349,7 +349,7 @@ internal static class BaseCabinetBuilder
 
 
         // Shelf holes (inside face) - adjust for toekick + half-depth shelves
-        if (baseCab.DrillShelfHoles)
+        if (baseCab.DrillShelfHoles && baseCab.Style != style2)
         {
             double shelfHoleCount = Math.Round(((height - 12) / 1.26) - tk_Height);
 
@@ -412,9 +412,6 @@ internal static class BaseCabinetBuilder
         }
 
 
-
-
-
         // Drawer slide holes (inside face) - per drawer opening
         // Row is 1.5" above the bottom of each opening.
         // Along depth: start 1.456" from front, spaced 2.5", stop ~3" from back.
@@ -464,10 +461,6 @@ internal static class BaseCabinetBuilder
                 }
             }
         }
-
-
-
-
 
 
         //Debug.WriteLine($"End Panels:");
