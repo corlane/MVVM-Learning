@@ -107,8 +107,44 @@ internal static class UpperCabinetBuilder
         // Construction Holes
         double topConstructionHoleInset = 2; // inset from front and back edges
         double topConstructionHoleCount = Math.Floor(depth - 4) / 10; // number of intermediate holes between the two holes inset from the edges, spaced every 10"
-        
 
+        double constructionY = height - (MaterialThickness34 / 2);
+        double minX = topConstructionHoleInset;          // back inset
+        double maxX = depth - topConstructionHoleInset;  // front inset
+
+        // Guard against tiny depths (keeps math safe)
+        if (maxX < minX)
+        {
+            (minX, maxX) = (maxX, minX);
+        }
+
+        double span = Math.Max(0, maxX - minX);
+
+        // Ensure adjacent spacing <= 10" between holes, including the two inset holes.
+        int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0)); // number of intervals
+        int holeCount = segments + 1;                               // number of holes
+
+        for (int i = 0; i < holeCount; i++)
+        {
+            double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
+            double x = minX + (span * t);
+
+            var leftHole = CabinetPartFactory.CreateHole(
+                centerX: x,
+                centerY: constructionY,
+                rimZ: MaterialThickness34,              // inside face of left end
+                bottomZ: holeDepth,   // drills into +Z
+                diameter: holeDiameter);
+            leftEnd.Children.Add(leftHole);
+
+            var rightHole = CabinetPartFactory.CreateHole(
+                centerX: x,
+                centerY: constructionY,
+                rimZ: 0, // inside face of right end
+                bottomZ: holeDepth,        // drills into +Z
+                diameter: holeDiameter);
+            rightEnd.Children.Add(rightHole);
+        }
 
 
         // Shelf Holes
