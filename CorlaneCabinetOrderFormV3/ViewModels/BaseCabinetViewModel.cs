@@ -1987,7 +1987,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
             SinkCabinet = SinkCabinet,
             TrashDrawer = TrashDrawer,
             DrillHingeHoles = DrillHingeHoles,
-            DrillShelfHoles = DrillShelfHoles
+            DrillShelfHoles = DrillShelfHoles,
+            DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
+            DrillSlideHolesOpening2 = DrillSlideHolesOpening2,
+            DrillSlideHolesOpening3 = DrillSlideHolesOpening3,
+            DrillSlideHolesOpening4 = DrillSlideHolesOpening4
         };
 
         // Request preview using the tab index owner token (Base tab = 0)

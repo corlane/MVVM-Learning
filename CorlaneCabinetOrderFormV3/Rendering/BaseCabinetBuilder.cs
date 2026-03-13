@@ -415,6 +415,60 @@ internal static class BaseCabinetBuilder
 
 
 
+        // Drawer slide holes (inside face) - per drawer opening
+        // Row is 1.5" above the bottom of each opening.
+        // Along depth: start 1.456" from front, spaced 2.5", stop ~3" from back.
+        if (baseCab.DrwCount > 0)
+        {
+            const double slideXFromFront = 1.456;
+            const double slideSpacing = 2.5;
+            const double stopFromBack = 3.0;
+            const double yFromOpeningBottom = 1.5;
+
+            double xStart = depth - slideXFromFront; // 1.456" from front edge
+            double xStop = stopFromBack;             // ~3" from back edge
+
+            double[] openingHeights = new[] { opening1Height, opening2Height, opening3Height, opening4Height };
+            bool[] drillSlidePerOpening = new[]
+            {
+                baseCab.DrillSlideHolesOpening1,
+                baseCab.DrillSlideHolesOpening2,
+                baseCab.DrillSlideHolesOpening3,
+                baseCab.DrillSlideHolesOpening4
+            };
+
+            // Bottom of Opening 1 (confirmed rule)
+            double openingBottomY = height - MaterialThickness34 - openingHeights[0];
+
+            for (int oi = 0; oi < 4; oi++)
+            {
+                int openingIndex = oi + 1;
+                if (baseCab.DrwCount < openingIndex) break;
+
+                if (drillSlidePerOpening[oi])
+                {
+                    double y = openingBottomY + yFromOpeningBottom;
+
+                    for (double x = xStart; x >= xStop; x -= slideSpacing)
+                    {
+                        leftEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, 0, holeDepth, holeDiameter));
+                        rightEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, MaterialThickness34, holeDepth, holeDiameter));
+                    }
+                }
+
+                // Advance to next opening down:
+                // next bottom = current bottom - next opening height - 3/4" stretcher
+                if (oi + 1 < 4)
+                {
+                    openingBottomY -= openingHeights[oi + 1] + MaterialThickness34;
+                }
+            }
+        }
+
+
+
+
+
 
         //Debug.WriteLine($"End Panels:");
 
