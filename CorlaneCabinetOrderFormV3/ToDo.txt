@@ -34,7 +34,7 @@ Remove Top Type exception tab entirely.
 
 Save state of PO Exception tabs. Mark job modified when they are changed.
 
-Increase number of allowed adjustable shelves. Make dependent on the height of the cabinet.
+
 
 
 

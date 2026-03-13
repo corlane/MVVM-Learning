@@ -990,7 +990,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
 
     // Combobox options
-    public List<int> ComboShelfCount { get; } = [0, 1, 2, 3, 4, 5];
+    public List<int> ComboShelfCount { get; } = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     public static List<string> TypeList => [Style1, Style2, Style3, Style4];
 
     public List<string> ListDrawerStyle { get; } =

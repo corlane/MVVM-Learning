@@ -123,4 +123,6 @@
 3.0.1.28
 	Added groupbox around "User Feedback" section of Place Order tab.
 	Fixed odd shelf positioning when back thickness is 1/4", base and upper.
-	
+	Added visible construction holes, shelf holes, hinge holes, drawer slide holes.
+	Increased max number of shelves to 8 for base & upper.
+	Removed Base Cab Top Type Exception tab.

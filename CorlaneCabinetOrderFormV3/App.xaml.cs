@@ -52,7 +52,7 @@ public partial class App : Application
                 services.AddTransient<PODoorDrwGrainDirViewModel>();
                 services.AddTransient<PORevealsGapsViewModel>();
                 services.AddTransient<POCornerCabinetDimsViewModel>();
-                services.AddTransient<POBaseCabTopTypeViewModel>();
+                //services.AddTransient<POBaseCabTopTypeViewModel>();
                 services.AddTransient<PONotesViewModel>();
                 services.AddTransient<POOpeningDrwFrontHeightsViewModel>();
                 services.AddTransient<PODrawerBoxesViewModel>();
