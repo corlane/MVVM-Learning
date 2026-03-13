@@ -9,6 +9,69 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static class CabinetPartFactory
 {
+    /// <summary>
+    /// Creates a dark disc overlay that visually represents a drilled hole on a panel face.
+    /// Place at <paramref name="rimZ"/> (the panel surface); <paramref name="bottomZ"/> indicates
+    /// which side the viewer is on so the disc normal faces outward.
+    /// </summary>
+    internal static Model3DGroup CreateHole(
+        double centerX,
+        double centerY,
+        double rimZ,
+        double bottomZ,
+        double diameter,
+        int segments = 16)
+    {
+        double radius = diameter / 2.0;
+
+        // normalDir: +1 when drilling –Z (viewer on +Z side), –1 when drilling +Z (viewer on –Z side)
+        double normalDir = Math.Sign(rimZ - bottomZ);
+        // Push the disc slightly proud of the surface so it renders in front of the panel face
+        double discZ = rimZ + normalDir * 0.002;
+
+        var builder = new MeshBuilder(false, false);
+        var center = new Point3D(centerX, centerY, discZ);
+
+        for (int i = 0; i < segments; i++)
+        {
+            double a0 = 2.0 * Math.PI * i / segments;
+            double a1 = 2.0 * Math.PI * ((i + 1) % segments) / segments;
+
+            var p0 = new Point3D(
+                centerX + radius * Math.Cos(a0),
+                centerY + radius * Math.Sin(a0),
+                discZ);
+            var p1 = new Point3D(
+                centerX + radius * Math.Cos(a1),
+                centerY + radius * Math.Sin(a1),
+                discZ);
+
+            if (normalDir >= 0)
+                builder.AddTriangle(center, p1, p0);  // normal faces +Z
+            else
+                builder.AddTriangle(center, p0, p1);  // normal faces –Z
+        }
+
+        builder.ComputeNormalsAndTangents(MeshFaces.Default);
+
+        var brush = new SolidColorBrush(Color.FromRgb(30, 30, 30));
+        brush.Freeze();
+        var holeMaterial = new DiffuseMaterial(brush);
+        holeMaterial.Freeze();
+
+        var group = new Model3DGroup();
+        group.Children.Add(new GeometryModel3D
+        {
+            Geometry = builder.ToMesh(true),
+            Material = holeMaterial,
+            BackMaterial = holeMaterial
+        });
+
+        return group;
+    }
+
+
+
     internal static Model3DGroup CreatePanel(
         List<Point3D> polygonPoints,
         double matlThickness,
@@ -306,3 +369,4 @@ internal static class CabinetPartFactory
         return partModel;
     }
 }
+

@@ -8,6 +8,7 @@
 - When generating patches, provide minimal, targeted edits that avoid deleting unrelated code (e.g., avoid reposting large file blocks that could overwrite content). Keep changes minimal and avoid accidental deletions of unrelated members (e.g., LoadDefaults/LoadSelectedIfMine). Aim for targeted diffs that only touch the requested areas.
 - Use a golden commit plus a refactor branch to safely perform potentially risky refactors with easy rollback.
 - Prefer using the Visual Studio UI for Git operations (inspect old commit and return to latest) when possible.
+- When debugging, check for missing property mappings in preview/model construction (e.g., `UpdatePreview()` not copying a VM property into the preview model) and call that out explicitly.
 
 ## Code Style
 - Use specific formatting rules
@@ -24,3 +25,4 @@
 - Hidden cabinet parts are visual-only; however, they must still contribute to material and edge totals. When building material/edge totals, always include all cabinet parts; BOM calculations should ignore preview hide flags, and totals must always be computed for the full cabinet regardless of hidden parts. User confirmed requirement: preview hide toggles are visualization-only; material/edge totals must always include hidden parts.
 - Avoid sharing Model3DGroup instances across multiple parents.
 - Display the user-entered custom species name when a cabinet's species is set to "Custom" instead of showing the literal word "Custom".
+- For cabinet 3D preview holes (shelf pin, assembly), use flat dark disc overlays via `CabinetPartFactory.CreateHole` rather than attempting CSG boolean subtraction or cylinder geometry behind panel faces. The user confirmed the flat disc approach looks great and no 3D holes are needed.

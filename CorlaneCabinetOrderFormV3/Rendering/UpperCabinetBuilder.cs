@@ -87,6 +87,12 @@ internal static class UpperCabinetBuilder
 
         doorEdgebandingSpecies = CabinetBuildHelpers.GetDoorEdgebandingSpecies(upperCab.DoorSpecies);
 
+        bool drillShelfHoles = upperCab.DrillShelfHoles;
+
+        double holeDiameter = 0.197;               // 5 mm ≈ 0.197"
+        double holeDepth = MaterialThickness34 / 2; // drill halfway through (~0.375")
+
+
         endPanelPoints =
         [
             new (depth,0,0),
@@ -97,6 +103,70 @@ internal static class UpperCabinetBuilder
 
         leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
         rightEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true);
+
+        // Construction Holes
+        double topConstructionHoleInset = 2; // inset from front and back edges
+        double topConstructionHoleCount = Math.Floor(depth - 4) / 10; // number of intermediate holes between the two holes inset from the edges, spaced every 10"
+        
+
+
+
+        // Shelf Holes
+        if (drillShelfHoles)
+        {
+            double shelfHoleCount = Math.Round((height - 12) / 1.26);
+
+            // Left End Shelf Holes
+            for (int i = 0; i < shelfHoleCount; i++)
+            {
+                // Rear Shelf Holes
+                var shelfHole = CabinetPartFactory.CreateHole(
+                    centerX: 1 + backThickness,                   // 1" from back
+                    centerY: 6 + (i * 1.26),               // start 6" from bottom, then every 1.26"
+                    rimZ: 0,                                 // inside face is Z = 0 in local coords
+                    bottomZ: holeDepth,                      // drills into +Z (into the panel)
+                    diameter: holeDiameter);
+                leftEnd.Children.Add(shelfHole);
+            }
+
+            for (int i = 0; i < shelfHoleCount; i++)
+            {
+                // Front Shelf Holes
+                var shelfHole = CabinetPartFactory.CreateHole(
+                    centerX: depth - 1,                   // 1" from front
+                    centerY: 6 + (i * 1.26),               // start 6" from bottom, then every 1.26"
+                    rimZ: 0,                                 // inside face is Z = 0 in local coords
+                    bottomZ: holeDepth,                      // drills into +Z (into the panel)
+                    diameter: holeDiameter);
+                leftEnd.Children.Add(shelfHole);
+            }
+
+            // Right End Shelf Holes
+            for (int i = 0; i < shelfHoleCount; i++)
+            {
+                // Rear Shelf Holes
+                var shelfHole = CabinetPartFactory.CreateHole(
+                    centerX: 1 + backThickness,                   // 1" from back
+                    centerY: 6 + (i * 1.26),               // start 6" from bottom, then every 1.26"
+                    rimZ: MaterialThickness34,               // inside face is Z = MatThickness34 in local coords
+                    bottomZ: holeDepth,                      // drills into +Z (into the panel)
+                    diameter: holeDiameter);
+                rightEnd.Children.Add(shelfHole);
+            }
+
+            for (int i = 0; i < shelfHoleCount; i++)
+            {
+                // Front Shelf Holes
+                var shelfHole = CabinetPartFactory.CreateHole(
+                    centerX: depth - 1,                   // 1" from front
+                    centerY: 6 + (i * 1.26),               // start 6" from bottom, then every 1.26"
+                    rimZ: MaterialThickness34,              // inside face is Z = MatThickness34 in local coords
+                    bottomZ: holeDepth,                      // drills into +Z (into the panel)
+                    diameter: holeDiameter);
+                rightEnd.Children.Add(shelfHole);
+            }
+        }
+
 
         if (string.Equals(cabType, style1, StringComparison.OrdinalIgnoreCase))
         {
