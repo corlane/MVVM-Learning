@@ -71,7 +71,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
 
-        LoadDefaults();
+        //LoadDefaults();
     }
 
     private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -233,31 +233,15 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_isMapping) return;
 
-        if (newValue)
-        {
-            IncDrwBoxInListOpening1 = (!newValue);
-            IncDrwBoxOpening1 = (!newValue);
-            DrillSlideHolesOpening1 = (!newValue);
-            IncDrwBoxesVisible = !newValue;
-            IncDrwBoxesInListVisible = !newValue;
-            DrillSlideHolesVisible = !newValue;
-            ListDrawerStyleVisible = !newValue;
+        IncDrwBoxInListOpening1 = (!newValue);
+        IncDrwBoxOpening1 = (!newValue);
+        DrillSlideHolesOpening1 = (!newValue);
+        IncDrwBoxesVisible = !newValue;
+        IncDrwBoxesInListVisible = !newValue;
+        DrillSlideHolesVisible = !newValue;
+        ListDrawerStyleVisible = !newValue;
 
-            UpdatePreview();
-        }
-
-        if (!newValue)
-        {
-            IncDrwBoxInListOpening1 = (!newValue);
-            IncDrwBoxOpening1 = (!newValue);
-            DrillSlideHolesOpening1 = (!newValue);
-            IncDrwBoxesVisible = !newValue;
-            IncDrwBoxesInListVisible = !newValue;
-            DrillSlideHolesVisible = !newValue;
-            ListDrawerStyleVisible = !newValue;
-
-            UpdatePreview();
-        }
+        UpdatePreview();
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
     {

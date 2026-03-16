@@ -134,3 +134,9 @@
 	Changed icon.ico to remove distortion. Finally.
 	Renamed root folder to CorlaneCabinetOrderFormV3 from MVVM Learning.
 	Selecting Sink Cabinet now hides Inc Drw Boxes, Inc Drw Boxes In List, Drill Slide Holes, and Drw Style Dropdown.
+	Asked Claude to check code. It came up with a list. I have fixed 2 items from that list:
+	Fixed double Load Defaults call in base and upper VM constructors. (commented out second one for now, but should be removed entirely if no issues arise)
+	Removed identical if/then block from OnSinkCabinetChanged handler.
+	Pushing update now. Will save big items for next update, in case it goes awry.
+
+

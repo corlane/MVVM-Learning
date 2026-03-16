@@ -70,7 +70,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
                 nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
 
-        LoadDefaults();
+        //LoadDefaults();
 
     }
 
