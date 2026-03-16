@@ -25,7 +25,6 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
         PODoorDrwGrainDirViewModel poDoorDrwGrainDirVm,
         PORevealsGapsViewModel poRevealsGapsVm,
         POOpeningDrwFrontHeightsViewModel poOpeningDrwFrontHeightsVm,
-        //POBaseCabTopTypeViewModel poBaseCabTopTypeVm,
         PONotesViewModel poNotesVm)
     {
         POCustomerInfoVm = poCustomerInfoVm ?? throw new ArgumentNullException(nameof(poCustomerInfoVm));
@@ -42,7 +41,6 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
         PODoorDrwGrainDirVm = poDoorDrwGrainDirVm ?? throw new ArgumentNullException(nameof(poDoorDrwGrainDirVm));
         PORevealsGapsVm = poRevealsGapsVm ?? throw new ArgumentNullException(nameof(poRevealsGapsVm));
         POOpeningDrwFrontHeightsVm = poOpeningDrwFrontHeightsVm ?? throw new ArgumentNullException(nameof(poOpeningDrwFrontHeightsVm));
-        //POBaseCabTopTypeVm = poBaseCabTopTypeVm ?? throw new ArgumentNullException(nameof(poBaseCabTopTypeVm));
         PONotesVm = poNotesVm ?? throw new ArgumentNullException(nameof(poNotesVm));
     }
 
@@ -60,6 +58,5 @@ public partial class REALLYProcessOrderViewModel : ObservableValidator
     public PODoorDrwGrainDirViewModel PODoorDrwGrainDirVm { get; }
     public PORevealsGapsViewModel PORevealsGapsVm { get; }
     public POOpeningDrwFrontHeightsViewModel POOpeningDrwFrontHeightsVm { get; }
-    //public POBaseCabTopTypeViewModel POBaseCabTopTypeVm { get; }
     public PONotesViewModel PONotesVm { get; }
 }

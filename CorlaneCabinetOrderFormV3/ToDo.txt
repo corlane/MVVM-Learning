@@ -30,10 +30,6 @@ Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
 On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
 
-Remove Top Type exception tab entirely. It is disabled, but not deleted....
-
-
-
 
 
 

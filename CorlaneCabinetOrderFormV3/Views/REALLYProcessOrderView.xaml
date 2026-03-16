@@ -126,14 +126,6 @@
                 <views:POOpeningDrwFrontHeightsView DataContext="{Binding POOpeningDrwFrontHeightsVm}"/>
             </TabItem>
 
-            <!--<TabItem Padding="10">
-                <TabItem.Header>
-                    <TextBlock Text="Base Cab Top Type"
-                               Foreground="{Binding POBaseCabTopTypeVm.TabHeaderBrush}" />
-                </TabItem.Header>
-                <views:POBaseCabTopTypeView DataContext="{Binding POBaseCabTopTypeVm}"/>
-            </TabItem>-->
-
             <TabItem Padding="10">
                 <TabItem.Header>
                     <TextBlock Text="Drw Stretcher Widths"
