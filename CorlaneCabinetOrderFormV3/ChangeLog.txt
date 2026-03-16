@@ -139,4 +139,7 @@
 	Removed identical if/then block from OnSinkCabinetChanged handler.
 	Pushing update now. Will save big items for next update, in case it goes awry.
 
+3.0.1.30
+	First step of Claude instructions, working on base cab vm
+
 

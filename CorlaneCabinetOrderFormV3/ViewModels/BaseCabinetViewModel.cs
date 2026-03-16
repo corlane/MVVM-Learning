@@ -33,6 +33,47 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
 
+    //public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
+    //{
+    //    _cabinetService = cabinetService;
+    //    _mainVm = mainVm;
+    //    _defaults = defaults;
+    //    _lookups = lookups;
+
+    //    // Subscribe to ALL property changes in this ViewModel
+    //    this.PropertyChanged += (_, __) => UpdatePreview();
+
+    //    PropertyChangedEventManager.AddHandler(
+    //        _mainVm,
+    //        MainVm_PropertyChanged,
+    //        nameof(MainWindowViewModel.SelectedCabinet));
+
+
+    //    Width = "18";
+    //    Height = "34.5";
+    //    Depth = "24";
+    //    LeftFrontWidth = "12";
+    //    RightFrontWidth = "12";
+    //    LeftDepth = "24";
+    //    RightDepth = "24";
+    //    LeftBackWidth = "36";
+    //    RightBackWidth = "36";
+    //    Style = Style1;
+    //    ListRolloutCount = [0, 1, 2];
+
+    //    LoadDefaults();
+
+    //    if (_defaults != null)
+    //    {
+    //        PropertyChangedEventManager.AddHandler(
+    //            _defaults,
+    //            Defaults_PropertyChanged,
+    //            nameof(DefaultSettingsService.DefaultDimensionFormat));
+    //    }
+
+    //    //LoadDefaults();
+    //}
+
     public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _cabinetService = cabinetService;
@@ -40,8 +81,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
         _defaults = defaults;
         _lookups = lookups;
 
-        // Subscribe to ALL property changes in this ViewModel
-        this.PropertyChanged += (_, __) => UpdatePreview();
+        // Only rebuild preview when geometry-affecting properties change
+        this.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is not null && s_previewProperties.Contains(e.PropertyName))
+                UpdatePreview();
+        };
 
         PropertyChangedEventManager.AddHandler(
             _mainVm,
@@ -123,7 +168,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         RecalculateFrontWidth();
         ResizeOpeningHeights();
         ResizeDrwFrontHeights();
-        UpdatePreview();
         RunValidationVisible();
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(7, 95)] public partial string Width { get; set; } = "";
@@ -145,38 +189,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 interiorHeight -= ConvertDimension.FractionToDouble(OpeningHeight1) - 0.75;
             }
 
-            if (interiorHeight < 12)
-            {
-                ListRolloutCount = [0, 1, 2];
-            }
-            else if (interiorHeight >= 12 && interiorHeight < 24)
-            {
-                ListRolloutCount = [0, 1, 2, 3];
-            }
-            else if (interiorHeight >= 24 && interiorHeight < 36)
-            {
-                ListRolloutCount = [0, 1, 2, 3, 4, 5];
-            }
-            else if (interiorHeight >= 36 && interiorHeight < 48)
-            {
-                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6];
-            }
-            else if (interiorHeight >= 48 && interiorHeight < 60)
-            {
-                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7];
-            }
-            else if (interiorHeight >= 60 && interiorHeight < 72)
-            {
-                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-            }
-            else if (interiorHeight >= 72 && interiorHeight < 84)
-            {
-                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-            }
-            else if (interiorHeight >= 84 && interiorHeight < 96)
-            {
-                ListRolloutCount = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-            }
+            ListRolloutCount = BuildRolloutCountList(interiorHeight);
 
             ResizeOpeningHeights();
             return;
@@ -185,18 +198,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // Style2: "Drawer" cabinets
         if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
         {
-
-            ResizeOpeningHeights();
-            ResizeDrwFrontHeights();
-            ApplyDrawerFrontEqualization();
-        }
-        else
-        {
-            ResizeOpeningHeights();
-            ResizeDrwFrontHeights();
+            RecalculateDrawerLayout();
         }
 
     }
+    private static ObservableCollection<int> BuildRolloutCountList(double interiorHeight)
+    {
+        int maxRollouts = Math.Clamp(2 + (int)(interiorHeight / 12), 2, 10);
+        return new ObservableCollection<int>(Enumerable.Range(0, maxRollouts + 1));
+    }
+
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), BaseCabinetDepthRange(48)] public partial string Depth { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
     {
@@ -240,8 +251,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         IncDrwBoxesInListVisible = !newValue;
         DrillSlideHolesVisible = !newValue;
         ListDrawerStyleVisible = !newValue;
-
-        UpdatePreview();
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
     {
@@ -269,10 +278,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -283,10 +289,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -297,10 +300,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -311,10 +311,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -359,13 +356,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // Style2: "Drawer" cabinets
         if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
         {
-            ApplyDrawerFrontEqualization();
-            ResizeDrwFrontHeights();
-        }
-        else
-        {
-            ResizeOpeningHeights();
-            ResizeDrwFrontHeights();
+            RecalculateDrawerLayout();
         }
         RunValidationVisible();
     }
@@ -849,7 +840,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncRolloutsEnabled = false;
             IncRolloutsInListEnabled = false;
             GroupRolloutsVisible = false;
-            UpdatePreview();
         }
 
         if (!newValue)
@@ -857,7 +847,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncRolloutsEnabled = true;
             IncRolloutsInListEnabled = true;
             GroupRolloutsVisible = true;
-            UpdatePreview();
         }
     }
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; } = false; partial void OnEqualizeBottomDrwFrontsChanged(bool oldValue, bool newValue)
@@ -933,13 +922,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Style2: "Drawer" cabinets
             if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
             {
-                ApplyDrawerFrontEqualization();
-                ResizeDrwFrontHeights();
-            }
-            else
-            {
-                ResizeOpeningHeights();
-                ResizeDrwFrontHeights();
+                RecalculateDrawerLayout();
             }
         }
     }
@@ -952,13 +935,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Style2: "Drawer" cabinets
             if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
             {
-                ApplyDrawerFrontEqualization();
-                ResizeDrwFrontHeights();
-            }
-            else
-            {
-                ResizeOpeningHeights();
-                ResizeDrwFrontHeights();
+                RecalculateDrawerLayout();
             }
         }
     }
@@ -971,13 +948,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Style2: "Drawer" cabinets
             if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
             {
-                ApplyDrawerFrontEqualization();
-                ResizeDrwFrontHeights();
-            }
-            else
-            {
-                ResizeOpeningHeights();
-                ResizeDrwFrontHeights();
+                RecalculateDrawerLayout();
             }
         }
     }
@@ -1373,6 +1344,19 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
+    private void RecalculateDrawerLayout()
+    {
+        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
+        {
+            ApplyDrawerFrontEqualization();
+        }
+        else
+        {
+            ResizeOpeningHeights();
+        }
+        ResizeDrwFrontHeights();
+    }
+
     private void RecalculateFrontWidth()
     {
         if (_isResizing || _isMapping)
@@ -1420,6 +1404,22 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // If any inputs are invalid/empty, just clear output.
             FrontWidth = string.Empty;
         }
+    }
+
+    private void RecalculateBackWidths90()
+    {
+        double leftBack = ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth);
+        double rightBack = ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth);
+
+        bool useFraction = string.Equals(_defaults?.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase);
+
+        LeftBackWidth90 = useFraction
+            ? ConvertDimension.DoubleToFraction(leftBack)
+            : leftBack.ToString();
+
+        RightBackWidth90 = useFraction
+            ? ConvertDimension.DoubleToFraction(rightBack)
+            : rightBack.ToString();
     }
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
@@ -2007,6 +2007,32 @@ public partial class BaseCabinetViewModel : ObservableValidator
         "OpeningHeight1","OpeningHeight2","OpeningHeight3","OpeningHeight4",
         "DrwFrontHeight1","DrwFrontHeight2","DrwFrontHeight3","DrwFrontHeight4",
         "LeftReveal","RightReveal","TopReveal","BottomReveal","GapWidth"
+    };
+
+    // Properties that affect 3D preview geometry — only these trigger UpdatePreview
+    private static readonly HashSet<string> s_previewProperties = new(StringComparer.Ordinal)
+    {
+        nameof(Style), nameof(Width), nameof(Height), nameof(Depth),
+        nameof(Species), nameof(EBSpecies),
+        nameof(TKHeight), nameof(TKDepth), nameof(HasTK),
+        nameof(LeftBackWidth), nameof(RightBackWidth),
+        nameof(LeftFrontWidth), nameof(RightFrontWidth),
+        nameof(LeftDepth), nameof(RightDepth),
+        nameof(DoorSpecies), nameof(BackThickness), nameof(TopType),
+        nameof(ShelfCount), nameof(ShelfDepth),
+        nameof(DoorCount), nameof(DoorGrainDir),
+        nameof(IncDoors), nameof(IncDrwFronts), nameof(IncDrwBoxes),
+        nameof(DrwCount), nameof(DrwFrontGrainDir), nameof(DrwStyle),
+        nameof(OpeningHeight1), nameof(OpeningHeight2), nameof(OpeningHeight3), nameof(OpeningHeight4),
+        nameof(IncDrwBoxOpening1), nameof(IncDrwBoxOpening2), nameof(IncDrwBoxOpening3), nameof(IncDrwBoxOpening4),
+        nameof(DrwFrontHeight1), nameof(DrwFrontHeight2), nameof(DrwFrontHeight3), nameof(DrwFrontHeight4),
+        nameof(IncDrwFront1), nameof(IncDrwFront2), nameof(IncDrwFront3), nameof(IncDrwFront4),
+        nameof(LeftReveal), nameof(RightReveal), nameof(TopReveal), nameof(BottomReveal), nameof(GapWidth),
+        nameof(IncRollouts), nameof(RolloutCount), nameof(RolloutStyle),
+        nameof(SinkCabinet), nameof(TrashDrawer),
+        nameof(DrillHingeHoles), nameof(DrillShelfHoles),
+        nameof(DrillSlideHolesOpening1), nameof(DrillSlideHolesOpening2),
+        nameof(DrillSlideHolesOpening3), nameof(DrillSlideHolesOpening4),
     };
 
     private void MapModelToViewModel(BaseCabinetModel model, string dimFormat)
