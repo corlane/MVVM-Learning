@@ -1,44 +1,4 @@
-﻿//using CorlaneCabinetOrderFormV3.ViewModels;
-//using Microsoft.Extensions.DependencyInjection;
-//using System;
-//using System.Collections.Generic;
-//using System.Text;
-//using System.Windows;
-//using System.Windows.Controls;
-//using System.Windows.Data;
-//using System.Windows.Documents;
-//using System.Windows.Input;
-//using System.Windows.Media;
-//using System.Windows.Media.Imaging;
-//using System.Windows.Navigation;
-//using System.Windows.Shapes;
-
-//namespace CorlaneCabinetOrderFormV3.Views
-//{
-//    public partial class PlaceOrderView : UserControl
-//    {
-//        public PlaceOrderView()
-//        {
-//            InitializeComponent();
-//            //DataContext = App.ServiceProvider.GetRequiredService<PlaceOrderViewModel>();
-//        }
-
-//        private void TextBoxGotFocus(object sender, RoutedEventArgs e)
-//        {
-//            if (sender is TextBox textBox)
-//            {
-//                Dispatcher.BeginInvoke(() => textBox.SelectAll());
-//            }
-
-//            e.Handled = true;
-//        }
-//    }
-//}
-
-// Original code above was modified to add a playful behavior to the "Bad" radio button, making it move away from the mouse cursor when hovered over. This is done by handling the MouseEnter event and randomly repositioning the radio button within the bounds of its parent canvas, while ensuring it stays a certain distance away from the cursor.
-
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 

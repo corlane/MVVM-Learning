@@ -1,9 +1,12 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.Models;
 
 public partial class EdgeBandPriceRow : ObservableObject
 {
-    [ObservableProperty] private string _species = "";
-    [ObservableProperty] private decimal _pricePerFt;
+    [ObservableProperty]
+    public partial string Species { get; set; } = "";
+
+    [ObservableProperty]
+    public partial decimal PricePerFt { get; set; }
 }

@@ -194,35 +194,6 @@
                                     IsReadOnly="True"
                                     Width="*"/>
 
-				<!--<DataGridTextColumn Header="Def L Front W"
-                                    Binding="{Binding DefaultLeftFrontWidth}"
-                                    IsReadOnly="True"
-                                    Width="*"/>
-
-				<DataGridTextColumn Header="Def R Front W"
-                                    Binding="{Binding DefaultRightFrontWidth}"
-                                    IsReadOnly="True"
-                                    Width="*"/>
-
-				<DataGridTextColumn Header="Def L Depth"
-                                    Binding="{Binding DefaultLeftDepth}"
-                                    IsReadOnly="True"
-                                    Width="*"/>
-
-				<DataGridTextColumn Header="Def R Depth"
-                                    Binding="{Binding DefaultRightDepth}"
-                                    IsReadOnly="True"
-                                    Width="*"/>
-
-				<DataGridTextColumn Header="Def L Back W"
-                                    Binding="{Binding DefaultLeftBackWidth}"
-                                    IsReadOnly="True"
-                                    Width="*"/>
-
-				<DataGridTextColumn Header="Def R Back W"
-                                    Binding="{Binding DefaultRightBackWidth}"
-                                    IsReadOnly="True"
-                                    Width="*"/>-->
 			</DataGrid.Columns>
 		</DataGrid>
 

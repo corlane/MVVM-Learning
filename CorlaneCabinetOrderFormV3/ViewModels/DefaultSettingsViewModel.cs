@@ -4,7 +4,6 @@ using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -126,12 +125,6 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultShelfDepth { get => _defaults.DefaultShelfDepth; set => _defaults.DefaultShelfDepth = value; }
     public bool DefaultDrillShelfHoles { get => _defaults.DefaultDrillShelfHoles; set => _defaults.DefaultDrillShelfHoles = value; }
 
-    // Openings  --- Getting rid of Default Opening Heights. Only allow setting default Drw Front heights. Let's see how this flies.
-    //public string DefaultOpeningHeight1 { get => _defaults.DefaultOpeningHeight1; set => _defaults.DefaultOpeningHeight1 = value; }
-    //public string DefaultOpeningHeight2 { get => _defaults.DefaultOpeningHeight2; set => _defaults.DefaultOpeningHeight2 = value; }
-    //public string DefaultOpeningHeight3 { get => _defaults.DefaultOpeningHeight3; set => _defaults.DefaultOpeningHeight3 = value; }
-
-
     // Doors
     public string DefaultDoorDrwSpecies { get => _defaults.DefaultDoorDrwSpecies; set => _defaults.DefaultDoorDrwSpecies = value; }
     public int DefaultDoorCount { get => _defaults.DefaultDoorCount; set => _defaults.DefaultDoorCount = value; }
@@ -153,8 +146,6 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultDrwFrontHeight1 { get => _defaults.DefaultDrwFrontHeight1; set => _defaults.DefaultDrwFrontHeight1 = value; }
     public string DefaultDrwFrontHeight2 { get => _defaults.DefaultDrwFrontHeight2; set => _defaults.DefaultDrwFrontHeight2 = value; }
     public string DefaultDrwFrontHeight3 { get => _defaults.DefaultDrwFrontHeight3; set => _defaults.DefaultDrwFrontHeight3 = value; }
-    //public bool DefaultEqualizeBottomDrwFronts { get => _defaults.DefaultEqualizeBottomDrwFronts; set => _defaults.DefaultEqualizeBottomDrwFronts = value; }
-    //public bool DefaultEqualizeAllDrwFronts { get => _defaults.DefaultEqualizeAllDrwFronts; set => _defaults.DefaultEqualizeAllDrwFronts = value; }
 
     // Replace the two existing pass-through properties with these:
 

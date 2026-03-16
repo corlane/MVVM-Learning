@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CorlaneCabinetOrderFormV3.Converters;  // Import for your ConvertDimension class
+﻿using CorlaneCabinetOrderFormV3.Converters;  // Import for your ConvertDimension class
 using System.ComponentModel.DataAnnotations;
 
 namespace CorlaneCabinetOrderFormV3.ValidationAttributes;

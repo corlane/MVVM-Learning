@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using CorlaneCabinetOrderFormV3.Models;
-
-namespace CorlaneCabinetOrderFormV3.Services;
+﻿namespace CorlaneCabinetOrderFormV3.Services;
 
 public interface IPriceBreakdownService
 {

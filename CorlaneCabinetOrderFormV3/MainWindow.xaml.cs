@@ -80,28 +80,6 @@ public partial class MainWindow : Window
         }
     }
 
-    //private async void MainWindow_Closed(object? sender, EventArgs e)
-    //{
-    //    try
-    //    {
-    //        var defaults = App.ServiceProvider.GetRequiredService<CorlaneCabinetOrderFormV3.Services.DefaultSettingsService>();
-
-    //        // Use RestoreBounds so a maximized window still saves the normal (restored) size/position
-    //        var bounds = this.RestoreBounds;
-    //        defaults.WindowLeft = bounds.Left;
-    //        defaults.WindowTop = bounds.Top;
-    //        defaults.WindowWidth = bounds.Width;
-    //        defaults.WindowHeight = bounds.Height;
-    //        defaults.WindowState = this.WindowState.ToString();
-
-    //        await defaults.SaveAsync();
-    //    }
-    //    catch
-    //    {
-    //        // best-effort — ignore failures saving UI state
-    //    }
-    //}
-
 private async void MainWindow_Closed(object? sender, EventArgs e)
     {
         try

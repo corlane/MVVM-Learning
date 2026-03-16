@@ -199,18 +199,6 @@ public partial class CabinetListView : UserControl
 
     private void ListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        //_dragStartPoint = e.GetPosition(null);
-        //_draggedCabinet = null;
-
-        //var element = e.OriginalSource as DependencyObject;
-        //var container = FindAncestor<ListViewItem>(element);
-        //if (container != null)
-        //{
-        //    _draggedCabinet = (CabinetModel?)ListViewItems.ItemContainerGenerator.ItemFromContainer(container);
-        //}
-
-
-
         _dragStartPoint = e.GetPosition(null);
         _draggedCabinet = null;
 

@@ -1,15 +1,24 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using System;
+ï»¿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.Models;
 
 public partial class MaterialTotal : ObservableObject
 {
-    [ObservableProperty] private string _species = "";
-    [ObservableProperty] private double _quantity; // ft² for panels, ft for edgebanding
-    [ObservableProperty] private string _unit = ""; // "ft²" or "ft"
-    [ObservableProperty] private decimal _unitPrice;
-    [ObservableProperty] private double _sqFt;
+    [ObservableProperty]
+    public partial string Species { get; set; } = "";
+
+    [ObservableProperty]
+    public partial double Quantity { get; set; }
+
+    [ObservableProperty]
+    public partial string Unit { get; set; } = "";
+
+    [ObservableProperty]
+    public partial decimal UnitPrice { get; set; }
+
+    [ObservableProperty]
+    public partial double SqFt { get; set; }
+
     partial void OnQuantityChanged(double oldValue, double newValue)
     {
         OnPropertyChanged(nameof(LineTotal));
@@ -20,5 +29,5 @@ public partial class MaterialTotal : ObservableObject
         OnPropertyChanged(nameof(LineTotal));
     }
 
-    public decimal LineTotal => Math.Round(_unitPrice * (decimal)_quantity, 2);
+    public decimal LineTotal => Math.Round(UnitPrice * (decimal)Quantity, 2);
 }

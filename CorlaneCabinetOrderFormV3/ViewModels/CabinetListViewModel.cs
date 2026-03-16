@@ -3,10 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
