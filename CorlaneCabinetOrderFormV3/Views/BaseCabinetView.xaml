@@ -53,7 +53,7 @@
                     </behaviors:Interaction.Triggers>
                 </ComboBox>
 
-                <CheckBox x:Name="checkSinkCabinet" Content="Sink Cabinet" Margin="10,5,5,10" IsChecked="{Binding SinkCabinet}" IsEnabled="{Binding SinkCabinetEnabled}"/>
+                <CheckBox x:Name="checkSinkCabinet" Content="Sink Cabinet" Margin="10,5,5,10" IsChecked="{Binding SinkCabinet, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SinkCabinetEnabled}"/>
 
                 <CheckBox x:Name="checkTrashDrawer" Content="Trash Drawer" Margin="10,5,5,10" IsChecked="{Binding TrashDrawer}" IsEnabled="{Binding TrashDrawerEnabled}"/>
             </StackPanel>
@@ -300,14 +300,14 @@
                     <CheckBox x:Name="checkIncludeDrwFrontsInSizesList" Content="Include Drawer Fronts In Sizes List" Margin="5" IsChecked="{Binding IncDrwFrontsInList}"/>
                         <Separator Margin="5,0,5,0"/>
 
-                    <CheckBox x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}"/>
-                    <CheckBox x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}"/>
-                    <CheckBox x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}"/>
+                    <CheckBox x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}" Visibility="{Binding IncDrwBoxesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <CheckBox x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}" Visibility="{Binding IncDrwBoxesInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <CheckBox x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}" Visibility="{Binding DrillSlideHolesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Drawer Style:" Margin="0"  VerticalAlignment="Center"/>
+                        <Label Content="Drawer Style:" Margin="0"  VerticalAlignment="Center" Visibility="{Binding ListDrawerStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                         <ComboBox x:Name="comboDrwStyle" Width="245" Margin="5" HorizontalAlignment="Left"
-                                          ItemsSource="{Binding ListDrawerStyle}" SelectedValue="{Binding DrwStyle, UpdateSourceTrigger=PropertyChanged}"/>
+                                          ItemsSource="{Binding ListDrawerStyle}" SelectedValue="{Binding DrwStyle, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ListDrawerStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
                     </StackPanel>
 

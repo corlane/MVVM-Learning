@@ -133,3 +133,4 @@
 	Cleaned up all files, removed commented blocks of code.
 	Changed icon.ico to remove distortion. Finally.
 	Renamed root folder to CorlaneCabinetOrderFormV3 from MVVM Learning.
+	Selecting Sink Cabinet now hides Inc Drw Boxes, Inc Drw Boxes In List, Drill Slide Holes, and Drw Style Dropdown.

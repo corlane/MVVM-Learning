@@ -238,6 +238,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwBoxInListOpening1 = (!newValue);
             IncDrwBoxOpening1 = (!newValue);
             DrillSlideHolesOpening1 = (!newValue);
+            IncDrwBoxesVisible = !newValue;
+            IncDrwBoxesInListVisible = !newValue;
+            DrillSlideHolesVisible = !newValue;
+            ListDrawerStyleVisible = !newValue;
+
             UpdatePreview();
         }
 
@@ -246,6 +251,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwBoxInListOpening1 = (!newValue);
             IncDrwBoxOpening1 = (!newValue);
             DrillSlideHolesOpening1 = (!newValue);
+            IncDrwBoxesVisible = !newValue;
+            IncDrwBoxesInListVisible = !newValue;
+            DrillSlideHolesVisible = !newValue;
+            ListDrawerStyleVisible = !newValue;
+
             UpdatePreview();
         }
     }
@@ -1097,6 +1107,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncRolloutsInListVisible { get; set; } = false;
     [ObservableProperty] public partial bool RolloutStyleVisible { get; set; } = false;
     [ObservableProperty] public partial bool DrillSlideHolesForRolloutsVisible { get; set; } = false;
+    [ObservableProperty] public partial bool IncDrwBoxesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool IncDrwBoxesInListVisible { get; set; } = true;
+    [ObservableProperty] public partial bool DrillSlideHolesVisible { get; set; } = true;
+    [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
+
 
     //[ObservableProperty] public partial bool HasErrors { get; set; }
     private void ResizeOpeningHeights()
