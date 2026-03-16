@@ -132,3 +132,4 @@
 3.0.1.29
 	Cleaned up all files, removed commented blocks of code.
 	Changed icon.ico to remove distortion. Finally.
+	Renamed root folder to CorlaneCabinetOrderFormV3 from MVVM Learning.
