@@ -103,7 +103,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
         Corner45DimsVisibility = value == Style3;
         BackThicknessVisible = value == Style1;
 
-        //LoadDefaults();
         RunValidationVisible();
     }
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
@@ -426,7 +425,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
         }
         else
         {
-            //LoadDefaults();
         }
     }
 

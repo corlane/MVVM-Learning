@@ -172,7 +172,6 @@ public partial class PanelViewModel : ObservableValidator
         }
         else
         {
-            //LoadDefaults();
         }
     }
 

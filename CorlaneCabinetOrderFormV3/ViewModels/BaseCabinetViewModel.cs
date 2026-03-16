@@ -73,8 +73,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 Defaults_PropertyChanged,
                 nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
-
-        //LoadDefaults();
     }
 
     private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
