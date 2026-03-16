@@ -1991,6 +1991,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         nameof(DrillSlideHolesOpening3), nameof(DrillSlideHolesOpening4),
     };
 
+
     private void MapModelToViewModel(BaseCabinetModel model, string dimFormat)
     {
         if (model is null) return;
@@ -1998,60 +1999,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         _isMapping = true;
         try
         {
-            var vmType = GetType();
-            var modelType = model.GetType();
-
-            // iterate model public instance properties and copy to VM where names match
-            foreach (var modelProp in modelType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
-            {
-                var vmProp = vmType.GetProperty(modelProp.Name, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                if (vmProp is null || !vmProp.CanWrite) continue;
-
-                var modelValue = modelProp.GetValue(model);
-                if (modelValue is null)
-                {
-                    vmProp.SetValue(this, null);
-                    continue;
-                }
-
-                // string properties: either dimension-formatted or direct copy
-                if (vmProp.PropertyType == typeof(string))
-                {
-                    var raw = modelValue.ToString() ?? "";
-
-                    if (s_dimensionProperties.Contains(modelProp.Name))
-                    {
-                        double numeric = ConvertDimension.FractionToDouble(raw);
-
-                        if (string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
-                        {
-                            vmProp.SetValue(this, ConvertDimension.DoubleToFraction(numeric));
-                        }
-                        else
-                        {
-                            vmProp.SetValue(this, numeric.ToString());
-                        }
-                    }
-                    else
-                    {
-                        vmProp.SetValue(this, raw);
-                    }
-                }
-                else if (vmProp.PropertyType == typeof(int))
-                {
-                    if (modelValue is int i) vmProp.SetValue(this, i);
-                    else if (int.TryParse(modelValue.ToString(), out var v)) vmProp.SetValue(this, v);
-                }
-                else if (vmProp.PropertyType == typeof(bool))
-                {
-                    if (modelValue is bool b) vmProp.SetValue(this, b);
-                    else if (bool.TryParse(modelValue.ToString(), out var vb)) vmProp.SetValue(this, vb);
-                }
-                else
-                {
-                    vmProp.SetValue(this, modelValue);
-                }
-            }
+            ViewModelMappingHelper.MapModelToViewModel(this, model, dimFormat, s_dimensionProperties);
         }
         finally
         {

@@ -143,4 +143,5 @@
 	First step of Claude instructions, working on base cab vm
 	Upper, filler, and panel VMs fixed as claude suggested.
 	Deleted stale //LoadDefaults in VMs
+	Added ViewModelMappingHelper, and simplified the mapping in the individual VMs.
 
