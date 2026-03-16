@@ -32,7 +32,6 @@ public partial class FillerViewModel : ObservableValidator
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
-
     public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _cabinetService = cabinetService;
@@ -40,8 +39,12 @@ public partial class FillerViewModel : ObservableValidator
         _defaults = defaults;
         _lookups = lookups;
 
-        // Subscribe to ALL property changes in this ViewModel
-        this.PropertyChanged += (_, __) => UpdatePreview();
+        // Only rebuild preview when geometry-affecting properties change
+        this.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is not null && s_previewProperties.Contains(e.PropertyName))
+                UpdatePreview();
+        };
 
         PropertyChangedEventManager.AddHandler(
             _mainVm,
@@ -110,6 +113,13 @@ public partial class FillerViewModel : ObservableValidator
         }
     }
 
+
+    // Properties that affect 3D preview geometry — only these trigger UpdatePreview
+    private static readonly HashSet<string> s_previewProperties = new(StringComparer.Ordinal)
+    {
+        nameof(Width), nameof(Height), nameof(Depth),
+        nameof(Species), nameof(EBSpecies),
+    };
 
     [RelayCommand]
     private void AddCabinet()

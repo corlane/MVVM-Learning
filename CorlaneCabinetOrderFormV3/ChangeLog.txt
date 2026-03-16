@@ -141,5 +141,5 @@
 
 3.0.1.30
 	First step of Claude instructions, working on base cab vm
-
+	Upper, filler, and panel VMs fixed as claude suggested.
 

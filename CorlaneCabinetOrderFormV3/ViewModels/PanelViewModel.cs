@@ -43,20 +43,18 @@ public partial class PanelViewModel : ObservableValidator
         _defaults = defaults;
         _lookups = lookups;
 
-        // Subscribe to ALL property changes in this ViewModel
         this.PropertyChanged += (_, e) =>
         {
-            // keep preview updated
-            UpdatePreview();
+            // Only rebuild preview when geometry-affecting properties change
+            if (e.PropertyName is not null && s_previewProperties.Contains(e.PropertyName))
+                UpdatePreview();
 
-            // when material-thickness properties change, update the list so bound ComboBox refreshes
+            // When material-thickness properties change, update the list so bound ComboBox refreshes
             if (e.PropertyName == nameof(MaterialThickness14) || e.PropertyName == nameof(MaterialThickness34))
-            {
                 OnPropertyChanged(nameof(ListPanelDepths));
-            }
         };
 
-        // react when DefaultDimensionFormat changes so ListPanelDepths updates
+        // React when DefaultDimensionFormat changes so ListPanelDepths updates
         if (_defaults != null)
         {
             PropertyChangedEventManager.AddHandler(
@@ -177,6 +175,16 @@ public partial class PanelViewModel : ObservableValidator
             //LoadDefaults();
         }
     }
+
+
+    // Properties that affect 3D preview geometry — only these trigger UpdatePreview
+    private static readonly HashSet<string> s_previewProperties = new(StringComparer.Ordinal)
+    {
+        nameof(Width), nameof(Height), nameof(Depth),
+        nameof(Species), nameof(EBSpecies),
+        nameof(PanelEBTop), nameof(PanelEBBottom),
+        nameof(PanelEBLeft), nameof(PanelEBRight),
+    };
 
 
     [RelayCommand]

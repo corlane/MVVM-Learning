@@ -32,48 +32,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
-
-    //public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
-    //{
-    //    _cabinetService = cabinetService;
-    //    _mainVm = mainVm;
-    //    _defaults = defaults;
-    //    _lookups = lookups;
-
-    //    // Subscribe to ALL property changes in this ViewModel
-    //    this.PropertyChanged += (_, __) => UpdatePreview();
-
-    //    PropertyChangedEventManager.AddHandler(
-    //        _mainVm,
-    //        MainVm_PropertyChanged,
-    //        nameof(MainWindowViewModel.SelectedCabinet));
-
-
-    //    Width = "18";
-    //    Height = "34.5";
-    //    Depth = "24";
-    //    LeftFrontWidth = "12";
-    //    RightFrontWidth = "12";
-    //    LeftDepth = "24";
-    //    RightDepth = "24";
-    //    LeftBackWidth = "36";
-    //    RightBackWidth = "36";
-    //    Style = Style1;
-    //    ListRolloutCount = [0, 1, 2];
-
-    //    LoadDefaults();
-
-    //    if (_defaults != null)
-    //    {
-    //        PropertyChangedEventManager.AddHandler(
-    //            _defaults,
-    //            Defaults_PropertyChanged,
-    //            nameof(DefaultSettingsService.DefaultDimensionFormat));
-    //    }
-
-    //    //LoadDefaults();
-    //}
-
     public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _cabinetService = cabinetService;

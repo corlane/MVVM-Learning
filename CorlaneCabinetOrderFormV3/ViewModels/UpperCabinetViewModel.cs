@@ -32,17 +32,19 @@ public partial class UpperCabinetViewModel : ObservableValidator
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
-
     public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
-        _lookups = lookups;
 
-        // Subscribe to ALL property changes in this ViewModel
-        this.PropertyChanged += (_, __) => UpdatePreview();
+        // Only rebuild preview when geometry-affecting properties change
+        this.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is not null && s_previewProperties.Contains(e.PropertyName))
+                UpdatePreview();
+        };
 
         PropertyChangedEventManager.AddHandler(
             _mainVm,
@@ -69,11 +71,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
                 Defaults_PropertyChanged,
                 nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
-
-        //LoadDefaults();
-
     }
-
     private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
@@ -170,10 +168,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -184,10 +179,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -198,10 +190,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -212,10 +201,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            LeftBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth));
-            RightBackWidth90 = Convert.ToString(ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth));
-            LeftBackWidth90 = new DimensionFormatConverter().Convert(LeftBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
-            RightBackWidth90 = new DimensionFormatConverter().Convert(RightBackWidth90, typeof(string), null, System.Globalization.CultureInfo.CurrentCulture)?.ToString()!;
+            RecalculateBackWidths90();
             RecalculateFrontWidth();
             RunValidationVisible();
         }
@@ -491,6 +477,21 @@ public partial class UpperCabinetViewModel : ObservableValidator
         }
     }
 
+    private void RecalculateBackWidths90()
+    {
+        double leftBack = ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth);
+        double rightBack = ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth);
+
+        bool useFraction = string.Equals(_defaults?.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase);
+
+        LeftBackWidth90 = useFraction
+            ? ConvertDimension.DoubleToFraction(leftBack)
+            : leftBack.ToString();
+
+        RightBackWidth90 = useFraction
+            ? ConvertDimension.DoubleToFraction(rightBack)
+            : rightBack.ToString();
+    }
 
     [RelayCommand]
     private void UpdateCabinet()
@@ -624,6 +625,22 @@ public partial class UpperCabinetViewModel : ObservableValidator
     "LeftDepth","RightDepth","BackThickness", "FrontWidth",
     "LeftReveal","RightReveal","TopReveal","BottomReveal","GapWidth"
 };
+
+    // Properties that affect 3D preview geometry — only these trigger UpdatePreview
+    private static readonly HashSet<string> s_previewProperties = new(StringComparer.Ordinal)
+    {
+        nameof(Style), nameof(Width), nameof(Height), nameof(Depth),
+        nameof(Species), nameof(EBSpecies),
+        nameof(LeftBackWidth), nameof(RightBackWidth),
+        nameof(LeftFrontWidth), nameof(RightFrontWidth),
+        nameof(LeftDepth), nameof(RightDepth),
+        nameof(DoorSpecies), nameof(BackThickness),
+        nameof(ShelfCount), nameof(DrillShelfHoles),
+        nameof(DoorCount), nameof(DoorGrainDir),
+        nameof(IncDoors), nameof(DrillHingeHoles),
+        nameof(LeftReveal), nameof(RightReveal),
+        nameof(TopReveal), nameof(BottomReveal), nameof(GapWidth),
+    };
 
     private void MapModelToViewModel(UpperCabinetModel model, string dimFormat)
     {
