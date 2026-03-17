@@ -1957,7 +1957,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         SupplySlabDoorsVisible = DoorCount > 0;
 
         // Trash Drawer dependent visibility
-        GroupRolloutsVisible = (style == Style1 || style == Style3 || style == Style4);
+        GroupRolloutsVisible = (style == Style1);
     }
 }
 

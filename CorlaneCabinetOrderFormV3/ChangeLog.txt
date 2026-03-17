@@ -156,3 +156,4 @@
 	Added EnforceStyleConstraints() and ApplyViewModelToModel for Base cabinets, and changed the Add & Update methods to use them. All cabinet parameters now live in ApplyViewModelToModel. No need to have to change the Add & Update methods anymore when cabinet parameters are added or removed.
 	Same as above for upper cabinets.
 	Same as above for fillers and panels.
+	Rollouts group hidden for corner cabinets.
