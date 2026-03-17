@@ -153,3 +153,4 @@
 3.0.1.31
 	The state of the Equalize drw front buttons is now saved with each cabinet.
 	Changed base cab vm to inject ipreviewservice through the constructor like the other dependencies.
+	Added EnforceStyleConstraints() and ApplyViewModelToModel for Base cabinets, and changed the Add & Update methods to use them. All cabinet parameters now live in ApplyViewModelToModel. No need to have to change the Add & Update methods anymore when cabinet parameters are added or removed.

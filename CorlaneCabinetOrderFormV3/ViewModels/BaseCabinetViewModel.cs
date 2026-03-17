@@ -1385,12 +1385,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
-    [RelayCommand]
-    private void AddCabinet()
+    /// <summary>
+    /// Applies style-specific constraints before saving to a model
+    /// (e.g. drawer cabs have 0 doors, corner cabs force 3/4" back).
+    /// </summary>
+    private void EnforceStyleConstraints()
     {
-        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
-            return;
-
         if (Style == Style2)
         {
             DoorCount = 0;
@@ -1416,96 +1416,111 @@ public partial class BaseCabinetViewModel : ObservableValidator
             TopType = CabinetOptions.TopType.Full;
             BackThickness = "0.75"; // Force 3/4" back
         }
+    }
+
+    /// <summary>
+    /// Copies all current ViewModel property values into the target model,
+    /// converting dimension strings to numeric format.
+    /// </summary>
+    private void ApplyViewModelToModel(BaseCabinetModel target)
+    {
+        target.Width = ConvertDimension.FractionToDouble(Width).ToString();
+        target.Height = ConvertDimension.FractionToDouble(Height).ToString();
+        target.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
+        target.Species = Species;
+        target.CustomSpecies = CustomSpecies;
+        target.EBSpecies = EBSpecies;
+        target.CustomEBSpecies = CustomEBSpecies;
+        target.Name = Name;
+        target.Qty = Qty;
+        target.Notes = Notes;
+        target.TKHeight = ConvertDimension.FractionToDouble(TKHeight).ToString();
+        target.Style = Style;
+        target.LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString();
+        target.RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString();
+        target.LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString();
+        target.RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString();
+        target.LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString();
+        target.RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString();
+        target.HasTK = HasTK;
+        target.TKDepth = ConvertDimension.FractionToDouble(TKDepth).ToString();
+        target.DoorSpecies = DoorSpecies;
+        target.CustomDoorSpecies = CustomDoorSpecies;
+        target.BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString();
+        target.TopType = TopType;
+        target.ShelfCount = ShelfCount;
+        target.ShelfDepth = ShelfDepth;
+        target.DrillShelfHoles = DrillShelfHoles;
+        target.DoorCount = DoorCount;
+        target.DoorGrainDir = DoorGrainDir;
+        target.IncDoorsInList = IncDoorsInList;
+        target.IncDoors = IncDoors;
+        target.DrillHingeHoles = DrillHingeHoles;
+        target.DrwFrontGrainDir = DrwFrontGrainDir;
+        target.IncDrwFrontsInList = IncDrwFrontsInList;
+        target.IncDrwFronts = IncDrwFronts;
+        target.IncDrwBoxesInList = IncDrwBoxesInList;
+        target.IncDrwBoxes = IncDrwBoxes;
+        target.DrillSlideHoles = DrillSlideHoles;
+        target.DrwCount = DrwCount;
+        target.DrwStyle = DrwStyle;
+        target.OpeningHeight1 = ConvertDimension.FractionToDouble(OpeningHeight1).ToString();
+        target.OpeningHeight2 = ConvertDimension.FractionToDouble(OpeningHeight2).ToString();
+        target.OpeningHeight3 = ConvertDimension.FractionToDouble(OpeningHeight3).ToString();
+        target.OpeningHeight4 = ConvertDimension.FractionToDouble(OpeningHeight4).ToString();
+        target.IncDrwBoxOpening1 = IncDrwBoxOpening1;
+        target.IncDrwBoxOpening2 = IncDrwBoxOpening2;
+        target.IncDrwBoxOpening3 = IncDrwBoxOpening3;
+        target.IncDrwBoxOpening4 = IncDrwBoxOpening4;
+        target.DrillSlideHolesOpening1 = DrillSlideHolesOpening1;
+        target.DrillSlideHolesOpening2 = DrillSlideHolesOpening2;
+        target.DrillSlideHolesOpening3 = DrillSlideHolesOpening3;
+        target.DrillSlideHolesOpening4 = DrillSlideHolesOpening4;
+        target.IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1;
+        target.IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2;
+        target.IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3;
+        target.IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4;
+        target.DrwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1).ToString();
+        target.DrwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2).ToString();
+        target.DrwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3).ToString();
+        target.DrwFrontHeight4 = ConvertDimension.FractionToDouble(DrwFrontHeight4).ToString();
+        target.IncDrwFront1 = IncDrwFront1;
+        target.IncDrwFront2 = IncDrwFront2;
+        target.IncDrwFront3 = IncDrwFront3;
+        target.IncDrwFront4 = IncDrwFront4;
+        target.IncDrwFrontInList1 = IncDrwFrontInList1;
+        target.IncDrwFrontInList2 = IncDrwFrontInList2;
+        target.IncDrwFrontInList3 = IncDrwFrontInList3;
+        target.IncDrwFrontInList4 = IncDrwFrontInList4;
+        target.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
+        target.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
+        target.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
+        target.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
+        target.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
+        target.IncRollouts = IncRollouts;
+        target.IncRolloutsInList = IncRolloutsInList;
+        target.RolloutCount = RolloutCount;
+        target.RolloutStyle = RolloutStyle;
+        target.DrillSlideHolesForRollouts = DrillSlideHolesForRollouts;
+        target.SinkCabinet = SinkCabinet;
+        target.TrashDrawer = TrashDrawer;
+        target.EqualizeAllDrwFronts = EqualizeAllDrwFronts;
+        target.EqualizeBottomDrwFronts = EqualizeBottomDrwFronts;
+    }
+
+    [RelayCommand]
+    private void AddCabinet()
+    {
+        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
+            return;
+
+        EnforceStyleConstraints();
 
         string tempTopType = TopType; // User-selected top type, which may be overridden by depth-specific rules below
         EnforceTopTypeForShallowDepth();
 
-        var newCabinet = new BaseCabinetModel
-        {
-            Width = ConvertDimension.FractionToDouble(Width).ToString(),
-            Height = ConvertDimension.FractionToDouble(Height).ToString(),
-            Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
-            Species = Species,
-            CustomSpecies = CustomSpecies,
-            EBSpecies = EBSpecies,
-            CustomEBSpecies = CustomEBSpecies,
-            Name = Name,
-            Qty = Qty,
-            Notes = Notes,
-
-            TKHeight = ConvertDimension.FractionToDouble(TKHeight).ToString(),  // Subtype-specific
-            Style = Style,
-            LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString(),
-            RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString(),
-            LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString(),
-            RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString(),
-            LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString(),
-            RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString(),
-            HasTK = HasTK,
-            TKDepth = ConvertDimension.FractionToDouble(TKDepth).ToString(),
-            DoorSpecies = DoorSpecies,
-            CustomDoorSpecies = CustomDoorSpecies,
-            BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString(),
-            TopType = TopType,
-            ShelfCount = ShelfCount,
-            ShelfDepth = ShelfDepth,
-            DrillShelfHoles = DrillShelfHoles,
-            DoorCount = DoorCount,
-            DoorGrainDir = DoorGrainDir,
-            IncDoorsInList = IncDoorsInList,
-            IncDoors = IncDoors,
-            DrillHingeHoles = DrillHingeHoles,
-            DrwFrontGrainDir = DrwFrontGrainDir,
-            IncDrwFrontsInList = IncDrwFrontsInList,
-            IncDrwFronts = IncDrwFronts,
-            IncDrwBoxesInList = IncDrwBoxesInList,
-            IncDrwBoxes = IncDrwBoxes,
-            DrillSlideHoles = DrillSlideHoles,
-            DrwCount = DrwCount,
-            DrwStyle = DrwStyle,
-            OpeningHeight1 = ConvertDimension.FractionToDouble(OpeningHeight1).ToString(),
-            OpeningHeight2 = ConvertDimension.FractionToDouble(OpeningHeight2).ToString(),
-            OpeningHeight3 = ConvertDimension.FractionToDouble(OpeningHeight3).ToString(),
-            OpeningHeight4 = ConvertDimension.FractionToDouble(OpeningHeight4).ToString(),
-            IncDrwBoxOpening1 = IncDrwBoxOpening1,
-            IncDrwBoxOpening2 = IncDrwBoxOpening2,
-            IncDrwBoxOpening3 = IncDrwBoxOpening3,
-            IncDrwBoxOpening4 = IncDrwBoxOpening4,
-            DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
-            DrillSlideHolesOpening2 = DrillSlideHolesOpening2,
-            DrillSlideHolesOpening3 = DrillSlideHolesOpening3,
-            DrillSlideHolesOpening4 = DrillSlideHolesOpening4,
-            IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1,
-            IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2,
-            IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3,
-            IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4,
-            DrwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1).ToString(),
-            DrwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2).ToString(),
-            DrwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3).ToString(),
-            DrwFrontHeight4 = ConvertDimension.FractionToDouble(DrwFrontHeight4).ToString(),
-            IncDrwFront1 = IncDrwFront1,
-            IncDrwFront2 = IncDrwFront2,
-            IncDrwFront3 = IncDrwFront3,
-            IncDrwFront4 = IncDrwFront4,
-            IncDrwFrontInList1 = IncDrwFrontInList1,
-            IncDrwFrontInList2 = IncDrwFrontInList2,
-            IncDrwFrontInList3 = IncDrwFrontInList3,
-            IncDrwFrontInList4 = IncDrwFrontInList4,
-            LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString(),
-            RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString(),
-            TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString(),
-            BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString(),
-            GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString(),
-            IncRollouts = IncRollouts,
-            IncRolloutsInList = IncRolloutsInList,
-            RolloutCount = RolloutCount,
-            RolloutStyle = RolloutStyle,
-            DrillSlideHolesForRollouts = DrillSlideHolesForRollouts,
-            SinkCabinet = SinkCabinet,
-            TrashDrawer = TrashDrawer,
-            EqualizeAllDrwFronts = EqualizeAllDrwFronts,
-            EqualizeBottomDrwFronts = EqualizeBottomDrwFronts
-        };
+        var newCabinet = new BaseCabinetModel();
+        ApplyViewModelToModel(newCabinet);
 
         try
         {
@@ -1537,117 +1552,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
             if (!ViewModelValidationHelper.ValidateUniqueName(Name, selected, _cabinetService, _mainVm))
                 return;
 
-            if (Style == Style2)
-            {
-                DoorCount = 0;
-                DrillHingeHoles = false;
-                DrillShelfHoles = false;
-                RolloutCount = 0;
-                ShelfCount = 0;
-            }
-
-            if (Style == Style3)
-            {
-                if (DoorCount == 1)
-                { DoorCount = 2; }
-                DrwCount = 0;
-                TopType = CabinetOptions.TopType.Full;
-                BackThickness = "0.75"; // Force 3/4" back
-            }
-
-            if (Style == Style4)
-            {
-                DrwCount = 0;
-                RolloutCount = 0;
-                TopType = CabinetOptions.TopType.Full;
-                BackThickness = "0.75"; // Force 3/4" back
-            }
+            EnforceStyleConstraints();
 
             string tempTopType = TopType; // User-selected top type, which may be overridden by depth-specific rules below
             EnforceTopTypeForShallowDepth();
 
-            selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
-            selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
-            selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
-            selected.Species = Species;
-            selected.CustomSpecies = CustomSpecies;
-            selected.EBSpecies = EBSpecies;
-            selected.CustomEBSpecies = CustomEBSpecies;
-            selected.Name = Name;
-            selected.Qty = Qty;
-            selected.Notes = Notes;
-            selected.TKHeight = ConvertDimension.FractionToDouble(TKHeight).ToString();  // Subtype-specific
-            selected.Style = Style;
-            selected.LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString();
-            selected.RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString();
-            selected.LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString();
-            selected.RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString();
-            selected.LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString();
-            selected.RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString();
-            selected.HasTK = HasTK;
-            selected.TKDepth = ConvertDimension.FractionToDouble(TKDepth).ToString();
-            selected.DoorSpecies = DoorSpecies;
-            selected.CustomDoorSpecies = CustomDoorSpecies;
-            selected.BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString();
-            selected.TopType = TopType;
-            selected.ShelfCount = ShelfCount;
-            selected.ShelfDepth = ShelfDepth;
-            selected.DrillShelfHoles = DrillShelfHoles;
-            selected.DoorCount = DoorCount;
-            selected.DoorGrainDir = DoorGrainDir;
-            selected.IncDoorsInList = IncDoorsInList;
-            selected.IncDoors = IncDoors;
-            selected.DrillHingeHoles = DrillHingeHoles;
-            selected.DrwFrontGrainDir = DrwFrontGrainDir;
-            selected.IncDrwFrontsInList = IncDrwFrontsInList;
-            selected.IncDrwFronts = IncDrwFronts;
-            selected.IncDrwBoxesInList = IncDrwBoxesInList;
-            selected.IncDrwBoxes = IncDrwBoxes;
-            selected.DrillSlideHoles = DrillSlideHoles;
-            selected.DrwCount = DrwCount;
-            selected.DrwStyle = DrwStyle;
-            selected.OpeningHeight1 = ConvertDimension.FractionToDouble(OpeningHeight1).ToString();
-            selected.OpeningHeight2 = ConvertDimension.FractionToDouble(OpeningHeight2).ToString();
-            selected.OpeningHeight3 = ConvertDimension.FractionToDouble(OpeningHeight3).ToString();
-            selected.OpeningHeight4 = ConvertDimension.FractionToDouble(OpeningHeight4).ToString();
-            selected.IncDrwBoxOpening1 = IncDrwBoxOpening1;
-            selected.IncDrwBoxOpening2 = IncDrwBoxOpening2;
-            selected.IncDrwBoxOpening3 = IncDrwBoxOpening3;
-            selected.IncDrwBoxOpening4 = IncDrwBoxOpening4;
-            selected.DrillSlideHolesOpening1 = DrillSlideHolesOpening1;
-            selected.DrillSlideHolesOpening2 = DrillSlideHolesOpening2;
-            selected.DrillSlideHolesOpening3 = DrillSlideHolesOpening3;
-            selected.DrillSlideHolesOpening4 = DrillSlideHolesOpening4;
-            selected.IncDrwBoxInListOpening1 = IncDrwBoxInListOpening1;
-            selected.IncDrwBoxInListOpening2 = IncDrwBoxInListOpening2;
-            selected.IncDrwBoxInListOpening3 = IncDrwBoxInListOpening3;
-            selected.IncDrwBoxInListOpening4 = IncDrwBoxInListOpening4;
-            selected.DrwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1).ToString();
-            selected.DrwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2).ToString();
-            selected.DrwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3).ToString();
-            selected.DrwFrontHeight4 = ConvertDimension.FractionToDouble(DrwFrontHeight4).ToString();
-            selected.IncDrwFront1 = IncDrwFront1;
-            selected.IncDrwFront2 = IncDrwFront2;
-            selected.IncDrwFront3 = IncDrwFront3;
-            selected.IncDrwFront4 = IncDrwFront4;
-            selected.IncDrwFrontInList1 = IncDrwFrontInList1;
-            selected.IncDrwFrontInList2 = IncDrwFrontInList2;
-            selected.IncDrwFrontInList3 = IncDrwFrontInList3;
-            selected.IncDrwFrontInList4 = IncDrwFrontInList4;
-            selected.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
-            selected.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
-            selected.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
-            selected.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
-            selected.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
-            selected.IncRollouts = IncRollouts;
-            selected.IncRolloutsInList = IncRolloutsInList;
-            selected.RolloutCount = RolloutCount;
-            selected.RolloutStyle = RolloutStyle;
-            selected.DrillSlideHolesForRollouts = DrillSlideHolesForRollouts;
-            selected.SinkCabinet = SinkCabinet;
-            selected.TrashDrawer = TrashDrawer;
-            selected.EqualizeAllDrwFronts = EqualizeAllDrwFronts;
-            selected.EqualizeBottomDrwFronts = EqualizeBottomDrwFronts;
+            ApplyViewModelToModel(selected);
 
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
