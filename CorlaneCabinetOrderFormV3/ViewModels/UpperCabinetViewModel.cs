@@ -34,13 +34,13 @@ public partial class UpperCabinetViewModel : ObservableValidator
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
-    public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
+    public UpperCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups, IPreviewService previewService)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
-        _previewService = App.ServiceProvider.GetRequiredService<IPreviewService>();
+        _previewService = previewService;
 
         // Only rebuild preview when geometry-affecting properties change
         this.PropertyChanged += (_, e) =>
@@ -338,50 +338,14 @@ public partial class UpperCabinetViewModel : ObservableValidator
         if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
             return;
 
-        if (Style == Style2 || Style == Style3)
-        {
-            BackThickness = CabinetOptions.BackThickness.ThreeQuarterDecimal; // Force 3/4" back
-        }
+        EnforceStyleConstraints();
 
-        var newCabinet = new UpperCabinetModel
-        {
-            Width = ConvertDimension.FractionToDouble(Width).ToString(),
-            Height = ConvertDimension.FractionToDouble(Height).ToString(),
-            Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
-            Species = Species,
-            CustomSpecies = CustomSpecies,
-            EBSpecies = EBSpecies,
-            CustomEBSpecies = CustomEBSpecies,
-            Name = Name,
-            Qty = Qty,
-            Notes = Notes,
-            Style = Style,
-            LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString(),
-            RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString(),
-            LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString(),
-            RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString(),
-            LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString(),
-            RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString(),
-            DoorSpecies = DoorSpecies,
-            CustomDoorSpecies = CustomDoorSpecies,
-            BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString(),
-            ShelfCount = ShelfCount,
-            DrillShelfHoles = DrillShelfHoles,
-            DoorCount = DoorCount,
-            DoorGrainDir = DoorGrainDir,
-            IncDoorsInList = IncDoorsInList,
-            IncDoors = IncDoors,
-            DrillHingeHoles = DrillHingeHoles,
-            LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString(),
-            RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString(),
-            TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString(),
-            BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString(),
-            GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString()
-        };
+        var newCabinet = new UpperCabinetModel();
+        ApplyViewModelToModel(newCabinet);
 
         try
         {
-            _cabinetService?.Add(newCabinet); // Add to shared service
+            _cabinetService?.Add(newCabinet);
             _mainVm!.SelectedCabinet = newCabinet;
         }
         catch (InvalidOperationException ex)
@@ -390,11 +354,94 @@ public partial class UpperCabinetViewModel : ObservableValidator
             return;
         }
 
-        Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
+        Notes = "";
 
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
     }
+
+    [RelayCommand]
+    private void UpdateCabinet()
+    {
+        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
+            return;
+
+        if (_mainVm!.SelectedCabinet is UpperCabinetModel selected)
+        {
+            if (!ViewModelValidationHelper.ValidateUniqueName(Name, selected, _cabinetService, _mainVm))
+                return;
+
+            EnforceStyleConstraints();
+
+            ApplyViewModelToModel(selected);
+
+            _mainVm?.Notify("Cabinet Updated", Brushes.Green);
+            _mainVm?.IsModified = true;
+        }
+        else
+        {
+            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
+            return;
+        }
+
+        _mainVm!.SelectedCabinet = null;
+
+        Notes = "";
+    }
+
+
+    /// <summary>
+    /// Applies style-specific constraints before saving to a model
+    /// (e.g. corner cabs force 3/4" back).
+    /// </summary>
+    private void EnforceStyleConstraints()
+    {
+        if (Style == Style2 || Style == Style3)
+        {
+            BackThickness = CabinetOptions.BackThickness.ThreeQuarterDecimal; // Force 3/4" back
+        }
+    }
+
+    /// <summary>
+    /// Copies all current ViewModel property values into the target model,
+    /// converting dimension strings to numeric format.
+    /// </summary>
+    private void ApplyViewModelToModel(UpperCabinetModel target)
+    {
+        target.Width = ConvertDimension.FractionToDouble(Width).ToString();
+        target.Height = ConvertDimension.FractionToDouble(Height).ToString();
+        target.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
+        target.Species = Species;
+        target.CustomSpecies = CustomSpecies;
+        target.EBSpecies = EBSpecies;
+        target.CustomEBSpecies = CustomEBSpecies;
+        target.Name = Name;
+        target.Qty = Qty;
+        target.Notes = Notes;
+        target.Style = Style;
+        target.LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString();
+        target.RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString();
+        target.LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString();
+        target.RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString();
+        target.LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString();
+        target.RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString();
+        target.DoorSpecies = DoorSpecies;
+        target.CustomDoorSpecies = CustomDoorSpecies;
+        target.BackThickness = ConvertDimension.FractionToDouble(BackThickness).ToString();
+        target.ShelfCount = ShelfCount;
+        target.DrillShelfHoles = DrillShelfHoles;
+        target.DoorCount = DoorCount;
+        target.DoorGrainDir = DoorGrainDir;
+        target.IncDoorsInList = IncDoorsInList;
+        target.IncDoors = IncDoors;
+        target.DrillHingeHoles = DrillHingeHoles;
+        target.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
+        target.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
+        target.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
+        target.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
+        target.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
+    }
+
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
     {
@@ -476,70 +523,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
             : rightBack.ToString();
     }
 
-    [RelayCommand]
-    private void UpdateCabinet()
-    {
-        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
-            return;
-
-        if (_mainVm!.SelectedCabinet is UpperCabinetModel selected)
-        {
-            if (!ViewModelValidationHelper.ValidateUniqueName(Name, selected, _cabinetService, _mainVm))
-                return;
-
-            if (Style == Style2 || Style == Style3)
-            {
-                BackThickness = CabinetOptions.BackThickness.ThreeQuarterDecimal; // Force 3/4" back
-            }
-
-            selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
-            selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
-            selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
-            selected.Species = Species;
-            selected.CustomSpecies = CustomSpecies;
-            selected.EBSpecies = EBSpecies;
-            selected.CustomEBSpecies = CustomEBSpecies;
-            selected.CustomDoorSpecies = CustomDoorSpecies;
-            selected.Name = Name;
-            selected.Qty = Qty;
-            selected.Notes = Notes;
-            selected.Style = Style;
-            selected.LeftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth).ToString();
-            selected.RightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth).ToString();
-            selected.LeftFrontWidth = ConvertDimension.FractionToDouble(LeftFrontWidth).ToString();
-            selected.RightFrontWidth = ConvertDimension.FractionToDouble(RightFrontWidth).ToString();
-            selected.LeftDepth = ConvertDimension.FractionToDouble(LeftDepth).ToString();
-            selected.RightDepth = ConvertDimension.FractionToDouble(RightDepth).ToString();
-            selected.DoorSpecies = DoorSpecies;
-            selected.BackThickness = BackThickness;
-            selected.ShelfCount = ShelfCount;
-            selected.DrillShelfHoles = DrillShelfHoles;
-            selected.DoorCount = DoorCount;
-            selected.DoorGrainDir = DoorGrainDir;
-            selected.IncDoorsInList = IncDoorsInList;
-            selected.IncDoors = IncDoors;
-            selected.DrillHingeHoles = DrillHingeHoles;
-            selected.LeftReveal = ConvertDimension.FractionToDouble(LeftReveal).ToString();
-            selected.RightReveal = ConvertDimension.FractionToDouble(RightReveal).ToString();
-            selected.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
-            selected.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
-            selected.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
-
-            _mainVm?.Notify("Cabinet Updated", Brushes.Green);
-            _mainVm?.IsModified = true;
-        }
-
-        else
-        {
-            // No cabinet selected or wrong type
-            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
-            return;
-        }
-        // Optional: clear selection after update
-        _mainVm!.SelectedCabinet = null;
-
-        Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
-    }
 
     [RelayCommand]
     private void LoadDefaults()
