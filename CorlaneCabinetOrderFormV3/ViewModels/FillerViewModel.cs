@@ -5,7 +5,6 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.ValidationAttributes;
-using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -32,13 +31,13 @@ public partial class FillerViewModel : ObservableValidator
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
-    public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
+    public FillerViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups, IPreviewService previewService)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
-        _previewService = App.ServiceProvider.GetRequiredService<IPreviewService>();
+        _previewService = previewService;
 
         // Only rebuild preview when geometry-affecting properties change
         this.PropertyChanged += (_, e) =>
@@ -122,28 +121,35 @@ public partial class FillerViewModel : ObservableValidator
         nameof(Species), nameof(EBSpecies),
     };
 
+    /// <summary>
+    /// Copies all current ViewModel property values into the target model,
+    /// converting dimension strings to numeric format.
+    /// </summary>
+    private void ApplyViewModelToModel(FillerModel target)
+    {
+        target.Width = ConvertDimension.FractionToDouble(Width).ToString();
+        target.Height = ConvertDimension.FractionToDouble(Height).ToString();
+        target.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
+        target.Species = Species;
+        target.CustomSpecies = CustomSpecies;
+        target.EBSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(Species);
+        target.Name = Name;
+        target.Qty = Qty;
+        target.Notes = Notes;
+    }
+
     [RelayCommand]
     private void AddCabinet()
     {
         if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, "", null))
             return;
 
-        var newCabinet = new FillerModel
-        {
-            Width = ConvertDimension.FractionToDouble(Width).ToString(),
-            Height = ConvertDimension.FractionToDouble(Height).ToString(),
-            Depth = ConvertDimension.FractionToDouble(Depth).ToString(),
-            Species = Species,
-            CustomSpecies = CustomSpecies,
-            EBSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(Species),
-            Name = Name,
-            Qty = Qty,
-            Notes = Notes,
-        };
+        var newCabinet = new FillerModel();
+        ApplyViewModelToModel(newCabinet);
 
         try
         {
-            _cabinetService?.Add(newCabinet);  // Adds to shared list as base type
+            _cabinetService?.Add(newCabinet);
             _mainVm!.SelectedCabinet = newCabinet;
         }
         catch (InvalidOperationException ex)
@@ -152,7 +158,7 @@ public partial class FillerViewModel : ObservableValidator
             return;
         }
 
-        Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
+        Notes = "";
 
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
@@ -170,32 +176,21 @@ public partial class FillerViewModel : ObservableValidator
             if (!ViewModelValidationHelper.ValidateUniqueName(Name, selected, _cabinetService, _mainVm))
                 return;
 
-            selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
-            selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
-            selected.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
-            selected.Species = Species;
-            selected.CustomSpecies = CustomSpecies;
-            selected.EBSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(Species);
-            selected.Name = Name;
-            selected.Qty = Qty;
-            selected.Notes = Notes;
+            ApplyViewModelToModel(selected);
 
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
             _mainVm.IsModified = true;
         }
-
         else
         {
-            // No cabinet selected or wrong type
             _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
             return;
         }
-        // Optional: clear selection after update
+
         _mainVm!.SelectedCabinet = null;
 
-        Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
+        Notes = "";
     }
-
 
     [RelayCommand]
     private void LoadDefaults()
