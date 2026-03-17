@@ -33,13 +33,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
-    public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups)
+    public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups, IPreviewService previewService)
     {
         _cabinetService = cabinetService;
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
-        _previewService = App.ServiceProvider.GetRequiredService<IPreviewService>();
+        _previewService = previewService;
 
         // Only rebuild preview when geometry-affecting properties change
         this.PropertyChanged += (_, e) =>
@@ -1502,7 +1502,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RolloutStyle = RolloutStyle,
             DrillSlideHolesForRollouts = DrillSlideHolesForRollouts,
             SinkCabinet = SinkCabinet,
-            TrashDrawer = TrashDrawer,        
+            TrashDrawer = TrashDrawer,
+            EqualizeAllDrwFronts = EqualizeAllDrwFronts,
+            EqualizeBottomDrwFronts = EqualizeBottomDrwFronts
         };
 
         try
@@ -1644,6 +1646,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             selected.DrillSlideHolesForRollouts = DrillSlideHolesForRollouts;
             selected.SinkCabinet = SinkCabinet;
             selected.TrashDrawer = TrashDrawer;
+            selected.EqualizeAllDrwFronts = EqualizeAllDrwFronts;
+            selected.EqualizeBottomDrwFronts = EqualizeBottomDrwFronts;
+
             _mainVm?.Notify("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
 

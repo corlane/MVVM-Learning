@@ -149,3 +149,7 @@
 	All dimensions now show correct user-default format on app load.
 	Added 2 unit tests: Base cab depth validation, and dimension conversion.
 	Rollout groupbox hides when trash drawer is selected, since rollouts aren't an option for that style.
+
+3.0.1.31
+	The state of the Equalize drw front buttons is now saved with each cabinet.
+	Changed base cab vm to inject ipreviewservice through the constructor like the other dependencies.

@@ -82,6 +82,8 @@ public class ConvertDimensionTests
     [InlineData("24 3/8")]
     [InlineData("1/2")]
     [InlineData("36")]
+    [InlineData("36 23/32")]
+
     public void RoundTrip_FractionToDoubleAndBack_PreservesValue(string original)
     {
         double asDouble = ConvertDimension.FractionToDouble(original);

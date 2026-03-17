@@ -75,7 +75,8 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool DrillSlideHolesForRollouts { get; set; }
     [ObservableProperty] public partial bool SinkCabinet { get; set; }
     [ObservableProperty] public partial bool TrashDrawer { get; set; }
-
+    [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; }
+    [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; }
     private void BumpGeometry() => BumpGeometryVersion();
 
     partial void OnLeftBackWidthChanged(string value) => BumpGeometry();
