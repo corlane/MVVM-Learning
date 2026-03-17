@@ -308,11 +308,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // Depth min depends on HasTK/TKDepth, so revalidate Depth when HasTK changes.
         ValidateProperty(Depth, nameof(Depth));
 
-        // Style2: "Drawer" cabinets
-        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
-        {
-            RecalculateDrawerLayout();
-        }
+        RecalculateDrawerLayout();
         RunValidationVisible();
     }
 
@@ -874,11 +870,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            // Style2: "Drawer" cabinets
-            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
-            {
-                RecalculateDrawerLayout();
-            }
+            RecalculateDrawerLayout();
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BottomReveal { get; set; } = ""; partial void OnBottomRevealChanged(string oldValue, string newValue)
@@ -887,11 +879,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            // Style2: "Drawer" cabinets
-            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
-            {
-                RecalculateDrawerLayout();
-            }
+            RecalculateDrawerLayout();
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string GapWidth { get; set; } = ""; partial void OnGapWidthChanged(string oldValue, string newValue)
@@ -900,11 +888,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (newValue != oldValue)
         {
-            // Style2: "Drawer" cabinets
-            if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
-            {
-                RecalculateDrawerLayout();
-            }
+            RecalculateDrawerLayout();
         }
     }
 

@@ -34,7 +34,8 @@ Add "Select All" for all "Done" buttons on PO tabs.
 
 Need to add shelf holes to corner cab end panels and backs
 
-Have implemented the base VM preview service caching. Noticed error on drawer stack height resize, drawer fronts are no longer resizing properly! Probably not the preview service caching, but something else. START HERE!
+Rollout group needs to be hidden entirely when Base Drawer cab is selected
+
 
 
 
