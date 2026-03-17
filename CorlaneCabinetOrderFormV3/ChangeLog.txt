@@ -145,4 +145,5 @@
 	Deleted stale //LoadDefaults in VMs
 	Added ViewModelMappingHelper, and simplified the mapping in the individual VMs.
 	Implemented caching of ipreview service in VMs.
+	All dimension boxes now show the user's default dimension format, and automatically convert to it on LostFocus.
 

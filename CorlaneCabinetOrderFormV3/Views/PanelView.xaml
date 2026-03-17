@@ -7,6 +7,7 @@
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
+             xmlns:appbehaviors="clr-namespace:CorlaneCabinetOrderFormV3.Behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="920" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
@@ -42,7 +43,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Width" HorizontalAlignment="Left" Margin="5,5,3,0"/>
                     <TextBox x:Name="textWidthUpper" Width="50" HorizontalAlignment="Right" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"
-                                                 Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"/>
+                                                 Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                 </StackPanel>
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
                                                Visibility="{Binding (Validation.HasError), ElementName=textWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -51,7 +52,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Height" Margin="5,0,0,0" HorizontalAlignment="Left"/>
                     <TextBox x:Name="textHeightUpper" Width="50" HorizontalAlignment="Left" VerticalAlignment="Center" GotFocus="TextBoxGotFocus"
-                                                 Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"/>
+                                                 Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                 </StackPanel>
                 <TextBlock FontSize="12" Foreground="Red" Margin="5 0 0 0" 
                                                Visibility="{Binding (Validation.HasError), ElementName=textHeightUpper, Converter={StaticResource BoolToVisibilityConverter}}"

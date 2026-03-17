@@ -11,10 +11,6 @@ Implement half-depth shelves for 90 deg corner cabinets
 
 If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on whether cab has drws
 
-On leaving a dimension box, its dimension should immediately convert to the default format.
-
-Make sure ALL dimension boxes show default format. Reveals, for example do not automatically convert. - Reveals maybe should stay decimal to avoid rounding/creeping.
-
 Add fixed shelf option (FULL DEPTH ONLY) - This will introduce the possibility of splitting the cabinet into more than 1 opening: Allow adjustable shelves and doors per opening? That's CAD territory...
 
 
