@@ -32,20 +32,18 @@ Need to add shelf holes to corner cab end panels and backs
 
 
 
+OPTIONAL: Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
+OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
+OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
+
+
+
+
 
 
 BUGS:
 
-Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 
-
-
-
-
-
-
-OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
-OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D preview
 
 	
 

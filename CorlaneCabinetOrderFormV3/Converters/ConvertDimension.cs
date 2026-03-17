@@ -19,10 +19,10 @@ public static class ConvertDimension
                 {
                     if (split.Length == 2)
                     {
-                        return (double)a / b;
+                        return b != 0 ? (double)a / b : 0;
                     }
                     int c;
-                    if (int.TryParse(split[2], out c))
+                    if (int.TryParse(split[2], out c) && c != 0)
                     {
                         // Handle mixed numbers with a possibly negative whole part correctly.
                         // e.g. "-1 1/2" should be -1.5, not -0.5.

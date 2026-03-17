@@ -13,6 +13,8 @@ public class ConvertDimensionTests
     [InlineData("3/4", 0.75)]
     [InlineData("1 1/2", 1.5)]
     [InlineData("24 3/8", 24.375)]
+    [InlineData("5/0", 0)]
+
     public void FractionToDouble_ValidInput_ReturnsExpected(string input, double expected)
     {
         double result = ConvertDimension.FractionToDouble(input);
@@ -89,5 +91,13 @@ public class ConvertDimensionTests
         double asDouble = ConvertDimension.FractionToDouble(original);
         string backToFraction = ConvertDimension.DoubleToFraction(asDouble);
         Assert.Equal(original, backToFraction);
+    }
+
+    [Theory]
+    [InlineData("5/0")]
+    [InlineData("1 3/0")]
+    public void FractionToDouble_ZeroDenominator_ReturnsZero(string input)
+    {
+        Assert.Equal(0.0, ConvertDimension.FractionToDouble(input));
     }
 }
