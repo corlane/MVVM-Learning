@@ -147,3 +147,4 @@
 	Implemented caching of ipreview service in VMs.
 	All dimension boxes now show the user's default dimension format, and automatically convert to it on LostFocus.
 	All dimensions now show correct user-default format on app load.
+	Added 2 unit tests: Base cab depth validation, and dimension conversion.

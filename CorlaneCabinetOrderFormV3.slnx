@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="CorlaneCabinetOrderFormV3.Tests/CorlaneCabinetOrderFormV3.Tests.csproj" Id="e51badf4-6956-4aab-b346-ad3029b26cc0" />
   <Project Path="CorlaneCabinetOrderFormV3/CorlaneCabinetOrderFormV3.csproj" />
 </Solution>
