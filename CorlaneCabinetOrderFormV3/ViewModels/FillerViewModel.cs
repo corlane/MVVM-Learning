@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Windows;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -25,7 +24,8 @@ public partial class FillerViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
-    
+    private readonly IPreviewService? _previewService;
+
     private bool _isMapping;
 
     private readonly IMaterialLookupService _lookups;
@@ -38,6 +38,7 @@ public partial class FillerViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
+        _previewService = App.ServiceProvider.GetRequiredService<IPreviewService>();
 
         // Only rebuild preview when geometry-affecting properties change
         this.PropertyChanged += (_, e) =>
@@ -228,9 +229,6 @@ public partial class FillerViewModel : ObservableValidator
 
     private void UpdatePreview()
     {
-        //_mainVm.CurrentPreviewCabinet = new FillerModel --- Original before Preview Service
-        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-
         var model = new FillerModel
         {
             Width = Width,
@@ -238,11 +236,8 @@ public partial class FillerViewModel : ObservableValidator
             Depth = Depth,
             Species = Species,
             EBSpecies = EBSpecies,
-
-            // ... copy EVERY property from fields to the preview model
-            // Yes, it's a few lines, but it's the only place — do it once per ViewModel
         };
-        // Request preview using the tab index owner token (Filler tab = 2)
-        previewSvc.RequestPreview(2, model);
+
+        _previewService?.RequestPreview(2, model);
     }
 }

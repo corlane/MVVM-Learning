@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows;
 using System.Windows.Media;
 
+
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class UpperCabinetViewModel : ObservableValidator
@@ -26,6 +27,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
+    private readonly IPreviewService? _previewService;
     private bool _isMapping;
 
     private readonly IMaterialLookupService _lookups;
@@ -38,6 +40,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
+        _previewService = App.ServiceProvider.GetRequiredService<IPreviewService>();
 
         // Only rebuild preview when geometry-affecting properties change
         this.PropertyChanged += (_, e) =>
@@ -624,9 +627,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
     // For 3D model:
     private void UpdatePreview()
     {
-        //_mainVm.CurrentPreviewCabinet = new UpperCabinetModel --- Original before Preview Service
-        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-
         var model = new UpperCabinetModel
         {
             Style = Style,
@@ -657,6 +657,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
         };
 
         // Request preview using the tab index owner token (Upper tab = 1)
-        previewSvc.RequestPreview(1, model);
+        _previewService?.RequestPreview(1, model);
     }
 }

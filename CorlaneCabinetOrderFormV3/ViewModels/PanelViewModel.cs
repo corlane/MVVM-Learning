@@ -28,6 +28,7 @@ public partial class PanelViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
+    private readonly IPreviewService? _previewService;
     private bool _isMapping;
 
     private readonly IMaterialLookupService _lookups;
@@ -42,6 +43,7 @@ public partial class PanelViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
+        _previewService = App.ServiceProvider.GetRequiredService<IPreviewService>();
 
         this.PropertyChanged += (_, e) =>
         {
@@ -306,9 +308,6 @@ public partial class PanelViewModel : ObservableValidator
 
     private void UpdatePreview()
     {
-        //_mainVm.CurrentPreviewCabinet = new PanelModel -- Original before Preview Service
-        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-
         var model = new PanelModel
         {
             Width = Width,
@@ -321,8 +320,8 @@ public partial class PanelViewModel : ObservableValidator
             PanelEBLeft = PanelEBLeft,
             PanelEBRight = PanelEBRight
         };
-        // Request preview using the tab index owner token (Panel tab = 3)
-        previewSvc.RequestPreview(3, model);
+
+        _previewService?.RequestPreview(3, model);
     }
 
 }
