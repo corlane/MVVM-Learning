@@ -122,7 +122,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
             }
         }
-        //LoadDefaults();
         RecalculateFrontWidth();
         ResizeOpeningHeights();
         ResizeDrwFrontHeights();
