@@ -37,12 +37,25 @@ public static class DimensionAutoFormat
             tb.LostFocus += TextBox_LostFocus;
             s_registeredBoxes.Add(new WeakReference<TextBox>(tb));
             EnsureListeningToDefaults();
+
+            // Format on first load so the initial value matches the default format
+            if (tb.IsLoaded)
+                ReformatTextBox(tb, GetCurrentFormat());
+            else
+                tb.Loaded += FormatOnInitialLoad;
         }
         else
         {
             tb.LostFocus -= TextBox_LostFocus;
             RemoveBox(tb);
         }
+    }
+
+    private static void FormatOnInitialLoad(object sender, RoutedEventArgs e)
+    {
+        if (sender is not TextBox tb) return;
+        tb.Loaded -= FormatOnInitialLoad; // one-shot
+        ReformatTextBox(tb, GetCurrentFormat());
     }
 
     private static void EnsureListeningToDefaults()
