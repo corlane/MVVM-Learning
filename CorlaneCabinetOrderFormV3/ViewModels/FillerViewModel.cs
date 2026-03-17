@@ -124,12 +124,8 @@ public partial class FillerViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
-        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
-        {
-            // Prompt for custom species
-            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, "", null))
             return;
-        }
 
         var newCabinet = new FillerModel
         {
@@ -165,32 +161,13 @@ public partial class FillerViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
-        {
-            // Prompt for custom species
-            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, "", null))
             return;
-        }
 
         if (_mainVm!.SelectedCabinet is FillerModel selected)
         {
-            var newName = Name;
-
-            if (!string.IsNullOrWhiteSpace(newName))
-            {
-                var normalized = newName.Trim();
-
-                bool dup = _cabinetService?.Cabinets.Any(c =>
-                    !ReferenceEquals(c, selected) &&
-                    !string.IsNullOrWhiteSpace(c.Name) &&
-                    string.Equals(c.Name.Trim(), normalized, StringComparison.OrdinalIgnoreCase)) == true;
-
-                if (dup)
-                {
-                    _mainVm?.Notify("Duplicate cabinet names are not allowed.", Brushes.Red, 3000);
-                    return;
-                }
-            }
+            if (!ViewModelValidationHelper.ValidateUniqueName(Name, selected, _cabinetService, _mainVm))
+                return;
 
             selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();

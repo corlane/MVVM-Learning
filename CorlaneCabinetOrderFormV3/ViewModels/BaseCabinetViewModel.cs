@@ -25,6 +25,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
     private readonly DefaultSettingsService? _defaults;
+    private readonly IPreviewService? _previewService;
     private bool _isResizing;
     private bool _isMapping; // true while MapModelToViewModel is running
 
@@ -38,6 +39,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         _mainVm = mainVm;
         _defaults = defaults;
         _lookups = lookups;
+        _previewService = App.ServiceProvider.GetRequiredService<IPreviewService>();
 
         // Only rebuild preview when geometry-affecting properties change
         this.PropertyChanged += (_, e) =>
@@ -151,11 +153,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             return;
         }
 
-        // Style2: "Drawer" cabinets
-        if (EqualizeAllDrwFronts || EqualizeBottomDrwFronts)
-        {
-            RecalculateDrawerLayout();
-        }
+        RecalculateDrawerLayout();
+
 
     }
     private static ObservableCollection<int> BuildRolloutCountList(double interiorHeight)
@@ -1406,27 +1405,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
-        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies)) 
-        {
-            // Prompt for custom species
-            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
             return;
-        }
 
-        if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomDoorSpecies))
-        {
-            // Prompt for custom species
-            MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
-        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
-        {
-            // Prompt for custom edge band species
-            MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-        
         if (Style == Style2)
         {
             DoorCount = 0;
@@ -1565,44 +1546,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         if (_mainVm is not null && _mainVm.SelectedCabinet is BaseCabinetModel selected)
         {
-            if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
-            {
-                // Prompt for custom species
-                MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
                 return;
-            }
 
-            if (DoorSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomDoorSpecies))
-            {
-                // Prompt for custom species
-                MessageBox.Show("Please enter a custom door species name.", "Custom Door Species", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (!ViewModelValidationHelper.ValidateUniqueName(Name, selected, _cabinetService, _mainVm))
                 return;
-            }
-
-            if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
-            {
-                // Prompt for custom edge band species
-                MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            var newName = Name;
-
-            if (!string.IsNullOrWhiteSpace(newName))
-            {
-                var normalized = newName.Trim();
-
-                bool dup = _cabinetService?.Cabinets.Any(c =>
-                    !ReferenceEquals(c, selected) &&
-                    !string.IsNullOrWhiteSpace(c.Name) &&
-                    string.Equals(c.Name.Trim(), normalized, StringComparison.OrdinalIgnoreCase)) == true;
-
-                if (dup)
-                {
-                    _mainVm?.Notify("Duplicate cabinet names are not allowed.", Brushes.Red, 3000);
-                    return;
-                }
-            }
 
             if (Style == Style2)
             {
@@ -1882,8 +1830,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     // For 3D model:
     private void UpdatePreview() // Update 3D cabinet model preview
     {
-        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-
         var model = new BaseCabinetModel
         {
             Style = Style,
@@ -1950,7 +1896,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         };
 
         // Request preview using the tab index owner token (Base tab = 0)
-        previewSvc.RequestPreview(0, model);
+        _previewService?.RequestPreview(0, model);
     }
 
 

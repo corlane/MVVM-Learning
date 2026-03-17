@@ -189,20 +189,8 @@ public partial class PanelViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
-        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
-        {
-            // Prompt for custom species
-            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies))
             return;
-        }
-
-        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
-        {
-            // Prompt for custom edge band species
-            MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
 
         var newCabinet = new PanelModel
         {
@@ -243,40 +231,13 @@ public partial class PanelViewModel : ObservableValidator
     [RelayCommand]
     private void UpdateCabinet()
     {
-        if (Species == "Custom" && string.IsNullOrWhiteSpace(CustomSpecies))
-        {
-            // Prompt for custom species
-            MessageBox.Show("Please enter a custom species name.", "Custom Species", MessageBoxButton.OK, MessageBoxImage.Information);
+        if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies))
             return;
-        }
-
-        if (EBSpecies == "Custom" && string.IsNullOrWhiteSpace(CustomEBSpecies))
-        {
-            // Prompt for custom edge band species
-            MessageBox.Show("Please enter a custom edgebanding species name.", "Custom Edge Band Species", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
 
         if (_mainVm!.SelectedCabinet is PanelModel selected)
         {
-            var newName = Name;
-
-            if (!string.IsNullOrWhiteSpace(newName))
-            {
-                var normalized = newName.Trim();
-
-                bool dup = _cabinetService?.Cabinets.Any(c =>
-                    !ReferenceEquals(c, selected) &&
-                    !string.IsNullOrWhiteSpace(c.Name) &&
-                    string.Equals(c.Name.Trim(), normalized, StringComparison.OrdinalIgnoreCase)) == true;
-
-                if (dup)
-                {
-                    _mainVm?.Notify("Duplicate cabinet names are not allowed.", Brushes.Red, 3000);
-                    return;
-                }
-            }
+            if (!ViewModelValidationHelper.ValidateUniqueName(Name, selected, _cabinetService, _mainVm))
+                return;
 
             selected.Width = ConvertDimension.FractionToDouble(Width).ToString();
             selected.Height = ConvertDimension.FractionToDouble(Height).ToString();
