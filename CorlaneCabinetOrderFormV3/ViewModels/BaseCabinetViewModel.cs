@@ -2011,10 +2011,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         GroupDrawerFrontHeightsVisibility = (style == Style1 || style == Style2);
         GroupDoorsVisibility = (style == Style1 || style == Style3 || style == Style4);
         BackThicknessVisible = (style == Style1 || style == Style2);
-        GroupRolloutsVisible = (style == Style1);
+        GroupRolloutsVisible = (style == Style1 && !TrashDrawer);
         TrashDrawerEnabled = (style == Style1);
         SinkCabinetEnabled = (style == Style1 || style == Style3 || style == Style4);
-
         if (style == Style2)
             ListDrwCount = [1, 2, 3, 4];
         else if (style == Style1)
@@ -2044,7 +2043,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         SupplySlabDoorsVisible = DoorCount > 0;
 
         // Trash Drawer dependent visibility
-        GroupRolloutsVisible = !TrashDrawer;
+        GroupRolloutsVisible = (style == Style1 || style == Style3 || style == Style4);
     }
 }
 

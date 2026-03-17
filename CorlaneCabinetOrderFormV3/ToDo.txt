@@ -30,7 +30,6 @@ Add "Select All" for all "Done" buttons on PO tabs.
 
 Need to add shelf holes to corner cab end panels and backs
 
-Rollout group needs to be hidden entirely when Base Drawer cab is selected
 
 
 
