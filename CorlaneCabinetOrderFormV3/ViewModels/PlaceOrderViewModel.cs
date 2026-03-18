@@ -260,7 +260,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(IsInternetConnected))]
         private async Task PlaceOrder()
         {
             var conf = MessageBox.Show("At this point, you will be prompted to save the job, then the order will be sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?", "Place Order", MessageBoxButton.YesNo, MessageBoxImage.Information);
@@ -526,6 +526,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             InternetStatusBackground = newValue
                 ? new SolidColorBrush(Color.FromRgb(146, 250, 153))
                 : new SolidColorBrush(Color.FromRgb(255, 88, 113));
+
+            PlaceOrderCommand.NotifyCanExecuteChanged();
         }
 
         private void InitializeNetworkMonitoring()

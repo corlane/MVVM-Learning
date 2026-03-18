@@ -163,4 +163,5 @@
 	Fixed a potential divide-by-zero error if user entered ex. 5/0 for a dimension.
 	Fixed drw front default height not being applied on app load.
 	Price now shows "not connected" when, well, not connected. Previously it was showing the CNC price only.
+	Place Order button now disabled when not connected to the database, to prevent orders being saved with incorrect quoted price.
 
