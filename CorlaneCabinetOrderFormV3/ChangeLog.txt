@@ -169,4 +169,6 @@
 
 3.0.1.33
 	Changed upper cab min width to 6"
-	3D view now shows which cabinet (if any) is selected for editing.
+	3D view now shows which cabinet (if any) is selected for editing. commit
+	Adjusted formatting of selected cabinet text. commit
+
