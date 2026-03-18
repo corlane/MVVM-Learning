@@ -42,6 +42,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private const string CustomPricingMessage = "CUSTOM MATERIAL - AUTOMATIC PRICING NOT AVAILABLE";
         private const string NotConnectedPricingMessage = "NOT CONNECTED - PRICING UNAVAILABLE";
 
+        private bool CanPlaceOrder() => IsInternetConnected && _cabinetService?.Cabinets?.Count > 0;
 
         private CancellationTokenSource? _networkCts;
 
@@ -260,7 +261,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [RelayCommand(CanExecute = nameof(IsInternetConnected))]
+        [RelayCommand(CanExecute = nameof(CanPlaceOrder))]
         private async Task PlaceOrder()
         {
             var conf = MessageBox.Show("At this point, you will be prompted to save the job, then the order will be sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?", "Place Order", MessageBoxButton.YesNo, MessageBoxImage.Information);
@@ -403,6 +404,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 CalculatePrices();
 
             OnPropertyChanged(nameof(QuotedPriceText));
+            PlaceOrderCommand.NotifyCanExecuteChanged();
         }
 
         private void MainVm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
