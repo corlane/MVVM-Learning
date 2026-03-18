@@ -1,4 +1,116 @@
-﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.Cabinet3DView"
+﻿<!--<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.Cabinet3DView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views"
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
+             xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
+             xmlns:helpers="clr-namespace:CorlaneCabinetOrderFormV3.Helpers"
+             xmlns:HelixToolkit="http://helix-toolkit.org/wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="900" d:DesignWidth="1200"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}"
+             Margin="10"
+             >
+
+    --><!-- Design-time DataContext (so intellisense will work) --><!--
+    <d:UserControl.DataContext>
+        <viewmodels:Cabinet3DViewModel/>
+    </d:UserControl.DataContext>
+
+    <Behaviors:Interaction.Triggers>
+        <Behaviors:EventTrigger EventName="Loaded">
+            <Behaviors:InvokeCommandAction Command="{Binding LoadInitialModelCommand}" />
+        </Behaviors:EventTrigger>
+    </Behaviors:Interaction.Triggers>
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid Background="#FF222222">
+
+
+        <HelixToolkit:HelixViewport3D x:Name="viewport" ZoomExtentsWhenLoaded="False" ModelUpDirection="0,1,0" Margin="0"
+                               helpers:ZoomExtentsHelper.Bounds="{Binding PreviewBounds}"
+                               helpers:ZoomExtentsHelper.BoundsChangeTolerance="1"
+							   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+							   BorderThickness="5" BorderBrush="#FF555555"
+							   ShowCameraTarget="False"
+							   ViewCubeBackText = "BK"
+							   ViewCubeFrontText = "F"
+							   ViewCubeRightText = "L"
+							   ViewCubeLeftText = "R"
+							   ViewCubeBottomText = "B"
+							   ViewCubeTopText = "T"
+							   IsHeadLightEnabled="True"
+							   >
+
+            <HelixToolkit:HelixViewport3D.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF1D1B1B" Offset="1"/>
+                    <GradientStop Color="#FF9E9E9E" Offset="0.038"/>
+                </LinearGradientBrush>
+            </HelixToolkit:HelixViewport3D.Background>
+            <HelixToolkit:DirectionalHeadLight Brightness="0.2"/>
+
+            <ModelVisual3D Content="{Binding PreviewModel}"/>
+        </HelixToolkit:HelixViewport3D>
+        
+        <Button Content="Reset View" 
+        Click="ResetToFrontView_Click"
+        Width="100" Height="30"
+        HorizontalAlignment="Left" 
+        VerticalAlignment="Top"
+        Margin="20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <ToggleButton Content="{Binding HideLeftEndText}" IsChecked="{Binding LeftEndHidden}"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,60,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <ToggleButton Content="{Binding HideRightEndText}" IsChecked="{Binding RightEndHidden}"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,100,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <ToggleButton Content="{Binding HideTopText}" IsChecked="{Binding TopHidden}"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,140,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <ToggleButton Content="{Binding HideDeckText}" IsChecked="{Binding DeckHidden}"
+        Width="100" Height="30"
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Top"
+        Margin="20,180,20,20" 
+        FontWeight="SemiBold"
+        Cursor="Hand"/>
+
+        <Label Content="Rotate: Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,60,5,5"/>
+        <Label Content="Pan: Shift + Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,80,5,5"/>
+        <Label Content="Zoom: Ctrl + Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,100,5,5"/>
+    </Grid>
+</UserControl>-->
+
+
+
+<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.Cabinet3DView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -60,7 +172,7 @@
 
             <ModelVisual3D Content="{Binding PreviewModel}"/>
         </HelixToolkit:HelixViewport3D>
-        
+
         <Button Content="Reset View" 
         Click="ResetToFrontView_Click"
         Width="100" Height="30"
@@ -69,6 +181,15 @@
         Margin="20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
+
+        <TextBlock Text="{Binding SelectedCabinetInfoText}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Bottom"
+                   Margin="20"
+                   Foreground="White"
+                   FontSize="14"
+                   FontWeight="SemiBold"
+                   LineHeight="22"/>
 
         <ToggleButton Content="{Binding HideLeftEndText}" IsChecked="{Binding LeftEndHidden}"
         Width="100" Height="30"

@@ -166,3 +166,7 @@
 	Place Order button now disabled when not connected to the database, to prevent orders being saved with incorrect quoted price.
 	Place Order button also disabled when cabinet list is empty.
 	Uploading 3.0.1.32
+
+3.0.1.33
+	Changed upper cab min width to 6"
+	3D view now shows which cabinet (if any) is selected for editing.
