@@ -382,10 +382,10 @@
                                     Visibility="{Binding GroupDrawerFrontHeightsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                             <StackPanel Orientation="Vertical" Margin="0,0,10,0">
                             <StackPanel Orientation="Horizontal">
-                                <ToggleButton Content="Equalize Bottom Drw. Fronts" IsChecked="{Binding EqualizeBottomDrwFronts}" Margin="5,5,0,5" HorizontalAlignment="Left" Padding="5,0,5,0"/>
-                                <Button Content="Load Default Drw Front Settings" Command="{Binding LoadDefaultDrwSettingsCommand}" HorizontalAlignment="Left" Margin="5,5,5,0" Padding="5,0,5,0"/>
+                                <ToggleButton Content="Equalize Bottom Drw. Fronts" IsChecked="{Binding EqualizeBottomDrwFronts}" Margin="5,5,0,5" HorizontalAlignment="Left" Padding="5,0,5,0" IsTabStop="False"/>
+                                <Button Content="Load Default Drw Front Settings" Command="{Binding LoadDefaultDrwSettingsCommand}" HorizontalAlignment="Left" Margin="5,5,5,0" Padding="5,0,5,0" IsTabStop="False"/>
                             </StackPanel>
-                            <ToggleButton Content="Equalize All Drw. Fronts" IsChecked="{Binding EqualizeAllDrwFronts}" Margin="5,0,5,0" HorizontalAlignment="Left" Padding="5,0,5,0"/>
+                            <ToggleButton Content="Equalize All Drw. Fronts" IsChecked="{Binding EqualizeAllDrwFronts}" Margin="5,0,5,0" HorizontalAlignment="Left" Padding="5,0,5,0" IsTabStop="False"/>
 
                             <Separator Margin="5,5,5,0"/>
                             <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}">

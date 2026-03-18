@@ -1691,6 +1691,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_defaults is null) return;
 
         // Suppress intermediate resize calls while batch-setting defaults.
+        // Preserve the outer _isResizing state so we don't break a parent
+        // batch (e.g. LoadDefaults) that also set _isResizing = true.
+        bool wasResizing = _isResizing;
         _isResizing = true;
         try
         {
@@ -1718,7 +1721,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         finally
         {
-            _isResizing = false;
+            _isResizing = wasResizing;
         }
 
         ApplyDrawerFrontEqualization();
