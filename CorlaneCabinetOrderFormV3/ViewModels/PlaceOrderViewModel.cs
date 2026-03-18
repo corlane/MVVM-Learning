@@ -40,6 +40,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private const string UploadApiKey = "corlanejobupload";
 
         private const string CustomPricingMessage = "CUSTOM MATERIAL - AUTOMATIC PRICING NOT AVAILABLE";
+        private const string NotConnectedPricingMessage = "NOT CONNECTED - PRICING UNAVAILABLE";
+
 
         private CancellationTokenSource? _networkCts;
 
@@ -93,9 +95,11 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         // --- Pricing display helpers ---
 
-        public string QuotedPriceText => HasCustomOrUnknownMaterialsInJob()
-            ? CustomPricingMessage
-            : FormattedTotal;
+        public string QuotedPriceText => !IsInternetConnected
+            ? NotConnectedPricingMessage
+            : HasCustomOrUnknownMaterialsInJob()
+                ? CustomPricingMessage
+                : FormattedTotal;
 
         private bool HasCustomOrUnknownMaterialsInJob()
         {
@@ -508,6 +512,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         }
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(QuotedPriceText))]
+        [NotifyPropertyChangedFor(nameof(InternetStatusText))]
         public partial bool IsInternetConnected { get; set; }
 
         [ObservableProperty]
@@ -517,13 +523,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         partial void OnIsInternetConnectedChanged(bool oldValue, bool newValue)
         {
-            Application.Current.Dispatcher.BeginInvoke(() =>
-            {
-                InternetStatusBackground = newValue
-                    ? new SolidColorBrush(Color.FromRgb(146, 250, 153))
-                    : new SolidColorBrush(Color.FromRgb(255, 88, 113));
-                OnPropertyChanged(nameof(InternetStatusText));
-            });
+            InternetStatusBackground = newValue
+                ? new SolidColorBrush(Color.FromRgb(146, 250, 153))
+                : new SolidColorBrush(Color.FromRgb(255, 88, 113));
         }
 
         private void InitializeNetworkMonitoring()

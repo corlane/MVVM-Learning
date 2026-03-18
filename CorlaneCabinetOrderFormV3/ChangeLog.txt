@@ -162,4 +162,5 @@
 3.0.1.32
 	Fixed a potential divide-by-zero error if user entered ex. 5/0 for a dimension.
 	Fixed drw front default height not being applied on app load.
+	Price now shows "not connected" when, well, not connected. Previously it was showing the CNC price only.
 

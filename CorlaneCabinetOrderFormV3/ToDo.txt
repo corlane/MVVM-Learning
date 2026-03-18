@@ -43,9 +43,7 @@ OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D
 
 BUGS:
 
-Default drw front height is not being obeyed on app load
 
-User should NOT be quoted a price unless connected to the internet. Currently, if the app can't connect to the internet, it shows the quoted price as the CNC price and nothing else, which is misleading. Should show "N/A" or something instead.
 
 	
 
