@@ -108,6 +108,10 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial double? WindowHeight { get; set; }
     [ObservableProperty] public partial string? WindowState { get; set; } = "Normal";
 
+    // UI Scale (1.0 = 100%)
+    [ObservableProperty] public partial double UIScale { get; set; } = 1.0;
+
+
 
     public async Task LoadAsync()
     {

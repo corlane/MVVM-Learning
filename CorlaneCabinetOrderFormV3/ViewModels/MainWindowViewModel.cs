@@ -14,7 +14,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.33";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.0.1.34";
 
     private readonly ICabinetService _cabinet_service;
 
@@ -23,6 +23,18 @@ public partial class MainWindowViewModel : ObservableValidator
     {
         _cabinet_service = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
         InitializeModificationTracking();
+
+
+
+
+
+        // Load persisted UI scale
+        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
+        UIScale = defaults.UIScale is > 0 ? defaults.UIScale : 1.0;
+
+
+
+
 
         _cabinet_service.ExceptionDoneStateChanged += () =>
         {
@@ -43,6 +55,22 @@ public partial class MainWindowViewModel : ObservableValidator
     [ObservableProperty] public partial bool ViewportVisible { get; set; } = true;
 
     [ObservableProperty] public partial bool CabinetListVisible { get; set; } = true;
+
+
+    // ── UI Scale ───────────────────────────────────────────────
+    [ObservableProperty]
+    public partial double UIScale { get; set; } = 1.0;
+
+    partial void OnUIScaleChanged(double value)
+    {
+        // Persist the scale factor
+        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
+        defaults.UIScale = value;
+        _ = defaults.SaveAsync();
+    }
+
+
+
 
     // Lazy-resolved tab viewmodels — resolve once and reuse so validation runs against the same instances
     private BaseCabinetViewModel? _baseCabinetVm;
