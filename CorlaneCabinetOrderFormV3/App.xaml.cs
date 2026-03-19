@@ -18,7 +18,7 @@ public partial class App : Application
 
         var host = Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
-            {   
+            {
                 // Register the shared service as singleton
                 services.AddSingleton<ICabinetService, CabinetService>();
                 services.AddSingleton<MainWindowViewModel>();
@@ -163,6 +163,23 @@ public partial class App : Application
         }
 
         mainWindow.Show();
-    }
 
+
+
+
+        // One-time popup — bump this version string whenever you have a new notice
+        const string currentPopupVersion = "3.0.1.34";
+        if (defaults.HasSeenPopup != currentPopupVersion)
+        {
+            MessageBox.Show(
+                "New feature: You can now adjust the interface scale using the slider in the bottom-right corner of the window.\n\n" +
+                "This is helpful for smaller screens (scale down) or larger displays (scale up).",
+                "What's New",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            defaults.HasSeenPopup = currentPopupVersion;
+            _ = defaults.SaveAsync();
+        }
+    }
 }

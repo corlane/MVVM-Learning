@@ -112,6 +112,8 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial double UIScale { get; set; } = 1.0;
 
 
+    // One-time popup notices — stores the last version whose popup was dismissed
+    [ObservableProperty] public partial string? HasSeenPopup { get; set; }
 
     public async Task LoadAsync()
     {

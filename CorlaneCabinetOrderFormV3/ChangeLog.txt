@@ -174,4 +174,5 @@
 	Uploading 3.0.1.33
 
 3.0.1.34
-	Add UI Scale slider in lower right corner. Fisher Price's My First Computer(tm) users rejoice! commit
+	Added UI Scale slider in lower right corner. Fisher Price's My First Computer(tm) users rejoice! commit
+	Added One Time Popup, alerting to UI scale feature. This can be used in the future for other announcements as well. It lives in App.xaml.cs. commit
