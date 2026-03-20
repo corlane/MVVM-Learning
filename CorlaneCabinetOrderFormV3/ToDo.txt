@@ -45,7 +45,6 @@ BUGS:
 
 Back thickness is not hiding when clicking corner cabinet in the list after clicking a non-corner cabinet. -- Tested and couldn't reproduce. Keep an eye out.
 
-Grab bar needs to be hidden on admin tabs. Also, perhaps move it all the way to the top on the Place order tab, because a cabinet preview is not necessary there, but a large cabinet list would be nice.
 
 
 

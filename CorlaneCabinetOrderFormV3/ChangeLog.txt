@@ -187,3 +187,4 @@
 	Implemented step 4 and 5 of Claude instructions. commit
 	Added to Bugs section of ToDo. commit
 	Grid Splitter now collapses the 3D window on the Place Order and Defaults tab, and is totally hidden on the Admin tabs. commit
+	Todo update. commit
