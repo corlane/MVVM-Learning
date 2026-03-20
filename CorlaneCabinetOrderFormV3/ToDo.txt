@@ -30,6 +30,12 @@ Add "Select All" for all "Done" buttons on PO tabs.
 
 Need to add shelf holes to corner cab end panels and backs
 
+Add more cabinet configurations to the MaterialsAndEdgeTotals Unit Test.
+
+
+
+
+
 
 
 OPTIONAL: Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
