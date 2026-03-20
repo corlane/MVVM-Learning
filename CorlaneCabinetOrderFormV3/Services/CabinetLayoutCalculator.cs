@@ -1,5 +1,6 @@
 ﻿namespace CorlaneCabinetOrderFormV3.Services;
 
+using CorlaneCabinetOrderFormV3.Models;
 /// <summary>
 /// Pure math for drawer/opening height calculations.
 /// Extracted from BaseCabinetViewModel so it can be unit-tested without a VM.

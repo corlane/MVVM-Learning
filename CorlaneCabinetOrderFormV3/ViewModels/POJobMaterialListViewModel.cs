@@ -85,123 +85,26 @@ public partial class POJobMaterialListViewModel : ObservableObject
             return;
         }
 
-        static string CollapseFaceKey(string species)
-        {
-            if (string.IsNullOrWhiteSpace(species))
-            {
-                return "None";
-            }
+        // Build lightweight snapshots so the calculator doesn't need CabinetModel
+        var snapshots = _cabinetService.Cabinets.Select(cab => new CabinetMaterialSnapshot(
+            Math.Max(1, cab.Qty),
+            cab.CustomSpecies,
+            cab.CustomEBSpecies,
+            new Dictionary<string, double>(cab.MaterialAreaBySpecies, StringComparer.OrdinalIgnoreCase),
+            new Dictionary<string, double>(cab.EdgeBandingLengthBySpecies, StringComparer.OrdinalIgnoreCase)
+        )).ToList();
 
-            var s = species.Trim();
+        // Delegate aggregation to the calculator
+        var materials = MaterialYieldCalculator.AggregateMaterialAreas(snapshots);
+        var edgebanding = MaterialYieldCalculator.AggregateEdgeBanding(snapshots);
 
-            if (s.EndsWith(" UP", StringComparison.OrdinalIgnoreCase))
-            {
-                return s[..^3].TrimEnd();
-            }
-
-            if (s.EndsWith(" DOWN", StringComparison.OrdinalIgnoreCase))
-            {
-                return s[..^5].TrimEnd();
-            }
-
-            return s;
-        }
-
-        static bool IsCustomToken(string s) =>
-            string.Equals(s?.Trim(), "Custom", StringComparison.OrdinalIgnoreCase);
-
-        static string NormalizeBlankToNone(string? s) =>
-            string.IsNullOrWhiteSpace(s) ? "None" : s.Trim();
-
-        static string ResolveCustomSpeciesKey(string keyFromTotals, CabinetModel cab)
-        {
-            var rawKey = NormalizeBlankToNone(keyFromTotals);
-
-            // Detect and preserve face suffix.
-            string suffix = "";
-            string baseKey = rawKey;
-
-            if (baseKey.EndsWith(" UP", StringComparison.OrdinalIgnoreCase))
-            {
-                suffix = " UP";
-                baseKey = baseKey[..^3].TrimEnd();
-            }
-            else if (baseKey.EndsWith(" DOWN", StringComparison.OrdinalIgnoreCase))
-            {
-                suffix = " DOWN";
-                baseKey = baseKey[..^5].TrimEnd();
-            }
-
-            // If not Custom, return original key unchanged.
-            if (!IsCustomToken(baseKey))
-            {
-                return rawKey;
-            }
-
-            // Replace Custom with the user-entered custom name, then re-apply UP/DOWN suffix.
-            var custom = NormalizeBlankToNone(cab.CustomSpecies);
-            if (string.Equals(custom, "None", StringComparison.OrdinalIgnoreCase))
-            {
-                custom = "Custom";
-            }
-
-            return $"{custom}{suffix}";
-        }
-
-        static string ResolveCustomEdgebandingKey(string keyFromTotals, CabinetModel cab)
-        {
-            var key = NormalizeBlankToNone(keyFromTotals);
-
-            if (!IsCustomToken(key))
-            {
-                return key;
-            }
-
-            var custom = NormalizeBlankToNone(cab.CustomEBSpecies);
-            return string.Equals(custom, "None", StringComparison.OrdinalIgnoreCase) ? "Custom" : custom;
-        }
-
-        // Aggregate (keeps UP/DOWN split at source)
-        var materials = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-        var edgebanding = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
-
+        // Upper cabinet extra edgebanding (bottom of end panels) — stays here because it needs CabinetModel type check
         foreach (var cab in _cabinetService.Cabinets)
         {
-            var qty = Math.Max(1, cab.Qty);
-
-            foreach (var kv in cab.MaterialAreaBySpecies)
-            {
-                var species = ResolveCustomSpeciesKey(kv.Key, cab);
-                var area = kv.Value * qty;
-
-                if (materials.TryGetValue(species, out var existing))
-                {
-                    materials[species] = existing + area;
-                }
-                else
-                {
-                    materials[species] = area;
-                }
-            }
-
-            foreach (var kv in cab.EdgeBandingLengthBySpecies)
-            {
-                var species = ResolveCustomEdgebandingKey(kv.Key, cab);
-                var feet = kv.Value * qty;
-
-                if (edgebanding.TryGetValue(species, out var existing))
-                {
-                    edgebanding[species] = existing + feet;
-                }
-                else
-                {
-                    edgebanding[species] = feet;
-                }
-            }
-
             if (cab is UpperCabinetModel)
             {
-                string upperCabExtraEbSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(cab.Species); // sets species extra banding on bottom of upper cabinet end panels
+                var qty = Math.Max(1, cab.Qty);
+                string upperCabExtraEbSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(cab.Species);
 
                 var depthIn = ConvertDimension.FractionToDouble(cab.Depth);
                 var extraFeet = ((2.0 * depthIn) / 12.0) * qty;
@@ -211,18 +114,14 @@ public partial class POJobMaterialListViewModel : ObservableObject
                     !string.Equals(upperCabExtraEbSpecies, "None", StringComparison.OrdinalIgnoreCase))
                 {
                     if (edgebanding.TryGetValue(upperCabExtraEbSpecies, out var existing))
-                    {
                         edgebanding[upperCabExtraEbSpecies] = existing + extraFeet;
-                    }
                     else
-                    {
                         edgebanding[upperCabExtraEbSpecies] = extraFeet;
-                    }
                 }
             }
         }
 
-        // Price breakdown: KEEP AS-IS for now (will price UP/DOWN separately unless you also collapse there).
+        // Price breakdown
         var breakdown = _priceBreakdownService.Build(materials, edgebanding);
         foreach (var line in breakdown.Lines)
         {
@@ -230,7 +129,7 @@ public partial class POJobMaterialListViewModel : ObservableObject
         }
         TotalMaterialPrice = breakdown.Total;
 
-        // Show split rows (UP and DOWN as separate lines)
+        // Sheet goods rows (UP and DOWN as separate lines)
         foreach (var kv in materials.OrderBy(k => k.Key))
         {
             var species = kv.Key;
@@ -238,10 +137,7 @@ public partial class POJobMaterialListViewModel : ObservableObject
 
             var sheetAreaSqFt = GetSheetAreaSqFt(species);
             var yield = GetYield(species);
-
-            var sheets = (sheetAreaSqFt <= 0 || yield <= 0)
-                ? 0
-                : (int)Math.Ceiling((qtySqFt / yield) / sheetAreaSqFt);
+            var sheets = MaterialYieldCalculator.ComputeSheetCount(qtySqFt, sheetAreaSqFt, yield);
 
             SheetGoods.Add(new MaterialBreakdownRow
             {
@@ -253,59 +149,46 @@ public partial class POJobMaterialListViewModel : ObservableObject
             TotalSheetGoodsSqFt += qtySqFt;
         }
 
-        // Compute combined total sheets (UP/DOWN collapsed)
+        // Combined total sheets (UP/DOWN collapsed)
         var collapsedMaterials = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
         foreach (var kv in materials)
         {
-            var collapsed = CollapseFaceKey(kv.Key);
+            var collapsed = MaterialYieldCalculator.CollapseFaceKey(kv.Key);
             if (collapsedMaterials.TryGetValue(collapsed, out var existing))
-            {
                 collapsedMaterials[collapsed] = existing + kv.Value;
-            }
             else
-            {
                 collapsedMaterials[collapsed] = kv.Value;
-            }
         }
 
         foreach (var kv in collapsedMaterials)
         {
-            var species = kv.Key;
-            var qtySqFt = kv.Value;
-
-            var sheetAreaSqFt = GetSheetAreaSqFt(species);
-            var yield = GetYield(species);
-
-            var sheets = (sheetAreaSqFt <= 0 || yield <= 0)
-                ? 0
-                : (int)Math.Ceiling((qtySqFt / yield) / sheetAreaSqFt);
-
-            TotalSheetGoodsSheets += sheets;
+            var sheetAreaSqFt = GetSheetAreaSqFt(kv.Key);
+            var yield = GetYield(kv.Key);
+            TotalSheetGoodsSheets += MaterialYieldCalculator.ComputeSheetCount(kv.Value, sheetAreaSqFt, yield);
         }
 
-        // Edgebanding unchanged
+        // Edgebanding rows
         foreach (var kv in edgebanding.OrderBy(k => k.Key))
         {
-            var species = kv.Key;
-            var feet = kv.Value;
-
             EdgeBanding.Add(new MaterialBreakdownRow
             {
-                Species = species,
-                LinearFeet = feet
+                Species = kv.Key,
+                LinearFeet = kv.Value
             });
 
-            TotalEdgeBandingFeet += feet;
+            TotalEdgeBandingFeet += kv.Value;
 
-            if (kv.Key == "None") // Remove "None" from total
+            if (kv.Key == "None")
             {
-                TotalEdgeBandingFeet -= feet;
+                TotalEdgeBandingFeet -= kv.Value;
             }
         }
 
         TotalSheetGoodsSqFt = Math.Round(TotalSheetGoodsSqFt, 2);
         TotalEdgeBandingFeet = Math.Round(TotalEdgeBandingFeet, 2);
     }
+
+
 
     private double GetYield(string species)
     {

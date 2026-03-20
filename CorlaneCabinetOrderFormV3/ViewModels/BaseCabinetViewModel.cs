@@ -1066,109 +1066,30 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     private void ResizeDrwFrontHeights()
     {
-        // Prevent re-entrancy caused by property-change handlers
-        if (_isResizing) return;
-        if (_isMapping) return;
-
-        const double MaterialThickness34 = 0.75; // 3/4" material thickness
-
-        double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
-        if (!HasTK) { tkHeight = 0; }
-        double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
-
-        double topReveal = ConvertDimension.FractionToDouble(TopReveal);
-        double bottomReveal = ConvertDimension.FractionToDouble(BottomReveal);
-        double gapWidth = ConvertDimension.FractionToDouble(GapWidth);
-
-        double opening1Height = ConvertDimension.FractionToDouble(OpeningHeight1);
-        double opening2Height = ConvertDimension.FractionToDouble(OpeningHeight2);
-        double opening3Height = ConvertDimension.FractionToDouble(OpeningHeight3);
-        double opening4Height = ConvertDimension.FractionToDouble(OpeningHeight4);
-
-
-        double drwFrontHeight1 = ConvertDimension.FractionToDouble(DrwFrontHeight1);
-        double drwFrontHeight2 = ConvertDimension.FractionToDouble(DrwFrontHeight2);
-        double drwFrontHeight3 = ConvertDimension.FractionToDouble(DrwFrontHeight3);
-        double drwFrontHeight4 = ConvertDimension.FractionToDouble(DrwFrontHeight4);
-
-        double topDeckAndStretcherThickness = (DrwCount + 1) * MaterialThickness34;
+        if (_isResizing || _isMapping) return;
 
         try
         {
             _isResizing = true;
 
-            if (Style == Style1)
+            var input = BuildLayoutInputs();
+            var result = CabinetLayoutCalculator.ComputeFromDrawerFronts(input);
+            ApplyLayoutResult(result);
+
+            // Style-specific disable flags
+            if (Style == Style1 && DrwCount == 1)
             {
-                if (DrwCount == 1)
-                {
-                    Opening1Disabled = false;
-                    DrwFront1Disabled = false;
-                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                    OpeningHeight1 = opening1Height.ToString();
-                    DrwFrontHeight1 = (opening1Height + (1.5 * MaterialThickness34) - topReveal - (gapWidth / 2)).ToString();
-                }
+                Opening1Disabled = false;
+                DrwFront1Disabled = false;
+            }
+            else if (Style == Style2)
+            {
+                if (DrwCount == 1) DrwFront1Disabled = true;
+                if (DrwCount >= 2) { DrwFront1Disabled = false; DrwFront2Disabled = true; }
+                if (DrwCount >= 3) { DrwFront2Disabled = false; DrwFront3Disabled = true; }
+                if (DrwCount >= 4) DrwFront3Disabled = false;
             }
 
-            if (Style == Style2)
-            {
-
-                if (DrwCount == 1)
-                {
-                    DrwFront1Disabled = true;
-
-                    opening1Height = height - (2 * MaterialThickness34);
-                    OpeningHeight1 = opening1Height.ToString();
-                    DrwFrontHeight1 = (opening1Height + (2 * MaterialThickness34) - topReveal - bottomReveal).ToString();
-                }
-
-
-
-                if (DrwCount == 2)
-                {
-                    DrwFront1Disabled = false;
-                    DrwFront2Disabled = true;
-
-                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                    opening2Height = height - topDeckAndStretcherThickness - opening1Height;// - opening2Height - opening3Height;
-                    OpeningHeight1 = opening1Height.ToString();
-                    OpeningHeight2 = opening2Height.ToString();
-                    DrwFrontHeight2 = (opening2Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
-
-                }
-
-                if (DrwCount == 3)
-                {
-                    DrwFront1Disabled = false;
-                    DrwFront2Disabled = false;
-                    DrwFront3Disabled = true;
-
-                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                    opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
-                    opening3Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height;// - opening3Height;
-                    OpeningHeight1 = opening1Height.ToString();
-                    OpeningHeight2 = opening2Height.ToString();
-                    OpeningHeight3 = opening3Height.ToString();
-                    DrwFrontHeight3 = (opening3Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
-
-                }
-
-                if (DrwCount == 4)
-                {
-                    DrwFront1Disabled = false;
-                    DrwFront2Disabled = false;
-                    DrwFront3Disabled = false;
-
-                    opening1Height = drwFrontHeight1 + topReveal + (gapWidth / 2) - (1.5 * MaterialThickness34);
-                    opening2Height = drwFrontHeight2 + gapWidth - (MaterialThickness34);
-                    opening3Height = drwFrontHeight3 + gapWidth - (MaterialThickness34);
-                    opening4Height = height - topDeckAndStretcherThickness - opening1Height - opening2Height - opening3Height;
-                    OpeningHeight1 = opening1Height.ToString();
-                    OpeningHeight2 = opening2Height.ToString();
-                    OpeningHeight3 = opening3Height.ToString();
-                    OpeningHeight4 = opening4Height.ToString();
-                    DrwFrontHeight4 = (opening4Height + (1.5 * MaterialThickness34) - bottomReveal - (gapWidth / 2)).ToString();
-                }
-            }
             if (EqualizeBottomDrwFronts)
             {
                 DrwFront2Disabled = true;
@@ -1180,29 +1101,21 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 DrwFront2Disabled = true;
                 DrwFront3Disabled = true;
             }
+
             UpdatePreview();
         }
-        finally
-        {
-            _isResizing = false;
-        }
+        finally { _isResizing = false; }
     }
 
     private void ApplyDrawerFrontEqualization()
     {
-        // Prevent re-entrancy caused by property-change handlers / equalize assignments
-        if (_isResizing) return;
-        if (_isMapping) return;
-
+        if (_isResizing || _isMapping) return;
         if (Style != Style2) return;
         if (DrwCount <= 0) return;
-
-        // Nothing to do if no equalize mode active
         if (!EqualizeAllDrwFronts && !EqualizeBottomDrwFronts) return;
 
         double tkHeight = ConvertDimension.FractionToDouble(TKHeight);
         if (!HasTK) tkHeight = 0;
-
         double height = ConvertDimension.FractionToDouble(Height) - tkHeight;
 
         double topReveal = ConvertDimension.FractionToDouble(TopReveal);
@@ -1211,14 +1124,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         try
         {
-            _isResizing = false; // _isResizing = true breaks this, because the openings won't resize. Try like this and see how it does. So far it seems to work.
+            _isResizing = false; // _isResizing = true breaks this, because the openings won't resize
 
             if (EqualizeAllDrwFronts)
             {
                 if (DrwCount <= 0) return;
 
-                double total = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1));
-                double each = total / DrwCount;
+                double each = CabinetLayoutCalculator.EqualizeAll(height, topReveal, bottomReveal, gapWidth, DrwCount);
 
                 DrwFrontHeight1 = each.ToString();
                 DrwFrontHeight2 = each.ToString();
@@ -1230,8 +1142,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 if (DrwCount <= 1) return;
 
                 double top = ConvertDimension.FractionToDouble(DrwFrontHeight1);
-                double total = height - topReveal - bottomReveal - (gapWidth * (DrwCount - 1)) - top;
-                double eachBottom = total / (DrwCount - 1);
+                double eachBottom = CabinetLayoutCalculator.EqualizeBottom(height, topReveal, bottomReveal, gapWidth, DrwCount, top);
 
                 if (DrwCount >= 2) DrwFrontHeight2 = eachBottom.ToString();
                 if (DrwCount >= 3) DrwFrontHeight3 = eachBottom.ToString();
@@ -1243,6 +1154,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             _isResizing = false;
         }
     }
+
 
     private void RecalculateDrawerLayout()
     {
@@ -1262,38 +1174,20 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isResizing || _isMapping)
             return;
 
-        // Only relevant for "Angle Front" (Style4). Clear it otherwise.
         if (!string.Equals(Style, Style4, StringComparison.Ordinal))
         {
             FrontWidth = string.Empty;
             return;
         }
 
-        // For the angle-front cabinet, the polygon edge used in Cabinet3DViewModel is:
-        // p0 = (LeftDepth, 0)
-        // p1 = (RightBackWidth - 3/4, LeftBackWidth - RightDepth)
-        // frontWidth = distance(p0, p1)
         try
         {
-            double leftDepth = ConvertDimension.FractionToDouble(LeftDepth);
-            double rightDepth = ConvertDimension.FractionToDouble(RightDepth);
-            double leftBackWidth = ConvertDimension.FractionToDouble(LeftBackWidth);
-            double rightBackWidth = ConvertDimension.FractionToDouble(RightBackWidth);
+            double frontWidth = CabinetLayoutCalculator.ComputeAngleFrontWidth(
+                ConvertDimension.FractionToDouble(LeftDepth),
+                ConvertDimension.FractionToDouble(RightDepth),
+                ConvertDimension.FractionToDouble(LeftBackWidth),
+                ConvertDimension.FractionToDouble(RightBackWidth));
 
-            const double materialThickness34 = 0.75;
-
-            double p0x = leftDepth;
-            double p0y = materialThickness34;
-
-            double p1x = rightBackWidth - materialThickness34;
-            double p1y = leftBackWidth - rightDepth;
-
-            double vx = p1x - p0x;
-            double vy = p1y - p0y;
-
-            double frontWidth = Math.Sqrt((vx * vx) + (vy * vy));
-
-            // Format per default settings
             string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
             FrontWidth = string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase)
                 ? ConvertDimension.DoubleToFraction(frontWidth)
@@ -1301,7 +1195,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         catch
         {
-            // If any inputs are invalid/empty, just clear output.
             FrontWidth = string.Empty;
         }
     }
