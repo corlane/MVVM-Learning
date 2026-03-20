@@ -183,3 +183,4 @@
 	Deleted CorlaneCabinetOrderFormV3 folder that AI had jammed into the wrong namespace. Also had an apparently empty unit test in it. Deleted. commit
 	Forgot to actually delete it. Done now. commit
 	One more dummy commit as a "golden" commit. Revert to this one if necessary. commit
+	Implemented steps 1-3 of Claude instructions in "Okay, le'ts have a look at making this app...". commit
