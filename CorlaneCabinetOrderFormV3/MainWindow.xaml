@@ -272,32 +272,38 @@
 
         </TabControl>
 
-        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="0,10,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <views:Cabinet3DView Grid.Column="0" Grid.Row="0" Visibility="{Binding DataContext.ViewportVisible,
+                <views:Cabinet3DView Grid.Column="0" Grid.Row="0" Visibility="{Binding DataContext.ViewportVisible,
                          RelativeSource={RelativeSource AncestorType=Window},
                          Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-            <TabControl Grid.Row="1" Grid.Column="0" Visibility="{Binding CabinetListVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TabItem Header="Cabinet List" Padding="10">
-                    <views:CabinetListView/>
-                </TabItem>
+                <GridSplitter Grid.Row="1" Height="15" HorizontalAlignment="Stretch"
+                          VerticalAlignment="Center" ResizeBehavior="PreviousAndNext"
+                          Background="{DynamicResource ABrush.AccentTone1.Background.Static}"
+                          Cursor="SizeNS"/>
 
-                <TabItem Header="Door Sizes List" Padding="10">
-                    <views:DoorSizesListView/>
-                </TabItem>
+                <TabControl Grid.Row="2" Grid.Column="0" Visibility="{Binding CabinetListVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TabItem Header="Cabinet List" Padding="10">
+                        <views:CabinetListView/>
+                    </TabItem>
 
-                <TabItem Header="Drawer Box Sizes List" Padding="10">
-                    <views:DrawerBoxSizesListView/>
-                </TabItem>
-            </TabControl>
+                    <TabItem Header="Door Sizes List" Padding="10">
+                        <views:DoorSizesListView/>
+                    </TabItem>
 
-            <!--Notification Message-->
-            <Border Grid.Row="0" Grid.Column="1"
+                    <TabItem Header="Drawer Box Sizes List" Padding="10">
+                        <views:DrawerBoxSizesListView/>
+                    </TabItem>
+                </TabControl>
+
+                <!--Notification Message-->
+                <Border Grid.Row="0" Grid.Column="1"
                 Background="{Binding NotificationBackground}"
                 Padding="20,10,20,10"
                 CornerRadius="6"
@@ -307,18 +313,18 @@
                 Visibility="{Binding IsNotificationVisible, Converter={StaticResource B2VConverter}}"
                 Opacity="0.95"
                 Panel.ZIndex="999">
-                <TextBlock
+                    <TextBlock
                 Text="{Binding NotificationMessage}"
                 Foreground="AntiqueWhite"
                 FontSize="16"
                 FontWeight="SemiBold"
                 TextWrapping="Wrap"
                 HorizontalAlignment="Center"/>
-            </Border>
+                </Border>
 
-        </Grid>
-
-        <Border Grid.Row="0" Grid.Column="0"
+            </Grid>
+            
+            <Border Grid.Row="0" Grid.Column="0"
                 Background="{Binding Notification2Background}"
                 Padding="40,10,40,10"
                 CornerRadius="6"

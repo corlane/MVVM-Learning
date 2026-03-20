@@ -43,9 +43,8 @@ OPTIONAL: Add visible shelf holes, pockets, drw slide mounting holes, etc. in 3D
 
 BUGS:
 
+Back thickness is not hiding when clicking corner cabinet in the list after clicking a non-corner cabinet.
 
-
-	
 
 
 
