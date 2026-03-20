@@ -1006,7 +1006,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
 
 
-    // In BaseCabinetViewModel.cs — replace the ~90-line method with this:
     private void ResizeOpeningHeights()
     {
         if (_isResizing || _isMapping) return;

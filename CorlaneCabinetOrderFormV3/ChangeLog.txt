@@ -185,3 +185,4 @@
 	One more dummy commit as a "golden" commit. Revert to this one if necessary. commit
 	Implemented steps 1-3 of Claude instructions in "Okay, le'ts have a look at making this app...". commit
 	Implemented step 4 and 5 of Claude instructions. commit
+	Added to Bugs section of ToDo. commit
