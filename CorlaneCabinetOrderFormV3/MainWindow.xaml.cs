@@ -14,6 +14,83 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         this.Closed += MainWindow_Closed;
+        DataContextChanged += (_, _) => HookTabIndexChanged();
+        Loaded += (_, _) => HookTabIndexChanged();
+    }
+
+    private void HookTabIndexChanged()
+    {
+        if (DataContext is not CorlaneCabinetOrderFormV3.ViewModels.MainWindowViewModel vm)
+            return;
+
+        vm.PropertyChanged -= Vm_PropertyChanged;
+        vm.PropertyChanged += Vm_PropertyChanged;
+
+        // apply immediately (handles startup / restored state)
+        ApplySplitterPreset(vm.SelectedTabIndex);
+    }
+
+    private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(CorlaneCabinetOrderFormV3.ViewModels.MainWindowViewModel.SelectedTabIndex))
+            return;
+
+        if (sender is CorlaneCabinetOrderFormV3.ViewModels.MainWindowViewModel vm)
+        {
+            ApplySplitterPreset(vm.SelectedTabIndex);
+        }
+    }
+
+    private double? _savedViewportRow0Px;
+    private double? _savedViewportRow2Px;
+
+    private void ApplySplitterPreset(int selectedTabIndex)
+    {
+        // Hide splitter on: 6 Material Prices, 7 Process Order
+        RightPreviewSplitter.Visibility = selectedTabIndex is 6 or 7
+            ? Visibility.Collapsed
+            : Visibility.Visible;
+
+        bool shouldCollapseViewport = selectedTabIndex is 4 or 5;
+
+        var row0 = RightPreviewGrid.RowDefinitions[0];
+        var row2 = RightPreviewGrid.RowDefinitions[2];
+
+        if (shouldCollapseViewport)
+        {
+            // Save current rendered heights once (what the user dragged to)
+            if (_savedViewportRow0Px is null && row0.ActualHeight > 0)
+                _savedViewportRow0Px = row0.ActualHeight;
+
+            if (_savedViewportRow2Px is null && row2.ActualHeight > 0)
+                _savedViewportRow2Px = row2.ActualHeight;
+
+            row0.Height = new GridLength(0, GridUnitType.Pixel);
+
+            // Let the bottom take the rest while collapsed
+            row2.Height = new GridLength(1, GridUnitType.Star);
+        }
+        else
+        {
+            if (_savedViewportRow0Px is double topPx && topPx > 0)
+                row0.Height = new GridLength(topPx, GridUnitType.Pixel);
+
+            if (_savedViewportRow2Px is double bottomPx && bottomPx > 0)
+                row2.Height = new GridLength(bottomPx, GridUnitType.Pixel);
+        }
+    }
+
+    private void RightPreviewSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+    {
+        // Only record sizes when we're in the "normal" mode (i.e., not collapsed for Place Order / Defaults)
+        if (DataContext is not MainWindowViewModel vm) return;
+        if (vm.SelectedTabIndex is 4 or 5) return;
+
+        var row0 = RightPreviewGrid.RowDefinitions[0];
+        var row2 = RightPreviewGrid.RowDefinitions[2];
+
+        if (row0.ActualHeight > 0) _savedViewportRow0Px = row0.ActualHeight;
+        if (row2.ActualHeight > 0) _savedViewportRow2Px = row2.ActualHeight;
     }
 
     private void PrintButton_Click(object sender, RoutedEventArgs e)
@@ -80,7 +157,7 @@ public partial class MainWindow : Window
         }
     }
 
-private async void MainWindow_Closed(object? sender, EventArgs e)
+    private async void MainWindow_Closed(object? sender, EventArgs e)
     {
         try
         {

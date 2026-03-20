@@ -4,7 +4,7 @@
 - First general instruction
 - Second general instruction
 - Use concise, informal acknowledgments for simple bug identifications (e.g., 'classic copy-paste error').
-- Prefer minimal, low-impact code changes; avoid adding/changing too much code when addressing issues.
+- Prefer minimal, low-impact code changes; avoid adding/changing too much code when addressing issues. When adding UI behavior fixes, keep code changes minimal and targeted; avoid large rewrites or reposting big file blocks.
 - When generating patches, provide minimal, targeted edits that avoid deleting unrelated code (e.g., avoid reposting large file blocks that could overwrite content). Keep changes minimal and avoid accidental deletions of unrelated members (e.g., LoadDefaults/LoadSelectedIfMine). Aim for targeted diffs that only touch the requested areas.
 - Use a golden commit plus a refactor branch to safely perform potentially risky refactors with easy rollback.
 - Prefer using the Visual Studio UI for Git operations (inspect old commit and return to latest) when possible.
@@ -28,3 +28,4 @@
 - For cabinet 3D preview holes (shelf pin, assembly), use flat dark disc overlays via `CabinetPartFactory.CreateHole` rather than attempting CSG boolean subtraction or cylinder geometry behind panel faces. The user confirmed the flat disc approach looks great and no 3D holes are needed.
 - Allow intentional flipping of `rimZ` values to place preview holes on the opposite panel face (e.g., outside cabinet).
 - For base cabinet drawer slide holes, calculate the opening for the first bottom reference as `height - MaterialThickness34 - opening1Height`.
+- For WPF GridSplitter state, persist/restore using RowDefinition.ActualHeight captured on GridSplitter.DragCompleted; restoring just GridLength on a star row can snap back due to layout.
