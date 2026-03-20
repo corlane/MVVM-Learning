@@ -181,4 +181,4 @@
 3.0.1.35
 	Added grab bar between cabinet list and 3D view, allowing the user to resize the 3D view/cabinets list. commit
 	Deleted CorlaneCabinetOrderFormV3 folder that AI had jammed into the wrong namespace. Also had an apparently empty unit test in it. Deleted. commit
-	 
+	Forgot to actually delete it. Done now. commit
