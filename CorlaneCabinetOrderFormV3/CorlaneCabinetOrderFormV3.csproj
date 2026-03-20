@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="CorlaneCabinetOrderFormV3.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Images\Edgebanding\Custom.png" />
     <None Remove="Images\Edgebanding\PVC Black.png" />
     <None Remove="Images\Edgebanding\PVC Hardrock Maple.png" />
