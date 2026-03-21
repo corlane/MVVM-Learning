@@ -28,6 +28,9 @@ public class MaterialAndEdgeTotalsTests
 
     //############################################################################################################
 
+    // UPPER CABINET TESTS
+
+
     [Fact]
     public void Upper12x12x12_MaterialArea_MatchesExpected()
     {
@@ -201,22 +204,10 @@ public class MaterialAndEdgeTotalsTests
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    //############################################################################################################
 
     // BASE CABINET TESTS -- NO TOEKICK, NO DRAWERS, FULL TOP, ¾" BACK
 
-    //############################################################################################################
 
     [Fact]
     public void Base24x30x24_MaterialArea_MatchesExpected()
@@ -360,6 +351,9 @@ public class MaterialAndEdgeTotalsTests
 
 
 
+    //############################################################################################################
+
+    // BASE CABINET TESTS -- TOEKICK, 1 DRAWER, STRETCHER TOP, 1/4" BACK
 
 
 
@@ -415,5 +409,6 @@ public class MaterialAndEdgeTotalsTests
             IncDrwBoxesInList = false,
             IncDrwFronts = false,
             IncDrwFrontsInList = false,
+            DrwStyle = "Blum Tandem H/Equivalent Undermount"
         };
 }

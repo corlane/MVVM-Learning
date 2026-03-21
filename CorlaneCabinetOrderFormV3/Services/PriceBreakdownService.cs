@@ -123,6 +123,11 @@ public sealed class PriceBreakdownService : IPriceBreakdownService
 
     private double GetYield(string species)
     {
+        if (string.IsNullOrWhiteSpace(species) || string.Equals(species, "None", StringComparison.OrdinalIgnoreCase))
+        {
+            return 0.0;
+        }
+
         if (_materialPrices.TryGetYield(species, out var y))
         {
             return y;
@@ -135,6 +140,11 @@ public sealed class PriceBreakdownService : IPriceBreakdownService
     {
         if (_materialPrices.TryGetSheetMaterial(species, out var row))
         {
+            if (string.IsNullOrWhiteSpace(species) || string.Equals(species, "None", StringComparison.OrdinalIgnoreCase))
+            {
+                return 0.0;
+            }
+
             var areaSqIn = row.SheetWidthIn * row.SheetLengthIn;
             if (areaSqIn > 0)
             {
