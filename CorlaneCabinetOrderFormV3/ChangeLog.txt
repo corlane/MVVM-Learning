@@ -192,3 +192,4 @@
 	Added several upper cabinet configs to the MaterialsAndEdgeTotalsTests unit test. All passed. commit
 	Added some base cabinet configs to the MaterialsAndEdgeTotalsTests unit test. All passed. commit
 	Added pricing Unit Test. All passed. commit
+	Added ConvertDimensionTests (updated), CabinetServicesTests, CabinetBuildHelpersTests, and JobFileRoundTripTests. All passed. commit
