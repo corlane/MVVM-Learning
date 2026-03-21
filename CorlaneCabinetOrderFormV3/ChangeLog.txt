@@ -196,3 +196,7 @@
 	Changed ProbeInternetAsync() in PlaceOrderViewModel to check www.corlanecabinetry.com instead of google. A) It actually seems to work, and B) it makes more sense 
 	 to check the Corlane website since that's where the app needs to connect to place orders and get pricing. commit
 	Updated the One Time Popup for the UI Scale and GridSplitter features. commit
+	Uploading 3.0.1.35
+
+3.0.1.36
+	
