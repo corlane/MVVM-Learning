@@ -579,7 +579,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             bool connected;
             try
             {
-                using var request = new HttpRequestMessage(HttpMethod.Get, "https://clients3.google.com/generate_204");
+                using var request = new HttpRequestMessage(HttpMethod.Head, "https://www.corlanecabinetry.com");
                 request.Headers.Add("Cache-Control", "no-cache");
 
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
@@ -587,7 +587,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                     .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token)
                     .ConfigureAwait(false);
 
-                connected = response.StatusCode == HttpStatusCode.NoContent || response.IsSuccessStatusCode;
+                connected = response.IsSuccessStatusCode;
             }
             catch { connected = false; }
 
