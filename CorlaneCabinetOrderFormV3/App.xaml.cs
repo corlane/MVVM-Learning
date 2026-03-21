@@ -168,12 +168,15 @@ public partial class App : Application
 
 
         // One-time popup — bump this version string whenever you have a new notice
-        const string currentPopupVersion = "3.0.1.34";
+        const string currentPopupVersion = "3.0.1.35";
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
-                "New feature: You can now adjust the interface scale using the slider in the bottom-right corner of the window.\n\n" +
-                "This is helpful for smaller screens (scale down) or larger displays (scale up).",
+                "NEW FEATURES:\n\n" + 
+                "You can now adjust the interface scale using the slider in the bottom-right corner of the window.\n" +
+                "This is helpful for smaller screens (scale down) or larger displays (scale up).\n\n" + 
+                "Also, there is now a colored horizontal bar between the 3D Preview and the Cabinet List. " +
+                "Dragging this bar up or down allows you to resize the 3D Preview and Cabinet List to your liking.",
                 "What's New",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
