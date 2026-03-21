@@ -190,3 +190,4 @@
 	Todo update. commit
 	Added MaterialsAndEdgeTotalsTests Unit Test, which checks calculated material and edgebanding totals against expected values for a given cabinet. commit
 	Added several upper cabinet configs to the MaterialsAndEdgeTotalsTests unit test. All passed. commit
+	Added some base cabinet configs to the MaterialsAndEdgeTotalsTests unit test. All passed. commit
