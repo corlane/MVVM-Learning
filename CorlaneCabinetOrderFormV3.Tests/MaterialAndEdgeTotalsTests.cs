@@ -23,6 +23,11 @@ public class MaterialAndEdgeTotalsTests
             throw caught;
     }
 
+
+
+
+    //############################################################################################################
+
     [Fact]
     public void Upper12x12x12_MaterialArea_MatchesExpected()
     {
@@ -55,13 +60,135 @@ public class MaterialAndEdgeTotalsTests
         });
     }
 
+    //############################################################################################################
+
+    [Fact]
+    public void Upper12x12x12_1Door_MaterialArea_MatchesExpected()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardUpper(width: "12", height: "12", depth: "12", doorCount: 1);
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+
+            // Left End (12×12) + Right End (12×12) + Deck (10.5×12) + Top (10.5×12) + Back¾ (10.5×10.5)
+            // = 144 + 144 + 126 + 126 + 110.25 = 650.25 in² → 4.5156 ft²
+            double expectedFt2 = 650.25 / 144.0; // Cabinet
+            expectedFt2 += 138.0625 / 144.0; // Door (11.75×11.75)
+            Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 2);
+        });
+    }
+
+    [Fact]
+    public void Upper12x12x12_1Door_EdgeBanding_MatchesExpected()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardUpper(width: "12", height: "12", depth: "12", doorCount: 1);
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+
+            // EB edge 0 lengths: LeftEnd 12 + RightEnd 12 + Deck 10.5 + Top 10.5 + Back¾ 10.5
+            // = 55.5 in → 4.625 ft
+            double expectedFt = 55.5 / 12.0; //  Cabinet
+            expectedFt += 47.0 / 12.0; // Door (11.75 + 11.75 + 11.75 + 11.75)
+            Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 2);
+        });
+    }
+
+    //############################################################################################################
+
+    [Fact]
+    public void Upper12x12x12_2Door_MaterialArea_MatchesExpected()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardUpper(width: "12", height: "12", depth: "12", doorCount: 2);
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+
+            // Left End (12×12) + Right End (12×12) + Deck (10.5×12) + Top (10.5×12) + Back¾ (10.5×10.5)
+            // = 144 + 144 + 126 + 126 + 110.25 = 650.25 in² → 4.5156 ft²
+            double expectedFt2 = 650.25 / 144.0; // Cabinet
+            expectedFt2 += 136.59375 / 144.0; // Doors (11.75×11.75 with 1/8 gap)
+            Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 2);
+        });
+    }
+
+    [Fact]
+    public void Upper12x12x12_2Door_EdgeBanding_MatchesExpected()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardUpper(width: "12", height: "12", depth: "12", doorCount: 2);
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+
+            // EB edge 0 lengths: LeftEnd 12 + RightEnd 12 + Deck 10.5 + Top 10.5 + Back¾ 10.5
+            // = 55.5 in → 4.625 ft
+            double expectedFt = 55.5 / 12.0; //  Cabinet
+            expectedFt += 70.25 / 12.0; // 2 Doors (11.75 x 5.8125, with 1/8 gap)
+            Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 2);
+        });
+    }
+
+    //############################################################################################################
+
+    [Fact]
+    public void Upper12x12x12_1Shelf_MaterialArea_MatchesExpected()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardUpper(width: "12", height: "12", depth: "12", shelfCount: 1, BackThickness: "3/4");
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+
+            // Left End (12×12) + Right End (12×12) + Deck (10.5×12) + Top (10.5×12) + Back¾ (10.5×10.5)
+            // = 144 + 144 + 126 + 126 + 110.25 = 650.25 in² → 4.5156 ft²
+            double expectedFt2 = 650.25 / 144.0;
+            expectedFt2 += 115.421875 / 144.0; // Shelf (11.125 x 10.375, with 1/16 gap on each side & 1/8 front setback)
+            Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 2);
+        });
+    }
+
+    [Fact]
+    public void Upper12x12x12_1Shelf_EdgeBanding_MatchesExpected()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardUpper(width: "12", height: "12", depth: "12", shelfCount: 1, BackThickness: "3/4");
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+
+            // EB edge 0 lengths: LeftEnd 12 + RightEnd 12 + Deck 10.5 + Top 10.5 + Back¾ 10.5
+            // = 55.5 in → 4.625 ft
+            double expectedFt = 55.5 / 12.0;
+            expectedFt += 10.375 / 12.0; // Shelf front edge only
+            Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 2);
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /// <summary>
     /// Creates a Standard upper cabinet model with the given dimensions,
     /// Maple species, Wood Maple edgebanding, ¾" back, 0 shelves, 0 doors.
     /// </summary>
     private static UpperCabinetModel MakeStandardUpper(
         string width, string height, string depth,
-        int shelfCount = 0, int doorCount = 0) => new()
+        int shelfCount = 0, int doorCount = 0, string BackThickness = null) => new()
     {
         Style = CabinetStyles.Upper.Standard,
         Width = width,
@@ -72,7 +199,7 @@ public class MaterialAndEdgeTotalsTests
         BackThickness = "3/4",
         ShelfCount = shelfCount,
         DoorCount = doorCount,
-        IncDoors = false,
+        IncDoors = true,
         IncDoorsInList = false,
         DrillShelfHoles = false,
         DrillHingeHoles = false,
@@ -82,6 +209,6 @@ public class MaterialAndEdgeTotalsTests
         RightReveal = "1/8",
         TopReveal = "1/8",
         BottomReveal = "1/8",
-        GapWidth = "1/8",
+        GapWidth = "1/8",   
     };
 }
