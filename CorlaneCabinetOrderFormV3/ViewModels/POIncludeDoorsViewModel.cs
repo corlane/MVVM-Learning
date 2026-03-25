@@ -63,6 +63,33 @@ public partial class POIncludeDoorsViewModel : ObservableObject
 
     partial void OnDefaultIncDoorsChanged(bool value) => RequestRefresh();
 
+    //private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    //{
+    //    if (e.NewItems != null)
+    //    {
+    //        foreach (var ni in e.NewItems)
+    //        {
+    //            if (ni is CabinetModel cab)
+    //            {
+    //                HookCabinet(cab);
+    //            }
+    //        }
+    //    }
+
+    //    if (e.OldItems != null)
+    //    {
+    //        foreach (var oi in e.OldItems)
+    //        {
+    //            if (oi is CabinetModel cab)
+    //            {
+    //                UnhookCabinet(cab);
+    //            }
+    //        }
+    //    }
+
+    //    RequestRefresh();
+    //}
+
     private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.NewItems != null)
@@ -87,8 +114,19 @@ public partial class POIncludeDoorsViewModel : ObservableObject
             }
         }
 
+        // On Reset (bulk load), NewItems is null — re-hook all current items
+        if (e.Action == NotifyCollectionChangedAction.Reset && _cabinetService?.Cabinets != null)
+        {
+            foreach (var cab in _cabinetService.Cabinets)
+            {
+                HookCabinet(cab);
+            }
+        }
+
         RequestRefresh();
     }
+
+
 
     private void HookCabinet(CabinetModel cab)
     {
