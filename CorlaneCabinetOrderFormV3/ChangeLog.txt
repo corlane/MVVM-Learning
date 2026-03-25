@@ -199,4 +199,4 @@
 	Uploading 3.0.1.35
 
 3.0.1.36
-	
+	Added PartKind to signature of CreatePanel, so parts can be identified during creation and edgebanding operations. commit

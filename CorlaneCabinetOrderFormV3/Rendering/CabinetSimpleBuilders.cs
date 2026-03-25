@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Converters;
+﻿using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using System.Windows.Media.Media3D;
 
@@ -34,7 +34,7 @@ internal static class CabinetSimpleBuilders
             new (0,0,0)
         ];
 
-        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
+        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.LeftEnd);
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 270, 0);
 
         backPoints =
@@ -45,7 +45,7 @@ internal static class CabinetSimpleBuilders
             new (width,height,0)
         ];
 
-        back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, filler.Species, getMatchingEdgebandingSpecies(filler.Species), "Vertical", filler, topDeck90, isPanel: true, panelEBEdges: "NNLR", isFaceUp: false);
+        back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, filler.Species, getMatchingEdgebandingSpecies(filler.Species), "Vertical", filler, topDeck90, isPanel: true, panelEBEdges: "NNLR", isFaceUp: false, partKind: CabinetPartKind.BackBase34);
         ModelTransforms.ApplyTransform(back, 0, 0, depth, 0, 0, 0);
 
         cabinet.Children.Add(leftEnd);
@@ -78,7 +78,7 @@ internal static class CabinetSimpleBuilders
             new (0,height,0)
         ];
 
-        back = CabinetPartFactory.CreatePanel(backPoints, depth, panel.Species, panel.EBSpecies, "Vertical", panel, topDeck90, isPanel, panelEBEdges, isFaceUp: false);
+        back = CabinetPartFactory.CreatePanel(backPoints, depth, panel.Species, panel.EBSpecies, "Vertical", panel, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Panel);
         ModelTransforms.ApplyTransform(back, 0, 0, depth / 2, 0, 0, 0);
 
         cabinet.Children.Add(back);

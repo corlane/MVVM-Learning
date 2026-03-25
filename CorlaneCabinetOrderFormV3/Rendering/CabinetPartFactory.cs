@@ -82,7 +82,8 @@ internal static class CabinetPartFactory
         bool isPanel,
         string panelEBEdges,
         bool isFaceUp,
-        double plywoodTextureRotationDegrees = 0)
+        double plywoodTextureRotationDegrees = 0,
+        CabinetPartKind partKind = CabinetPartKind.Unspecified)
     {
         double thickness = matlThickness;
 
@@ -317,15 +318,17 @@ internal static class CabinetPartFactory
         // If edgebanding was applied, accumulate into the cabinet's edge-banding totals
         try
         {
-            if (edgeBandLengthInches > 0.0)
+            if (edgeBandLengthInches > 0.0 && edgebandingSpecies != "None")
             {
                 var ebSpeciesKey = string.IsNullOrWhiteSpace(edgebandingSpecies) ? "None" : edgebandingSpecies;
                 double feet = edgeBandLengthInches / 12.0;
 
                 if (cab.EdgeBandingLengthBySpecies.ContainsKey(ebSpeciesKey))
                     cab.EdgeBandingLengthBySpecies[ebSpeciesKey] += feet;
+
                 else
                     cab.EdgeBandingLengthBySpecies[ebSpeciesKey] = feet;
+
             }
         }
         catch
