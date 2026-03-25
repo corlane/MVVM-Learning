@@ -202,3 +202,4 @@
 	Added PartKind to signature of CreatePanel, so parts can be identified during creation and edgebanding operations. commit
 	Tweaking material area and edgebanding calcs to make sure everything is being counted correctly.
 	Changed tests. The two base cabinet tests are correct. The upper cabinet test is a placeholder. Need to finish. commit
+	Changed version number in mainwindow vm to 36 - had forgotten to do that. commit
