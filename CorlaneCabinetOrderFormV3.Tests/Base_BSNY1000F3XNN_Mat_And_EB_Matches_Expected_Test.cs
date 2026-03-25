@@ -37,8 +37,8 @@ public class Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
 
-            // Cabinet: 3549 in² of 3/4 ply
-            double expectedFt2 = 3549 / 144.0;
+            // Cabinet: 3467 in² of 3/4 ply according to eCabs WITH JOINERY REMOVED. This is the number we want to match, as the joinery is not currently included in our material area calculations.
+            double expectedFt2 = 3467 / 144.0;
             
             Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 0);
         });
@@ -61,18 +61,8 @@ public class Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test
 
 
 
-
-
-
-
-
-
-
-
-
     /// <summary>
-    /// Creates a Standard base cabinet model with the given dimensions.
-    /// Maple species, Wood Maple edgebanding, ¾" back, Full top, no toe kick.
+    /// Creates a Standard base cabinet model with the given parameters.
     /// </summary>
     private static BaseCabinetModel MakeStandardBase(
         string width, string height, string depth,
@@ -86,7 +76,7 @@ public class Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test
             EBSpecies = "Wood Maple",
             BackThickness = "3/4",
             TopType = CabinetOptions.TopType.Full,
-            HasTK = false,
+            HasTK = true,
             TKHeight = "4",
             TKDepth = "3.75",
             ShelfCount = shelfCount,

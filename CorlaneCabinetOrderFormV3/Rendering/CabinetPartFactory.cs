@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using HelixToolkit.Wpf;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -190,47 +191,68 @@ internal static class CabinetPartFactory
         // Track edgebanding total length (in inches) for this panel
         double edgeBandLengthInches = 0.0;
 
-        // Special handling for panels: panelEBEdges letters map to physical panel width/height.
-        if (isPanel && !string.IsNullOrEmpty(panelEBEdges))
+        // Check to see if panel gets edgebanding at all, based on PartKind.
+        if (partKind != CabinetPartKind.Toekick &&
+            partKind != CabinetPartKind.TopStretcherBack &&
+            partKind != CabinetPartKind.BackBase34 &&
+            partKind != CabinetPartKind.BackBase14 &&
+            partKind != CabinetPartKind.BackUpper14 &&
+            partKind != CabinetPartKind.SinkStretcher &&
+            partKind != CabinetPartKind.DrawerBoxBottom)
+
         {
-            double panelWidthInches = maxX - minX;
-            double panelHeightInches = maxY - minY;
-
-            if (panelEBEdges.Contains('T')) edgeBandLengthInches += panelWidthInches;
-            if (panelEBEdges.Contains('B')) edgeBandLengthInches += panelWidthInches;
-            if (panelEBEdges.Contains('L')) edgeBandLengthInches += panelHeightInches;
-            if (panelEBEdges.Contains('R')) edgeBandLengthInches += panelHeightInches;
-        }
-
-        double cumulativeU = 0;
-        for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
-        {
-            int b0 = edgeFace;
-            int b1 = (edgeFace + 1) % polygonPoints.Count;
-            int t1 = b1 + topOffset;
-            int t0 = b0 + topOffset;
-
-            double u0 = cumulativeU / perimeter;
-            double u1 = (cumulativeU + sideLengths[edgeFace]) / perimeter;
-            Point uvBottomLeft = new(u0, 0);
-            Point uvBottomRight = new(u1, 0);
-            Point uvTopRight = new(u1, 1);
-            Point uvTopLeft = new(u0, 1);
-
-            if (!isPanel && !topDeck90)
+            // Special handling for panels: panelEBEdges letters map to physical panel width/height.
+            if (isPanel && !string.IsNullOrEmpty(panelEBEdges))
             {
-                if (edgeFace == 0)
-                {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
-                        uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                double panelWidthInches = maxX - minX;
+                double panelHeightInches = maxY - minY;
 
-                    edgeBandLengthInches += sideLengths[edgeFace];
+                if (panelEBEdges.Contains('T')) edgeBandLengthInches += panelWidthInches;
+                if (panelEBEdges.Contains('B')) edgeBandLengthInches += panelWidthInches;
+                if (panelEBEdges.Contains('L')) edgeBandLengthInches += panelHeightInches;
+                if (panelEBEdges.Contains('R')) edgeBandLengthInches += panelHeightInches;
+            }
+
+            double cumulativeU = 0;
+            for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
+            {
+                int b0 = edgeFace;
+                int b1 = (edgeFace + 1) % polygonPoints.Count;
+                int t1 = b1 + topOffset;
+                int t0 = b0 + topOffset;
+
+                double u0 = cumulativeU / perimeter;
+                double u1 = (cumulativeU + sideLengths[edgeFace]) / perimeter;
+                Point uvBottomLeft = new(u0, 0);
+                Point uvBottomRight = new(u1, 0);
+                Point uvTopRight = new(u1, 1);
+                Point uvTopLeft = new(u0, 1);
+
+                if (!isPanel && !topDeck90)
+                {
+                    if (edgeFace == 0)
+                    {
+                        specialBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+
+                        edgeBandLengthInches += sideLengths[edgeFace];
+                    }
+                    else
+                    {
+                        mainBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    }
                 }
-                else
+
+                if (isPanel)
                 {
                     mainBuilder.AddQuad(
                         mainBuilder.Positions[b0],
@@ -238,103 +260,97 @@ internal static class CabinetPartFactory
                         mainBuilder.Positions[t1],
                         mainBuilder.Positions[t0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+
+                    if (panelEBEdges.Contains('B') && edgeFace == 0)
+                    {
+                        specialBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    }
+                    else if (panelEBEdges.Contains('R') && edgeFace == 1)
+                    {
+                        specialBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    }
+                    else if (panelEBEdges.Contains('T') && edgeFace == 2)
+                    {
+                        specialBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    }
+                    else if (panelEBEdges.Contains('L') && edgeFace == 3)
+                    {
+                        specialBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    }
                 }
+
+                if (topDeck90)
+                {
+                    if (edgeFace == 0 || edgeFace == 1)
+                    {
+                        specialBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+
+                        edgeBandLengthInches += sideLengths[edgeFace];
+                    }
+                    else
+                    {
+                        mainBuilder.AddQuad(
+                            mainBuilder.Positions[b0],
+                            mainBuilder.Positions[b1],
+                            mainBuilder.Positions[t1],
+                            mainBuilder.Positions[t0],
+                            uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    }
+                }
+
+                cumulativeU += sideLengths[edgeFace];
             }
 
-            if (isPanel)
+            //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and edge banding {edgeBandLengthInches:F1} inches");
+
+            // If edgebanding was applied, accumulate into the cabinet's edge-banding totals
+            try
             {
-                mainBuilder.AddQuad(
-                    mainBuilder.Positions[b0],
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
-                    uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                if (edgeBandLengthInches > 0.0 && edgebandingSpecies != "None")
+                {
+                    var ebSpeciesKey = string.IsNullOrWhiteSpace(edgebandingSpecies) ? "None" : edgebandingSpecies;
+                    double feet = edgeBandLengthInches / 12.0;
 
-                if (panelEBEdges.Contains('B') && edgeFace == 0)
-                {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
-                        uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else if (panelEBEdges.Contains('R') && edgeFace == 1)
-                {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
-                        uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else if (panelEBEdges.Contains('T') && edgeFace == 2)
-                {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
-                        uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
-                else if (panelEBEdges.Contains('L') && edgeFace == 3)
-                {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
-                        uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
+                    if (cab.EdgeBandingLengthBySpecies.ContainsKey(ebSpeciesKey))
+                        cab.EdgeBandingLengthBySpecies[ebSpeciesKey] += feet;
+
+                    else
+                        cab.EdgeBandingLengthBySpecies[ebSpeciesKey] = feet;
+
                 }
             }
-
-            if (topDeck90)
+            catch
             {
-                if (edgeFace == 0 || edgeFace == 1)
-                {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
-                        uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-
-                    edgeBandLengthInches += sideLengths[edgeFace];
-                }
-                else
-                {
-                    mainBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
-                        uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
-                }
+                // swallow accumulation errors to keep preview resilient
             }
 
-            cumulativeU += sideLengths[edgeFace];
         }
 
-        // If edgebanding was applied, accumulate into the cabinet's edge-banding totals
-        try
-        {
-            if (edgeBandLengthInches > 0.0 && edgebandingSpecies != "None")
-            {
-                var ebSpeciesKey = string.IsNullOrWhiteSpace(edgebandingSpecies) ? "None" : edgebandingSpecies;
-                double feet = edgeBandLengthInches / 12.0;
-
-                if (cab.EdgeBandingLengthBySpecies.ContainsKey(ebSpeciesKey))
-                    cab.EdgeBandingLengthBySpecies[ebSpeciesKey] += feet;
-
-                else
-                    cab.EdgeBandingLengthBySpecies[ebSpeciesKey] = feet;
-
-            }
-        }
-        catch
-        {
-            // swallow accumulation errors to keep preview resilient
-        }
 
         mainBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
         specialBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
@@ -367,6 +383,9 @@ internal static class CabinetPartFactory
         var partModel = new Model3DGroup();
         partModel.Children.Add(panelModel);
         partModel.Children.Add(edgebandingModel);
+
+        Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and edge banding {edgeBandLengthInches:F1} inches");
+
 
         return partModel;
     }

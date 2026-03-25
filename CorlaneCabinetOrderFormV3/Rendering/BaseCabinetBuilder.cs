@@ -1570,10 +1570,10 @@ internal static class BaseCabinetBuilder
             new(0, dbxDepth - (materialThickness * 2), 0)
         };
 
-        var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxSide);
-        var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxSide);
-        var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxFront);
-        var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, true, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxBack);
+        var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxSide);
+        var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxSide);
+        var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxFront);
+        var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxBack);
         var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, true, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerBoxBottom);
 
         // Apply local transforms to assemble the box (same as original)
