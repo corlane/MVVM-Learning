@@ -63,33 +63,6 @@ public partial class POIncludeDoorsViewModel : ObservableObject
 
     partial void OnDefaultIncDoorsChanged(bool value) => RequestRefresh();
 
-    //private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    //{
-    //    if (e.NewItems != null)
-    //    {
-    //        foreach (var ni in e.NewItems)
-    //        {
-    //            if (ni is CabinetModel cab)
-    //            {
-    //                HookCabinet(cab);
-    //            }
-    //        }
-    //    }
-
-    //    if (e.OldItems != null)
-    //    {
-    //        foreach (var oi in e.OldItems)
-    //        {
-    //            if (oi is CabinetModel cab)
-    //            {
-    //                UnhookCabinet(cab);
-    //            }
-    //        }
-    //    }
-
-    //    RequestRefresh();
-    //}
-
     private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.NewItems != null)

@@ -46,14 +46,6 @@ public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
         }
     }
 
-    //private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    //{
-    //    UnhookCabinetItemEvents(e.OldItems);
-    //    HookCabinetItemEvents(e.NewItems);
-
-    //    Rebuild();
-    //}
-
     private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         UnhookCabinetItemEvents(e.OldItems);

@@ -204,3 +204,4 @@
 	Changed tests. The two base cabinet tests are correct. The upper cabinet test is a placeholder. Need to finish. commit
 	Changed version number in mainwindow vm to 36 - had forgotten to do that. commit
 	Changed job loading so that it doesn't hammer the prop changed stuff during the loading process. Jobs load MUCH faster now. Check carefully. Seems to work, but keep an eye out. commit
+	PO Reveals tab now shows exception if Drill Hinge Holes is selected, even if Supply Doors is false. commit

@@ -513,41 +513,6 @@ public partial class MainWindowViewModel : ObservableValidator
         }
     }
 
-    //private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    //{
-    //    if (_suppressIsModified) return;
-
-    //    // Mark modified for add/remove/reset/move (user changed the collection)
-    //    if (e.Action == NotifyCollectionChangedAction.Add ||
-    //        e.Action == NotifyCollectionChangedAction.Remove ||
-    //        e.Action == NotifyCollectionChangedAction.Replace ||
-    //        e.Action == NotifyCollectionChangedAction.Reset ||
-    //        e.Action == NotifyCollectionChangedAction.Move)
-    //    {
-    //        IsModified = true;
-    //    }
-
-    //    // Attach handlers for newly added items so property changes mark modified
-    //    if (e.NewItems != null)
-    //    {
-    //        foreach (var ni in e.NewItems)
-    //        {
-    //            if (ni is INotifyPropertyChanged inpc)
-    //                inpc.PropertyChanged += Item_PropertyChanged;
-    //        }
-    //    }
-
-    //    // Detach handlers for removed items
-    //    if (e.OldItems != null)
-    //    {
-    //        foreach (var oi in e.OldItems)
-    //        {
-    //            if (oi is INotifyPropertyChanged inpc)
-    //                inpc.PropertyChanged -= Item_PropertyChanged;
-    //        }
-    //    }
-    //}
-
     private void Cabinets_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (_suppressIsModified) return;

@@ -106,10 +106,10 @@ public class Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test
             DrillHingeHoles = false,
 
             // ── Reveals / Gaps ──
-            LeftReveal = "1/8",
-            RightReveal = "1/8",
-            TopReveal = "1/8",
-            BottomReveal = "1/8",
+            LeftReveal = ".0625",
+            RightReveal = ".0625",
+            TopReveal = ".4375",
+            BottomReveal = ".0625",
             GapWidth = "1/8",
 
             // ── Drawers (count & style) ──

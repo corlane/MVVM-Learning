@@ -326,8 +326,6 @@ internal static class CabinetPartFactory
                 cumulativeU += sideLengths[edgeFace];
             }
 
-            //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and edge banding {edgeBandLengthInches:F1} inches");
-
             // If edgebanding was applied, accumulate into the cabinet's edge-banding totals
             try
             {
@@ -384,7 +382,7 @@ internal static class CabinetPartFactory
         partModel.Children.Add(panelModel);
         partModel.Children.Add(edgebandingModel);
 
-        Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and edge banding {edgeBandLengthInches:F1} inches");
+        //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and edge banding {edgeBandLengthInches:F1} inches");
 
 
         return partModel;
