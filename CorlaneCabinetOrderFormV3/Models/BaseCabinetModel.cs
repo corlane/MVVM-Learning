@@ -73,7 +73,6 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial string RolloutStyle { get; set; }
     [ObservableProperty] public partial bool IncRolloutsInList { get; set; }
     [ObservableProperty] public partial bool DrillSlideHolesForRollouts { get; set; }
-    [ObservableProperty] public partial bool SinkCabinet { get; set; }
     [ObservableProperty] public partial bool TrashDrawer { get; set; }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; }
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; }

@@ -28,6 +28,7 @@ public abstract partial class CabinetModel : ObservableObject
     [ObservableProperty] public partial int Qty { get; set; }
     [ObservableProperty] public partial string Notes { get; set; }
     [ObservableProperty] public partial string Style { get; set; }
+    [ObservableProperty] public partial bool SinkCabinet { get; set; }
 
     [JsonIgnore]
     public int GeometryVersion { get; private set; }
