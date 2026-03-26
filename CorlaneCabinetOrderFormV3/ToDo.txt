@@ -30,8 +30,6 @@ Add "Select All" for all "Done" buttons on PO tabs.
 
 Need to add shelf holes to corner cab end panels and backs
 
-Add more cabinet configurations to the MaterialsAndEdgeTotals Unit Test. Specifically drawer cabinets, rollouts, trash pullouts, and corner cabinets.
-
 Opening/Drw Front PO Tab needs to only check opening sizes, and NOT drw front sizes.
 
 
@@ -68,3 +66,4 @@ TESTING NOTES:
 									
 Add tests for PO opening heights
 
+Add more cabinet configurations to the MaterialsAndEdgeTotals Unit Test. Specifically drawer cabinets, rollouts, trash pullouts, and corner cabinets.
