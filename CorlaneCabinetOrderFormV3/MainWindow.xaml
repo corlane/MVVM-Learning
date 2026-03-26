@@ -293,7 +293,7 @@
                   Cursor="SizeNS"
                   DragCompleted="RightPreviewSplitter_DragCompleted"/>
 
-                <TabControl Grid.Row="2" Grid.Column="0" Visibility="{Binding CabinetListVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TabControl Grid.Row="2" Grid.Column="0" Visibility="{Binding CabinetListVisible, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Stretch">
                     <TabItem Header="Cabinet List" Padding="10">
                         <views:CabinetListView/>
                     </TabItem>

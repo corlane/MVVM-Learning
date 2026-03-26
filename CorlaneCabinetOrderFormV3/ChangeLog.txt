@@ -211,3 +211,6 @@
 	Fixed PODoorDrwGrainDirection viewmodel missing GrainDirection list for combobox binding. commit
 	Panels with no EB now do not show in PO Edgebanding tab. commit
 	Uploading 3.0.1.36. commit
+
+3.0.1.37
+	Set cabinet list vertical alignment to Stretch. Not sure if that makes any difference. commit
