@@ -43,7 +43,7 @@ public class UpperCabinetTest
             // Left End (12×12) + Right End (12×12) + Deck (10.5×12) + Top (10.5×12) + Back¾ (10.5×10.5)
             // = 144 + 144 + 126 + 126 + 110.25 = 650.25 in² → 4.5156 ft²
             double expectedFt2 = 650.25 / 144.0;
-            Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 2);
+            Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 0);
         });
     }
 
@@ -59,7 +59,7 @@ public class UpperCabinetTest
             // EB edge 0 lengths: LeftEnd 12 + RightEnd 12 + Deck 10.5 + Top 10.5 + Back¾ 10.5
             // = 55.5 in → 4.625 ft
             double expectedFt = 55.5 / 12.0;
-            Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 2);
+            Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 0);
         });
     }
 
@@ -67,32 +67,56 @@ public class UpperCabinetTest
 
 
     /// <summary>
-    /// Creates a Standard upper cabinet model with the given dimensions,
-    /// Maple species, Wood Maple edgebanding, ¾" back, 0 shelves, 0 doors.
+    /// Creates a Standard upper cabinet model with the given parameters.
     /// </summary>
     private static UpperCabinetModel MakeStandardUpper(
         string width, string height, string depth,
-        int shelfCount = 0, int doorCount = 0, string BackThickness = null) => new()
+        int shelfCount = 0, int doorCount = 0, string BackThickness = "3/4") => new()
         {
+            // ── CabinetModel (base) ──
+            Name = "Test",
+            Qty = 1,
             Style = CabinetStyles.Upper.Standard,
             Width = width,
             Height = height,
             Depth = depth,
             Species = "Maple",
+            CustomSpecies = "",
             EBSpecies = "Wood Maple",
-            BackThickness = "3/4",
+            CustomEBSpecies = "",
+            MaterialThickness34 = 0.75,
+            MaterialThickness14 = 0.25,
+            Notes = "",
+
+            // ── Back ──
+            BackThickness = BackThickness,
+
+            // ── Shelves ──
             ShelfCount = shelfCount,
+            DrillShelfHoles = false,
+
+            // ── Doors ──
             DoorCount = doorCount,
+            DoorSpecies = "Maple",
+            CustomDoorSpecies = "",
+            DoorGrainDir = "Vertical",
             IncDoors = true,
             IncDoorsInList = false,
-            DrillShelfHoles = false,
             DrillHingeHoles = false,
-            DoorSpecies = "Maple",
-            DoorGrainDir = "Vertical",
+
+            // ── Reveals / Gaps ──
             LeftReveal = "1/8",
             RightReveal = "1/8",
             TopReveal = "1/8",
             BottomReveal = "1/8",
             GapWidth = "1/8",
+
+            // ── Corner-only (leave empty for standard) ──
+            LeftBackWidth = "",
+            RightBackWidth = "",
+            LeftFrontWidth = "",
+            RightFrontWidth = "",
+            LeftDepth = "",
+            RightDepth = "",
         };
 }

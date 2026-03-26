@@ -19,34 +19,65 @@ internal static class CabinetPreviewBuilder
     private static PreviewCacheKey? _lastPreviewKey;
     private static Model3DGroup? _lastPreviewModel;
 
+    //internal static Model3DGroup BuildPreviewModel(
+    //    CabinetModel? cab,
+    //    bool leftEndHidden,
+    //    bool rightEndHidden,
+    //    bool deckHidden,
+    //    bool topHidden)
+    //{
+    //    var group = new Model3DGroup();
+
+    //    if (cab is not null)
+    //    {
+    //        // Totals (full cabinet, independent of preview hides)
+    //        cab.ResetAllMaterialAndEdgeTotals();
+    //        _ = BuildCabinetForTotals(cab);
+
+    //        // Preview (may hide parts; cached)
+    //        var built = BuildCabinetForPreviewCached(cab, leftEndHidden, rightEndHidden, deckHidden, topHidden);
+    //        group.Children.Add(built);
+    //    }
+
+    //    group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
+
+    //    // Freeze the final group so it can be reused by WPF cheaply if desired.
+    //    // (Lights/materials created by builders are typically freezable.)
+    //    TryFreeze(group);
+
+    //    return group;
+    //}
+
     internal static Model3DGroup BuildPreviewModel(
-        CabinetModel? cab,
-        bool leftEndHidden,
-        bool rightEndHidden,
-        bool deckHidden,
-        bool topHidden)
+    CabinetModel? cab,
+    bool leftEndHidden,
+    bool rightEndHidden,
+    bool deckHidden,
+    bool topHidden)
     {
         var group = new Model3DGroup();
 
         if (cab is not null)
         {
-            // Totals (full cabinet, independent of preview hides)
+            // Reset totals before the single build pass.
+            // Totals are accumulated inside CreatePanel as a side-effect,
+            // so every part must call CreatePanel even when hidden from preview.
             cab.ResetAllMaterialAndEdgeTotals();
-            _ = BuildCabinetForTotals(cab);
 
-            // Preview (may hide parts; cached)
-            var built = BuildCabinetForPreviewCached(cab, leftEndHidden, rightEndHidden, deckHidden, topHidden);
+            // Single build: accumulates totals for ALL parts; hides geometry per flags.
+            var built = BuildCabinetForPreview(cab, leftEndHidden, rightEndHidden, deckHidden, topHidden);
             group.Children.Add(built);
         }
 
         group.Children.Add(new DirectionalLight(Colors.DarkGray, new Vector3D(-1, -1, -1)));
 
-        // Freeze the final group so it can be reused by WPF cheaply if desired.
-        // (Lights/materials created by builders are typically freezable.)
         TryFreeze(group);
 
         return group;
     }
+
+
+
 
     internal static Model3DGroup BuildCabinetForTotals(CabinetModel cab)
         => BuildCabinetForPreview(

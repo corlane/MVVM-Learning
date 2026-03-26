@@ -35,15 +35,6 @@ internal static class BaseCabinetBuilder
         Model3DGroup rightBack;
         Model3DGroup door1;
         Model3DGroup door2;
-        //Model3DGroup drwFront1;
-        //Model3DGroup drwFront2;
-        //Model3DGroup drwFront3;
-        //Model3DGroup drwFront4;
-        //Model3DGroup dbxLeftSide;
-        //Model3DGroup dbxRightSide;
-        //Model3DGroup dbxFront;
-        //Model3DGroup dbxBack;
-        //Model3DGroup dbxBottom;
         Model3DGroup nailer;
 
 
@@ -63,9 +54,6 @@ internal static class BaseCabinetBuilder
         List<Point3D> shelfPoints;
         List<Point3D> doorPoints;
         List<Point3D> drwFrontPoints;
-        //List<Point3D> dbxSidePoints;
-        //List<Point3D> dbxFrontAndBackPoints;
-        //List<Point3D> dbxBottomPoints;
         List<Point3D> nailerPoints;
 
 
