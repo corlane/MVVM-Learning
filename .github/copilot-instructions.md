@@ -18,7 +18,7 @@
 - Do not introduce a combined helper `CreatePanelAndTransform`; prefer explicit `CabinetPartFactory.CreatePanel` followed by `ModelTransforms.ApplyTransform` for readability in BaseCabinetBuilder.cs. Additionally, do not replace rotation angle literals (e.g., 90) with named constants; prefer literal angles for readability.
 
 ## Project-Specific Rules
-- When Door/Drawer size lists depend on CabinetModel accumulators, ensure that AccumulateMaterialAndEdgeTotals runs synchronously (using Dispatcher.Invoke) to avoid missing the last/only cabinet due to BeginInvoke timing.
+- When Door/Drawer size lists depend on CabinetModel accumulators, ensure that AccumulateMaterialAndEdgeTotals runs synchronously (using Dispatcher.Invoke) to avoid missing the last/only cabinet due to BeginInvoke timing. Centralize AccumulateMaterialAndEdgeTotals calls in DoorSizesListViewModel and DrawerBoxSizesListViewModel into the cabinet service for architectural improvement, allowing the list VMs to read pre-computed data.
 - When investigating intermittent load hangs in CorlaneCabinetOrderFormV3, note that LoadAsync is fast (~288ms) and that commenting out ListViewItems.UpdateLayout() in CabinetListView.xaml.cs did not eliminate the UI freeze.
 - Ensure drawer front height TextBox inputs maintain `UpdateSourceTrigger=PropertyChanged` while allowing in-progress fraction states (e.g., "1/", "1 1/") without being overwritten by recalculation logic.
 - When refactoring rendering/geometry logic, place it in internal static classes under the CorlaneCabinetOrderFormV3.Rendering namespace.
