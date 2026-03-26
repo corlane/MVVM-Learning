@@ -38,7 +38,9 @@ public partial class App : Application
                 services.AddTransient<FillerViewModel>();
                 services.AddTransient<PanelViewModel>();
                 services.AddTransient<DefaultSettingsViewModel>();
-                services.AddTransient<Cabinet3DViewModel>();
+
+                services.AddSingleton<Cabinet3DViewModel>();
+
                 services.AddTransient<PlaceOrderViewModel>();
                 services.AddTransient<ProcessOrderViewModel>();
                 services.AddTransient<REALLYProcessOrderViewModel>();

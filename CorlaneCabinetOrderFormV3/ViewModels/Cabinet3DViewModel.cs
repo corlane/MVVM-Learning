@@ -4,6 +4,7 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
@@ -22,7 +23,7 @@ public partial class Cabinet3DViewModel : ObservableObject
     private readonly MainWindowViewModel? _mainVm;
 
     // Debounce state (coalesce multiple rebuild requests)
-    private DispatcherOperation? _pendingRebuild;
+    private bool _rebuildQueued;
 
     private void RequestRebuildPreview()
     {
@@ -36,12 +37,26 @@ public partial class Cabinet3DViewModel : ObservableObject
             return;
         }
 
-        // If a rebuild is already queued, don't queue another.
-        if (_pendingRebuild is { Status: DispatcherOperationStatus.Pending })
+        if (_rebuildQueued)
             return;
 
-        _pendingRebuild = dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(RebuildPreview));
+        _rebuildQueued = true;
+
+        dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+        {
+            try
+            {
+                RebuildPreview();
+            }
+            finally
+            {
+                _rebuildQueued = false;
+            }
+        }));
     }
+
+
+
 
     public Cabinet3DViewModel(IPreviewService previewSvc, ICabinetService cabinetSvc, MainWindowViewModel mainVm)
     {
@@ -136,6 +151,9 @@ public partial class Cabinet3DViewModel : ObservableObject
             dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(RebuildPreview));
             return;
         }
+
+        //Debug.WriteLine($"=== RebuildPreview #{DateTime.Now.Ticks} ===");
+        //Debug.WriteLine(Environment.StackTrace);
 
         PreviewModel = CabinetPreviewBuilder.BuildPreviewModel(
             _previewSvc!.CurrentPreviewCabinet,

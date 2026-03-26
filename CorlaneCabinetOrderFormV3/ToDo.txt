@@ -51,7 +51,7 @@ BUGS:
 
 Back thickness is not hiding when clicking corner cabinet in the list after clicking a non-corner cabinet. -- Tested and couldn't reproduce. Keep an eye out.
 
-
+Parts that don't get edgebanded now have no edges at all, probably because of the new PartKind logic. 
 
 
 
