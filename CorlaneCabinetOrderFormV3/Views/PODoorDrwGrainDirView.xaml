@@ -53,7 +53,7 @@
                        FontWeight="SemiBold"/>
 
             <ComboBox Grid.Column="1"
-                      ItemsSource="{Binding DataContext.POIncludeDoorsVm.ListGrainDirection, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      ItemsSource="{Binding ListGrainDirection}"
                       SelectedItem="{Binding DefaultDoorGrainDir, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Margin="6,0,0,0"/>
 
@@ -63,7 +63,7 @@
                        FontWeight="SemiBold"/>
 
             <ComboBox Grid.Column="4"
-                      ItemsSource="{Binding DataContext.POIncludeDoorsVm.ListGrainDirection, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      ItemsSource="{Binding ListGrainDirection}"
                       SelectedItem="{Binding DefaultDrwFrontGrainDir, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Margin="6,0,0,0"/>
         </Grid>

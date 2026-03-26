@@ -56,6 +56,13 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
         Refresh();
     }
 
+    public List<string> ListGrainDirection { get; } =
+[
+    "Horizontal",
+        "Vertical"
+];
+
+
     [ObservableProperty]
     public partial string DefaultDoorGrainDir { get; set; } = "Vertical";
     partial void OnDefaultDoorGrainDirChanged(string value) => Refresh();

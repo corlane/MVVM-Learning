@@ -208,4 +208,5 @@
 	Changed CabinetPreviewBuilder  BuildPreviewModel() to try to get rid of redundant rebuilds. commit
 	Succeeded in getting rid of redundant rebuilds when changing properties. commit
 	Fixed non-edgebanded panels having no edge faces due to introduction of PartKind. commit
+	Fixed PODoorDrwGrainDirection viewmodel missing GrainDirection list for combobox binding. commit
 

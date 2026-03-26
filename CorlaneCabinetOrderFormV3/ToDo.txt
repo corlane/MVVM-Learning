@@ -36,7 +36,18 @@ Opening/Drw Front PO Tab needs to only check opening sizes, and NOT drw front si
 
 Panel PO Tab shows to change panels with no EB to "None" - be better to not show them at all.
 
+
+
+
+
+IMPORTANT:
 Move pricing service calls OUT of the DoorSizesListViewModel and DrawerBoxSizesListViewModel. Check the AI chat log for detail under the "I have the Debug.Writeline statement..." conversation.
+
+
+
+
+
+
 
 OPTIONAL: Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
