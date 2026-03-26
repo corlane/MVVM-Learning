@@ -34,7 +34,6 @@ Add more cabinet configurations to the MaterialsAndEdgeTotals Unit Test. Specifi
 
 Opening/Drw Front PO Tab needs to only check opening sizes, and NOT drw front sizes.
 
-Panel PO Tab shows to change panels with no EB to "None" - be better to not show them at all.
 
 
 

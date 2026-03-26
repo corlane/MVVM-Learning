@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -99,6 +100,14 @@ public partial class POEdgebandingViewModel : ObservableObject
                 {
                     cabSpecies = custom;
                 }
+            }
+
+            // A panel with no edgebanding edges needs no species exception
+            if (cab is PanelModel pm
+                && !pm.PanelEBTop && !pm.PanelEBBottom
+                && !pm.PanelEBLeft && !pm.PanelEBRight)
+            {
+                continue;
             }
 
             if (string.Equals(cabSpecies, defaultSpecies, StringComparison.OrdinalIgnoreCase))
