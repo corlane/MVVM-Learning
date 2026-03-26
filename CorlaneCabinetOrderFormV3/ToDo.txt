@@ -32,13 +32,15 @@ Need to add shelf holes to corner cab end panels and backs
 
 Opening/Drw Front PO Tab needs to only check opening sizes, and NOT drw front sizes.
 
+Add checkbox to not include drawer box for trash drawer.
+
 
 
 
 
 
 IMPORTANT:
-Move pricing service calls OUT of the DoorSizesListViewModel and DrawerBoxSizesListViewModel. Check the AI chat log for detail under the "I have the Debug.Writeline statement..." conversation.
+Move pricing service calls OUT of the DoorSizesListViewModel and DrawerBoxSizesListViewModel. Check the AI chat log for detail under the "I have the Debug.Writeline statement..." conversation (bedroom computer).
 
 
 
@@ -59,6 +61,9 @@ BUGS:
 
 Back thickness is not hiding when clicking corner cabinet in the list after clicking a non-corner cabinet. -- Tested and couldn't reproduce. Keep an eye out.
 
+Rollout shelf groupbox is being partially obscured by special instructions group. Move special instructions group down.
+
+Rollout Style combo box is not populating with rollout styles, nor is it invalidating the form when no style is selected.
 
 
 
@@ -66,4 +71,3 @@ TESTING NOTES:
 									
 Add tests for PO opening heights
 
-Add more cabinet configurations to the MaterialsAndEdgeTotals Unit Test. Specifically drawer cabinets, rollouts, trash pullouts, and corner cabinets.

@@ -214,3 +214,4 @@
 
 3.0.1.37
 	Set cabinet list vertical alignment to Stretch. Not sure if that makes any difference. commit
+	PO OpeningHeights now ONLY checks opening heights, not drawer front heights. commit

@@ -14,6 +14,12 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
 {
     private const string TabId = "DrwFrontHeights";
 
+    // Expected opening heights (inches)
+    private const double Expected_OH1_Default = 6.375;    // 6 3/8  – Type1 any, Type2 3-drw OH1, Type2 4-drw OH1
+    private const double Expected_OH1_2Drw = 14.3125;  // 14 5/16 – Type2 2-drawer OH1
+    private const double Expected_OH2_3Drw = 10.75;    // 10 3/4  – Type2 3-drawer OH2
+    private const double Expected_OH23_4Drw = 6.9167;   // ~6 11/12 – Type2 4-drawer OH2 & OH3
+
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
 
@@ -23,15 +29,12 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
     public POOpeningDrwFrontHeightsViewModel()
     {
         // design-time support
-        DefaultDrwFront1Height = "7";
         UpdateTabHeaderBrush();
     }
 
     public POOpeningDrwFrontHeightsViewModel(ICabinetService cabinetService)
     {
         _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
-
-        DefaultDrwFront1Height = "7";
 
         if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
         {
@@ -41,9 +44,6 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
         Refresh();
     }
 
-    [ObservableProperty]
-    public partial string DefaultDrwFront1Height { get; set; } = "7";
-
     public ObservableCollection<OpeningDrwFrontHeightExceptionRow> Exceptions { get; } = new();
 
     [ObservableProperty]
@@ -51,8 +51,6 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
 
     [ObservableProperty]
     public partial Brush TabHeaderBrush { get; set; } = s_okGreen;
-
-    partial void OnDefaultDrwFront1HeightChanged(string value) => Refresh();
 
     public void Refresh()
     {
@@ -75,8 +73,6 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
             return;
         }
 
-        double defaultFront1 = ConvertDimension.FractionToDouble(DefaultDrwFront1Height ?? "");
-
         var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
         int cabNumber = 0;
@@ -90,11 +86,10 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                 continue;
             }
 
+            bool isType1 = string.Equals(baseCab.Style, BaseCabinetViewModel.Style1, StringComparison.Ordinal);
+            bool isType2 = string.Equals(baseCab.Style, BaseCabinetViewModel.Style2, StringComparison.Ordinal);
 
-            bool isStyle1 = string.Equals(baseCab.Style, BaseCabinetViewModel.Style1, StringComparison.Ordinal);
-            bool isStyle2 = string.Equals(baseCab.Style, BaseCabinetViewModel.Style2, StringComparison.Ordinal);
-
-            if (!isStyle1 && !isStyle2)
+            if (!isType1 && !isType2)
             {
                 continue;
             }
@@ -105,109 +100,72 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                 continue;
             }
 
-            // Drawer front heights (used for comparisons)
-            double dh1 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight1 ?? "");
-            double dh2 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight2 ?? "");
-            double dh3 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight3 ?? "");
-            double dh4 = ConvertDimension.FractionToDouble(baseCab.DrwFrontHeight4 ?? "");
+            // Opening heights (used for comparisons)
+            double oh1 = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1 ?? "");
+            double oh2 = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2 ?? "");
+            double oh3 = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3 ?? "");
 
-            bool oh1NeedsChange = false;
-            bool oh2NeedsChange = false;
-            bool oh3NeedsChange = false;
-            bool oh4NeedsChange = false;
+            var reasons = new List<string>();
 
-            string reason = "";
-
-            if (isStyle1)
+            if (isType1)
             {
-                // Style1 + DrwCount > 0 + DF1 != default => flag OH1
-                if (!NearlyEqual(dh1, defaultFront1))
+                // Type1 (Standard): OH1 must be 6 3/8
+                if (!NearlyEqual(oh1, Expected_OH1_Default))
                 {
-                    oh1NeedsChange = true;
-                    reason = "Style1: Drw Front 1 differs from default";
+                    reasons.Add("OH1 expected 6 3/8");
                 }
             }
-            else if (isStyle2)
+            else if (isType2)
             {
                 if (drwCount == 2)
                 {
-                    // DF1 and DF2 must be equal => if not, flag OH1, OH2
-                    if (!NearlyEqual(dh1, dh2))
+                    // Type2 (Drawer) 2-drw: OH1 must be 14 5/16
+                    if (!NearlyEqual(oh1, Expected_OH1_2Drw))
                     {
-                        oh1NeedsChange = true;
-                        oh2NeedsChange = true;
-                        reason = "Style2 (2 drawers): Drw Front 1 and 2 must be equal";
+                        reasons.Add("OH1 expected 14 5/16");
                     }
                 }
                 else if (drwCount == 3)
                 {
-                    // DF1 != default OR DF2 and DF3 not equal
-                    bool df1Differs = !NearlyEqual(dh1, defaultFront1);
-                    bool df23Differs = !NearlyEqual(dh2, dh3);
-
-                    if (df1Differs)
+                    // Type2 (Drawer) 3-drw: OH1 must be 6 3/8, OH2 must be 10 3/4
+                    if (!NearlyEqual(oh1, Expected_OH1_Default))
                     {
-                        oh1NeedsChange = true;
+                        reasons.Add("OH1 expected 6 3/8");
                     }
 
-                    if (df23Differs)
+                    if (!NearlyEqual(oh2, Expected_OH2_3Drw))
                     {
-                        oh2NeedsChange = true;
-                        oh3NeedsChange = true;
-                    }
-
-                    if (df1Differs && df23Differs)
-                    {
-                        reason = "Style2 (3 drawers): Drw Front 1 differs from default; Drw Front 2 and 3 must be equal";
-                    }
-                    else if (df1Differs)
-                    {
-                        reason = "Style2 (3 drawers): Drw Front 1 differs from default";
-                    }
-                    else if (df23Differs)
-                    {
-                        reason = "Style2 (3 drawers): Drw Front 2 and 3 must be equal";
+                        reasons.Add("OH2 expected 10 3/4");
                     }
                 }
                 else if (drwCount == 4)
                 {
-                    // DF1 != default OR DF2/DF3/DF4 not all equal
-                    bool df1Differs = !NearlyEqual(dh1, defaultFront1);
-                    bool df234NotAllEqual = !NearlyEqual(dh2, dh3) || !NearlyEqual(dh3, dh4);
-
-                    if (df1Differs)
+                    // Type2 (Drawer) 4-drw: OH1 must be 6 3/8, OH2 & OH3 must be ~6 11/12
+                    if (!NearlyEqual(oh1, Expected_OH1_Default))
                     {
-                        oh1NeedsChange = true;
+                        reasons.Add("OH1 expected 6 3/8");
                     }
 
-                    if (df234NotAllEqual)
+                    if (!NearlyEqual(oh2, Expected_OH23_4Drw))
                     {
-                        oh2NeedsChange = true;
-                        oh3NeedsChange = true;
-                        oh4NeedsChange = true;
+                        reasons.Add("OH2 expected ~6 11/12");
                     }
 
-                    if (df1Differs && df234NotAllEqual)
+                    if (!NearlyEqual(oh3, Expected_OH23_4Drw))
                     {
-                        reason = "Style2 (4 drawers): Drw Front 1 differs from default; Drw Front 2, 3, and 4 must be equal";
-                    }
-                    else if (df1Differs)
-                    {
-                        reason = "Style2 (4 drawers): Drw Front 1 differs from default";
-                    }
-                    else if (df234NotAllEqual)
-                    {
-                        reason = "Style2 (4 drawers): Drw Front 2, 3, and 4 must be equal";
+                        reasons.Add("OH3 expected ~6 11/12");
                     }
                 }
             }
 
-            if (!oh1NeedsChange && !oh2NeedsChange && !oh3NeedsChange && !oh4NeedsChange)
+            if (reasons.Count == 0)
             {
                 continue;
             }
 
-            // Flagged cabinet: show ALL opening heights (not just the ones related to failing drawer fronts).
+            string styleLabel = isType1 ? "Standard" : $"Drawer ({drwCount} drw)";
+            string reason = $"{styleLabel}: {string.Join("; ", reasons)}";
+
             var row = new OpeningDrwFrontHeightExceptionRow
             {
                 CabinetId = cab.Id,
@@ -221,7 +179,6 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                 OpeningHeight3 = baseCab.OpeningHeight3 ?? "",
                 OpeningHeight4 = baseCab.OpeningHeight4 ?? "",
 
-                DefaultDrwFront1Height = DefaultDrwFront1Height ?? "",
                 Reason = reason,
                 IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
             };
@@ -294,7 +251,7 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
     }
 
     private static bool NearlyEqual(double a, double b)
-        => Math.Abs(a - b) < 0.0001;
+        => Math.Abs(a - b) < 0.001;
 
     public sealed partial class OpeningDrwFrontHeightExceptionRow : ObservableObject
     {
@@ -307,13 +264,11 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
         [ObservableProperty] public partial string Style { get; set; } = "";
         [ObservableProperty] public partial int DrwCount { get; set; }
 
-        // Replaces DF1..DF4 in the grid
         [ObservableProperty] public partial string OpeningHeight1 { get; set; } = "";
         [ObservableProperty] public partial string OpeningHeight2 { get; set; } = "";
         [ObservableProperty] public partial string OpeningHeight3 { get; set; } = "";
         [ObservableProperty] public partial string OpeningHeight4 { get; set; } = "";
 
-        [ObservableProperty] public partial string DefaultDrwFront1Height { get; set; } = "";
         [ObservableProperty] public partial string Reason { get; set; } = "";
     }
 }
