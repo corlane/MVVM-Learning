@@ -16,9 +16,15 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
 
     // Expected opening heights (inches)
     private const double Expected_OH1_Default = 6.375;    // 6 3/8  – Type1 any, Type2 3-drw OH1, Type2 4-drw OH1
+
     private const double Expected_OH1_2Drw = 14.3125;  // 14 5/16 – Type2 2-drawer OH1
+    private const double Expected_OH2_2Drw = 13.9375;  // 13 15/16 – Type2 2-drawer OH2
+
     private const double Expected_OH2_3Drw = 10.75;    // 10 3/4  – Type2 3-drawer OH2
+    private const double Expected_OH3_3Drw = 10.375;    // 10 3/8  – Type2 3-drawer OH3
+
     private const double Expected_OH23_4Drw = 6.9167;   // ~6 11/12 – Type2 4-drawer OH2 & OH3
+    private const double Expected_OH4_4Drw = 6.5417;   // ~6 9/16 – Type2 4-drawer OH4
 
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
@@ -104,6 +110,7 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
             double oh1 = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1 ?? "");
             double oh2 = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2 ?? "");
             double oh3 = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3 ?? "");
+            double oh4 = ConvertDimension.FractionToDouble(baseCab.OpeningHeight4 ?? "");
 
             var reasons = new List<string>();
 
@@ -124,6 +131,11 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                     {
                         reasons.Add("OH1 expected 14 5/16");
                     }
+
+                    if (!NearlyEqual(oh2, Expected_OH2_2Drw))
+                    {
+                        reasons.Add("OH2 expected 13 15/16");
+                    }
                 }
                 else if (drwCount == 3)
                 {
@@ -136,6 +148,11 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                     if (!NearlyEqual(oh2, Expected_OH2_3Drw))
                     {
                         reasons.Add("OH2 expected 10 3/4");
+                    }
+
+                    if (!NearlyEqual(oh3, Expected_OH3_3Drw))
+                    {
+                        reasons.Add("OH3 expected 10 3/8");
                     }
                 }
                 else if (drwCount == 4)
@@ -154,6 +171,11 @@ public partial class POOpeningDrwFrontHeightsViewModel : ObservableObject
                     if (!NearlyEqual(oh3, Expected_OH23_4Drw))
                     {
                         reasons.Add("OH3 expected ~6 11/12");
+                    }
+
+                    if (!NearlyEqual(oh4, Expected_OH4_4Drw))
+                    {
+                        reasons.Add("OH4 expected ~6 9/16");
                     }
                 }
             }

@@ -197,7 +197,7 @@ public partial class POJobMaterialListViewModel : ObservableObject
             return y;
         }
 
-        return _materialPrices?.DefaultSheetYield ?? 0.82;
+        return _materialPrices?.DefaultSheetYield ?? 0.78;
     }
 
     private double GetSheetAreaSqFt(string species)

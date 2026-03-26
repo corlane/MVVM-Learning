@@ -63,7 +63,7 @@ public partial class ProcessOrderViewModel : ObservableValidator
     public ObservableCollection<EdgeBandPriceRow> EdgeBanding { get; } = new();
 
     [ObservableProperty] public partial decimal CncPricePerSheet { get; set; } = 60m;
-    [ObservableProperty] public partial double DefaultSheetYield { get; set; } = 0.82;
+    [ObservableProperty] public partial double DefaultSheetYield { get; set; } = 0.78;
 
     [ObservableProperty]
     public partial string YieldBySpeciesJson { get; set; } = "{\n  \"PFP 1/4\": 0.65\n}";
