@@ -916,7 +916,7 @@ internal static class BaseCabinetBuilder
             // Rollouts or Trash Drawer
             if (baseCab.IncRollouts || baseCab.IncRolloutsInList || baseCab.TrashDrawer)
             {
-                const double rolloutMountBracketSpacing = 1.2; // Thickness of Blum Tandem Rollout Mounting Bracket - Gus uses 3/4"
+                const double rolloutMountBracketSpacing = 1; // Thickness of Blum Tandem Rollout Mounting Bracket - Gus uses 3/4"
                 dbxHeight = rolloutHeight;
 
                 if (baseCab.RolloutStyle is not null)

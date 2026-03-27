@@ -226,4 +226,5 @@
 	Uploading 3.0.1.38
 
 3.0.1.39
-	
+	Fixed error in Rollout width math - Rollout brackets were specified at 1.2, they should have been 1. commit
+
