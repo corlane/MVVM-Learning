@@ -85,6 +85,9 @@ public partial class POJobMaterialListViewModel : ObservableObject
             return;
         }
 
+        // Ensure every cabinet's material/edge totals are up-to-date before reading them.
+        _cabinetService.AccumulateAllMaterialAndEdgeTotals();
+
         // Build lightweight snapshots so the calculator doesn't need CabinetModel
         var snapshots = _cabinetService.Cabinets.Select(cab => new CabinetMaterialSnapshot(
             Math.Max(1, cab.Qty),

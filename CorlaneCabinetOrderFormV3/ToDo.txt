@@ -37,12 +37,6 @@ Add checkbox to not include drawer box for trash drawer.
 
 
 
-IMPORTANT:
-Move pricing service calls OUT of the DoorSizesListViewModel and DrawerBoxSizesListViewModel. Check the AI chat log for detail under the "I have the Debug.Writeline statement..." conversation (bedroom computer).
-
-
-
-
 
 
 

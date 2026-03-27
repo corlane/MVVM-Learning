@@ -1,7 +1,10 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Rendering;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
@@ -143,5 +146,37 @@ public class CabinetService : ICabinetService
         }
 
         return loadedJob;
+    }
+
+    public void AccumulateMaterialAndEdgeTotals(CabinetModel cab)
+    {
+        if (cab == null) return;
+
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher == null)
+            return;
+
+        // Must run synchronously (Invoke, not BeginInvoke) so totals are
+        // populated before the caller reads MaterialAreaBySpecies / EdgeBandingLengthBySpecies.
+        dispatcher.Invoke(() =>
+        {
+            try
+            {
+                cab.ResetAllMaterialAndEdgeTotals();
+                _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+            }
+            catch
+            {
+                // best-effort
+            }
+        }, DispatcherPriority.Background);
+    }
+
+    public void AccumulateAllMaterialAndEdgeTotals()
+    {
+        foreach (var cab in Cabinets)
+        {
+            AccumulateMaterialAndEdgeTotals(cab);
+        }
     }
 }

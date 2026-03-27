@@ -11,7 +11,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 public sealed partial class DoorSizesListViewModel : ObservableObject
 {
     private readonly ICabinetService _cabinetService;
-    private readonly Cabinet3DViewModel _cabinet3D;
     private readonly DefaultSettingsService _defaults;
 
     public DoorSizesListViewModel()
@@ -19,10 +18,9 @@ public sealed partial class DoorSizesListViewModel : ObservableObject
         // Parameterless constructor for design-time support
     }
 
-    public DoorSizesListViewModel(ICabinetService cabinetService, Cabinet3DViewModel cabinet3D, DefaultSettingsService defaults)
+    public DoorSizesListViewModel(ICabinetService cabinetService, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService;
-        _cabinet3D = cabinet3D;
         _defaults = defaults;
 
         if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
@@ -114,13 +112,13 @@ public sealed partial class DoorSizesListViewModel : ObservableObject
     {
         DoorSizes.Clear();
 
+        _cabinetService.AccumulateAllMaterialAndEdgeTotals();
+
         for (int i = 0; i < _cabinetService.Cabinets.Count; i++)
         {
             var cab = _cabinetService.Cabinets[i];
             int cabinetNumber = i + 1;
             string cabinetName = cab.Name ?? "";
-
-            _cabinet3D.AccumulateMaterialAndEdgeTotals(cab);
 
             foreach (var row in cab.FrontParts)
             {

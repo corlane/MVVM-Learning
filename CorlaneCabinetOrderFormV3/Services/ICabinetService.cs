@@ -25,4 +25,10 @@ public interface ICabinetService
     /// <summary>Raised when any PO exception Done button is toggled (for IsModified tracking).</summary>
     event Action? ExceptionDoneStateChanged;
     void RaiseExceptionDoneStateChanged();
+
+    /// <summary>Resets and re-accumulates material area and edgebanding totals for a single cabinet.</summary>
+    void AccumulateMaterialAndEdgeTotals(CabinetModel cab);
+
+    /// <summary>Resets and re-accumulates material area and edgebanding totals for every cabinet in the list.</summary>
+    void AccumulateAllMaterialAndEdgeTotals();
 }

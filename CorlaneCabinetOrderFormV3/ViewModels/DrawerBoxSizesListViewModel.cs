@@ -11,7 +11,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
 {
     private readonly ICabinetService _cabinetService;
-    private readonly Cabinet3DViewModel _cabinet3D;
     private readonly DefaultSettingsService _defaults;
 
     public DrawerBoxSizesListViewModel()
@@ -19,10 +18,9 @@ public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
         // Parameterless constructor for design-time support
     }
 
-    public DrawerBoxSizesListViewModel(ICabinetService cabinetService, Cabinet3DViewModel cabinet3D, DefaultSettingsService defaults)
+    public DrawerBoxSizesListViewModel(ICabinetService cabinetService, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService;
-        _cabinet3D = cabinet3D;
         _defaults = defaults;
 
         if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
@@ -113,13 +111,13 @@ public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
     {
         DrawerBoxSizes.Clear();
 
+        _cabinetService.AccumulateAllMaterialAndEdgeTotals();
+
         for (int i = 0; i < _cabinetService.Cabinets.Count; i++)
         {
             var cab = _cabinetService.Cabinets[i];
             int cabinetNumber = i + 1;
             string cabinetName = cab.Name ?? "";
-
-            _cabinet3D.AccumulateMaterialAndEdgeTotals(cab);
 
             foreach (var row in cab.DrawerBoxes)
             {
@@ -135,3 +133,13 @@ public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
         }
     }
 }
+
+
+
+
+
+
+
+
+
+

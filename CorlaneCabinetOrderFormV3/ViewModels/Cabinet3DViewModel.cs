@@ -183,26 +183,4 @@ public partial class Cabinet3DViewModel : ObservableObject
             ? $"Selected Item: #{cabNumber}\n{cab.Style} {cab.CabinetType}\n{cab.Name}"
             : $"Selected Item: {cab.Style} {cab.CabinetType}\n{cab.Name}";
     }
-
-    public void AccumulateMaterialAndEdgeTotals(CabinetModel? cab)
-    {
-        if (cab == null) return;
-
-        var dispatcher = Application.Current?.Dispatcher;
-        if (dispatcher == null)
-            return;
-
-        dispatcher.Invoke(() =>
-        {
-            try
-            {
-                cab.ResetAllMaterialAndEdgeTotals();
-                _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
-            }
-            catch
-            {
-                // best-effort
-            }
-        }, DispatcherPriority.Background);
-    }
 }
