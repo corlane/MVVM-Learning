@@ -236,3 +236,4 @@
 3.0.1.41
 	Removed redundant price, yield, and material thickness numbers throughout. All tests passed. commit
 	Removed 5 redundant DTOs and placed in MaterialPriceDtos.cs. commit
+	GetYield/GetSheetArea defined in more than one place. Moved to MaterialPriceExtensions.cs. commit
