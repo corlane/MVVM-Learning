@@ -35,9 +35,6 @@ internal static class CabinetPreviewBuilder
         return group;
     }
 
-
-
-
     internal static Model3DGroup BuildCabinetForTotals(CabinetModel cab)
         => BuildCabinetForPreview(
             cab,

@@ -221,4 +221,5 @@
 	Uploading 3.0.1.37
 
 3.0.1.38
-	Moveed the pricing and materials services out of Cabinet3DViewModel and into CabinetServices. commit
+	Moved the pricing and materials services out of Cabinet3DViewModel and into CabinetServices. commit
+	Added a lot more tests. commit

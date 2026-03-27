@@ -388,7 +388,6 @@ internal static class CabinetPartFactory
 
         //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and edge banding {edgeBandLengthInches:F1} inches");
 
-
         return partModel;
     }
 }
