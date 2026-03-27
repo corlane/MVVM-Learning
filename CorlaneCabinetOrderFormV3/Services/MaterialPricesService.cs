@@ -1,7 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
@@ -148,59 +147,5 @@ public sealed class MaterialPricesService : IMaterialPricesService
         {
             return _yieldBySpecies.TryGetValue(species, out yield);
         }
-    }
-
-    private sealed class MaterialPricesDto
-    {
-        [JsonPropertyName("sheetMaterials")]
-        public List<SheetMaterialPriceDto>? SheetMaterials { get; set; }
-
-        [JsonPropertyName("edgeBanding")]
-        public List<EdgeBandingPriceDto>? EdgeBanding { get; set; }
-
-        [JsonPropertyName("cncCutting")]
-        public CncCuttingDto? CncCutting { get; set; }
-
-        [JsonPropertyName("yields")]
-        public YieldsDto? Yields { get; set; }
-    }
-
-    private sealed class SheetMaterialPriceDto
-    {
-        [JsonPropertyName("species")]
-        public string? Species { get; set; }
-
-        [JsonPropertyName("pricePerSqFt")]
-        public decimal PricePerSqFt { get; set; }
-
-        [JsonPropertyName("sheetWidthIn")]
-        public double SheetWidthIn { get; set; }
-
-        [JsonPropertyName("sheetLengthIn")]
-        public double SheetLengthIn { get; set; }
-    }
-
-    private sealed class EdgeBandingPriceDto
-    {
-        [JsonPropertyName("species")]
-        public string? Species { get; set; }
-
-        [JsonPropertyName("pricePerFt")]
-        public decimal PricePerFt { get; set; }
-    }
-
-    private sealed class CncCuttingDto
-    {
-        [JsonPropertyName("pricePerSheet")]
-        public decimal PricePerSheet { get; set; }
-    }
-
-    private sealed class YieldsDto
-    {
-        [JsonPropertyName("defaultSheetYield")]
-        public double DefaultSheetYield { get; set; }
-
-        [JsonPropertyName("yieldBySpecies")]
-        public Dictionary<string, double>? YieldBySpecies { get; set; }
     }
 }
