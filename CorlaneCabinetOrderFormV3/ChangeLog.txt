@@ -232,3 +232,6 @@
 3.0.1.40
 	Forgot to update version number in MainWindowViewModel. Done now. commit
 	Uploading 3.0.1.40
+
+3.0.1.41
+	Removed redundant price, yield, and material thickness numbers throughout. All tests passed. commit

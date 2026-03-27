@@ -27,8 +27,8 @@ public sealed class MaterialPricesService : IMaterialPricesService
     private List<EdgeBandPriceRow> _edgeBanding = [];
     private Dictionary<string, double> _yieldBySpecies = new(StringComparer.OrdinalIgnoreCase);
 
-    private decimal _cncPricePerSheet = 60m;
-    private double _defaultSheetYield = 0.82;
+    private decimal _cncPricePerSheet = MaterialDefaults.DefaultCncPricePerSheet;
+    private double _defaultSheetYield = MaterialDefaults.DefaultYield;
     private bool _hasPrices;
 
     public IReadOnlyList<MaterialPriceRow> SheetMaterials
@@ -91,8 +91,8 @@ public sealed class MaterialPricesService : IMaterialPricesService
             _sheetMaterials = sheet;
             _edgeBanding = edge;
 
-            _cncPricePerSheet = dto.CncCutting?.PricePerSheet ?? 60m;
-            _defaultSheetYield = dto.Yields?.DefaultSheetYield ?? 0.82;
+            _cncPricePerSheet = dto.CncCutting?.PricePerSheet ?? MaterialDefaults.DefaultCncPricePerSheet;
+            _defaultSheetYield = dto.Yields?.DefaultSheetYield ?? MaterialDefaults.DefaultYield;
 
             _yieldBySpecies = new Dictionary<string, double>(yields, StringComparer.OrdinalIgnoreCase);
 

@@ -6,9 +6,6 @@
 /// </summary>
 public static class MaterialYieldCalculator
 {
-    public const double DefaultSheetAreaSqFt = 32.0;  // 4×8 sheet
-    public const double DefaultYield = 0.78;
-
     /// <summary>
     /// Compute number of sheets needed, rounding up.
     /// </summary>

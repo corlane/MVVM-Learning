@@ -17,7 +17,7 @@ public class MaterialYieldCalculatorTests
     [Fact]
     public void ComputeSheetCount_ZeroYield_ReturnsZero()
     {
-        Assert.Equal(0, MaterialYieldCalculator.ComputeSheetCount(100, 32, 0));
+        Assert.Equal(0, MaterialYieldCalculator.ComputeSheetCount(100, MaterialDefaults.DefaultSheetAreaSqFt, 0));
     }
 
     [Fact]

@@ -200,7 +200,7 @@ public partial class POJobMaterialListViewModel : ObservableObject
             return y;
         }
 
-        return _materialPrices?.DefaultSheetYield ?? 0.78;
+        return _materialPrices?.DefaultSheetYield ?? MaterialDefaults.DefaultYield;
     }
 
     private double GetSheetAreaSqFt(string species)
@@ -215,6 +215,6 @@ public partial class POJobMaterialListViewModel : ObservableObject
         }
 
         // fallback 4x8
-        return 32.0;
+        return MaterialDefaults.DefaultSheetAreaSqFt;
     }
 }

@@ -108,8 +108,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         RunValidationVisible();
     }
-    [ObservableProperty] public partial double MaterialThickness34 { get; set; } = 0.75;
-    [ObservableProperty] public partial double MaterialThickness14 { get; set; } = 0.25;
+    [ObservableProperty] public partial double MaterialThickness34 { get; set; } = MaterialDefaults.Thickness34;
+    [ObservableProperty] public partial double MaterialThickness14 { get; set; } = MaterialDefaults.Thickness14;
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(6, 60)] public partial string Width { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 120)] public partial string Height { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string Depth { get; set; } = "";

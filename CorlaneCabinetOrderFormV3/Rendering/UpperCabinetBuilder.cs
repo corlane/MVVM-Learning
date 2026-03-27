@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Services;
 using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
@@ -39,8 +40,8 @@ internal static class UpperCabinetBuilder
         List<Point3D> doorPoints;
         List<Point3D> nailerPoints;
 
-        double MaterialThickness34 = 0.75;
-        double MaterialThickness14 = 0.25;
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+        double MaterialThickness14 = MaterialDefaults.Thickness14;
         double doubleMaterialThickness34 = MaterialThickness34 * 2;
 
         string? cabType = upperCab.Style;

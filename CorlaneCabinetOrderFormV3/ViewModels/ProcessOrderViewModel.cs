@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.VisualBasic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -62,8 +63,8 @@ public partial class ProcessOrderViewModel : ObservableValidator
     public ObservableCollection<MaterialPriceRow> SheetMaterials { get; } = new();
     public ObservableCollection<EdgeBandPriceRow> EdgeBanding { get; } = new();
 
-    [ObservableProperty] public partial decimal CncPricePerSheet { get; set; } = 60m;
-    [ObservableProperty] public partial double DefaultSheetYield { get; set; } = 0.78;
+    [ObservableProperty] public partial decimal CncPricePerSheet { get; set; } = MaterialDefaults.DefaultCncPricePerSheet;
+    [ObservableProperty] public partial double DefaultSheetYield { get; set; } = MaterialDefaults.DefaultYield;
 
     [ObservableProperty]
     public partial string YieldBySpeciesJson { get; set; } = "{\n  \"PFP 1/4\": 0.65\n}";
@@ -117,8 +118,8 @@ public partial class ProcessOrderViewModel : ObservableValidator
                     }
                 }
 
-                CncPricePerSheet = dto.CncCutting?.PricePerSheet ?? 60m;
-                DefaultSheetYield = dto.Yields?.DefaultSheetYield ?? 0.82;
+                CncPricePerSheet = dto.CncCutting?.PricePerSheet ?? MaterialDefaults.DefaultCncPricePerSheet;
+                DefaultSheetYield = dto.Yields?.DefaultSheetYield ?? MaterialDefaults.DefaultYield;
 
                 var y = dto.Yields?.YieldBySpecies ?? new Dictionary<string, double>();
                 YieldBySpeciesJson = JsonSerializer.Serialize(y, s_jsonOptions);

@@ -1,10 +1,10 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
 public sealed class PriceBreakdownService : IPriceBreakdownService
 {
-    private const double BaselineCncSheetAreaSqFt = 32.0; // 48x96
+    private const double BaselineCncSheetAreaSqFt = MaterialDefaults.DefaultSheetAreaSqFt;
 
     private readonly IMaterialPricesService _materialPrices;
 
@@ -152,6 +152,6 @@ public sealed class PriceBreakdownService : IPriceBreakdownService
             }
         }
 
-        return 32.0;
+        return MaterialDefaults.DefaultSheetAreaSqFt;
     }
 }

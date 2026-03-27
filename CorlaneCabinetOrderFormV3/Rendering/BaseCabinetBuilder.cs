@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Services;
 using System.Windows.Media.Media3D;
 
 
@@ -58,8 +59,8 @@ internal static class BaseCabinetBuilder
 
 
 
-        double MaterialThickness34 = 0.75;
-        double MaterialThickness14 = 0.25;
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+        double MaterialThickness14 = MaterialDefaults.Thickness14;
         double halfMaterialThickness34 = MaterialThickness34 / 2; // This is to make door calcs etc. more straightforward
         double doubleMaterialThickness34 = MaterialThickness34 * 2; // This is to make door calcs etc. more straightforward
 
