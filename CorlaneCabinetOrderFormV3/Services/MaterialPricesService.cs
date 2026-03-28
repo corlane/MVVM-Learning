@@ -1,25 +1,10 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
 public sealed class MaterialPricesService : IMaterialPricesService
 {
-    private static readonly HttpClient s_httpClient = new()
-    {
-        Timeout = TimeSpan.FromSeconds(15)
-    };
-
-    private const string MaterialPricesBaseUrl = "https://corlanecabinetry.com/matprices/";
-    private const string MaterialPricesFileName = "material-prices.json";
-    private static readonly Uri s_pricesUri = new(new Uri(MaterialPricesBaseUrl), MaterialPricesFileName);
-
-    private static readonly JsonSerializerOptions s_jsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
-
     private readonly object _gate = new();
 
     private List<MaterialPriceRow> _sheetMaterials = [];
@@ -62,8 +47,8 @@ public sealed class MaterialPricesService : IMaterialPricesService
 
     public async Task RefreshFromServerAsync(CancellationToken cancellationToken = default)
     {
-        var json = await s_httpClient.GetStringAsync(s_pricesUri, cancellationToken).ConfigureAwait(false);
-        var dto = JsonSerializer.Deserialize<MaterialPricesDto>(json, s_jsonOptions);
+        var json = await CorlaneApi.HttpClient.GetStringAsync(CorlaneApi.PricesUri, cancellationToken).ConfigureAwait(false);
+        var dto = JsonSerializer.Deserialize<MaterialPricesDto>(json, CorlaneApi.JsonReadOptions);
         if (dto == null)
         {
             return;

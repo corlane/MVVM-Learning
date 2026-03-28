@@ -377,14 +377,14 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             form.Add(fileContent, "jobFile", Path.GetFileName(jobFilePath));
             form.Add(new StringContent(Path.GetFileName(jobFilePath)), "originalFileName");
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, s_uploadJobUri)
+            using var request = new HttpRequestMessage(HttpMethod.Post, CorlaneApi.UploadJobUri)
             {
                 Content = form
             };
 
             request.Headers.Add("X-Api-Key", UploadApiKey);
 
-            using var response = await s_httpClient.SendAsync(request).ConfigureAwait(false);
+            using var response = await CorlaneApi.HttpClient.SendAsync(request).ConfigureAwait(false);
             var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
@@ -579,11 +579,11 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             bool connected;
             try
             {
-                using var request = new HttpRequestMessage(HttpMethod.Head, "https://www.corlanecabinetry.com");
+                using var request = new HttpRequestMessage(HttpMethod.Head, CorlaneApi.ProbeUrl);
                 request.Headers.Add("Cache-Control", "no-cache");
 
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                using var response = await s_httpClient
+                using var response = await CorlaneApi.HttpClient
                     .SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token)
                     .ConfigureAwait(false);
 

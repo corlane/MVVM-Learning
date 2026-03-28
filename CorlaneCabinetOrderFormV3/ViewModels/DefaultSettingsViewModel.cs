@@ -9,45 +9,6 @@ using System.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
-//public partial class DefaultSettingsViewModel : ObservableObject
-//{
-
-//    public DefaultSettingsViewModel()
-//    {
-//        // empty constructor for design-time support
-//    }
-
-//    public DefaultSettingsViewModel(DefaultSettingsService defaults)
-//    {
-//        _defaults = defaults;
-
-//        // Initialize SelectedTheme from persisted default (falls back to Light Theme)
-//        if (_defaults != null)
-//        {
-//            SelectedTheme = string.IsNullOrWhiteSpace(_defaults.DefaultTheme)
-//                ? "Light Theme"
-//                : _defaults.DefaultTheme;
-//        }
-
-//        // Listen for changes on the underlying defaults so computed/display properties update.
-//        if (_defaults != null)
-//        {
-//            PropertyChangedEventManager.AddHandler(_defaults, Defaults_PropertyChanged, string.Empty);
-//        }
-
-//        // Initialize VM-level formatted values from the backing defaults so ComboBoxes
-//        // have matching SelectedItem when the view appears.
-//        ApplyDefaultsToViewModel();
-//    }
-
-
-//    private readonly DefaultSettingsService? _defaults;
-
-//    // Flag used to avoid writing back to _defaults while we are applying values that came from _defaults.
-//    // This prevents re-entrant PropertyChanged loops and transient mismatches between SelectedItem and ItemsSource.
-//    private bool _isApplyingDefaults;
-
-
 public partial class DefaultSettingsViewModel : ObservableObject
 {
 

@@ -239,3 +239,4 @@
 	GetYield/GetSheetArea defined in more than one place. Moved to MaterialPriceExtensions.cs. commit
 	Centralized all combobox lists into CabinetOptions.cs. commit
 	Changed DefaultSettingsViewModel to pull from CabinetOptions for the combobox lists. commit
+	Created CorlaneApi.cs and moved all API calls there. commit

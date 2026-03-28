@@ -15,13 +15,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 
 
-
-
 // THIS IS ACTUALLY THE MATERIAL PRICES TAB VIEWMODEL. RENAMING IT WOULD BREAK A LOT OF THINGS SO WHATEVER.
 // THE ACTUAL PROCESS ORDER VIEWMODEL IS REALLYProcessOrderViewModel.
-
-
-
 
 
 
@@ -42,23 +37,6 @@ public partial class ProcessOrderViewModel : ObservableValidator
         _mainVm = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
     }
 
-    private static readonly HttpClient s_httpClient = new()
-    {
-        Timeout = TimeSpan.FromSeconds(15)
-    };
-
-    private const string MaterialPricesBaseUrl = "https://corlanecabinetry.com/matprices/";
-    private const string MaterialPricesFileName = "material-prices.json";
-
-    private static readonly Uri s_pricesUri = new(new Uri(MaterialPricesBaseUrl), MaterialPricesFileName);
-    private static readonly Uri s_uploadUri = new(new Uri(MaterialPricesBaseUrl), "upload-material-prices.php");
-
-    private static readonly JsonSerializerOptions s_jsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        WriteIndented = true
-    };
-
     public ObservableCollection<MaterialPriceRow> SheetMaterials { get; } = new();
     public ObservableCollection<EdgeBandPriceRow> EdgeBanding { get; } = new();
 
@@ -78,9 +56,9 @@ public partial class ProcessOrderViewModel : ObservableValidator
 
         try
         {
-            var json = await s_httpClient.GetStringAsync(s_pricesUri).ConfigureAwait(false);
+            var json = await CorlaneApi.HttpClient.GetStringAsync(CorlaneApi.PricesUri).ConfigureAwait(false);
 
-            var dto = JsonSerializer.Deserialize<MaterialPricesDto>(json, s_jsonOptions);
+            var dto = JsonSerializer.Deserialize<MaterialPricesDto>(json, CorlaneApi.JsonWriteOptions);
             if (dto == null)
             {
                 _mainVm.Notify2("Failed to parse JSON.", Brushes.Red);
@@ -121,7 +99,7 @@ public partial class ProcessOrderViewModel : ObservableValidator
                 DefaultSheetYield = dto.Yields?.DefaultSheetYield ?? MaterialDefaults.DefaultYield;
 
                 var y = dto.Yields?.YieldBySpecies ?? new Dictionary<string, double>();
-                YieldBySpeciesJson = JsonSerializer.Serialize(y, s_jsonOptions);
+                YieldBySpeciesJson = JsonSerializer.Serialize(y, CorlaneApi.JsonWriteOptions);
             });
 
             _mainVm.Notify2("Download complete.", Brushes.Green);
@@ -156,7 +134,7 @@ public partial class ProcessOrderViewModel : ObservableValidator
             Dictionary<string, double> yieldBySpecies;
             try
             {
-                yieldBySpecies = JsonSerializer.Deserialize<Dictionary<string, double>>(YieldBySpeciesJson, s_jsonOptions)
+                yieldBySpecies = JsonSerializer.Deserialize<Dictionary<string, double>>(YieldBySpeciesJson, CorlaneApi.JsonWriteOptions)
                                  ?? new Dictionary<string, double>();
             }
             catch (Exception ex)
@@ -191,13 +169,13 @@ public partial class ProcessOrderViewModel : ObservableValidator
                 }
             };
 
-            var json = JsonSerializer.Serialize(dto, s_jsonOptions);
+            var json = JsonSerializer.Serialize(dto, CorlaneApi.JsonWriteOptions);
 
-            using var request = new HttpRequestMessage(HttpMethod.Post, s_uploadUri);
+            using var request = new HttpRequestMessage(HttpMethod.Post, CorlaneApi.UploadPricesUri);
             request.Headers.Authorization = CreateBasicAuthHeader(userName, password);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            using var response = await s_httpClient.SendAsync(request).ConfigureAwait(false);
+            using var response = await CorlaneApi.HttpClient.SendAsync(request).ConfigureAwait(false);
             var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
