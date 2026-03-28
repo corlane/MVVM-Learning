@@ -14,6 +14,7 @@
 - Use specific formatting rules
 - Follow naming conventions
 - Refactor helper/rendering code into internal static classes under the CorlaneCabinetOrderFormV3.Rendering namespace. User confirmed preference to place rendering/geometry helpers in these classes.
+- Organize the Rendering folder with subfolders: Base/ for base cabinet files, Upper/ for upper cabinet files, etc. Universally shared files like CabinetPartFactory stay in the Rendering root.
 - Prefer small helpers (e.g., ApplyTransformAndAdd) to reduce duplicated CreatePanel + ApplyTransform + Add patterns.
 - Do not introduce a combined helper `CreatePanelAndTransform`; prefer explicit `CabinetPartFactory.CreatePanel` followed by `ModelTransforms.ApplyTransform` for readability in BaseCabinetBuilder.cs. Additionally, do not replace rotation angle literals (e.g., 90) with named constants; prefer literal angles for readability.
 

@@ -240,3 +240,6 @@
 	Centralized all combobox lists into CabinetOptions.cs. commit
 	Changed DefaultSettingsViewModel to pull from CabinetOptions for the combobox lists. commit
 	Created CorlaneApi.cs and moved all API calls there. commit
+	----- return to the above commit if the following breaks anything.
+	Refactoring the CabinetBuilders in Rendering, starting with BaseCabinetBuilder.
+	Refactored BaseCbainetBuilder into multiple files in its own folder. Tests passed. commit
