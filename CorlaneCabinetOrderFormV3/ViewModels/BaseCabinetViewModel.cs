@@ -892,61 +892,21 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
 
     // Combobox options
-    public List<int> ComboShelfCount { get; } = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    public IReadOnlyList<int> ComboShelfCount => CabinetOptions.ShelfCounts;
     public static List<string> TypeList => [Style1, Style2, Style3, Style4];
 
-    public List<string> ListDrawerStyle { get; } =
-    [
-        "Blum Tandem H/Equivalent Undermount",
-        "Accuride/Equivalent Sidemount"
-    ];
+    public IReadOnlyList<string> ListDrawerStyle => CabinetOptions.DrawerStyles;
+    public IReadOnlyList<int> ListDoorCount => CabinetOptions.DoorCounts;
+    public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
+    public IReadOnlyList<string> ListShelfDepth => CabinetOptions.ShelfDepths;
+    public IReadOnlyList<string> ListTopType => CabinetOptions.TopTypes;
 
-    public List<int> ListDoorCount { get; } =
-    [
-        0,
-        1,
-        2
-    ];
-
-    public List<string> ListGrainDirection { get; } =
-    [
-        "Horizontal",
-        "Vertical"
-    ];
-
-    public List<string> ListShelfDepth { get; } =
-    [
-        CabinetOptions.ShelfDepth.HalfDepth,
-        CabinetOptions.ShelfDepth.FullDepth
-    ];
-
-    public List<string> ListBackThickness
-    {
-        get
-        {
-            var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
-            bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
-
-            string thin = useFraction
-                ? ConvertDimension.DoubleToFraction(0.25)
-                : 0.25.ToString();
-
-            string thick = useFraction
-                ? ConvertDimension.DoubleToFraction(0.75)
-                : 0.75.ToString();
-
-            return [thin, thick];
-        }
-    }
-
-    public List<string> ListTopType { get; } =
-    [
-        CabinetOptions.TopType.Stretcher,
-        CabinetOptions.TopType.Full
-    ];
+    public List<string> ListBackThickness =>
+        CabinetOptions.BackThickness.GetList(_defaults?.DefaultDimensionFormat ?? "Decimal");
 
     [ObservableProperty] public partial ObservableCollection<int> ListDrwCount { get; set; } = [];
     [ObservableProperty] public partial ObservableCollection<int> ListRolloutCount { get; set; } = [];
+
 
 
     // Visibility properties

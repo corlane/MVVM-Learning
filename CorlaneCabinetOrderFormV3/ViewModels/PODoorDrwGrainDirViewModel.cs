@@ -56,12 +56,7 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
         Refresh();
     }
 
-    public List<string> ListGrainDirection { get; } =
-[
-    "Horizontal",
-        "Vertical"
-];
-
+    public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
 
     [ObservableProperty]
     public partial string DefaultDoorGrainDir { get; set; } = "Vertical";

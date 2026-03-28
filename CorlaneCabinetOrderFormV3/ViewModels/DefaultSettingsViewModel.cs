@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
+using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
 using System.ComponentModel;
@@ -232,22 +233,9 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public List<int> ListShelfCount { get; } = [0, 1, 2, 3, 4, 5];
     public List<int> ListStdDrwCount { get; } = [0, 1];
     public List<int> ListDrwStackDrwCount { get; } = [1, 2, 3, 4];
-    public List<string> ListDrawerStyle { get; } =
-    [
-        "Blum Tandem H/Equivalent Undermount",
-        "Accuride/Equivalent Sidemount"
-    ];
-    public List<int> ListDoorCount { get; } =
-    [
-        0,
-        1,
-        2
-    ];
-    public List<string> ListGrainDirection { get; } =
-    [
-        "Horizontal",
-        "Vertical"
-    ];
+    public IReadOnlyList<string> ListDrawerStyle => CabinetOptions.DrawerStyles;
+    public IReadOnlyList<int> ListDoorCount => CabinetOptions.DoorCounts;
+    public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
     public List<string> ListCabSpecies { get; } =
 [
     "Prefinished Ply",
@@ -281,34 +269,16 @@ public partial class DefaultSettingsViewModel : ObservableObject
         "Wood Mahogany",
         "Custom"
     ];
-    public List<string> ListShelfDepth { get; } =
-        [
-            "Half Depth",
-            "Full Depth"
-        ];
-    public List<string> ListBackThickness
-    {
-        get
-        {
-            var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
-            bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
+    public IReadOnlyList<string> ListShelfDepth => CabinetOptions.ShelfDepths;
 
-            string thin = useFraction
-                ? ConvertDimension.DoubleToFraction(0.25)
-                : 0.25.ToString();
+    public List<string> ListBackThickness =>
+        CabinetOptions.BackThickness.GetList(_defaults?.DefaultDimensionFormat ?? "Decimal");
 
-            string thick = useFraction
-                ? ConvertDimension.DoubleToFraction(0.75)
-                : 0.75.ToString();
+    public IReadOnlyList<string> ListTopType => CabinetOptions.TopTypes;
 
-            return new List<string> { thin, thick };
-        }
-    }
-    public List<string> ListTopType { get; } =
-        [
-            "Stretcher",
-            "Full"
-        ];
+
+
+
     public List<string> ThemeOptions { get; } = new()
     {
         "Deep Dark",

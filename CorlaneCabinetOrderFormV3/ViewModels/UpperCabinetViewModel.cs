@@ -282,40 +282,16 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BottomReveal { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string GapWidth { get; set; } = "";
 
-
     // Combobox options
-    public List<int> ComboShelfCount { get; } = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    public IReadOnlyList<int> ComboShelfCount => CabinetOptions.ShelfCounts;
     public static List<string> TypeList => [Style1, Style2, Style3];
-    public List<int> ListDoorCount { get; } =
-    [
-        0,
-        1,
-        2
-    ];
-    public List<string> ListGrainDirection { get; } =
-    [
-        "Horizontal",
-        "Vertical"
-    ];
+    public IReadOnlyList<int> ListDoorCount => CabinetOptions.DoorCounts;
+    public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
 
-    public List<string> ListBackThickness
-    {
-        get
-        {
-            var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
-            bool useFraction = string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase);
+    public List<string> ListBackThickness =>
+        CabinetOptions.BackThickness.GetList(_defaults?.DefaultDimensionFormat ?? "Decimal");
 
-            string thin = useFraction
-                ? CabinetOptions.BackThickness.QuarterFraction
-                : CabinetOptions.BackThickness.QuarterDecimal;
 
-            string thick = useFraction
-                ? CabinetOptions.BackThickness.ThreeQuarterFraction
-                : CabinetOptions.BackThickness.ThreeQuarterDecimal;
-
-            return [thin, thick];
-        }
-    }
 
     // Visibility properties
     [ObservableProperty] public partial bool StandardDimsVisibility { get; set; } = true;
