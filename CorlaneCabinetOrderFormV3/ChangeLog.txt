@@ -244,3 +244,4 @@
 	Refactoring the CabinetBuilders in Rendering, starting with BaseCabinetBuilder.
 	Refactored BaseCbainetBuilder into multiple files in its own folder. Tests passed. commit
 	Uppers are next. Added Upper Folder. commit
+	Upper seems to be working. Tests passed. commit
