@@ -4,9 +4,49 @@ using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
+
+//public partial class DefaultSettingsViewModel : ObservableObject
+//{
+
+//    public DefaultSettingsViewModel()
+//    {
+//        // empty constructor for design-time support
+//    }
+
+//    public DefaultSettingsViewModel(DefaultSettingsService defaults)
+//    {
+//        _defaults = defaults;
+
+//        // Initialize SelectedTheme from persisted default (falls back to Light Theme)
+//        if (_defaults != null)
+//        {
+//            SelectedTheme = string.IsNullOrWhiteSpace(_defaults.DefaultTheme)
+//                ? "Light Theme"
+//                : _defaults.DefaultTheme;
+//        }
+
+//        // Listen for changes on the underlying defaults so computed/display properties update.
+//        if (_defaults != null)
+//        {
+//            PropertyChangedEventManager.AddHandler(_defaults, Defaults_PropertyChanged, string.Empty);
+//        }
+
+//        // Initialize VM-level formatted values from the backing defaults so ComboBoxes
+//        // have matching SelectedItem when the view appears.
+//        ApplyDefaultsToViewModel();
+//    }
+
+
+//    private readonly DefaultSettingsService? _defaults;
+
+//    // Flag used to avoid writing back to _defaults while we are applying values that came from _defaults.
+//    // This prevents re-entrant PropertyChanged loops and transient mismatches between SelectedItem and ItemsSource.
+//    private bool _isApplyingDefaults;
+
 
 public partial class DefaultSettingsViewModel : ObservableObject
 {
@@ -14,11 +54,13 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public DefaultSettingsViewModel()
     {
         // empty constructor for design-time support
+        _lookups = new MaterialLookupService();
     }
 
-    public DefaultSettingsViewModel(DefaultSettingsService defaults)
+    public DefaultSettingsViewModel(DefaultSettingsService defaults, IMaterialLookupService lookups)
     {
         _defaults = defaults;
+        _lookups = lookups;
 
         // Initialize SelectedTheme from persisted default (falls back to Light Theme)
         if (_defaults != null)
@@ -41,10 +83,15 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
 
     private readonly DefaultSettingsService? _defaults;
+    private readonly IMaterialLookupService _lookups;
 
     // Flag used to avoid writing back to _defaults while we are applying values that came from _defaults.
     // This prevents re-entrant PropertyChanged loops and transient mismatches between SelectedItem and ItemsSource.
     private bool _isApplyingDefaults;
+
+
+
+
 
 
     // Mirror every default as a bindable property
@@ -236,39 +283,8 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public IReadOnlyList<string> ListDrawerStyle => CabinetOptions.DrawerStyles;
     public IReadOnlyList<int> ListDoorCount => CabinetOptions.DoorCounts;
     public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
-    public List<string> ListCabSpecies { get; } =
-[
-    "Prefinished Ply",
-        "Maple Ply",
-        "Red Oak Ply",
-        "White Oak Ply",
-        "Cherry Ply",
-        "Alder Ply",
-        "Mahogany Ply",
-        "Walnut Ply",
-        "Hickory Ply",
-        "MDF",
-        "Melamine",
-        "Custom"
-];
-    public List<string> ListEBSpecies { get; } =
-    [
-        "None",
-        "PVC White",
-        "PVC Black",
-        "PVC Hardrock Maple",
-        "PVC Paint Grade",
-        "Wood Prefinished Maple",
-        "Wood Maple",
-        "Wood Red Oak",
-        "Wood White Oak",
-        "Wood Walnut",
-        "Wood Cherry",
-        "Wood Alder",
-        "Wood Hickory",
-        "Wood Mahogany",
-        "Custom"
-    ];
+    public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
+    public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
     public IReadOnlyList<string> ListShelfDepth => CabinetOptions.ShelfDepths;
 
     public List<string> ListBackThickness =>

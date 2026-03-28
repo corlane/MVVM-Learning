@@ -238,3 +238,4 @@
 	Removed 5 redundant DTOs and placed in MaterialPriceDtos.cs. commit
 	GetYield/GetSheetArea defined in more than one place. Moved to MaterialPriceExtensions.cs. commit
 	Centralized all combobox lists into CabinetOptions.cs. commit
+	Changed DefaultSettingsViewModel to pull from CabinetOptions for the combobox lists. commit
