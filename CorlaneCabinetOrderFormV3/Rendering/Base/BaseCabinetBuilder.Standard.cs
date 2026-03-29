@@ -596,6 +596,7 @@ internal static partial class BaseCabinetBuilder
         if (cabType != style2)
         {
             double shelfSpacing = interiorHeight - opening1Height + MaterialThickness34;
+            if (baseCab.DrwCount == 0) { shelfSpacing = interiorHeight; }
             if (baseCab.HasTK) { shelfSpacing += tk_Height * 2; }
             shelfSpacing /= (baseCab.ShelfCount + 1);
 
