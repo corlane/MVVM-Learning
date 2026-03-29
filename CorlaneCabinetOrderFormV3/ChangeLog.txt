@@ -253,3 +253,4 @@
 	Base 90 deg corner hinge holes implemented. commit
 	Implemented half-depth shelves for Base 90 deg corner cabinets. commit
 	Fixed adjustable shelf spacing in Base Cabs with 0 drws. commit
+	Added a Parts List to POJobMaterialListView for the lulz. Pretty freaking cool. Will be handy for troubleshooting. commit

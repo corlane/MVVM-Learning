@@ -190,4 +190,20 @@ public partial class POJobMaterialListViewModel : ObservableObject
         TotalSheetGoodsSqFt = Math.Round(TotalSheetGoodsSqFt, 2);
         TotalEdgeBandingFeet = Math.Round(TotalEdgeBandingFeet, 2);
     }
+
+    [RelayCommand]
+    private void GeneratePartsList()
+    {
+        if (_cabinetService == null || _cabinetService.Cabinets.Count == 0)
+            return;
+
+        var entries = Rendering.PartsListBuilder.Build(_cabinetService.Cabinets);
+
+        var window = new Views.PartsListWindow
+        {
+            DataContext = entries,
+            Owner = Application.Current.MainWindow
+        };
+        window.Show();
+    }
 }
