@@ -133,6 +133,12 @@ internal static partial class BaseCabinetBuilder
             double frontShelfHoleLeftX = leftDepth + backThickness - 2;
             double frontShelfHoleRightX = rightDepth + backThickness - 2;
 
+            if (baseCab.ShelfDepth == CabinetOptions.ShelfDepth.HalfDepth)
+            {
+                frontShelfHoleLeftX = leftDepth / 2;
+                frontShelfHoleRightX = rightDepth / 2;
+            }
+
             for (int i = 0; i < shelfHoleCount; i++)
             {
                 double y = yStart + (i * 1.26);
@@ -314,13 +320,6 @@ internal static partial class BaseCabinetBuilder
                     rimZ: MaterialThickness34,
                     bottomZ: holeDepth,
                     diameter: holeDiameter));
-
-                //leftBack.Children.Add(CabinetPartFactory.CreateHole(
-                //    centerX: 2,
-                //    centerY: y,
-                //    rimZ: MaterialThickness34,
-                //    bottomZ: holeDepth,
-                //    diameter: holeDiameter));
             }
         }
 
@@ -370,18 +369,35 @@ internal static partial class BaseCabinetBuilder
         {
             double gap = .125;
 
+            shelfPoints =
+            [
+                new (0,0,0),
+                new (leftFrontWidth-MaterialThickness34-gap,0,0),
+                new (leftFrontWidth-MaterialThickness34-gap, rightFrontWidth-MaterialThickness34-gap,0),
+                new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,rightFrontWidth - MaterialThickness34-gap,0),
+                new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,-leftDepth + doubleMaterialThickness34 + gap,0),
+                new (0,-leftDepth + doubleMaterialThickness34 + gap,0),
+            ];
+
+            if (baseCab.ShelfDepth == CabinetOptions.ShelfDepth.HalfDepth)
+            {
+                double halfLeftInternal = (leftDepth - doubleMaterialThickness34 - gap) / 2;
+                double halfRightInternal = (rightDepth - doubleMaterialThickness34 - gap) / 2;
+
+                shelfPoints =
+                [
+                    new (0, -halfLeftInternal, 0),
+                    new (leftFrontWidth - MaterialThickness34 - gap + halfRightInternal, -halfLeftInternal, 0),
+                    new (leftFrontWidth - MaterialThickness34 - gap + halfRightInternal, rightFrontWidth - MaterialThickness34 - gap, 0),
+                    new (leftFrontWidth - MaterialThickness34 - gap + rightDepth - doubleMaterialThickness34 - gap, rightFrontWidth - MaterialThickness34 - gap, 0),
+                    new (leftFrontWidth - MaterialThickness34 - gap + rightDepth - doubleMaterialThickness34 - gap, -leftDepth + doubleMaterialThickness34 + gap, 0),
+                    new (0, -leftDepth + doubleMaterialThickness34 + gap, 0),
+                ];
+            }
+
             double shelfSpacing = (height - tk_Height - doubleMaterialThickness34) / (shelfCount + 1);
             for (int i = 1; i < shelfCount + 1; i++)
             {
-                shelfPoints =
-                    [
-                        new (0,0,0),
-                        new (leftFrontWidth-MaterialThickness34-gap,0,0),
-                        new (leftFrontWidth-MaterialThickness34-gap, rightFrontWidth-MaterialThickness34-gap,0),
-                        new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,rightFrontWidth - MaterialThickness34-gap,0),
-                        new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,-leftDepth + doubleMaterialThickness34 + gap,0),
-                        new (0,-leftDepth + doubleMaterialThickness34 + gap,0),
-                    ];
                 shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Shelf);
                 ModelTransforms.ApplyTransform(shelf, 0 + .0625, leftDepth, -i * shelfSpacing, 90, 0, 0);
                 cabinet.Children.Add(shelf);

@@ -251,3 +251,4 @@
 	Fixed rollouts not being called out on PODrawerBoxes tab if IncRollouts = false. commit
 	Base 90 deg corner cabinet shelf holes implemented.
 	Base 90 deg corner hinge holes implemented. commit
+	Implemented half-depth shelves for Base 90 deg corner cabinets. commit
