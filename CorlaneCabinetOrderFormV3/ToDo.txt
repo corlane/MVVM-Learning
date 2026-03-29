@@ -34,7 +34,7 @@ Add checkbox to not include drawer box for trash drawer.
 
 Fix shelf spacing so it is more centered in cabinets. Note: This is for visual niceness only.
 
-
+Back shelf holes in corner cabinets need the actual spacing set. Right now it is just a guess. i.e. BaseCabinetBuilder.Corner90 line 238.
 
 
 

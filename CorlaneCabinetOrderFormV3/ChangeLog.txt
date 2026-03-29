@@ -249,3 +249,5 @@
 	--- Currently done for Base Std. & Drawer cabinets, but should be implemented for all cabinet types. Also added a couple of tests to demonstrate. commit
 	Changed Place Order behavior: If job was not previously saved, will prompt user to save job before placing order. If job has been saved, it will silently save the job before placing the order, to make sure any changes are captured. commit
 	Fixed rollouts not being called out on PODrawerBoxes tab if IncRollouts = false. commit
+	Base 90 deg corner cabinet shelf holes implemented.
+	Base 90 deg corner hinge holes implemented. commit
