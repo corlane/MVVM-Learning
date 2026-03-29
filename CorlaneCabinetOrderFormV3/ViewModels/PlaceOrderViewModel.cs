@@ -264,20 +264,32 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         [RelayCommand(CanExecute = nameof(CanPlaceOrder))]
         private async Task PlaceOrder()
         {
-            var conf = MessageBox.Show("At this point, you will be prompted to save the job, then the order will be sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?", "Place Order", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            var conf = MessageBox.Show("The order will be saved and sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?", "Place Order", MessageBoxButton.YesNo, MessageBoxImage.Information);
             if (conf != MessageBoxResult.Yes) return;
 
             // Snapshot a current quote at the moment the user clicks Place Order.
             CalculatePrices();
 
-            var dialog = new SaveFileDialog
-            {
-                Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
-                DefaultExt = "cor",
-                FileName = string.IsNullOrWhiteSpace(_mainVm.CurrentJobName) ? "Untitled Job" : _mainVm.CurrentJobName
-            };
+            string filePath;
 
-            if (dialog.ShowDialog() != true) return;
+            if (_mainVm.IsModified || string.IsNullOrEmpty(_mainVm.CurrentJobPath))
+            {
+                // Job has unsaved changes or has never been saved — prompt for a location.
+                var dialog = new SaveFileDialog
+                {
+                    Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
+                    DefaultExt = "cor",
+                    FileName = string.IsNullOrWhiteSpace(_mainVm.CurrentJobName) ? "Untitled Job" : _mainVm.CurrentJobName
+                };
+
+                if (dialog.ShowDialog() != true) return;
+                filePath = dialog.FileName;
+            }
+            else
+            {
+                // Job is already saved — silently re-save to the same path.
+                filePath = _mainVm.CurrentJobPath;
+            }
 
             try
             {
@@ -310,14 +322,14 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 OrderedAtLocal = orderedAt;
 
                 await _cabinetService.SaveAsync(
-                    dialog.FileName,
+                    filePath,
                     customer,
                     TotalPrice,
                     submittedWithAppTitle: _mainVm.AppTitle);
 
                 try
                 {
-                    await UploadJobToWebsiteAsync(dialog.FileName);
+                    await UploadJobToWebsiteAsync(filePath);
                     _mainVm.Notify2("Order placed. Job saved and sent to Corlane. Thank you!", Brushes.Green, 5000);
 
                     _ = Application.Current.Dispatcher.BeginInvoke(() =>
@@ -331,7 +343,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                     _mainVm.Notify2($"Order saved, but upload failed: {ex.Message}", Brushes.OrangeRed, 6000);
                 }
 
-                _mainVm.CurrentJobName = Path.GetFileNameWithoutExtension(dialog.FileName);
+                _mainVm.CurrentJobName = Path.GetFileNameWithoutExtension(filePath);
+                _mainVm.CurrentJobPath = filePath;
                 _mainVm.IsModified = false;
             }
             catch (Exception ex)
@@ -339,7 +352,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 MessageBox.Show($"Error placing order: {ex.Message}", "Error");
             }
         }
-
         [ObservableProperty]
         private DateTime? orderedAtLocal;
 

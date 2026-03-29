@@ -247,3 +247,4 @@
 	Upper seems to be working. Tests passed. commit
 	Added CabinetBuildResult.cs. Results from any calculated parameters in the builders can be captured and stored here, and then tested against expected results in the unit tests.
 	--- Currently done for Base Std. & Drawer cabinets, but should be implemented for all cabinet types. Also added a couple of tests to demonstrate. commit
+	Changed Place Order behavior: If job was not previously saved, will prompt user to save job before placing order. If job has been saved, it will silently save the job before placing the order, to make sure any changes are captured. commit

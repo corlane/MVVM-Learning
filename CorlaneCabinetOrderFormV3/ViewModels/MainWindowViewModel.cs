@@ -139,6 +139,7 @@ public partial class MainWindowViewModel : ObservableValidator
 
                     Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Saved", Brushes.Green, 4000);
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+                    CurrentJobPath = dialog.FileName;
                     IsModified = false;
                 }
                 finally
@@ -206,6 +207,7 @@ public partial class MainWindowViewModel : ObservableValidator
 
                     Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Loaded", Brushes.Green, 4000);
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+                    CurrentJobPath = dialog.FileName;
                     IsModified = false;
                 }
                 catch (Exception ex)
@@ -260,6 +262,7 @@ public partial class MainWindowViewModel : ObservableValidator
 
             // 2) Reset main-window state
             CurrentJobName = "Untitled Job";
+            CurrentJobPath = null;
             SelectedCabinet = null;
             SelectedTabIndex = 0;
 
@@ -357,6 +360,10 @@ public partial class MainWindowViewModel : ObservableValidator
 
 
     [ObservableProperty] public partial string CurrentJobName { get; set; } = "Untitled Job";
+
+
+    /// <summary>Full file path of the last saved/loaded .cor file, or null for a fresh job.</summary>
+    [ObservableProperty] public partial string? CurrentJobPath { get; set; }
 
     [ObservableProperty]
     public partial int SelectedTabIndex { get; set; } = 0;
