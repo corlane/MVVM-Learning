@@ -764,6 +764,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             if (RolloutCount > 0)
             {
                 ShelfCount = 0;
+                IncRollouts = _defaults.DefaultIncDrwBoxes;
             }
             else
             { 
@@ -1453,6 +1454,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
             IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
             IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
+            IncRollouts = _defaults.DefaultIncDrwBoxes;
             DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
             if (Style == Style1) { DrwCount = _defaults.DefaultStdDrawerCount; }
             if (Style == Style2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }

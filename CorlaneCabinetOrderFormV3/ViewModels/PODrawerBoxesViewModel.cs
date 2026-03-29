@@ -59,6 +59,120 @@ public partial class PODrawerBoxesViewModel : ObservableObject
     [ObservableProperty]
     public partial Brush TabHeaderBrush { get; set; } = s_okGreen;
 
+    //public void Refresh()
+    //{
+    //    if (Application.Current?.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess())
+    //    {
+    //        Application.Current.Dispatcher.Invoke(Refresh);
+    //        return;
+    //    }
+
+    //    _isRefreshing = true;
+    //    SnapshotDoneKeys();
+
+    //    Exceptions.Clear();
+    //    TotalCabsNeedingChange = 0;
+
+    //    if (_cabinetService is null)
+    //    {
+    //        UpdateTabHeaderBrush();
+    //        _isRefreshing = false;
+    //        return;
+    //    }
+
+    //    string defaultStyle = (DefaultDrwStyle ?? "").Trim();
+
+    //    var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
+
+    //    int cabNumber = 0;
+
+    //    foreach (var cab in _cabinetService.Cabinets)
+    //    {
+    //        cabNumber++;
+
+    //        if (cab is not BaseCabinetModel baseCab)
+    //        {
+    //            continue;
+    //        }
+
+    //        // Do not check for drawer boxes in sink cabinets even if DrwCount > 0
+    //        if (cab.SinkCabinet)
+    //        {
+    //            continue;
+    //        }
+
+    //        bool anyRowsAddedForCab = false;
+
+    //        int drwCount = Math.Clamp(baseCab.DrwCount, 0, 4);
+
+    //        if (drwCount > 0)
+    //        {
+    //            for (int opening = 1; opening <= drwCount; opening++)
+    //            {
+    //                bool inc = GetIncDrwBoxForOpening(baseCab, opening);
+
+    //                if (inc == DefaultIncDrwBoxes)
+    //                {
+    //                    continue;
+    //                }
+
+    //                string exType = "Drawer Box Include";
+    //                string drwBoxType = $"Opening {opening}";
+
+    //                TrackRow(new DrawerBoxExceptionRow
+    //                {
+    //                    CabinetId = cab.Id,
+    //                    CabinetNumber = cabNumber,
+    //                    CabinetName = baseCab.Name ?? "",
+    //                    ExceptionType = exType,
+    //                    DrawerBoxType = drwBoxType,
+    //                    Actual = IncludeLabel(inc),
+    //                    Default = IncludeLabel(DefaultIncDrwBoxes),
+    //                    IsDone = savedKeys?.Contains(MakeKey(cab.Id, exType, drwBoxType)) == true
+    //                });
+
+    //                anyRowsAddedForCab = true;
+    //            }
+    //        }
+
+    //        bool anyDrawerBoxIncluded = drwCount > 0
+    //            && Enumerable.Range(1, drwCount).Any(o => GetIncDrwBoxForOpening(baseCab, o));
+
+    //        if (anyDrawerBoxIncluded)
+    //        {
+    //            string actualStyle = (baseCab.DrwStyle ?? "").Trim();
+
+    //            if (!string.Equals(actualStyle, defaultStyle, StringComparison.OrdinalIgnoreCase))
+    //            {
+    //                string exType = "Drawer Slide Type";
+    //                string drwBoxType = "";
+
+    //                TrackRow(new DrawerBoxExceptionRow
+    //                {
+    //                    CabinetId = cab.Id,
+    //                    CabinetNumber = cabNumber,
+    //                    CabinetName = baseCab.Name ?? "",
+    //                    ExceptionType = exType,
+    //                    DrawerBoxType = drwBoxType,
+    //                    Actual = actualStyle,
+    //                    Default = defaultStyle,
+    //                    IsDone = savedKeys?.Contains(MakeKey(cab.Id, exType, drwBoxType)) == true
+    //                });
+
+    //                anyRowsAddedForCab = true;
+    //            }
+    //        }
+
+    //        if (anyRowsAddedForCab)
+    //        {
+    //            TotalCabsNeedingChange += Math.Max(1, baseCab.Qty);
+    //        }
+    //    }
+
+    //    UpdateTabHeaderBrush();
+    //    _isRefreshing = false;
+    //}
+
     public void Refresh()
     {
         if (Application.Current?.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess())
@@ -91,6 +205,12 @@ public partial class PODrawerBoxesViewModel : ObservableObject
             cabNumber++;
 
             if (cab is not BaseCabinetModel baseCab)
+            {
+                continue;
+            }
+
+            // Do not check for drawer boxes in sink cabinets even if DrwCount > 0
+            if (cab.SinkCabinet)
             {
                 continue;
             }
@@ -157,6 +277,27 @@ public partial class PODrawerBoxesViewModel : ObservableObject
                 }
             }
 
+            // Rollout include exception – same logic as drawer box openings
+            if (baseCab.RolloutCount > 0 && baseCab.IncRollouts != DefaultIncDrwBoxes)
+            {
+                string exType = "Rollout Include";
+                string drwBoxType = "";
+
+                TrackRow(new DrawerBoxExceptionRow
+                {
+                    CabinetId = cab.Id,
+                    CabinetNumber = cabNumber,
+                    CabinetName = baseCab.Name ?? "",
+                    ExceptionType = exType,
+                    DrawerBoxType = drwBoxType,
+                    Actual = IncludeLabel(baseCab.IncRollouts),
+                    Default = IncludeLabel(DefaultIncDrwBoxes),
+                    IsDone = savedKeys?.Contains(MakeKey(cab.Id, exType, drwBoxType)) == true
+                });
+
+                anyRowsAddedForCab = true;
+            }
+
             if (anyRowsAddedForCab)
             {
                 TotalCabsNeedingChange += Math.Max(1, baseCab.Qty);
@@ -166,6 +307,10 @@ public partial class PODrawerBoxesViewModel : ObservableObject
         UpdateTabHeaderBrush();
         _isRefreshing = false;
     }
+
+
+
+
 
     [RelayCommand]
     private void RefreshList() => Refresh();

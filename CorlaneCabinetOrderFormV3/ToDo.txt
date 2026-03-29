@@ -55,10 +55,6 @@ Back thickness is not hiding when clicking corner cabinet in the list after clic
 
 When dragging the Grid Splitter, sometimes the cabinet list will not be anchored to the bottom of the window and will drag upwards.
 
-PO Drw box tab is saying to remove the drawer box from a sink cabinet. lol
-
-PO Drw box tab is NOT obeying rollout settings, aka don't include rollouts...
-
 
 
 
