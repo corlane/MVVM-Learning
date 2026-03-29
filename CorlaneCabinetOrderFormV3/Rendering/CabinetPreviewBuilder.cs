@@ -95,6 +95,38 @@ internal static class CabinetPreviewBuilder
         return cabinet;
     }
 
+    /// <summary>
+    /// Builds the cabinet and returns a <see cref="CabinetBuildResult"/> populated
+    /// by the builders as they compute values. Single source of truth.
+    /// </summary>
+    internal static CabinetBuildResult BuildCabinetWithResult(CabinetModel cab)
+    {
+        var cabinet = new Model3DGroup();
+        var result = new CabinetBuildResult();
+
+        var getEb = CabinetBuildHelpers.GetMatchingEdgebandingSpecies;
+        var resolveDoorSpecies = CabinetBuildHelpers.ResolveDoorSpeciesForTotals;
+
+        if (cab is BaseCabinetModel baseCab)
+        {
+            BaseCabinetBuilder.BuildBase(
+                cabinet,
+                baseCab,
+                leftEndHidden: false,
+                rightEndHidden: false,
+                deckHidden: false,
+                topHidden: false,
+                getEb,
+                resolveDoorSpecies,
+                CabinetBuildHelpers.AddFrontPartRow,
+                CabinetBuildHelpers.AddDrawerBoxRow,
+                result);
+        }
+
+        TryFreeze(cabinet);
+        return result;
+    }
+
     private static void TryFreeze(Freezable freezable)
     {
         if (freezable.CanFreeze && !freezable.IsFrozen)

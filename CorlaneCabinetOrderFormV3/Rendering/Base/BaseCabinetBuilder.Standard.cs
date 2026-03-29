@@ -17,7 +17,8 @@ internal static partial class BaseCabinetBuilder
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow,
-        Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow)
+        Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow,
+        CabinetBuildResult? result = null)
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double MaterialThickness14 = MaterialDefaults.Thickness14;
@@ -78,6 +79,16 @@ internal static partial class BaseCabinetBuilder
 
         double holeDiameter = 0.197;
         double holeDepth = MaterialThickness34 / 2;
+
+        // ── Capture core dimensions ──
+        if (result is not null)
+        {
+            result.InteriorWidth = interiorWidth;
+            result.InteriorDepth = interiorDepth;
+            result.InteriorHeight = interiorHeight;
+            result.ShelfDepth = shelfDepth;
+            result.DrawerBoxDepth = dbxDepth;
+        }
 
         Model3DGroup leftEnd;
         Model3DGroup rightEnd;
@@ -685,6 +696,8 @@ internal static partial class BaseCabinetBuilder
 
         // Drawer Fronts (grouped)
         double drwFrontWidth = width - (doorSideReveal * 2);
+        if (result is not null)
+            result.DrawerFrontWidth = drwFrontWidth;
 
         var doorSpeciesForTotalsForDrw = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
 
@@ -693,6 +706,13 @@ internal static partial class BaseCabinetBuilder
         bool[] incFrontInList = new[] { baseCab.IncDrwFrontInList1, baseCab.IncDrwFrontInList2, baseCab.IncDrwFrontInList3, baseCab.IncDrwFrontInList4 };
 
         int maxFronts = Math.Min(4, Math.Max(0, baseCab.DrwCount));
+
+        if (result is not null)
+        {
+            for (int i = 0; i < maxFronts; i++)
+                result.DrawerFrontHeights.Add(drwHeights[i]);
+        }
+
         for (int fi = 0; fi < maxFronts; fi++)
         {
             double h = drwHeights[fi];
@@ -747,6 +767,9 @@ internal static partial class BaseCabinetBuilder
                     }
                 }
 
+                if (result is not null)
+                    result.DrawerBoxWidth = dbxWidth;
+
                 double[] openingHeights = new[] { opening1Height, opening2Height, opening3Height, opening4Height };
                 bool[] incBoxOpening = new[] { baseCab.IncDrwBoxOpening1, baseCab.IncDrwBoxOpening2, baseCab.IncDrwBoxOpening3, baseCab.IncDrwBoxOpening4 };
                 bool[] incBoxInList = new[] { baseCab.IncDrwBoxInListOpening1, baseCab.IncDrwBoxInListOpening2, baseCab.IncDrwBoxInListOpening3, baseCab.IncDrwBoxInListOpening4 };
@@ -762,6 +785,8 @@ internal static partial class BaseCabinetBuilder
                     {
                         dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
                     }
+
+                    result?.DrawerBoxHeights.Add(dbxHeight);
 
                     if (incBoxInList[oi])
                     {
@@ -806,6 +831,14 @@ internal static partial class BaseCabinetBuilder
             if (baseCab.RolloutCount > 0)
             {
                 dbxWidth -= rolloutMountBracketSpacing * baseCab.DoorCount;
+            }
+
+            // ── Capture rollout dims — these are the actual values used for geometry ──
+            if (result is not null)
+            {
+                result.RolloutWidth = dbxWidth;
+                result.RolloutHeight = dbxHeight;
+                result.RolloutDepth = dbxDepth;
             }
 
             double dbxFrontAndBackWidth = dbxWidth - (MaterialThickness34 * 2);

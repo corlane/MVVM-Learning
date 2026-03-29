@@ -1,8 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace CorlaneCabinetOrderFormV3.Tests;
 
@@ -63,6 +61,41 @@ public class Base_BSNY2012F3FYN_Mat_And_EB_Matches_Expected
         });
     }
 
+
+
+    //############################################################################################################
+
+    // Below is a demo of using the CabinetBuildResult to be able to retrieve the actual computed values from the builders, which makes testing the calculations easier and more direct,
+    // and enables the testing of literally any property that is passed through the builders, without needing to duplicate the calculation logic in the tests.
+
+    [Fact]
+    public void Base_BSNY2012F3FYN_CalculatedDimensions_MatchExpected()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardBase(width: "46.5", height: "85", depth: "19.25", shelfCount: 1);
+            cab.ResetAllMaterialAndEdgeTotals();
+            var result = CabinetPreviewBuilder.BuildCabinetWithResult(cab);
+
+            // Interior: 46.5 - (0.75 × 2) = 45.0
+            Assert.Equal(45.0, result.InteriorWidth, tolerance: 0.001);
+
+            // InteriorDepth: 19.25 - 0.75 (3/4 back) = 18.5
+            Assert.Equal(18.5, result.InteriorDepth, tolerance: 0.001);
+
+            // Rollout width: 45.0 - 0.4 (Blum) - (1.0 × 0 doors) = 44.6
+            Assert.Equal(44.6, result.RolloutWidth, tolerance: 0.001);
+
+            // Rollout height: fixed at 4"
+            Assert.Equal(4.0, result.RolloutHeight, tolerance: 0.001);
+
+            // Drawer box depth: depth 19.25 → bracket 16.625–19.625 → 15"
+            Assert.Equal(15.0, result.DrawerBoxDepth, tolerance: 0.001);
+
+            // Rollout depth matches drawer box depth
+            Assert.Equal(15.0, result.RolloutDepth, tolerance: 0.001);
+        });
+    }
 
 
     /// <summary>
@@ -189,3 +222,5 @@ public class Base_BSNY2012F3FYN_Mat_And_EB_Matches_Expected
         };
 
 }
+
+
