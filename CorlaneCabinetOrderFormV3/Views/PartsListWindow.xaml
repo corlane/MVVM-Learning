@@ -4,7 +4,8 @@
         Title="Job Parts List"
         Width="1100" Height="700"
         WindowStartupLocation="CenterOwner"
-        Background="{DynamicResource ABrush.Tone1.Background.Static}">
+        Background="{DynamicResource ABrush.Tone1.Background.Static}"
+		FontSize="16">
 
     <Window.Resources>
         <CollectionViewSource x:Key="PartsView" Source="{Binding}">
