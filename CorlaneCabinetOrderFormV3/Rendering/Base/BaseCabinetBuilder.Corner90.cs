@@ -43,6 +43,7 @@ internal static partial class BaseCabinetBuilder
         bool isPanel = false;
         string panelEBEdges = "";
         int shelfCount = baseCab.ShelfCount;
+        double interiorHeight = dim.InteriorHeight;
 
         double holeDiameter = 0.197;
         double holeDepth = MaterialThickness34 / 2;
@@ -395,7 +396,9 @@ internal static partial class BaseCabinetBuilder
                 ];
             }
 
-            double shelfSpacing = (height - tk_Height - doubleMaterialThickness34) / (shelfCount + 1);
+            double shelfSpacing = interiorHeight + MaterialThickness34 + MaterialThickness34;
+            if (baseCab.HasTK) { shelfSpacing += tk_Height * 2; }
+            shelfSpacing /= (baseCab.ShelfCount + 1);
             for (int i = 1; i < shelfCount + 1; i++)
             {
                 shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Shelf);

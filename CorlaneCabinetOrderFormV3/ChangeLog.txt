@@ -259,3 +259,4 @@
 
 3.0.1.42
 	Adjusted Drawers group box up to tighten things up a bit. commit
+	Adjusted shelf calc in Base 90 corner so shelf is more centered. Need to do the same for Angle Front and Upper equivalents. commit
