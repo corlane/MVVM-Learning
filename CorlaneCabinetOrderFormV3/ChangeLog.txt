@@ -256,3 +256,6 @@
 	Added a Parts List to POJobMaterialListView for the lulz. Pretty freaking cool. Will be handy for troubleshooting. commit
 	Enlarged font size in Parts List. commit
 	Uploading 3.0.1.41
+
+3.0.1.42
+	Adjusted Drawers group box up to tighten things up a bit. commit
