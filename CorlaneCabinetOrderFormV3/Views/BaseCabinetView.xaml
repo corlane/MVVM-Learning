@@ -53,9 +53,10 @@
                 </ComboBox>
 
                 <CheckBox x:Name="checkSinkCabinet" Content="Sink Cabinet" Margin="10,5,5,10" IsChecked="{Binding SinkCabinet, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SinkCabinetEnabled}"/>
-
                 <CheckBox x:Name="checkTrashDrawer" Content="Trash Drawer" Margin="10,5,5,10" IsChecked="{Binding TrashDrawer}" IsEnabled="{Binding TrashDrawerEnabled}"/>
-            </StackPanel>
+                <CheckBox x:Name="checkIncTrashDrwBox" Content="Supply Drw Box" Margin="15,0,5,10" IsChecked="{Binding IncTrashDrwBox}" IsEnabled="{Binding TrashDrawerEnabled}"/>
+
+                </StackPanel>
         </GroupBox>
 
         <GroupBox Grid.Row="0" Grid.Column="1" x:Name="groupBaseDimensions" Header="Dimensions" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Stretch"
@@ -229,7 +230,7 @@
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Row="0" Grid.Column="0" Header="Toekick" Margin="5,150,5,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <GroupBox Grid.Row="0" Grid.Column="0" Header="Toekick" Margin="5,165,5,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <StackPanel Orientation="Vertical">
                 <CheckBox x:Name="checkHasTK" Content="Has Toekick" Margin="10,10,10,0" IsChecked="{Binding HasTK}"/>
 

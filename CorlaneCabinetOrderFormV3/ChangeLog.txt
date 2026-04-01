@@ -265,4 +265,4 @@
 	Shelf depth now sets to full and disables for Base Angle front cabinets.
 	Upper 90 shelf & hinge holes implemented.
 	Upper Angle Front shelf & hinge holes implemented. commit
-	
+	Added customizable zoom levels for standard, 90 degree, and angle cabinets. Now they all show the same size instead of corner cabinets being zoomed out too far. Set the zoom levels in Cabinet3DViewModel.cs. commit

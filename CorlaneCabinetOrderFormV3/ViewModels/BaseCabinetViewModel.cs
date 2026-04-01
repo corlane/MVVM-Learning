@@ -799,6 +799,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             GroupRolloutsVisible = true;
         }
     }
+    [ObservableProperty] public partial bool IncTrashDrwBox { get; set; } = true;
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; } = false; partial void OnEqualizeBottomDrwFrontsChanged(bool oldValue, bool newValue)
     {
         if (_isMapping) return;
