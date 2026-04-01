@@ -26,44 +26,60 @@ internal static class CabinetMaterials
 
         try
         {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(resourcePath);
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            bitmap.Freeze();
-
-            var brush = new ImageBrush(bitmap)
-            {
-                TileMode = TileMode.Tile,
-                ViewportUnits = BrushMappingMode.Absolute,
-                Viewport = new Rect(0, 0, .5, 1)
-            };
-
-            if (Math.Abs(rotationDegrees) > 1e-6)
-            {
-                var rt = new RotateTransform(rotationDegrees, 0.5, 0.5);
-                rt.Freeze();
-                brush.RelativeTransform = rt;
-            }
-
-            brush.Freeze();
-
-            var material = new DiffuseMaterial(brush);
-            material.Freeze();
-
-            return material;
+            return BuildMaterial(resourcePath, rotationDegrees);
         }
         catch
         {
-            var fallbackBrush = new SolidColorBrush(Color.FromRgb(200, 200, 200));
-            fallbackBrush.Freeze();
+            // Species image not found — try the generic Custom material image
+            // before falling back to plain gray (handles user-entered custom names
+            // like "My Custom Wood" that won't have their own image file).
+            try
+            {
+                string customPath = "pack://application:,,,/Images/Plywood/Custom.png";
+                return BuildMaterial(customPath, rotationDegrees);
+            }
+            catch
+            {
+                var fallbackBrush = new SolidColorBrush(Color.FromRgb(200, 200, 200));
+                fallbackBrush.Freeze();
 
-            var fallbackMaterial = new DiffuseMaterial(fallbackBrush);
-            fallbackMaterial.Freeze();
+                var fallbackMaterial = new DiffuseMaterial(fallbackBrush);
+                fallbackMaterial.Freeze();
 
-            return fallbackMaterial;
+                return fallbackMaterial;
+            }
         }
+    }
+
+    private static DiffuseMaterial BuildMaterial(string resourcePath, double rotationDegrees)
+    {
+        var bitmap = new BitmapImage();
+        bitmap.BeginInit();
+        bitmap.UriSource = new Uri(resourcePath);
+        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+        bitmap.EndInit();
+        bitmap.Freeze();
+
+        var brush = new ImageBrush(bitmap)
+        {
+            TileMode = TileMode.Tile,
+            ViewportUnits = BrushMappingMode.Absolute,
+            Viewport = new Rect(0, 0, .5, 1)
+        };
+
+        if (Math.Abs(rotationDegrees) > 1e-6)
+        {
+            var rt = new RotateTransform(rotationDegrees, 0.5, 0.5);
+            rt.Freeze();
+            brush.RelativeTransform = rt;
+        }
+
+        brush.Freeze();
+
+        var material = new DiffuseMaterial(brush);
+        material.Freeze();
+
+        return material;
     }
 
     internal static DiffuseMaterial GetEdgeBandingSpecies(string? species)

@@ -1569,6 +1569,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             HasTK = HasTK,
             TKDepth = TKDepth,
             DoorSpecies = DoorSpecies,
+            CustomDoorSpecies = CustomDoorSpecies,
             BackThickness = BackThickness,
             TopType = TopType,
             ShelfCount = ShelfCount,
