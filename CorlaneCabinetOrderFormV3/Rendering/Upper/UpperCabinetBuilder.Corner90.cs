@@ -1,6 +1,7 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System.Windows.Media.Media3D;
+using static CorlaneCabinetOrderFormV3.Models.CabinetOptions;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -32,6 +33,7 @@ internal static partial class UpperCabinetBuilder
         double doorRightReveal = dim.DoorRightReveal;
         double doorTopReveal = dim.DoorTopReveal;
         double doorBottomReveal = dim.DoorBottomReveal;
+        double backThickness = MaterialThickness34;
 
         bool topDeck90 = false;
         bool isPanel = false;
@@ -55,6 +57,9 @@ internal static partial class UpperCabinetBuilder
         List<Point3D> shelfPoints;
         List<Point3D> doorPoints;
 
+        double holeDiameter = 0.197;
+        double holeDepth = MaterialThickness34 / 2;
+
         leftEndPanelPoints =
         [
             new (leftDepth,0,0),
@@ -73,6 +78,129 @@ internal static partial class UpperCabinetBuilder
 
         leftEnd = CabinetPartFactory.CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.LeftEnd);
         rightEnd = CabinetPartFactory.CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.RightEnd);
+
+        // Shelf holes (inside face)
+        if (upperCab.DrillShelfHoles)
+        {
+            double shelfHoleCount = Math.Round(((height - 12) / 1.26));
+
+            double yStart = 6;
+
+            double? maxShelfHoleY = null;
+
+            double frontShelfHoleLeftX = leftDepth + backThickness - 2;
+            double frontShelfHoleRightX = rightDepth + backThickness - 2;
+
+            for (int i = 0; i < shelfHoleCount; i++)
+            {
+                double y = yStart + (i * 1.26);
+
+                if (maxShelfHoleY is not null && y > maxShelfHoleY.Value)
+                {
+                    break;
+                }
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: 2 + backThickness,
+                    centerY: y,
+                    rimZ: 0,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: frontShelfHoleLeftX,
+                    centerY: y,
+                    rimZ: 0,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: 2 + backThickness,
+                    centerY: y,
+                    rimZ: MaterialThickness34,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    centerX: frontShelfHoleRightX,
+                    centerY: y,
+                    rimZ: MaterialThickness34,
+                    bottomZ: holeDepth,
+                    diameter: holeDiameter));
+            }
+        }
+
+        // Hinge holes (inside face)
+        // Left end hinge holes:
+        if (upperCab.DrillHingeHoles)
+        {
+            const double hingeBoreSpacing = 1.26;
+            const double hingeXFromFront = 1.456;
+            const double hingeCenterInset = 2.5197;
+            const double maxHingeCenterSpacing = 40.0;
+
+            double hingeX = leftDepth - hingeXFromFront;
+
+            double topCenterY = height - hingeCenterInset;
+            double bottomCenterY = hingeCenterInset;
+
+            if (topCenterY < bottomCenterY)
+            {
+                (topCenterY, bottomCenterY) = (bottomCenterY, topCenterY);
+            }
+
+            double spanY = Math.Max(0, topCenterY - bottomCenterY);
+
+            int hingeCount = Math.Max(2, (int)Math.Ceiling(spanY / maxHingeCenterSpacing) + 1);
+
+            for (int h = 0; h < hingeCount; h++)
+            {
+                double t = hingeCount == 1 ? 0 : (double)h / (hingeCount - 1);
+                double hingeCenterY = bottomCenterY + (spanY * t);
+
+                double y1 = hingeCenterY - (hingeBoreSpacing / 2);
+                double y2 = hingeCenterY + (hingeBoreSpacing / 2);
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y1, 0, holeDepth, holeDiameter));
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y2, 0, holeDepth, holeDiameter));
+            }
+        }
+
+        // Right end hinge holes:
+        if (upperCab.DrillHingeHoles)
+        {
+            const double hingeBoreSpacing = 1.26;
+            const double hingeXFromFront = 1.456;
+            const double hingeCenterInset = 2.5197;
+            const double maxHingeCenterSpacing = 40.0;
+
+            double hingeX = rightDepth - hingeXFromFront;
+
+            double topCenterY = height - hingeCenterInset;
+            double bottomCenterY = hingeCenterInset;
+
+            if (topCenterY < bottomCenterY)
+            {
+                (topCenterY, bottomCenterY) = (bottomCenterY, topCenterY);
+            }
+
+            double spanY = Math.Max(0, topCenterY - bottomCenterY);
+
+            int hingeCount = Math.Max(2, (int)Math.Ceiling(spanY / maxHingeCenterSpacing) + 1);
+
+            for (int h = 0; h < hingeCount; h++)
+            {
+                double t = hingeCount == 1 ? 0 : (double)h / (hingeCount - 1);
+                double hingeCenterY = bottomCenterY + (spanY * t);
+
+                double y1 = hingeCenterY - (hingeBoreSpacing / 2);
+                double y2 = hingeCenterY + (hingeBoreSpacing / 2);
+
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y1, MaterialThickness34, holeDepth, holeDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(hingeX, y2, MaterialThickness34, holeDepth, holeDiameter));
+            }
+        }
+
 
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, 0, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, -(rightDepth - MaterialThickness34) - leftFrontWidth, 0, -leftDepth - rightFrontWidth, 0, 180, 0);

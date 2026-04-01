@@ -262,4 +262,7 @@
 	Adjusted shelf calc in Base 90 corner so shelf is more centered. Need to do the same for Angle Front and Upper equivalents. commit
 	Base Angle front now centered as well. Uppers were fine already. commit
 	Added shelf & hinge holes to Base Angle Front cabinets.
-	Shelf depth now sets to full and disables for Base Angle front cabinets. commit
+	Shelf depth now sets to full and disables for Base Angle front cabinets.
+	Upper 90 shelf & hinge holes implemented.
+	Upper Angle Front shelf & hinge holes implemented. commit
+	

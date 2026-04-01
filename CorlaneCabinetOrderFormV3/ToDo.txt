@@ -25,8 +25,6 @@ On stupidly wide cabinets, an Exception tab to notify us to change grain directi
 
 Add "Select All" for all "Done" buttons on PO tabs.
 
-Add shelf & hinge holes to corner cab end panels and backs -- Base cab 90 deg done.
-
 Add checkbox to not include drawer box for trash drawer.
 
 Back shelf holes in corner cabinets need the actual positioning set. Right now it is just a guess. i.e. BaseCabinetBuilder.Corner90 line 238.
