@@ -54,7 +54,7 @@
 
                 <CheckBox x:Name="checkSinkCabinet" Content="Sink Cabinet" Margin="10,5,5,10" IsChecked="{Binding SinkCabinet, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SinkCabinetEnabled}"/>
                 <CheckBox x:Name="checkTrashDrawer" Content="Trash Drawer" Margin="10,5,5,10" IsChecked="{Binding TrashDrawer}" IsEnabled="{Binding TrashDrawerEnabled}"/>
-                <CheckBox x:Name="checkIncTrashDrwBox" Content="Supply Drw Box" Margin="15,0,5,10" IsChecked="{Binding IncTrashDrwBox}" IsEnabled="{Binding TrashDrawerEnabled}"/>
+                <CheckBox x:Name="checkIncTrashDrwBox" Content="Supply Drw Box" Margin="15,0,5,10" IsChecked="{Binding IncTrashDrwBox}" IsEnabled="{Binding TrashDrawer}"/>
 
                 </StackPanel>
         </GroupBox>
