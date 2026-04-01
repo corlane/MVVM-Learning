@@ -40,6 +40,7 @@ internal static partial class UpperCabinetBuilder
         double doorTopReveal = dim.DoorTopReveal;
         double doorBottomReveal = dim.DoorBottomReveal;
         double doorSideReveal = dim.DoorSideReveal;
+        double backInsetForDeckAndTop = 0;
 
         bool topDeck90 = false;
         bool isPanel = false;
@@ -293,14 +294,14 @@ internal static partial class UpperCabinetBuilder
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
 
-
+        if (backThickness == MaterialThickness34) { backInsetForDeckAndTop = MaterialThickness34; }
         // Deck
         deckPoints =
         [
             new (0,0,0),
             new (interiorWidth,0,0),
-            new (interiorWidth,depth,0),
-            new (0,depth,0)
+            new (interiorWidth,depth - backInsetForDeckAndTop,0),
+            new (0,depth - backInsetForDeckAndTop,0)
         ];
         deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Deck);
         ModelTransforms.ApplyTransform(deck, -(interiorWidth / 2), -depth, 0, 270, 0, 0);
@@ -310,8 +311,8 @@ internal static partial class UpperCabinetBuilder
         [
             new (0,0,0),
             new (interiorWidth,0,0),
-            new (interiorWidth,depth,0),
-            new (0,depth,0)
+            new (interiorWidth,depth - backInsetForDeckAndTop,0),
+            new (0,depth - backInsetForDeckAndTop,0)
         ];
         top = CabinetPartFactory.CreatePanel(topPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Top);
         ModelTransforms.ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
@@ -321,10 +322,10 @@ internal static partial class UpperCabinetBuilder
         {
             backPoints =
             [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,interiorHeight,0),
-                new (0,interiorHeight,0)
+                new (0,-MaterialThickness34,0),
+                new (interiorWidth,-MaterialThickness34,0),
+                new (interiorWidth,interiorHeight + (MaterialThickness34),0),
+                new (0,interiorHeight + (MaterialThickness34),0)
             ];
             back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackUpper34);
             ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34, 0, 0, 0, 0);

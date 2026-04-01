@@ -58,6 +58,7 @@ internal static partial class BaseCabinetBuilder
         double doorTopReveal = dim.DoorTopReveal;
         double doorBottomReveal = dim.DoorBottomReveal;
         double doorSideReveal = dim.DoorSideReveal;
+        double deckBackInset = 0;
 
         bool topDeck90 = false;
         bool isPanel = false;
@@ -397,12 +398,13 @@ internal static partial class BaseCabinetBuilder
 
 
         // Deck
+        if (backThickness == MaterialThickness34) { deckBackInset = MaterialThickness34; }
         deckPoints =
         [
             new (0,0,0),
             new (interiorWidth,0,0),
-            new (interiorWidth,depth,0),
-            new (0,depth,0)
+            new (interiorWidth,depth - deckBackInset,0),
+            new (0,depth - deckBackInset,0)
         ];
         deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Deck);
         ModelTransforms.ApplyTransform(deck, -(interiorWidth / 2), -depth, tk_Height, 270, 0, 0);
@@ -468,8 +470,8 @@ internal static partial class BaseCabinetBuilder
         {
             backPoints =
             [
-                new (0,0,0),
-                new (interiorWidth,0,0),
+                new (0,-MaterialThickness34,0),
+                new (interiorWidth,-MaterialThickness34,0),
                 new (interiorWidth,interiorHeight,0),
                 new (0,interiorHeight,0)
             ];

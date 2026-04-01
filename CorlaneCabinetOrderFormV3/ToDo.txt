@@ -32,7 +32,6 @@ Add "Select All" for all "Done" buttons on PO tabs.
 
 
 
-OPTIONAL: Base cabinet back and deck are lapped wrong. Deck should be 3/4" less than cab depth and back should lap over deck
 OPTIONAL: Add thumbnail images in ListCabinetView -- Talked to AI about it. Looks less complex than I thought. Can be done later. See previous AI chat for details.
 OPTIONAL: Add fixed shelf option (FULL DEPTH ONLY) - This will introduce the possibility of splitting the cabinet into more than 1 opening: Allow adjustable shelves and doors per opening? That's CAD territory...
 OPTIONAL: Change pricing to account for linear inches of perimeter around parts. This would mean that jobs with a lot of small parts would be more expensive than jobs with fewer, larger parts.

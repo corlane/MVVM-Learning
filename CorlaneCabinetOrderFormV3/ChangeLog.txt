@@ -271,3 +271,4 @@
 	
 3.0.1.43
 	Fixed custom species image turning from blue to gray when selected a 2nd time. commit
+	FINALLY fixed base and upper 3/4 back lapping wrong. commit
