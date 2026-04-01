@@ -36,6 +36,7 @@ internal static partial class BaseCabinetBuilder
         double doorRightReveal = dim.DoorRightReveal;
         double doorTopReveal = dim.DoorTopReveal;
         double doorBottomReveal = dim.DoorBottomReveal;
+        double interiorHeight = dim.InteriorHeight;
 
         bool topDeck90 = false;
         bool isPanel = false;
@@ -234,7 +235,9 @@ internal static partial class BaseCabinetBuilder
         {
             double gap = .125;
 
-            double shelfSpacing = (height - doubleMaterialThickness34) / (shelfCount + 1);
+            double shelfSpacing = interiorHeight + MaterialThickness34 + MaterialThickness34;
+            if (baseCab.HasTK) { shelfSpacing += tk_Height * 2; }
+            shelfSpacing /= (baseCab.ShelfCount + 1);
             for (int i = 1; i < shelfCount + 1; i++)
             {
                 shelfPoints =
