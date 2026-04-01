@@ -812,7 +812,7 @@ internal static partial class BaseCabinetBuilder
         }
 
         // Rollouts or Trash Drawer
-        if (baseCab.IncRollouts || baseCab.IncRolloutsInList || baseCab.TrashDrawer)
+        if (baseCab.IncRollouts || baseCab.IncRolloutsInList || baseCab.IncTrashDrwBox)
         {
             const double rolloutMountBracketSpacing = 1;
             dbxHeight = rolloutHeight;
@@ -846,9 +846,9 @@ internal static partial class BaseCabinetBuilder
             double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
             double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
 
-            if (baseCab.RolloutCount >= 1 || baseCab.TrashDrawer)
+            if (baseCab.RolloutCount >= 1 || baseCab.IncTrashDrwBox)
             {
-                if (baseCab.TrashDrawer)
+                if (baseCab.IncTrashDrwBox)
                 {
                     dbxHeight = 12;
                 }
@@ -882,7 +882,7 @@ internal static partial class BaseCabinetBuilder
                     }
                 }
 
-                if (baseCab.TrashDrawer)
+                if (baseCab.IncTrashDrwBox && baseCab.TrashDrawer)
                 {
                     if (baseCab.IncDrwBoxesInList)
                     {

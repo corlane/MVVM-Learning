@@ -266,3 +266,4 @@
 	Upper 90 shelf & hinge holes implemented.
 	Upper Angle Front shelf & hinge holes implemented. commit
 	Added customizable zoom levels for standard, 90 degree, and angle cabinets. Now they all show the same size instead of corner cabinets being zoomed out too far. Set the zoom levels in Cabinet3DViewModel.cs. commit
+	Added Supply Trash Drw Box checkbox, modified PO Drawer boxes tab. Seems to be working, haven't tested much. commit

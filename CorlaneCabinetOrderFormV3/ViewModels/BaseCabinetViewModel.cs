@@ -1321,6 +1321,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.DrillSlideHolesForRollouts = DrillSlideHolesForRollouts;
         target.SinkCabinet = SinkCabinet;
         target.TrashDrawer = TrashDrawer;
+        target.IncTrashDrwBox = IncTrashDrwBox;
         target.EqualizeAllDrwFronts = EqualizeAllDrwFronts;
         target.EqualizeBottomDrwFronts = EqualizeBottomDrwFronts;
     }
@@ -1606,6 +1607,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             DrwStyle = DrwStyle,
             SinkCabinet = SinkCabinet,
             TrashDrawer = TrashDrawer,
+            IncTrashDrwBox = IncTrashDrwBox,
             DrillHingeHoles = DrillHingeHoles,
             DrillShelfHoles = DrillShelfHoles,
             DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
@@ -1650,7 +1652,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         nameof(IncDrwFront1), nameof(IncDrwFront2), nameof(IncDrwFront3), nameof(IncDrwFront4),
         nameof(LeftReveal), nameof(RightReveal), nameof(TopReveal), nameof(BottomReveal), nameof(GapWidth),
         nameof(IncRollouts), nameof(RolloutCount), nameof(RolloutStyle),
-        nameof(SinkCabinet), nameof(TrashDrawer),
+        nameof(SinkCabinet), nameof(TrashDrawer), nameof(IncTrashDrwBox),
         nameof(DrillHingeHoles), nameof(DrillShelfHoles),
         nameof(DrillSlideHolesOpening1), nameof(DrillSlideHolesOpening2),
         nameof(DrillSlideHolesOpening3), nameof(DrillSlideHolesOpening4),
