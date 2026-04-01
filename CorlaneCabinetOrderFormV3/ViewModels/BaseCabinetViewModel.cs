@@ -964,7 +964,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDrwBoxesInListVisible { get; set; } = true;
     [ObservableProperty] public partial bool DrillSlideHolesVisible { get; set; } = true;
     [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
+    [ObservableProperty] public partial bool ComboShelfDepthEnabled { get; set; } = true;
 
+    
 
     private void ResizeOpeningHeights()
     {
@@ -1738,6 +1740,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         Corner90Visibility = (style == Style3);
         Corner45Visibility = (style == Style4);
         GroupShelvesVisibility = (style == Style1 || style == Style3 || style == Style4);
+        ComboShelfDepthEnabled = (style == Style1 || style == Style3);
         GroupDrawersVisibility = (style == Style1 || style == Style2);
         GroupCabinetTopTypeVisibility = (style == Style1 || style == Style2);
         GroupDrawerFrontHeightsVisibility = (style == Style1 || style == Style2);

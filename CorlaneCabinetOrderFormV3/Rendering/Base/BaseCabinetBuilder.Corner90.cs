@@ -122,7 +122,6 @@ internal static partial class BaseCabinetBuilder
         rightEnd = CabinetPartFactory.CreatePanel(rightEndPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.RightEnd);
 
         // Shelf holes (inside face)
-        //Left End:
         if (baseCab.DrillShelfHoles)
         {
             double shelfHoleCount = Math.Round(((height - 12) / 1.26) - tk_Height);

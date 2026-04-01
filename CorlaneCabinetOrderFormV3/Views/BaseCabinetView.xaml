@@ -278,7 +278,7 @@
                 <ComboBox Name="comboShelvesBase" Width="80" HorizontalAlignment="Left" Margin="5,10,5,5"
                                       ItemsSource="{Binding ComboShelfCount}" SelectedItem="{Binding ShelfCount}"/>
                 <ComboBox Name="comboShelfDepth" Width="100" HorizontalAlignment="Left" Margin="5"
-                                      ItemsSource="{Binding ListShelfDepth}" SelectedItem="{Binding ShelfDepth}"/>
+                                      ItemsSource="{Binding ListShelfDepth}" SelectedItem="{Binding ShelfDepth}" IsEnabled="{Binding ComboShelfDepthEnabled}"/>
                 <CheckBox x:Name="checkDrillShelfHolesBase" Content="Drill Shelf Holes" Margin="5"
                                       IsChecked="{Binding DrillShelfHoles}"/>
             </StackPanel>
