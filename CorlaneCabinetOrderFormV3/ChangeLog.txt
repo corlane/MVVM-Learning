@@ -279,3 +279,6 @@
 	Added Sink Cutouts in stretchers of sink cabinets. commit
 	90 degree corner cabinets now have proper radius inside corner. Removed unused PolygonUtils.cs. commit
 	Uploading 3.0.1.44
+
+3.0.1.45
+	Somehow the Special Instructions/add cabinet group had gotten moved up and was once again hiding the rollout groupbox. Fixed. commit
