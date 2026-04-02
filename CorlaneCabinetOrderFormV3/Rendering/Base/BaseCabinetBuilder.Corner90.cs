@@ -48,6 +48,27 @@ internal static partial class BaseCabinetBuilder
         double holeDiameter = 0.197;
         double holeDepth = MaterialThickness34 / 2;
 
+        double insideCornerRadius = 1.0; // adjust to taste
+        int arcSegments = 8;
+
+        static List<Point3D> GenerateInsideCornerArc(
+            double cornerX, double cornerY, double radius, int segments)
+        {
+            double cx = cornerX - radius;
+            double cy = cornerY + radius;
+            var pts = new List<Point3D>(segments + 1);
+            for (int i = 0; i <= segments; i++)
+            {
+                double t = (double)i / segments;
+                double angle = -(Math.PI / 2.0) + (t * Math.PI / 2.0); // -90° → 0°
+                pts.Add(new Point3D(
+                    cx + radius * Math.Cos(angle),
+                    cy + radius * Math.Sin(angle),
+                    0));
+            }
+            return pts;
+        }
+
         Model3DGroup leftEnd;
         Model3DGroup rightEnd;
         Model3DGroup deck;
@@ -253,16 +274,21 @@ internal static partial class BaseCabinetBuilder
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, 0, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, -(rightDepth - MaterialThickness34) - leftFrontWidth, 0, -leftDepth - rightFrontWidth, 0, 180, 0);
 
-        // Deck & top
+        var deckCornerArc = GenerateInsideCornerArc(
+            leftFrontWidth - MaterialThickness34,
+            0,
+            insideCornerRadius, arcSegments);
+
         deckPoints =
             [
                 new (0,0,0),
-                new (leftFrontWidth-MaterialThickness34,0,0),
+                ..deckCornerArc,
                 new (leftFrontWidth-MaterialThickness34, rightFrontWidth-MaterialThickness34,0),
                 new ((leftFrontWidth - MaterialThickness34) + rightDepth - (doubleMaterialThickness34),rightFrontWidth - MaterialThickness34,0),
                 new ((leftFrontWidth - MaterialThickness34) + rightDepth - (doubleMaterialThickness34),-leftDepth + doubleMaterialThickness34,0),
                 new (0,-leftDepth + doubleMaterialThickness34,0),
             ];
+
         deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Deck);
         top = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Top);
 
@@ -369,25 +395,36 @@ internal static partial class BaseCabinetBuilder
         {
             double gap = .125;
 
+            var shelfCornerArc = GenerateInsideCornerArc(
+                leftFrontWidth - MaterialThickness34 - gap,
+                0,
+                insideCornerRadius, arcSegments);
+
             shelfPoints =
             [
                 new (0,0,0),
-                new (leftFrontWidth-MaterialThickness34-gap,0,0),
+                ..shelfCornerArc,
                 new (leftFrontWidth-MaterialThickness34-gap, rightFrontWidth-MaterialThickness34-gap,0),
                 new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,rightFrontWidth - MaterialThickness34-gap,0),
                 new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,-leftDepth + doubleMaterialThickness34 + gap,0),
                 new (0,-leftDepth + doubleMaterialThickness34 + gap,0),
             ];
 
+            // Half depth shelves
             if (baseCab.ShelfDepth == CabinetOptions.ShelfDepth.HalfDepth)
             {
                 double halfLeftInternal = (leftDepth - doubleMaterialThickness34 - gap) / 2;
                 double halfRightInternal = (rightDepth - doubleMaterialThickness34 - gap) / 2;
 
+                var halfShelfCornerArc = GenerateInsideCornerArc(
+                    leftFrontWidth - MaterialThickness34 - gap + halfRightInternal,
+                    -halfLeftInternal,
+                    insideCornerRadius, arcSegments);
+
                 shelfPoints =
                 [
                     new (0, -halfLeftInternal, 0),
-                    new (leftFrontWidth - MaterialThickness34 - gap + halfRightInternal, -halfLeftInternal, 0),
+                    ..halfShelfCornerArc,
                     new (leftFrontWidth - MaterialThickness34 - gap + halfRightInternal, rightFrontWidth - MaterialThickness34 - gap, 0),
                     new (leftFrontWidth - MaterialThickness34 - gap + rightDepth - doubleMaterialThickness34 - gap, rightFrontWidth - MaterialThickness34 - gap, 0),
                     new (leftFrontWidth - MaterialThickness34 - gap + rightDepth - doubleMaterialThickness34 - gap, -leftDepth + doubleMaterialThickness34 + gap, 0),

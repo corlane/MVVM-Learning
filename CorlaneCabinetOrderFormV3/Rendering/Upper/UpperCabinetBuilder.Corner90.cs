@@ -40,6 +40,30 @@ internal static partial class UpperCabinetBuilder
         string panelEBEdges = "";
         int shelfCount = upperCab.ShelfCount;
 
+        double holeDiameter = 0.197;
+        double holeDepth = MaterialThickness34 / 2;
+
+        double insideCornerRadius = 1.0;
+        int arcSegments = 8;
+
+        static List<Point3D> GenerateInsideCornerArc(
+            double cornerX, double cornerY, double radius, int segments)
+        {
+            double cx = cornerX - radius;
+            double cy = cornerY + radius;
+            var pts = new List<Point3D>(segments + 1);
+            for (int i = 0; i <= segments; i++)
+            {
+                double t = (double)i / segments;
+                double angle = -(Math.PI / 2.0) + (t * Math.PI / 2.0); // -90° → 0°
+                pts.Add(new Point3D(
+                    cx + radius * Math.Cos(angle),
+                    cy + radius * Math.Sin(angle),
+                    0));
+            }
+            return pts;
+        }
+
         Model3DGroup leftEnd;
         Model3DGroup rightEnd;
         Model3DGroup deck;
@@ -56,9 +80,6 @@ internal static partial class UpperCabinetBuilder
         List<Point3D> backPoints;
         List<Point3D> shelfPoints;
         List<Point3D> doorPoints;
-
-        double holeDiameter = 0.197;
-        double holeDepth = MaterialThickness34 / 2;
 
         leftEndPanelPoints =
         [
@@ -205,10 +226,15 @@ internal static partial class UpperCabinetBuilder
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, 0, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, -(rightDepth - MaterialThickness34) - leftFrontWidth, 0, -leftDepth - rightFrontWidth, 0, 180, 0);
 
+        var deckCornerArc = GenerateInsideCornerArc(
+            leftFrontWidth - MaterialThickness34,
+            0,
+            insideCornerRadius, arcSegments);
+
         deckPoints =
         [
             new (0,0,0),
-            new (leftFrontWidth-MaterialThickness34,0,0),
+            ..deckCornerArc,
             new (leftFrontWidth-MaterialThickness34, rightFrontWidth-MaterialThickness34,0),
             new ((leftFrontWidth - MaterialThickness34) + rightDepth - (doubleMaterialThickness34),rightFrontWidth - MaterialThickness34,0),
             new ((leftFrontWidth - MaterialThickness34) + rightDepth - (doubleMaterialThickness34),-leftDepth + doubleMaterialThickness34,0),
@@ -245,13 +271,18 @@ internal static partial class UpperCabinetBuilder
         {
             double gap = .125;
 
+            var shelfCornerArc = GenerateInsideCornerArc(
+                leftFrontWidth - MaterialThickness34 - gap,
+                0,
+                insideCornerRadius, arcSegments);
+
             double shelfSpacing = (height - doubleMaterialThickness34) / (shelfCount + 1);
             for (int i = 1; i < shelfCount + 1; i++)
             {
                 shelfPoints =
                 [
                     new (0,0,0),
-                    new (leftFrontWidth-MaterialThickness34-gap,0,0),
+                    ..shelfCornerArc,
                     new (leftFrontWidth-MaterialThickness34-gap, rightFrontWidth-MaterialThickness34-gap,0),
                     new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,rightFrontWidth - MaterialThickness34-gap,0),
                     new (leftFrontWidth - MaterialThickness34-gap + rightDepth - doubleMaterialThickness34 - gap,-leftDepth + doubleMaterialThickness34 + gap,0),

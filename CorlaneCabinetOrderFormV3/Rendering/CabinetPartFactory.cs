@@ -362,7 +362,7 @@ internal static class CabinetPartFactory
             }
             else if (topDeck90)
             {
-                if (edgeFace == 0 || edgeFace == 1)
+                if (edgeFace < polygonPoints.Count - 4)
                 {
                     specialBuilder.AddQuad(
                         mainBuilder.Positions[b0],
