@@ -70,7 +70,61 @@ internal static class CabinetPartFactory
         return group;
     }
 
+    /// <summary>
+    /// Creates a dark rectangular overlay that visually represents a saw cut on a panel face.
+    /// Same convention as <see cref="CreateHole"/>: <paramref name="rimZ"/> is the panel surface,
+    /// <paramref name="bottomZ"/> indicates the viewer side so the quad normal faces outward.
+    /// The rectangle is centered at (<paramref name="centerX"/>, <paramref name="centerY"/>).
+    /// </summary>
+    internal static Model3DGroup CreateRectangularCut(
+        double centerX,
+        double centerY,
+        double rimZ,
+        double bottomZ,
+        double cutWidth,
+        double cutLength)
+    {
+        double halfW = cutWidth / 2.0;
+        double halfL = cutLength / 2.0;
 
+        double normalDir = Math.Sign(rimZ - bottomZ);
+        double discZ = rimZ + normalDir * 0.002;
+
+        var builder = new MeshBuilder(false, false);
+
+        var p0 = new Point3D(centerX - halfW, centerY - halfL, discZ);
+        var p1 = new Point3D(centerX + halfW, centerY - halfL, discZ);
+        var p2 = new Point3D(centerX + halfW, centerY + halfL, discZ);
+        var p3 = new Point3D(centerX - halfW, centerY + halfL, discZ);
+
+        if (normalDir >= 0)
+        {
+            builder.AddTriangle(p0, p2, p1);
+            builder.AddTriangle(p0, p3, p2);
+        }
+        else
+        {
+            builder.AddTriangle(p0, p1, p2);
+            builder.AddTriangle(p0, p2, p3);
+        }
+
+        builder.ComputeNormalsAndTangents(MeshFaces.Default);
+
+        var brush = new SolidColorBrush(Color.FromRgb(30, 30, 30));
+        brush.Freeze();
+        var cutMaterial = new DiffuseMaterial(brush);
+        cutMaterial.Freeze();
+
+        var group = new Model3DGroup();
+        group.Children.Add(new GeometryModel3D
+        {
+            Geometry = builder.ToMesh(true),
+            Material = cutMaterial,
+            BackMaterial = cutMaterial
+        });
+
+        return group;
+    }
 
     internal static Model3DGroup CreatePanel(
         List<Point3D> polygonPoints,

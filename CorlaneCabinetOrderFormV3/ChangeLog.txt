@@ -275,3 +275,5 @@
 	Adjusted Parts List to accommodate change in back/top/deck lapping. Haven't thoroughly checked, but it looks correct. commit
 	Uploading 3.0.1.43
 
+3.0.1.44
+	Added Sink Cutouts in stretchers of sink cabinets. commit

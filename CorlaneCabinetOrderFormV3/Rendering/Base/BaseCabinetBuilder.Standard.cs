@@ -445,6 +445,37 @@ internal static partial class BaseCabinetBuilder
             topStretcherFront = CabinetPartFactory.CreatePanel(topStretcherFrontPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.TopStretcherFront);
             topStretcherBack = CabinetPartFactory.CreatePanel(topStretcherBackPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.TopStretcherBack);
 
+            // Sink cuts on top stretcher front (local coords: X 0→interiorWidth, Y 0→StretcherWidth)
+            if (baseCab.SinkCabinet)
+            {
+                double cutWidth = 0.5;
+                double cutLength = 4.5; // TODO: fill in cut length
+                double cutRimZ = MaterialThickness34;
+                double cutBottomZ = 0;
+
+                // TODO: fill in centerX / centerY for each cut
+                double cut1CenterX = 2;
+                double cut1CenterY = StretcherWidth - (cutLength / 2);
+
+                topStretcherFront.Children.Add(CabinetPartFactory.CreateRectangularCut(
+                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+
+
+                cut1CenterX = width - MaterialThickness34 - 2.75;
+
+                topStretcherFront.Children.Add(CabinetPartFactory.CreateRectangularCut(
+                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+
+                cut1CenterX = interiorWidth / 2;
+                cut1CenterY = 1.75;
+
+                cutLength = .5;
+                cutWidth = width - (2.75 * 2);
+
+                topStretcherFront.Children.Add(CabinetPartFactory.CreateRectangularCut(
+                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+            }
+
             ModelTransforms.ApplyTransform(topStretcherFront, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
             ModelTransforms.ApplyTransform(topStretcherBack, -(interiorWidth / 2), -topStretcherBackWidth, height - MaterialThickness34, 270, 0, 0);
             top.Children.Add(topStretcherFront);
@@ -514,6 +545,37 @@ internal static partial class BaseCabinetBuilder
             }
 
             stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+
+            if (baseCab.SinkCabinet)
+            {
+                double cutWidth = 0.5;
+                double cutLength = 4.5; // TODO: fill in cut length
+                double cutRimZ = MaterialThickness34;
+                double cutBottomZ = 0;
+
+                // TODO: fill in centerX / centerY for each cut
+                double cut1CenterX = 2;
+                double cut1CenterY = StretcherWidth - (cutLength / 2);
+
+                stretcher.Children.Add(CabinetPartFactory.CreateRectangularCut(
+                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+
+
+                cut1CenterX = width - MaterialThickness34 - 2.75;
+
+                stretcher.Children.Add(CabinetPartFactory.CreateRectangularCut(
+                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+
+                cut1CenterX = interiorWidth / 2;
+                cut1CenterY = 1.75;
+
+                cutLength = .5;
+                cutWidth = width - (2.75 * 2);
+
+                stretcher.Children.Add(CabinetPartFactory.CreateRectangularCut(
+                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+            }
+
             ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
             cabinet.Children.Add(stretcher);
 
