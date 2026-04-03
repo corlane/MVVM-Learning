@@ -286,3 +286,4 @@
 
 3.0.1.46
 	Moved viewmodels into subfolders in ViewModels folder. commit
+	Renamed ProcessOrderViewModel to MaterialPricesViewModel. commit

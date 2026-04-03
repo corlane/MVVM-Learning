@@ -10,7 +10,7 @@
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
     <d:UserControl.DataContext>
-        <viewmodels:ProcessOrderViewModel/>
+        <viewmodels:MaterialPricesViewModel/>
     </d:UserControl.DataContext>
 
     <Grid Margin="12">

@@ -91,8 +91,8 @@ public partial class MainWindowViewModel : ObservableValidator
     private DefaultSettingsViewModel? _defaultsVm;
     public DefaultSettingsViewModel DefaultsVm => _defaultsVm ??= App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
 
-    private ProcessOrderViewModel? _processOrderVm;
-    public ProcessOrderViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<ProcessOrderViewModel>();
+    private MaterialPricesViewModel? _processOrderVm;
+    public MaterialPricesViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<MaterialPricesViewModel>();
 
     private REALLYProcessOrderViewModel? _reallyProcessOrderVm;
     public REALLYProcessOrderViewModel REALLYProcessOrderVm => _reallyProcessOrderVm ??= App.ServiceProvider.GetRequiredService<REALLYProcessOrderViewModel>();

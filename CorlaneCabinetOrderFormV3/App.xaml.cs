@@ -42,7 +42,7 @@ public partial class App : Application
                 services.AddSingleton<Cabinet3DViewModel>();
 
                 services.AddTransient<PlaceOrderViewModel>();
-                services.AddTransient<ProcessOrderViewModel>();
+                services.AddTransient<MaterialPricesViewModel>();
                 services.AddTransient<REALLYProcessOrderViewModel>();
                 services.AddTransient<DoorSizesListViewModel>();
                 services.AddTransient<DrawerBoxSizesListViewModel>();
