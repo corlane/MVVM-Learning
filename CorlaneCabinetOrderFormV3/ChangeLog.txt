@@ -283,3 +283,6 @@
 3.0.1.45
 	Somehow the Special Instructions/add cabinet group had gotten moved up and was once again hiding the rollout groupbox. Fixed. commit
 	Uploading 3.0.1.45
+
+3.0.1.46
+	Moved viewmodels into subfolders in ViewModels folder. commit
