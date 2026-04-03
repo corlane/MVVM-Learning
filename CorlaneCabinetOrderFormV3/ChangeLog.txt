@@ -288,3 +288,4 @@
 	Moved viewmodels into subfolders in ViewModels folder. commit
 	Renamed ProcessOrderViewModel to MaterialPricesViewModel. commit
 	Renamed REALLYProcessOrderViewModel to ProcessOrderViewModel. commit
+	Breaking BaseCabinetViewModel into subfiles. commit
