@@ -11,7 +11,7 @@
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
     <d:UserControl.DataContext>
-        <viewmodels:REALLYProcessOrderViewModel/>
+        <viewmodels:ProcessOrderViewModel/>
     </d:UserControl.DataContext>
     
     <Grid>

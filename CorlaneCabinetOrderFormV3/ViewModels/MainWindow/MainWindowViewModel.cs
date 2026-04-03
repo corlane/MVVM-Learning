@@ -94,8 +94,8 @@ public partial class MainWindowViewModel : ObservableValidator
     private MaterialPricesViewModel? _processOrderVm;
     public MaterialPricesViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<MaterialPricesViewModel>();
 
-    private REALLYProcessOrderViewModel? _reallyProcessOrderVm;
-    public REALLYProcessOrderViewModel REALLYProcessOrderVm => _reallyProcessOrderVm ??= App.ServiceProvider.GetRequiredService<REALLYProcessOrderViewModel>();
+    private ProcessOrderViewModel? _reallyProcessOrderVm;
+    public ProcessOrderViewModel REALLYProcessOrderVm => _reallyProcessOrderVm ??= App.ServiceProvider.GetRequiredService<ProcessOrderViewModel>();
 
     private POCustomerInfoViewModel? _poCustomerInfoVm;
     public POCustomerInfoViewModel POCustomerInfoVm => _poCustomerInfoVm ??= App.ServiceProvider.GetRequiredService<POCustomerInfoViewModel>();

@@ -43,7 +43,7 @@ public partial class App : Application
 
                 services.AddTransient<PlaceOrderViewModel>();
                 services.AddTransient<MaterialPricesViewModel>();
-                services.AddTransient<REALLYProcessOrderViewModel>();
+                services.AddTransient<ProcessOrderViewModel>();
                 services.AddTransient<DoorSizesListViewModel>();
                 services.AddTransient<DrawerBoxSizesListViewModel>();
                 services.AddTransient<POToekickViewModel>();

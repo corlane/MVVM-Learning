@@ -2,14 +2,14 @@
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
-public partial class REALLYProcessOrderViewModel : ObservableValidator
+public partial class ProcessOrderViewModel : ObservableValidator
 {
-    public REALLYProcessOrderViewModel()
+    public ProcessOrderViewModel()
     {
         // design-time
     }
 
-    public REALLYProcessOrderViewModel(
+    public ProcessOrderViewModel(
         POCustomerInfoViewModel poCustomerInfoVm,
         POBatchListViewModel poBatchListVm,
         POJobMaterialListViewModel poJobMaterialListVm,
