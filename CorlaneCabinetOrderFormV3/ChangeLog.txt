@@ -291,3 +291,4 @@
 	Breaking BaseCabinetViewModel into subfiles. commit
 	Fixed trash rollout appearing when RolloutCount > 0 and IncTrashDrwBox = true. commit
 	Broke UpperCabinetViewModel into subfiles. commit
+	Changed Upper Cabinet visibility properties to all point to a single source of truth: UpperCabinetViewModel.Visibility. Had also previously done the same with Base Cabinets (as part of the "Fixed trash rollout appearing" commit). commit

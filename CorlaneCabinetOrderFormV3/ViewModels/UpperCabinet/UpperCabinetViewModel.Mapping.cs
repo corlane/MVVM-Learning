@@ -62,7 +62,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         {
             _isMapping = false;
 
-            OnStyleChanged(model.Style);
+            //OnStyleChanged(model.Style);
             ApplyStyleVisibility(Style);
         }
     }
