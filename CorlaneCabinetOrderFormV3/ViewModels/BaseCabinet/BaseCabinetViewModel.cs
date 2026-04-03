@@ -204,10 +204,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         IncDrwBoxInListOpening1 = (!newValue);
         IncDrwBoxOpening1 = (!newValue);
         DrillSlideHolesOpening1 = (!newValue);
-        //IncDrwBoxesVisible = !newValue;
-        //IncDrwBoxesInListVisible = !newValue;
-        //DrillSlideHolesVisible = !newValue;
-        //ListDrawerStyleVisible = !newValue;
+
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
@@ -741,11 +738,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (newValue)
         {
             TrashDrawer = false;
-            //TrashDrawerEnabled = false;
-        }
-        else
-        {
-            //TrashDrawerEnabled = true;
         }
         ApplyStyleVisibility(Style);
     }
@@ -782,17 +774,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RolloutCount = 0;
             IncRollouts = false;
             IncRolloutsInList = false;
-            //IncRolloutsEnabled = false;
-            //IncRolloutsInListEnabled = false;
-            //GroupRolloutsVisible = false;
         }
 
-        if (!newValue)
-        {
-            //IncRolloutsEnabled = true;
-            //IncRolloutsInListEnabled = true;
-            //GroupRolloutsVisible = true;
-        }
+
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial bool IncTrashDrwBox { get; set; } = true;
@@ -806,26 +790,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
-
-            //DrwFront1Disabled = false;
-            //DrwFront2Disabled = true;
-            //DrwFront3Disabled = true;
-
-            //Opening1Disabled = false;
-            //Opening2Disabled = true;
-            //Opening3Disabled = true;
         }
-        else
-        {
-            //DrwFront1Disabled = false;
-            //DrwFront2Disabled = false;
-            //DrwFront3Disabled = false;
 
-            //Opening1Disabled = false;
-            //Opening2Disabled = false;
-            //Opening3Disabled = false;
-            ApplyStyleVisibility(Style);
-        }
+        ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; } = false; partial void OnEqualizeAllDrwFrontsChanged(bool oldValue, bool newValue)
     {
@@ -837,26 +804,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
-
-            //DrwFront1Disabled = true;
-            //DrwFront2Disabled = true;
-            //DrwFront3Disabled = true;
-
-            //Opening1Disabled = true;
-            //Opening2Disabled = true;
-            //Opening3Disabled = true;
         }
-        else
-        {
-            //DrwFront1Disabled = false;
-            //DrwFront2Disabled = false;
-            //DrwFront3Disabled = false;
 
-            //Opening1Disabled = false;
-            //Opening2Disabled = false;
-            //Opening3Disabled = false;
-            ApplyStyleVisibility(Style);
-        }
+        ApplyStyleVisibility(Style);
     }
 
     // Reveal and gap properties
@@ -1011,12 +961,3 @@ public partial class BaseCabinetViewModel : ObservableValidator
         return false;
     }
 }
-
-
-
-
-
-
-
-
-

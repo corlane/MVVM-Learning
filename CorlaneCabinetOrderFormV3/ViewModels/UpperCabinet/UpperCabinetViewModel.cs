@@ -75,6 +75,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
                 nameof(DefaultSettingsService.DefaultDimensionFormat));
         }
     }
+
     private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(MainWindowViewModel.SelectedCabinet))
@@ -101,11 +102,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string value)
     {
         if (_isMapping) return;
-        //StandardDimsVisibility = value == Style1;
-        //Corner90DimsVisibility = value == Style2;
-        //Corner45DimsVisibility = value == Style3;
-        //BackThicknessVisible = value == Style1;
-
         ApplyStyleVisibility(value);
         RunValidationVisible();
     }
@@ -116,27 +112,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string Depth { get; set; } = "";
     [ObservableProperty] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
     {
-        //if (newValue == "Custom")
-        //{
-        //    CustomCabSpeciesEnabled = true;
-        //}
-        //else
-        //{
-        //    CustomCabSpeciesEnabled = false;
-        //}
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial string CustomSpecies { get; set; } = "";
     [ObservableProperty] public partial string EBSpecies { get; set; } = ""; partial void OnEBSpeciesChanged(string oldValue, string newValue)
     {
-        //if (newValue == "Custom")
-        //{
-        //    CustomEBSpeciesEnabled = true;
-        //}
-        //else
-        //{
-        //    CustomEBSpeciesEnabled = false;
-        //}
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
@@ -217,14 +197,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     [ObservableProperty] public partial string DoorSpecies { get; set; } = ""; partial void OnDoorSpeciesChanged(string oldValue, string newValue)
     {
-        //if (newValue == "Custom")
-        //{
-        //    CustomDoorSpeciesEnabled = true;
-        //}
-        //else
-        //{
-        //    CustomDoorSpeciesEnabled = false;
-        //}
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial string CustomDoorSpecies { get; set; } = "";
@@ -267,11 +239,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
             DrillHingeHoles = false;
         }
 
-        // DoorCount-dependent visibility
-        //DoorGrainDirVisible = DoorCount > 0;
-        //IncDoorsInListVisible = DoorCount > 0;
-        //DrillHingeHolesVisible = DoorCount > 0;
-        //SupplySlabDoorsVisible = DoorCount > 0;
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";

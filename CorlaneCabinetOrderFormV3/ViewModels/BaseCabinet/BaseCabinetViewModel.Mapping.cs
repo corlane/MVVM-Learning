@@ -136,10 +136,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
             UpdatePreview();
         }
-        else
-        {
-            //LoadDefaults();
-        }
     }
 
     // Helper: property name set that should be treated as a "dimension" (string -> numeric -> formatted string)

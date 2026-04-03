@@ -115,7 +115,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 DoorSpecies = _defaults.DefaultDoorDrwSpecies;
                 if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultBaseBackThickness; }
                 else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultBaseBackThickness)); }
-                //BackThickness = _defaults.DefaultBaseBackThickness;
                 TopType = _defaults.DefaultTopType;
                 ShelfCount = _defaults.DefaultShelfCount;
                 ShelfDepth = _defaults.DefaultShelfDepth;

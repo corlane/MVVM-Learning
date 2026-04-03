@@ -78,7 +78,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
         DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
         if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultUpperBackThickness; }
         else { BackThickness = ConvertDimension.DoubleToFraction(Convert.ToDouble(_defaults.DefaultUpperBackThickness)); }
-        //BackThickness = _defaults.DefaultUpperBackThickness;
         DoorCount = _defaults.DefaultDoorCount;
         IncDoors = _defaults.DefaultIncDoors;
         IncDoorsInList = _defaults.DefaultIncDoorsInList;
