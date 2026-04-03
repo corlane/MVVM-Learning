@@ -170,4 +170,50 @@ public partial class BaseCabinetViewModel : ObservableValidator
         ResizeDrwFrontHeights();
     }
 
+    private void RecalculateFrontWidth()
+    {
+        if (_isResizing || _isMapping)
+            return;
+
+        if (!string.Equals(Style, Style4, StringComparison.Ordinal))
+        {
+            FrontWidth = string.Empty;
+            return;
+        }
+
+        try
+        {
+            double frontWidth = CabinetLayoutCalculator.ComputeAngleFrontWidth(
+                ConvertDimension.FractionToDouble(LeftDepth),
+                ConvertDimension.FractionToDouble(RightDepth),
+                ConvertDimension.FractionToDouble(LeftBackWidth),
+                ConvertDimension.FractionToDouble(RightBackWidth));
+
+            string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
+            FrontWidth = string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase)
+                ? ConvertDimension.DoubleToFraction(frontWidth)
+                : frontWidth.ToString("0.####");
+        }
+        catch
+        {
+            FrontWidth = string.Empty;
+        }
+    }
+
+    private void RecalculateBackWidths90()
+    {
+        double leftBack = ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth);
+        double rightBack = ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth);
+
+        bool useFraction = string.Equals(_defaults?.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase);
+
+        LeftBackWidth90 = useFraction
+            ? ConvertDimension.DoubleToFraction(leftBack)
+            : leftBack.ToString();
+
+        RightBackWidth90 = useFraction
+            ? ConvertDimension.DoubleToFraction(rightBack)
+            : rightBack.ToString();
+    }
+
 }

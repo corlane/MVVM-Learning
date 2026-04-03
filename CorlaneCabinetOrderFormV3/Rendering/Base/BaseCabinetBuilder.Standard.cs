@@ -910,9 +910,9 @@ internal static partial class BaseCabinetBuilder
             double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
             double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
 
-            if (baseCab.RolloutCount >= 1 || baseCab.IncTrashDrwBox)
+            if (baseCab.RolloutCount >= 1 || (baseCab.IncTrashDrwBox && baseCab.TrashDrawer))
             {
-                if (baseCab.IncTrashDrwBox)
+                if (baseCab.IncTrashDrwBox && baseCab.TrashDrawer)
                 {
                     dbxHeight = 12;
                 }

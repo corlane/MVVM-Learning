@@ -289,3 +289,4 @@
 	Renamed ProcessOrderViewModel to MaterialPricesViewModel. commit
 	Renamed REALLYProcessOrderViewModel to ProcessOrderViewModel. commit
 	Breaking BaseCabinetViewModel into subfiles. commit
+	Fixed trash rollout appearing when RolloutCount > 0 and IncTrashDrwBox = true. commit

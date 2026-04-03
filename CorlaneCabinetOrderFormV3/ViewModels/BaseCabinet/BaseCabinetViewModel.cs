@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
@@ -9,7 +8,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Timers;
 using System.Windows;
-using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -31,6 +29,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
     private readonly IMaterialLookupService _lookups;
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
+
+    private readonly System.Timers.Timer _drwFrontHeight1DebounceTimer = new(90) { AutoReset = false };
+
+    private bool _suppressEditSync;
+
+    private bool _isEditingDrwFrontHeight1;
 
     public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups, IPreviewService previewService)
     {
@@ -200,10 +204,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
         IncDrwBoxInListOpening1 = (!newValue);
         IncDrwBoxOpening1 = (!newValue);
         DrillSlideHolesOpening1 = (!newValue);
-        IncDrwBoxesVisible = !newValue;
-        IncDrwBoxesInListVisible = !newValue;
-        DrillSlideHolesVisible = !newValue;
-        ListDrawerStyleVisible = !newValue;
+        //IncDrwBoxesVisible = !newValue;
+        //IncDrwBoxesInListVisible = !newValue;
+        //DrillSlideHolesVisible = !newValue;
+        //ListDrawerStyleVisible = !newValue;
+        ApplyStyleVisibility(Style);
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
     {
@@ -285,17 +290,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial string TopType { get; set; } = "";
 
 
-    private void EnforceTopTypeForShallowDepth()
-    {
-        // If the user chose "Stretcher" but the cabinet is very shallow, force "Full".
-
-        double depth = ConvertDimension.FractionToDouble(Depth);
-
-        if (depth > 0 && depth < 10)
-        { 
-            TopType = CabinetOptions.TopType.Full;
-        }
-    }
 
     // Toekick-specific properties
     [ObservableProperty] public partial bool HasTK { get; set; }
@@ -747,12 +741,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (newValue)
         {
             TrashDrawer = false;
-            TrashDrawerEnabled = false;
+            //TrashDrawerEnabled = false;
         }
         else
         {
-            TrashDrawerEnabled = true;
+            //TrashDrawerEnabled = true;
         }
+        ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial bool IncRolloutsInList { get; set; } = false;
     [ObservableProperty] public partial int RolloutCount { get; set; } = 0; partial void OnRolloutCountChanged(int oldValue, int newValue)
@@ -787,17 +782,18 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RolloutCount = 0;
             IncRollouts = false;
             IncRolloutsInList = false;
-            IncRolloutsEnabled = false;
-            IncRolloutsInListEnabled = false;
-            GroupRolloutsVisible = false;
+            //IncRolloutsEnabled = false;
+            //IncRolloutsInListEnabled = false;
+            //GroupRolloutsVisible = false;
         }
 
         if (!newValue)
         {
-            IncRolloutsEnabled = true;
-            IncRolloutsInListEnabled = true;
-            GroupRolloutsVisible = true;
+            //IncRolloutsEnabled = true;
+            //IncRolloutsInListEnabled = true;
+            //GroupRolloutsVisible = true;
         }
+        ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial bool IncTrashDrwBox { get; set; } = true;
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; } = false; partial void OnEqualizeBottomDrwFrontsChanged(bool oldValue, bool newValue)
@@ -811,23 +807,24 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
 
-            DrwFront1Disabled = false;
-            DrwFront2Disabled = true;
-            DrwFront3Disabled = true;
+            //DrwFront1Disabled = false;
+            //DrwFront2Disabled = true;
+            //DrwFront3Disabled = true;
 
-            Opening1Disabled = false;
-            Opening2Disabled = true;
-            Opening3Disabled = true;
+            //Opening1Disabled = false;
+            //Opening2Disabled = true;
+            //Opening3Disabled = true;
         }
         else
         {
-            DrwFront1Disabled = false;
-            DrwFront2Disabled = false;
-            DrwFront3Disabled = false;
+            //DrwFront1Disabled = false;
+            //DrwFront2Disabled = false;
+            //DrwFront3Disabled = false;
 
-            Opening1Disabled = false;
-            Opening2Disabled = false;
-            Opening3Disabled = false;
+            //Opening1Disabled = false;
+            //Opening2Disabled = false;
+            //Opening3Disabled = false;
+            ApplyStyleVisibility(Style);
         }
     }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; } = false; partial void OnEqualizeAllDrwFrontsChanged(bool oldValue, bool newValue)
@@ -841,23 +838,24 @@ public partial class BaseCabinetViewModel : ObservableValidator
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
 
-            DrwFront1Disabled = true;
-            DrwFront2Disabled = true;
-            DrwFront3Disabled = true;
+            //DrwFront1Disabled = true;
+            //DrwFront2Disabled = true;
+            //DrwFront3Disabled = true;
 
-            Opening1Disabled = true;
-            Opening2Disabled = true;
-            Opening3Disabled = true;
+            //Opening1Disabled = true;
+            //Opening2Disabled = true;
+            //Opening3Disabled = true;
         }
         else
         {
-            DrwFront1Disabled = false;
-            DrwFront2Disabled = false;
-            DrwFront3Disabled = false;
+            //DrwFront1Disabled = false;
+            //DrwFront2Disabled = false;
+            //DrwFront3Disabled = false;
 
-            Opening1Disabled = false;
-            Opening2Disabled = false;
-            Opening3Disabled = false;
+            //Opening1Disabled = false;
+            //Opening2Disabled = false;
+            //Opening3Disabled = false;
+            ApplyStyleVisibility(Style);
         }
     }
 
@@ -966,103 +964,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillSlideHolesVisible { get; set; } = true;
     [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
     [ObservableProperty] public partial bool ComboShelfDepthEnabled { get; set; } = true;
-
-    
-
-
-    private void RecalculateFrontWidth()
-    {
-        if (_isResizing || _isMapping)
-            return;
-
-        if (!string.Equals(Style, Style4, StringComparison.Ordinal))
-        {
-            FrontWidth = string.Empty;
-            return;
-        }
-
-        try
-        {
-            double frontWidth = CabinetLayoutCalculator.ComputeAngleFrontWidth(
-                ConvertDimension.FractionToDouble(LeftDepth),
-                ConvertDimension.FractionToDouble(RightDepth),
-                ConvertDimension.FractionToDouble(LeftBackWidth),
-                ConvertDimension.FractionToDouble(RightBackWidth));
-
-            string dimFormat = _defaults?.DefaultDimensionFormat ?? "Decimal";
-            FrontWidth = string.Equals(dimFormat, "Fraction", StringComparison.OrdinalIgnoreCase)
-                ? ConvertDimension.DoubleToFraction(frontWidth)
-                : frontWidth.ToString("0.####");
-        }
-        catch
-        {
-            FrontWidth = string.Empty;
-        }
-    }
-
-    private void RecalculateBackWidths90()
-    {
-        double leftBack = ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth);
-        double rightBack = ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth);
-
-        bool useFraction = string.Equals(_defaults?.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase);
-
-        LeftBackWidth90 = useFraction
-            ? ConvertDimension.DoubleToFraction(leftBack)
-            : leftBack.ToString();
-
-        RightBackWidth90 = useFraction
-            ? ConvertDimension.DoubleToFraction(rightBack)
-            : rightBack.ToString();
-    }
-
-
-    /// <summary>
-    /// Applies style-specific constraints before saving to a model
-    /// (e.g. drawer cabs have 0 doors, corner cabs force 3/4" back).
-    /// </summary>
-    private void EnforceStyleConstraints()
-    {
-        if (Style == Style2)
-        {
-            DoorCount = 0;
-            DrillHingeHoles = false;
-            DrillShelfHoles = false;
-            RolloutCount = 0;
-            ShelfCount = 0;
-        }
-
-        if (Style == Style3)
-        {
-            if (DoorCount == 1)
-            { DoorCount = 2; }
-            DrwCount = 0;
-            TopType = CabinetOptions.TopType.Full;
-            BackThickness = "0.75"; // Force 3/4" back
-        }
-
-        if (Style == Style4)
-        {
-            DrwCount = 0;
-            RolloutCount = 0;
-            TopType = CabinetOptions.TopType.Full;
-            BackThickness = "0.75"; // Force 3/4" back
-        }
-    }
-
-
-
-
-
-
-    private readonly System.Timers.Timer _drwFrontHeight1DebounceTimer = new(90) { AutoReset = false };
-    private bool _suppressEditSync;
-    private bool _isEditingDrwFrontHeight1;
-
-    [ObservableProperty]
-    public partial string DrwFrontHeight1Edit { get; set; } = "";
-
-    partial void OnDrwFrontHeight1EditChanged(string oldValue, string newValue)
+    [ObservableProperty] public partial string DrwFrontHeight1Edit { get; set; } = ""; partial void OnDrwFrontHeight1EditChanged(string oldValue, string newValue)
     {
         _isEditingDrwFrontHeight1 = true;
 
@@ -1108,7 +1010,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // if you actually want to allow 0, handle it here; for cabinet dimensions it’s typically invalid:
         return false;
     }
-
 }
 
 

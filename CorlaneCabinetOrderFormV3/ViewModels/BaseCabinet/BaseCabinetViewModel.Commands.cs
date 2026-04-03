@@ -184,6 +184,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
             DrwFrontHeight1Edit = DrwFrontHeight1;
+            ApplyStyleVisibility(Style);
         }
 
         [RelayCommand]
@@ -227,6 +228,51 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
+        }
+
+        private void EnforceTopTypeForShallowDepth()
+        {
+            // If the user chose "Stretcher" but the cabinet is very shallow, force "Full".
+
+            double depth = ConvertDimension.FractionToDouble(Depth);
+
+            if (depth > 0 && depth < 10)
+            {
+                TopType = CabinetOptions.TopType.Full;
+            }
+        }
+
+        /// <summary>
+        /// Applies style-specific constraints before saving to a model
+        /// (e.g. drawer cabs have 0 doors, corner cabs force 3/4" back).
+        /// </summary>
+        private void EnforceStyleConstraints()
+        {
+            if (Style == Style2)
+            {
+                DoorCount = 0;
+                DrillHingeHoles = false;
+                DrillShelfHoles = false;
+                RolloutCount = 0;
+                ShelfCount = 0;
+            }
+
+            if (Style == Style3)
+            {
+                if (DoorCount == 1)
+                { DoorCount = 2; }
+                DrwCount = 0;
+                TopType = CabinetOptions.TopType.Full;
+                BackThickness = "0.75"; // Force 3/4" back
+            }
+
+            if (Style == Style4)
+            {
+                DrwCount = 0;
+                RolloutCount = 0;
+                TopType = CabinetOptions.TopType.Full;
+                BackThickness = "0.75"; // Force 3/4" back
+            }
         }
     }
 }
