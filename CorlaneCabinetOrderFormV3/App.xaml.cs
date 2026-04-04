@@ -3,6 +3,7 @@ using CorlaneCabinetOrderFormV3.Themes;
 using CorlaneCabinetOrderFormV3.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics;
 using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3;
@@ -11,10 +12,50 @@ public partial class App : Application
 {
     public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
+    /// <summary>
+    /// Builds a user-facing message for an unhandled UI-thread exception.
+    /// Returns (message, title, shouldHandle).
+    /// </summary>
+    internal static (string Message, string Title, bool Handled) BuildDispatcherExceptionResponse(Exception ex)
+    {
+        var msg = $"An unexpected error occurred:\n\n{ex.Message}\n\nThe application will attempt to continue.";
+        return (msg, "Unexpected Error", true);
+    }
+
+    /// <summary>
+    /// Builds a user-facing message for a fatal (non-UI-thread) exception.
+    /// Returns null if the exception object is not an Exception.
+    /// </summary>
+    internal static (string Message, string Title)? BuildFatalExceptionResponse(object exceptionObject)
+    {
+        if (exceptionObject is not Exception ex)
+            return null;
+
+        var msg = $"A fatal error occurred:\n\n{ex.Message}";
+        return (msg, "Fatal Error");
+    }
+
     protected override async void OnStartup(StartupEventArgs e)
     {
 
         base.OnStartup(e);
+
+        // ── Global exception safety net ──────────────────────────────
+        DispatcherUnhandledException += (_, args) =>
+        {
+            Debug.WriteLine($"[UnhandledException] {args.Exception}");
+            var (msg, title, handled) = BuildDispatcherExceptionResponse(args.Exception);
+            MessageBox.Show(msg, title, MessageBoxButton.OK, MessageBoxImage.Error);
+            args.Handled = handled;
+        };
+
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+        {
+            Debug.WriteLine($"[FatalException] {args.ExceptionObject}");
+            var response = BuildFatalExceptionResponse(args.ExceptionObject);
+            if (response is var (msg, title))
+                MessageBox.Show(msg, title, MessageBoxButton.OK, MessageBoxImage.Error);
+        };
 
         var host = Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
