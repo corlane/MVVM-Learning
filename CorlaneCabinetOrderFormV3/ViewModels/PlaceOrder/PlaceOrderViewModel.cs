@@ -42,7 +42,10 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private const string CustomPricingMessage = "CUSTOM MATERIAL - AUTOMATIC PRICING NOT AVAILABLE";
         private const string NotConnectedPricingMessage = "NOT CONNECTED - PRICING UNAVAILABLE";
 
-        private bool CanPlaceOrder() => IsInternetConnected && _cabinetService?.Cabinets?.Count > 0;
+        private bool CanPlaceOrder() =>
+            IsInternetConnected
+            && _cabinetService?.Cabinets?.Count > 0
+            && !string.IsNullOrEmpty(_mainVm?.CurrentJobPath);
 
         private CancellationTokenSource? _networkCts;
 
@@ -428,6 +431,12 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                     CalculatePrices();
                     OnPropertyChanged(nameof(QuotedPriceText));
                 }
+            }
+
+            // Re-evaluate Place Order button when job save state changes
+            if (e.PropertyName == nameof(MainWindowViewModel.CurrentJobPath))
+            {
+                PlaceOrderCommand.NotifyCanExecuteChanged();
             }
         }
 

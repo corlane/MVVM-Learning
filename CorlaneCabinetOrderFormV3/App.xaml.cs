@@ -104,6 +104,7 @@ public partial class App : Application
             .Build();
 
         ServiceProvider = host.Services;
+        var cabinetService = ServiceProvider.GetRequiredService<ICabinetService>();
         var defaults = ServiceProvider.GetRequiredService<DefaultSettingsService>();
         await defaults.LoadAsync();
 
@@ -208,7 +209,52 @@ public partial class App : Application
         mainWindow.Show();
 
 
+        mainWindow.Show();
 
+        // ── Crash recovery check ─────────────────────────────────────
+        if (AutoSaveService.HasRecoveryFile())
+        {
+            var result = MessageBox.Show(
+                "A recovery file was found from a previous session.\n\n" +
+                "Would you like to restore it?",
+                "Recover Unsaved Work",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    var job = await cabinetService.LoadAsync(AutoSaveService.RecoveryFilePath);
+                    if (job != null)
+                    {
+                        mainVm.CurrentJobName = "Recovered Job";
+                        mainVm.CurrentJobPath = null;
+                        mainVm.IsModified = true;
+
+                        mainVm.POCustomerInfoVm.CompanyName = job.CustomerInfo.CompanyName;
+                        mainVm.POCustomerInfoVm.ContactName = job.CustomerInfo.ContactName;
+                        mainVm.POCustomerInfoVm.PhoneNumber = job.CustomerInfo.PhoneNumber;
+                        mainVm.POCustomerInfoVm.EMail = job.CustomerInfo.EMail;
+                        mainVm.POCustomerInfoVm.Street = job.CustomerInfo.Street;
+                        mainVm.POCustomerInfoVm.City = job.CustomerInfo.City;
+                        mainVm.POCustomerInfoVm.ZipCode = job.CustomerInfo.ZipCode;
+                        mainVm.POCustomerInfoVm.QuotedTotalPrice = job.QuotedTotalPrice;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Could not restore recovery file:\n\n{ex.Message}",
+                        "Recovery Failed",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                }
+            }
+
+            // Either way, clean up the recovery file
+            AutoSaveService.DeleteRecoveryFile();
+        }
 
         // One-time popup — bump this version string whenever you have a new notice
         const string currentPopupVersion = "3.0.1.35";
