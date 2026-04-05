@@ -297,3 +297,4 @@
 	Added Auto-Save & Recovery feature: The app now automatically saves the current job every 5 minutes, and creates a backup file. If the app crashes or is closed unexpectedly, it will offer to recover the last auto-saved job on the next launch. commit
 	Fixed a bunch (probably not all) blank Catch blocks that were swallowing exceptions. They now write to the Debug console. commit
 	Reduced App.ServiceProvider usage: cached DefaultSettingsService, IPrintService, and IPreviewService as fields in MainWindowViewModel. These were being called multiple times in various places, and it's more efficient to cache them. commit
+	Added InitialDirectory to Open and Save File Dialogs, hopefully this will fix the bug Corey reported. commit
