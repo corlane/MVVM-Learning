@@ -163,24 +163,28 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
+  
+        private CancellationTokenSource? _saveDebounceCts;
+
         private void TrySaveDefaults()
         {
-            if (_defaults == null)
-            {
-                return;
-            }
+            _saveDebounceCts?.Cancel();
+            _saveDebounceCts = new CancellationTokenSource();
+            var token = _saveDebounceCts.Token;
 
             _ = Task.Run(async () =>
             {
                 try
                 {
-                    await _defaults.SaveAsync().ConfigureAwait(false);
+                    await Task.Delay(300, token);
+                    await _defaults!.SaveAsync();
                 }
-                catch (Exception ex) 
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
                 {
                     Debug.WriteLine($"Error saving defaults: {ex}");
                 }
-            });
+            }, token);
         }
 
         public ObservableCollection<MaterialTotal> MaterialTotals { get; } = new ObservableCollection<MaterialTotal>();

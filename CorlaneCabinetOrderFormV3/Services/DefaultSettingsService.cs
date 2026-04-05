@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
+using System.Runtime;
 using System.Text.Json;
 
 namespace CorlaneCabinetOrderFormV3.Services;
@@ -136,12 +137,24 @@ public partial class DefaultSettingsService : ObservableObject
         }
     }
 
+
+    private static readonly SemaphoreSlim _fileLock = new(1, 1);
+
     public async Task SaveAsync()
     {
-        Directory.CreateDirectory(SettingsDirectory);
-
-        var json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
-        await File.WriteAllTextAsync(SettingsFilePath, json).ConfigureAwait(false);
+        await _fileLock.WaitAsync();
+        try
+        {
+            Directory.CreateDirectory(SettingsDirectory);
+            var json = JsonSerializer.Serialize(this);
+            var tempPath = SettingsFilePath + ".tmp";
+            await File.WriteAllTextAsync(tempPath, json);
+            File.Move(tempPath, SettingsFilePath, overwrite: true);
+        }
+        finally
+        {
+            _fileLock.Release();
+        }
     }
 }
 

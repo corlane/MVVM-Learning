@@ -298,3 +298,4 @@
 	Fixed a bunch (probably not all) blank Catch blocks that were swallowing exceptions. They now write to the Debug console. commit
 	Reduced App.ServiceProvider usage: cached DefaultSettingsService, IPrintService, and IPreviewService as fields in MainWindowViewModel. These were being called multiple times in various places, and it's more efficient to cache them. commit
 	Added InitialDirectory to Open and Save File Dialogs, hopefully this will fix the bug Corey reported. commit
+	Fixed IOErrors from multiple defaults writes happening on app startup. commit
