@@ -296,3 +296,4 @@
 	Added global exception handler to catch any unhandled exceptions and display a user-friendly message instead of crashing. Also added unit tests for the exception handler. commit
 	Added Auto-Save & Recovery feature: The app now automatically saves the current job every 5 minutes, and creates a backup file. If the app crashes or is closed unexpectedly, it will offer to recover the last auto-saved job on the next launch. commit
 	Fixed a bunch (probably not all) blank Catch blocks that were swallowing exceptions. They now write to the Debug console. commit
+	Reduced App.ServiceProvider usage: cached DefaultSettingsService, IPrintService, and IPreviewService as fields in MainWindowViewModel. These were being called multiple times in various places, and it's more efficient to cache them. commit

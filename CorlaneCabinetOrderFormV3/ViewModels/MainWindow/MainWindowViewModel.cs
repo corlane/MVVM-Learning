@@ -18,12 +18,20 @@ public partial class MainWindowViewModel : ObservableValidator
 
     private readonly ICabinetService _cabinet_service;
     private readonly AutoSaveService _autoSave;
+    private readonly DefaultSettingsService _defaults;
+    private readonly IPrintService _printer;
+    private readonly IPreviewService _previewSvc;
 
     // DI constructor used at runtime
     public MainWindowViewModel(ICabinetService cabinetService)
     {
         _cabinet_service = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
         InitializeModificationTracking();
+
+        // ── Resolve shared services once ─────────────────────────────
+        _defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
+        _printer = App.ServiceProvider.GetRequiredService<IPrintService>();
+        _previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
 
         // ── Auto-save setup ──────────────────────────────────────────
         _autoSave = new AutoSaveService(cabinetService);
@@ -41,8 +49,7 @@ public partial class MainWindowViewModel : ObservableValidator
             quotedPriceProvider: () => POCustomerInfoVm.QuotedTotalPrice);
 
         // Load persisted UI scale
-        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
-        UIScale = defaults.UIScale is > 0 ? defaults.UIScale : 1.0;
+        UIScale = _defaults.UIScale is > 0 ? _defaults.UIScale : 1.0;
 
         _cabinet_service.ExceptionDoneStateChanged += () =>
         {

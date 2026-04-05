@@ -14,27 +14,21 @@ public partial class MainWindowViewModel
     [RelayCommand]
     private void PrintCabinetList()
     {
-        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
-        var printer = App.ServiceProvider.GetRequiredService<IPrintService>();
-
-        printer.PrintCabinetList(
-            companyName: defaults.CompanyName ?? "",
+        _printer.PrintCabinetList(
+            companyName: _defaults.CompanyName ?? "",
             jobName: CurrentJobName,
-            dimensionFormat: defaults.DefaultDimensionFormat ?? "Fraction",
+            dimensionFormat: _defaults.DefaultDimensionFormat ?? "Fraction",
             cabinets: _cabinet_service.Cabinets.ToList());
     }
 
     [RelayCommand]
     private void PrintDoorList()
     {
-        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
-        var printer = App.ServiceProvider.GetRequiredService<IPrintService>();
-
         var doorVm = App.ServiceProvider.GetRequiredService<DoorSizesListViewModel>();
         doorVm.Rebuild();
 
-        printer.PrintDoorList(
-            companyName: defaults.CompanyName ?? "",
+        _printer.PrintDoorList(
+            companyName: _defaults.CompanyName ?? "",
             jobName: CurrentJobName,
             doors: doorVm.DoorSizes.ToList());
     }
@@ -42,14 +36,11 @@ public partial class MainWindowViewModel
     [RelayCommand]
     private void PrintDrawerBoxList()
     {
-        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
-        var printer = App.ServiceProvider.GetRequiredService<IPrintService>();
-
         var drawerVm = App.ServiceProvider.GetRequiredService<DrawerBoxSizesListViewModel>();
         drawerVm.Rebuild();
 
-        printer.PrintDrawerBoxList(
-            companyName: defaults.CompanyName ?? "",
+        _printer.PrintDrawerBoxList(
+            companyName: _defaults.CompanyName ?? "",
             jobName: CurrentJobName,
             drawerBoxes: drawerVm.DrawerBoxSizes.ToList());
     }
@@ -59,7 +50,6 @@ public partial class MainWindowViewModel
     [RelayCommand]
     private void ExportCabinetList()
     {
-        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
         var dialog = new SaveFileDialog
         {
             Filter = "CSV files (*.csv)|*.csv",
@@ -71,7 +61,7 @@ public partial class MainWindowViewModel
 
         try
         {
-            string dimensionFormat = defaults.DefaultDimensionFormat ?? "Fraction";
+            string dimensionFormat = _defaults.DefaultDimensionFormat ?? "Fraction";
 
             static string FormatDimensionString(string? raw, string dimensionFormat)
             {
