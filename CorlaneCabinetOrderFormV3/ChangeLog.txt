@@ -299,3 +299,4 @@
 	Reduced App.ServiceProvider usage: cached DefaultSettingsService, IPrintService, and IPreviewService as fields in MainWindowViewModel. These were being called multiple times in various places, and it's more efficient to cache them. commit
 	Added InitialDirectory to Open and Save File Dialogs, hopefully this will fix the bug Corey reported. commit
 	Fixed IOErrors from multiple defaults writes happening on app startup. commit
+	Added a line in App.xaml.cs to silence the myriad WPF binding warnings that were flooding the output window due to the error message lists having 0 items when the viewmodels are initialized. commit

@@ -37,8 +37,11 @@ public partial class App : Application
 
     protected override async void OnStartup(StartupEventArgs e)
     {
-
         base.OnStartup(e);
+
+        // Suppress harmless WPF data-binding warnings (e.g., Validation.Errors[0] on empty collections)
+        System.Diagnostics.PresentationTraceSources.DataBindingSource.Switch.Level
+            = System.Diagnostics.SourceLevels.Error;
 
         // ── Global exception safety net ──────────────────────────────
         DispatcherUnhandledException += (_, args) =>
