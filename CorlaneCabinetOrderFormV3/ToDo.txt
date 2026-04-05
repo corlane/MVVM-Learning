@@ -9,6 +9,8 @@ Add rollouts option	-- DONE-ish. Need to adjust rollout count logic, and talk ab
 
 If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on whether cab has drws
 
+Add a Hide Doors/Drw Fronts button to the 3D view to make it easier to see inside the cabinet.
+
 
 
 
