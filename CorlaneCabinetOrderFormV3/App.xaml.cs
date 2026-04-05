@@ -114,9 +114,9 @@ public partial class App : Application
             var prices = ServiceProvider.GetRequiredService<IMaterialPricesService>();
             await prices.RefreshFromServerAsync();
         }
-        catch
+        catch (Exception ex)
         {
-            // ignore: app can run offline
+            Debug.WriteLine($"[Catch] Startup price refresh failed: {ex.Message}");
         }
 
         // Apply persisted theme (if any) before creating/showing MainWindow
@@ -201,13 +201,10 @@ public partial class App : Application
 
             ClampToVirtualScreen(mainWindow);
         }
-        catch
+        catch (Exception ex)
         {
-            // best-effort — ignore any issues applying persisted bounds
+            Debug.WriteLine($"[Catch] Startup Window Size/Position/State Failed: {ex.Message}");
         }
-
-        mainWindow.Show();
-
 
         mainWindow.Show();
 

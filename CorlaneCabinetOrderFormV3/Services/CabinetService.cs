@@ -1,6 +1,7 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Windows;
@@ -165,9 +166,9 @@ public class CabinetService : ICabinetService
                 cab.ResetAllMaterialAndEdgeTotals();
                 _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
             }
-            catch
+            catch (Exception ex)
             {
-                // best-effort
+                Debug.WriteLine($"[Catch] AccumulateTotals for '{cab.Name}': {ex.Message}");
             }
         }, DispatcherPriority.Background);
     }

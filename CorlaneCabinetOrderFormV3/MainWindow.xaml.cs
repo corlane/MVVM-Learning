@@ -1,6 +1,7 @@
 ﻿using CorlaneCabinetOrderFormV3.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -135,7 +136,7 @@ public partial class MainWindow : Window
         if (result == MessageBoxResult.No)
         {
             _allowClose = true;
-            e.Cancel = false; // allow THIS close to proceed (do not call Close())
+            Close();
             return;
         }
 
@@ -148,12 +149,12 @@ public partial class MainWindow : Window
             if (!vm.IsModified)
             {
                 _allowClose = true;
-                e.Cancel = false; // allow THIS close to proceed (do not call Close())
+                Close();
             }
         }
-        catch
+        catch (Exception ex)
         {
-            // Save failed: keep window open.
+            Debug.WriteLine($"[Catch] Save on close failed: {ex.Message}");
         }
     }
 
@@ -192,8 +193,7 @@ public partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            // Log the exception so we can see why save might have failed
-            System.Diagnostics.Debug.WriteLine("Failed saving window bounds: " + ex);
+            Debug.WriteLine($"[Catch] Save on close failed: {ex.Message}");
         }
     }
 }

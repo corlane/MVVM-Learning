@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -175,9 +176,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 {
                     await _defaults.SaveAsync().ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex) 
                 {
-                    // best-effort: defaults saving must never break the UI
+                    Debug.WriteLine($"Error saving defaults: {ex}");
                 }
             });
         }
@@ -302,9 +303,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                     {
                         await _defaults.SaveAsync();
                     }
-                    catch
+                    catch (Exception ex) 
                     {
-                        // ignore
+                        Debug.WriteLine("Error saving defaults while placing order: " + ex);
                     }
                 }
 
@@ -506,9 +507,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                         }
                     }
                 }
-                catch
+                catch (Exception ex) 
                 {
-                    // best-effort
+                    Debug.WriteLine("Error aggregating totals for a cabinet: " + ex);
                 }
             }
 
@@ -585,7 +586,10 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 }
             }
             catch (OperationCanceledException) { }
-            catch { }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Catch] ProbeLoop: {ex.Message}");
+            }
         }
 
         private void PostToUi(Action action)
@@ -610,7 +614,11 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
                 connected = response.IsSuccessStatusCode;
             }
-            catch { connected = false; }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Catch] ProbeInternet: {ex.Message}");
+                connected = false;
+            }
 
             PostToUi(() => IsInternetConnected = connected);
         }
