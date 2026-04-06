@@ -23,8 +23,6 @@ https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_
 
 Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
-On stupidly wide cabinets, an Exception tab to notify us to change grain direction on back
-
 Add "Select All" for all "Done" buttons on PO tabs.
 
 Add construction holes on exterior ends of corner cabinets (90 deg and angle).

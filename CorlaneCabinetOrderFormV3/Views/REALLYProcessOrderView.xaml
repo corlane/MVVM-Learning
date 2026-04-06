@@ -133,6 +133,15 @@
                 </TabItem.Header>
                 <views:PODrwStretcherWidthsView DataContext="{Binding PODrwStretcherWidthsVm}"/>
             </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Back Grain Dir."
+                               Foreground="{Binding POBackGrainDirVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:POBackGrainDirView DataContext="{Binding POBackGrainDirVm}"/>
+            </TabItem>
+            
         </TabControl>
     </Grid>
 </UserControl>
