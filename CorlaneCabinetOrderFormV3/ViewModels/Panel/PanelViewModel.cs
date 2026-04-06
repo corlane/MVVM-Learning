@@ -46,7 +46,7 @@ public partial class PanelViewModel : ObservableValidator
         this.PropertyChanged += (_, e) =>
         {
             // Only rebuild preview when geometry-affecting properties change
-            if (e.PropertyName is not null && s_previewProperties.Contains(e.PropertyName))
+            if (!_isMapping && e.PropertyName is not null && s_previewProperties.Contains(e.PropertyName))
                 UpdatePreview();
 
             // When material-thickness properties change, update the list so bound ComboBox refreshes

@@ -301,3 +301,4 @@
 	Fixed IOErrors from multiple defaults writes happening on app startup. commit
 	Added a line in App.xaml.cs to silence the myriad WPF binding warnings that were flooding the output window due to the error message lists having 0 items when the viewmodels are initialized. commit
 	Changed the WindowClosing method to _ = Dispatcher.BeginInvoke(Close);...ironically, it was crashing on close, unhandled...after having added a global exception handler. So what good is it? I don't know. But hopefully it works now. commit.
+	Reduced number of rebuilds to the minimum necessary when adding cabinets. It is still not optimized (that would require caching the list, and only adding the new items), but it is better than it was. commit

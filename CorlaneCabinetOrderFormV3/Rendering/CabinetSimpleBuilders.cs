@@ -45,7 +45,7 @@ internal static class CabinetSimpleBuilders
             new (width,height,0)
         ];
 
-        back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, filler.Species, getMatchingEdgebandingSpecies(filler.Species), "Vertical", filler, topDeck90, isPanel: true, panelEBEdges: "NNLR", isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+        back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, filler.Species, getMatchingEdgebandingSpecies(filler.Species), "Vertical", filler, topDeck90, isPanel: true, panelEBEdges: "NNLR", isFaceUp: false, partKind: CabinetPartKind.FillerFront);
         ModelTransforms.ApplyTransform(back, 0, 0, depth, 0, 0, 0);
 
         cabinet.Children.Add(leftEnd);

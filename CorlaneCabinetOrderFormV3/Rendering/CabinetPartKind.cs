@@ -31,6 +31,6 @@ internal enum CabinetPartKind
     DrawerBoxBack,
     DrawerBoxBottom,
     FillerEnd,
-    FillerBack,
+    FillerFront,
     Panel,
 }

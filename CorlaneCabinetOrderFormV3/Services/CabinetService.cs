@@ -1,6 +1,8 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
@@ -19,6 +21,50 @@ public class CabinetService : ICabinetService
 
     public event Action? ExceptionDoneStateChanged;
     public void RaiseExceptionDoneStateChanged() => ExceptionDoneStateChanged?.Invoke();
+
+    // ── Staleness tracking for AccumulateAll ──────────────────────────
+    private bool _totalsStale = true;
+    private bool _suppressStale;   // prevents re-staleness during accumulation
+    private bool _isAccumulating;  // reentrancy guard against Invoke message-pump
+
+    public CabinetService()
+    {
+        ((INotifyCollectionChanged)Cabinets).CollectionChanged += OnCabinetsCollectionChanged;
+    }
+
+    private void OnCabinetsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        // Unhook removed items
+        if (e.OldItems is not null)
+        {
+            foreach (CabinetModel cab in e.OldItems)
+                cab.PropertyChanged -= OnCabinetItemPropertyChanged;
+        }
+
+        // Hook new items
+        if (e.NewItems is not null)
+        {
+            foreach (CabinetModel cab in e.NewItems)
+                cab.PropertyChanged += OnCabinetItemPropertyChanged;
+        }
+
+        // Reset (bulk load): re-hook all current items
+        if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            foreach (var cab in Cabinets)
+                cab.PropertyChanged += OnCabinetItemPropertyChanged;
+        }
+
+        if (!_suppressStale)
+            _totalsStale = true;
+    }
+
+    private void OnCabinetItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (!_suppressStale)
+            _totalsStale = true;
+    }
+    // ──────────────────────────────────────────────────────────────────
 
     public void Add(CabinetModel cabinet)
     {
@@ -157,27 +203,54 @@ public class CabinetService : ICabinetService
         if (dispatcher == null)
             return;
 
-        // Must run synchronously (Invoke, not BeginInvoke) so totals are
-        // populated before the caller reads MaterialAreaBySpecies / EdgeBandingLengthBySpecies.
-        dispatcher.Invoke(() =>
+        // When already on the UI thread, run directly to avoid Dispatcher.Invoke
+        // message-pumping which can cause reentrant execution of other Background-
+        // priority work (e.g., debounced Rebuilds from size-list VMs).
+        if (dispatcher.CheckAccess())
         {
-            try
-            {
-                cab.ResetAllMaterialAndEdgeTotals();
-                _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Catch] AccumulateTotals for '{cab.Name}': {ex.Message}");
-            }
-        }, DispatcherPriority.Background);
+            DoAccumulate(cab);
+        }
+        else
+        {
+            // Off UI thread — marshal synchronously
+            dispatcher.Invoke(() => DoAccumulate(cab), DispatcherPriority.Background);
+        }
+    }
+
+    private static void DoAccumulate(CabinetModel cab)
+    {
+        try
+        {
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Catch] AccumulateTotals for '{cab.Name}': {ex.Message}");
+        }
     }
 
     public void AccumulateAllMaterialAndEdgeTotals()
     {
-        foreach (var cab in Cabinets)
+        // Skip if totals are already current, or if we're already mid-accumulation
+        // (reentrancy via Dispatcher message-pump processing debounced Rebuilds).
+        if (!_totalsStale || _isAccumulating) return;
+
+        // Mark not-stale BEFORE the loop so any reentrant caller sees fresh state
+        _totalsStale = false;
+        _isAccumulating = true;
+        _suppressStale = true;
+        try
         {
-            AccumulateMaterialAndEdgeTotals(cab);
+            foreach (var cab in Cabinets)
+            {
+                AccumulateMaterialAndEdgeTotals(cab);
+            }
+        }
+        finally
+        {
+            _isAccumulating = false;
+            _suppressStale = false;
         }
     }
 }
