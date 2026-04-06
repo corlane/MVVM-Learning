@@ -59,6 +59,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             _lookups = new MaterialLookupService();
         }
 
+        private bool _isInitializing;
+
         public PlaceOrderViewModel(
             ICabinetService cabinetService,
             MainWindowViewModel mainVm,
@@ -72,6 +74,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             _priceBreakdownService = priceBreakdownService ?? throw new ArgumentNullException(nameof(priceBreakdownService));
             _lookups = lookups;
 
+            _isInitializing = true;
+
             OrderedAtLocal = _cabinetService.OrderedAtLocal;
             CompanyName = _defaults.CompanyName;
             ContactName = _defaults.ContactName;
@@ -80,6 +84,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             Street = _defaults.Street;
             City = _defaults.City;
             ZipCode = _defaults.ZipCode;
+
+            _isInitializing = false;
 
             ValidateAllProperties();
 
@@ -168,6 +174,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         private void TrySaveDefaults()
         {
+            if (_isInitializing) return;
+
             _saveDebounceCts?.Cancel();
             _saveDebounceCts = new CancellationTokenSource();
             var token = _saveDebounceCts.Token;

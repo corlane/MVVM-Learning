@@ -303,3 +303,4 @@
 	Changed the WindowClosing method to _ = Dispatcher.BeginInvoke(Close);...ironically, it was crashing on close, unhandled...after having added a global exception handler. So what good is it? I don't know. But hopefully it works now. commit.
 	Reduced number of rebuilds to the minimum necessary when adding cabinets. It is still not optimized (that would require caching the list, and only adding the new items), but it is better than it was. commit
 	Eliminated redundant rebuilds entirely by caching the list as mentioned. All tests passed, but still recommend some heavy testing to make sure everything still works. commit
+	Fixed PlaceOrderViewModel to stop throwing errors when opening app or loading job. (It was related to customer info properties bouncing). commit
