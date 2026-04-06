@@ -170,16 +170,18 @@ public partial class Cabinet3DViewModel : ObservableObject
     {
         if (cab is null) return 1.0;
 
+        bool isBase = cab is BaseCabinetModel;
+
         if (string.Equals(cab.Style, CabinetStyles.Base.AngleFront, StringComparison.Ordinal)
             || string.Equals(cab.Style, CabinetStyles.Upper.AngleFront, StringComparison.Ordinal))
         {
-            return 2.2;
+            return isBase ? 2.2 : 1.6;
         }
 
         if (string.Equals(cab.Style, CabinetStyles.Base.Corner90, StringComparison.Ordinal)
             || string.Equals(cab.Style, CabinetStyles.Upper.Corner90, StringComparison.Ordinal))
         {
-            return 1.5; // adjust to taste
+            return isBase ? 1.5 : 1.2;
         }
 
         return 1.0;

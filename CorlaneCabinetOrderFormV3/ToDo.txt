@@ -53,7 +53,6 @@ When dragging the Grid Splitter, sometimes the cabinet list will not be anchored
 
 In some instances (Corey noticed) saving a job will go to the previously opened job's folder. I couldn't reproduce... keep an eye out
 
-Upper 90 deg and angle front are zoomed in too far...
 
 
 
