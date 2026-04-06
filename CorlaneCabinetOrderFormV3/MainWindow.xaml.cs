@@ -136,9 +136,10 @@ public partial class MainWindow : Window
         if (result == MessageBoxResult.No)
         {
             _allowClose = true;
-            Close();
+            _ = Dispatcher.BeginInvoke(Close);
             return;
         }
+
 
         // Yes => attempt save
         try
@@ -149,7 +150,7 @@ public partial class MainWindow : Window
             if (!vm.IsModified)
             {
                 _allowClose = true;
-                Close();
+                _ = Dispatcher.BeginInvoke(Close);
             }
         }
         catch (Exception ex)
