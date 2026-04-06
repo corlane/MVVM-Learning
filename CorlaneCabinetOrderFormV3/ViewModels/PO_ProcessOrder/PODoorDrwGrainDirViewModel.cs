@@ -106,7 +106,8 @@ public partial class PODoorDrwGrainDirViewModel : ObservableObject
             {
                 AddDoorExceptionIfNeeded(cab.Id, cabNumber, cabName, baseCab.IncDoors, baseCab.DoorCount, baseCab.DoorGrainDir, baseCab.Qty);
 
-                bool anyFrontIncluded = baseCab.IncDrwFront1 || baseCab.IncDrwFront2 || baseCab.IncDrwFront3 || baseCab.IncDrwFront4;
+                bool anyFrontIncluded = baseCab.DrwCount > 0
+                    && (baseCab.IncDrwFront1 || baseCab.IncDrwFront2 || baseCab.IncDrwFront3 || baseCab.IncDrwFront4);
                 if (anyFrontIncluded)
                 {
                     AddDrawerFrontExceptionIfNeeded(cab.Id, cabNumber, cabName, baseCab.DrwFrontGrainDir, baseCab.Qty);

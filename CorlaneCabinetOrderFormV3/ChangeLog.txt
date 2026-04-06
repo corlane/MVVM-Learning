@@ -308,3 +308,4 @@
 
 3.0.1.47
 	Fixed Filler not showing the proper Custom EB species in POEdgebanding tab. commit
+	Grain direction PO tab: if Drw Count == 0, do not flag even if grain direction is not default. Fixed. commit
