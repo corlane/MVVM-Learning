@@ -27,7 +27,8 @@ On stupidly wide cabinets, an Exception tab to notify us to change grain directi
 
 Add "Select All" for all "Done" buttons on PO tabs.
 
- 
+Add construction holes on exterior ends of corner cabinets (90 deg and angle).
+
 
 
 
@@ -51,6 +52,8 @@ Back thickness is not hiding when clicking corner cabinet in the list after clic
 When dragging the Grid Splitter, sometimes the cabinet list will not be anchored to the bottom of the window and will drag upwards.
 
 In some instances (Corey noticed) saving a job will go to the previously opened job's folder. I couldn't reproduce... keep an eye out
+
+Upper 90 deg and angle front are zoomed in too far...
 
 
 

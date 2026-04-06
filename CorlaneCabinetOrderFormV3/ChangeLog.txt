@@ -304,3 +304,4 @@
 	Reduced number of rebuilds to the minimum necessary when adding cabinets. It is still not optimized (that would require caching the list, and only adding the new items), but it is better than it was. commit
 	Eliminated redundant rebuilds entirely by caching the list as mentioned. All tests passed, but still recommend some heavy testing to make sure everything still works. commit
 	Fixed PlaceOrderViewModel to stop throwing errors when opening app or loading job. (It was related to customer info properties bouncing). commit
+	Uploading 3.0.1.46
