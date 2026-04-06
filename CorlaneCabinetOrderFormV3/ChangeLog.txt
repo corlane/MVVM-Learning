@@ -310,3 +310,4 @@
 	Fixed Filler not showing the proper Custom EB species in POEdgebanding tab. commit
 	Grain direction PO tab: if Drw Count == 0, do not flag even if grain direction is not default. Fixed. commit
 	Adjusted initial zoom levels for upper corner & angle cabinets. They are independently adjustable in Cabinet3DViewModel.cs. commit
+	Standard Base & Upper backs now change to horizontal grain when cabinet width exceeds a certain amount. commit

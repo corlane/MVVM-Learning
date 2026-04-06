@@ -327,7 +327,14 @@ internal static partial class UpperCabinetBuilder
                 new (interiorWidth,interiorHeight + (MaterialThickness34),0),
                 new (0,interiorHeight + (MaterialThickness34),0)
             ];
-            back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackUpper34);
+            if (width <= 47.75 + (2 * MaterialThickness34))
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
+            else
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
             ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34, 0, 0, 0, 0);
         }
         else
@@ -339,7 +346,14 @@ internal static partial class UpperCabinetBuilder
                 new (width,height,0),
                 new (0,height,0)
             ];
-            back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackUpper14);
+            if (width <= 47.75)
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
+            else
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "None", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
             ModelTransforms.ApplyTransform(back, -(width / 2), 0, -MaterialThickness14, 0, 0, 0);
 
             nailerPoints =
