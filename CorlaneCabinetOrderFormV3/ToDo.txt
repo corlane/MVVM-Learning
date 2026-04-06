@@ -55,6 +55,9 @@ In some instances (Corey noticed) saving a job will go to the previously opened 
 
 Upper 90 deg and angle front are zoomed in too far...
 
+Filler with Custom species not getting flagged properly in Edgebanding PO tab.
+
+Grain direction PO tab: if Drw Count == 0, do not flag even if grain direction is not default.
 
 
 

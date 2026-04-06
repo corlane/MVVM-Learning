@@ -125,6 +125,19 @@ public partial class FillerViewModel : ObservableValidator
     /// Copies all current ViewModel property values into the target model,
     /// converting dimension strings to numeric format.
     /// </summary>
+    //private void ApplyViewModelToModel(FillerModel target)
+    //{
+    //    target.Width = ConvertDimension.FractionToDouble(Width).ToString();
+    //    target.Height = ConvertDimension.FractionToDouble(Height).ToString();
+    //    target.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
+    //    target.Species = Species;
+    //    target.CustomSpecies = CustomSpecies;
+    //    target.EBSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(Species);
+    //    target.Name = Name;
+    //    target.Qty = Qty;
+    //    target.Notes = Notes;
+    //}
+
     private void ApplyViewModelToModel(FillerModel target)
     {
         target.Width = ConvertDimension.FractionToDouble(Width).ToString();
@@ -133,6 +146,7 @@ public partial class FillerViewModel : ObservableValidator
         target.Species = Species;
         target.CustomSpecies = CustomSpecies;
         target.EBSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(Species);
+        target.CustomEBSpecies = CustomSpecies;
         target.Name = Name;
         target.Qty = Qty;
         target.Notes = Notes;
