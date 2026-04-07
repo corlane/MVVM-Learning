@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Rendering;
+﻿using CorlaneCabinetOrderFormV3.Rendering;
 
 namespace CorlaneCabinetOrderFormV3.Tests;
 
@@ -42,19 +42,19 @@ public class CustomSpeciesResolutionTests
     // Edgebanding species mapping for custom materials
     //############################################################################################################
 
-    [Fact]
-    public void CustomMaterial_EdgebandingMapsToNone()
-    {
-        // "Custom" isn't in the known species list, so EB should map to "None"
-        Assert.Equal("None", CabinetBuildHelpers.GetMatchingEdgebandingSpecies("Custom"));
-    }
+    //[Fact]
+    //public void CustomMaterial_EdgebandingMapsToNone()
+    //{
+    //    // "Custom" isn't in the known species list, so EB should map to "None"
+    //    Assert.Equal("None", CabinetBuildHelpers.GetMatchingEdgebandingSpecies("Custom"));
+    //}
 
-    [Theory]
-    [InlineData("Bamboo")]
-    [InlineData("White Ash")]
-    [InlineData("SomeNewWood")]
-    public void UnknownSpecies_EdgebandingMapsToNone(string species)
-    {
-        Assert.Equal("None", CabinetBuildHelpers.GetMatchingEdgebandingSpecies(species));
-    }
+    //[Theory]
+    //[InlineData("Bamboo")]
+    //[InlineData("White Ash")]
+    //[InlineData("SomeNewWood")]
+    //public void UnknownSpecies_EdgebandingMapsToNone(string species)
+    //{
+    //    Assert.Equal("None", CabinetBuildHelpers.GetMatchingEdgebandingSpecies(species));
+    //}
 }

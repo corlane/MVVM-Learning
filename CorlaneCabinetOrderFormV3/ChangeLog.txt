@@ -312,3 +312,4 @@
 	Adjusted initial zoom levels for upper corner & angle cabinets. They are independently adjustable in Cabinet3DViewModel.cs. commit
 	Standard Base & Upper backs now change to horizontal grain when cabinet width exceeds a certain amount. commit
 	Added POBackGrainDir exception tab for wide cabinets that need horizontal grain on the back. commit
+	Upper cabinet edgebanding failed test. Back had gotten changed to Base34 with no edgebanding. Tsk tsk Claude... Fixed. commit
