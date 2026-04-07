@@ -166,6 +166,23 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
 
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), BaseCabinetDepthRange(48)] public partial string Depth { get; set; } = "";
+    partial void OnDepthChanged(string oldValue, string newValue)
+    {
+        if (ConvertDimension.FractionToDouble(Depth) < 10.625)
+        {
+            IncDrwBoxes = false;
+            IncDrwBoxesEnabled = false;
+            IncRollouts = false;
+            IncRolloutsEnabled = false;
+            ApplyStyleVisibility(Style);
+        }
+        else
+        {
+            IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
+            IncDrwBoxesEnabled = true;
+            ApplyStyleVisibility(Style);
+        }
+    }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
     {
         if (newValue == "Custom")
@@ -870,6 +887,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = true;
     [ObservableProperty] public partial bool BaseShowRevealSettings { get; set; }
+    [ObservableProperty] public partial bool IncDrwBoxesEnabled { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront1Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront2Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront3Visible { get; set; } = true;

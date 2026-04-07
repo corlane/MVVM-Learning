@@ -314,7 +314,7 @@
                     <CheckBox x:Name="checkIncludeDrwFrontsInSizesList" Content="Include Drawer Fronts In Sizes List" Margin="5" IsChecked="{Binding IncDrwFrontsInList}"/>
                         <Separator Margin="5,0,5,0"/>
 
-                    <CheckBox x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}" Visibility="{Binding IncDrwBoxesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <CheckBox x:Name="checkIncludeDrwBoxes" Content="Supply Drawer Boxes With Cabinet" Margin="5" IsChecked="{Binding IncDrwBoxes}" Visibility="{Binding IncDrwBoxesVisible, Converter={StaticResource BoolToVisibilityConverter}}" IsEnabled="{Binding IncDrwBoxesEnabled}"/>
                     <CheckBox x:Name="checkIncludeDrwBoxesInSizesList" Content="Include Drawer Boxes In Sizes List" Margin="5,5,5,5" IsChecked="{Binding IncDrwBoxesInList}" Visibility="{Binding IncDrwBoxesInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <CheckBox x:Name="checkDrillSlideHoles" Content="Drill Drawer Slide Mounting Holes" Margin="5,5,5,10" IsChecked="{Binding DrillSlideHoles}" Visibility="{Binding DrillSlideHolesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
 

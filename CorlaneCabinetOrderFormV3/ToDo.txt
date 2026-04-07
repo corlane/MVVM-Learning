@@ -17,8 +17,6 @@ Finish angle corner cabinet models -- DONE except angle front base toekick board
 
 
 
-If cabinet depth is too shallow for drw, display warning - remove drws and hide drw group box - or, adjust depth range validation based on whether cab has drws
-	9" deep drw box is the minimum.
 
 
 

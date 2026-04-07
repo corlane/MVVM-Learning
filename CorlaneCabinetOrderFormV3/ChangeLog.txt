@@ -319,3 +319,4 @@
 	Added construction holes to the ends of all corner and angle cabinets. commit
 	Adjusted position of vertical row of back construction holes on corner cabinets. commit
 	Rollouts now space properly. commit
+	Drawer boxes, rollouts, & trash drawer are now removed when cabinet depth is less than 10.625". commit

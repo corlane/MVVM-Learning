@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CorlaneCabinetOrderFormV3.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -58,10 +59,10 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             // ── TrashDrawer / Rollouts mutual-exclusion ──
             // Use RolloutCount > 0 (not IncRollouts) because IncRollouts can be
             // true from defaults even when no rollouts are structurally present.
-            GroupRolloutsVisible = (style == Style1) && !TrashDrawer;
+            GroupRolloutsVisible = (style == Style1) && !TrashDrawer && ConvertDimension.FractionToDouble(Depth) >= 10.625;
             TrashDrawerEnabled = (style == Style1) && RolloutCount == 0;
-            IncRolloutsEnabled = !TrashDrawer;
-            IncRolloutsInListEnabled = !TrashDrawer;
+            IncRolloutsEnabled = !TrashDrawer && ConvertDimension.FractionToDouble(Depth) >= 10.625;
+            IncRolloutsInListEnabled = !TrashDrawer && ConvertDimension.FractionToDouble(Depth) >= 10.625;
 
             // ── SinkCabinet-dependent ──
             IncDrwBoxesVisible = !SinkCabinet;
