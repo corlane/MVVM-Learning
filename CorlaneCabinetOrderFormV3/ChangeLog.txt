@@ -314,3 +314,4 @@
 	Added POBackGrainDir exception tab for wide cabinets that need horizontal grain on the back. commit
 	Upper cabinet edgebanding failed test. Back had gotten changed to Base34 with no edgebanding. My bad. A Classic Copy-Paste Error (tm). Fixed. commit
 	Added Hide Doors/Drw Fronts button in 3D view. commit
+	Accidentally left the CabinetPartFactory Debug.WriteLine uncommented. Commented out now. commit
