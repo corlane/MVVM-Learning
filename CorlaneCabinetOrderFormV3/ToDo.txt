@@ -25,9 +25,6 @@ Finish angle corner cabinet models -- DONE except angle front base toekick board
 
 Corlane side:
 
-
-Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
-
 Add "Select All" for all "Done" buttons on PO tabs.
 
 

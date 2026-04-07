@@ -320,3 +320,6 @@
 	Adjusted position of vertical row of back construction holes on corner cabinets. commit
 	Rollouts now space properly. commit
 	Drawer boxes, rollouts, & trash drawer are now removed when cabinet depth is less than 10.625". commit
+	Uploading 3.0.1.47
+
+3.0.1.48
