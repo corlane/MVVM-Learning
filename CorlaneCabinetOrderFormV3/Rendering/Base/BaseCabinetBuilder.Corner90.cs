@@ -15,6 +15,7 @@ internal static partial class BaseCabinetBuilder
         bool rightEndHidden,
         bool deckHidden,
         bool topHidden,
+        bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow)
@@ -492,8 +493,11 @@ internal static partial class BaseCabinetBuilder
                     ModelTransforms.ApplyTransform(door1, -MaterialThickness34 + doorLeftReveal, doorBottomReveal + tk_Height, leftDepth, 0, 0, 0);
                     ModelTransforms.ApplyTransform(door2, -leftDepth - door2Width - cornerCabDoorOpenSideReveal, doorBottomReveal + tk_Height, leftFrontWidth - (doubleMaterialThickness34), 0, 90, 0);
                 }
-                cabinet.Children.Add(door1);
-                cabinet.Children.Add(door2);
+                if (!doorsHidden)
+                {
+                    cabinet.Children.Add(door1);
+                    cabinet.Children.Add(door2);
+                }
             }
         }
 

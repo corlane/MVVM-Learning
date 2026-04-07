@@ -112,10 +112,18 @@ public partial class Cabinet3DViewModel : ObservableObject
         RequestRebuildPreview();
     }
 
+    [ObservableProperty] public partial bool DoorsHidden { get; set; } = false; partial void OnDoorsHiddenChanged(bool value)
+    {
+        HideDoorsText = value ? "Show Doors/Drw Fronts" : "Hide Doors/Drw Fronts";
+        RequestRebuildPreview();
+    }
+
     [ObservableProperty] public partial string HideTopText { get; set; } = "Hide Top";
     [ObservableProperty] public partial string HideDeckText { get; set; } = "Hide Deck";
     [ObservableProperty] public partial string HideLeftEndText { get; set; } = "Hide Left End";
     [ObservableProperty] public partial string HideRightEndText { get; set; } = "Hide Right End";
+    [ObservableProperty] public partial string HideDoorsText { get; set; } = "Hide Doors/Drw Fronts";
+
 
     [ObservableProperty]
     public partial string SelectedCabinetInfoText { get; set; } = "No cabinet selected";
@@ -163,7 +171,8 @@ public partial class Cabinet3DViewModel : ObservableObject
             LeftEndHidden,
             RightEndHidden,
             DeckHidden,
-            TopHidden);
+            TopHidden,
+            DoorsHidden);
     }
 
     private static double GetStyleZoomMultiplier(CabinetModel? cab)

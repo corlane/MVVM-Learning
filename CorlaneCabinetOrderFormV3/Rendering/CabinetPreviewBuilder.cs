@@ -1,9 +1,8 @@
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Rendering;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
-
-namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static class CabinetPreviewBuilder
 {
@@ -12,7 +11,8 @@ internal static class CabinetPreviewBuilder
     bool leftEndHidden,
     bool rightEndHidden,
     bool deckHidden,
-    bool topHidden)
+    bool topHidden,
+    bool doorsHidden)
     {
         var group = new Model3DGroup();
 
@@ -24,7 +24,7 @@ internal static class CabinetPreviewBuilder
             cab.ResetAllMaterialAndEdgeTotals();
 
             // Single build: accumulates totals for ALL parts; hides geometry per flags.
-            var built = BuildCabinetForPreview(cab, leftEndHidden, rightEndHidden, deckHidden, topHidden);
+            var built = BuildCabinetForPreview(cab, leftEndHidden, rightEndHidden, deckHidden, topHidden, doorsHidden);
             group.Children.Add(built);
         }
 
@@ -41,14 +41,16 @@ internal static class CabinetPreviewBuilder
             leftEndHidden: false,
             rightEndHidden: false,
             deckHidden: false,
-            topHidden: false);
+            topHidden: false,
+            doorsHidden: false);
 
     internal static Model3DGroup BuildCabinetForPreview(
         CabinetModel cab,
         bool leftEndHidden,
         bool rightEndHidden,
         bool deckHidden,
-        bool topHidden)
+        bool topHidden,
+        bool doorsHidden)
     {
         var cabinet = new Model3DGroup();
 
@@ -64,6 +66,7 @@ internal static class CabinetPreviewBuilder
                 rightEndHidden,
                 deckHidden,
                 topHidden,
+                doorsHidden,
                 getEb,
                 resolveDoorSpecies,
                 CabinetBuildHelpers.AddFrontPartRow,
@@ -78,6 +81,7 @@ internal static class CabinetPreviewBuilder
                 rightEndHidden,
                 deckHidden,
                 topHidden,
+                doorsHidden,
                 getEb,
                 resolveDoorSpecies,
                 CabinetBuildHelpers.AddFrontPartRow);
@@ -116,6 +120,7 @@ internal static class CabinetPreviewBuilder
                 rightEndHidden: false,
                 deckHidden: false,
                 topHidden: false,
+                doorsHidden: false,
                 getEb,
                 resolveDoorSpecies,
                 CabinetBuildHelpers.AddFrontPartRow,

@@ -15,6 +15,7 @@ internal static partial class BaseCabinetBuilder
         bool rightEndHidden,
         bool deckHidden,
         bool topHidden,
+        bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow)
@@ -417,7 +418,7 @@ internal static partial class BaseCabinetBuilder
                     var door1Rotated = new Model3DGroup();
                     door1Rotated.Children.Add(door1);
                     ModelTransforms.ApplyTransform(door1Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
-                    cabinet.Children.Add(door1Rotated);
+                    if (!doorsHidden) cabinet.Children.Add(door1Rotated);
                 }
             }
             if (baseCab.DoorCount == 2)
@@ -445,8 +446,10 @@ internal static partial class BaseCabinetBuilder
                     var door1Rotated = new Model3DGroup();
                     door1Rotated.Children.Add(door1);
                     ModelTransforms.ApplyTransform(door1Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
-                    cabinet.Children.Add(door1Rotated);
-
+                    if (!doorsHidden)
+                    {
+                        cabinet.Children.Add(door1Rotated);;
+                    }
                     doorPoints =
                     [
                         new (0,0,0),
@@ -459,7 +462,10 @@ internal static partial class BaseCabinetBuilder
                     var door2Rotated = new Model3DGroup();
                     door2Rotated.Children.Add(door2);
                     ModelTransforms.ApplyTransform(door2Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
-                    cabinet.Children.Add(door2Rotated);
+                    if (!doorsHidden)
+                    {;
+                        cabinet.Children.Add(door2Rotated);
+                    }
                 }
             }
         }

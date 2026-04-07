@@ -14,6 +14,7 @@ internal static partial class BaseCabinetBuilder
         bool rightEndHidden,
         bool deckHidden,
         bool topHidden,
+        bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow,
@@ -728,7 +729,7 @@ internal static partial class BaseCabinetBuilder
                     {
                         ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
                     }
-                    cabinet.Children.Add(door1);
+                    if (!doorsHidden) cabinet.Children.Add(door1);
                 }
             }
 
@@ -765,8 +766,11 @@ internal static partial class BaseCabinetBuilder
                         ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
                         ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
                     }
-                    cabinet.Children.Add(door1);
-                    cabinet.Children.Add(door2);
+                    if (!doorsHidden)
+                    {
+                        cabinet.Children.Add(door1);
+                        cabinet.Children.Add(door2);
+                    }
                 }
             }
 
@@ -818,7 +822,7 @@ internal static partial class BaseCabinetBuilder
 
             var front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.DrawerFront);
             ModelTransforms.ApplyTransform(front, -(width / 2) + doorLeftReveal, yPos, depth, 0, 0, 0);
-            cabinet.Children.Add(front);
+            if (!doorsHidden) cabinet.Children.Add(front);
         }
 
 

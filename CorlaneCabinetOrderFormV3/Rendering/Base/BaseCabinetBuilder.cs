@@ -12,13 +12,14 @@ internal static partial class BaseCabinetBuilder
         bool rightEndHidden,
         bool deckHidden,
         bool topHidden,
+        bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow,
         Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow)
     {
         // Normal path — no result capture
-        BuildBase(cabinet, baseCab, leftEndHidden, rightEndHidden, deckHidden, topHidden,
+        BuildBase(cabinet, baseCab, leftEndHidden, rightEndHidden, deckHidden, topHidden, doorsHidden,
             getMatchingEdgebandingSpecies, resolveDoorSpeciesForTotals,
             addFrontPartRow, addDrawerBoxRow, result: null);
     }
@@ -34,6 +35,7 @@ internal static partial class BaseCabinetBuilder
         bool rightEndHidden,
         bool deckHidden,
         bool topHidden,
+        bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow,
@@ -45,21 +47,21 @@ internal static partial class BaseCabinetBuilder
         if (baseCab.Style == CabinetStyles.Base.Standard || baseCab.Style == CabinetStyles.Base.Drawer)
         {
             BuildStandardOrDrawer(cabinet, baseCab, dim,
-                leftEndHidden, rightEndHidden, deckHidden, topHidden,
+                leftEndHidden, rightEndHidden, deckHidden, topHidden, doorsHidden,
                 getMatchingEdgebandingSpecies, resolveDoorSpeciesForTotals,
                 addFrontPartRow, addDrawerBoxRow, result);
         }
         else if (baseCab.Style == CabinetStyles.Base.Corner90)
         {
             BuildCorner90(cabinet, baseCab, dim,
-                leftEndHidden, rightEndHidden, deckHidden, topHidden,
+                leftEndHidden, rightEndHidden, deckHidden, topHidden, doorsHidden,
                 getMatchingEdgebandingSpecies, resolveDoorSpeciesForTotals,
                 addFrontPartRow);
         }
         else if (baseCab.Style == CabinetStyles.Base.AngleFront)
         {
             BuildAngleFront(cabinet, baseCab, dim,
-                leftEndHidden, rightEndHidden, deckHidden, topHidden,
+                leftEndHidden, rightEndHidden, deckHidden, topHidden, doorsHidden,
                 getMatchingEdgebandingSpecies, resolveDoorSpeciesForTotals,
                 addFrontPartRow);
         }

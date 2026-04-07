@@ -14,6 +14,7 @@ internal static partial class UpperCabinetBuilder
         bool rightEndHidden,
         bool deckHidden,
         bool topHidden,
+        bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow)
@@ -421,7 +422,7 @@ internal static partial class UpperCabinetBuilder
 
                     door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, topDeck90, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
                     ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
-                    cabinet.Children.Add(door1);
+                    if (!doorsHidden) cabinet.Children.Add(door1);
                 }
             }
 
@@ -451,8 +452,11 @@ internal static partial class UpperCabinetBuilder
                     ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
                     ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal, depth, 0, 0, 0);
 
-                    cabinet.Children.Add(door1);
-                    cabinet.Children.Add(door2);
+                    if (!doorsHidden)
+                    {
+                        cabinet.Children.Add(door1);
+                        cabinet.Children.Add(door2);
+                    }
                 }
             }
         }

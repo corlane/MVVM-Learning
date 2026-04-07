@@ -37,7 +37,7 @@ public class HiddenPartsMaterialTotalsTests
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
                 leftEndHidden: false, rightEndHidden: false,
-                deckHidden: false, topHidden: false);
+                deckHidden: false, topHidden: false, doorsHidden: false);
 
             double fullMat = cab.TotalMaterialAreaFt2;
             double fullEB = cab.TotalEdgeBandingFeet;
@@ -46,7 +46,7 @@ public class HiddenPartsMaterialTotalsTests
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
                 leftEndHidden: true, rightEndHidden: true,
-                deckHidden: true, topHidden: true);
+                deckHidden: true, topHidden: true, doorsHidden: true);
 
             double hiddenMat = cab.TotalMaterialAreaFt2;
             double hiddenEB = cab.TotalEdgeBandingFeet;
@@ -60,12 +60,13 @@ public class HiddenPartsMaterialTotalsTests
     //############################################################################################################
 
     [Theory]
-    [InlineData(true, false, false, false)]
-    [InlineData(false, true, false, false)]
-    [InlineData(false, false, true, false)]
-    [InlineData(false, false, false, true)]
+    [InlineData(true, false, false, false, false)]
+    [InlineData(false, true, false, false, false)]
+    [InlineData(false, false, true, false, false)]
+    [InlineData(false, false, false, true, false)]
+    [InlineData(false, false, false, false, true)]
     public void HidingSinglePart_DoesNotChangeMaterialTotals(
-        bool leftHidden, bool rightHidden, bool deckHidden, bool topHidden)
+        bool leftHidden, bool rightHidden, bool deckHidden, bool topHidden, bool doorsHidden)
     {
         RunOnSta(() =>
         {
@@ -73,14 +74,14 @@ public class HiddenPartsMaterialTotalsTests
 
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
-                false, false, false, false);
+                false, false, false, false, false);
 
             double baselineMat = cab.TotalMaterialAreaFt2;
             double baselineEB = cab.TotalEdgeBandingFeet;
 
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
-                leftHidden, rightHidden, deckHidden, topHidden);
+                leftHidden, rightHidden, deckHidden, topHidden, doorsHidden);
 
             Assert.Equal(baselineMat, cab.TotalMaterialAreaFt2, precision: 4);
             Assert.Equal(baselineEB, cab.TotalEdgeBandingFeet, precision: 4);
@@ -98,14 +99,72 @@ public class HiddenPartsMaterialTotalsTests
 
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
-                false, false, false, false);
+                false, false, false, false, false);
 
             double baselineMat = cab.TotalMaterialAreaFt2;
             double baselineEB = cab.TotalEdgeBandingFeet;
 
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
-                true, true, true, true);
+                true, true, true, true, true);
+
+            Assert.True(baselineMat > 0);
+            Assert.Equal(baselineMat, cab.TotalMaterialAreaFt2, precision: 4);
+            Assert.Equal(baselineEB, cab.TotalEdgeBandingFeet, precision: 4);
+        });
+    }
+
+    //############################################################################################################
+
+    [Fact]
+    public void HidingDoorsOnly_DoesNotChangeMaterialTotals_BaseWithDoors()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardBase();
+            cab.DoorCount = 2;
+            cab.IncDoors = true;
+            cab.DrwCount = 1;
+            cab.IncDrwFront1 = true;
+
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
+                false, false, false, false, doorsHidden: false);
+
+            double baselineMat = cab.TotalMaterialAreaFt2;
+            double baselineEB = cab.TotalEdgeBandingFeet;
+
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
+                false, false, false, false, doorsHidden: true);
+
+            Assert.True(baselineMat > 0);
+            Assert.Equal(baselineMat, cab.TotalMaterialAreaFt2, precision: 4);
+            Assert.Equal(baselineEB, cab.TotalEdgeBandingFeet, precision: 4);
+        });
+    }
+
+    //############################################################################################################
+
+    [Fact]
+    public void HidingDoorsOnly_DoesNotChangeMaterialTotals_UpperWithDoors()
+    {
+        RunOnSta(() =>
+        {
+            var cab = MakeStandardUpper();
+            cab.DoorCount = 2;
+            cab.IncDoors = true;
+
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
+                false, false, false, false, doorsHidden: false);
+
+            double baselineMat = cab.TotalMaterialAreaFt2;
+            double baselineEB = cab.TotalEdgeBandingFeet;
+
+            cab.ResetAllMaterialAndEdgeTotals();
+            _ = CabinetPreviewBuilder.BuildCabinetForPreview(cab,
+                false, false, false, false, doorsHidden: true);
 
             Assert.True(baselineMat > 0);
             Assert.Equal(baselineMat, cab.TotalMaterialAreaFt2, precision: 4);
