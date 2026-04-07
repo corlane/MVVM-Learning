@@ -85,6 +85,9 @@ public partial class App : Application
 
                 services.AddSingleton<Cabinet3DViewModel>();
 
+                // Thumbnail rendering for the cabinet list
+                services.AddSingleton<ThumbnailService>();
+
                 services.AddTransient<PlaceOrderViewModel>();
                 services.AddTransient<MaterialPricesViewModel>();
                 services.AddTransient<ProcessOrderViewModel>();
@@ -110,6 +113,10 @@ public partial class App : Application
         ServiceProvider = host.Services;
         var cabinetService = ServiceProvider.GetRequiredService<ICabinetService>();
         var defaults = ServiceProvider.GetRequiredService<DefaultSettingsService>();
+
+        // Eagerly create ThumbnailService so it subscribes to cabinet collection changes
+        ServiceProvider.GetRequiredService<ThumbnailService>();
+
         await defaults.LoadAsync();
 
         // NEW: best-effort material prices refresh on startup

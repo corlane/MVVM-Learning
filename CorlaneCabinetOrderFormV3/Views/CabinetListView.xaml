@@ -52,6 +52,17 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
+                    <GridViewColumn Header="" Width="72">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="128" Height="128"
+                                       Stretch="Uniform"
+                                       Source="{Binding Thumbnail}"
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
                     <GridViewColumn Header="Actions" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
