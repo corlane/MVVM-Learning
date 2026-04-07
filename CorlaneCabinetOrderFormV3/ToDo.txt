@@ -31,7 +31,6 @@ Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
 Add "Select All" for all "Done" buttons on PO tabs.
 
-Add construction holes on exterior ends of corner cabinets (90 deg and angle).
 
 
 

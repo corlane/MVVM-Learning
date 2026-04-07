@@ -316,3 +316,4 @@
 	Added Hide Doors/Drw Fronts button in 3D view. commit
 	Accidentally left the CabinetPartFactory Debug.WriteLine uncommented. Commented out now. commit
 	Updated ToDo list. commit
+	Added construction holes to the ends of all corner and angle cabinets. commit

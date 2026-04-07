@@ -80,6 +80,75 @@ internal static partial class UpperCabinetBuilder
         leftEnd = CabinetPartFactory.CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.LeftEnd);
         rightEnd = CabinetPartFactory.CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.RightEnd);
 
+        leftEnd = CabinetPartFactory.CreatePanel(leftEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.LeftEnd);
+        rightEnd = CabinetPartFactory.CreatePanel(rightEndPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.RightEnd);
+
+        // Construction holes (outside face) - along Depth axis, top & bottom edges
+        {
+            double topConstructionHoleInset = 2;
+
+            // Left end (uses leftDepth)
+            {
+                double minX = topConstructionHoleInset;
+                double maxX = leftDepth - topConstructionHoleInset;
+                if (maxX < minX) (minX, maxX) = (maxX, minX);
+                double span = Math.Max(0, maxX - minX);
+                int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0));
+                int holeCount = segments + 1;
+
+                for (int i = 0; i < holeCount; i++)
+                {
+                    double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
+                    double xx = minX + (span * t);
+                    double topYY = height - (MaterialThickness34 / 2);
+                    double bottomYY = MaterialThickness34 / 2;
+
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, MaterialThickness34, holeDepth, holeDiameter));
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, MaterialThickness34, holeDepth, holeDiameter));
+                }
+            }
+
+            // Right end (uses rightDepth)
+            {
+                double minX = topConstructionHoleInset;
+                double maxX = rightDepth - topConstructionHoleInset;
+                if (maxX < minX) (minX, maxX) = (maxX, minX);
+                double span = Math.Max(0, maxX - minX);
+                int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0));
+                int holeCount = segments + 1;
+
+                for (int i = 0; i < holeCount; i++)
+                {
+                    double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
+                    double xx = minX + (span * t);
+                    double topYY = height - (MaterialThickness34 / 2);
+                    double bottomYY = MaterialThickness34 / 2;
+
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, 0, holeDepth, holeDiameter));
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, 0, holeDepth, holeDiameter));
+                }
+            }
+        }
+
+        // Back vertical construction holes (outside face)
+        {
+            double x = MaterialThickness34 / 2;
+            double topY = height - (2 + MaterialThickness34);
+            double bottomY = 2 + MaterialThickness34;
+            if (topY < bottomY) (topY, bottomY) = (bottomY, topY);
+            double spanY = Math.Max(0, topY - bottomY);
+            int holeCountY = Math.Max(1, (int)Math.Ceiling(spanY / 10.0)) + 1;
+
+            for (int i = 0; i < holeCountY; i++)
+            {
+                double t = holeCountY == 1 ? 0 : (double)i / (holeCountY - 1);
+                double y = bottomY + (spanY * t);
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, MaterialThickness34, holeDepth, holeDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, 0, holeDepth, holeDiameter));
+            }
+        }
+
         // Shelf holes (inside face)
         if (upperCab.DrillShelfHoles)
         {
