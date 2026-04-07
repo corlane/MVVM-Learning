@@ -937,7 +937,21 @@ internal static partial class BaseCabinetBuilder
 
                 if (baseCab.IncRollouts)
                 {
-                    for (int r = 0; r < baseCab.RolloutCount; r++)
+                    // Calculate rollout opening for even vertical spacing
+                    double rolloutOpeningBottom = MaterialThickness34 + tk_Height;
+                    double rolloutOpeningTop = (cabType == style1 && baseCab.DrwCount == 1)
+                        ? height - ((baseCab.DrwCount + 1) * MaterialThickness34) - opening1Height
+                        : height - MaterialThickness34;
+
+                    double rolloutOpeningHeight = rolloutOpeningTop - rolloutOpeningBottom;
+                    double bottomOffset = 0.8406;
+                    int rolloutCount = baseCab.RolloutCount;
+                    double totalRolloutHeight = rolloutCount * dbxHeight;
+                    double rolloutGap = rolloutCount > 0
+                        ? (rolloutOpeningHeight - bottomOffset - totalRolloutHeight) / rolloutCount
+                        : 0;
+
+                    for (int r = 0; r < rolloutCount; r++)
                     {
                         if (baseCab.IncRolloutsInList)
                         {
@@ -947,7 +961,10 @@ internal static partial class BaseCabinetBuilder
                         var rotateGroup = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
                         var placement = new Model3DGroup();
                         placement.Children.Add(rotateGroup);
-                        ModelTransforms.ApplyTransform(placement, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906 + (r * 6), interiorDepth + backThickness - .25, 0, 0, 0);
+
+                        double rolloutY = rolloutOpeningBottom + bottomOffset + (r * (dbxHeight + rolloutGap));
+
+                        ModelTransforms.ApplyTransform(placement, (dbxWidth / 2) - MaterialThickness34, rolloutY, interiorDepth + backThickness - .25, 0, 0, 0);
                         cabinet.Children.Add(placement);
                     }
                 }
