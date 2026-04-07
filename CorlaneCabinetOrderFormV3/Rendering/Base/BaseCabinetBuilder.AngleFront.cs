@@ -173,7 +173,7 @@ internal static partial class BaseCabinetBuilder
 
         // Back vertical construction holes (outside face)
         {
-            double x = MaterialThickness34 / 2;
+            double x = MaterialThickness34;
             double topY = height - (3 + MaterialThickness34);
             double bottomY = tk_Height + MaterialThickness34;
             if (topY < bottomY) (topY, bottomY) = (bottomY, topY);

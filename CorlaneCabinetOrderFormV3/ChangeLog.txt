@@ -317,3 +317,4 @@
 	Accidentally left the CabinetPartFactory Debug.WriteLine uncommented. Commented out now. commit
 	Updated ToDo list. commit
 	Added construction holes to the ends of all corner and angle cabinets. commit
+	Adjusted position of vertical row of back construction holes on corner cabinets. commit
