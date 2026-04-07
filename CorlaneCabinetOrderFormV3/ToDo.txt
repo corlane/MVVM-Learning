@@ -1,6 +1,16 @@
 ﻿.
 .
 .
+.
+https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_V3_Setup.zip Corlane_Cabinet_Order_Form_V3_Setup <-- copy this text to rename the created zip file
+.
+.
+.
+.
+.
+
+
+
 User side:
 
 Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
@@ -14,17 +24,16 @@ If cabinet depth is too shallow for drw, display warning - remove drws and hide 
 
 
 
-
-
 Corlane side:
 
-https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_V3_Setup.zip Corlane_Cabinet_Order_Form_V3_Setup <-- copy this text to rename the created zip file
 
 Need to warn if cabinet depth is > ~24, so drawer boxes can be resized in eCabs
 
 Add "Select All" for all "Done" buttons on PO tabs.
 
 Add construction holes on exterior ends of corner cabinets (90 deg and angle).
+
+
 
 
 
@@ -43,12 +52,6 @@ OPTIONAL: Change pricing to account for linear inches of perimeter around parts.
 
 
 BUGS:
-
-Back thickness is not hiding when clicking corner cabinet in the list after clicking a non-corner cabinet. -- Tested and couldn't reproduce. Keep an eye out.
-
-When dragging the Grid Splitter, sometimes the cabinet list will not be anchored to the bottom of the window and will drag upwards.
-
-In some instances (Corey noticed) saving a job will go to the previously opened job's folder. I couldn't reproduce... keep an eye out. Dealt with by setting InitialFolder. Not sure if I like this, as it forces user to start at a root folder and drill down.
 
 
 
