@@ -323,3 +323,4 @@
 	Uploading 3.0.1.47
 
 3.0.1.48
+	Master "golden" commit before forking to work on cabinet thumbnails. commit
