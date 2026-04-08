@@ -325,3 +325,4 @@
 3.0.1.48
 	Master "golden" commit before forking to work on cabinet thumbnails. commit
 	Committing feature/cabinet-thumbnails branch with initial implementation of thumbnail images in ListCabinetView. commit
+	Adjusted CabinetListView: larger fonts, centered vertically, thumbnails with radius corners & gradient background. commit

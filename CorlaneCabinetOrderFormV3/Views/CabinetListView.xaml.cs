@@ -175,14 +175,15 @@ public partial class CabinetListView : UserControl
 
         try
         {
-            foreach (var col in gridView.Columns)
+            // Skip column 0 ("#") – it has a fixed width set in XAML.
+            foreach (var col in gridView.Columns.Skip(1))
             {
                 col.Width = 0;
             }
 
             ListViewItems.UpdateLayout();
 
-            foreach (var col in gridView.Columns)
+            foreach (var col in gridView.Columns.Skip(1))
             {
                 col.Width = double.NaN;
             }

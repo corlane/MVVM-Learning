@@ -216,7 +216,14 @@ public class ThumbnailService
         // Wrap in a Border so background renders behind the 3D content
         var border = new Border
         {
-            Background = Brushes.White,
+            Background = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop(Color.FromRgb(215, 215, 215), 0.0),
+                    new GradientStop(Color.FromRgb(150, 150, 150), 1.0)
+                },
+                new Point(0, 0),
+                new Point(1, 1)),
             Child = viewport,
             Width = ThumbWidth,
             Height = ThumbHeight

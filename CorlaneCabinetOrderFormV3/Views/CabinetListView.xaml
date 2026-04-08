@@ -21,6 +21,7 @@
     <UserControl.Resources>
         <!--<converters:AddOneConverter x:Key="AddOneConverter"/>-->
         <converters:ListViewItemIndexConverter x:Key="ListViewItemIndexConverter"/>
+        <converters:DimensionFormatConverter x:Key="DimensionFormatConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -38,27 +39,39 @@
                   DragOver="ListView_DragOver"
                   Drop="ListView_Drop"
                   >
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="FontSize" Value="14"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="#" Width="30">
+                    <GridViewColumn Header="#" Width="50">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem},
                                       Converter={StaticResource ListViewItemIndexConverter}}"
-                       TextAlignment="Center"
-                       FontWeight="SemiBold"/>
+                                           TextAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           FontSize="18"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="" Width="72">
+                    <GridViewColumn Header="" Width="128">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Width="128" Height="128"
-                                       Stretch="Uniform"
-                                       Source="{Binding Thumbnail}"
-                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Rectangle Width="128" Height="128"
+                       RadiusX="8" RadiusY="8">
+                                    <Rectangle.Fill>
+                                        <ImageBrush ImageSource="{Binding Thumbnail}"
+                                Stretch="Uniform"
+                                RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    </Rectangle.Fill>
+                                </Rectangle>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -85,7 +98,7 @@
                     <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
-                    <GridViewColumn Header="Sink" DisplayMemberBinding="{Binding SinkCabinet}" Width="Auto"/>
+                    <!--<GridViewColumn Header="Sink" DisplayMemberBinding="{Binding SinkCabinet}" Width="Auto"/>-->
                 </GridView>
             </ListView.View>
         </ListView>
