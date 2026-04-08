@@ -328,3 +328,4 @@
 	Adjusted CabinetListView: larger fonts, centered vertically, thumbnails with radius corners & gradient background. commit
 	Thumbnail borders now obey them accent color. Because why not? commit
 	Changed InitialDirectory to remember the last directory used, instead of always going to Documents. Saves in defaultsettings. commit
+	Fixed Angle Front Width not recalculating/populating when clicking cabinet in list. Also BackWidth90 wasn't recalculating either. commit

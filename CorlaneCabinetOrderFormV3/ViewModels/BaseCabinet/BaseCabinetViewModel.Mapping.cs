@@ -134,6 +134,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
             _drwFrontHeight1DebounceTimer.Stop();  // kill it again immediately
             _isEditingDrwFrontHeight1 = false;
 
+            // Recalculate derived angle-front fields that were skipped
+            // during mapping (change handlers bail out while _isMapping is true).
+            RecalculateFrontWidth();
+            RecalculateBackWidths90();
+
             UpdatePreview();
         }
     }

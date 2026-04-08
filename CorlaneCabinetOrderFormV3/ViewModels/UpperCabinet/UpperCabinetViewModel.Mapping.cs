@@ -75,6 +75,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
             // Map model -> VM with proper formatting for dimension properties
             MapModelToViewModel(upperCab, dimFormat);
 
+            // Recalculate derived angle-front fields that were skipped
+            // during mapping (change handlers bail out while _isMapping is true).
+            RecalculateFrontWidth();
+            RecalculateBackWidths90();
+
             // Any additional logic that must run after loading (visibility, resize, preview)
             UpdatePreview();
         }
