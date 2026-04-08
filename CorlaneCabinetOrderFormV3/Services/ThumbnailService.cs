@@ -214,6 +214,9 @@ public class ThumbnailService
         };
 
         // Wrap in a Border so background renders behind the 3D content
+        var accentBrush = Application.Current.TryFindResource("ABrush.AccentTone1.Background.Static") as SolidColorBrush;
+        var borderColor = accentBrush?.Color ?? Color.FromRgb(100, 100, 100);
+
         var border = new Border
         {
             Background = new LinearGradientBrush(
@@ -224,6 +227,9 @@ public class ThumbnailService
                 },
                 new Point(0, 0),
                 new Point(1, 1)),
+            BorderBrush = new SolidColorBrush(borderColor),
+            BorderThickness = new Thickness(3),
+            CornerRadius = new CornerRadius(8),
             Child = viewport,
             Width = ThumbWidth,
             Height = ThumbHeight
