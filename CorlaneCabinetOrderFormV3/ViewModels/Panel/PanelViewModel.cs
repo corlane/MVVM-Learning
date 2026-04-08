@@ -260,14 +260,19 @@ public partial class PanelViewModel : ObservableValidator
 
         Notes = "";
     }
+
     [RelayCommand]
     private void LoadDefaults()
     {
         Species = _defaults!.DefaultPanelSpecies;
         EBSpecies = _defaults.DefaultPanelEBSpecies;
-        Depth = _defaults.DefaultPanelThickness;
 
-        // etc.
+        // Format thickness to match ListPanelDepths (which uses DefaultDimensionFormat)
+        bool useFraction = string.Equals(_defaults.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase);
+        if (useFraction && double.TryParse(_defaults.DefaultPanelThickness, out var thickness))
+            Depth = ConvertDimension.DoubleToFraction(thickness);
+        else
+            Depth = _defaults.DefaultPanelThickness;
     }
 
 
