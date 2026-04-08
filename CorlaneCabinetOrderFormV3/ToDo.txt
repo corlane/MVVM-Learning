@@ -48,7 +48,7 @@ OPTIONAL: Change pricing to account for linear inches of perimeter around parts.
 
 BUGS:
 
-
+Panel Thickness is not remembering its setting in Defaults. It clears when changing dimension type default.
 
 
 

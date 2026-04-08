@@ -330,3 +330,4 @@
 	Changed InitialDirectory to remember the last directory used, instead of always going to Documents. Saves in defaultsettings. commit
 	Fixed Angle Front Width not recalculating/populating when clicking cabinet in list. Also BackWidth90 wasn't recalculating either. commit
 	Changed scroll mode in CabinetListView to "Pixel" instead of "Item". This allows for smoother scrolling, especially with the larger thumbnails. commit
+	Working on trying to get back thicknesses and panel thickness to not clear every time you change dimension type default. commit

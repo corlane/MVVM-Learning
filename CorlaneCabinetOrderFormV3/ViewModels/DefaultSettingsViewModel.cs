@@ -67,8 +67,21 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultPanelSpecies { get => _defaults.DefaultPanelSpecies; set => _defaults.DefaultPanelSpecies = value; }
     public string DefaultPanelEBSpecies { get => _defaults.DefaultPanelEBSpecies; set => _defaults.DefaultPanelEBSpecies     = value; }
 
-    // Panel Thickness
-    public string DefaultPanelThickness { get => _defaults.DefaultPanelThickness; set => _defaults.DefaultPanelThickness = value; }
+    // Panel Thickness - store in defaults as canonical numeric string, but expose formatted strings for UI.
+
+    [ObservableProperty] public partial string DefaultPanelThickness { get; set; } = "0.75"; partial void OnDefaultPanelThicknessChanged(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return;
+
+        if (_isApplyingDefaults) return;
+
+        if (_defaults != null)
+        {
+            _defaults.DefaultPanelThickness = ConvertDimension.FractionToDouble(value).ToString();
+            _ = _defaults.SaveAsync();
+        }
+    }
 
     //Top
     public string DefaultTopType { get => _defaults.DefaultTopType; set => _defaults.DefaultTopType = value; }
@@ -301,13 +314,9 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     private void Defaults_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        //Debug.WriteLine($"Defaults_PropertyChanged: PropertyName={e.PropertyName}, defaults.DimensionFormat='{_defaults?.DefaultDimensionFormat}', defaults.BaseBack='{_defaults?.DefaultBaseBackThickness}', defaults.UpperBack='{_defaults?.DefaultUpperBackThickness}'");
-
-        // When dimension format changes, recompute display lists and formatted properties
-        if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
-        {
-            OnPropertyChanged(nameof(ListBackThickness));
-        }
+        // Only reformat when the dimension format actually changes
+        if (e.PropertyName != nameof(DefaultSettingsService.DefaultDimensionFormat))
+            return;
 
         if (_defaults == null) return;
 
@@ -315,43 +324,48 @@ public partial class DefaultSettingsViewModel : ObservableObject
         {
             _isApplyingDefaults = true;
 
-            var listValues = ListBackThickness;
-            //Debug.WriteLine($"ListBackThickness items BEFORE assignment: [{string.Join(", ", listValues)}]");
-
+            // 1. Set the formatted values FIRST so SelectedItem already matches the new list
             if (_defaults.DefaultDimensionFormat == "Fraction")
             {
                 try
                 {
                     var baseConv = Convert.ToDouble(_defaults.DefaultBaseBackThickness);
                     DefaultBaseBackThickness = ConvertDimension.DoubleToFraction(baseConv);
-                    //Debug.WriteLine($"Assigned DefaultBaseBackThickness (fraction) = '{DefaultBaseBackThickness}' (from '{_defaults.DefaultBaseBackThickness}')");
                 }
-                catch (Exception ex)
+                catch
                 {
                     DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
-                    //Debug.WriteLine($"Exception converting base back to fraction: {ex}. Falling back to '{DefaultBaseBackThickness}'");
                 }
 
                 try
                 {
                     var upperConv = Convert.ToDouble(_defaults.DefaultUpperBackThickness);
                     DefaultUpperBackThickness = ConvertDimension.DoubleToFraction(upperConv);
-                    //Debug.WriteLine($"Assigned DefaultUpperBackThickness (fraction) = '{DefaultUpperBackThickness}' (from '{_defaults.DefaultUpperBackThickness}')");
                 }
-                catch (Exception ex)
+                catch
                 {
                     DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
-                    //Debug.WriteLine($"Exception converting upper back to fraction: {ex}. Falling back to '{DefaultUpperBackThickness}'");
+                }
+
+                try
+                {
+                    var panelConv = Convert.ToDouble(_defaults.DefaultPanelThickness);
+                    DefaultPanelThickness = ConvertDimension.DoubleToFraction(panelConv);
+                }
+                catch
+                {
+                    DefaultPanelThickness = _defaults.DefaultPanelThickness;
                 }
             }
             else
             {
                 DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
                 DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
-                //Debug.WriteLine($"Assigned decimal Base='{DefaultBaseBackThickness}' Upper='{DefaultUpperBackThickness}'");
+                DefaultPanelThickness = _defaults.DefaultPanelThickness;
             }
 
-            //Debug.WriteLine($"ListBackThickness items AFTER assignment: [{string.Join(", ", ListBackThickness)}]");
+            // 2. THEN notify the list changed — ComboBox SelectedItems already match the new list items
+            OnPropertyChanged(nameof(ListBackThickness));
         }
         finally
         {
@@ -370,7 +384,6 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
             if (string.Equals(_defaults.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase))
             {
-                // Convert stored canonical numeric strings into the fraction display strings
                 if (double.TryParse(_defaults.DefaultBaseBackThickness, out var b))
                     DefaultBaseBackThickness = ConvertDimension.DoubleToFraction(b);
                 else
@@ -380,11 +393,17 @@ public partial class DefaultSettingsViewModel : ObservableObject
                     DefaultUpperBackThickness = ConvertDimension.DoubleToFraction(u);
                 else
                     DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
+
+                if (double.TryParse(_defaults.DefaultPanelThickness, out var p))
+                    DefaultPanelThickness = ConvertDimension.DoubleToFraction(p);
+                else
+                    DefaultPanelThickness = _defaults.DefaultPanelThickness;
             }
             else
             {
                 DefaultBaseBackThickness = _defaults.DefaultBaseBackThickness;
                 DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
+                DefaultPanelThickness = _defaults.DefaultPanelThickness;
             }
         }
         finally
