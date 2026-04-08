@@ -29,6 +29,7 @@
                   Margin="20"
                   Height="Auto"
                   FontSize="14"
+                  VirtualizingStackPanel.ScrollUnit="Pixel"
                   ItemsSource="{Binding Cabinets}"
                   SelectedItem="{Binding SelectedCabinet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionMode="Single"
