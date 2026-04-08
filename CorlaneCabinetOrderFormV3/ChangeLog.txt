@@ -332,3 +332,5 @@
 	Changed scroll mode in CabinetListView to "Pixel" instead of "Item". This allows for smoother scrolling, especially with the larger thumbnails. commit
 	Working on trying to get back thicknesses and panel thickness to not clear every time you change dimension type default. commit
 	Fixed Panel not loading its default value. commit
+	Uploading 3.0.1.48
+
