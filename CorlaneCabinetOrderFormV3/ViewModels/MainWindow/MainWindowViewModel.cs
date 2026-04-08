@@ -124,9 +124,7 @@ public partial class MainWindowViewModel : ObservableValidator
             Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
             DefaultExt = "cor",
             FileName = CurrentJobName + ".cor",
-            InitialDirectory = !string.IsNullOrEmpty(CurrentJobPath)
-                ? System.IO.Path.GetDirectoryName(CurrentJobPath)!
-                : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            InitialDirectory = _defaults.GetFileDialogDirectory(CurrentJobPath)
         };
 
         Notify2("Saving job...", Brushes.Blue, 100000);
@@ -159,6 +157,8 @@ public partial class MainWindowViewModel : ObservableValidator
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     CurrentJobPath = dialog.FileName;
                     IsModified = false;
+
+                    _defaults.RememberFileDialogDirectory(dialog.FileName);
 
                     // Successful save — no need for recovery file
                     _autoSave.Stop();
@@ -198,9 +198,7 @@ public partial class MainWindowViewModel : ObservableValidator
         var dialog = new OpenFileDialog
         {
             Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
-            InitialDirectory = !string.IsNullOrEmpty(CurrentJobPath)
-                ? System.IO.Path.GetDirectoryName(CurrentJobPath)!
-                : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            InitialDirectory = _defaults.GetFileDialogDirectory(CurrentJobPath)
         };
 
         Notify2("Loading job...", Brushes.Blue, 100000); // yes, 100 seconds - will be cleared on success
@@ -234,6 +232,8 @@ public partial class MainWindowViewModel : ObservableValidator
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     CurrentJobPath = dialog.FileName;
                     IsModified = false;
+
+                    _defaults.RememberFileDialogDirectory(dialog.FileName);
 
                     // Clean load — no recovery needed
                     _autoSave.Stop();

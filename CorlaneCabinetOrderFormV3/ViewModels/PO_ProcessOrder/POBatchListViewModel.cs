@@ -14,13 +14,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class POBatchListViewModel : ObservableObject
 {
-    private readonly string RootDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     private string CabinetStyle = "";
 
     private const string CsvTypeConstant = "Cabinet";
 
     private readonly ICabinetService? _cabinetService;
     private readonly MainWindowViewModel? _mainVm;
+    private readonly DefaultSettingsService? _defaults;
 
     public POBatchListViewModel()
     {
@@ -28,10 +28,11 @@ public partial class POBatchListViewModel : ObservableObject
         Refresh();
     }
 
-    public POBatchListViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm)
+    public POBatchListViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults)
     {
         _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
         _mainVm = mainVm ?? throw new ArgumentNullException(nameof(mainVm));
+        _defaults = defaults ?? throw new ArgumentNullException(nameof(defaults));
 
         if (_cabinetService.Cabinets is INotifyCollectionChanged cc)
         {
@@ -222,13 +223,17 @@ public partial class POBatchListViewModel : ObservableObject
             Title = "Save Batch List",
             Filter = "CSV (*.csv)|*.csv",
             DefaultExt = "csv",
-            FileName = defaultFileName
+            FileName = defaultFileName,
+            InitialDirectory = _defaults?.GetFileDialogDirectory()
+                ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         };
 
         if (dlg.ShowDialog() != true)
         {
             return;
         }
+
+        _defaults?.RememberFileDialogDirectory(dlg.FileName);
 
         try
         {

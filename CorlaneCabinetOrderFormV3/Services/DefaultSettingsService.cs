@@ -116,6 +116,41 @@ public partial class DefaultSettingsService : ObservableObject
     // One-time popup notices — stores the last version whose popup was dismissed
     [ObservableProperty] public partial string? HasSeenPopup { get; set; }
 
+    // Last directory used in a file dialog (open/save/export)
+    [ObservableProperty] public partial string? LastFileDialogDirectory { get; set; }
+
+    /// <summary>
+    /// Returns the best initial directory for a file dialog:
+    /// <paramref name="preferredPath"/> directory first, then last-used directory, then My Documents.
+    /// </summary>
+    public string GetFileDialogDirectory(string? preferredPath = null)
+    {
+        if (!string.IsNullOrEmpty(preferredPath))
+        {
+            var dir = Path.GetDirectoryName(preferredPath);
+            if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir))
+                return dir;
+        }
+
+        if (!string.IsNullOrEmpty(LastFileDialogDirectory) && Directory.Exists(LastFileDialogDirectory))
+            return LastFileDialogDirectory;
+
+        return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    }
+
+    /// <summary>
+    /// Saves the directory of the given file path as the last-used dialog directory.
+    /// </summary>
+    public void RememberFileDialogDirectory(string filePath)
+    {
+        var dir = Path.GetDirectoryName(filePath);
+        if (!string.IsNullOrEmpty(dir))
+        {
+            LastFileDialogDirectory = dir;
+            _ = SaveAsync(); // fire-and-forget persist
+        }
+    }
+
     public async Task LoadAsync()
     {
         if (!File.Exists(SettingsFilePath)) return;

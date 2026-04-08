@@ -54,10 +54,12 @@ public partial class MainWindowViewModel
         {
             Filter = "CSV files (*.csv)|*.csv",
             DefaultExt = "csv",
-            FileName = $"{CurrentJobName} - Cabinet List.csv"
+            FileName = $"{CurrentJobName} - Cabinet List.csv",
+            InitialDirectory = _defaults.GetFileDialogDirectory()
         };
 
         if (dialog.ShowDialog() != true) return;
+        _defaults.RememberFileDialogDirectory(dialog.FileName);
 
         try
         {
@@ -121,10 +123,12 @@ public partial class MainWindowViewModel
         {
             Filter = "CSV files (*.csv)|*.csv",
             DefaultExt = "csv",
-            FileName = $"{CurrentJobName} - Door List.csv"
+            FileName = $"{CurrentJobName} - Door List.csv",
+            InitialDirectory = _defaults.GetFileDialogDirectory()
         };
 
         if (dialog.ShowDialog() != true) return;
+        _defaults.RememberFileDialogDirectory(dialog.FileName);
 
         try
         {
@@ -176,10 +180,12 @@ public partial class MainWindowViewModel
         {
             Filter = "CSV files (*.csv)|*.csv",
             DefaultExt = "csv",
-            FileName = $"{CurrentJobName} - Drawer Box List.csv"
+            FileName = $"{CurrentJobName} - Drawer Box List.csv",
+            InitialDirectory = _defaults.GetFileDialogDirectory()
         };
 
         if (dialog.ShowDialog() != true) return;
+        _defaults.RememberFileDialogDirectory(dialog.FileName);
 
         try
         {
