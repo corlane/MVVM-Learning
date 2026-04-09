@@ -334,3 +334,5 @@
 	Fixed Panel not loading its default value. commit
 	Uploading 3.0.1.48
 
+3.0.1.49
+	Fixed Upper 3/4 back edgebanding issue. Was set to "Hardrock Maple", not "PVC Hardrock Maple". commit
