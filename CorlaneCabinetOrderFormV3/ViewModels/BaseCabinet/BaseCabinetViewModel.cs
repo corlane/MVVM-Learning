@@ -174,13 +174,23 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwBoxesEnabled = false;
             IncRollouts = false;
             IncRolloutsEnabled = false;
+            TopType = CabinetOptions.TopType.Full;
             ApplyStyleVisibility(Style);
         }
         else
         {
             IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
             IncDrwBoxesEnabled = true;
+            TopType = _defaults.DefaultTopType;
             ApplyStyleVisibility(Style);
+        }
+        if (ConvertDimension.FractionToDouble(Depth) < 8)
+        {
+            ShelfDepth = CabinetOptions.ShelfDepth.FullDepth;
+        }
+        else
+        {
+            ShelfDepth = _defaults.DefaultShelfDepth;
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)

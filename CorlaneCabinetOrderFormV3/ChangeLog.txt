@@ -337,3 +337,5 @@
 3.0.1.49
 	Fixed Upper 3/4 back edgebanding issue. Was set to "Hardrock Maple", not "PVC Hardrock Maple". commit
 	Moved "Current Job" label to the left, now longer job names fit without truncation. commit
+	If Base cabinet is < 10.625" deep, Top Type changes to Full. Changes to default top type above that.
+	If Base cabinet is < 8" deep, Shelf Depth changes to Full. Changes to default shelf depth above that. commit
