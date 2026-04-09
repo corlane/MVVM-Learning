@@ -440,7 +440,7 @@ internal static class CabinetPartFactory
         partModel.Children.Add(panelModel);
         partModel.Children.Add(edgebandingModel);
 
-        Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and {edgeBandLengthInches:F1} inches {edgebandingSpecies} edge banding");
+        //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and {edgeBandLengthInches:F1} inches {edgebandingSpecies} edge banding");
 
         return partModel;
     }

@@ -336,3 +336,4 @@
 
 3.0.1.49
 	Fixed Upper 3/4 back edgebanding issue. Was set to "Hardrock Maple", not "PVC Hardrock Maple". commit
+	Moved "Current Job" label to the left, now longer job names fit without truncation. commit

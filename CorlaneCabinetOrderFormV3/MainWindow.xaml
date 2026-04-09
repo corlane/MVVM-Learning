@@ -232,7 +232,7 @@
                 </Viewbox>
             </Button>
 
-            <Label Content="Current Job:" VerticalAlignment="Center" Margin="80,0,0,0" FontSize="16"/>
+            <Label Content="Current Job:" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="16"/>
             <Label Content="{Binding DisplayJobName}" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="16" FontWeight="Bold"/>
         </StackPanel>
 
