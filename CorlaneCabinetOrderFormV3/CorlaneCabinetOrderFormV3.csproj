@@ -33,6 +33,7 @@
     <None Remove="Images\icon.ico" />
     <None Remove="Images\Plywood\Alder Ply - Horizontal.png" />
     <None Remove="Images\Plywood\Alder Ply.png" />
+    <None Remove="Images\Plywood\Black Melamine.png" />
     <None Remove="Images\Plywood\Cherry Ply - Horizontal.png" />
     <None Remove="Images\Plywood\Cherry Ply.png" />
     <None Remove="Images\Plywood\Custom - Horizontal.png" />
@@ -52,6 +53,7 @@
     <None Remove="Images\Plywood\Red Oak Ply.png" />
     <None Remove="Images\Plywood\Walnut Ply - Horizontal.png" />
     <None Remove="Images\Plywood\Walnut Ply.png" />
+    <None Remove="Images\Plywood\White Melamine.png" />
     <None Remove="Images\Plywood\White Oak Ply - Horizontal.png" />
     <None Remove="Images\Plywood\White Oak Ply.png" />
     <None Remove="Images\woodgrain.PNG" />
@@ -113,16 +115,17 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Plywood\Alder Ply.png" />
+    <Resource Include="Images\Plywood\Black Melamine.png" />
     <Resource Include="Images\Plywood\Cherry Ply.png" />
     <Resource Include="Images\Plywood\Custom.png" />
     <Resource Include="Images\Plywood\Hickory Ply.png" />
     <Resource Include="Images\Plywood\Mahogany Ply.png" />
     <Resource Include="Images\Plywood\Maple Ply.png" />
     <Resource Include="Images\Plywood\MDF.png" />
-    <Resource Include="Images\Plywood\Melamine.png" />
     <Resource Include="Images\Plywood\Prefinished Ply.png" />
     <Resource Include="Images\Plywood\Red Oak Ply.png" />
     <Resource Include="Images\Plywood\Walnut Ply.png" />
+    <Resource Include="Images\Plywood\White Melamine.png" />
     <Resource Include="Images\Plywood\White Oak Ply.png" />
     <Resource Include="Images\woodgrain.PNG">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

@@ -4,31 +4,6 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static class CabinetBuildHelpers
 {
-    //internal static string GetMatchingEdgebandingSpecies(string? fillerSpecies) // Helper to map common species/material names to edgebanding names
-    //{
-    //    return fillerSpecies switch
-    //    {
-    //        null or "" => "None",
-
-    //        // Match common species/material names -> edgebanding names
-    //        string s when s.Contains("Alder", StringComparison.OrdinalIgnoreCase) => "Wood Alder",
-    //        string s when s.Contains("Cherry", StringComparison.OrdinalIgnoreCase) => "Wood Cherry",
-    //        string s when s.Contains("Hickory", StringComparison.OrdinalIgnoreCase) => "Wood Hickory",
-    //        string s when s.Contains("Mahogany", StringComparison.OrdinalIgnoreCase) => "Wood Mahogany",
-    //        string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-    //        string s when s.Contains("Maply Ply", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-    //        string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-    //        string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "Melamine",
-    //        string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "PVC Hardrock Maple",
-    //        string s when s.Contains("PFP 1/4", StringComparison.OrdinalIgnoreCase) => "None",
-    //        string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
-    //        string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
-    //        string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
-
-    //        _ => "None"
-    //    };
-    //}
-
     internal static string GetMatchingEdgebandingSpecies(string? fillerSpecies) // Helper to map common species/material names to edgebanding names
     {
         return fillerSpecies switch
@@ -46,12 +21,13 @@ internal static class CabinetBuildHelpers
             string s when s.Contains("Maple", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
             string s when s.Contains("Maply Ply", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
             string s when s.Contains("MDF", StringComparison.OrdinalIgnoreCase) => "Wood Maple",
-            string s when s.Contains("Melamine", StringComparison.OrdinalIgnoreCase) => "Melamine",
             string s when s.Contains("Prefinished Ply", StringComparison.OrdinalIgnoreCase) => "PVC Hardrock Maple",
             string s when s.Contains("PFP 1/4", StringComparison.OrdinalIgnoreCase) => "None",
             string s when s.Contains("Red Oak", StringComparison.OrdinalIgnoreCase) => "Wood Red Oak",
             string s when s.Contains("Walnut", StringComparison.OrdinalIgnoreCase) => "Wood Walnut",
             string s when s.Contains("White Oak", StringComparison.OrdinalIgnoreCase) => "Wood White Oak",
+            string s when s.Contains("White Melamine", StringComparison.OrdinalIgnoreCase) => "PVC White",
+            string s when s.Contains("Black Melamine", StringComparison.OrdinalIgnoreCase) => "PVC Black",
 
             _ => "None"
         };

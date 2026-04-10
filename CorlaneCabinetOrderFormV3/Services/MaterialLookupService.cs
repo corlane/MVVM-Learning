@@ -21,7 +21,8 @@ public class MaterialLookupService : IMaterialLookupService
         CabinetSpecies.Add("Walnut Ply");
         CabinetSpecies.Add("Hickory Ply");
         CabinetSpecies.Add("MDF");
-        CabinetSpecies.Add("Melamine");
+        CabinetSpecies.Add("White Melamine");
+        CabinetSpecies.Add("Black Melamine");
         CabinetSpecies.Add("Custom");
 
 

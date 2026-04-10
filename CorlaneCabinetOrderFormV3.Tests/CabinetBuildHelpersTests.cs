@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Rendering;
+﻿using CorlaneCabinetOrderFormV3.Rendering;
 
 namespace CorlaneCabinetOrderFormV3.Tests;
 
@@ -16,7 +16,8 @@ public class CabinetBuildHelpersTests
     [InlineData("Prefinished Ply", "PVC Hardrock Maple")]
     [InlineData("PFP 1/4", "None")]
     [InlineData("MDF", "Wood Maple")]
-    [InlineData("Melamine", "Melamine")]
+    [InlineData("White Melamine", "PVC White")]
+    [InlineData("Black Melamine", "PVC Black")]
     [InlineData(null, "None")]
     [InlineData("", "None")]
     [InlineData("SomeUnknownWood", "None")]
