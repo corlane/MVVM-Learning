@@ -342,3 +342,7 @@
 	Refactored BaseCabinetBuilder.Standard into multiple helper methods instead of one giant method to make it more readable and maintainable.
 	Shelf depth combobox now properly disables and sets to Full when depth is < 8". commit
 	Removed Melamine, and added White Melamine and Black Melamine, and mapped their matching EB to PVC White & Black. commit
+	Uploading 3.0.1.49
+
+3.0.1.50
+	
