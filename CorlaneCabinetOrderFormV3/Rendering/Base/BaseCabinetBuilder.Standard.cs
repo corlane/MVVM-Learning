@@ -23,11 +23,8 @@ internal static partial class BaseCabinetBuilder
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double MaterialThickness14 = MaterialDefaults.Thickness14;
-        double halfMaterialThickness34 = MaterialThickness34 / 2;
-        double doubleMaterialThickness34 = MaterialThickness34 * 2;
 
         string? cabType = baseCab.Style;
-        string style1 = CabinetStyles.Base.Standard;
         string style2 = CabinetStyles.Base.Drawer;
 
         string doorEdgebandingSpecies = CabinetBuildHelpers.GetDoorEdgebandingSpecies(baseCab.DoorSpecies);
@@ -46,41 +43,11 @@ internal static partial class BaseCabinetBuilder
         double interiorHeight = dim.InteriorHeight;
         double shelfDepth = dim.ShelfDepth;
         double opening1Height = dim.Opening1Height;
-        double opening2Height = dim.Opening2Height;
-        double opening3Height = dim.Opening3Height;
-        double opening4Height = dim.Opening4Height;
-        double drwFront1Height = dim.DrwFront1Height;
-        double drwFront2Height = dim.DrwFront2Height;
-        double drwFront3Height = dim.DrwFront3Height;
-        double drwFront4Height = dim.DrwFront4Height;
-        double baseDoorGap = dim.BaseDoorGap;
-        double doorLeftReveal = dim.DoorLeftReveal;
-        double doorRightReveal = dim.DoorRightReveal;
-        double doorTopReveal = dim.DoorTopReveal;
-        double doorBottomReveal = dim.DoorBottomReveal;
-        double doorSideReveal = dim.DoorSideReveal;
         double deckBackInset = 0;
 
         bool topDeck90 = false;
         bool isPanel = false;
         string panelEBEdges = "";
-
-        int shelfCount = baseCab.ShelfCount;
-
-        double dbxWidth = interiorWidth;
-        double dbxHeight;
-        double dbxDepth = dim.DrawerBoxDepth;
-        double tandemSideSpacing = .4;
-        double tandemTopSpacing = .375;
-        double tandemBottomSpacing = .5906;
-        double tandemMidDrwBottomSpacingAdjustment = 0;
-        double accurideSideSpacing = 1;
-        double accurideTopSpacing = .5;
-        double accurideBottomSpacing = .5;
-        double rolloutHeight = 4;
-
-        double holeDiameter = 0.197;
-        double holeDepth = MaterialThickness34 / 2;
 
         // ── Capture core dimensions ──
         if (result is not null)
@@ -89,7 +56,7 @@ internal static partial class BaseCabinetBuilder
             result.InteriorDepth = interiorDepth;
             result.InteriorHeight = interiorHeight;
             result.ShelfDepth = shelfDepth;
-            result.DrawerBoxDepth = dbxDepth;
+            result.DrawerBoxDepth = dim.DrawerBoxDepth;
         }
 
         Model3DGroup leftEnd;
@@ -98,44 +65,12 @@ internal static partial class BaseCabinetBuilder
         Model3DGroup top = new();
         Model3DGroup topStretcherFront;
         Model3DGroup topStretcherBack;
-        Model3DGroup stretcher;
         Model3DGroup shelf;
         Model3DGroup toekick = new();
         Model3DGroup back;
-        Model3DGroup door1;
-        Model3DGroup door2;
-        Model3DGroup nailer;
 
         List<Point3D> endPanelPoints;
-        List<Point3D> deckPoints;
-        List<Point3D> topPoints;
-        List<Point3D> topStretcherFrontPoints;
-        List<Point3D> topStretcherBackPoints;
-        List<Point3D> toekickPoints;
-        List<Point3D> backPoints;
-        List<Point3D> stretcherPoints;
-        List<Point3D> trashRolloutStretcherPoints;
-        List<Point3D> sinkStretcherPoints;
         List<Point3D> shelfPoints;
-        List<Point3D> doorPoints;
-        List<Point3D> drwFrontPoints;
-        List<Point3D> nailerPoints;
-
-        stretcherPoints =
-        [
-            new (0,0,0),
-            new (interiorWidth,0,0),
-            new (interiorWidth,StretcherWidth,0),
-            new (0,StretcherWidth,0)
-        ];
-
-        trashRolloutStretcherPoints =
-        [
-            new (0,0,0),
-            new (interiorWidth,0,0),
-            new (interiorWidth,interiorDepth,0),
-            new (0,interiorDepth,0)
-        ];
 
         shelfPoints =
         [
@@ -180,6 +115,245 @@ internal static partial class BaseCabinetBuilder
         // HOLES (base cabinets)
         // IMPORTANT: add holes before ApplyTransform(leftEnd/rightEnd, ...)
         // ----------------------------
+        DrillEndPanelHoles(leftEnd, rightEnd, baseCab, dim);
+
+
+        // End panel transforms
+        ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
+        ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
+
+
+        // Deck
+        if (backThickness == MaterialThickness34) { deckBackInset = MaterialThickness34; }
+        List<Point3D> deckPoints =
+        [
+            new (0,0,0),
+            new (interiorWidth,0,0),
+            new (interiorWidth,depth - deckBackInset,0),
+            new (0,depth - deckBackInset,0)
+        ];
+        deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Deck);
+        ModelTransforms.ApplyTransform(deck, -(interiorWidth / 2), -depth, tk_Height, 270, 0, 0);
+
+        // Full Top
+        if (string.Equals(baseCab.TopType, CabinetOptions.TopType.Full, StringComparison.OrdinalIgnoreCase))
+        {
+            List<Point3D> topPoints =
+            [
+                new (0,0,0),
+                new (interiorWidth,0,0),
+                new (interiorWidth,depth,0),
+                new (0,depth,0)
+            ];
+            top = CabinetPartFactory.CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Top);
+            ModelTransforms.ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
+        }
+
+        else
+        {
+            List<Point3D> topStretcherFrontPoints =
+            [
+                new (0,0,0),
+                new (interiorWidth,0,0),
+                new (interiorWidth,StretcherWidth,0),
+                new (0,StretcherWidth,0)
+            ];
+
+            List<Point3D> topStretcherBackPoints =
+            [
+                new (0,0,0),
+                new (interiorWidth,0,0),
+                new (interiorWidth,topStretcherBackWidth,0),
+                new (0,topStretcherBackWidth,0)
+            ];
+
+            topStretcherFront = CabinetPartFactory.CreatePanel(topStretcherFrontPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.TopStretcherFront);
+            topStretcherBack = CabinetPartFactory.CreatePanel(topStretcherBackPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.TopStretcherBack);
+
+            // Sink cuts on top stretcher front (local coords: X 0→interiorWidth, Y 0→StretcherWidth)
+            if (baseCab.SinkCabinet)
+            {
+                AddSinkCuts(topStretcherFront, interiorWidth, width, StretcherWidth, MaterialThickness34);
+            }
+
+            ModelTransforms.ApplyTransform(topStretcherFront, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
+            ModelTransforms.ApplyTransform(topStretcherBack, -(interiorWidth / 2), -topStretcherBackWidth, height - MaterialThickness34, 270, 0, 0);
+            top.Children.Add(topStretcherFront);
+            top.Children.Add(topStretcherBack);
+        }
+
+        // Toekick
+        if (baseCab.HasTK)
+        {
+            List<Point3D> toekickPoints =
+            [
+                new (0,0,0),
+                new (interiorWidth,0,0),
+                new (interiorWidth,tk_Height-.5,0),
+                new (0,tk_Height-.5,0)
+            ];
+            toekick = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Toekick);
+            ModelTransforms.ApplyTransform(toekick, -(interiorWidth / 2), 0.5, depth - tk_Depth - MaterialThickness34, 0, 0, 0);
+        }
+
+        // Back
+        if (backThickness == 0.75)
+        {
+            List<Point3D> backPoints =
+            [
+                new (0,-MaterialThickness34,0),
+                new (interiorWidth,-MaterialThickness34,0),
+                new (interiorWidth,interiorHeight,0),
+                new (0,interiorHeight,0)
+            ];
+            if (width <= 47.75 + (2 * MaterialThickness34))
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
+            else
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
+            ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34 + tk_Height, 0, 0, 0, 0);
+        }
+        else
+        {
+            List<Point3D> backPoints =
+            [
+                new (0,0,0),
+                new (width,0,0),
+                new (width,height-tk_Height,0),
+                new (0,height-tk_Height,0)
+            ];
+            if (width <= 47.75)
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
+            else
+            {
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
+            }
+            ModelTransforms.ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
+
+            List<Point3D> nailerPoints =
+            [
+                new (0,0,0),
+                new (interiorWidth,0,0),
+                new (interiorWidth,StretcherWidth,0),
+                new (0,StretcherWidth,0)
+            ];
+
+            var nailer = CabinetPartFactory.CreatePanel(nailerPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Nailer);
+            ModelTransforms.ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
+            cabinet.Children.Add(nailer);
+        }
+
+        // Drawer Stretchers
+        BuildDrawerStretchers(cabinet, baseCab, dim);
+
+        // Shelves
+        if (cabType != style2)
+        {
+            double shelfSpacing = interiorHeight - opening1Height + MaterialThickness34;
+            if (baseCab.DrwCount == 0) { shelfSpacing = interiorHeight; }
+            if (baseCab.HasTK) { shelfSpacing += tk_Height * 2; }
+            shelfSpacing /= (baseCab.ShelfCount + 1);
+
+            for (int i = 1; i < baseCab.ShelfCount + 1; i++)
+            {
+                double backThicknessForSpacing = backThickness;
+                if (backThickness == 0.25) { backThicknessForSpacing = 0; }
+                shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Shelf);
+                ModelTransforms.ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -backThicknessForSpacing - shelfDepth, i * shelfSpacing, 270, 0, 0);
+                cabinet.Children.Add(shelf);
+            }
+        }
+
+        // Doors
+        if (baseCab.DoorCount > 0 && baseCab.IncDoors && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2)
+        {
+            BuildDoors(cabinet, baseCab, dim, opening1Height, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow);
+        }
+
+        // Drawer Fronts
+        BuildDrawerFronts(cabinet, baseCab, dim, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, result);
+
+        // Drawer Boxes
+        BuildDrawerBoxes(cabinet, baseCab, dim, addDrawerBoxRow, result);
+
+        // Rollouts or Trash Drawer
+        BuildRolloutsAndTrash(cabinet, baseCab, dim, addDrawerBoxRow, result);
+
+        if (!leftEndHidden) cabinet.Children.Add(leftEnd);
+        if (!rightEndHidden) cabinet.Children.Add(rightEnd);
+        if (!deckHidden) cabinet.Children.Add(deck);
+        if (!topHidden) cabinet.Children.Add(top);
+        cabinet.Children.Add(back);
+        cabinet.Children.Add(toekick);
+    }
+
+
+
+
+    /// <summary>
+    /// Adds the three sink clip cuts (left tab, right tab, center slot)
+    /// to a stretcher panel in its local coordinate space.
+    /// </summary>
+    private static void AddSinkCuts(Model3DGroup panel, double interiorWidth, double width, double stretcherWidth, double materialThickness)
+    {
+        double cutWidth = 0.5;
+        double cutLength = 4.5;
+        double cutRimZ = materialThickness;
+        double cutBottomZ = 0;
+
+        double cut1CenterX = 2;
+        double cut1CenterY = stretcherWidth - (cutLength / 2);
+
+        panel.Children.Add(CabinetPartFactory.CreateRectangularCut(
+            cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+
+        cut1CenterX = width - materialThickness - 2.75;
+
+        panel.Children.Add(CabinetPartFactory.CreateRectangularCut(
+            cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+
+        cut1CenterX = interiorWidth / 2;
+        cut1CenterY = 1.75;
+
+        cutLength = .5;
+        cutWidth = width - (2.75 * 2);
+
+        panel.Children.Add(CabinetPartFactory.CreateRectangularCut(
+            cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
+    }
+
+
+    /// <summary>
+    /// Drills all end-panel holes (construction, back vertical, hinge, shelf, drawer slide)
+    /// into the left and right end panels in local coordinates.
+    /// Must be called before ApplyTransform on the end panels.
+    /// </summary>
+    private static void DrillEndPanelHoles(
+        Model3DGroup leftEnd,
+        Model3DGroup rightEnd,
+        BaseCabinetModel baseCab,
+        BaseCabinetDimensions dim)
+    {
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+        double holeDiameter = 0.197;
+        double holeDepth = MaterialThickness34 / 2;
+
+        double depth = dim.Depth;
+        double height = dim.Height;
+        double tk_Height = dim.TKHeight;
+        double backThickness = dim.BackThickness;
+        double shelfDepth = dim.ShelfDepth;
+        double opening1Height = dim.Opening1Height;
+        double opening2Height = dim.Opening2Height;
+        double opening3Height = dim.Opening3Height;
+        double opening4Height = dim.Opening4Height;
+
+        string style2 = CabinetStyles.Base.Drawer;
 
         // Construction holes (outside face) - along Depth axis, top & bottom edges
         {
@@ -391,400 +565,154 @@ internal static partial class BaseCabinetBuilder
                 }
             }
         }
+    }
 
 
-        // End panel transforms
-        ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
-        ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
+    /// <summary>
+    /// Builds and positions 1 or 2 doors, adding them to <paramref name="cabinet"/>
+    /// and optionally recording them via <paramref name="addFrontPartRow"/>.
+    /// </summary>
+    private static void BuildDoors(
+        Model3DGroup cabinet,
+        BaseCabinetModel baseCab,
+        BaseCabinetDimensions dim,
+        double opening1Height,
+        string doorEdgebandingSpecies,
+        bool doorsHidden,
+        Func<string?, string?, string> resolveDoorSpeciesForTotals,
+        Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow)
+    {
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+        double halfMaterialThickness34 = MaterialThickness34 / 2;
 
+        string style1 = CabinetStyles.Base.Standard;
+        string? cabType = baseCab.Style;
 
-        // Deck
-        if (backThickness == MaterialThickness34) { deckBackInset = MaterialThickness34; }
-        deckPoints =
-        [
-            new (0,0,0),
-            new (interiorWidth,0,0),
-            new (interiorWidth,depth - deckBackInset,0),
-            new (0,depth - deckBackInset,0)
-        ];
-        deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Deck);
-        ModelTransforms.ApplyTransform(deck, -(interiorWidth / 2), -depth, tk_Height, 270, 0, 0);
+        double width = dim.Width;
+        double height = dim.Height;
+        double depth = dim.Depth;
+        double tk_Height = dim.TKHeight;
+        double baseDoorGap = dim.BaseDoorGap;
+        double doorLeftReveal = dim.DoorLeftReveal;
+        double doorRightReveal = dim.DoorRightReveal;
+        double doorTopReveal = dim.DoorTopReveal;
+        double doorBottomReveal = dim.DoorBottomReveal;
+        double doorSideReveal = dim.DoorSideReveal;
 
-        // Full Top
-        if (string.Equals(baseCab.TopType, CabinetOptions.TopType.Full, StringComparison.OrdinalIgnoreCase))
-        {
-            topPoints =
-            [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,depth,0),
-                new (0,depth,0)
-            ];
-            top = CabinetPartFactory.CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Top);
-            ModelTransforms.ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
-        }
+        var doorSpeciesForTotals = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
 
-        else
-        {
-            topStretcherFrontPoints =
-            [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,StretcherWidth,0),
-                new (0,StretcherWidth,0)
-            ];
+        double doorWidth = width - (doorSideReveal * 2);
+        double doorHeight = height - doorTopReveal - doorBottomReveal - tk_Height;
 
-            topStretcherBackPoints =
-            [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,topStretcherBackWidth,0),
-                new (0,topStretcherBackWidth,0)
-            ];
-
-
-            topStretcherFront = CabinetPartFactory.CreatePanel(topStretcherFrontPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.TopStretcherFront);
-            topStretcherBack = CabinetPartFactory.CreatePanel(topStretcherBackPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.TopStretcherBack);
-
-            // Sink cuts on top stretcher front (local coords: X 0→interiorWidth, Y 0→StretcherWidth)
-            if (baseCab.SinkCabinet)
-            {
-                double cutWidth = 0.5;
-                double cutLength = 4.5; // TODO: fill in cut length
-                double cutRimZ = MaterialThickness34;
-                double cutBottomZ = 0;
-
-                // TODO: fill in centerX / centerY for each cut
-                double cut1CenterX = 2;
-                double cut1CenterY = StretcherWidth - (cutLength / 2);
-
-                topStretcherFront.Children.Add(CabinetPartFactory.CreateRectangularCut(
-                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
-
-
-                cut1CenterX = width - MaterialThickness34 - 2.75;
-
-                topStretcherFront.Children.Add(CabinetPartFactory.CreateRectangularCut(
-                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
-
-                cut1CenterX = interiorWidth / 2;
-                cut1CenterY = 1.75;
-
-                cutLength = .5;
-                cutWidth = width - (2.75 * 2);
-
-                topStretcherFront.Children.Add(CabinetPartFactory.CreateRectangularCut(
-                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
-            }
-
-            ModelTransforms.ApplyTransform(topStretcherFront, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
-            ModelTransforms.ApplyTransform(topStretcherBack, -(interiorWidth / 2), -topStretcherBackWidth, height - MaterialThickness34, 270, 0, 0);
-            top.Children.Add(topStretcherFront);
-            top.Children.Add(topStretcherBack);
-        }
-
-        // Toekick
-        if (baseCab.HasTK)
-        {
-            toekickPoints =
-                [
-                    new (0,0,0),
-                    new (interiorWidth,0,0),
-                    new (interiorWidth,tk_Height-.5,0),
-                    new (0,tk_Height-.5,0)
-                ];
-            toekick = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Toekick);
-            ModelTransforms.ApplyTransform(toekick, -(interiorWidth / 2), 0.5, depth - tk_Depth - MaterialThickness34, 0, 0, 0);
-        }
-
-        // Back
-        if (backThickness == 0.75)
-        {
-            backPoints =
-            [
-                new (0,-MaterialThickness34,0),
-                new (interiorWidth,-MaterialThickness34,0),
-                new (interiorWidth,interiorHeight,0),
-                new (0,interiorHeight,0)
-            ];
-            if (width <= 47.75 + (2*MaterialThickness34))
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
-            }
-            else
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
-            }
-            ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34 + tk_Height, 0, 0, 0, 0);
-        }
-        else
-        {
-            backPoints =
-            [
-                new (0,0,0),
-                new (width,0,0),
-                new (width,height-tk_Height,0),
-                new (0,height-tk_Height,0)
-            ];
-            if (width <= 47.75)
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
-            }
-            else
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackBase34);
-            }
-            ModelTransforms.ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
-
-            nailerPoints =
-            [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,StretcherWidth,0),
-                new (0,StretcherWidth,0)
-            ];
-
-            nailer = CabinetPartFactory.CreatePanel(nailerPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Nailer);
-            ModelTransforms.ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
-            cabinet.Children.Add(nailer);
-        }
-
-        // Drawer Stretchers
         if (cabType == style1 && baseCab.DrwCount == 1)
         {
-            double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
-
-            if (baseCab.TrashDrawer)
-            {
-                stretcherPoints = trashRolloutStretcherPoints;
-            }
-
-            stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
-
-            if (baseCab.SinkCabinet)
-            {
-                double cutWidth = 0.5;
-                double cutLength = 4.5; // TODO: fill in cut length
-                double cutRimZ = MaterialThickness34;
-                double cutBottomZ = 0;
-
-                // TODO: fill in centerX / centerY for each cut
-                double cut1CenterX = 2;
-                double cut1CenterY = StretcherWidth - (cutLength / 2);
-
-                stretcher.Children.Add(CabinetPartFactory.CreateRectangularCut(
-                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
-
-
-                cut1CenterX = width - MaterialThickness34 - 2.75;
-
-                stretcher.Children.Add(CabinetPartFactory.CreateRectangularCut(
-                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
-
-                cut1CenterX = interiorWidth / 2;
-                cut1CenterY = 1.75;
-
-                cutLength = .5;
-                cutWidth = width - (2.75 * 2);
-
-                stretcher.Children.Add(CabinetPartFactory.CreateRectangularCut(
-                    cut1CenterX, cut1CenterY, cutRimZ, cutBottomZ, cutWidth, cutLength));
-            }
-
-            ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
-            cabinet.Children.Add(stretcher);
-
-            if (baseCab.SinkCabinet)
-            {
-                sinkStretcherPoints =
-                [
-                    new (0,0,0),
-                    new (interiorWidth,0,0),
-                    new (interiorWidth,opening1Height,0),
-                    new (0,opening1Height,0)
-                ];
-
-                stretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.SinkStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
-                cabinet.Children.Add(stretcher);
-            }
+            doorHeight = height - opening1Height - MaterialThickness34 - halfMaterialThickness34 - (baseDoorGap / 2) - doorBottomReveal - tk_Height;
         }
 
-        if (cabType == style2)
+        if (baseCab.DoorCount == 1)
         {
-            double opening1HeightAdjusted = opening1Height;
-            double opening2HeightAdjusted = opening2Height;
-            double opening3HeightAdjusted = opening3Height;
+            List<Point3D> doorPoints =
+            [
+                new (0,0,0),
+                new (doorWidth,0,0),
+                new (doorWidth,doorHeight,0),
+                new (0,doorHeight,0)
+            ];
 
-            if (baseCab.DrwCount == 2)
+            if (baseCab.IncDoorsInList)
             {
-                opening1HeightAdjusted += doubleMaterialThickness34;
-                stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
+                addFrontPartRow(baseCab, "Door", doorHeight, doorWidth, baseCab.DoorSpecies, baseCab.DoorGrainDir);
             }
 
-            if (baseCab.DrwCount == 3)
+            if (baseCab.IncDoors)
             {
-                opening1HeightAdjusted += doubleMaterialThickness34;
-                stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
-
-                opening2HeightAdjusted += MaterialThickness34;
-                stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
-            }
-
-            if (baseCab.DrwCount == 4)
-            {
-                opening1HeightAdjusted += doubleMaterialThickness34;
-                stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
-
-                opening2HeightAdjusted += MaterialThickness34;
-                stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
-
-                opening3HeightAdjusted += MaterialThickness34;
-                stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted - opening3HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
-            }
-
-            if (baseCab.SinkCabinet)
-            {
-                sinkStretcherPoints =
-                [
-                    new (0,0,0),
-                    new (interiorWidth,0,0),
-                    new (interiorWidth,opening1Height,0),
-                    new (0,opening1Height,0)
-                ];
-
-                stretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.SinkStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
-                cabinet.Children.Add(stretcher);
-            }
-        }
-
-        // Shelves
-        if (cabType != style2)
-        {
-            double shelfSpacing = interiorHeight - opening1Height + MaterialThickness34;
-            if (baseCab.DrwCount == 0) { shelfSpacing = interiorHeight; }
-            if (baseCab.HasTK) { shelfSpacing += tk_Height * 2; }
-            shelfSpacing /= (baseCab.ShelfCount + 1);
-
-            for (int i = 1; i < baseCab.ShelfCount + 1; i++)
-            {
-                double backThicknessForSpacing = backThickness;
-                if (backThickness == 0.25) { backThicknessForSpacing = 0; }
-                shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Shelf);
-                ModelTransforms.ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -backThicknessForSpacing - shelfDepth, i * shelfSpacing, 270, 0, 0);
-                cabinet.Children.Add(shelf);
-            }
-        }
-
-
-        // Doors
-        if (baseCab.DoorCount > 0 && baseCab.IncDoors && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2)
-        {
-            var doorSpeciesForTotals = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
-
-            double doorWidth = width - (doorSideReveal * 2);
-            double doorHeight = height - doorTopReveal - doorBottomReveal - tk_Height;
-
-            if (cabType == style1 && baseCab.DrwCount == 1)
-            {
-                doorHeight = height - opening1Height - MaterialThickness34 - halfMaterialThickness34 - (baseDoorGap / 2) - doorBottomReveal - tk_Height;
-            }
-
-            if (baseCab.DoorCount == 1)
-            {
-                doorPoints =
-                [
-                    new (0,0,0),
-                    new (doorWidth,0,0),
-                    new (doorWidth,doorHeight,0),
-                    new (0,doorHeight,0)
-                ];
-
-                if (baseCab.IncDoorsInList)
+                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
+                if (!baseCab.HasTK)
                 {
-                    addFrontPartRow(baseCab, "Door", doorHeight, doorWidth, baseCab.DoorSpecies, baseCab.DoorGrainDir);
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
                 }
-
-                if (baseCab.IncDoors)
+                else
                 {
-                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
-                    if (!baseCab.HasTK)
-                    {
-                        ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
-                    }
-                    else
-                    {
-                        ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
-                    }
-                    if (!doorsHidden) cabinet.Children.Add(door1);
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
                 }
+                if (!doorsHidden) cabinet.Children.Add(door1);
             }
+        }
 
-            if (baseCab.DoorCount == 2)
-            {
-                doorWidth = (doorWidth / 2) - (baseDoorGap / 2);
+        if (baseCab.DoorCount == 2)
+        {
+            doorWidth = (doorWidth / 2) - (baseDoorGap / 2);
 
-                doorPoints =
-                [
+            List<Point3D> doorPoints =
+            [
                 new (0,0,0),
                 new (doorWidth,0,0),
                 new (doorWidth, doorHeight, 0),
                 new (0,doorHeight,0)
-                ];
+            ];
 
-                if (baseCab.IncDoorsInList)
-                {
-                    addFrontPartRow(baseCab, "Door", doorHeight, doorWidth, baseCab.DoorSpecies, baseCab.DoorGrainDir);
-                    addFrontPartRow(baseCab, "Door", doorHeight, doorWidth, baseCab.DoorSpecies, baseCab.DoorGrainDir);
-                }
-
-                if (baseCab.IncDoors)
-                {
-                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
-
-                    door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
-                    if (!baseCab.HasTK)
-                    {
-                        ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
-                        ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal, depth, 0, 0, 0);
-                    }
-                    else
-                    {
-                        ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
-                        ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
-                    }
-                    if (!doorsHidden)
-                    {
-                        cabinet.Children.Add(door1);
-                        cabinet.Children.Add(door2);
-                    }
-                }
+            if (baseCab.IncDoorsInList)
+            {
+                addFrontPartRow(baseCab, "Door", doorHeight, doorWidth, baseCab.DoorSpecies, baseCab.DoorGrainDir);
+                addFrontPartRow(baseCab, "Door", doorHeight, doorWidth, baseCab.DoorSpecies, baseCab.DoorGrainDir);
             }
 
+            if (baseCab.IncDoors)
+            {
+                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
+
+                var door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
+                if (!baseCab.HasTK)
+                {
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
+                    ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal, depth, 0, 0, 0);
+                }
+                else
+                {
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
+                    ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
+                }
+                if (!doorsHidden)
+                {
+                    cabinet.Children.Add(door1);
+                    cabinet.Children.Add(door2);
+                }
+            }
         }
+    }
 
 
-        // Drawer Fronts (grouped)
+    /// <summary>
+    /// Builds and positions drawer front panels, adding them to <paramref name="cabinet"/>
+    /// and optionally recording them via <paramref name="addFrontPartRow"/>.
+    /// </summary>
+    private static void BuildDrawerFronts(
+        Model3DGroup cabinet,
+        BaseCabinetModel baseCab,
+        BaseCabinetDimensions dim,
+        string doorEdgebandingSpecies,
+        bool doorsHidden,
+        Func<string?, string?, string> resolveDoorSpeciesForTotals,
+        Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow,
+        CabinetBuildResult? result)
+    {
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+
+        double width = dim.Width;
+        double height = dim.Height;
+        double depth = dim.Depth;
+        double doorLeftReveal = dim.DoorLeftReveal;
+        double doorTopReveal = dim.DoorTopReveal;
+        double doorSideReveal = dim.DoorSideReveal;
+        double baseDoorGap = dim.BaseDoorGap;
+
         double drwFrontWidth = width - (doorSideReveal * 2);
         if (result is not null)
             result.DrawerFrontWidth = drwFrontWidth;
 
         var doorSpeciesForTotalsForDrw = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
 
-        double[] drwHeights = new[] { drwFront1Height, drwFront2Height, drwFront3Height, drwFront4Height };
+        double[] drwHeights = new[] { dim.DrwFront1Height, dim.DrwFront2Height, dim.DrwFront3Height, dim.DrwFront4Height };
         bool[] incFront = new[] { baseCab.IncDrwFront1, baseCab.IncDrwFront2, baseCab.IncDrwFront3, baseCab.IncDrwFront4 };
         bool[] incFrontInList = new[] { baseCab.IncDrwFrontInList1, baseCab.IncDrwFrontInList2, baseCab.IncDrwFrontInList3, baseCab.IncDrwFrontInList4 };
 
@@ -807,7 +735,7 @@ internal static partial class BaseCabinetBuilder
 
             if (!incFront[fi]) continue;
 
-            drwFrontPoints =
+            List<Point3D> drwFrontPoints =
             [
                 new (0,0,0),
                 new (drwFrontWidth,0,0),
@@ -820,191 +748,375 @@ internal static partial class BaseCabinetBuilder
 
             double yPos = height - doorTopReveal - cumulativeHeight - (fi * baseDoorGap);
 
-            var front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, topDeck90, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.DrawerFront);
+            var front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.DrawerFront);
             ModelTransforms.ApplyTransform(front, -(width / 2) + doorLeftReveal, yPos, depth, 0, 0, 0);
             if (!doorsHidden) cabinet.Children.Add(front);
         }
+    }
 
 
-        // Drawer Boxes (grouped)
-        if (baseCab.DrwCount > 0)
+    /// <summary>
+    /// Builds and positions drawer boxes for each opening, adding them to
+    /// <paramref name="cabinet"/> and optionally recording them via <paramref name="addDrawerBoxRow"/>.
+    /// </summary>
+    private static void BuildDrawerBoxes(
+        Model3DGroup cabinet,
+        BaseCabinetModel baseCab,
+        BaseCabinetDimensions dim,
+        Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow,
+        CabinetBuildResult? result)
+    {
+        if (baseCab.DrwCount <= 0) return;
+
+        if (!baseCab.IncDrwBoxOpening1 && !baseCab.IncDrwBoxOpening2 && !baseCab.IncDrwBoxOpening3 && !baseCab.IncDrwBoxOpening4
+            && !baseCab.IncDrwBoxInListOpening1 && !baseCab.IncDrwBoxInListOpening2 && !baseCab.IncDrwBoxInListOpening3 && !baseCab.IncDrwBoxInListOpening4)
+            return;
+
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+        double tandemSideSpacing = .4;
+        double tandemTopSpacing = .375;
+        double tandemBottomSpacing = .5906;
+        double tandemMidDrwBottomSpacingAdjustment = 0;
+        double accurideSideSpacing = 1;
+        double accurideTopSpacing = .5;
+        double accurideBottomSpacing = .5;
+
+        double height = dim.Height;
+        double interiorWidth = dim.InteriorWidth;
+        double interiorDepth = dim.InteriorDepth;
+        double backThickness = dim.BackThickness;
+        double dbxWidth = interiorWidth;
+        double dbxDepth = dim.DrawerBoxDepth;
+
+        double topSpacing = 0;
+        double bottomSpacing = 0;
+
+        if (baseCab.DrwStyle is not null)
         {
-            if (baseCab.IncDrwBoxOpening1 || baseCab.IncDrwBoxOpening2 || baseCab.IncDrwBoxOpening3 || baseCab.IncDrwBoxOpening4 || baseCab.IncDrwBoxInListOpening1 || baseCab.IncDrwBoxInListOpening2 || baseCab.IncDrwBoxInListOpening3 || baseCab.IncDrwBoxInListOpening4)
+            if (baseCab.DrwStyle.Contains("Blum"))
             {
-                double topSpacing = 0;
-                double bottomSpacing = 0;
-
-                if (baseCab.DrwStyle is not null)
-                {
-                    if (baseCab.DrwStyle.Contains("Blum"))
-                    {
-                        dbxWidth -= tandemSideSpacing;
-                        topSpacing = tandemTopSpacing;
-                        bottomSpacing = tandemBottomSpacing;
-                    }
-                    else if (baseCab.DrwStyle.Contains("Accuride"))
-                    {
-                        dbxWidth -= accurideSideSpacing;
-                        topSpacing = accurideTopSpacing;
-                        bottomSpacing = accurideBottomSpacing;
-                    }
-                }
-
-                if (result is not null)
-                    result.DrawerBoxWidth = dbxWidth;
-
-                double[] openingHeights = new[] { opening1Height, opening2Height, opening3Height, opening4Height };
-                bool[] incBoxOpening = new[] { baseCab.IncDrwBoxOpening1, baseCab.IncDrwBoxOpening2, baseCab.IncDrwBoxOpening3, baseCab.IncDrwBoxOpening4 };
-                bool[] incBoxInList = new[] { baseCab.IncDrwBoxInListOpening1, baseCab.IncDrwBoxInListOpening2, baseCab.IncDrwBoxInListOpening3, baseCab.IncDrwBoxInListOpening4 };
-
-                for (int oi = 0; oi < 4; oi++)
-                {
-                    int openingIndex = oi + 1;
-                    if (baseCab.DrwCount < openingIndex) break;
-
-                    dbxHeight = openingHeights[oi] - topSpacing - bottomSpacing;
-
-                    if (baseCab.DrwCount > openingIndex)
-                    {
-                        dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
-                    }
-
-                    result?.DrawerBoxHeights.Add(dbxHeight);
-
-                    if (incBoxInList[oi])
-                    {
-                        addDrawerBoxRow(baseCab, $"Drawer Box {openingIndex}", dbxHeight, dbxWidth, dbxDepth);
-                    }
-
-                    if (!incBoxOpening[oi]) continue;
-
-                    var dbxRotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
-                    Model3DGroup dbxGroup = new();
-                    dbxGroup.Children.Add(dbxRotate);
-
-                    double prevOpeningsSum = 0;
-                    for (int p = 0; p < oi; p++) prevOpeningsSum += openingHeights[p];
-
-                    double y = height - dbxHeight - MaterialThickness34 - topSpacing - prevOpeningsSum - (MaterialThickness34 * oi);
-
-                    ModelTransforms.ApplyTransform(dbxGroup, (dbxWidth / 2) - MaterialThickness34, y, interiorDepth + backThickness, 0, 0, 0);
-                    cabinet.Children.Add(dbxGroup);
-                }
+                dbxWidth -= tandemSideSpacing;
+                topSpacing = tandemTopSpacing;
+                bottomSpacing = tandemBottomSpacing;
+            }
+            else if (baseCab.DrwStyle.Contains("Accuride"))
+            {
+                dbxWidth -= accurideSideSpacing;
+                topSpacing = accurideTopSpacing;
+                bottomSpacing = accurideBottomSpacing;
             }
         }
 
-        // Rollouts or Trash Drawer
-        if (baseCab.IncRollouts || baseCab.IncRolloutsInList || baseCab.IncTrashDrwBox)
-        {
-            const double rolloutMountBracketSpacing = 1;
-            dbxHeight = rolloutHeight;
+        if (result is not null)
+            result.DrawerBoxWidth = dbxWidth;
 
-            if (baseCab.RolloutStyle is not null)
+        double[] openingHeights = new[] { dim.Opening1Height, dim.Opening2Height, dim.Opening3Height, dim.Opening4Height };
+        bool[] incBoxOpening = new[] { baseCab.IncDrwBoxOpening1, baseCab.IncDrwBoxOpening2, baseCab.IncDrwBoxOpening3, baseCab.IncDrwBoxOpening4 };
+        bool[] incBoxInList = new[] { baseCab.IncDrwBoxInListOpening1, baseCab.IncDrwBoxInListOpening2, baseCab.IncDrwBoxInListOpening3, baseCab.IncDrwBoxInListOpening4 };
+
+        for (int oi = 0; oi < 4; oi++)
+        {
+            int openingIndex = oi + 1;
+            if (baseCab.DrwCount < openingIndex) break;
+
+            double dbxHeight = openingHeights[oi] - topSpacing - bottomSpacing;
+
+            if (baseCab.DrwCount > openingIndex)
             {
-                if (baseCab.RolloutStyle.Contains("Blum"))
+                dbxHeight -= tandemMidDrwBottomSpacingAdjustment;
+            }
+
+            result?.DrawerBoxHeights.Add(dbxHeight);
+
+            if (incBoxInList[oi])
+            {
+                addDrawerBoxRow(baseCab, $"Drawer Box {openingIndex}", dbxHeight, dbxWidth, dbxDepth);
+            }
+
+            if (!incBoxOpening[oi]) continue;
+
+            var dbxRotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+            Model3DGroup dbxGroup = new();
+            dbxGroup.Children.Add(dbxRotate);
+
+            double prevOpeningsSum = 0;
+            for (int p = 0; p < oi; p++) prevOpeningsSum += openingHeights[p];
+
+            double y = height - dbxHeight - MaterialThickness34 - topSpacing - prevOpeningsSum - (MaterialThickness34 * oi);
+
+            ModelTransforms.ApplyTransform(dbxGroup, (dbxWidth / 2) - MaterialThickness34, y, interiorDepth + backThickness, 0, 0, 0);
+            cabinet.Children.Add(dbxGroup);
+        }
+    }
+
+
+    /// <summary>
+    /// Builds and positions rollout shelves and/or the trash drawer box,
+    /// adding them to <paramref name="cabinet"/> and optionally recording
+    /// them via <paramref name="addDrawerBoxRow"/>.
+    /// </summary>
+    private static void BuildRolloutsAndTrash(
+        Model3DGroup cabinet,
+        BaseCabinetModel baseCab,
+        BaseCabinetDimensions dim,
+        Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow,
+        CabinetBuildResult? result)
+    {
+        if (!baseCab.IncRollouts && !baseCab.IncRolloutsInList && !baseCab.IncTrashDrwBox) return;
+
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+        double tandemSideSpacing = .4;
+        double accurideSideSpacing = 1;
+        const double rolloutMountBracketSpacing = 1;
+        double rolloutHeight = 4;
+
+        string style1 = CabinetStyles.Base.Standard;
+
+        double height = dim.Height;
+        double tk_Height = dim.TKHeight;
+        double interiorWidth = dim.InteriorWidth;
+        double interiorDepth = dim.InteriorDepth;
+        double backThickness = dim.BackThickness;
+        double opening1Height = dim.Opening1Height;
+        double dbxDepth = dim.DrawerBoxDepth;
+
+        double dbxWidth = interiorWidth;
+        double dbxHeight = rolloutHeight;
+
+        if (baseCab.RolloutStyle is not null)
+        {
+            if (baseCab.RolloutStyle.Contains("Blum"))
+            {
+                dbxWidth = interiorWidth - tandemSideSpacing;
+            }
+            else if (baseCab.RolloutStyle.Contains("Accuride"))
+            {
+                dbxWidth = interiorWidth - accurideSideSpacing;
+            }
+        }
+
+        if (baseCab.RolloutCount > 0)
+        {
+            dbxWidth -= rolloutMountBracketSpacing * baseCab.DoorCount;
+        }
+
+        // ── Capture rollout dims — these are the actual values used for geometry ──
+        if (result is not null)
+        {
+            result.RolloutWidth = dbxWidth;
+            result.RolloutHeight = dbxHeight;
+            result.RolloutDepth = dbxDepth;
+        }
+
+        if (baseCab.RolloutCount >= 1 || (baseCab.IncTrashDrwBox && baseCab.TrashDrawer))
+        {
+            if (baseCab.IncTrashDrwBox && baseCab.TrashDrawer)
+            {
+                dbxHeight = 12;
+            }
+
+            if (baseCab.IncRollouts)
+            {
+                // Calculate rollout opening for even vertical spacing
+                double rolloutOpeningBottom = MaterialThickness34 + tk_Height;
+                double rolloutOpeningTop = (baseCab.Style == style1 && baseCab.DrwCount == 1)
+                    ? height - ((baseCab.DrwCount + 1) * MaterialThickness34) - opening1Height
+                    : height - MaterialThickness34;
+
+                double rolloutOpeningHeight = rolloutOpeningTop - rolloutOpeningBottom;
+                double bottomOffset = 0.8406;
+                int rolloutCount = baseCab.RolloutCount;
+                double totalRolloutHeight = rolloutCount * dbxHeight;
+                double rolloutGap = rolloutCount > 0
+                    ? (rolloutOpeningHeight - bottomOffset - totalRolloutHeight) / rolloutCount
+                    : 0;
+
+                for (int r = 0; r < rolloutCount; r++)
+                {
+                    if (baseCab.IncRolloutsInList)
+                    {
+                        addDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
+                    }
+
+                    var rotateGroup = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+                    var placement = new Model3DGroup();
+                    placement.Children.Add(rotateGroup);
+
+                    double rolloutY = rolloutOpeningBottom + bottomOffset + (r * (dbxHeight + rolloutGap));
+
+                    ModelTransforms.ApplyTransform(placement, (dbxWidth / 2) - MaterialThickness34, rolloutY, interiorDepth + backThickness - .25, 0, 0, 0);
+                    cabinet.Children.Add(placement);
+                }
+            }
+
+            // Reset dbxWidth for trash drawer (uses DrwStyle, not RolloutStyle)
+            if (baseCab.DrwStyle is not null)
+            {
+                if (baseCab.DrwStyle.Contains("Blum"))
                 {
                     dbxWidth = interiorWidth - tandemSideSpacing;
                 }
-                else if (baseCab.RolloutStyle.Contains("Accuride"))
+                else if (baseCab.DrwStyle.Contains("Accuride"))
                 {
                     dbxWidth = interiorWidth - accurideSideSpacing;
                 }
             }
 
-            if (baseCab.RolloutCount > 0)
+            if (baseCab.IncTrashDrwBox && baseCab.TrashDrawer)
             {
-                dbxWidth -= rolloutMountBracketSpacing * baseCab.DoorCount;
-            }
-
-            // ── Capture rollout dims — these are the actual values used for geometry ──
-            if (result is not null)
-            {
-                result.RolloutWidth = dbxWidth;
-                result.RolloutHeight = dbxHeight;
-                result.RolloutDepth = dbxDepth;
-            }
-
-            double dbxFrontAndBackWidth = dbxWidth - (MaterialThickness34 * 2);
-            double dbxBottomWidth = dbxWidth - (MaterialThickness34 * 2);
-            double dbxBottomLength = dbxDepth - (MaterialThickness34 * 2);
-
-            if (baseCab.RolloutCount >= 1 || (baseCab.IncTrashDrwBox && baseCab.TrashDrawer))
-            {
-                if (baseCab.IncTrashDrwBox && baseCab.TrashDrawer)
+                if (baseCab.IncDrwBoxesInList)
                 {
-                    dbxHeight = 12;
+                    addDrawerBoxRow(baseCab, "Trash Drawer", dbxHeight, dbxWidth, dbxDepth);
                 }
 
-                if (baseCab.IncRollouts)
+                if (baseCab.IncDrwBoxes)
                 {
-                    // Calculate rollout opening for even vertical spacing
-                    double rolloutOpeningBottom = MaterialThickness34 + tk_Height;
-                    double rolloutOpeningTop = (cabType == style1 && baseCab.DrwCount == 1)
-                        ? height - ((baseCab.DrwCount + 1) * MaterialThickness34) - opening1Height
-                        : height - MaterialThickness34;
-
-                    double rolloutOpeningHeight = rolloutOpeningTop - rolloutOpeningBottom;
-                    double bottomOffset = 0.8406;
-                    int rolloutCount = baseCab.RolloutCount;
-                    double totalRolloutHeight = rolloutCount * dbxHeight;
-                    double rolloutGap = rolloutCount > 0
-                        ? (rolloutOpeningHeight - bottomOffset - totalRolloutHeight) / rolloutCount
-                        : 0;
-
-                    for (int r = 0; r < rolloutCount; r++)
-                    {
-                        if (baseCab.IncRolloutsInList)
-                        {
-                            addDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
-                        }
-
-                        var rotateGroup = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
-                        var placement = new Model3DGroup();
-                        placement.Children.Add(rotateGroup);
-
-                        double rolloutY = rolloutOpeningBottom + bottomOffset + (r * (dbxHeight + rolloutGap));
-
-                        ModelTransforms.ApplyTransform(placement, (dbxWidth / 2) - MaterialThickness34, rolloutY, interiorDepth + backThickness - .25, 0, 0, 0);
-                        cabinet.Children.Add(placement);
-                    }
-                }
-
-                if (baseCab.DrwStyle is not null)
-                {
-                    if (baseCab.DrwStyle.Contains("Blum"))
-                    {
-                        dbxWidth = interiorWidth - tandemSideSpacing;
-                    }
-                    else if (baseCab.DrwStyle.Contains("Accuride"))
-                    {
-                        dbxWidth = interiorWidth - accurideSideSpacing;
-                    }
-                }
-
-                if (baseCab.IncTrashDrwBox && baseCab.TrashDrawer)
-                {
-                    if (baseCab.IncDrwBoxesInList)
-                    {
-                        addDrawerBoxRow(baseCab, "Trash Drawer", dbxHeight, dbxWidth, dbxDepth);
-                    }
-
-                    if (baseCab.IncDrwBoxes)
-                    {
-                        var rotateGroup = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, panelEBEdges, topDeck90);
-                        var trashDrawer = new Model3DGroup();
-                        trashDrawer.Children.Add(rotateGroup);
-                        ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0);
-                        cabinet.Children.Add(trashDrawer);
-                    }
+                    var rotateGroup = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+                    var trashDrawer = new Model3DGroup();
+                    trashDrawer.Children.Add(rotateGroup);
+                    ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0);
+                    cabinet.Children.Add(trashDrawer);
                 }
             }
         }
+    }
 
-        if (!leftEndHidden) cabinet.Children.Add(leftEnd);
-        if (!rightEndHidden) cabinet.Children.Add(rightEnd);
-        if (!deckHidden) cabinet.Children.Add(deck);
-        if (!topHidden) cabinet.Children.Add(top);
-        cabinet.Children.Add(back);
-        cabinet.Children.Add(toekick);
+
+    /// <summary>
+    /// Builds and positions drawer stretchers for Standard (1-drawer)
+    /// and Drawer style cabinets, including sink stretcher/clips when applicable.
+    /// </summary>
+    private static void BuildDrawerStretchers(
+        Model3DGroup cabinet,
+        BaseCabinetModel baseCab,
+        BaseCabinetDimensions dim)
+    {
+        double MaterialThickness34 = MaterialDefaults.Thickness34;
+        double doubleMaterialThickness34 = MaterialThickness34 * 2;
+        double StretcherWidth = 6;
+
+        string style1 = CabinetStyles.Base.Standard;
+        string style2 = CabinetStyles.Base.Drawer;
+        string? cabType = baseCab.Style;
+
+        double width = dim.Width;
+        double height = dim.Height;
+        double depth = dim.Depth;
+        double interiorWidth = dim.InteriorWidth;
+        double interiorDepth = dim.InteriorDepth;
+        double opening1Height = dim.Opening1Height;
+        double opening2Height = dim.Opening2Height;
+        double opening3Height = dim.Opening3Height;
+
+        List<Point3D> stretcherPoints =
+        [
+            new (0,0,0),
+            new (interiorWidth,0,0),
+            new (interiorWidth,StretcherWidth,0),
+            new (0,StretcherWidth,0)
+        ];
+
+        // Standard style with 1 drawer
+        if (cabType == style1 && baseCab.DrwCount == 1)
+        {
+            double topDeckAndStretcherThickness = (baseCab.DrwCount + 1) * MaterialThickness34;
+
+            var points = baseCab.TrashDrawer
+                ? new List<Point3D>
+                  {
+                      new (0,0,0),
+                      new (interiorWidth,0,0),
+                      new (interiorWidth,interiorDepth,0),
+                      new (0,interiorDepth,0)
+                  }
+                : stretcherPoints;
+
+            var stretcher = CabinetPartFactory.CreatePanel(points, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+
+            if (baseCab.SinkCabinet)
+            {
+                AddSinkCuts(stretcher, interiorWidth, width, StretcherWidth, MaterialThickness34);
+            }
+
+            ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
+            cabinet.Children.Add(stretcher);
+
+            if (baseCab.SinkCabinet)
+            {
+                List<Point3D> sinkStretcherPoints =
+                [
+                    new (0,0,0),
+                    new (interiorWidth,0,0),
+                    new (interiorWidth,opening1Height,0),
+                    new (0,opening1Height,0)
+                ];
+
+                stretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.SinkStretcher);
+                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
+                cabinet.Children.Add(stretcher);
+            }
+        }
+
+        // Drawer style (2–4 drawers)
+        if (cabType == style2)
+        {
+            double opening1HeightAdjusted = opening1Height;
+            double opening2HeightAdjusted = opening2Height;
+            double opening3HeightAdjusted = opening3Height;
+
+            if (baseCab.DrwCount == 2)
+            {
+                opening1HeightAdjusted += doubleMaterialThickness34;
+                var stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
+                cabinet.Children.Add(stretcher);
+            }
+
+            if (baseCab.DrwCount == 3)
+            {
+                opening1HeightAdjusted += doubleMaterialThickness34;
+                var stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
+                cabinet.Children.Add(stretcher);
+
+                opening2HeightAdjusted += MaterialThickness34;
+                var stretcher2 = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+                ModelTransforms.ApplyTransform(stretcher2, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
+                cabinet.Children.Add(stretcher2);
+            }
+
+            if (baseCab.DrwCount == 4)
+            {
+                opening1HeightAdjusted += doubleMaterialThickness34;
+                var stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
+                cabinet.Children.Add(stretcher);
+
+                opening2HeightAdjusted += MaterialThickness34;
+                var stretcher2 = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+                ModelTransforms.ApplyTransform(stretcher2, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
+                cabinet.Children.Add(stretcher2);
+
+                opening3HeightAdjusted += MaterialThickness34;
+                var stretcher3 = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.DrawerStretcher);
+                ModelTransforms.ApplyTransform(stretcher3, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted - opening3HeightAdjusted, 270, 0, 0);
+                cabinet.Children.Add(stretcher3);
+            }
+
+            if (baseCab.SinkCabinet)
+            {
+                List<Point3D> sinkStretcherPoints =
+                [
+                    new (0,0,0),
+                    new (interiorWidth,0,0),
+                    new (interiorWidth,opening1Height,0),
+                    new (0,opening1Height,0)
+                ];
+
+                var sinkStretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, false, false, "", isFaceUp: false, partKind: CabinetPartKind.SinkStretcher);
+                ModelTransforms.ApplyTransform(sinkStretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
+                cabinet.Children.Add(sinkStretcher);
+            }
+        }
     }
 }

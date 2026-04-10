@@ -103,6 +103,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             CustomCabSpeciesEnabled = (Species == "Custom");
             CustomEBSpeciesEnabled = (EBSpecies == "Custom");
             CustomDoorSpeciesEnabled = (DoorSpecies == "Custom");
+
+            // ── Depth-dependent ──
+            ComboShelfDepthEnabled = (ConvertDimension.FractionToDouble(Depth) >= 8);
         }
     }
 }
