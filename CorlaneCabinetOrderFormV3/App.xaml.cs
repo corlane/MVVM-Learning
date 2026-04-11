@@ -265,7 +265,7 @@ public partial class App : Application
         }
 
         // One-time popup — bump this version string whenever you have a new notice
-        const string currentPopupVersion = "3.0.1.50";
+        const string currentPopupVersion = "3.0.1.51";
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
