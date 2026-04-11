@@ -346,3 +346,4 @@
 
 3.0.1.50
 	Base & Upper 1/4" back thickness in builders had magically gotten changed to MaterialThickness34. Fixed. commit
+	Added a crap-top of new tests. commit
