@@ -15,8 +15,7 @@ User side:
 
 Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
 
-
-
+Have each cabinet in the Cabinet List have a Checkbox to select it. Above cabinet List, have a "Select All" & "Deselect All" button to select/deselect all cabinets in the list. Then add a "Modify Selected" button that will open a window/page that will allow modification of cabinet & door species, edgebanding, door reveals, etc.
 
 
 
