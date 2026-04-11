@@ -120,11 +120,11 @@
         </HeaderedContentControl>
 
         <!-- ── Supply Doors (Base & Upper) ──────────────── -->
-        <HeaderedContentControl Header="Supply Doors"
+        <HeaderedContentControl Header="Doors"
                                 Margin="0,0,0,10"
                                 Visibility="{Binding HasBaseOrUpper, Converter={StaticResource BoolToVis}}">
             <StackPanel>
-                <CheckBox IsChecked="{Binding ApplySupplyDoors}" Content="Apply Supply Doors" Margin="0,0,0,4"/>
+                <CheckBox IsChecked="{Binding ApplySupplyDoors}" Content="Modify Doors" Margin="0,0,0,4"/>
                 <StackPanel IsEnabled="{Binding ApplySupplyDoors}" Margin="16,0,0,0">
                     <CheckBox IsChecked="{Binding IncDoors}" Content="Include Doors" Margin="0,0,0,2"/>
                     <CheckBox IsChecked="{Binding IncDoorsInList}" Content="Include Doors in List" Margin="0,0,0,2"/>
@@ -133,11 +133,11 @@
         </HeaderedContentControl>
 
         <!-- ── Supply Drawer Fronts (Base only) ─────────── -->
-        <HeaderedContentControl Header="Supply Drawer Fronts"
+        <HeaderedContentControl Header="Drawer Fronts"
                                 Margin="0,0,0,10"
                                 Visibility="{Binding HasBase, Converter={StaticResource BoolToVis}}">
             <StackPanel>
-                <CheckBox IsChecked="{Binding ApplySupplyDrawerFronts}" Content="Apply Supply Drawer Fronts" Margin="0,0,0,4"/>
+                <CheckBox IsChecked="{Binding ApplySupplyDrawerFronts}" Content="Modify Drawer Fronts" Margin="0,0,0,4"/>
                 <StackPanel IsEnabled="{Binding ApplySupplyDrawerFronts}" Margin="16,0,0,0">
                     <CheckBox IsChecked="{Binding IncDrwFronts}" Content="Include Drawer Fronts" Margin="0,0,0,2"/>
                     <CheckBox IsChecked="{Binding IncDrwFrontsInList}" Content="Include Drawer Fronts in List" Margin="0,0,0,2"/>

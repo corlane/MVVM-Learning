@@ -351,3 +351,6 @@
 	Added Global Modification feature. Badass. TEST IT!! commit
 	Updated one-time popup to include Global Modification announcement. commit
 	Uploading 3.0.1.50
+
+3.0.1.51
+	Modified wording in BatchModifyWindow for doors & drawer fronts. commit
