@@ -22,11 +22,25 @@
         <!--<converters:AddOneConverter x:Key="AddOneConverter"/>-->
         <converters:ListViewItemIndexConverter x:Key="ListViewItemIndexConverter"/>
         <converters:DimensionFormatConverter x:Key="DimensionFormatConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </UserControl.Resources>
 
-    <Grid>
+    <DockPanel Margin="20">
+        <!-- Toolbar above the list -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Content="Select All"
+                    Padding="10,4" Margin="0,0,6,0"
+                    Command="{Binding SelectAllCommand}"/>
+            <Button Content="Deselect All"
+                    Padding="10,4" Margin="0,0,6,0"
+                    Command="{Binding DeselectAllCommand}"/>
+            <Button Content="Modify Selected"
+                    Padding="10,4" Margin="0,0,6,0"
+                    Command="{Binding ModifySelectedCommand}"
+                    IsEnabled="{Binding HasSelectedCabinets}"/>
+        </StackPanel>
+
         <ListView x:Name="ListViewItems"
-                  Margin="20"
                   Height="Auto"
                   FontSize="14"
                   VirtualizingStackPanel.ScrollUnit="Pixel"
@@ -47,7 +61,7 @@
                     <Setter Property="FontSize" Value="14"/>
                 </Style>
             </ListView.ItemContainerStyle>
-            
+
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="#" Width="50">
@@ -80,14 +94,20 @@
                     <GridViewColumn Header="Actions" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Delete"
-                                    Background="#FF6666"
-                                    Foreground="White"
-                                    Padding="8,2"
-                                    Margin="4"
-                                    Cursor="Hand"
-                                    Command="{Binding DataContext.DeleteCabinetCommand,RelativeSource={RelativeSource AncestorType=ListView}}"
-                                    CommandParameter="{Binding}"/>
+                                <StackPanel>
+                                    <CheckBox IsChecked="{Binding IsSelected}"
+                                              Content="Select"
+                                              Margin="4,2"
+                                              HorizontalAlignment="Center"/>
+                                    <Button Content="Delete"
+                                        Background="#FF6666"
+                                        Foreground="White"
+                                        Padding="8,2"
+                                        Margin="4"
+                                        Cursor="Hand"
+                                        Command="{Binding DataContext.DeleteCabinetCommand,RelativeSource={RelativeSource AncestorType=ListView}}"
+                                        CommandParameter="{Binding}"/>
+                                </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -103,5 +123,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-    </Grid>
-</UserControl>
+    </DockPanel>
+</UserControl>    

@@ -114,4 +114,6 @@ public partial class BaseCabinetModel : CabinetModel
     partial void OnTopRevealChanged(string value) => BumpGeometry();
     partial void OnBottomRevealChanged(string value) => BumpGeometry();
     partial void OnGapWidthChanged(string value) => BumpGeometry();
+    partial void OnIncDoorsChanged(bool value) => BumpGeometry();
+    partial void OnIncDrwFrontsChanged(bool value) => BumpGeometry();
 }

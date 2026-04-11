@@ -2,8 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.Views;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -44,6 +47,43 @@ public partial class CabinetListViewModel : ObservableValidator
                 MainVm_PropertyChanged,
                 nameof(MainWindowViewModel.SelectedCabinet));
         }
+
+        // Track IsSelected changes on existing and future cabinets
+        if (_cabinetService?.Cabinets is INotifyCollectionChanged coll)
+        {
+            coll.CollectionChanged += OnCabinetsCollectionChanged;
+            foreach (var cab in _cabinetService.Cabinets)
+                cab.PropertyChanged += OnCabinetPropertyChanged;
+        }
+    }
+
+    private void OnCabinetsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems != null)
+        {
+            foreach (CabinetModel cab in e.NewItems)
+                cab.PropertyChanged += OnCabinetPropertyChanged;
+        }
+
+        if (e.OldItems != null)
+        {
+            foreach (CabinetModel cab in e.OldItems)
+                cab.PropertyChanged -= OnCabinetPropertyChanged;
+        }
+
+        if (e.Action == NotifyCollectionChangedAction.Reset && _cabinetService?.Cabinets != null)
+        {
+            foreach (var cab in _cabinetService.Cabinets)
+                cab.PropertyChanged += OnCabinetPropertyChanged;
+        }
+
+        OnPropertyChanged(nameof(HasSelectedCabinets));
+    }
+
+    private void OnCabinetPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(CabinetModel.IsSelected))
+            OnPropertyChanged(nameof(HasSelectedCabinets));
     }
 
     private void MainVm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -92,6 +132,52 @@ public partial class CabinetListViewModel : ObservableValidator
                     OnPropertyChanged();
                 }
             }
+        }
+    }
+
+    /// <summary>True when at least one cabinet has IsSelected checked.</summary>
+    public bool HasSelectedCabinets =>
+        _cabinetService?.Cabinets.Any(c => c.IsSelected) == true;
+
+    [RelayCommand]
+    private void SelectAll()
+    {
+        if (_cabinetService?.Cabinets == null) return;
+        foreach (var cab in _cabinetService.Cabinets)
+            cab.IsSelected = true;
+    }
+
+    [RelayCommand]
+    private void DeselectAll()
+    {
+        if (_cabinetService?.Cabinets == null) return;
+        foreach (var cab in _cabinetService.Cabinets)
+            cab.IsSelected = false;
+    }
+
+    [RelayCommand]
+    private void ModifySelected()
+    {
+        if (_cabinetService?.Cabinets == null) return;
+
+        var selected = _cabinetService.Cabinets.Where(c => c.IsSelected).ToList();
+        if (selected.Count == 0) return;
+
+        var vm = new BatchModifyViewModel(selected);
+        var window = new BatchModifyWindow
+        {
+            DataContext = vm,
+            Owner = Application.Current.MainWindow
+        };
+
+        if (window.ShowDialog() == true)
+        {
+            vm.ApplyToSelected();
+            _mainVm?.IsModified = true;
+
+            // Clear selection checkboxes after applying
+            foreach (var cab in selected)
+                cab.IsSelected = false;
         }
     }
 

@@ -1,0 +1,156 @@
+﻿<Window x:Class="CorlaneCabinetOrderFormV3.Views.BatchModifyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+        Title="Modify Selected Cabinets"
+        Width="480" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{DynamicResource ABrush.Tone1.Background.Static}"
+        d:DataContext="{d:DesignInstance viewmodels:BatchModifyViewModel}"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <EventSetter Event="GotFocus" Handler="TextBoxGotFocus"/>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel Margin="16">
+        <TextBlock FontSize="16" FontWeight="SemiBold" Margin="0,0,0,12">
+            <Run Text="Modifying "/>
+            <Run Text="{Binding SelectedCount, Mode=OneTime}"/>
+            <Run Text=" cabinet(s)"/>
+        </TextBlock>
+        <TextBlock Text="Check each box to apply that field to all selected cabinets."
+                   FontSize="12" Foreground="Gray" Margin="0,0,0,16"/>
+
+        <!-- ── Cabinet Species ──────────────────────────── -->
+        <HeaderedContentControl Header="Cabinet Species" Margin="0,0,0,10">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding ApplySpecies}" Content="Apply Cabinet Species" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding CabinetSpeciesList}"
+                          SelectedItem="{Binding Species}"
+                          IsEnabled="{Binding ApplySpecies}"
+                          Margin="0,0,0,4"/>
+                <TextBox Text="{Binding CustomSpecies, UpdateSourceTrigger=PropertyChanged}"
+                         Visibility="{Binding IsSpeciesCustom, Converter={StaticResource BoolToVis}}"
+                         IsEnabled="{Binding ApplySpecies}"
+                         Margin="0,0,0,4"/>
+            </StackPanel>
+        </HeaderedContentControl>
+
+        <!-- ── Edgebanding Species ──────────────────────── -->
+        <HeaderedContentControl Header="Edgebanding Species"
+                                Margin="0,0,0,10"
+                                Visibility="{Binding HasUserEB, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding ApplyEBSpecies}" Content="Apply Edgebanding Species" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding EBSpeciesList}"
+                          SelectedItem="{Binding EBSpecies}"
+                          IsEnabled="{Binding ApplyEBSpecies}"
+                          Margin="0,0,0,4"/>
+                <TextBox Text="{Binding CustomEBSpecies, UpdateSourceTrigger=PropertyChanged}"
+                         Visibility="{Binding IsEBSpeciesCustom, Converter={StaticResource BoolToVis}}"
+                         IsEnabled="{Binding ApplyEBSpecies}"
+                         Margin="0,0,0,4"/>
+            </StackPanel>
+        </HeaderedContentControl>
+
+        <!-- ── Door Species (Base & Upper only) ─────────── -->
+        <HeaderedContentControl Header="Door Species"
+                                Margin="0,0,0,10"
+                                Visibility="{Binding HasBaseOrUpper, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding ApplyDoorSpecies}" Content="Apply Door Species" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding CabinetSpeciesList}"
+                          SelectedItem="{Binding DoorSpecies}"
+                          IsEnabled="{Binding ApplyDoorSpecies}"
+                          Margin="0,0,0,4"/>
+                <TextBox Text="{Binding CustomDoorSpecies, UpdateSourceTrigger=PropertyChanged}"
+                         Visibility="{Binding IsDoorSpeciesCustom, Converter={StaticResource BoolToVis}}"
+                         IsEnabled="{Binding ApplyDoorSpecies}"
+                         Margin="0,0,0,4"/>
+            </StackPanel>
+        </HeaderedContentControl>
+
+        <!-- ── Reveals & Gaps (Base & Upper only) ───────── -->
+        <HeaderedContentControl Header="Reveals &amp; Gaps"
+                                Margin="0,0,0,10"
+                                Visibility="{Binding HasBaseOrUpper, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding ApplyReveals}" Content="Apply Reveals" Margin="0,0,0,4"/>
+                <Grid IsEnabled="{Binding ApplyReveals}" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,0,0,4">
+                        <TextBlock Text="Left Reveal"/>
+                        <TextBox Text="{Binding LeftReveal, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="0" Margin="0,0,0,4">
+                        <TextBlock Text="Right Reveal"/>
+                        <TextBox Text="{Binding RightReveal, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,0,0,4">
+                        <TextBlock Text="Top Reveal"/>
+                        <TextBox Text="{Binding TopReveal, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="1" Margin="0,0,0,4">
+                        <TextBlock Text="Bottom Reveal"/>
+                        <TextBox Text="{Binding BottomReveal, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </Grid>
+
+                <CheckBox IsChecked="{Binding ApplyGapWidth}" Content="Apply Gap Width" Margin="0,6,0,4"/>
+                <TextBox Text="{Binding GapWidth, UpdateSourceTrigger=PropertyChanged}"
+                         IsEnabled="{Binding ApplyGapWidth}"
+                         Width="120" HorizontalAlignment="Left"/>
+            </StackPanel>
+        </HeaderedContentControl>
+
+        <!-- ── Supply Doors (Base & Upper) ──────────────── -->
+        <HeaderedContentControl Header="Supply Doors"
+                                Margin="0,0,0,10"
+                                Visibility="{Binding HasBaseOrUpper, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding ApplySupplyDoors}" Content="Apply Supply Doors" Margin="0,0,0,4"/>
+                <StackPanel IsEnabled="{Binding ApplySupplyDoors}" Margin="16,0,0,0">
+                    <CheckBox IsChecked="{Binding IncDoors}" Content="Include Doors" Margin="0,0,0,2"/>
+                    <CheckBox IsChecked="{Binding IncDoorsInList}" Content="Include Doors in List" Margin="0,0,0,2"/>
+                </StackPanel>
+            </StackPanel>
+        </HeaderedContentControl>
+
+        <!-- ── Supply Drawer Fronts (Base only) ─────────── -->
+        <HeaderedContentControl Header="Supply Drawer Fronts"
+                                Margin="0,0,0,10"
+                                Visibility="{Binding HasBase, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <CheckBox IsChecked="{Binding ApplySupplyDrawerFronts}" Content="Apply Supply Drawer Fronts" Margin="0,0,0,4"/>
+                <StackPanel IsEnabled="{Binding ApplySupplyDrawerFronts}" Margin="16,0,0,0">
+                    <CheckBox IsChecked="{Binding IncDrwFronts}" Content="Include Drawer Fronts" Margin="0,0,0,2"/>
+                    <CheckBox IsChecked="{Binding IncDrwFrontsInList}" Content="Include Drawer Fronts in List" Margin="0,0,0,2"/>
+                </StackPanel>
+            </StackPanel>
+        </HeaderedContentControl>
+
+        <!-- ── Buttons ──────────────────────────────────── -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Apply" Padding="16,6" Margin="0,0,8,0"
+                    IsDefault="True" Click="ApplyButton_Click"/>
+            <Button Content="Cancel" Padding="16,6"
+                    IsCancel="True"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

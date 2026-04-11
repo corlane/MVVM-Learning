@@ -48,4 +48,5 @@ public partial class UpperCabinetModel : CabinetModel
     partial void OnTopRevealChanged(string value) => BumpGeometry();
     partial void OnBottomRevealChanged(string value) => BumpGeometry();
     partial void OnGapWidthChanged(string value) => BumpGeometry();
+    partial void OnIncDoorsChanged(bool value) => BumpGeometry();
 }

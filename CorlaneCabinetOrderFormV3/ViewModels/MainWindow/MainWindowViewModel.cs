@@ -604,15 +604,20 @@ public partial class MainWindowViewModel : ObservableValidator
         }
     }
 
-
-
     private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (_suppressIsModified) return;
 
+        // UI-only flags — don't mark job as modified
+        if (e.PropertyName is nameof(CabinetModel.IsSelected)
+                           or nameof(CabinetModel.IsHighlighted)
+                           or nameof(CabinetModel.Thumbnail))
+            return;
+
         // Any property change on an item marks the job modified.
         IsModified = true;
     }
+
 
     [RelayCommand]
     private void Help()
