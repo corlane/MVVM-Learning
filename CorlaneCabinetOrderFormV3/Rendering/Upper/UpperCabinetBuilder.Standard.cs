@@ -349,11 +349,11 @@ internal static partial class UpperCabinetBuilder
             ];
             if (width <= 47.75)
             {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, upperCab.Species, "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackUpper14);
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackUpper14);
             }
             else
             {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, upperCab.Species, "None", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackUpper14);
+                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Horizontal", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.BackUpper14);
             }
             ModelTransforms.ApplyTransform(back, -(width / 2), 0, -MaterialThickness14, 0, 0, 0);
 

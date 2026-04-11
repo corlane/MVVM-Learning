@@ -346,4 +346,5 @@
 
 3.0.1.50
 	Base & Upper 1/4" back thickness in builders had magically gotten changed to MaterialThickness34. Fixed. commit
-	Added a crap-top of new tests. commit
+	Added a crap-ton of new tests. commit
+	Base & Upper 1/4" back material had magically gotten changed to match the cabinet species instead of hard-coded "PFP 1/4". Fixed. commit
