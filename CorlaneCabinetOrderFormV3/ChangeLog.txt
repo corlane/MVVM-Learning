@@ -349,3 +349,4 @@
 	Added a crap-ton of new tests. commit
 	Base & Upper 1/4" back material had magically gotten changed to match the cabinet species instead of hard-coded "PFP 1/4". Fixed. commit
 	Added Global Modification feature. Badass. TEST IT!! commit
+	Updated one-time popup to include Global Modification announcement. commit

@@ -265,15 +265,18 @@ public partial class App : Application
         }
 
         // One-time popup — bump this version string whenever you have a new notice
-        const string currentPopupVersion = "3.0.1.35";
+        const string currentPopupVersion = "3.0.1.50";
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
                 "NEW FEATURES:\n\n" + 
-                "You can now adjust the interface scale using the slider in the bottom-right corner of the window.\n" +
-                "This is helpful for smaller screens (scale down) or larger displays (scale up).\n\n" + 
-                "Also, there is now a colored horizontal bar between the 3D Preview and the Cabinet List. " +
-                "Dragging this bar up or down allows you to resize the 3D Preview and Cabinet List to your liking.",
+                "Global Item Modification!\n\n" +
+                "You can now select multiple cabinets in the list using\n" +
+                "the Select checkbox above each cabinet's Delete button,\n" +
+                "or click the Select All button above the Cabinet List.\n\n" +
+                "Then click Modify Selected, and you can globally change\n" +
+                "many properties of the cabinets at once, such as Species,\n" +
+                "edgabanding, door & drawer front options, etc.\n",
                 "What's New",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
