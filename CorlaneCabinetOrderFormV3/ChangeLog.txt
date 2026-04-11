@@ -345,4 +345,4 @@
 	Uploading 3.0.1.49
 
 3.0.1.50
-	
+	Base & Upper 1/4" back thickness in builders had magically gotten changed to MaterialThickness34. Fixed. commit
