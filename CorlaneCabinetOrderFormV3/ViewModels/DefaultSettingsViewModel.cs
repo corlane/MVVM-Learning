@@ -51,10 +51,6 @@ public partial class DefaultSettingsViewModel : ObservableObject
     private bool _isApplyingDefaults;
 
 
-
-
-
-
     // Mirror every default as a bindable property
 
     // Dimension Format

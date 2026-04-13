@@ -53,10 +53,4 @@ internal static partial class BaseCabinetBuilder
 
         return rotateGroup;
     }
-
-    private static void ApplyTransformAndAdd(Model3DGroup parent, Model3DGroup child, double tx, double ty, double tz, double rx, double ry, double rz)
-    {
-        ModelTransforms.ApplyTransform(child, tx, ty, tz, rx, ry, rz);
-        parent.Children.Add(child);
-    }
 }

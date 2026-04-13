@@ -6,7 +6,6 @@ using CorlaneCabinetOrderFormV3.Views;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -198,8 +197,6 @@ public partial class CabinetListViewModel : ObservableValidator
             _mainVm?.IsModified = true;
         }
     }
-
-
 
     public void RefreshSelectedCabinet()
     {

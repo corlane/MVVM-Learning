@@ -354,20 +354,6 @@ public partial class PORevealsGapsViewModel : ObservableObject
         [ObservableProperty] public partial string DefaultGapWidth { get; set; } = "";
     }
 
-    //private static bool ShouldShowInExceptionList(CabinetModel cab)
-    //{
-    //    return cab switch
-    //    {
-    //        // Uppers: only doors exist, so require doors to exist + be included
-    //        UpperCabinetModel u => u.DoorCount > 0 && u.IncDoors,
-
-    //        // Bases: show if (doors exist + included) OR (any drawer front included for existing openings)
-    //        BaseCabinetModel b => (b.DoorCount > 0 && b.IncDoors) || AnyIncludedDrawerFront(b),
-
-    //        _ => false
-    //    };
-    //}
-
     private static bool ShouldShowInExceptionList(CabinetModel cab)
     {
         return cab switch

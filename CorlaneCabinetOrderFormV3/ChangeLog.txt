@@ -356,3 +356,5 @@
 	Modified wording in BatchModifyWindow for doors & drawer fronts. commit
 	Uploading 3.0.1.51
 
+3.0.1.52
+	Deleted commented-out code app-wide, removed unused Usings. commit

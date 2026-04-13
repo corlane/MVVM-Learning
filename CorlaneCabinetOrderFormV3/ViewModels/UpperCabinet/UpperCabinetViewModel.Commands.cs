@@ -2,9 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;

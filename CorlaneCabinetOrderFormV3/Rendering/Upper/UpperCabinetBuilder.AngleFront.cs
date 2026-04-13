@@ -1,7 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System.Windows.Media.Media3D;
-using static CorlaneCabinetOrderFormV3.Models.CabinetOptions;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 

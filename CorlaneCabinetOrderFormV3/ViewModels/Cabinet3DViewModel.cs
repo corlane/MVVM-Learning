@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 using System.ComponentModel;
 using System.Windows;
@@ -53,9 +52,6 @@ public partial class Cabinet3DViewModel : ObservableObject
             }
         }));
     }
-
-
-
 
     public Cabinet3DViewModel(IPreviewService previewSvc, ICabinetService cabinetSvc, MainWindowViewModel mainVm)
     {
