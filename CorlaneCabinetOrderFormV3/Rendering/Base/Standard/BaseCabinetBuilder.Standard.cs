@@ -64,182 +64,49 @@ internal static partial class BaseCabinetBuilder
             result.DrawerBoxDepth = dim.DrawerBoxDepth;
         }
 
+        endPanelPoints = BuildEndPanels(baseCab, height, depth, tk_Height, tk_Depth);
 
-        endPanelPoints = BuildEndPanels(
-            baseCab,
-            height,
-            depth,
-            tk_Height,
-            tk_Depth);
+        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.LeftEnd);
 
-        leftEnd = CabinetPartFactory.CreatePanel(
-            endPanelPoints,
-            MaterialThickness34,
-            baseCab.Species, 
-            baseCab.EBSpecies, 
-            "Vertical",
-            baseCab,
-            topDeck90,
-            isPanel,
-            panelEBEdges,
-            isFaceUp: true, 
-            partKind: CabinetPartKind.LeftEnd);
-
-        rightEnd = CabinetPartFactory.CreatePanel(
-            endPanelPoints,
-            MaterialThickness34,
-            baseCab.Species, 
-            baseCab.EBSpecies, 
-            "Vertical", 
-            baseCab,
-            topDeck90,
-            isPanel,
-            panelEBEdges,
-            isFaceUp: true,
-            partKind: CabinetPartKind.RightEnd);
-
+        rightEnd = CabinetPartFactory.CreatePanel( endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.RightEnd);
 
         // ----------------------------
         // HOLES (base cabinets)
         // IMPORTANT: add holes before ApplyTransform(leftEnd/rightEnd, ...)
         // ----------------------------
-        DrillEndPanelHoles(
-            leftEnd,
-            rightEnd,
-            baseCab,
-            dim);
-
+        DrillEndPanelHoles(leftEnd, rightEnd, baseCab, dim);
 
         // End panel transforms
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
 
-        deck = BuildDeck(
-            baseCab,
-            MaterialThickness34,
-            depth,
-            backThickness,
-            tk_Height,
-            interiorWidth,
-            deckBackInset,
-            topDeck90,
-            isPanel,
-            panelEBEdges);
+        deck = BuildDeck(baseCab, MaterialThickness34, depth, backThickness, tk_Height, interiorWidth, deckBackInset, topDeck90, isPanel, panelEBEdges);
 
-        top = BuildTop(
-            baseCab,
-            MaterialThickness34,
-            StretcherWidth,
-            topStretcherBackWidth,
-            width,
-            height,
-            depth,
-            interiorWidth,
-            topDeck90,
-            isPanel,
-            panelEBEdges,
-            top,
-            out Model3DGroup topStretcherFront,
-            out Model3DGroup topStretcherBack);
+        top = BuildTop(baseCab, MaterialThickness34, StretcherWidth, topStretcherBackWidth, width, height, depth, interiorWidth, topDeck90, isPanel, panelEBEdges, top, out Model3DGroup? topStretcherFront, out Model3DGroup? topStretcherBack);
 
-        toekick = BuildToekick(
-            baseCab,
-            MaterialThickness34,
-            depth,
-            tk_Height,
-            tk_Depth,
-            interiorWidth,
-            topDeck90,
-            isPanel,
-            panelEBEdges,
-            toekick);
+        toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, topDeck90, isPanel, panelEBEdges, toekick);
 
-        back = BuildBack(
-            cabinet,
-            baseCab,
-            getMatchingEdgebandingSpecies,
-            MaterialThickness34,
-            MaterialThickness14,
-            StretcherWidth,
-            width,
-            height,
-            backThickness,
-            tk_Height,
-            interiorWidth,
-            interiorHeight,
-            topDeck90,
-            isPanel,
-            panelEBEdges);
+        back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight, topDeck90, isPanel, panelEBEdges);
 
         // Drawer Stretchers
-        BuildDrawerStretchers(
-            cabinet,
-            baseCab,
-            dim);
+        BuildDrawerStretchers(cabinet, baseCab, dim);
 
-        shelf = BuildShelves(
-            cabinet,
-            baseCab,
-            getMatchingEdgebandingSpecies,
-            MaterialThickness34,
-            cabType,
-            style2,
-            backThickness,
-            tk_Height,
-            interiorWidth,
-            interiorHeight,
-            shelfDepth,
-            opening1Height,
-            topDeck90,
-            isPanel,
-            panelEBEdges);
+        shelf = BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, cabType, style2, backThickness, tk_Height, interiorWidth, interiorHeight, shelfDepth, opening1Height, topDeck90, isPanel, panelEBEdges);
 
         // Doors
-        if (
-            baseCab.DoorCount > 0 && 
-            baseCab.IncDoors && 
-            cabType != style2 || 
-            baseCab.DoorCount > 0 && 
-            baseCab.IncDoorsInList && 
-            cabType != style2)
-            {
-            BuildDoors(
-                cabinet,
-                baseCab, 
-                dim, 
-                opening1Height, 
-                doorEdgebandingSpecies,
-                doorsHidden, 
-                resolveDoorSpeciesForTotals, 
-                addFrontPartRow);
-            }
+        if (baseCab.DoorCount > 0 && baseCab.IncDoors && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2)
+        {
+            BuildDoors(cabinet, baseCab, dim, opening1Height, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow);
+        }
 
         // Drawer Fronts
-        BuildDrawerFronts(
-            cabinet, 
-            baseCab, 
-            dim, 
-            doorEdgebandingSpecies, 
-            doorsHidden, 
-            resolveDoorSpeciesForTotals, 
-            addFrontPartRow, 
-            result);
+        BuildDrawerFronts(cabinet, baseCab, dim, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, result);
 
         // Drawer Boxes
-        BuildDrawerBoxes(
-            cabinet, 
-            baseCab, 
-            dim, 
-            addDrawerBoxRow, 
-            result);
+        BuildDrawerBoxes(cabinet, baseCab, dim, addDrawerBoxRow, result);
 
         // Rollouts or Trash Drawer
-        BuildRolloutsAndTrash(
-            cabinet, 
-            baseCab, 
-            dim, 
-            addDrawerBoxRow, 
-            result);
+        BuildRolloutsAndTrash(cabinet, baseCab, dim, addDrawerBoxRow, result);
 
         if (!leftEndHidden) cabinet.Children.Add(leftEnd);
         if (!rightEndHidden) cabinet.Children.Add(rightEnd);
