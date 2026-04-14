@@ -366,3 +366,4 @@
 	Changed the methods to private. I'll get this right eventually. commit
 	Base 90 and Angle Front builders refactored. commit
 	Refactored all Upper cabinet builders. commit
+	Clean & Rebuild. All tests passed. commit
