@@ -359,3 +359,4 @@
 3.0.1.52
 	Deleted commented-out code app-wide, removed unused Usings. commit
 	Further subdividing Base cabinet types into folders, prior to breaking out methods into separate files. commit
+	Finished refactoring Base Standard cabinet builders. commit
