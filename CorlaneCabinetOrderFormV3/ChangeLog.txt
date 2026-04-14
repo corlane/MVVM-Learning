@@ -365,3 +365,4 @@
 	Changed BaseCabinetBuilder methods to partial. Seems safer & makes more sense, since there will be upper cabinet builder methods with the same names. commit
 	Changed the methods to private. I'll get this right eventually. commit
 	Base 90 and Angle Front builders refactored. commit
+	Refactored all Upper cabinet builders. commit
