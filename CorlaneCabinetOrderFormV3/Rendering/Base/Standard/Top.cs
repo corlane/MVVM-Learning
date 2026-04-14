@@ -3,7 +3,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class Top
+internal static class Top
 {
     public static Model3DGroup BuildTop(
         BaseCabinetModel baseCab, 

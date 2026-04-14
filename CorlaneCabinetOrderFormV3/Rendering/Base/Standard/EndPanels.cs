@@ -3,7 +3,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class EndPanels
+internal static class EndPanels
 {
     public static List<Point3D> BuildEndPanels(BaseCabinetModel baseCab, double height, double depth, double tk_Height, double tk_Depth)
     {

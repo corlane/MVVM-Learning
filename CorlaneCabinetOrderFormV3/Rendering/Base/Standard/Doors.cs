@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class Doors
+internal static class Doors
 {
     /// <summary>
     /// Builds and positions 1 or 2 doors, adding them to <paramref name="cabinet"/>

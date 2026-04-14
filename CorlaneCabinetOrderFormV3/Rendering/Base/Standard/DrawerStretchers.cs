@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class DrawerStretchers
+internal static class DrawerStretchers
 {
     /// <summary>
     /// Builds and positions drawer stretchers for Standard (1-drawer)

@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class DrawerFronts
+internal static class DrawerFronts
 {
     /// <summary>
     /// Builds and positions drawer front panels, adding them to <paramref name="cabinet"/>

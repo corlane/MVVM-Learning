@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class RolloutsAndTrashDrw
+internal static class RolloutsAndTrashDrw
 {
     /// <summary>
     /// Builds and positions rollout shelves and/or the trash drawer box,
@@ -94,7 +94,7 @@ internal static partial class RolloutsAndTrashDrw
                         addDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
                     }
 
-                    var rotateGroup =  BaseCabinetBuilder.BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+                    var rotateGroup =  DrawerBoxes.BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
                     var placement = new Model3DGroup();
                     placement.Children.Add(rotateGroup);
 
@@ -127,7 +127,7 @@ internal static partial class RolloutsAndTrashDrw
 
                 if (baseCab.IncDrwBoxes)
                 {
-                    var rotateGroup =  BaseCabinetBuilder.BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+                    var rotateGroup =  DrawerBoxes.BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
                     var trashDrawer = new Model3DGroup();
                     trashDrawer.Children.Add(rotateGroup);
                     ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0);

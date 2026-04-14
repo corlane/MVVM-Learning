@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class EndPanelHoles
+internal static class EndPanelHoles
 {
     /// <summary>
     /// Drills all end-panel holes (construction, back vertical, hinge, shelf, drawer slide)

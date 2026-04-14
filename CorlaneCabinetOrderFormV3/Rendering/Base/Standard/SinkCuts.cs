@@ -3,7 +3,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class SinkCuts
+internal static class SinkCuts
 {
     /// <summary>
     /// Adds the three sink clip cuts (left tab, right tab, center slot)

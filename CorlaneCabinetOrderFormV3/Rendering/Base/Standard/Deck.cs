@@ -3,7 +3,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class Deck
+internal static class Deck
 {
     public static Model3DGroup BuildDeck(
         BaseCabinetModel baseCab, 
@@ -12,7 +12,7 @@ internal static partial class Deck
         double backThickness, 
         double tk_Height, 
         double interiorWidth, 
-        ref double deckBackInset,
+        double deckBackInset,
         bool topDeck90, 
         bool isPanel, 
         string panelEBEdges)

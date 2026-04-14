@@ -3,7 +3,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static partial class Back
+internal static class Back
 {
     public static Model3DGroup BuildBack(Model3DGroup cabinet, BaseCabinetModel baseCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, double MaterialThickness14, double StretcherWidth, double width, double height, double backThickness, double tk_Height, double interiorWidth, double interiorHeight, bool topDeck90, bool isPanel, string panelEBEdges)
     {
