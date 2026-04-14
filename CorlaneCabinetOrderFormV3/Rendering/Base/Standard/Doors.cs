@@ -10,7 +10,7 @@ internal static partial class BaseCabinetBuilder
     /// Builds and positions 1 or 2 doors, adding them to <paramref name="cabinet"/>
     /// and optionally recording them via <paramref name="addFrontPartRow"/>.
     /// </summary>
-    public static void BuildDoors(
+    private static void BuildDoors(
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,

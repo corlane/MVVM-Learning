@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    public static List<Point3D> BuildEndPanels(BaseCabinetModel baseCab, double height, double depth, double tk_Height, double tk_Depth)
+    private static List<Point3D> BuildEndPanels(BaseCabinetModel baseCab, double height, double depth, double tk_Height, double tk_Depth)
     {
         List<Point3D> endPanelPoints;
         if (baseCab.HasTK)

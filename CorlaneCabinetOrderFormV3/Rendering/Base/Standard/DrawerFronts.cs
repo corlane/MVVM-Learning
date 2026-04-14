@@ -10,7 +10,7 @@ internal static partial class BaseCabinetBuilder
     /// Builds and positions drawer front panels, adding them to <paramref name="cabinet"/>
     /// and optionally recording them via <paramref name="addFrontPartRow"/>.
     /// </summary>
-    public static void BuildDrawerFronts(
+    private static void BuildDrawerFronts(
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,

@@ -11,7 +11,7 @@ internal static partial class BaseCabinetBuilder
     /// into the left and right end panels in local coordinates.
     /// Must be called before ApplyTransform on the end panels.
     /// </summary>
-    public static void DrillEndPanelHoles(
+    private static void DrillEndPanelHoles(
         Model3DGroup leftEnd,
         Model3DGroup rightEnd,
         BaseCabinetModel baseCab,

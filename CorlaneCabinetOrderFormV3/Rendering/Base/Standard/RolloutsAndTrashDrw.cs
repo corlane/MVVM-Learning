@@ -11,7 +11,7 @@ internal static partial class BaseCabinetBuilder
     /// adding them to <paramref name="cabinet"/> and optionally recording
     /// them via <paramref name="addDrawerBoxRow"/>.
     /// </summary>
-    public static void BuildRolloutsAndTrash(
+    private static void BuildRolloutsAndTrash(
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,

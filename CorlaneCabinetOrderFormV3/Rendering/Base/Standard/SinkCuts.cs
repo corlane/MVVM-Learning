@@ -9,7 +9,7 @@ internal static partial class BaseCabinetBuilder
     /// Adds the three sink clip cuts (left tab, right tab, center slot)
     /// to a stretcher panel in its local coordinate space.
     /// </summary>
-    public static void AddSinkCuts(
+    private static void AddSinkCuts(
         Model3DGroup panel, 
         double interiorWidth, 
         double width, 

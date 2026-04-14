@@ -10,7 +10,7 @@ internal static partial class BaseCabinetBuilder
     /// Builds and positions drawer boxes for each opening, adding them to
     /// <paramref name="cabinet"/> and optionally recording them via <paramref name="addDrawerBoxRow"/>.
     /// </summary>
-    public static void BuildDrawerBoxes(
+    private static void BuildDrawerBoxes(
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,
@@ -100,7 +100,7 @@ internal static partial class BaseCabinetBuilder
         }
     }
 
-    public static Model3DGroup BuildDrawerBoxRotateGroup(
+    private static Model3DGroup BuildDrawerBoxRotateGroup(
         double dbxWidth,
         double dbxHeight, 
         double dbxDepth,

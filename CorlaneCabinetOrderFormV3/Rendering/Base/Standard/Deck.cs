@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    public static Model3DGroup BuildDeck(
+    private static Model3DGroup BuildDeck(
         BaseCabinetModel baseCab, 
         double MaterialThickness34, 
         double depth, 

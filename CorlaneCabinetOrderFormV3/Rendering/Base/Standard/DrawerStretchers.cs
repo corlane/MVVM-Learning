@@ -10,7 +10,7 @@ internal static partial class BaseCabinetBuilder
     /// Builds and positions drawer stretchers for Standard (1-drawer)
     /// and Drawer style cabinets, including sink stretcher/clips when applicable.
     /// </summary>
-    public static void BuildDrawerStretchers(
+    private static void BuildDrawerStretchers(
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim)

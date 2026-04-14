@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    public static Model3DGroup BuildTop(
+    private static Model3DGroup BuildTop(
         BaseCabinetModel baseCab, 
         double MaterialThickness34, 
         double StretcherWidth, 
