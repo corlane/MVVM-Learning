@@ -362,3 +362,4 @@
 	Finished refactoring Base Standard cabinet builders. commit
 	Fixed some naming inconsistencies in the Base cabinet builders. commit
 	Fixed a typo, did clean/rebuild. commit
+	Changed BaseCabinetBuilder methods to partial. Seems safer & makes more sense, since there will be upper cabinet builder methods with the same names. commit

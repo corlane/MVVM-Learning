@@ -3,7 +3,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static class Toekick
+internal static partial class BaseCabinetBuilder
 {
     public static Model3DGroup BuildToekick(BaseCabinetModel baseCab, double MaterialThickness34, double depth, double tk_Height, double tk_Depth, double interiorWidth, bool topDeck90, bool isPanel, string panelEBEdges, Model3DGroup toekick)
     {

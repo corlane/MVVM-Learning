@@ -3,7 +3,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static class Top
+internal static partial class BaseCabinetBuilder
 {
     public static Model3DGroup BuildTop(
         BaseCabinetModel baseCab, 
@@ -18,8 +18,8 @@ internal static class Top
         bool isPanel, 
         string panelEBEdges, 
         Model3DGroup top, 
-        out Model3DGroup topStretcherFront, 
-        out Model3DGroup topStretcherBack)
+        out Model3DGroup? topStretcherFront, 
+        out Model3DGroup? topStretcherBack)
 
     {
         // Full Top
@@ -60,7 +60,7 @@ internal static class Top
             // Sink cuts on top stretcher front (local coords: X 0→interiorWidth, Y 0→StretcherWidth)
             if (baseCab.SinkCabinet)
             {
-               SinkCuts.AddSinkCuts(topStretcherFront, interiorWidth, width, StretcherWidth, MaterialThickness34);
+               AddSinkCuts(topStretcherFront, interiorWidth, width, StretcherWidth, MaterialThickness34);
             }
 
             ModelTransforms.ApplyTransform(topStretcherFront, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);

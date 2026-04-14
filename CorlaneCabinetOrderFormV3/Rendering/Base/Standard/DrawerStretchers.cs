@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static class DrawerStretchers
+internal static partial class BaseCabinetBuilder
 {
     /// <summary>
     /// Builds and positions drawer stretchers for Standard (1-drawer)
@@ -59,7 +59,7 @@ internal static class DrawerStretchers
 
             if (baseCab.SinkCabinet)
             {
-                SinkCuts.AddSinkCuts(stretcher, interiorWidth, width, StretcherWidth, MaterialThickness34);
+                AddSinkCuts(stretcher, interiorWidth, width, StretcherWidth, MaterialThickness34);
             }
 
             ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);

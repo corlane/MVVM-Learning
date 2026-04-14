@@ -65,7 +65,7 @@ internal static partial class BaseCabinetBuilder
         }
 
 
-        endPanelPoints = EndPanels.BuildEndPanels(
+        endPanelPoints = BuildEndPanels(
             baseCab,
             height,
             depth,
@@ -103,7 +103,7 @@ internal static partial class BaseCabinetBuilder
         // HOLES (base cabinets)
         // IMPORTANT: add holes before ApplyTransform(leftEnd/rightEnd, ...)
         // ----------------------------
-        EndPanelHoles.DrillEndPanelHoles(
+        DrillEndPanelHoles(
             leftEnd,
             rightEnd,
             baseCab,
@@ -114,7 +114,7 @@ internal static partial class BaseCabinetBuilder
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
 
-        deck = Deck.BuildDeck(
+        deck = BuildDeck(
             baseCab,
             MaterialThickness34,
             depth,
@@ -126,7 +126,7 @@ internal static partial class BaseCabinetBuilder
             isPanel,
             panelEBEdges);
 
-        top = Top.BuildTop(
+        top = BuildTop(
             baseCab,
             MaterialThickness34,
             StretcherWidth,
@@ -142,7 +142,7 @@ internal static partial class BaseCabinetBuilder
             out Model3DGroup topStretcherFront,
             out Model3DGroup topStretcherBack);
 
-        toekick = Toekick.BuildToekick(
+        toekick = BuildToekick(
             baseCab,
             MaterialThickness34,
             depth,
@@ -154,7 +154,7 @@ internal static partial class BaseCabinetBuilder
             panelEBEdges,
             toekick);
 
-        back = Back.BuildBack(
+        back = BuildBack(
             cabinet,
             baseCab,
             getMatchingEdgebandingSpecies,
@@ -172,12 +172,12 @@ internal static partial class BaseCabinetBuilder
             panelEBEdges);
 
         // Drawer Stretchers
-        DrawerStretchers.BuildDrawerStretchers(
+        BuildDrawerStretchers(
             cabinet,
             baseCab,
             dim);
 
-        shelf = Shelves.BuildShelves(
+        shelf = BuildShelves(
             cabinet,
             baseCab,
             getMatchingEdgebandingSpecies,
@@ -203,7 +203,7 @@ internal static partial class BaseCabinetBuilder
             baseCab.IncDoorsInList && 
             cabType != style2)
             {
-            Doors.BuildDoors(
+            BuildDoors(
                 cabinet,
                 baseCab, 
                 dim, 
@@ -215,7 +215,7 @@ internal static partial class BaseCabinetBuilder
             }
 
         // Drawer Fronts
-        DrawerFronts.BuildDrawerFronts(
+        BuildDrawerFronts(
             cabinet, 
             baseCab, 
             dim, 
@@ -226,7 +226,7 @@ internal static partial class BaseCabinetBuilder
             result);
 
         // Drawer Boxes
-        DrawerBoxes.BuildDrawerBoxes(
+        BuildDrawerBoxes(
             cabinet, 
             baseCab, 
             dim, 
@@ -234,7 +234,7 @@ internal static partial class BaseCabinetBuilder
             result);
 
         // Rollouts or Trash Drawer
-        RolloutsAndTrashDrw.BuildRolloutsAndTrash(
+        BuildRolloutsAndTrash(
             cabinet, 
             baseCab, 
             dim, 

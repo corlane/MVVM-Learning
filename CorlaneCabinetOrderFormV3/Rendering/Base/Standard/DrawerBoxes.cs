@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static class DrawerBoxes
+internal static partial class BaseCabinetBuilder
 {
     /// <summary>
     /// Builds and positions drawer boxes for each opening, adding them to
