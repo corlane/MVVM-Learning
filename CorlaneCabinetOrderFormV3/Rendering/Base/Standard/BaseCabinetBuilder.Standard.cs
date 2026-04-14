@@ -142,7 +142,7 @@ internal static partial class BaseCabinetBuilder
             out Model3DGroup topStretcherFront,
             out Model3DGroup topStretcherBack);
 
-        toekick = Toekick.BuilToekick(
+        toekick = Toekick.BuildToekick(
             baseCab,
             MaterialThickness34,
             depth,
