@@ -1,6 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using HelixToolkit.Wpf;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -127,18 +126,19 @@ internal static class CabinetPartFactory
     }
 
     internal static Model3DGroup CreatePanel(
-        List<Point3D> polygonPoints,
-        double matlThickness,
-        string panelSpecies,
-        string edgebandingSpecies,
-        string grainDirection,
-        CabinetModel cab,
-        bool topDeck90,
-        bool isPanel,
-        string panelEBEdges,
-        bool isFaceUp,
-        double plywoodTextureRotationDegrees = 0,
-        CabinetPartKind partKind = CabinetPartKind.Unspecified)
+    List<Point3D> polygonPoints,
+    double matlThickness,
+    string panelSpecies,
+    string edgebandingSpecies,
+    string grainDirection,
+    CabinetModel cab,
+    bool topDeck90,
+    bool isPanel,
+    string panelEBEdges,
+    bool isFaceUp,
+    double plywoodTextureRotationDegrees = 0,
+    CabinetPartKind partKind = CabinetPartKind.Unspecified)
+
     {
         double thickness = matlThickness;
 
@@ -146,9 +146,9 @@ internal static class CabinetPartFactory
         double areaSqIn = 0.0;
         for (int i = 0, j = polygonPoints.Count - 1; i < polygonPoints.Count; j = i++)
         {
-            var pi = polygonPoints[i];
-            var pj = polygonPoints[j];
-            areaSqIn += (pj.X * pi.Y) - (pi.X * pj.Y);
+            var currentPoint = polygonPoints[i];
+            var previousPoint = polygonPoints[j];
+            areaSqIn += (previousPoint.X * currentPoint.Y) - (currentPoint.X * previousPoint.Y);
         }
 
         areaSqIn = Math.Abs(areaSqIn) * 0.5;
@@ -193,8 +193,8 @@ internal static class CabinetPartFactory
         }
 
         // Create a MeshBuilder with textures enabled (second param true)
-        var mainBuilder = new MeshBuilder(false, true);
-        var specialBuilder = new MeshBuilder(false, true); // For edgebanded side
+        var panelMeshBuilder = new MeshBuilder(false, true);
+        var edgebandMeshBuilder = new MeshBuilder(false, true); // For edgebanded side
 
         // Find min/max for UV normalization (project XY to 0-1)
         double minX = polygonPoints.Min(p => p.X);
@@ -205,29 +205,29 @@ internal static class CabinetPartFactory
         // Add bottom positions and texture coords
         foreach (var point in polygonPoints)
         {
-            mainBuilder.Positions.Add(point);
+            panelMeshBuilder.Positions.Add(point);
             double u = (point.X - minX) / (maxX - minX);
             double v = (point.Y - minY) / (maxY - minY);
-            mainBuilder.TextureCoordinates.Add(new Point(u, v));
+            panelMeshBuilder.TextureCoordinates.Add(new Point(u, v));
         }
 
         // Add bottom face using triangulation
         var bottomIndices = Enumerable.Range(0, polygonPoints.Count).ToList();
-        mainBuilder.AddPolygonByTriangulation(bottomIndices);
+        panelMeshBuilder.AddPolygonByTriangulation(bottomIndices);
 
         // Add top positions at z=thickness with same texture coords
-        int topOffset = polygonPoints.Count;
+        int topVertexStartIndex = polygonPoints.Count;
         foreach (var point in polygonPoints)
         {
-            mainBuilder.Positions.Add(new Point3D(point.X, point.Y, thickness));
+            panelMeshBuilder.Positions.Add(new Point3D(point.X, point.Y, thickness));
             double u = (point.X - minX) / (maxX - minX);
             double v = (point.Y - minY) / (maxY - minY);
-            mainBuilder.TextureCoordinates.Add(new Point(u, v));
+            panelMeshBuilder.TextureCoordinates.Add(new Point(u, v));
         }
 
         // Add top face (reverse indices for correct winding/normal direction)
-        var topIndices = Enumerable.Range(topOffset, polygonPoints.Count).Reverse().ToList();
-        mainBuilder.AddPolygonByTriangulation(topIndices);
+        var topIndices = Enumerable.Range(topVertexStartIndex, polygonPoints.Count).Reverse().ToList();
+        panelMeshBuilder.AddPolygonByTriangulation(topIndices);
 
         // Add side faces as quads with texture coords (unwrap sides: U around perimeter, V height)
         double perimeter = 0;
@@ -266,125 +266,125 @@ internal static class CabinetPartFactory
             if (panelEBEdges.Contains('R')) edgeBandLengthInches += panelHeightInches;
         }
 
-        double cumulativeU = 0;
-        for (int edgeFace = 0; edgeFace < polygonPoints.Count; edgeFace++)
+        double perimeterUOffset = 0;
+        for (int sideIndex = 0; sideIndex < polygonPoints.Count; sideIndex++)
         {
-            int b0 = edgeFace;
-            int b1 = (edgeFace + 1) % polygonPoints.Count;
-            int t1 = b1 + topOffset;
-            int t0 = b0 + topOffset;
+            int bottomIdx0 = sideIndex;
+            int bottomIdx1 = (sideIndex + 1) % polygonPoints.Count;
+            int topIdx1 = bottomIdx1 + topVertexStartIndex;
+            int topIdx0 = bottomIdx0 + topVertexStartIndex;
 
-            double u0 = cumulativeU / perimeter;
-            double u1 = (cumulativeU + sideLengths[edgeFace]) / perimeter;
-            Point uvBottomLeft = new(u0, 0);
-            Point uvBottomRight = new(u1, 0);
-            Point uvTopRight = new(u1, 1);
-            Point uvTopLeft = new(u0, 1);
+            double textureUStart = perimeterUOffset / perimeter;
+            double textureUEnd = (perimeterUOffset + sideLengths[sideIndex]) / perimeter;
+            Point uvBottomLeft = new(textureUStart, 0);
+            Point uvBottomRight = new(textureUEnd, 0);
+            Point uvTopRight = new(textureUEnd, 1);
+            Point uvTopLeft = new(textureUStart, 1);
 
             if (!hasEdgebanding)
             {
                 // No edgebanding — all side faces use the main panel material
-                mainBuilder.AddQuad(
-                    mainBuilder.Positions[b0],
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
+                panelMeshBuilder.AddQuad(
+                    panelMeshBuilder.Positions[bottomIdx0],
+                    panelMeshBuilder.Positions[bottomIdx1],
+                    panelMeshBuilder.Positions[topIdx1],
+                    panelMeshBuilder.Positions[topIdx0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
             }
             else if (!isPanel && !topDeck90)
             {
-                if (edgeFace == 0)
+                if (sideIndex == 0)
                 {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    edgebandMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
 
-                    edgeBandLengthInches += sideLengths[edgeFace];
+                    edgeBandLengthInches += sideLengths[sideIndex];
                 }
                 else
                 {
-                    mainBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    panelMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
             }
             else if (isPanel)
             {
-                mainBuilder.AddQuad(
-                    mainBuilder.Positions[b0],
-                    mainBuilder.Positions[b1],
-                    mainBuilder.Positions[t1],
-                    mainBuilder.Positions[t0],
+                panelMeshBuilder.AddQuad(
+                    panelMeshBuilder.Positions[bottomIdx0],
+                    panelMeshBuilder.Positions[bottomIdx1],
+                    panelMeshBuilder.Positions[topIdx1],
+                    panelMeshBuilder.Positions[topIdx0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
 
-                if (panelEBEdges.Contains('B') && edgeFace == 0)
+                if (panelEBEdges.Contains('B') && sideIndex == 0)
                 {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    edgebandMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
-                else if (panelEBEdges.Contains('R') && edgeFace == 1)
+                else if (panelEBEdges.Contains('R') && sideIndex == 1)
                 {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    edgebandMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
-                else if (panelEBEdges.Contains('T') && edgeFace == 2)
+                else if (panelEBEdges.Contains('T') && sideIndex == 2)
                 {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    edgebandMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
-                else if (panelEBEdges.Contains('L') && edgeFace == 3)
+                else if (panelEBEdges.Contains('L') && sideIndex == 3)
                 {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    edgebandMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
             }
             else if (topDeck90)
             {
-                if (edgeFace < polygonPoints.Count - 4)
+                if (sideIndex < polygonPoints.Count - 4)
                 {
-                    specialBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    edgebandMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
 
-                    edgeBandLengthInches += sideLengths[edgeFace];
+                    edgeBandLengthInches += sideLengths[sideIndex];
                 }
                 else
                 {
-                    mainBuilder.AddQuad(
-                        mainBuilder.Positions[b0],
-                        mainBuilder.Positions[b1],
-                        mainBuilder.Positions[t1],
-                        mainBuilder.Positions[t0],
+                    panelMeshBuilder.AddQuad(
+                        panelMeshBuilder.Positions[bottomIdx0],
+                        panelMeshBuilder.Positions[bottomIdx1],
+                        panelMeshBuilder.Positions[topIdx1],
+                        panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
             }
 
-            cumulativeU += sideLengths[edgeFace];
+            perimeterUOffset += sideLengths[sideIndex];
         }
 
         // If edgebanding was applied, accumulate into the cabinet's edge-banding totals
@@ -408,32 +408,32 @@ internal static class CabinetPartFactory
             // swallow accumulation errors to keep preview resilient
         }
 
-        mainBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
-        specialBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
+        panelMeshBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
+        edgebandMeshBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
 
-        var mesh = mainBuilder.ToMesh(true);
-        var specialMesh = specialBuilder.ToMesh(true);
+        var panelMesh = panelMeshBuilder.ToMesh(true);
+        var edgebandMesh = edgebandMeshBuilder.ToMesh(true);
 
         var material = CabinetMaterials.GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
-        var specialMaterial = CabinetMaterials.GetEdgeBandingSpecies(edgebandingSpecies);
+        var edgebandMaterial = CabinetMaterials.GetEdgeBandingSpecies(edgebandingSpecies);
 
         if (edgebandingSpecies == "None")
         {
-            specialMaterial = CabinetMaterials.GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
+            edgebandMaterial = CabinetMaterials.GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
         }
 
         var panelModel = new GeometryModel3D
         {
-            Geometry = mesh,
+            Geometry = panelMesh,
             Material = material,
             BackMaterial = material
         };
 
         var edgebandingModel = new GeometryModel3D
         {
-            Geometry = specialMesh,
-            Material = specialMaterial,
-            BackMaterial = specialMaterial
+            Geometry = edgebandMesh,
+            Material = edgebandMaterial,
+            BackMaterial = edgebandMaterial
         };
 
         var partModel = new Model3DGroup();
