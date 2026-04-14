@@ -367,3 +367,4 @@
 	Base 90 and Angle Front builders refactored. commit
 	Refactored all Upper cabinet builders. commit
 	Clean & Rebuild. All tests passed. commit
+	Renamed SimpleBuilder to FillerAndPanelBuilder, moved to its own folder. commit

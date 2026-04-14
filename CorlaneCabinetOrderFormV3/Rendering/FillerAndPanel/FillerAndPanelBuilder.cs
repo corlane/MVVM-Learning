@@ -4,7 +4,7 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
-internal static class CabinetSimpleBuilders
+internal static class FillerAndPanelBuilder
 {
     internal static void BuildFiller(
         Model3DGroup cabinet,

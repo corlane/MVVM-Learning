@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using System.Windows;
 using System.Windows.Media;
@@ -88,11 +88,11 @@ internal static class CabinetPreviewBuilder
         }
         else if (cab is FillerModel filler)
         {
-            CabinetSimpleBuilders.BuildFiller(cabinet, filler, getEb);
+            FillerAndPanelBuilder.BuildFiller(cabinet, filler, getEb);
         }
         else if (cab is PanelModel panel)
         {
-            CabinetSimpleBuilders.BuildPanel(cabinet, panel);
+            FillerAndPanelBuilder.BuildPanel(cabinet, panel);
         }
 
         TryFreeze(cabinet);
