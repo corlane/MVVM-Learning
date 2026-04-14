@@ -27,6 +27,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             GroupDoorsVisibility = (style == Style1 || style == Style3 || style == Style4);
             BackThicknessVisible = (style == Style1 || style == Style2);
             SinkCabinetEnabled = (style == Style1 || style == Style3 || style == Style4);
+            ShelfDepthVisible = (style == Style1 || style == Style3);
 
             if (style == Style2)
                 ListDrwCount = [1, 2, 3, 4];

@@ -942,6 +942,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillSlideHolesVisible { get; set; } = true;
     [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
     [ObservableProperty] public partial bool ComboShelfDepthEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool ShelfDepthVisible { get; set; } = true;
     [ObservableProperty] public partial string DrwFrontHeight1Edit { get; set; } = ""; partial void OnDrwFrontHeight1EditChanged(string oldValue, string newValue)
     {
         _isEditingDrwFrontHeight1 = true;
@@ -951,7 +952,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         _drwFrontHeight1DebounceTimer.Elapsed += DrwFrontHeight1DebounceTimer_Elapsed;
         _drwFrontHeight1DebounceTimer.Start();
     }
-
     private void DrwFrontHeight1DebounceTimer_Elapsed(object? sender, ElapsedEventArgs e)
     {
         Application.Current.Dispatcher.Invoke(() =>
