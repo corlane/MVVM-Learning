@@ -374,3 +374,4 @@
 	Phase 1 of refactoring CreatePanel(). commit
 	Phase 2 of refactoring CreatePanel() done. commit
 	Phase 3 of refactoring CreatePanel() done. commit
+	isMapping was missing from Base Cabinet OnDepthChanged handler, causing the ever-recurring Classic Click-Twice-To-Properly-Populate-Fields bug. Fixed, and added tests to try to catch it. commit

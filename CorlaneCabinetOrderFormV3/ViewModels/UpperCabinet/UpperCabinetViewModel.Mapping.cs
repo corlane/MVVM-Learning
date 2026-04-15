@@ -10,7 +10,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     /// Copies all current ViewModel property values into the target model,
     /// converting dimension strings to numeric format.
     /// </summary>
-    private void ApplyViewModelToModel(UpperCabinetModel target)
+    internal void ApplyViewModelToModel(UpperCabinetModel target)
     {
         target.Width = ConvertDimension.FractionToDouble(Width).ToString();
         target.Height = ConvertDimension.FractionToDouble(Height).ToString();

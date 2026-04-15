@@ -6,7 +6,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class BaseCabinetViewModel : ObservableValidator
 {
-    private void MapModelToViewModel(BaseCabinetModel model, string dimFormat)
+    internal void MapModelToViewModel(BaseCabinetModel model, string dimFormat)
     {
         if (model is null) return;
 

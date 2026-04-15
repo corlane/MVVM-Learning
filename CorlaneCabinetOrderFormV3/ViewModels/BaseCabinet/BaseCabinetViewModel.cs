@@ -168,6 +168,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), BaseCabinetDepthRange(48)] public partial string Depth { get; set; } = "";
     partial void OnDepthChanged(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         if (ConvertDimension.FractionToDouble(Depth) < 10.625)
         {
             IncDrwBoxes = false;
