@@ -371,3 +371,4 @@
 	Removed Half Depth shelf option from Base Angle Front cabinets. commit
 	Renamed the a lot of variables in CreatePanel() method that were had non-descriptive names. commit
 	Commit before refactoring the CreatePanel() method. commit
+	Phase 1 of refactoring CreatePanel(). commit

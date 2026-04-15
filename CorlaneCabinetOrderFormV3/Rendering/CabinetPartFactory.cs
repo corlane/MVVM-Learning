@@ -125,6 +125,7 @@ internal static class CabinetPartFactory
         return group;
     }
 
+
     internal static Model3DGroup CreatePanel(
     List<Point3D> polygonPoints,
     double matlThickness,
@@ -132,15 +133,37 @@ internal static class CabinetPartFactory
     string edgebandingSpecies,
     string grainDirection,
     CabinetModel cab,
-    bool topDeck90,
-    bool isPanel,
-    string panelEBEdges,
+    bool topDeck90,      // Phase 2: remove — now derived from partKind + geometry
+    bool isPanel,        // Phase 2: remove — now derived from partKind
+    string panelEBEdges, // Phase 2: make optional — auto-resolved for Door/DrawerFront
     bool isFaceUp,
     double plywoodTextureRotationDegrees = 0,
     CabinetPartKind partKind = CabinetPartKind.Unspecified)
 
     {
         double thickness = matlThickness;
+
+        // ── Derive flags from partKind (shadows the legacy parameters) ──
+
+        // Panel-like parts have per-edge edgebanding control (T/B/L/R)
+        bool isPanelLikePart = partKind is CabinetPartKind.Door
+            or CabinetPartKind.DrawerFront
+            or CabinetPartKind.Panel
+            or CabinetPartKind.FillerFront;
+
+        // Corner90 deck/top polygons have arc segments (>4 points);
+        // front edges get edgebanding, last 4 edges get panel material
+        bool isCorner90Shape = polygonPoints.Count > 4
+            && partKind is (CabinetPartKind.Deck or CabinetPartKind.Top);
+
+        // Auto-resolve edgebanding edges for parts that are always fully banded
+        string resolvedEBEdges = panelEBEdges;
+        if (isPanelLikePart && string.IsNullOrEmpty(resolvedEBEdges))
+        {
+            resolvedEBEdges = partKind is CabinetPartKind.Door or CabinetPartKind.DrawerFront
+                ? "TBLR"
+                : resolvedEBEdges; // Panel, FillerFront: must be explicitly provided
+        }
 
         // --- compute polygon area (shoelace) in square inches and accumulate into cabinet totals ---
         double areaSqIn = 0.0;
@@ -254,16 +277,16 @@ internal static class CabinetPartFactory
             and not CabinetPartKind.SinkStretcher
             and not CabinetPartKind.DrawerBoxBottom;
 
-        // Special handling for panels: panelEBEdges letters map to physical panel width/height.
-        if (hasEdgebanding && isPanel && !string.IsNullOrEmpty(panelEBEdges))
+        // Special handling for panel-like parts: resolvedEBEdges letters map to physical panel width/height.
+        if (hasEdgebanding && isPanelLikePart && !string.IsNullOrEmpty(resolvedEBEdges))
         {
             double panelWidthInches = maxX - minX;
             double panelHeightInches = maxY - minY;
 
-            if (panelEBEdges.Contains('T')) edgeBandLengthInches += panelWidthInches;
-            if (panelEBEdges.Contains('B')) edgeBandLengthInches += panelWidthInches;
-            if (panelEBEdges.Contains('L')) edgeBandLengthInches += panelHeightInches;
-            if (panelEBEdges.Contains('R')) edgeBandLengthInches += panelHeightInches;
+            if (resolvedEBEdges.Contains('T')) edgeBandLengthInches += panelWidthInches;
+            if (resolvedEBEdges.Contains('B')) edgeBandLengthInches += panelWidthInches;
+            if (resolvedEBEdges.Contains('L')) edgeBandLengthInches += panelHeightInches;
+            if (resolvedEBEdges.Contains('R')) edgeBandLengthInches += panelHeightInches;
         }
 
         double perimeterUOffset = 0;
@@ -291,8 +314,9 @@ internal static class CabinetPartFactory
                     panelMeshBuilder.Positions[topIdx0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
             }
-            else if (!isPanel && !topDeck90)
+            else if (!isPanelLikePart && !isCorner90Shape)
             {
+                // Standard structural part: only the front edge (sideIndex 0) gets edgebanding
                 if (sideIndex == 0)
                 {
                     edgebandMeshBuilder.AddQuad(
@@ -314,8 +338,9 @@ internal static class CabinetPartFactory
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
             }
-            else if (isPanel)
+            else if (isPanelLikePart)
             {
+                // Panel-like part: all edges get panel material, specific edges also get edgebanding overlay
                 panelMeshBuilder.AddQuad(
                     panelMeshBuilder.Positions[bottomIdx0],
                     panelMeshBuilder.Positions[bottomIdx1],
@@ -323,7 +348,7 @@ internal static class CabinetPartFactory
                     panelMeshBuilder.Positions[topIdx0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
 
-                if (panelEBEdges.Contains('B') && sideIndex == 0)
+                if (resolvedEBEdges.Contains('B') && sideIndex == 0)
                 {
                     edgebandMeshBuilder.AddQuad(
                         panelMeshBuilder.Positions[bottomIdx0],
@@ -332,7 +357,7 @@ internal static class CabinetPartFactory
                         panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
-                else if (panelEBEdges.Contains('R') && sideIndex == 1)
+                else if (resolvedEBEdges.Contains('R') && sideIndex == 1)
                 {
                     edgebandMeshBuilder.AddQuad(
                         panelMeshBuilder.Positions[bottomIdx0],
@@ -341,7 +366,7 @@ internal static class CabinetPartFactory
                         panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
-                else if (panelEBEdges.Contains('T') && sideIndex == 2)
+                else if (resolvedEBEdges.Contains('T') && sideIndex == 2)
                 {
                     edgebandMeshBuilder.AddQuad(
                         panelMeshBuilder.Positions[bottomIdx0],
@@ -350,7 +375,7 @@ internal static class CabinetPartFactory
                         panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
-                else if (panelEBEdges.Contains('L') && sideIndex == 3)
+                else if (resolvedEBEdges.Contains('L') && sideIndex == 3)
                 {
                     edgebandMeshBuilder.AddQuad(
                         panelMeshBuilder.Positions[bottomIdx0],
@@ -360,8 +385,9 @@ internal static class CabinetPartFactory
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
             }
-            else if (topDeck90)
+            else if (isCorner90Shape)
             {
+                // Corner90 shape: arc/front edges get edgebanding, last 4 rectangular edges get panel material
                 if (sideIndex < polygonPoints.Count - 4)
                 {
                     edgebandMeshBuilder.AddQuad(
