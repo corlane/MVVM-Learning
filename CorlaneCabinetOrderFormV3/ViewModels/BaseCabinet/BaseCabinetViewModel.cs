@@ -165,8 +165,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         return new ObservableCollection<int>(Enumerable.Range(0, maxRollouts + 1));
     }
 
-    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), BaseCabinetDepthRange(48)] public partial string Depth { get; set; } = "";
-    partial void OnDepthChanged(string oldValue, string newValue)
+    [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), BaseCabinetDepthRange(48)] public partial string Depth { get; set; } = ""; partial void OnDepthChanged(string oldValue, string newValue)
     {
         if (_isMapping) return;
 
@@ -699,6 +698,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight1 { get; set; } = ""; partial void OnOpeningHeight1Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
@@ -706,6 +706,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight2 { get; set; } = ""; partial void OnOpeningHeight2Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
@@ -713,6 +714,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight3 { get; set; } = ""; partial void OnOpeningHeight3Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
@@ -720,14 +722,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string OpeningHeight4 { get; set; } = ""; partial void OnOpeningHeight4Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
         if (newValue != oldValue)
         {
             ResizeOpeningHeights();
         }
     }
-    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = "";
-    partial void OnDrwFrontHeight1Changed(string oldValue, string newValue)
+    [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = ""; partial void OnDrwFrontHeight1Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
+
         // Keep edit buffer synced when not typing; never overwrite while user is mid-edit.
         if (!_suppressEditSync && !_isEditingDrwFrontHeight1)
             DrwFrontHeight1Edit = newValue;
@@ -740,6 +744,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = ""; partial void OnDrwFrontHeight2Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
         if (newValue != oldValue)
         {
             ResizeDrwFrontHeights();
@@ -747,6 +752,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = ""; partial void OnDrwFrontHeight3Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
         if (newValue != oldValue)
         {
             ResizeDrwFrontHeights();
@@ -754,6 +760,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = ""; partial void OnDrwFrontHeight4Changed(string oldValue, string newValue)
     {
+        if (_isMapping) return;
         if (newValue != oldValue)
         {
             ResizeDrwFrontHeights();

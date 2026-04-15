@@ -376,3 +376,6 @@
 	Phase 3 of refactoring CreatePanel() done. commit
 	isMapping was missing from Base Cabinet OnDepthChanged handler, causing the ever-recurring Classic Click-Twice-To-Properly-Populate-Fields bug. Fixed, and added tests to try to catch it. commit
 	Uploading 3.0.1.52
+
+3.0.1.53
+	Added MappingGuardAuditTest. This looks for isMapping in ANY OnXChanged handler in any of the cabinet viewmodels. If it finds one that is missing it, the test fails and outputs the name of the handler that's missing it. This should help catch any future instances of the Classic Click-Twice bug. commit
