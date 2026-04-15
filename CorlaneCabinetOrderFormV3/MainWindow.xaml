@@ -239,7 +239,7 @@
         <TabControl Grid.Row="1" Grid.Column="0" SelectedIndex="{Binding SelectedTabIndex}" Width="{Binding MainTabControlWidth}" Grid.ColumnSpan="2" HorizontalAlignment="Left">
 
             <TabItem Header="Base Cabinet" Padding="10" Width="120">
-                <views:BaseCabinetView DataContext="{Binding BaseCabinetVm}"/>
+                <views:BaseCabinetViewV2 DataContext="{Binding BaseCabinetVm}"/>
             </TabItem>
 
             <TabItem Header="Upper Cabinet" Padding="10" Width="120">
