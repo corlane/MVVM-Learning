@@ -44,7 +44,6 @@ OPTIONAL: Change pricing to account for linear inches of perimeter around parts.
 
 BUGS:
 
-Angle Front cabinets need to have Half Depth shelf disabled.
 
 
 
