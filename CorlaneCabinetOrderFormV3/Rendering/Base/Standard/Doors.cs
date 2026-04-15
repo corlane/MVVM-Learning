@@ -64,7 +64,7 @@ internal static partial class BaseCabinetBuilder
 
             if (baseCab.IncDoors)
             {
-                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
+                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
                 if (!baseCab.HasTK)
                 {
                     ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
@@ -97,9 +97,9 @@ internal static partial class BaseCabinetBuilder
 
             if (baseCab.IncDoors)
             {
-                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
+                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
 
-                var door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.Door);
+                var door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
                 if (!baseCab.HasTK)
                 {
                     ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);

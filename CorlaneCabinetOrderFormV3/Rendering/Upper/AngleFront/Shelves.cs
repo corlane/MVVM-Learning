@@ -25,7 +25,7 @@ internal static partial class UpperCabinetBuilder
                     new (MaterialThickness34 + .25 + gap, leftBackWidth - MaterialThickness34 - .25 - gap,0),
                     new (MaterialThickness34 + .25 + gap, MaterialThickness34 + gap,0),
                 ];
-                shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Horizontal", upperCab, true, isPanel, panelEBEdges, isFaceUp: false, 45, partKind: CabinetPartKind.Shelf);
+                shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Shelf, plywoodTextureRotationDegrees: 45);
                 ModelTransforms.ApplyTransform(shelf, 0, gap / 2, +i * shelfSpacing, 90, 90, 180);
                 cabinet.Children.Add(shelf);
             }

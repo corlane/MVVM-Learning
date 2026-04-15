@@ -58,7 +58,7 @@ internal static partial class BaseCabinetBuilder
             shelfSpacing /= (baseCab.ShelfCount + 1);
             for (int i = 1; i < shelfCount + 1; i++)
             {
-                shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, true, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Shelf);
+                shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, baseCab.Species, getMatchingEdgebandingSpecies(baseCab.Species), "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.Shelf);
                 ModelTransforms.ApplyTransform(shelf, 0 + .0625, leftDepth, -i * shelfSpacing, 90, 0, 0);
                 cabinet.Children.Add(shelf);
             }

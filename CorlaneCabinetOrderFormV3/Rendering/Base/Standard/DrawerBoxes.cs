@@ -133,11 +133,11 @@ internal static partial class BaseCabinetBuilder
             new(0, dbxDepth - (materialThickness * 2), 0)
         };
 
-        var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxSide);
-        var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxSide);
-        var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxFront);
-        var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, topDeck90, false, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.DrawerBoxBack);
-        var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, "Prefinished Ply", "None", "Vertical", baseCab, topDeck90, true, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.DrawerBoxBottom);
+        var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
+        var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
+        var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxFront);
+        var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxBack);
+        var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, "Prefinished Ply", "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.DrawerBoxBottom);
 
         ModelTransforms.ApplyTransform(leftSide, 0, 0, -(dbxWidth - materialThickness), 0, 0, 0);
         ModelTransforms.ApplyTransform(front, 0, 0, 0, 0, 90, 0);

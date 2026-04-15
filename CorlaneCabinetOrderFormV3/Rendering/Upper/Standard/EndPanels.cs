@@ -15,7 +15,7 @@ internal static partial class UpperCabinetBuilder
             new (0,0,0)
         ];
 
-        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.LeftEnd);
-        rightEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.RightEnd);
+        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, isFaceUp: true, CabinetPartKind.LeftEnd);
+        rightEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Vertical", upperCab, isFaceUp: true, CabinetPartKind.RightEnd);
     }
 }

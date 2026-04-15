@@ -17,8 +17,8 @@ internal static partial class UpperCabinetBuilder
             new (0,-leftDepth + doubleMaterialThickness34,0),
         ];
 
-        deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, true, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Deck);
-        top = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, true, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Top);
+        deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Deck);
+        top = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Top);
 
         ModelTransforms.ApplyTransform(top, 0, leftDepth, -height, 90, 0, 0);
         ModelTransforms.ApplyTransform(deck, 0, leftDepth, -MaterialThickness34, 90, 0, 0);

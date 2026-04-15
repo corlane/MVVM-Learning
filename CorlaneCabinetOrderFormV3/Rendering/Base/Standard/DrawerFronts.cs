@@ -72,7 +72,7 @@ internal static partial class BaseCabinetBuilder
 
             double yPos = height - doorTopReveal - cumulativeHeight - (fi * baseDoorGap);
 
-            var front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, false, true, "TBLR", isFaceUp: false, partKind: CabinetPartKind.DrawerFront);
+            var front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, isFaceUp: false, CabinetPartKind.DrawerFront);
             ModelTransforms.ApplyTransform(front, -(width / 2) + doorLeftReveal, yPos, depth, 0, 0, 0);
             if (!doorsHidden) cabinet.Children.Add(front);
         }

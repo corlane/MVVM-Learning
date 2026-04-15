@@ -14,7 +14,7 @@ internal static partial class UpperCabinetBuilder
             new (leftBackWidth - MaterialThickness34 - .25,height,0),
             new (0,height,0)
         ];
-        leftBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.BackUpper34);
+        leftBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Vertical", upperCab, isFaceUp: true, CabinetPartKind.BackUpper34);
         ModelTransforms.ApplyTransform(leftBack, -leftBackWidth + .25, 0, -MaterialThickness34 - .25, 0, 0, 0);
 
         backPoints =
@@ -24,7 +24,7 @@ internal static partial class UpperCabinetBuilder
             new (rightBackWidth - doubleMaterialThickness34 - .25,height,0),
             new (0,height,0)
         ];
-        rightBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Vertical", upperCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.BackUpper34);
+        rightBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Vertical", upperCab, isFaceUp: true, CabinetPartKind.BackUpper34);
         ModelTransforms.ApplyTransform(rightBack, MaterialThickness34 + .25, 0, -leftBackWidth + .25, 0, 90, 0);
     }
 }

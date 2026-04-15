@@ -22,7 +22,7 @@ internal static partial class BaseCabinetBuilder
                     new (leftFrontWidth - MaterialThickness34 + tk_Depth,tk_Height-.5,0),
                     new (0,tk_Height-.5,0)
                 ];
-            toekick1 = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Toekick);
+            toekick1 = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.Toekick);
             ModelTransforms.ApplyTransform(toekick1, 0, 0.5, leftDepth - tk_Depth - MaterialThickness34, 0, 0, 0);
             cabinet.Children.Add(toekick1);
 
@@ -33,7 +33,7 @@ internal static partial class BaseCabinetBuilder
                     new (rightFrontWidth + tk_Depth,tk_Height-.5,0),
                     new (0,tk_Height-.5,0)
                 ];
-            toekick2 = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Toekick);
+            toekick2 = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.Toekick);
             ModelTransforms.ApplyTransform(toekick2, -leftDepth - rightFrontWidth + MaterialThickness34, 0.5, leftFrontWidth + tk_Depth - MaterialThickness34, 0, 90, 0);
             cabinet.Children.Add(toekick2);
         }

@@ -20,7 +20,7 @@ internal static partial class BaseCabinetBuilder
                 new (frontWidth + tk_Depth,tk_Height-.5,0),
                 new (-tk_Depth,tk_Height-.5,0)
             ];
-            toekick = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Toekick);
+            toekick = CabinetPartFactory.CreatePanel(toekickPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.Toekick);
             ModelTransforms.ApplyTransform(toekick, 0, 0, -tk_Depth, 0, ((angle * 180) / Math.PI) + 90, 0);
             var toekickRotated = new Model3DGroup();
             toekickRotated.Children.Add(toekick);

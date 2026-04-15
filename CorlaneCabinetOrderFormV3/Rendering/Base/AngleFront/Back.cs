@@ -35,7 +35,7 @@ internal static partial class BaseCabinetBuilder
             ];
         }
 
-        leftBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.BackBase34);
+        leftBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, isFaceUp: true, CabinetPartKind.BackBase34);
         ModelTransforms.ApplyTransform(leftBack, -leftBackWidth + .25, 0, -MaterialThickness34 - .25, 0, 0, 0);
 
         // Right Back
@@ -46,7 +46,7 @@ internal static partial class BaseCabinetBuilder
             new (rightBackWidth - doubleMaterialThickness34 - .25,height,0),
             new (0,height,0)
         ];
-        rightBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.BackBase34);
+        rightBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, isFaceUp: true, CabinetPartKind.BackBase34);
         ModelTransforms.ApplyTransform(rightBack, MaterialThickness34 + .25, 0, -leftBackWidth + .25, 0, 90, 0);
     }
 }

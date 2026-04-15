@@ -66,9 +66,9 @@ internal static partial class BaseCabinetBuilder
 
         endPanelPoints = BuildEndPanels(baseCab, height, depth, tk_Height, tk_Depth);
 
-        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.LeftEnd);
+        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, isFaceUp: true, CabinetPartKind.LeftEnd);
 
-        rightEnd = CabinetPartFactory.CreatePanel( endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.RightEnd);
+        rightEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, isFaceUp: true, CabinetPartKind.RightEnd);
 
         // ----------------------------
         // HOLES (base cabinets)

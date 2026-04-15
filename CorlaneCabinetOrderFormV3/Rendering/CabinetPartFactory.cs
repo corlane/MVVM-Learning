@@ -127,20 +127,18 @@ internal static class CabinetPartFactory
 
 
     internal static Model3DGroup CreatePanel(
-    List<Point3D> polygonPoints,
-    double matlThickness,
-    string panelSpecies,
-    string edgebandingSpecies,
-    string grainDirection,
-    CabinetModel cab,
-    bool topDeck90,      // Phase 2: remove — now derived from partKind + geometry
-    bool isPanel,        // Phase 2: remove — now derived from partKind
-    string panelEBEdges, // Phase 2: make optional — auto-resolved for Door/DrawerFront
-    bool isFaceUp,
-    double plywoodTextureRotationDegrees = 0,
-    CabinetPartKind partKind = CabinetPartKind.Unspecified)
+        List<Point3D> polygonPoints,
+        double matlThickness,
+        string panelSpecies,
+        string edgebandingSpecies,
+        string grainDirection,
+        CabinetModel cab,
+        bool isFaceUp,
+        CabinetPartKind partKind,
+        string panelEBEdges = "",
+        double plywoodTextureRotationDegrees = 0)
 
-    {
+        {
         double thickness = matlThickness;
 
         // ── Derive flags from partKind (shadows the legacy parameters) ──

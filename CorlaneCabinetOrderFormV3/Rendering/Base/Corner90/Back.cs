@@ -32,7 +32,7 @@ internal static partial class BaseCabinetBuilder
                 new (0,height,0)
             ];
         }
-        leftBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.BackBase34);
+        leftBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, isFaceUp: true, CabinetPartKind.BackBase34);
 
         AddShelfHoles(baseCab, MaterialThickness34, doubleMaterialThickness34, height, leftFrontWidth, rightDepth, tk_Height, holeDiameter, holeDepth, leftBack);
 
@@ -46,7 +46,7 @@ internal static partial class BaseCabinetBuilder
             new (leftDepth+rightFrontWidth - MaterialThickness34 - doubleMaterialThickness34,height-tk_Height,0),
             new (0,height-tk_Height,0),
         ];
-        rightBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, topDeck90, isPanel, panelEBEdges, isFaceUp: true, partKind: CabinetPartKind.BackBase34);
+        rightBack = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, isFaceUp: true, CabinetPartKind.BackBase34);
         ModelTransforms.ApplyTransform(rightBack, -leftDepth - rightFrontWidth + MaterialThickness34, tk_Height, leftFrontWidth + rightDepth - doubleMaterialThickness34 - .75, 0, 90, 0);
     }
 

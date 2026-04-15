@@ -34,7 +34,7 @@ internal static class FillerAndPanelBuilder
             new (0,0,0)
         ];
 
-        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.LeftEnd);
+        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, filler.Species, "None", "Vertical", filler, isFaceUp: false, CabinetPartKind.LeftEnd);
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, -MaterialThickness34, 0, 270, 0);
 
         backPoints =
@@ -45,7 +45,7 @@ internal static class FillerAndPanelBuilder
             new (width,height,0)
         ];
 
-        back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, filler.Species, getMatchingEdgebandingSpecies(filler.Species), "Vertical", filler, topDeck90, isPanel: true, panelEBEdges: "NNLR", isFaceUp: false, partKind: CabinetPartKind.FillerFront);
+        back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, filler.Species, getMatchingEdgebandingSpecies(filler.Species), "Vertical", filler, isFaceUp: false, CabinetPartKind.FillerFront, panelEBEdges: "NNLR");
         ModelTransforms.ApplyTransform(back, 0, 0, depth, 0, 0, 0);
 
         cabinet.Children.Add(leftEnd);
@@ -78,7 +78,7 @@ internal static class FillerAndPanelBuilder
             new (0,height,0)
         ];
 
-        back = CabinetPartFactory.CreatePanel(backPoints, depth, panel.Species, panel.EBSpecies, "Vertical", panel, topDeck90, isPanel, panelEBEdges, isFaceUp: false, partKind: CabinetPartKind.Panel);
+        back = CabinetPartFactory.CreatePanel(backPoints, depth, panel.Species, panel.EBSpecies, "Vertical", panel, isFaceUp: false, CabinetPartKind.Panel, panelEBEdges: panelEBEdges);
         ModelTransforms.ApplyTransform(back, 0, 0, depth / 2, 0, 0, 0);
 
         cabinet.Children.Add(back);
