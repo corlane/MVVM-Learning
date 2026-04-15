@@ -326,7 +326,7 @@ internal static class PartsListBuilder
         Add(entries, label, "Right End", 1, species, height, rd, Mt34, "Vertical" + tkNote,
             eb, height);
 
-        // Deck & Top (L-shaped) — edges 0+1 banded (topDeck90)
+        // Deck & Top (L-shaped) — edges 0+1 banded
         double deckEdge0 = lf - Mt34;   // first L-shape edge
         double deckEdge1 = rf - Mt34;   // second L-shape edge
         double deckEBLen = deckEdge0 + deckEdge1;
@@ -349,7 +349,7 @@ internal static class PartsListBuilder
             Add(entries, label, "Toekick (Right)", 1, species, rf + tkD, tkH - 0.5, Mt34, "Horizontal");
         }
 
-        // Shelves (L-shaped) — edges 0+1 banded (topDeck90)
+        // Shelves (L-shaped) — edges 0+1 banded
         if (b.ShelfCount > 0)
         {
             string shelfNote = b.ShelfDepth == CabinetOptions.ShelfDepth.HalfDepth

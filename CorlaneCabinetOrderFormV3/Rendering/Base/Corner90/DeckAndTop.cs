@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    static void BuildDeckAndTop(BaseCabinetModel baseCab, double MaterialThickness34, double doubleMaterialThickness34, double height, double leftFrontWidth, double rightFrontWidth, double leftDepth, double rightDepth, double tk_Height, bool isPanel, string panelEBEdges, double insideCornerRadius, int arcSegments, Model3DGroup leftEnd, Model3DGroup rightEnd, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints)
+    static void BuildDeckAndTop(BaseCabinetModel baseCab, double MaterialThickness34, double doubleMaterialThickness34, double height, double leftFrontWidth, double rightFrontWidth, double leftDepth, double rightDepth, double tk_Height, double insideCornerRadius, int arcSegments, Model3DGroup leftEnd, Model3DGroup rightEnd, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints)
     {
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, 0, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, -(rightDepth - MaterialThickness34) - leftFrontWidth, 0, -leftDepth - rightFrontWidth, 0, 180, 0);

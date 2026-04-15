@@ -33,9 +33,6 @@ internal static partial class UpperCabinetBuilder
         double doorTopReveal = dim.DoorTopReveal;
         double doorBottomReveal = dim.DoorBottomReveal;
         double backThickness = MaterialThickness34;
-        bool topDeck90 = false;
-        bool isPanel = false;
-        string panelEBEdges = "";
         int shelfCount = upperCab.ShelfCount;
         double holeDiameter = 0.197;
         double holeDepth = MaterialThickness34 / 2;
@@ -43,7 +40,7 @@ internal static partial class UpperCabinetBuilder
         double insideCornerRadius = 1.0;
         int arcSegments = 8;
 
-        BuildEndPanels90(upperCab, MaterialThickness34, height, leftDepth, rightDepth, topDeck90, isPanel, panelEBEdges, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> leftEndPanelPoints, out List<Point3D> rightEndPanelPoints);
+        BuildEndPanels90(upperCab, MaterialThickness34, height, leftDepth, rightDepth, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> leftEndPanelPoints, out List<Point3D> rightEndPanelPoints);
 
         AddHoles(upperCab, MaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, backThickness, holeDiameter, holeDepth, leftEnd, rightEnd);
 
@@ -66,17 +63,17 @@ internal static partial class UpperCabinetBuilder
 
         var deckCornerArc = GenerateInsideCornerArc(leftFrontWidth - MaterialThickness34, 0, insideCornerRadius, arcSegments);
 
-        BuildDeckAndTop(upperCab, MaterialThickness34, doubleMaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, isPanel, panelEBEdges, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints, deckCornerArc);
+        BuildDeckAndTop(upperCab, MaterialThickness34, doubleMaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints, deckCornerArc);
 
-        BuildBacks(upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, doubleMaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, topDeck90, isPanel, panelEBEdges, out Model3DGroup leftBack, out Model3DGroup rightBack, out List<Point3D> backPoints);
+        BuildBacks(upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, doubleMaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, out Model3DGroup leftBack, out Model3DGroup rightBack, out List<Point3D> backPoints);
 
         var shelfCornerArc = GenerateInsideCornerArc(leftFrontWidth - MaterialThickness34 - gap, 0, insideCornerRadius, arcSegments);
 
-        BuildShelves(cabinet, upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, doubleMaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, isPanel, panelEBEdges, shelfCount, gap, out Model3DGroup shelf, out List<Point3D> shelfPoints, shelfCornerArc);
+        BuildShelves(cabinet, upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, doubleMaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, shelfCount, gap, out Model3DGroup? shelf, out List<Point3D>? shelfPoints, shelfCornerArc);
 
         double cornerCabDoorOpenSideReveal = 0.875;
 
-        BuildDoors(cabinet, upperCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doubleMaterialThickness34, doorEdgebandingSpecies, height, leftFrontWidth, rightFrontWidth, leftDepth, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, topDeck90, out Model3DGroup door1, out Model3DGroup door2, out List<Point3D> doorPoints, cornerCabDoorOpenSideReveal);
+        BuildDoors(cabinet, upperCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doubleMaterialThickness34, doorEdgebandingSpecies, height, leftFrontWidth, rightFrontWidth, leftDepth, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, cornerCabDoorOpenSideReveal);
 
         if (!leftEndHidden) cabinet.Children.Add(leftEnd);
         if (!rightEndHidden) cabinet.Children.Add(rightEnd);

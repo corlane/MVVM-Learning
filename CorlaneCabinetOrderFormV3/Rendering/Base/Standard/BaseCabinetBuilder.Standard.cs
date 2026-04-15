@@ -41,9 +41,6 @@ internal static partial class BaseCabinetBuilder
         double shelfDepth = dim.ShelfDepth;
         double opening1Height = dim.Opening1Height;
         double deckBackInset = 0;
-        bool topDeck90 = false;
-        bool isPanel = false;
-        string panelEBEdges = "";
         Model3DGroup leftEnd;
         Model3DGroup rightEnd;
         Model3DGroup deck;
@@ -80,18 +77,18 @@ internal static partial class BaseCabinetBuilder
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
 
-        deck = BuildDeck(baseCab, MaterialThickness34, depth, backThickness, tk_Height, interiorWidth, deckBackInset, topDeck90, isPanel, panelEBEdges);
+        deck = BuildDeck(baseCab, MaterialThickness34, depth, backThickness, tk_Height, interiorWidth, deckBackInset);
 
-        top = BuildTop(baseCab, MaterialThickness34, StretcherWidth, topStretcherBackWidth, width, height, depth, interiorWidth, topDeck90, isPanel, panelEBEdges, top, out Model3DGroup? topStretcherFront, out Model3DGroup? topStretcherBack);
+        top = BuildTop(baseCab, MaterialThickness34, StretcherWidth, topStretcherBackWidth, width, height, depth, interiorWidth, top, out Model3DGroup? topStretcherFront, out Model3DGroup? topStretcherBack);
 
-        toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, topDeck90, isPanel, panelEBEdges, toekick);
+        toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, toekick);
 
-        back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight, topDeck90, isPanel, panelEBEdges);
+        back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight);
 
         // Drawer Stretchers
         BuildDrawerStretchers(cabinet, baseCab, dim);
 
-        shelf = BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, cabType, style2, backThickness, tk_Height, interiorWidth, interiorHeight, shelfDepth, opening1Height, topDeck90, isPanel, panelEBEdges);
+        shelf = BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, cabType, style2, backThickness, tk_Height, interiorWidth, interiorHeight, shelfDepth, opening1Height);
 
         // Doors
         if (baseCab.DoorCount > 0 && baseCab.IncDoors && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2)

@@ -373,3 +373,4 @@
 	Commit before refactoring the CreatePanel() method. commit
 	Phase 1 of refactoring CreatePanel(). commit
 	Phase 2 of refactoring CreatePanel() done. commit
+	Phase 3 of refactoring CreatePanel() done. commit

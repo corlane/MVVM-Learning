@@ -86,7 +86,7 @@ internal static partial class BaseCabinetBuilder
 
             if (!incBoxOpening[oi]) continue;
 
-            var dbxRotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+            var dbxRotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
             Model3DGroup dbxGroup = new();
             dbxGroup.Children.Add(dbxRotate);
 
@@ -105,9 +105,7 @@ internal static partial class BaseCabinetBuilder
         double dbxHeight, 
         double dbxDepth,
         double materialThickness,
-        BaseCabinetModel baseCab,
-        string panelEBEdges,
-        bool topDeck90)
+        BaseCabinetModel baseCab)
     {
         var dbxSidePoints = new List<Point3D>
         {

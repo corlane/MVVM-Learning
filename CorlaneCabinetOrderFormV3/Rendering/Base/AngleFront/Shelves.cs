@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    private static void BuildShelves(Model3DGroup cabinet, BaseCabinetModel baseCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, double leftDepth, double rightDepth, double leftBackWidth, double rightBackWidth, double tk_Height, double interiorHeight, bool isPanel, string panelEBEdges, int shelfCount, out Model3DGroup? shelf, out List<Point3D>? shelfPoints)
+    private static void BuildShelves(Model3DGroup cabinet, BaseCabinetModel baseCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, double leftDepth, double rightDepth, double leftBackWidth, double rightBackWidth, double tk_Height, double interiorHeight, int shelfCount, out Model3DGroup? shelf, out List<Point3D>? shelfPoints)
     {
         shelf = null;
         shelfPoints = null;

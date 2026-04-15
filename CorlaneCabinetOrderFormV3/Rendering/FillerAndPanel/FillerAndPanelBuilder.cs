@@ -22,9 +22,6 @@ internal static class FillerAndPanelBuilder
         double width = ConvertDimension.FractionToDouble(filler.Width);
         double height = ConvertDimension.FractionToDouble(filler.Height);
         double depth = ConvertDimension.FractionToDouble(filler.Depth);
-        bool topDeck90 = false;
-        bool isPanel = false;
-        string panelEBEdges = "";
 
         endPanelPoints =
         [
@@ -61,8 +58,6 @@ internal static class FillerAndPanelBuilder
         double width = ConvertDimension.FractionToDouble(panel.Width);
         double height = ConvertDimension.FractionToDouble(panel.Height);
         double depth = ConvertDimension.FractionToDouble(panel.Depth);
-        bool topDeck90 = false;
-        bool isPanel = true;
 
         string panelEBEdges = "";
         if (panel.PanelEBTop) { panelEBEdges += "T"; }

@@ -6,7 +6,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 internal static partial class UpperCabinetBuilder
 {
     
-    private static void BuildDeckAndTop(UpperCabinetModel upperCab, double MaterialThickness34, double depth, double backThickness, double interiorWidth, double backInsetForDeckAndTop, bool topDeck90, bool isPanel, string panelEBEdges, out Model3DGroup deck, out List<Point3D> deckPoints, out Model3DGroup top, out List<Point3D> topPoints, double height)
+    private static void BuildDeckAndTop(UpperCabinetModel upperCab, double MaterialThickness34, double depth, double backThickness, double interiorWidth, double backInsetForDeckAndTop, out Model3DGroup deck, out List<Point3D> deckPoints, out Model3DGroup top, out List<Point3D> topPoints, double height)
     {
         // Deck
         if (backThickness == MaterialThickness34)

@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class UpperCabinetBuilder
 {
-    private static void BuildDoors(Model3DGroup cabinet, UpperCabinetModel upperCab, bool doorsHidden, Func<string?, string?, string> resolveDoorSpeciesForTotals, Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow, double MaterialThickness34, double doubleMaterialThickness34, string doorEdgebandingSpecies, double height, double leftFrontWidth, double rightFrontWidth, double leftDepth, double doorLeftReveal, double doorRightReveal, double doorTopReveal, double doorBottomReveal, bool topDeck90, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, double cornerCabDoorOpenSideReveal)
+    private static void BuildDoors(Model3DGroup cabinet, UpperCabinetModel upperCab, bool doorsHidden, Func<string?, string?, string> resolveDoorSpeciesForTotals, Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow, double MaterialThickness34, double doubleMaterialThickness34, string doorEdgebandingSpecies, double height, double leftFrontWidth, double rightFrontWidth, double leftDepth, double doorLeftReveal, double doorRightReveal, double doorTopReveal, double doorBottomReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, double cornerCabDoorOpenSideReveal)
     {
         door1 = null;
         door2 = null;

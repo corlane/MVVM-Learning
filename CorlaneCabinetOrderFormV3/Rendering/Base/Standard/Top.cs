@@ -13,10 +13,7 @@ internal static partial class BaseCabinetBuilder
         double width, 
         double height, 
         double depth, 
-        double interiorWidth, 
-        bool topDeck90, 
-        bool isPanel, 
-        string panelEBEdges, 
+        double interiorWidth,
         Model3DGroup top, 
         out Model3DGroup? topStretcherFront, 
         out Model3DGroup? topStretcherBack)

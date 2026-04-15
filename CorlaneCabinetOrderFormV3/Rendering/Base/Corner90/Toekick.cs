@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    private static void BuildToekick(Model3DGroup cabinet, BaseCabinetModel baseCab, double MaterialThickness34, double leftFrontWidth, double rightFrontWidth, double leftDepth, double tk_Height, double tk_Depth, bool topDeck90, bool isPanel, string panelEBEdges, out Model3DGroup toekick1, out Model3DGroup toekick2, out List<Point3D> toekickPoints)
+    private static void BuildToekick(Model3DGroup cabinet, BaseCabinetModel baseCab, double MaterialThickness34, double leftFrontWidth, double rightFrontWidth, double leftDepth, double tk_Height, double tk_Depth, out Model3DGroup toekick1, out Model3DGroup toekick2, out List<Point3D> toekickPoints)
     {
         // Initialize out parameters
         toekick1 = null!;

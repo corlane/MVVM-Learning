@@ -12,10 +12,8 @@ internal static partial class BaseCabinetBuilder
         double backThickness, 
         double tk_Height, 
         double interiorWidth, 
-        double deckBackInset,
-        bool topDeck90, 
-        bool isPanel, 
-        string panelEBEdges)
+        double deckBackInset
+        )
 
     {
         Model3DGroup deck;

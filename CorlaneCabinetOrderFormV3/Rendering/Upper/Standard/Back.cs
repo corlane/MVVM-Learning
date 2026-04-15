@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class UpperCabinetBuilder
 {
-    private static void BuildBack(Model3DGroup cabinet, UpperCabinetModel upperCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, double MaterialThickness14, double StretcherWidth, double width, double height, double backThickness, double interiorWidth, double interiorHeight, bool topDeck90, bool isPanel, string panelEBEdges, out Model3DGroup back, out Model3DGroup? nailer, out List<Point3D> backPoints, out List<Point3D>? nailerPoints)
+    private static void BuildBack(Model3DGroup cabinet, UpperCabinetModel upperCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, double MaterialThickness14, double StretcherWidth, double width, double height, double backThickness, double interiorWidth, double interiorHeight, out Model3DGroup back, out Model3DGroup? nailer, out List<Point3D> backPoints, out List<Point3D>? nailerPoints)
     {
         nailer = null;
         nailerPoints = null;

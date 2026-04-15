@@ -94,7 +94,7 @@ internal static partial class BaseCabinetBuilder
                         addDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
                     }
 
-                    var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+                    var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
                     var placement = new Model3DGroup();
                     placement.Children.Add(rotateGroup);
 
@@ -127,7 +127,7 @@ internal static partial class BaseCabinetBuilder
 
                 if (baseCab.IncDrwBoxes)
                 {
-                    var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, "", false);
+                    var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
                     var trashDrawer = new Model3DGroup();
                     trashDrawer.Children.Add(rotateGroup);
                     ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0);

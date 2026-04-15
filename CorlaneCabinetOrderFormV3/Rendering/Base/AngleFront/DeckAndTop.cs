@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    private static void BuildDeckAndTop(BaseCabinetModel baseCab, double MaterialThickness34, double height, double leftDepth, double rightDepth, double leftBackWidth, double rightBackWidth, double tk_Height, bool isPanel, string panelEBEdges, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints, out double frontWidth, out double angle, out Model3DGroup deckRotated, out Model3DGroup topRotated)
+    private static void BuildDeckAndTop(BaseCabinetModel baseCab, double MaterialThickness34, double height, double leftDepth, double rightDepth, double leftBackWidth, double rightBackWidth, double tk_Height, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints, out double frontWidth, out double angle, out Model3DGroup deckRotated, out Model3DGroup topRotated)
     {
         // Deck & top - build original polygon then normalize so edge[0] is at origin along +X
         var originalDeck = new List<Point3D>

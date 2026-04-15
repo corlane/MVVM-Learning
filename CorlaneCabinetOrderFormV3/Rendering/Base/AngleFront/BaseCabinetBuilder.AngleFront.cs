@@ -38,26 +38,23 @@ internal static partial class BaseCabinetBuilder
         double doorBottomReveal = dim.DoorBottomReveal;
         double interiorHeight = dim.InteriorHeight;
         double backThickness = MaterialThickness34; // corner cabinets always have 3/4" backs
-        bool topDeck90 = false;
-        bool isPanel = false;
-        string panelEBEdges = "";
         int shelfCount = baseCab.ShelfCount;
         double holeDiameter = 0.197;
         double holeDepth = MaterialThickness34 / 2;
 
-        BuildEndPanelsAngleFront(baseCab, MaterialThickness34, height, leftDepth, rightDepth, tk_Height, tk_Depth, topDeck90, isPanel, panelEBEdges, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> leftEndPanelPoints, out List<Point3D> rightEndPanelPoints);
+        BuildEndPanelsAngleFront(baseCab, MaterialThickness34, height, leftDepth, rightDepth, tk_Height, tk_Depth, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> leftEndPanelPoints, out List<Point3D> rightEndPanelPoints);
 
         AddHoles(baseCab, MaterialThickness34, height, leftDepth, rightDepth, leftBackWidth, rightBackWidth, tk_Height, backThickness, holeDiameter, holeDepth, leftEnd, rightEnd);
 
-        BuildDeckAndTop(baseCab, MaterialThickness34, height, leftDepth, rightDepth, leftBackWidth, rightBackWidth, tk_Height, isPanel, panelEBEdges, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints, out double frontWidth, out double angle, out Model3DGroup deckRotated, out Model3DGroup topRotated);
+        BuildDeckAndTop(baseCab, MaterialThickness34, height, leftDepth, rightDepth, leftBackWidth, rightBackWidth, tk_Height, out Model3DGroup deck, out Model3DGroup top, out List<Point3D> deckPoints, out double frontWidth, out double angle, out Model3DGroup deckRotated, out Model3DGroup topRotated);
 
-        BuildToekick(cabinet, baseCab, MaterialThickness34, leftDepth, tk_Height, tk_Depth, topDeck90, isPanel, panelEBEdges, out Model3DGroup? toekick, out List<Point3D>? toekickPoints, frontWidth, angle);
+        BuildToekick(cabinet, baseCab, MaterialThickness34, leftDepth, tk_Height, tk_Depth, out Model3DGroup? toekick, out List<Point3D>? toekickPoints, frontWidth, angle);
 
-        BuildBacks(baseCab, MaterialThickness34, doubleMaterialThickness34, backLegWidth, height, leftBackWidth, rightBackWidth, tk_Height, topDeck90, isPanel, panelEBEdges, out Model3DGroup leftBack, out Model3DGroup rightBack, out List<Point3D> backPoints);
+        BuildBacks(baseCab, MaterialThickness34, doubleMaterialThickness34, backLegWidth, height, leftBackWidth, rightBackWidth, tk_Height, out Model3DGroup leftBack, out Model3DGroup rightBack, out List<Point3D> backPoints);
 
-        BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, leftDepth, rightDepth, leftBackWidth, rightBackWidth, tk_Height, interiorHeight, isPanel, panelEBEdges, shelfCount, out Model3DGroup? shelf, out List<Point3D>? shelfPoints);
+        BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, leftDepth, rightDepth, leftBackWidth, rightBackWidth, tk_Height, interiorHeight, shelfCount, out Model3DGroup? shelf, out List<Point3D>? shelfPoints);
 
-        BuildDoors(cabinet, baseCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doorEdgebandingSpecies, height, leftDepth, tk_Height, baseDoorGap, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, topDeck90, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, frontWidth, angle);
+        BuildDoors(cabinet, baseCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doorEdgebandingSpecies, height, leftDepth, tk_Height, baseDoorGap, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, frontWidth, angle);
 
         if (!leftEndHidden) cabinet.Children.Add(leftEnd);
         if (!rightEndHidden) cabinet.Children.Add(rightEnd);
