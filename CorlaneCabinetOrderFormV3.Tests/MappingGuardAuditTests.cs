@@ -106,8 +106,13 @@ public partial class MappingGuardAuditTests
             if (ExemptHandlers.Contains(handlerName))
                 continue;
 
-            // The handler body must contain _isMapping (either as a guard or in any check)
-            if (!body.Contains("_isMapping"))
+            // _isMapping must appear on a line that isn't commented out
+            bool hasActiveGuard = body
+                .Split('\n')
+                .Select(line => line.Trim())
+                .Any(line => line.Contains("_isMapping") && !line.StartsWith("//"));
+
+            if (!hasActiveGuard)
             {
                 failures.Add(handlerName);
             }

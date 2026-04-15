@@ -379,3 +379,4 @@
 
 3.0.1.53
 	Added MappingGuardAuditTest. This looks for isMapping in ANY OnXChanged handler in any of the cabinet viewmodels. If it finds one that is missing it, the test fails and outputs the name of the handler that's missing it. This should help catch any future instances of the Classic Click-Twice bug. commit
+	Modified MappingGuardAuditTest to fail if _isMapping is commented out (it wasn't checking that before). Now it is easy to check that a test fails properly by commenting out the _isMapping line in a handler and seeing if the test fails. commit
