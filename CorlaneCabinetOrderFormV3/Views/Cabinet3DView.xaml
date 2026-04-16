@@ -84,7 +84,7 @@
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
-        Margin="20,60,20,20" 
+        Margin="20,20,20,20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
 
@@ -92,7 +92,7 @@
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
-        Margin="20,100,20,20" 
+        Margin="20,60,20,20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
 
@@ -100,7 +100,7 @@
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
-        Margin="20,140,20,20" 
+        Margin="20,100,20,20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
 
@@ -108,7 +108,7 @@
         Width="100" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
-        Margin="20,180,20,20" 
+        Margin="20,140,20,20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
 
@@ -116,7 +116,7 @@
         Width="135" Height="30"
         HorizontalAlignment="Right" 
         VerticalAlignment="Top"
-        Margin="20,220,20,20" 
+        Margin="20,180,20,20" 
         FontWeight="SemiBold"
         Cursor="Hand"/>
 

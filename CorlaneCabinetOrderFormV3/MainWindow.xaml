@@ -440,7 +440,7 @@
                     CornerRadius="6"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
-                    Margin="20"
+                    Margin="20,200"
                     Visibility="{Binding IsNotificationVisible, Converter={StaticResource B2VConverter}}"
                     Opacity="0.95"
                     Panel.ZIndex="999">

@@ -1001,7 +1001,7 @@
                             <!-- Opening 1 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                 <TextBlock Text="1" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight1" Width="60" VerticalAlignment="Center"
+                                <TextBox x:Name="textOpeningHeight1" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="{Binding Opening1Disabled}"
                                          Text="{Binding OpeningHeight1, UpdateSourceTrigger=PropertyChanged}"
                                          GotFocus="TextBoxGotFocus"/>
@@ -1013,7 +1013,7 @@
                             <!-- Opening 2 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening2Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                 <TextBlock Text="2" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight2" Width="60" VerticalAlignment="Center"
+                                <TextBox x:Name="textOpeningHeight2" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="{Binding Opening2Disabled}"
                                          Text="{Binding OpeningHeight2, UpdateSourceTrigger=PropertyChanged}"
                                          GotFocus="TextBoxGotFocus"/>
@@ -1025,7 +1025,7 @@
                             <!-- Opening 3 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening3Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                 <TextBlock Text="3" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight3" Width="60" VerticalAlignment="Center"
+                                <TextBox x:Name="textOpeningHeight3" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="{Binding Opening3Disabled}"
                                          Text="{Binding OpeningHeight3, UpdateSourceTrigger=PropertyChanged}"
                                          GotFocus="TextBoxGotFocus"/>
@@ -1037,7 +1037,7 @@
                             <!-- Opening 4 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening4Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                 <TextBlock Text="4" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight4" Width="60" VerticalAlignment="Center"
+                                <TextBox x:Name="textOpeningHeight4" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="True"
                                          Text="{Binding OpeningHeight4, UpdateSourceTrigger=PropertyChanged}"
                                          GotFocus="TextBoxGotFocus"/>
@@ -1066,7 +1066,7 @@
                                 <!-- Front 1 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                     <TextBlock Text="1" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight1" Width="60" VerticalAlignment="Center"
+                                    <TextBox x:Name="textDrwFrontHeight1" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="{Binding DrwFront1Disabled}"
                                              Text="{Binding DrwFrontHeight1Edit, UpdateSourceTrigger=PropertyChanged}"
                                              GotFocus="TextBoxGotFocus"/>
@@ -1077,7 +1077,7 @@
                                 <!-- Front 2 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront2Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                     <TextBlock Text="2" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight2" Width="60" VerticalAlignment="Center"
+                                    <TextBox x:Name="textDrwFrontHeight2" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="{Binding DrwFront2Disabled}"
                                              Text="{Binding DrwFrontHeight2, UpdateSourceTrigger=PropertyChanged}"
                                              GotFocus="TextBoxGotFocus"/>
@@ -1088,7 +1088,7 @@
                                 <!-- Front 3 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront3Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                     <TextBlock Text="3" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight3" Width="60" VerticalAlignment="Center"
+                                    <TextBox x:Name="textDrwFrontHeight3" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="{Binding DrwFront3Disabled}"
                                              Text="{Binding DrwFrontHeight3, UpdateSourceTrigger=PropertyChanged}"
                                              GotFocus="TextBoxGotFocus"/>
@@ -1099,7 +1099,7 @@
                                 <!-- Front 4 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront4Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
                                     <TextBlock Text="4" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight4" Width="60" VerticalAlignment="Center"
+                                    <TextBox x:Name="textDrwFrontHeight4" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="True"
                                              Text="{Binding DrwFrontHeight4, UpdateSourceTrigger=PropertyChanged}"
                                              GotFocus="TextBoxGotFocus"/>
