@@ -400,3 +400,4 @@
 
 3.0.1.56
 	"Golden commit" before branching to work on UI layout rework. commit
+	3D view moved to center window, cabinet list stays on right but fills full vertical space. Looking GOOD. commit

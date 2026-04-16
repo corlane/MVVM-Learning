@@ -42,7 +42,7 @@
 
         <ListView x:Name="ListViewItems"
                   Height="Auto"
-                  FontSize="14"
+                  FontSize="12"
                   VirtualizingStackPanel.ScrollUnit="Pixel"
                   ItemsSource="{Binding Cabinets}"
                   SelectedItem="{Binding SelectedCabinet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -76,10 +76,10 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="" Width="128">
+                    <GridViewColumn Header="" Width="96">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Rectangle Width="128" Height="128"
+                                <Rectangle Width="96" Height="96"
                        RadiusX="8" RadiusY="8">
                                     <Rectangle.Fill>
                                         <ImageBrush ImageSource="{Binding Thumbnail}"

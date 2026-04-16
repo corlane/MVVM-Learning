@@ -71,6 +71,8 @@ public partial class MainWindowViewModel : ObservableValidator
 
     [ObservableProperty] public partial bool CabinetListVisible { get; set; } = true;
 
+    [ObservableProperty] public partial bool RightPanelVisible { get; set; } = true;
+
     [ObservableProperty] public partial bool ExperimentalView { get; set; } = false;
 
     // ── UI Scale ───────────────────────────────────────────────
@@ -426,54 +428,50 @@ public partial class MainWindowViewModel : ObservableValidator
                     (BaseCabinetVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
-                    MainTabControlWidth = 1000;
+                    RightPanelVisible = true;
                     break;
                 case 1:
                     (UpperCabinetVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
-                    MainTabControlWidth = 1000;
-
+                    RightPanelVisible = true;
                     break;
                 case 2:
                     (FillerVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
-                    MainTabControlWidth = 1000;
-
+                    RightPanelVisible = true;
                     break;
                 case 3:
                     (PanelVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = true;
                     CabinetListVisible = true;
-                    MainTabControlWidth = 1000;
-
+                    RightPanelVisible = true;
                     break;
                 case 4:
                     (PlaceOrderVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
                     CabinetListVisible = true;
-                    MainTabControlWidth = 1000;
-
+                    RightPanelVisible = true;
                     break;
                 case 5:
                     (DefaultsVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
                     CabinetListVisible = true;
-                    MainTabControlWidth = 1000;
+                    RightPanelVisible = true;
                     break;
 
                 case 6:
                     ViewportVisible = false;
                     CabinetListVisible = false;
-                    MainTabControlWidth = 1000;
+                    RightPanelVisible = false;
                     break;
 
                 case 7:
                     (REALLYProcessOrderVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
                     CabinetListVisible = false;
-                    MainTabControlWidth = 1790;
+                    RightPanelVisible = false;
                     break;
 
                 default:

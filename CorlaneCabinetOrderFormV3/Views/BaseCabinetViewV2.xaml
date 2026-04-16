@@ -1319,8 +1319,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Future: 3D preview, other content, etc. -->
-
+            <!-- 3D viewport is placed here programmatically by MainWindow -->
+            <Border x:Name="ViewportHost" Grid.Row="0"/>
+            
             <!--===== BOTTOM ACTION PANEL =====-->
             <Border Grid.Row="1"
                     Background="{DynamicResource ABrush.Tone2.Background.Static}"

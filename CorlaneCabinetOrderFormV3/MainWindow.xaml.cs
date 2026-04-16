@@ -1,125 +1,112 @@
 ﻿using CorlaneCabinetOrderFormV3.ViewModels;
+using CorlaneCabinetOrderFormV3.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3;
 
 public partial class MainWindow : Window
 {
     private bool _allowClose;
+    private readonly Cabinet3DView _viewport;
 
     public MainWindow()
     {
         InitializeComponent();
+        _viewport = App.ServiceProvider.GetRequiredService<Cabinet3DView>();
         this.Closed += MainWindow_Closed;
         DataContextChanged += (_, _) => HookTabIndexChanged();
-        Loaded += (_, _) => HookTabIndexChanged();
+        Loaded += (_, _) =>
+        {
+            HookTabIndexChanged();
+            MoveViewportToActiveTab();
+        };
     }
 
     private void HookTabIndexChanged()
     {
-        if (DataContext is not CorlaneCabinetOrderFormV3.ViewModels.MainWindowViewModel vm)
+        if (DataContext is not MainWindowViewModel vm)
             return;
 
         vm.PropertyChanged -= Vm_PropertyChanged;
         vm.PropertyChanged += Vm_PropertyChanged;
-
-        // apply immediately (handles startup / restored state)
-        ApplySplitterPreset(vm.SelectedTabIndex);
     }
 
-    private void Vm_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void Vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(CorlaneCabinetOrderFormV3.ViewModels.MainWindowViewModel.SelectedTabIndex))
+        if (e.PropertyName is nameof(MainWindowViewModel.SelectedTabIndex)
+                           or nameof(MainWindowViewModel.ExperimentalView))
+        {
+            // Defer so the visual tree has updated after tab/view switch
+            Dispatcher.InvokeAsync(MoveViewportToActiveTab,
+                System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+    }
+
+    private void MoveViewportToActiveTab()
+    {
+        // Detach from current parent
+        if (_viewport.Parent is Border oldBorder)
+            oldBorder.Child = null;
+        else if (_viewport.Parent is ContentPresenter cp)
+            cp.Content = null;
+
+        if (DataContext is not MainWindowViewModel vm)
             return;
 
-        if (sender is CorlaneCabinetOrderFormV3.ViewModels.MainWindowViewModel vm)
-        {
-            ApplySplitterPreset(vm.SelectedTabIndex);
-        }
+        // Only show viewport on cabinet tabs (0–3) with experimental view
+        if (!vm.ViewportVisible || !vm.ExperimentalView)
+            return;
+
+        // Find the active tab's content
+        var tabItem = MainTabControl.ItemContainerGenerator
+            .ContainerFromIndex(vm.SelectedTabIndex) as TabItem;
+
+        if (tabItem?.Content is not DependencyObject root)
+            return;
+
+        // Walk the visual tree to find a Border named "ViewportHost"
+        var host = FindViewportHost(root);
+        if (host != null)
+            host.Child = _viewport;
     }
 
-    private double? _savedViewportRow0Px;
-    private double? _savedViewportRow2Px;
-
-    private void ApplySplitterPreset(int selectedTabIndex)
+    private static Border? FindViewportHost(DependencyObject? root)
     {
-        // Hide splitter on: 6 Material Prices, 7 Process Order
-        RightPreviewSplitter.Visibility = selectedTabIndex is 6 or 7
-            ? Visibility.Collapsed
-            : Visibility.Visible;
+        if (root is null) return null;
 
-        bool shouldCollapseViewport = selectedTabIndex is 4 or 5;
+        // The tab content might not be in the visual tree yet, walk logical tree first
+        if (root is Border b && b.Name == "ViewportHost")
+            return b;
 
-        var row0 = RightPreviewGrid.RowDefinitions[0];
-        var row2 = RightPreviewGrid.RowDefinitions[2];
-
-        if (shouldCollapseViewport)
+        // Check logical children (works for UserControls not yet in visual tree)
+        foreach (var child in LogicalTreeHelper.GetChildren(root))
         {
-            // Save current rendered heights once (what the user dragged to)
-            if (_savedViewportRow0Px is null && row0.ActualHeight > 0)
-                _savedViewportRow0Px = row0.ActualHeight;
-
-            if (_savedViewportRow2Px is null && row2.ActualHeight > 0)
-                _savedViewportRow2Px = row2.ActualHeight;
-
-            row0.Height = new GridLength(0, GridUnitType.Pixel);
-
-            // Let the bottom take the rest while collapsed
-            row2.Height = new GridLength(1, GridUnitType.Star);
+            if (child is not DependencyObject dChild) continue;
+            var found = FindViewportHost(dChild);
+            if (found != null) return found;
         }
-        else
-        {
-            if (_savedViewportRow0Px is double topPx && topPx > 0)
-                row0.Height = new GridLength(topPx, GridUnitType.Pixel);
 
-            if (_savedViewportRow2Px is double bottomPx && bottomPx > 0)
-                row2.Height = new GridLength(bottomPx, GridUnitType.Pixel);
-        }
-    }
-
-    private void RightPreviewSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-    {
-        // Only record sizes when we're in the "normal" mode (i.e., not collapsed for Place Order / Defaults)
-        if (DataContext is not MainWindowViewModel vm) return;
-        if (vm.SelectedTabIndex is 4 or 5) return;
-
-        var row0 = RightPreviewGrid.RowDefinitions[0];
-        var row2 = RightPreviewGrid.RowDefinitions[2];
-
-        if (row0.ActualHeight > 0) _savedViewportRow0Px = row0.ActualHeight;
-        if (row2.ActualHeight > 0) _savedViewportRow2Px = row2.ActualHeight;
+        return null;
     }
 
     private void PrintButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button btn || btn.ContextMenu is null) return;
-
         btn.ContextMenu.PlacementTarget = btn;
         btn.ContextMenu.IsOpen = true;
     }
 
     private async void MainWindow_Closing(object? sender, CancelEventArgs e)
     {
-        if (_allowClose)
-        {
-            return;
-        }
+        if (_allowClose) return;
+        if (DataContext is not MainWindowViewModel vm) return;
+        if (!vm.IsModified) return;
 
-        if (DataContext is not MainWindowViewModel vm)
-        {
-            return;
-        }
-
-        if (!vm.IsModified)
-        {
-            return;
-        }
-
-        // Pause closing so we can ask the question.
         e.Cancel = true;
 
         var result = MessageBox.Show(
@@ -128,10 +115,7 @@ public partial class MainWindow : Window
             MessageBoxButton.YesNoCancel,
             MessageBoxImage.Warning);
 
-        if (result == MessageBoxResult.Cancel)
-        {
-            return;
-        }
+        if (result == MessageBoxResult.Cancel) return;
 
         if (result == MessageBoxResult.No)
         {
@@ -140,13 +124,9 @@ public partial class MainWindow : Window
             return;
         }
 
-
-        // Yes => attempt save
         try
         {
             await vm.SaveJobCommand.ExecuteAsync(null);
-
-            // If the user completed a save (or you set IsModified=false on save), then allow close.
             if (!vm.IsModified)
             {
                 _allowClose = true;
@@ -164,8 +144,6 @@ public partial class MainWindow : Window
         try
         {
             var defaults = App.ServiceProvider.GetRequiredService<CorlaneCabinetOrderFormV3.Services.DefaultSettingsService>();
-
-            // Prefer RestoreBounds so a maximized window stores the restored (normal) bounds
             var bounds = this.RestoreBounds;
 
             double left = bounds.Left;
@@ -173,13 +151,11 @@ public partial class MainWindow : Window
             double width = bounds.Width;
             double height = bounds.Height;
 
-            // Fallbacks if RestoreBounds yielded invalid values
             if (double.IsNaN(left) || double.IsInfinity(left)) left = this.Left;
             if (double.IsNaN(top) || double.IsInfinity(top)) top = this.Top;
             if (double.IsNaN(width) || width <= 0) width = this.Width;
             if (double.IsNaN(height) || height <= 0) height = this.Height;
 
-            // Sanity clamp so JSON doesn't get absurd values
             width = Math.Max(300, width);
             height = Math.Max(200, height);
 
@@ -190,7 +166,6 @@ public partial class MainWindow : Window
             defaults.WindowState = this.WindowState.ToString();
 
             await defaults.SaveAsync().ConfigureAwait(false);
-
         }
         catch (Exception ex)
         {

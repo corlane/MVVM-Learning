@@ -1,6 +1,7 @@
 ﻿using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
 using CorlaneCabinetOrderFormV3.ViewModels;
+using CorlaneCabinetOrderFormV3.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
@@ -74,6 +75,7 @@ public partial class App : Application
                 services.AddSingleton<POCustomerInfoViewModel>();
                 services.AddSingleton<IMaterialLookupService, MaterialLookupService>();
                 services.AddTransient<POJobMaterialListViewModel>();
+                services.AddSingleton<Cabinet3DView>();
 
                 // Register ViewModels as transients
                 services.AddTransient<BaseCabinetViewModel>();
