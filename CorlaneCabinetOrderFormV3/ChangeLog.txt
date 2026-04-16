@@ -391,3 +391,4 @@
 	Uploading 3.0.1.54
 	Added corner radius = 10 to flyouts & bottom action panel.
 	Added UpperCabinetViewV2, with the same layout as BaseCabinetViewV2. commit
+	Filler and Panel V2 views added. commit
