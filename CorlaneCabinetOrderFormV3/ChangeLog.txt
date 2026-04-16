@@ -388,3 +388,4 @@
 
 3.0.1.54
 	Added isMapping guard to BaseCabinetViewModel.Commands LoadDefaults(). It was causing the Classic Click-Twice-To-Properly-Populate-Fields bug. Fixed. commit
+	Uploading 3.0.1.54
