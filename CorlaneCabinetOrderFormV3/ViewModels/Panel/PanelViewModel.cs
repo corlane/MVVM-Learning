@@ -264,6 +264,7 @@ public partial class PanelViewModel : ObservableValidator
     [RelayCommand]
     private void LoadDefaults()
     {
+        if (_isMapping) return;
         Species = _defaults!.DefaultPanelSpecies;
         EBSpecies = _defaults.DefaultPanelEBSpecies;
 

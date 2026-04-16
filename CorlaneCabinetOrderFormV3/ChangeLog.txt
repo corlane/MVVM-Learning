@@ -389,3 +389,5 @@
 3.0.1.54
 	Added isMapping guard to BaseCabinetViewModel.Commands LoadDefaults(). It was causing the Classic Click-Twice-To-Properly-Populate-Fields bug. Fixed. commit
 	Uploading 3.0.1.54
+	Added corner radius = 10 to flyouts & bottom action panel.
+	Added UpperCabinetViewV2, with the same layout as BaseCabinetViewV2. commit

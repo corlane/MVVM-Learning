@@ -274,12 +274,40 @@
                     </views:BaseCabinetViewV2>
                 </Grid>
             </TabItem>
-            
-            <TabItem Header="Upper Cabinet" Padding="10" Width="120">
-                <views:UpperCabinetView DataContext="{Binding UpperCabinetVm}"/>
-            </TabItem>
 
-            <TabItem Header="Filler/End" Padding="10" Width="120">
+                <TabItem Header="Upper Cabinet" Padding="10" Width="120">
+                    <Grid>
+                        <views:UpperCabinetView DataContext="{Binding UpperCabinetVm}">
+                            <views:UpperCabinetView.Style>
+                                <Style TargetType="UserControl">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
+                                    RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </views:UpperCabinetView.Style>
+                        </views:UpperCabinetView>
+
+                        <views:UpperCabinetViewV2 DataContext="{Binding UpperCabinetVm}">
+                            <views:UpperCabinetViewV2.Style>
+                                <Style TargetType="UserControl">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
+                                    RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </views:UpperCabinetViewV2.Style>
+                        </views:UpperCabinetViewV2>
+                    </Grid>
+                </TabItem>
+            
+                <TabItem Header="Filler/End" Padding="10" Width="120">
                 <views:FillerView DataContext="{Binding FillerVm}"/>
             </TabItem>
 

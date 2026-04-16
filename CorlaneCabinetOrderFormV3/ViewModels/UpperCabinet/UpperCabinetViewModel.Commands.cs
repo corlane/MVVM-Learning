@@ -68,6 +68,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void LoadDefaults()
     {
+        if (_isMapping) return;
         if (_defaults is null) return;
         Species = _defaults.DefaultSpecies;
         EBSpecies = _defaults.DefaultEBSpecies;

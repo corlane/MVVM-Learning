@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.BaseCabinetViewV2"
+﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.UpperCabinetViewV2"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views"
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"    
              xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
-             xmlns:Models="clr-namespace:CorlaneCabinetOrderFormV3.Models"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:appbehaviors="clr-namespace:CorlaneCabinetOrderFormV3.Behaviors"
              mc:Ignorable="d" 
@@ -16,7 +15,7 @@
              >
     <!-- Design-time DataContext (so intellisense will work) -->
     <d:UserControl.DataContext>
-        <viewmodels:BaseCabinetViewModel/>
+        <viewmodels:UpperCabinetViewModel/>
     </d:UserControl.DataContext>
 
     <UserControl.Resources>
@@ -74,11 +73,8 @@
                     <behaviors:EventTrigger EventName="Checked">
                         <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
@@ -91,11 +87,8 @@
                     <behaviors:EventTrigger EventName="Checked">
                         <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
@@ -108,51 +101,13 @@
                     <behaviors:EventTrigger EventName="Checked">
                         <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Species" FontSize="14"/>
-            </ToggleButton>
-
-            <ToggleButton x:Name="btnToekick" Padding="8,16" Margin="10">
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="Checked">
-                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
-                <TextBlock Text="Toekick" FontSize="14"/>
-            </ToggleButton>
-
-            <ToggleButton x:Name="btnTopType" Padding="8,16" Margin="10"
-                          Visibility="{Binding GroupCabinetTopTypeVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="Checked">
-                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
-                <TextBlock Text="Top Type" FontSize="14"/>
             </ToggleButton>
 
             <ToggleButton x:Name="btnBackThickness" Padding="8,16" Margin="10"
@@ -162,10 +117,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
@@ -173,17 +125,13 @@
                 <TextBlock Text="Back Thickness" FontSize="14"/>
             </ToggleButton>
 
-            <ToggleButton x:Name="btnDoors" Padding="8,16" Margin="10"
-                          Visibility="{Binding GroupDoorsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ToggleButton x:Name="btnDoors" Padding="8,16" Margin="10">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="Checked">
                         <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
@@ -191,36 +139,14 @@
                 <TextBlock Text="Doors" FontSize="14"/>
             </ToggleButton>
 
-            <ToggleButton x:Name="btnDrawers" Padding="8,16" Margin="10"
-                          Visibility="{Binding GroupDrawersVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ToggleButton x:Name="btnShelves" Padding="8,16" Margin="10">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="Checked">
                         <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
-                <TextBlock Text="Drawers" FontSize="14"/>
-            </ToggleButton>
-
-            <ToggleButton x:Name="btnShelves" Padding="8,16" Margin="10"
-                          Visibility="{Binding GroupShelvesVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="Checked">
-                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
@@ -233,11 +159,8 @@
                         <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnToekick" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnTopType" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
-                        <behaviors:ChangePropertyAction TargetName="btnDrawers" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
@@ -288,7 +211,6 @@
 
             <Border Width="220" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
@@ -305,18 +227,6 @@
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
                     </ListBox>
-
-                    <Separator Margin="0,10,0,8"/>
-
-                    <CheckBox Content="Sink Cabinet"
-                              IsChecked="{Binding SinkCabinet, UpdateSourceTrigger=PropertyChanged}"
-                              IsEnabled="{Binding SinkCabinetEnabled}"/>
-                    <CheckBox Content="Trash Drawer"
-                              IsChecked="{Binding TrashDrawer}"
-                              IsEnabled="{Binding TrashDrawerEnabled}"/>
-                    <CheckBox Content="Supply Drw Box" Margin="16,5,0,5"
-                              IsChecked="{Binding IncTrashDrwBox}"
-                              IsEnabled="{Binding TrashDrawer}"/>
                 </StackPanel>
             </Border>
         </Border>
@@ -364,7 +274,6 @@
 
             <Border Width="220" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
@@ -374,160 +283,160 @@
                     <StackPanel>
                         <TextBlock Text="Dimensions" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
-                        <!--===== STANDARD / DRAWER BASE =====-->
-                        <StackPanel Visibility="{Binding StdOrDrwBaseVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <!--===== STANDARD UPPER =====-->
+                        <StackPanel Visibility="{Binding StandardDimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                             <!-- Width -->
                             <Label Content="Width" Margin="0,4,0,0"/>
-                            <TextBox x:Name="textWidthBase" Width="120" HorizontalAlignment="Left"
+                            <TextBox x:Name="textWidthUpper" Width="120" HorizontalAlignment="Left"
                                      Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textWidthBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textWidthBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textWidthUpper, FallbackValue=''}"/>
 
                             <!-- Height -->
                             <Label Content="Height" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textHeightBase" Width="120" HorizontalAlignment="Left"
+                            <TextBox x:Name="textHeightUpper" Width="120" HorizontalAlignment="Left"
                                      Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textHeightBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textHeightUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightUpper, FallbackValue=''}"/>
 
                             <!-- Depth -->
                             <Label Content="Depth" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textDepthBase" Width="120" HorizontalAlignment="Left"
+                            <TextBox x:Name="textDepthUpper" Width="120" HorizontalAlignment="Left"
                                      Text="{Binding Depth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textDepthBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textDepthBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textDepthUpper, FallbackValue=''}"/>
                         </StackPanel>
 
                         <!--===== CORNER 90° =====-->
-                        <StackPanel Visibility="{Binding Corner90Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel Visibility="{Binding Corner90DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                             <!-- Left Front Width -->
                             <Label Content="Left Front Width" Padding="0" Margin="0,4,0,0"/>
-                            <TextBox x:Name="textLeftFrontWidthBase" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textLeftFrontWidthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding LeftFrontWidth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftFrontWidthBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftFrontWidthBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftFrontWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftFrontWidthUpper, FallbackValue=''}"/>
 
                             <!-- Right Front Width -->
                             <Label Content="Right Front Width" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textRightFrontWidthBase" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textRightFrontWidthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding RightFrontWidth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textRightFrontWidthBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightFrontWidthBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textRightFrontWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightFrontWidthUpper, FallbackValue=''}"/>
 
                             <!-- Left Depth -->
                             <Label Content="Left Depth" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textLeftDepthBase" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textLeftDepthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding LeftDepth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftDepthBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepthBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepthUpper, FallbackValue=''}"/>
 
                             <!-- Right Depth -->
                             <Label Content="Right Depth" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textRightDepthBase" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textRightDepthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding RightDepth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textRightDepthBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepthBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textRightDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepthUpper, FallbackValue=''}"/>
 
                             <!-- Left Back Width (read-only) -->
                             <Label Content="Left Back Width" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textLeftBackWidthBase" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textLeftBackWidthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding LeftBackWidth90}" IsReadOnly="True" IsEnabled="False"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
 
                             <!-- Right Back Width (read-only) -->
                             <Label Content="Right Back Width" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textRightBackWidthBase" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textRightBackWidthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding RightBackWidth90}" IsReadOnly="True" IsEnabled="False"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
 
                             <!-- Height -->
                             <Label Content="Height" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textHeightCornerBase" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textHeightCornerUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textHeightCornerBase, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCornerBase, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textHeightCornerUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCornerUpper, FallbackValue=''}"/>
                         </StackPanel>
 
-                        <!--===== CORNER 45° =====-->
-                        <StackPanel Visibility="{Binding Corner45Visibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <!--===== CORNER 45° (ANGLE FRONT) =====-->
+                        <StackPanel Visibility="{Binding Corner45DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                             <!-- Left Depth -->
                             <Label Content="Left Depth" Padding="0" Margin="0,4,0,0"/>
-                            <TextBox x:Name="textLeftDepth45Base" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textLeftDepth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding LeftDepth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftDepth45Base, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepth45Base, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftDepth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepth45Upper, FallbackValue=''}"/>
 
                             <!-- Right Depth -->
                             <Label Content="Right Depth" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textRightDepth45Base" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textRightDepth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding RightDepth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textRightDepth45Base, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepth45Base, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textRightDepth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepth45Upper, FallbackValue=''}"/>
 
                             <!-- Left Back Width -->
                             <Label Content="Left Back Width" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textLeftBackWidth45Base" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textLeftBackWidth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding LeftBackWidth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftBackWidth45Base, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftBackWidth45Base, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textLeftBackWidth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftBackWidth45Upper, FallbackValue=''}"/>
 
                             <!-- Right Back Width -->
                             <Label Content="Right Back Width" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textRightBackWidth45Base" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textRightBackWidth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding RightBackWidth, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textRightBackWidth45Base, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightBackWidth45Base, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textRightBackWidth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightBackWidth45Upper, FallbackValue=''}"/>
 
                             <!-- Front Width (read-only) -->
                             <Label Content="Front Width" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textFrontWidth45Base" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textFrontWidth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding FrontWidth}" IsReadOnly="True" IsEnabled="False"/>
 
                             <!-- Height -->
                             <Label Content="Height" Padding="0" Margin="0,8,0,0"/>
-                            <TextBox x:Name="textHeightCorner45Base" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                            <TextBox x:Name="textHeightCorner45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
                                      Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
                                      GotFocus="TextBoxGotFocus"
                                      appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                             <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                                       Visibility="{Binding (Validation.HasError), ElementName=textHeightCorner45Base, Converter={StaticResource BoolToVisibilityConverter}}"
-                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCorner45Base, FallbackValue=''}"/>
+                                       Visibility="{Binding (Validation.HasError), ElementName=textHeightCorner45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                                       Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCorner45Upper, FallbackValue=''}"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
@@ -577,7 +486,6 @@
 
             <Border Width="700" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
@@ -608,9 +516,9 @@
                                      IsEnabled="{Binding CustomEBSpeciesEnabled}"/>
                         </StackPanel>
 
-                        <!-- Door / Drawer Front Species -->
+                        <!-- Door Species -->
                         <StackPanel Width="190">
-                            <TextBlock Text="Door / Drw. Front" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                            <TextBlock Text="Door Species" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
                             <ListBox ItemsSource="{Binding ListCabSpecies}"
                                      SelectedItem="{Binding DoorSpecies}"/>
                             <Label Content="Custom Door Species:" Margin="0,6,0,0" Padding="0"/>
@@ -618,141 +526,6 @@
                                      IsEnabled="{Binding CustomDoorSpeciesEnabled}"/>
                         </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </Border>
-        </Border>
-
-        <!--========== TOEKICK FLYOUT ==========-->
-        <Border Grid.Column="1"
-                ClipToBounds="True"
-                Background="{DynamicResource ABrush.Tone2.Background.Static}"
-                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}"
-                BorderThickness="0,0,1,0"
-                CornerRadius="10">
-            <Border.Style>
-                <Style TargetType="Border">
-                    <Setter Property="Width" Value="0"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnToekick}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="220" Duration="0:0:0.25">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase EasingMode="EaseOut"/>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="0" Duration="0:0:0.2">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase EasingMode="EaseIn"/>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-
-            <Border Width="220" HorizontalAlignment="Left" Padding="10">
-                <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
-                    <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
-                    <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
-                    <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
-                    <Style TargetType="ComboBox" BasedOn="{StaticResource FlyoutComboBox}"/>
-                </Border.Resources>
-                <StackPanel>
-                    <TextBlock Text="Toekick" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
-
-                    <CheckBox Content="Has Toekick" Margin="0,4,0,10" IsChecked="{Binding HasTK}"/>
-
-                    <!-- Toekick Height -->
-                    <Label Content="Toekick Height" Margin="0,0,0,0" Padding="0"/>
-                    <TextBox x:Name="textTKHeight" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
-                             Text="{Binding TKHeight, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding HasTK}" GotFocus="TextBoxGotFocus"
-                             appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
-                    <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                               Visibility="{Binding (Validation.HasError), ElementName=textTKHeight, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textTKHeight, FallbackValue=''}"/>
-
-                    <!-- Toekick Depth -->
-                    <Label Content="Toekick Depth" Margin="0,8,0,0" Padding="0"/>
-                    <TextBox x:Name="textTKDepth" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
-                             Text="{Binding TKDepth, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding HasTK}" GotFocus="TextBoxGotFocus"
-                             appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
-                    <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
-                               Visibility="{Binding (Validation.HasError), ElementName=textTKDepth, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textTKDepth, FallbackValue=''}"/>
-                </StackPanel>
-            </Border>
-        </Border>
-
-        <!--========== TOP TYPE FLYOUT ==========-->
-        <Border Grid.Column="1"
-                ClipToBounds="True"
-                Background="{DynamicResource ABrush.Tone2.Background.Static}"
-                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}"
-                BorderThickness="0,0,1,0"
-                CornerRadius="10">
-            <Border.Style>
-                <Style TargetType="Border">
-                    <Setter Property="Width" Value="0"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnTopType}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="220" Duration="0:0:0.25">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase EasingMode="EaseOut"/>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="0" Duration="0:0:0.2">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase EasingMode="EaseIn"/>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-
-            <Border Width="220" HorizontalAlignment="Left" Padding="10">
-                <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
-                    <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
-                    <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
-                    <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
-                    <Style TargetType="ComboBox" BasedOn="{StaticResource FlyoutComboBox}"/>
-                    <Style TargetType="ListBox" BasedOn="{StaticResource FlyoutListBox}"/>
-                </Border.Resources>
-                <StackPanel>
-                    <TextBlock Text="Cabinet Top Type" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                    <ListBox ItemsSource="{Binding ListTopType}"
-                             SelectedItem="{Binding TopType}"/>
                 </StackPanel>
             </Border>
         </Border>
@@ -800,7 +573,6 @@
 
             <Border Width="220" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
@@ -858,7 +630,6 @@
 
             <Border Width="320" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
@@ -899,222 +670,7 @@
             </Border>
         </Border>
 
-        <!--========== DRAWERS FLYOUT ==========-->
-        <Border Grid.Column="1"
-                ClipToBounds="True"
-                Background="{DynamicResource ABrush.Tone2.Background.Static}"
-                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}"
-                BorderThickness="0,0,1,0"
-                CornerRadius="10">
-            <Border.Style>
-                <Style TargetType="Border">
-                    <Setter Property="Width" Value="0"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnDrawers}" Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="740" Duration="0:0:0.25">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase EasingMode="EaseOut"/>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                            <DataTrigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="0" Duration="0:0:0.2">
-                                            <DoubleAnimation.EasingFunction>
-                                                <CubicEase EasingMode="EaseIn"/>
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.ExitActions>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-
-            <Border Width="740" HorizontalAlignment="Left" Padding="10">
-                <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
-                    <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
-                    <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
-                    <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
-                    <Style TargetType="ComboBox" BasedOn="{StaticResource FlyoutComboBox}"/>
-                </Border.Resources>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel>
-                        <TextBlock Text="Drawers" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
-
-                        <!-- Drawer Count -->
-                        <Label Content="Number of Drawers:" Padding="0" Margin="0,0,0,4"/>
-                        <ComboBox Width="60" HorizontalAlignment="Left"
-                                  ItemsSource="{Binding ListDrwCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                                  SelectedItem="{Binding DrwCount}"/>
-
-                        <!-- Everything below is visible only when drawers > 0 -->
-                        <StackPanel Visibility="{Binding DrawersStackPanelVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-
-                            <!-- Grain Direction -->
-                            <Label Content="Drawer Front Grain Direction:" Padding="0" Margin="0,10,0,4"/>
-                            <ComboBox Width="120" HorizontalAlignment="Left"
-                                      ItemsSource="{Binding ListGrainDirection}"
-                                      SelectedItem="{Binding DrwFrontGrainDir}"/>
-
-                            <!-- Fronts checkboxes -->
-                            <CheckBox Content="Supply Slab Drawer Fronts" Margin="0,10,0,4" IsChecked="{Binding IncDrwFronts}"/>
-                            <CheckBox Content="Include Drawer Fronts In Sizes List" Margin="0,4,0,4" IsChecked="{Binding IncDrwFrontsInList}"/>
-
-                            <Separator Margin="0,8,0,8"/>
-
-                            <!-- Box checkboxes -->
-                            <CheckBox Content="Supply Drawer Boxes" Margin="0,4,0,4"
-                                      IsChecked="{Binding IncDrwBoxes}"
-                                      Visibility="{Binding IncDrwBoxesVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                      IsEnabled="{Binding IncDrwBoxesEnabled}"/>
-                            <CheckBox Content="Include Drawer Boxes In Sizes List" Margin="0,4,0,4"
-                                      IsChecked="{Binding IncDrwBoxesInList}"
-                                      Visibility="{Binding IncDrwBoxesInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <CheckBox Content="Drill Drawer Slide Mounting Holes" Margin="0,4,0,4"
-                                      IsChecked="{Binding DrillSlideHoles}"
-                                      Visibility="{Binding DrillSlideHolesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-                            <!-- Drawer Style -->
-                            <Label Content="Drawer Style:" Padding="0" Margin="0,8,0,4"
-                                   Visibility="{Binding ListDrawerStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <ComboBox Width="320" HorizontalAlignment="Left"
-                                      ItemsSource="{Binding ListDrawerStyle}"
-                                      SelectedValue="{Binding DrwStyle, UpdateSourceTrigger=PropertyChanged}"
-                                      Visibility="{Binding ListDrawerStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-                            <Separator Margin="0,8,0,8"/>
-
-                            <!--===== OPENING HEIGHTS =====-->
-                            <TextBlock Text="Opening Heights" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,6"/>
-
-                            <!-- Opening 1 -->
-                            <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="1" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight1" Width="60" VerticalAlignment="Center"
-                                         IsReadOnly="{Binding Opening1Disabled}"
-                                         Text="{Binding OpeningHeight1, UpdateSourceTrigger=PropertyChanged}"
-                                         GotFocus="TextBoxGotFocus"/>
-                                <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}"/>
-                                <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}"/>
-                                <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}"/>
-                            </StackPanel>
-
-                            <!-- Opening 2 -->
-                            <StackPanel Orientation="Horizontal" Visibility="{Binding Opening2Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="2" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight2" Width="60" VerticalAlignment="Center"
-                                         IsReadOnly="{Binding Opening2Disabled}"
-                                         Text="{Binding OpeningHeight2, UpdateSourceTrigger=PropertyChanged}"
-                                         GotFocus="TextBoxGotFocus"/>
-                                <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening2}"/>
-                                <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening2}"/>
-                                <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening2}"/>
-                            </StackPanel>
-
-                            <!-- Opening 3 -->
-                            <StackPanel Orientation="Horizontal" Visibility="{Binding Opening3Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="3" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight3" Width="60" VerticalAlignment="Center"
-                                         IsReadOnly="{Binding Opening3Disabled}"
-                                         Text="{Binding OpeningHeight3, UpdateSourceTrigger=PropertyChanged}"
-                                         GotFocus="TextBoxGotFocus"/>
-                                <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening3}"/>
-                                <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening3}"/>
-                                <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening3}"/>
-                            </StackPanel>
-
-                            <!-- Opening 4 -->
-                            <StackPanel Orientation="Horizontal" Visibility="{Binding Opening4Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="4" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                <TextBox x:Name="textOpeningHeight4" Width="60" VerticalAlignment="Center"
-                                         IsReadOnly="True"
-                                         Text="{Binding OpeningHeight4, UpdateSourceTrigger=PropertyChanged}"
-                                         GotFocus="TextBoxGotFocus"/>
-                                <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening4}"/>
-                                <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening4}"/>
-                                <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening4}"/>
-                            </StackPanel>
-
-                            <Separator Margin="0,8,0,8"/>
-
-                            <!--===== DRAWER FRONT HEIGHTS =====-->
-                            <StackPanel Visibility="{Binding GroupDrawerFrontHeightsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
-                                <TextBlock Text="Drw. Front Heights" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,4"/>
-
-                                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                                    <ToggleButton Content="Equalize Bottom Drawer Fronts" Style="{StaticResource FlyoutToggleButton}" HorizontalAlignment="Left" IsTabStop="False"
-                                                  IsChecked="{Binding EqualizeBottomDrwFronts}"/>
-                                    <ToggleButton Content="Equalize All Drawer Fronts" Style="{StaticResource FlyoutToggleButton}" HorizontalAlignment="Left" Margin="8,0,0,0" IsTabStop="False"
-                                                  IsChecked="{Binding EqualizeAllDrwFronts}"/>
-                                    <Button Content="Load Default Drawer Front Settings" Style="{StaticResource FlyoutButton}" HorizontalAlignment="Left" Margin="8,0,0,0" IsTabStop="False"
-                                            Command="{Binding LoadDefaultDrwSettingsCommand}"/>
-                                </StackPanel>
-
-                                <Separator Margin="0,8,0,8"/>
-
-                                <!-- Front 1 -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="1" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight1" Width="60" VerticalAlignment="Center"
-                                             IsReadOnly="{Binding DrwFront1Disabled}"
-                                             Text="{Binding DrwFrontHeight1Edit, UpdateSourceTrigger=PropertyChanged}"
-                                             GotFocus="TextBoxGotFocus"/>
-                                    <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront1}"/>
-                                    <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList1}"/>
-                                </StackPanel>
-
-                                <!-- Front 2 -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront2Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="2" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight2" Width="60" VerticalAlignment="Center"
-                                             IsReadOnly="{Binding DrwFront2Disabled}"
-                                             Text="{Binding DrwFrontHeight2, UpdateSourceTrigger=PropertyChanged}"
-                                             GotFocus="TextBoxGotFocus"/>
-                                    <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront2}"/>
-                                    <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList2}"/>
-                                </StackPanel>
-
-                                <!-- Front 3 -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront3Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="3" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight3" Width="60" VerticalAlignment="Center"
-                                             IsReadOnly="{Binding DrwFront3Disabled}"
-                                             Text="{Binding DrwFrontHeight3, UpdateSourceTrigger=PropertyChanged}"
-                                             GotFocus="TextBoxGotFocus"/>
-                                    <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront3}"/>
-                                    <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList3}"/>
-                                </StackPanel>
-
-                                <!-- Front 4 -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront4Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="4" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
-                                    <TextBox x:Name="textDrwFrontHeight4" Width="60" VerticalAlignment="Center"
-                                             IsReadOnly="True"
-                                             Text="{Binding DrwFrontHeight4, UpdateSourceTrigger=PropertyChanged}"
-                                             GotFocus="TextBoxGotFocus"/>
-                                    <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront4}"/>
-                                    <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList4}"/>
-                                </StackPanel>
-                            </StackPanel>
-
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
-            </Border>
-        </Border>
-
-        <!--========== SHELVES & ROLLOUTS FLYOUT ==========-->
+        <!--========== SHELVES FLYOUT ==========-->
         <Border Grid.Column="1"
                 ClipToBounds="True"
                 Background="{DynamicResource ABrush.Tone2.Background.Static}"
@@ -1130,7 +686,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="350" Duration="0:0:0.25">
+                                                         To="220" Duration="0:0:0.25">
                                             <DoubleAnimation.EasingFunction>
                                                 <CubicEase EasingMode="EaseOut"/>
                                             </DoubleAnimation.EasingFunction>
@@ -1155,67 +711,24 @@
                 </Style>
             </Border.Style>
 
-            <Border Width="350" HorizontalAlignment="Left" Padding="10">
+            <Border Width="220" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
                     <Style TargetType="ComboBox" BasedOn="{StaticResource FlyoutComboBox}"/>
                 </Border.Resources>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel>
-                        <!--===== SHELVES =====-->
-                        <TextBlock Text="Shelves" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                <StackPanel>
+                    <TextBlock Text="Shelves" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
-                        <Label Content="Shelf Count:" Padding="0" Margin="0,0,0,4"/>
-                        <ComboBox Width="80" HorizontalAlignment="Left"
-                                  ItemsSource="{Binding ComboShelfCount}"
-                                  SelectedItem="{Binding ShelfCount}"/>
+                    <Label Content="Shelf Count:" Padding="0" Margin="0,0,0,4"/>
+                    <ComboBox Width="80" HorizontalAlignment="Left"
+                              ItemsSource="{Binding ComboShelfCount}"
+                              SelectedItem="{Binding ShelfCount}"/>
 
-                        <Label Content="Shelf Depth:" Padding="0" Margin="0,10,0,4"
-                               Visibility="{Binding ShelfDepthVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                        <ComboBox Width="120" HorizontalAlignment="Left"
-                                  ItemsSource="{Binding ListShelfDepth}"
-                                  SelectedItem="{Binding ShelfDepth}"
-                                  IsEnabled="{Binding ComboShelfDepthEnabled}"
-                                  Visibility="{Binding ShelfDepthVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-                        <CheckBox Content="Drill Shelf Holes" Margin="0,10,0,0"
-                                  IsChecked="{Binding DrillShelfHoles}"/>
-
-                        <!--===== ROLLOUTS =====-->
-                        <StackPanel Visibility="{Binding GroupRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <Separator Margin="0,14,0,10"/>
-
-                            <TextBlock Text="Rollout Shelves" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
-
-                            <Label Content="Number of Rollouts:" Padding="0" Margin="0,0,0,4"/>
-                            <ComboBox Width="60" HorizontalAlignment="Left"
-                                      ItemsSource="{Binding ListRolloutCount}"
-                                      SelectedItem="{Binding RolloutCount}"/>
-
-                            <CheckBox Content="Supply Rollouts With Cabinet" Margin="0,10,0,4"
-                                      IsChecked="{Binding IncRollouts}"
-                                      IsEnabled="{Binding IncRolloutsEnabled}"
-                                      Visibility="{Binding IncRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <CheckBox Content="Include Rollouts In Sizes List" Margin="0,4,0,4"
-                                      IsChecked="{Binding IncRolloutsInList}"
-                                      IsEnabled="{Binding IncRolloutsInListEnabled}"
-                                      Visibility="{Binding IncRolloutsInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <CheckBox Content="Drill Slide Holes For Rollouts" Margin="0,4,0,4"
-                                      IsChecked="{Binding DrillSlideHolesForRollouts}"
-                                      Visibility="{Binding DrillSlideHolesForRolloutsVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-                            <Label Content="Rollout Style:" Padding="0" Margin="0,8,0,4"
-                                   Visibility="{Binding RolloutStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <ComboBox Width="320" HorizontalAlignment="Left"
-                                      ItemsSource="{Binding ListDrawerStyle}"
-                                      SelectedValue="{Binding RolloutStyle, UpdateSourceTrigger=PropertyChanged}"
-                                      Visibility="{Binding RolloutStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
+                    <CheckBox Content="Drill Shelf Holes" Margin="0,10,0,0"
+                              IsChecked="{Binding DrillShelfHoles}"/>
+                </StackPanel>
             </Border>
         </Border>
 
@@ -1262,7 +775,6 @@
 
             <Border Width="220" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
-                    <!-- Implicit styles scoped to this flyout panel -->
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
@@ -1273,37 +785,37 @@
 
                     <!-- Left Reveal -->
                     <Label Content="Left Reveal" Padding="0" Margin="0,4,0,0"/>
-                    <TextBox x:Name="textBaseDoorLeftReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
+                    <TextBox x:Name="textUpperDoorLeftReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
                              Text="{Binding LeftReveal, UpdateSourceTrigger=PropertyChanged}"
                              GotFocus="TextBoxGotFocus"
                              appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
 
                     <!-- Right Reveal -->
                     <Label Content="Right Reveal" Padding="0" Margin="0,8,0,0"/>
-                    <TextBox x:Name="textBaseDoorRightReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
+                    <TextBox x:Name="textUpperDoorRightReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
                              Text="{Binding RightReveal, UpdateSourceTrigger=PropertyChanged}"
                              GotFocus="TextBoxGotFocus"
                              appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
 
                     <!-- Top Reveal -->
                     <Label Content="Top Reveal" Padding="0" Margin="0,8,0,0"/>
-                    <TextBox x:Name="textBaseDoorTopReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
+                    <TextBox x:Name="textUpperDoorTopReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
                              Text="{Binding TopReveal, UpdateSourceTrigger=PropertyChanged}"
                              GotFocus="TextBoxGotFocus"
                              appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
 
                     <!-- Bottom Reveal -->
                     <Label Content="Bottom Reveal" Padding="0" Margin="0,8,0,0"/>
-                    <TextBox x:Name="textBaseDoorBottomReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
+                    <TextBox x:Name="textUpperDoorBottomReveal" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
                              Text="{Binding BottomReveal, UpdateSourceTrigger=PropertyChanged}"
                              GotFocus="TextBoxGotFocus"
                              appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
 
                     <Separator Margin="0,12,0,8"/>
 
-                    <!-- Door/Drw. Front Gaps -->
-                    <Label Content="Door/Drw. Front Gaps" Padding="0" Margin="0,0,0,0"/>
-                    <TextBox x:Name="textBaseDoorGaps" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
+                    <!-- Door Gaps -->
+                    <Label Content="Door Gaps" Padding="0" Margin="0,0,0,0"/>
+                    <TextBox x:Name="textUpperDoorGaps" Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"
                              Text="{Binding GapWidth, UpdateSourceTrigger=PropertyChanged}"
                              GotFocus="TextBoxGotFocus"
                              appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
@@ -1311,7 +823,6 @@
             </Border>
         </Border>
 
-        <!--========== MAIN CONTENT AREA ==========-->
         <!--========== MAIN CONTENT AREA ==========-->
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
@@ -1343,7 +854,7 @@
                     <!--== CENTER: Special instructions ==-->
                     <StackPanel Grid.Column="1" Margin="24,0">
                         <TextBlock Text="Special Instructions / Notes" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,4"/>
-                        <TextBox x:Name="textBaseCabNotes" MinHeight="100" MaxHeight="100"
+                        <TextBox x:Name="textUpperCabNotes" MinHeight="100" MaxHeight="100"
                                  TextWrapping="Wrap" AcceptsReturn="True"
                                  VerticalScrollBarVisibility="Auto"
                                  FontSize="14"

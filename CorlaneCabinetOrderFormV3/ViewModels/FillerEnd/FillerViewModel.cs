@@ -196,6 +196,7 @@ public partial class FillerViewModel : ObservableValidator
     [RelayCommand]
     private void LoadDefaults()
     {
+        if (_isMapping) return;
         Species = _defaults!.DefaultFillerSpecies;
         // etc.
     }
