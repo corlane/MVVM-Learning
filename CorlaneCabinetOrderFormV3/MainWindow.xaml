@@ -33,6 +33,7 @@
         <Border DockPanel.Dock="Bottom" Padding="5,2"
                 Background="{DynamicResource ABrush.Tone1.Background.Static}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <CheckBox Content="Experimental View" IsChecked="{Binding ExperimentalView}" Margin="0,0,30,0"/>
                 <TextBlock Text="UI Scale:" VerticalAlignment="Center" Margin="0,0,5,0" FontSize="11"/>
                 <Slider Width="120" Minimum="0.65" Maximum="1.5"
                         TickFrequency="0.05" IsSnapToTickEnabled="True"
@@ -238,11 +239,43 @@
 
         <TabControl Grid.Row="1" Grid.Column="0" SelectedIndex="{Binding SelectedTabIndex}" Width="{Binding MainTabControlWidth}" Grid.ColumnSpan="2" HorizontalAlignment="Left">
 
-            <TabItem Header="Base Cabinet" Padding="10" Width="120">
+            <!--<TabItem Header="Base Cabinet" Padding="10" Width="120">
                 <views:BaseCabinetViewV2 DataContext="{Binding BaseCabinetVm}"/>
-            </TabItem>
+            </TabItem>-->
 
-            <TabItem Header="Upper Cabinet" Padding="10" Width="120">
+                <TabItem Header="Base Cabinet" Padding="10" Width="120">
+                    <Grid>
+                        <views:BaseCabinetView DataContext="{Binding BaseCabinetVm}">
+                            <views:BaseCabinetView.Style>
+                                <Style TargetType="UserControl">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
+                                     RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </views:BaseCabinetView.Style>
+                        </views:BaseCabinetView>
+
+                        <views:BaseCabinetViewV2 DataContext="{Binding BaseCabinetVm}">
+                            <views:BaseCabinetViewV2.Style>
+                                <Style TargetType="UserControl">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
+                                     RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </views:BaseCabinetViewV2.Style>
+                        </views:BaseCabinetViewV2>
+                    </Grid>
+                </TabItem>
+            
+                <TabItem Header="Upper Cabinet" Padding="10" Width="120">
                 <views:UpperCabinetView DataContext="{Binding UpperCabinetVm}"/>
             </TabItem>
 

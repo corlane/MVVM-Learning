@@ -71,6 +71,7 @@ public partial class MainWindowViewModel : ObservableValidator
 
     [ObservableProperty] public partial bool CabinetListVisible { get; set; } = true;
 
+    [ObservableProperty] public partial bool ExperimentalView { get; set; } = false;
 
     // ── UI Scale ───────────────────────────────────────────────
     [ObservableProperty]
