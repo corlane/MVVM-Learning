@@ -24,14 +24,9 @@ Corlane side:
 
 Add "Select All" for all "Done" buttons on PO tabs.
 
-chg door defaults to:
-drill hinge plate mount holes (move to top)
-
 Add checkbox to edgeband doors or not (and a note saying if they are edgebanded it will match door species)
 
 Remove "global" checkboxes from base cabinets: Inc Drws Boxes, Inc Drw Fronts, etc. They are always conflicting with the per-opening checkboxes.
-
-Change default shelf holes checkbox to be above shelf count combos.
 
 Load/Save etc Notification message not showing up.
 

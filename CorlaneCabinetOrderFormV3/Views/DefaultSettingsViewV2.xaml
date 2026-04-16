@@ -433,6 +433,8 @@
                     <StackPanel>
                         <TextBlock Text="Doors &amp; Drawer Fronts" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
+                        <CheckBox Content="Drill Hinge Plate Mounting Holes"
+                                  IsChecked="{Binding DefaultDrillHingeHoles}"/>
                         <CheckBox Content="Include Doors In Door Sizes List"
                                   IsChecked="{Binding DefaultIncDoorsInList}"/>
                         <CheckBox Content="Include Slab Doors With Cabinet"
@@ -441,8 +443,6 @@
                                   IsChecked="{Binding DefaultIncDrwFrontsInList}"/>
                         <CheckBox Content="Include Slab Drw Fronts With Cabinet"
                                   IsChecked="{Binding DefaultIncDrwFronts}"/>
-                        <CheckBox Content="Drill Hinge Plate Mounting Holes"
-                                  IsChecked="{Binding DefaultDrillHingeHoles}"/>
 
                         <Separator Margin="0,10,0,8"/>
 
@@ -673,6 +673,10 @@
                     <StackPanel>
                         <TextBlock Text="Shelves" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
+                        <CheckBox Content="Drill Shelf Holes" IsChecked="{Binding DefaultDrillShelfHoles}" Margin="0,15,0,0"/>
+
+                        <Separator Margin="0,14,0,10"/>
+
                         <Label Content="Base Shelf Count" Margin="0,4,0,0"/>
                         <ComboBox ItemsSource="{Binding ListShelfCount}" SelectedValue="{Binding DefaultShelfCount}"
                                   Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"/>
@@ -688,8 +692,6 @@
                         <Label Content="Upper Shelf Count" Margin="0,0,0,0"/>
                         <ComboBox ItemsSource="{Binding ListShelfCount}" SelectedValue="{Binding DefaultUpperShelfCount}"
                                   Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"/>
-
-                        <CheckBox Content="Drill Shelf Holes" IsChecked="{Binding DefaultDrillShelfHoles}" Margin="0,10,0,0"/>
 
                         <Separator Margin="0,14,0,12"/>
 

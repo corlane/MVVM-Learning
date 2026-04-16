@@ -402,3 +402,4 @@
 	"Golden commit" before branching to work on UI layout rework. commit
 	3D view moved to center window, cabinet list stays on right but fills full vertical space. Looking GOOD. commit
 	Pushing to remote. commit
+	Fixed missing Notify2 thing. commit

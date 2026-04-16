@@ -7,6 +7,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 public partial class MainWindowViewModel
 {
     private CancellationTokenSource? _notificationCts;
+    private CancellationTokenSource? _notification2Cts;
 
     [ObservableProperty] public partial string NotificationMessage { get; set; } = "";
     [ObservableProperty] public partial string NotificationMessage2 { get; set; } = "";
@@ -82,9 +83,9 @@ public partial class MainWindowViewModel
 
     public async Task ShowNotification2Async(string message, Brush? background = null, int durationMs = 2000)
     {
-        _notificationCts?.Cancel();
-        _notificationCts = new CancellationTokenSource();
-        var ct = _notificationCts.Token;
+        _notification2Cts?.Cancel();
+        _notification2Cts = new CancellationTokenSource();
+        var ct = _notification2Cts.Token;
 
         // Ensure initial set runs on UI thread and also set background
         if (Application.Current?.Dispatcher == null)

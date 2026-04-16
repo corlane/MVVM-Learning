@@ -441,15 +441,30 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
                     Margin="20,200"
-                    Visibility="{Binding IsNotificationVisible, Converter={StaticResource B2VConverter}}"
+                    Visibility="{Binding IsNotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Opacity="0.95"
                     Panel.ZIndex="999">
                 <TextBlock Text="{Binding NotificationMessage}"
                            Foreground="AntiqueWhite" FontSize="16" FontWeight="SemiBold"
                            TextWrapping="Wrap" HorizontalAlignment="Center"/>
             </Border>
+
+            <!--Notification Message 2 (overlays right panel area) -->
+            <Border Grid.Row="0" Grid.Column="0"
+                    Background="{Binding Notification2Background}"
+                    Padding="20,10,20,10"
+                    CornerRadius="6"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Margin="10"
+                    Visibility="{Binding IsNotification2Visible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Opacity="0.95"
+                    Panel.ZIndex="999">
+                <TextBlock Text="{Binding NotificationMessage2}"
+                           Foreground="AntiqueWhite" FontSize="16" FontWeight="SemiBold"
+                           TextWrapping="Wrap" HorizontalAlignment="Center"/>
+            </Border>
         </Grid>
         <!-- existing close tag for the scaled Grid -->
     </DockPanel>
-    <!-- add this -->
 </Window>
