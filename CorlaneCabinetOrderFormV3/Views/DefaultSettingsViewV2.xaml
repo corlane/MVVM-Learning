@@ -100,7 +100,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
-                <TextBlock Text="Thickness" FontSize="14"/>
+                <TextBlock Text="Thickness &amp;&#xA;Top Type" FontSize="14" TextAlignment="Center"/>
             </ToggleButton>
 
             <ToggleButton x:Name="btnDoors" Padding="8,16" Margin="10">
