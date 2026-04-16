@@ -50,6 +50,7 @@ OPTIONAL: Change pricing to account for linear inches of perimeter around parts.
 
 BUGS:
 
+Upper angle front not showing calculated front width. AGAIN.
 
 
 
