@@ -82,6 +82,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         [RelayCommand]
         private void LoadDefaults()
         {
+            if (_isMapping) return;
             if (_defaults is null) return;
 
             if (Style == Style2)

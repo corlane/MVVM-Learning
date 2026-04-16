@@ -385,3 +385,6 @@
 	Implemented the remainder of BaseCabinetViewV2 (main content area). commit
 	Added ExperimentalView checkbox to allow switching between the old and new Base Cabinet view. commit
 	Uploading 3.0.1.53
+
+3.0.1.54
+	Added isMapping guard to BaseCabinetViewModel.Commands LoadDefaults(). It was causing the Classic Click-Twice-To-Properly-Populate-Fields bug. Fixed. commit
