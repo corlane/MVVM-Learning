@@ -528,10 +528,10 @@
                                 </TextBox.Style>
                             </TextBox>
 
-                            <ToggleButton Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                            <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
                                           Content="Equalize Bottom Drw. Fronts"
                                           IsChecked="{Binding DefaultEqualizeBottomDrwFronts}" Margin="0,8,0,0"/>
-                            <ToggleButton Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                            <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                                           Content="Equalize All Drw. Fronts"
                                           IsChecked="{Binding DefaultEqualizeAllDrwFronts}" Margin="0,6,0,0"/>
                         </Grid>

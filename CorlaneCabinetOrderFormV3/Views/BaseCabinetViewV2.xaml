@@ -1000,7 +1000,7 @@
 
                             <!-- Opening 1 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening1Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="1" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                <TextBlock Text="Opening 1" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                 <TextBox x:Name="textOpeningHeight1" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="{Binding Opening1Disabled}"
                                          Text="{Binding OpeningHeight1, UpdateSourceTrigger=PropertyChanged}"
@@ -1012,7 +1012,7 @@
 
                             <!-- Opening 2 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening2Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="2" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                <TextBlock Text="Opening 2" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                 <TextBox x:Name="textOpeningHeight2" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="{Binding Opening2Disabled}"
                                          Text="{Binding OpeningHeight2, UpdateSourceTrigger=PropertyChanged}"
@@ -1024,7 +1024,7 @@
 
                             <!-- Opening 3 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening3Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="3" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                <TextBlock Text="Opening 3" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                 <TextBox x:Name="textOpeningHeight3" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="{Binding Opening3Disabled}"
                                          Text="{Binding OpeningHeight3, UpdateSourceTrigger=PropertyChanged}"
@@ -1036,7 +1036,7 @@
 
                             <!-- Opening 4 -->
                             <StackPanel Orientation="Horizontal" Visibility="{Binding Opening4Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                <TextBlock Text="4" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                <TextBlock Text="Opening 4" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                 <TextBox x:Name="textOpeningHeight4" Width="80" VerticalAlignment="Center"
                                          IsReadOnly="True"
                                          Text="{Binding OpeningHeight4, UpdateSourceTrigger=PropertyChanged}"
@@ -1052,20 +1052,9 @@
                             <StackPanel Visibility="{Binding GroupDrawerFrontHeightsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <TextBlock Text="Drw. Front Heights" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,4"/>
 
-                                <StackPanel Orientation="Horizontal" Margin="0,4,0,4">
-                                    <ToggleButton Content="Equalize Bottom Drawer Fronts" Style="{StaticResource FlyoutToggleButton}" HorizontalAlignment="Left" IsTabStop="False"
-                                                  IsChecked="{Binding EqualizeBottomDrwFronts}"/>
-                                    <ToggleButton Content="Equalize All Drawer Fronts" Style="{StaticResource FlyoutToggleButton}" HorizontalAlignment="Left" Margin="8,0,0,0" IsTabStop="False"
-                                                  IsChecked="{Binding EqualizeAllDrwFronts}"/>
-                                    <Button Content="Load Default Drawer Front Settings" Style="{StaticResource FlyoutButton}" HorizontalAlignment="Left" Margin="8,0,0,0" IsTabStop="False"
-                                            Command="{Binding LoadDefaultDrwSettingsCommand}"/>
-                                </StackPanel>
-
-                                <Separator Margin="0,8,0,8"/>
-
                                 <!-- Front 1 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront1Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="1" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                    <TextBlock Text="Drw. Front 1" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                     <TextBox x:Name="textDrwFrontHeight1" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="{Binding DrwFront1Disabled}"
                                              Text="{Binding DrwFrontHeight1Edit, UpdateSourceTrigger=PropertyChanged}"
@@ -1076,7 +1065,7 @@
 
                                 <!-- Front 2 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront2Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="2" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                    <TextBlock Text="Drw. Front 2" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                     <TextBox x:Name="textDrwFrontHeight2" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="{Binding DrwFront2Disabled}"
                                              Text="{Binding DrwFrontHeight2, UpdateSourceTrigger=PropertyChanged}"
@@ -1087,7 +1076,7 @@
 
                                 <!-- Front 3 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront3Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="3" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                    <TextBlock Text="Drw. Front 3" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                     <TextBox x:Name="textDrwFrontHeight3" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="{Binding DrwFront3Disabled}"
                                              Text="{Binding DrwFrontHeight3, UpdateSourceTrigger=PropertyChanged}"
@@ -1098,7 +1087,7 @@
 
                                 <!-- Front 4 -->
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding DrwFront4Visible, Converter={StaticResource BoolToVisibilityConverter}}" Margin="0,0,0,6">
-                                    <TextBlock Text="4" VerticalAlignment="Center" FontWeight="SemiBold" Width="14"/>
+                                    <TextBlock Text="Drw. Front 4" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                                     <TextBox x:Name="textDrwFrontHeight4" Width="80" VerticalAlignment="Center"
                                              IsReadOnly="True"
                                              Text="{Binding DrwFrontHeight4, UpdateSourceTrigger=PropertyChanged}"
@@ -1106,6 +1095,18 @@
                                     <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront4}"/>
                                     <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList4}"/>
                                 </StackPanel>
+
+                                <Separator Margin="0,8,0,8"/>
+
+                                <StackPanel Orientation="Vertical" Margin="0,4,0,4">
+                                    <CheckBox Content="Equalize Bottom Drawer Fronts" Style="{StaticResource FlyoutCheckBox}" HorizontalAlignment="Left" Margin="8,0,0,10" IsTabStop="False"
+                                                  IsChecked="{Binding EqualizeBottomDrwFronts}"/>
+                                    <CheckBox Content="Equalize All Drawer Fronts" Style="{StaticResource FlyoutCheckBox}" HorizontalAlignment="Left" Margin="8,0,0,10" IsTabStop="False"
+                                                  IsChecked="{Binding EqualizeAllDrwFronts}"/>
+                                    <Button Content="Load Default Drawer Front Settings" Style="{StaticResource FlyoutButton}" HorizontalAlignment="Left" Margin="8,0,0,10" IsTabStop="False"
+                                            Command="{Binding LoadDefaultDrwSettingsCommand}"/>
+                                </StackPanel>
+
                             </StackPanel>
 
                         </StackPanel>
