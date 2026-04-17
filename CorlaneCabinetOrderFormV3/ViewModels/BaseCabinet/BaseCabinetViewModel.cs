@@ -171,8 +171,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (ConvertDimension.FractionToDouble(Depth) < 10.625)
         {
-            IncDrwBoxes = false;
-            IncDrwBoxesEnabled = false;
+            IncDrwBoxOpening1 = false;
+            IncDrwBoxOpening2 = false;
+            IncDrwBoxOpening3 = false;
+            IncDrwBoxOpening4 = false;
             IncRollouts = false;
             IncRolloutsEnabled = false;
             TopType = CabinetOptions.TopType.Full;
@@ -180,8 +182,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         else
         {
-            IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
-            IncDrwBoxesEnabled = true;
+            bool incBoxes = _defaults.DefaultIncDrwBoxes;
+            IncDrwBoxOpening1 = incBoxes;
+            IncDrwBoxOpening2 = incBoxes;
+            IncDrwBoxOpening3 = incBoxes;
+            IncDrwBoxOpening4 = incBoxes;
             TopType = _defaults.DefaultTopType;
             ApplyStyleVisibility(Style);
         }
@@ -425,277 +430,26 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwStyle { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontGrainDir { get; set; } = "";
-    [ObservableProperty] public partial bool IncDrwFrontsInList { get; set; }
-    partial void OnIncDrwFrontsInListChanged(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (newValue != oldValue)
-        {
-            if (IncDrwFrontsInList)
-            {
-                IncDrwFrontInList1 = true;
-                IncDrwFrontInList2 = true;
-                IncDrwFrontInList3 = true;
-                IncDrwFrontInList4 = true;
-            }
-            else
-            {
-                IncDrwFrontInList1 = false;
-                IncDrwFrontInList2 = false;
-                IncDrwFrontInList3 = false;
-                IncDrwFrontInList4 = false;
-            }
-        }
-    }
     [ObservableProperty] public partial bool IncDrwFrontInList1 { get; set; }
-    partial void OnIncDrwFrontInList1Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
-        { IncDrwFrontsInList = false; }
-    }
     [ObservableProperty] public partial bool IncDrwFrontInList2 { get; set; }
-    partial void OnIncDrwFrontInList2Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
-        { IncDrwFrontsInList = false; }
-    }
     [ObservableProperty] public partial bool IncDrwFrontInList3 { get; set; }
-    partial void OnIncDrwFrontInList3Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
-        { IncDrwFrontsInList = false; }
-    }
     [ObservableProperty] public partial bool IncDrwFrontInList4 { get; set; }
-    partial void OnIncDrwFrontInList4Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFrontInList1 && !IncDrwFrontInList2 && !IncDrwFrontInList3 && !IncDrwFrontInList4)
-        { IncDrwFrontsInList = false; }
-    }
-    [ObservableProperty] public partial bool IncDrwFronts { get; set; }
-    partial void OnIncDrwFrontsChanged(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (newValue != oldValue)
-        {
-            if (IncDrwFronts)
-            {
-                IncDrwFront1 = true;
-                IncDrwFront2 = true;
-                IncDrwFront3 = true;
-                IncDrwFront4 = true;
-            }
-            else
-            {
-                IncDrwFront1 = false;
-                IncDrwFront2 = false;
-                IncDrwFront3 = false;
-                IncDrwFront4 = false;
-            }
-        }
-    }
     [ObservableProperty] public partial bool IncDrwFront1 { get; set; }
-    partial void OnIncDrwFront1Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
-        { IncDrwFronts = false; }
-    }
     [ObservableProperty] public partial bool IncDrwFront2 { get; set; }
-    partial void OnIncDrwFront2Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
-        { IncDrwFronts = false; }
-    }
     [ObservableProperty] public partial bool IncDrwFront3 { get; set; }
-    partial void OnIncDrwFront3Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
-        { IncDrwFronts = false; }
-    }
     [ObservableProperty] public partial bool IncDrwFront4 { get; set; }
-    partial void OnIncDrwFront4Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwFront1 && !IncDrwFront2 && !IncDrwFront3 && !IncDrwFront4)
-        { IncDrwFronts = false; }
-    }
-    [ObservableProperty] public partial bool IncDrwBoxesInList { get; set; }
-    partial void OnIncDrwBoxesInListChanged(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (newValue != oldValue)
-        {
-            if (IncDrwBoxesInList)
-            {
-                IncDrwBoxInListOpening1 = true;
-                IncDrwBoxInListOpening2 = true;
-                IncDrwBoxInListOpening3 = true;
-                IncDrwBoxInListOpening4 = true;
-            }
-            else
-            {
-                IncDrwBoxInListOpening1 = false;
-                IncDrwBoxInListOpening2 = false;
-                IncDrwBoxInListOpening3 = false;
-                IncDrwBoxInListOpening4 = false;
-            }
-        }
-    }
     [ObservableProperty] public partial bool IncDrwBoxInListOpening1 { get; set; }
-    partial void OnIncDrwBoxInListOpening1Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
-        { IncDrwBoxesInList = false; }
-    }
     [ObservableProperty] public partial bool IncDrwBoxInListOpening2 { get; set; }
-    partial void OnIncDrwBoxInListOpening2Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
-        { IncDrwBoxesInList = false; }
-    }
     [ObservableProperty] public partial bool IncDrwBoxInListOpening3 { get; set; }
-    partial void OnIncDrwBoxInListOpening3Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
-        { IncDrwBoxesInList = false; }
-    }
     [ObservableProperty] public partial bool IncDrwBoxInListOpening4 { get; set; }
-    partial void OnIncDrwBoxInListOpening4Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxInListOpening1 && !IncDrwBoxInListOpening2 && !IncDrwBoxInListOpening3 && !IncDrwBoxInListOpening4)
-        { IncDrwBoxesInList = false; }
-    }
-    [ObservableProperty] public partial bool IncDrwBoxes { get; set; }
-    partial void OnIncDrwBoxesChanged(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (newValue != oldValue)
-        {
-            if (IncDrwBoxes)
-            {
-                IncDrwBoxOpening1 = true;
-                IncDrwBoxOpening2 = true;
-                IncDrwBoxOpening3 = true;
-                IncDrwBoxOpening4 = true;
-            }
-            else
-            {
-                IncDrwBoxOpening1 = false;
-                IncDrwBoxOpening2 = false;
-                IncDrwBoxOpening3 = false;
-                IncDrwBoxOpening4 = false;
-            }
-
-            if (SinkCabinet)
-            {
-                IncDrwBoxOpening1 = false;
-                DrillSlideHolesOpening1 = false;
-                IncDrwBoxInListOpening1 = false;
-            }
-        }
-    }
     [ObservableProperty] public partial bool IncDrwBoxOpening1 { get; set; }
-    partial void OnIncDrwBoxOpening1Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
-        { IncDrwBoxes = false; }
-    }
     [ObservableProperty] public partial bool IncDrwBoxOpening2 { get; set; }
-    partial void OnIncDrwBoxOpening2Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
-        { IncDrwBoxes = false; }
-    }
     [ObservableProperty] public partial bool IncDrwBoxOpening3 { get; set; }
-    partial void OnIncDrwBoxOpening3Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
-        { IncDrwBoxes = false; }
-    }
     [ObservableProperty] public partial bool IncDrwBoxOpening4 { get; set; }
-    partial void OnIncDrwBoxOpening4Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-        if (!IncDrwBoxOpening1 && !IncDrwBoxOpening2 && !IncDrwBoxOpening3 && !IncDrwBoxOpening4)
-        { IncDrwBoxes = false; }
-    }
-    [ObservableProperty] public partial bool DrillSlideHoles { get; set; }
-    partial void OnDrillSlideHolesChanged(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (!newValue)
-        {
-            DrillSlideHolesOpening1 = false;
-            DrillSlideHolesOpening2 = false;
-            DrillSlideHolesOpening3 = false;
-            DrillSlideHolesOpening4 = false;
-        }
-        else
-        {
-            DrillSlideHolesOpening1 = true;
-            DrillSlideHolesOpening2 = true;
-            DrillSlideHolesOpening3 = true;
-            DrillSlideHolesOpening4 = true;
-        }
-    }
     [ObservableProperty] public partial bool DrillSlideHolesOpening1 { get; set; }
-    partial void OnDrillSlideHolesOpening1Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
-        {
-            DrillSlideHoles = false;
-        }
-    }
     [ObservableProperty] public partial bool DrillSlideHolesOpening2 { get; set; }
-    partial void OnDrillSlideHolesOpening2Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
-        {
-            DrillSlideHoles = false;
-        }
-    }
     [ObservableProperty] public partial bool DrillSlideHolesOpening3 { get; set; }
-    partial void OnDrillSlideHolesOpening3Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
-        {
-            DrillSlideHoles = false;
-        }
-    }
     [ObservableProperty] public partial bool DrillSlideHolesOpening4 { get; set; }
-    partial void OnDrillSlideHolesOpening4Changed(bool oldValue, bool newValue)
-    {
-        if (_isMapping) return;
-
-        if (!DrillSlideHolesOpening1 && !DrillSlideHolesOpening2 && !DrillSlideHolesOpening3 && !DrillSlideHolesOpening4)
-        {
-            DrillSlideHoles = false;
-        }
-    }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight1 { get; set; } = ""; partial void OnOpeningHeight1Changed(string oldValue, string newValue)
     {
         if (_isMapping) return;
@@ -906,7 +660,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool GroupDrawerFrontHeightsVisibility { get; set; } = true;
     [ObservableProperty] public partial bool GroupShelvesVisibility { get; set; } = true;
     [ObservableProperty] public partial bool BaseShowRevealSettings { get; set; }
-    [ObservableProperty] public partial bool IncDrwBoxesEnabled { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront1Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront2Visible { get; set; } = true;
     [ObservableProperty] public partial bool DrwFront3Visible { get; set; } = true;
@@ -946,9 +699,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncRolloutsInListVisible { get; set; } = false;
     [ObservableProperty] public partial bool RolloutStyleVisible { get; set; } = false;
     [ObservableProperty] public partial bool DrillSlideHolesForRolloutsVisible { get; set; } = false;
-    [ObservableProperty] public partial bool IncDrwBoxesVisible { get; set; } = true;
-    [ObservableProperty] public partial bool IncDrwBoxesInListVisible { get; set; } = true;
-    [ObservableProperty] public partial bool DrillSlideHolesVisible { get; set; } = true;
     [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
     [ObservableProperty] public partial bool ComboShelfDepthEnabled { get; set; } = true;
     [ObservableProperty] public partial bool ShelfDepthVisible { get; set; } = true;

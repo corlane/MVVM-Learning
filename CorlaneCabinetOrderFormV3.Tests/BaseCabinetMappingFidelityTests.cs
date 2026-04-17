@@ -132,7 +132,6 @@ public class BaseCabinetMappingFidelityTests
         // These three are the exact properties the Depth-handler bug was clobbering:
         Assert.Equal("Full", vm.TopType);
         Assert.Equal("Full Depth", vm.ShelfDepth);
-        Assert.False(vm.IncDrwBoxes);
 
         Assert.Equal(2, vm.ShelfCount);
         Assert.False(vm.DrillShelfHoles);
@@ -144,10 +143,6 @@ public class BaseCabinetMappingFidelityTests
         Assert.False(vm.DrillHingeHoles);
         Assert.Equal(1, vm.DrwCount);
         Assert.Equal("Grass Zargen", vm.DrwStyle);
-        Assert.False(vm.IncDrwFrontsInList);
-        Assert.False(vm.IncDrwFronts);
-        Assert.False(vm.IncDrwBoxesInList);
-        Assert.False(vm.DrillSlideHoles);
         Assert.Equal("20", vm.OpeningHeight1);
         Assert.Equal("6.5", vm.DrwFrontHeight1);
         Assert.False(vm.IncDrwBoxOpening1);
@@ -187,7 +182,6 @@ public class BaseCabinetMappingFidelityTests
         Assert.Equal("18", vm.Depth);
         Assert.Equal("Full", vm.TopType);
         Assert.Equal("Full Depth", vm.ShelfDepth);
-        Assert.False(vm.IncDrwBoxes);
     }
 
     [Fact]
@@ -206,7 +200,6 @@ public class BaseCabinetMappingFidelityTests
         vm.MapModelToViewModel(model, "Decimal");
 
         Assert.Equal("8", vm.Depth);
-        Assert.False(vm.IncDrwBoxes);
         Assert.Equal("Full", vm.TopType);
         Assert.Equal("Full Depth", vm.ShelfDepth);
     }

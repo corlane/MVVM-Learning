@@ -967,24 +967,6 @@
                                       ItemsSource="{Binding ListGrainDirection}"
                                       SelectedItem="{Binding DrwFrontGrainDir}"/>
 
-                            <!-- Fronts checkboxes -->
-                            <CheckBox Content="Supply Slab Drawer Fronts" Margin="0,10,0,4" IsChecked="{Binding IncDrwFronts}"/>
-                            <CheckBox Content="Include Drawer Fronts In Sizes List" Margin="0,4,0,4" IsChecked="{Binding IncDrwFrontsInList}"/>
-
-                            <Separator Margin="0,8,0,8"/>
-
-                            <!-- Box checkboxes -->
-                            <CheckBox Content="Supply Drawer Boxes" Margin="0,4,0,4"
-                                      IsChecked="{Binding IncDrwBoxes}"
-                                      Visibility="{Binding IncDrwBoxesVisible, Converter={StaticResource BoolToVisibilityConverter}}"
-                                      IsEnabled="{Binding IncDrwBoxesEnabled}"/>
-                            <CheckBox Content="Include Drawer Boxes In Sizes List" Margin="0,4,0,4"
-                                      IsChecked="{Binding IncDrwBoxesInList}"
-                                      Visibility="{Binding IncDrwBoxesInListVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                            <CheckBox Content="Drill Drawer Slide Mounting Holes" Margin="0,4,0,4"
-                                      IsChecked="{Binding DrillSlideHoles}"
-                                      Visibility="{Binding DrillSlideHolesVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
-
                             <!-- Drawer Style -->
                             <Label Content="Drawer Style:" Padding="0" Margin="0,8,0,4"
                                    Visibility="{Binding ListDrawerStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>

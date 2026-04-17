@@ -404,3 +404,4 @@
 	Pushing to remote. commit
 	Fixed missing Notify2 thing. commit
 	"Golden commit" before removing the master IncDrwBoxes, Drw Fronts, etc. checkboxes from the drawers tab.
+	Removed the master checkboxes. commit

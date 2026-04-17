@@ -66,9 +66,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             IncRolloutsInListEnabled = !TrashDrawer && ConvertDimension.FractionToDouble(Depth) >= 10.625;
 
             // ── SinkCabinet-dependent ──
-            IncDrwBoxesVisible = !SinkCabinet;
-            IncDrwBoxesInListVisible = !SinkCabinet;
-            DrillSlideHolesVisible = !SinkCabinet;
             ListDrawerStyleVisible = !SinkCabinet;
 
             // ── Equalization-dependent ──

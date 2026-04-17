@@ -26,7 +26,6 @@ Add "Select All" for all "Done" buttons on PO tabs.
 
 Add checkbox to edgeband doors or not (and a note saying if they are edgebanded it will match door species)
 
-Remove "global" checkboxes from base cabinets: Inc Drws Boxes, Inc Drw Fronts, etc. They are always conflicting with the per-opening checkboxes.
 
 
 

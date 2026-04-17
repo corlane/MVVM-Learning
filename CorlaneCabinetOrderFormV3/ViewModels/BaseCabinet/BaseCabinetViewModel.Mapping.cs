@@ -65,11 +65,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.IncDoors = IncDoors;
         target.DrillHingeHoles = DrillHingeHoles;
         target.DrwFrontGrainDir = DrwFrontGrainDir;
-        target.IncDrwFrontsInList = IncDrwFrontsInList;
-        target.IncDrwFronts = IncDrwFronts;
-        target.IncDrwBoxesInList = IncDrwBoxesInList;
-        target.IncDrwBoxes = IncDrwBoxes;
-        target.DrillSlideHoles = DrillSlideHoles;
+        // Derive vestigial master flags from per-item state (backward compat for saved files)
+        target.IncDrwFrontsInList = IncDrwFrontInList1 || IncDrwFrontInList2 || IncDrwFrontInList3 || IncDrwFrontInList4;
+        target.IncDrwFronts = IncDrwFront1 || IncDrwFront2 || IncDrwFront3 || IncDrwFront4;
+        target.IncDrwBoxesInList = IncDrwBoxInListOpening1 || IncDrwBoxInListOpening2 || IncDrwBoxInListOpening3 || IncDrwBoxInListOpening4;
+        target.IncDrwBoxes = IncDrwBoxOpening1 || IncDrwBoxOpening2 || IncDrwBoxOpening3 || IncDrwBoxOpening4;
+        target.DrillSlideHoles = DrillSlideHolesOpening1 || DrillSlideHolesOpening2 || DrillSlideHolesOpening3 || DrillSlideHolesOpening4;
         target.DrwCount = DrwCount;
         target.DrwStyle = DrwStyle;
         target.OpeningHeight1 = ConvertDimension.FractionToDouble(OpeningHeight1).ToString();

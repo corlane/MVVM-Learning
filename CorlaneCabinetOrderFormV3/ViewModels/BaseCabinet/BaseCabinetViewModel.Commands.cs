@@ -121,27 +121,40 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 ShelfDepth = _defaults.DefaultShelfDepth;
                 DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
                 DrwFrontGrainDir = _defaults.DefaultDrwGrainDir;
-                IncDrwFrontsInList = _defaults.DefaultIncDrwFrontsInList;
-                IncDrwFronts = _defaults.DefaultIncDrwFronts;
-                if (IncDrwFronts)
-                {
-                    IncDrwFront1 = true;
-                    IncDrwFront2 = true;
-                    IncDrwFront3 = true;
-                    IncDrwFront4 = true;
-                }
-                else
-                {
-                    IncDrwFront1 = false;
-                    IncDrwFront2 = false;
-                    IncDrwFront3 = false;
-                    IncDrwFront4 = false;
-                }
 
-                IncDrwBoxesInList = _defaults.DefaultIncDrwBoxesInList;
-                IncDrwBoxes = _defaults.DefaultIncDrwBoxes;
+                // Per-front defaults (replaces removed master IncDrwFrontsInList / IncDrwFronts toggles)
+                bool incFrontsInList = _defaults.DefaultIncDrwFrontsInList;
+                IncDrwFrontInList1 = incFrontsInList;
+                IncDrwFrontInList2 = incFrontsInList;
+                IncDrwFrontInList3 = incFrontsInList;
+                IncDrwFrontInList4 = incFrontsInList;
+
+                bool incFronts = _defaults.DefaultIncDrwFronts;
+                IncDrwFront1 = incFronts;
+                IncDrwFront2 = incFronts;
+                IncDrwFront3 = incFronts;
+                IncDrwFront4 = incFronts;
+
+                // Per-opening defaults (replaces removed master IncDrwBoxesInList / IncDrwBoxes / DrillSlideHoles toggles)
+                bool incBoxesInList = _defaults.DefaultIncDrwBoxesInList;
+                IncDrwBoxInListOpening1 = incBoxesInList;
+                IncDrwBoxInListOpening2 = incBoxesInList;
+                IncDrwBoxInListOpening3 = incBoxesInList;
+                IncDrwBoxInListOpening4 = incBoxesInList;
+
+                bool incBoxes = _defaults.DefaultIncDrwBoxes;
+                IncDrwBoxOpening1 = incBoxes;
+                IncDrwBoxOpening2 = incBoxes;
+                IncDrwBoxOpening3 = incBoxes;
+                IncDrwBoxOpening4 = incBoxes;
                 IncRollouts = _defaults.DefaultIncDrwBoxes;
-                DrillSlideHoles = _defaults.DefaultDrillSlideHoles;
+
+                bool drillSlide = _defaults.DefaultDrillSlideHoles;
+                DrillSlideHolesOpening1 = drillSlide;
+                DrillSlideHolesOpening2 = drillSlide;
+                DrillSlideHolesOpening3 = drillSlide;
+                DrillSlideHolesOpening4 = drillSlide;
+
                 if (Style == Style1) { DrwCount = _defaults.DefaultStdDrawerCount; }
                 if (Style == Style2) { DrwCount = _defaults.DefaultDrawerStackDrawerCount; }
                 DrwStyle = _defaults.DefaultDrwStyle;
