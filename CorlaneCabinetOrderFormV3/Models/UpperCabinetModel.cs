@@ -26,6 +26,7 @@ public partial class UpperCabinetModel : CabinetModel
     [ObservableProperty] public partial string TopReveal { get; set; } = "";
     [ObservableProperty] public partial string BottomReveal { get; set; } = "";
     [ObservableProperty] public partial string GapWidth { get; set; } = "";
+    [ObservableProperty] public partial bool EdgebandDoorsAndDrawers { get; set; }
 
     private void BumpGeometry() => BumpGeometryVersion();
 

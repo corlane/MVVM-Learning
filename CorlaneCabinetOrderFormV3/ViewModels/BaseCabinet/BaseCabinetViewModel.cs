@@ -409,6 +409,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial string DoorGrainDir { get; set; } = "";
     [ObservableProperty] public partial bool IncDoorsInList { get; set; }
     [ObservableProperty] public partial bool IncDoors { get; set; }
+    [ObservableProperty] public partial bool EdgebandDoorsAndDrawers { get; set; } = true;
 
     // Drawer-specific properties
     [ObservableProperty] public partial int DrwCount { get; set; }

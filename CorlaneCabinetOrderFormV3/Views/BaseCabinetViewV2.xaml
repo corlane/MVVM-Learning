@@ -616,6 +616,8 @@
                             <Label Content="Custom Door Species:" Margin="0,6,0,0" Padding="0"/>
                             <TextBox Text="{Binding CustomDoorSpecies}" HorizontalAlignment="Stretch" Margin="0,4,0,0"
                                      IsEnabled="{Binding CustomDoorSpeciesEnabled}"/>
+                            <CheckBox Content="Apply Matching&#xA;Edgebanding To Doors&#xA;&amp; Drawer Fronts" Margin="0,10,0,4"
+                                  IsChecked="{Binding EdgebandDoorsAndDrawers}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -966,7 +968,7 @@
                             <ComboBox Width="120" HorizontalAlignment="Left"
                                       ItemsSource="{Binding ListGrainDirection}"
                                       SelectedItem="{Binding DrwFrontGrainDir}"/>
-
+                            
                             <!-- Drawer Style -->
                             <Label Content="Drawer Style:" Padding="0" Margin="0,8,0,4"
                                    Visibility="{Binding ListDrawerStyleVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>

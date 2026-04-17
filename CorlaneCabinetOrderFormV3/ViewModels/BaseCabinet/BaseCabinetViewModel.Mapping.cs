@@ -116,6 +116,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.IncTrashDrwBox = IncTrashDrwBox;
         target.EqualizeAllDrwFronts = EqualizeAllDrwFronts;
         target.EqualizeBottomDrwFronts = EqualizeBottomDrwFronts;
+        target.EdgebandDoorsAndDrawers = EdgebandDoorsAndDrawers;
     }
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type

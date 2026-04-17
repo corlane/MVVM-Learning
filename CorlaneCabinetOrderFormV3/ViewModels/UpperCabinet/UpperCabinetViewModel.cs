@@ -240,7 +240,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDoorsInList { get; set; }
     [ObservableProperty] public partial bool IncDoors { get; set; }
     [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
-
+    [ObservableProperty] public partial bool EdgebandDoorsAndDrawers { get; set; } = true;
 
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string LeftReveal { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string RightReveal { get; set; } = "";

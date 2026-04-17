@@ -114,7 +114,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
-                <TextBlock Text="Doors/Fronts" FontSize="14"/>
+                <TextBlock Text="Doors &amp;&#xA;Drawer Fronts" FontSize="14" TextAlignment="Center"/>
             </ToggleButton>
 
             <ToggleButton x:Name="btnDrawers" Padding="8,16" Margin="10">
@@ -396,7 +396,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="360" Duration="0:0:0.25">
+                                                         To="440" Duration="0:0:0.25">
                                             <DoubleAnimation.EasingFunction>
                                                 <CubicEase EasingMode="EaseOut"/>
                                             </DoubleAnimation.EasingFunction>
@@ -421,7 +421,7 @@
                 </Style>
             </Border.Style>
 
-            <Border Width="360" HorizontalAlignment="Left" Padding="10">
+            <Border Width="440" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
                     <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
@@ -454,6 +454,11 @@
                         <ComboBox ItemsSource="{Binding ListGrainDirection}" SelectedItem="{Binding DefaultDrwGrainDir}"
                                   Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"/>
 
+                        <Separator Margin="0,10,0,8"/>
+
+                        <CheckBox Content="Apply Matching Edgebanding To Doors &amp; Drawer Fronts" Margin="0,10,0,4"
+                                  IsChecked="{Binding DefaultEdgebandDoorsAndDrawers}"/>
+                        
                         <Separator Margin="0,12,0,8"/>
 
                         <TextBlock Text="Default Drw. Front Heights" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,6"/>
@@ -556,7 +561,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                         To="340" Duration="0:0:0.25">
+                                                         To="380" Duration="0:0:0.25">
                                             <DoubleAnimation.EasingFunction>
                                                 <CubicEase EasingMode="EaseOut"/>
                                             </DoubleAnimation.EasingFunction>
@@ -581,7 +586,7 @@
                 </Style>
             </Border.Style>
 
-            <Border Width="340" HorizontalAlignment="Left" Padding="10">
+            <Border Width="380" HorizontalAlignment="Left" Padding="10">
                 <Border.Resources>
                     <Style TargetType="CheckBox" BasedOn="{StaticResource FlyoutCheckBox}"/>
                     <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
@@ -602,7 +607,7 @@
                                       Width="80" HorizontalAlignment="Left" Margin="0,4,0,0"/>
                         </StackPanel>
                     </StackPanel>
-
+                    
                     <Separator Margin="0,12,0,8"/>
 
                     <CheckBox Content="Drill Drawer Slide Holes In Cabinet"

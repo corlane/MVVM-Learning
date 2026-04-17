@@ -150,6 +150,8 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultDoorGrainDir { get => _defaults.DefaultDoorGrainDir; set => _defaults.DefaultDoorGrainDir = value; }
     public bool DefaultIncDoorsInList { get => _defaults.DefaultIncDoorsInList; set => _defaults.DefaultIncDoorsInList = value; }
     public bool DefaultIncDoors { get => _defaults.DefaultIncDoors; set => _defaults.DefaultIncDoors = value; }
+    public bool DefaultEdgebandDoorsAndDrawers { get => _defaults.DefaultEdgebandDoorsAndDrawers; set => _defaults.DefaultEdgebandDoorsAndDrawers = value; }
+
 
     // Drawers
     public int DefaultStdDrawerCount { get => _defaults.DefaultStdDrawerCount; set => _defaults.DefaultStdDrawerCount = value; }
@@ -164,6 +166,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultDrwFrontHeight1 { get => _defaults.DefaultDrwFrontHeight1; set => _defaults.DefaultDrwFrontHeight1 = value; }
     public string DefaultDrwFrontHeight2 { get => _defaults.DefaultDrwFrontHeight2; set => _defaults.DefaultDrwFrontHeight2 = value; }
     public string DefaultDrwFrontHeight3 { get => _defaults.DefaultDrwFrontHeight3; set => _defaults.DefaultDrwFrontHeight3 = value; }
+
 
     // Replace the two existing pass-through properties with these:
 

@@ -72,6 +72,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         if (_defaults is null) return;
         Species = _defaults.DefaultSpecies;
         EBSpecies = _defaults.DefaultEBSpecies;
+        EdgebandDoorsAndDrawers = _defaults.DefaultEdgebandDoorsAndDrawers;
         ShelfCount = _defaults.DefaultUpperShelfCount;
         DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
         if (_defaults.DefaultDimensionFormat == "Decimal") { BackThickness = _defaults.DefaultUpperBackThickness; }

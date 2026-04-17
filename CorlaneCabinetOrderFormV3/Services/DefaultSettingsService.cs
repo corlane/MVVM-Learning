@@ -60,6 +60,7 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial string DefaultDoorGrainDir { get; set; } = "Vertical";
     [ObservableProperty] public partial bool DefaultIncDoorsInList { get; set; } = true;
     [ObservableProperty] public partial bool DefaultIncDoors { get; set; } = true;
+    [ObservableProperty] public partial bool DefaultEdgebandDoorsAndDrawers { get; set; } = true;
 
     // Drawers
     [ObservableProperty] public partial int DefaultStdDrawerCount { get; set; } = 1;
@@ -76,6 +77,8 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial string DefaultDrwFrontHeight3 { get; set; } = "7";
     [ObservableProperty] public partial bool DefaultEqualizeBottomDrwFronts { get; set; } = true;
     [ObservableProperty] public partial bool DefaultEqualizeAllDrwFronts { get; set; } = false;
+
+
     // Reveals and Gaps
     [ObservableProperty] public partial string DefaultBaseLeftReveal { get; set; } = ".0625";
     [ObservableProperty] public partial string DefaultBaseRightReveal { get; set; } = ".0625";

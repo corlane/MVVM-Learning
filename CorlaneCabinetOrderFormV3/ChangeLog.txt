@@ -405,3 +405,9 @@
 	Fixed missing Notify2 thing. commit
 	"Golden commit" before removing the master IncDrwBoxes, Drw Fronts, etc. checkboxes from the drawers tab.
 	Removed the master checkboxes. commit
+	Add EdgebandDoorsAndDrawers option to cabinets
+	Introduced EdgebandDoorsAndDrawers property to Base/Upper cabinet models and viewmodels, with defaulting and UI binding. 
+	Updated DefaultSettings to support this option. 
+	Added checkboxes to cabinet and settings views. 
+	Tweaked UI layouts for clarity. 
+	Fixed trash drawer logic in RolloutsAndTrashDrw.cs. commit

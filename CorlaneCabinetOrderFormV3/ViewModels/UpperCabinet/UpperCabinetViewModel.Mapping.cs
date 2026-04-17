@@ -44,6 +44,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         target.TopReveal = ConvertDimension.FractionToDouble(TopReveal).ToString();
         target.BottomReveal = ConvertDimension.FractionToDouble(BottomReveal).ToString();
         target.GapWidth = ConvertDimension.FractionToDouble(GapWidth).ToString();
+        target.EdgebandDoorsAndDrawers = EdgebandDoorsAndDrawers;
     }
 
     private void MapModelToViewModel(UpperCabinetModel model, string dimFormat)

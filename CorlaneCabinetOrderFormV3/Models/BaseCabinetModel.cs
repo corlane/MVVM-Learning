@@ -77,6 +77,8 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool IncTrashDrwBox { get; set; }
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; }
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; }
+    [ObservableProperty] public partial bool EdgebandDoorsAndDrawers { get; set; }
+
     private void BumpGeometry() => BumpGeometryVersion();
 
     partial void OnLeftBackWidthChanged(string value) => BumpGeometry();

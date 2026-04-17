@@ -120,19 +120,13 @@ internal static partial class BaseCabinetBuilder
 
             if (baseCab.IncTrashDrwBox && baseCab.TrashDrawer)
             {
-                if (baseCab.IncDrwBoxesInList)
-                {
-                    addDrawerBoxRow(baseCab, "Trash Drawer", dbxHeight, dbxWidth, dbxDepth);
-                }
+                addDrawerBoxRow(baseCab, "Trash Drawer", dbxHeight, dbxWidth, dbxDepth);
 
-                if (baseCab.IncDrwBoxes)
-                {
-                    var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
-                    var trashDrawer = new Model3DGroup();
-                    trashDrawer.Children.Add(rotateGroup);
-                    ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0);
-                    cabinet.Children.Add(trashDrawer);
-                }
+                var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
+                var trashDrawer = new Model3DGroup();
+                trashDrawer.Children.Add(rotateGroup);
+                ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0);
+                cabinet.Children.Add(trashDrawer);
             }
         }
     }

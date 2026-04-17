@@ -105,6 +105,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             {
                 Species = _defaults.DefaultSpecies;
                 EBSpecies = _defaults.DefaultEBSpecies;
+                EdgebandDoorsAndDrawers = _defaults.DefaultEdgebandDoorsAndDrawers;
                 HasTK = _defaults.DefaultHasTK;
                 TKHeight = _defaults.DefaultTKHeight;
                 TKDepth = _defaults.DefaultTKDepth;
