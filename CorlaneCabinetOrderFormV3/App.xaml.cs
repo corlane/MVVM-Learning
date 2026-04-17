@@ -109,6 +109,7 @@ public partial class App : Application
                 services.AddTransient<POBatchListViewModel>();
                 services.AddTransient<PODrwStretcherWidthsViewModel>();
                 services.AddTransient<POBackGrainDirViewModel>();
+                services.AddTransient<POEdgebandDoorsViewModel>();
             })
             .Build();
 

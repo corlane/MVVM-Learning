@@ -415,3 +415,7 @@
 	Removed legacy V1 views and conditional visibility logic from MainWindow.xaml; tabs now always use V2 views with visibility bound to ExperimentalView.
 	Also applied whitespace and formatting normalization.
 	ToDo.txt updated with a new bug note.
+	Add Edgeband Doors exceptions tracking UI
+	Introduced POEdgebandDoorsViewModel to track cabinets needing edgebanding exceptions for doors and drawer fronts. 
+	Added a new tab and view (POEdgebandDoorsView) to display and manage these exceptions, including marking them as done. 
+	Updated DI registration and ProcessOrderViewModel to support the new feature.

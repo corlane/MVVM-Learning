@@ -25,7 +25,8 @@ public partial class ProcessOrderViewModel : ObservableValidator
         PORevealsGapsViewModel poRevealsGapsVm,
         POOpeningDrwFrontHeightsViewModel poOpeningDrwFrontHeightsVm,
         PONotesViewModel poNotesVm,
-        POBackGrainDirViewModel poBackGrainDirVm)
+        POBackGrainDirViewModel poBackGrainDirVm,
+        POEdgebandDoorsViewModel poEdgebandDoorsVm)
     {
         POCustomerInfoVm = poCustomerInfoVm ?? throw new ArgumentNullException(nameof(poCustomerInfoVm));
         POBatchListVm = poBatchListVm ?? throw new ArgumentNullException(nameof(poBatchListVm));
@@ -43,6 +44,7 @@ public partial class ProcessOrderViewModel : ObservableValidator
         POOpeningDrwFrontHeightsVm = poOpeningDrwFrontHeightsVm ?? throw new ArgumentNullException(nameof(poOpeningDrwFrontHeightsVm));
         PONotesVm = poNotesVm ?? throw new ArgumentNullException(nameof(poNotesVm));
         POBackGrainDirVm = poBackGrainDirVm ?? throw new ArgumentNullException(nameof(poBackGrainDirVm));
+        POEdgebandDoorsVm = poEdgebandDoorsVm ?? throw new ArgumentNullException(nameof(poEdgebandDoorsVm));
     }
 
     public POCustomerInfoViewModel POCustomerInfoVm { get; }
@@ -61,4 +63,5 @@ public partial class ProcessOrderViewModel : ObservableValidator
     public POOpeningDrwFrontHeightsViewModel POOpeningDrwFrontHeightsVm { get; }
     public PONotesViewModel PONotesVm { get; }
     public POBackGrainDirViewModel POBackGrainDirVm { get; }
+    public POEdgebandDoorsViewModel POEdgebandDoorsVm { get; }
 }
