@@ -73,8 +73,6 @@ public partial class MainWindowViewModel : ObservableValidator
 
     [ObservableProperty] public partial bool RightPanelVisible { get; set; } = true;
 
-    [ObservableProperty] public partial bool ExperimentalView { get; set; } = true;
-
     // ── UI Scale ───────────────────────────────────────────────
     [ObservableProperty]
     public partial double UIScale { get; set; } = 1.0;

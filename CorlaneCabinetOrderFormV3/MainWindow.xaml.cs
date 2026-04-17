@@ -38,10 +38,9 @@ public partial class MainWindow : Window
 
     private void Vm_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is nameof(MainWindowViewModel.SelectedTabIndex)
-                           or nameof(MainWindowViewModel.ExperimentalView))
+        if (e.PropertyName is nameof(MainWindowViewModel.SelectedTabIndex))
         {
-            // Defer so the visual tree has updated after tab/view switch
+            // Defer so the visual tree has updated after tab switch
             Dispatcher.InvokeAsync(MoveViewportToActiveTab,
                 System.Windows.Threading.DispatcherPriority.Loaded);
         }
@@ -59,7 +58,8 @@ public partial class MainWindow : Window
             return;
 
         // Only show viewport on cabinet tabs (0–3) with experimental view
-        if (!vm.ViewportVisible || !vm.ExperimentalView)
+        // Only show viewport on cabinet tabs (0–3)
+        if (!vm.ViewportVisible)
             return;
 
         // Find the active tab's content

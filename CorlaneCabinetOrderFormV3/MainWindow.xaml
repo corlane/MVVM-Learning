@@ -241,73 +241,25 @@
 
                 <TabItem Header="Base Cabinet" Padding="10" Width="120">
                     <Grid>
-                        <views:BaseCabinetViewV2 DataContext="{Binding BaseCabinetVm}">
-                            <views:BaseCabinetViewV2.Style>
-                                <Style TargetType="UserControl">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
-                            RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </views:BaseCabinetViewV2.Style>
-                        </views:BaseCabinetViewV2>
+                        <views:BaseCabinetViewV2 DataContext="{Binding BaseCabinetVm}"/>
                     </Grid>
                 </TabItem>
 
                 <TabItem Header="Upper Cabinet" Padding="10" Width="120">
                     <Grid>
-                        <views:UpperCabinetViewV2 DataContext="{Binding UpperCabinetVm}">
-                            <views:UpperCabinetViewV2.Style>
-                                <Style TargetType="UserControl">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
-                            RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </views:UpperCabinetViewV2.Style>
-                        </views:UpperCabinetViewV2>
+                        <views:UpperCabinetViewV2 DataContext="{Binding UpperCabinetVm}"/>
                     </Grid>
                 </TabItem>
 
                 <TabItem Header="Filler/End" Padding="10" Width="120">
                     <Grid>
-                        <views:FillerViewV2 DataContext="{Binding FillerVm}">
-                            <views:FillerViewV2.Style>
-                                <Style TargetType="UserControl">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
-                            RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </views:FillerViewV2.Style>
-                        </views:FillerViewV2>
+                        <views:FillerViewV2 DataContext="{Binding FillerVm}"/>
                     </Grid>
                 </TabItem>
 
                 <TabItem Header="Panel" Padding="10" Width="120">
                     <Grid>
-                        <views:PanelViewV2 DataContext="{Binding PanelVm}">
-                            <views:PanelViewV2.Style>
-                                <Style TargetType="UserControl">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
-                            RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </views:PanelViewV2.Style>
-                        </views:PanelViewV2>
+                        <views:PanelViewV2 DataContext="{Binding PanelVm}"/>
                     </Grid>
                 </TabItem>
 
@@ -317,19 +269,7 @@
 
                 <TabItem Header="Defaults" Padding="10" Width="120">
                     <Grid>
-                        <views:DefaultSettingsViewV2 DataContext="{Binding DefaultsVm}">
-                            <views:DefaultSettingsViewV2.Style>
-                                <Style TargetType="UserControl">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.ExperimentalView, 
-                                RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </views:DefaultSettingsViewV2.Style>
-                        </views:DefaultSettingsViewV2>
+                        <views:DefaultSettingsViewV2 DataContext="{Binding DefaultsVm}"/>
                     </Grid>
                 </TabItem>
 
