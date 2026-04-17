@@ -12,6 +12,13 @@ internal static partial class BaseCabinetBuilder
         door2 = null!;
         doorPoints = null!;
 
+        bool edgeBandingOnDoorsAndDrawerFronts = baseCab.EdgebandDoorsAndDrawers;
+
+        if (edgeBandingOnDoorsAndDrawerFronts)
+        {
+            doorEdgebandingSpecies = "None";
+        }
+
         // Doors
         double cornerCabDoorOpenSideReveal = 0.875;
 

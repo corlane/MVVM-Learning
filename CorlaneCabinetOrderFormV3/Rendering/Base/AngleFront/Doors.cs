@@ -11,6 +11,13 @@ internal static partial class BaseCabinetBuilder
         door2 = null;
         doorPoints = null;
 
+        bool edgeBandingOnDoorsAndDrawerFronts = baseCab.EdgebandDoorsAndDrawers;
+
+        if (edgeBandingOnDoorsAndDrawerFronts)
+        {
+            doorEdgebandingSpecies = "None";
+        }
+
         // Doors
         if (baseCab.DoorCount > 0 && baseCab.IncDoors || baseCab.DoorCount > 0 && baseCab.IncDoorsInList)
         {

@@ -22,10 +22,8 @@ internal static partial class BaseCabinetBuilder
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double halfMaterialThickness34 = MaterialThickness34 / 2;
-
         string style1 = CabinetStyles.Base.Standard;
         string? cabType = baseCab.Style;
-
         double width = dim.Width;
         double height = dim.Height;
         double depth = dim.Depth;
@@ -36,11 +34,15 @@ internal static partial class BaseCabinetBuilder
         double doorTopReveal = dim.DoorTopReveal;
         double doorBottomReveal = dim.DoorBottomReveal;
         double doorSideReveal = dim.DoorSideReveal;
-
         var doorSpeciesForTotals = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
-
         double doorWidth = width - (doorSideReveal * 2);
         double doorHeight = height - doorTopReveal - doorBottomReveal - tk_Height;
+        bool edgeBandingOnDoorsAndDrawerFronts = baseCab.EdgebandDoorsAndDrawers;
+
+        if (!edgeBandingOnDoorsAndDrawerFronts)
+        {
+            doorEdgebandingSpecies = "None";
+        }
 
         if (cabType == style1 && baseCab.DrwCount == 1)
         {

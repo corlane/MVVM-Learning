@@ -420,4 +420,5 @@
 	Added a new tab and view (POEdgebandDoorsView) to display and manage these exceptions, including marking them as done. 
 	Updated DI registration and ProcessOrderViewModel to support the new feature.
 	Remove ExperimentalView flag and related UI logic. Simplifies MainWindow and MainWindowViewModel by removing the ExperimentalView property and all associated triggers and visibility logic. commit
+	Adjustded Doors & Drawer Front methods to check for EdgebandDoorsAndDrawers and remove edgebanding as necessary. commit
 

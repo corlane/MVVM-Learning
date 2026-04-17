@@ -21,7 +21,6 @@ internal static partial class BaseCabinetBuilder
         CabinetBuildResult? result)
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
-
         double width = dim.Width;
         double height = dim.Height;
         double depth = dim.Depth;
@@ -29,18 +28,20 @@ internal static partial class BaseCabinetBuilder
         double doorTopReveal = dim.DoorTopReveal;
         double doorSideReveal = dim.DoorSideReveal;
         double baseDoorGap = dim.BaseDoorGap;
-
         double drwFrontWidth = width - (doorSideReveal * 2);
-        if (result is not null)
-            result.DrawerFrontWidth = drwFrontWidth;
-
+        if (result is not null) result.DrawerFrontWidth = drwFrontWidth;
         var doorSpeciesForTotalsForDrw = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
-
         double[] drwHeights = new[] { dim.DrwFront1Height, dim.DrwFront2Height, dim.DrwFront3Height, dim.DrwFront4Height };
         bool[] incFront = new[] { baseCab.IncDrwFront1, baseCab.IncDrwFront2, baseCab.IncDrwFront3, baseCab.IncDrwFront4 };
         bool[] incFrontInList = new[] { baseCab.IncDrwFrontInList1, baseCab.IncDrwFrontInList2, baseCab.IncDrwFrontInList3, baseCab.IncDrwFrontInList4 };
-
         int maxFronts = Math.Min(4, Math.Max(0, baseCab.DrwCount));
+        bool edgeBandingOnDoorsAndDrawerFronts = baseCab.EdgebandDoorsAndDrawers;
+
+        if (!edgeBandingOnDoorsAndDrawerFronts)
+        {
+            doorEdgebandingSpecies = "None";
+        }
+
 
         if (result is not null)
         {
