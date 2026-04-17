@@ -411,3 +411,7 @@
 	Added checkboxes to cabinet and settings views. 
 	Tweaked UI layouts for clarity. 
 	Fixed trash drawer logic in RolloutsAndTrashDrw.cs. commit
+	Refactor MainWindow to use only V2 views in tabs
+	Removed legacy V1 views and conditional visibility logic from MainWindow.xaml; tabs now always use V2 views with visibility bound to ExperimentalView.
+	Also applied whitespace and formatting normalization.
+	ToDo.txt updated with a new bug note.
