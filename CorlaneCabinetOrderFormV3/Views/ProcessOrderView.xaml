@@ -4,100 +4,152 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             xmlns:views="clr-namespace:CorlaneCabinetOrderFormV3.Views"
              mc:Ignorable="d"
              d:DesignHeight="920" d:DesignWidth="1000"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
     <d:UserControl.DataContext>
-        <viewmodels:MaterialPricesViewModel/>
+        <viewmodels:ProcessOrderViewModel/>
     </d:UserControl.DataContext>
+    
+    <Grid>
+        <TabControl Margin="0,10,0,0">
+            
+            <TabItem Header="Customer Info" Padding="10">
+                <views:POCustomerInfoView DataContext="{Binding POCustomerInfoVm}"/>
+            </TabItem>
 
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <TabItem Header="Batch List" Padding="10">
+                <views:POBatchListView DataContext="{Binding POBatchListVm}"/>
+            </TabItem>
 
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <Button Content="Download Prices" Padding="16,6" Margin="0,0,10,0"
-                    Command="{Binding DownloadPricesCommand}" />
-            <Button Content="Upload material-prices.json" Padding="16,6" Margin="0,0,10,0"
-                    Command="{Binding UploadPricesCommand}" />
+            <TabItem Header="Job Material List" Padding="10">
+                <views:POJobMaterialListView DataContext="{Binding POJobMaterialListVm}"/>
+            </TabItem>
 
-            <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" />
-        </StackPanel>
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Toekick"
+                   Foreground="{Binding POToekickVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <views:POToekickView DataContext="{Binding POToekickVm}"/>
+            </TabItem>
 
-            <GroupBox Header="Sheet Materials" Grid.Row="0" Margin="0,0,0,10">
-                <DataGrid ItemsSource="{Binding SheetMaterials}"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="True"
-                          CanUserDeleteRows="True"
-                          IsReadOnly="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Species"
-                                            Binding="{Binding Species, UpdateSourceTrigger=PropertyChanged}"
-                                            Width="2*"/>
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Edgebanding"
+                               Foreground="{Binding POEdgebandingVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
-                        <DataGridTextColumn Header="Price / SqFt"
-                    Binding="{Binding PricePerSqFt, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
-                    Width="*"/>
+                <views:POEdgebandingView DataContext="{Binding POEdgebandingVm}"/>
+            </TabItem>
 
-                        <DataGridTextColumn Header="Sheet Width (in)"
-                    Binding="{Binding SheetWidthIn, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
-                    Width="*"/>
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Hinge Holes"
+                               Foreground="{Binding POHingeHolesVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
-                        <DataGridTextColumn Header="Sheet Length (in)"
-                    Binding="{Binding SheetLengthIn, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
-                    Width="*"/>
-                        
-                    </DataGrid.Columns>
-                </DataGrid>
-            </GroupBox>
+                <views:POHingeHolesView DataContext="{Binding POHingeHolesVm}"/>
+            </TabItem>
 
-            <GroupBox Header="Edgebanding" Grid.Row="1" Margin="0,0,0,10">
-                <DataGrid ItemsSource="{Binding EdgeBanding}"
-                          AutoGenerateColumns="False"
-                          CanUserAddRows="True"
-                          CanUserDeleteRows="True"
-                          IsReadOnly="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Species"
-                                            Binding="{Binding Species, UpdateSourceTrigger=PropertyChanged}"
-                                            Width="2*"/>
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Drawer Boxes"
+                   Foreground="{Binding PODrawerBoxesVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
-                        <DataGridTextColumn Header="Price / Ft"
-                    Binding="{Binding PricePerFt, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}"
-                    Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </GroupBox>
+                <views:PODrawerBoxesView DataContext="{Binding PODrawerBoxesVm}"/>
+            </TabItem>
 
-            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
-                <Label Content="CNC Price / Sheet:" VerticalAlignment="Center" />
-                <TextBox Width="120" Margin="8,0,20,0"
-         Text="{Binding CncPricePerSheet, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}" />
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Cabinet Species"
+                   Foreground="{Binding POCabinetSpeciesVm.TabHeaderBrush}" />
+                </TabItem.Header>
 
-                <Label Content="Default Yield:" VerticalAlignment="Center" />
-                <TextBox Width="120" Margin="8,0,0,0"
-         Text="{Binding DefaultSheetYield, UpdateSourceTrigger=LostFocus, ConverterCulture=en-US}" />
-            </StackPanel>
+                <views:POCabinetSpeciesView DataContext="{Binding POCabinetSpeciesVm}"/>
+            </TabItem>
 
-            <GroupBox Header="Yield Override (JSON Dictionary)" Grid.Row="3">
-                <TextBox Text="{Binding YieldBySpeciesJson, UpdateSourceTrigger=PropertyChanged}"
-                         AcceptsReturn="True"
-                         VerticalScrollBarVisibility="Auto"
-                         HorizontalScrollBarVisibility="Auto"
-                         TextWrapping="NoWrap" />
-            </GroupBox>
-        </Grid>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Include Doors"
+                   Foreground="{Binding POIncludeDoorsVm.TabHeaderBrush}"/>
+                </TabItem.Header>
+                <views:POIncludeDoorsView DataContext="{Binding POIncludeDoorsVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Edgeband Doors"
+                               Foreground="{Binding POEdgebandDoorsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:POEdgebandDoorsView DataContext="{Binding POEdgebandDoorsVm}"/>
+            </TabItem>
+            
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Corner Cabinet Dims"
+                   Foreground="{Binding POCornerCabinetDimsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:POCornerCabinetDimsView DataContext="{Binding POCornerCabinetDimsVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Notes"
+                               Foreground="{Binding PONotesVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:PONotesView DataContext="{Binding PONotesVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Reveals/Gaps"
+                               Foreground="{Binding PORevealsGapsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:PORevealsGapsView DataContext="{Binding PORevealsGapsVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Door/Drw Grain Dir."
+                               Foreground="{Binding PODoorDrwGrainDirVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:PODoorDrwGrainDirView DataContext="{Binding PODoorDrwGrainDirVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Opening/Drw Front Heights"
+                               Foreground="{Binding POOpeningDrwFrontHeightsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:POOpeningDrwFrontHeightsView DataContext="{Binding POOpeningDrwFrontHeightsVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Drw Stretcher Widths"
+                               Foreground="{Binding PODrwStretcherWidthsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:PODrwStretcherWidthsView DataContext="{Binding PODrwStretcherWidthsVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Back Grain Dir."
+                               Foreground="{Binding POBackGrainDirVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:POBackGrainDirView DataContext="{Binding POBackGrainDirVm}"/>
+            </TabItem>
+            
+        </TabControl>
     </Grid>
 </UserControl>

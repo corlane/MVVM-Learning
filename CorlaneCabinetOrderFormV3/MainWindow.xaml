@@ -274,11 +274,11 @@
                 </TabItem>
 
                 <TabItem Header="Material Prices" Padding="10" Width="120" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <views:ProcessOrderView DataContext="{Binding ProcessOrderVm}"/>
+                    <views:MaterialPricesView DataContext="{Binding MaterialPricesVm}"/>
                 </TabItem>
 
                 <TabItem Header="Process Order" Padding="10" Width="120" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <views:REALLYProcessOrderView DataContext="{Binding REALLYProcessOrderVm}" HorizontalAlignment="Stretch"/>
+                    <views:ProcessOrderView DataContext="{Binding ProcessOrderVm}" HorizontalAlignment="Stretch"/>
                 </TabItem>
 
             </TabControl>

@@ -107,11 +107,11 @@ public partial class MainWindowViewModel : ObservableValidator
     private DefaultSettingsViewModel? _defaultsVm;
     public DefaultSettingsViewModel DefaultsVm => _defaultsVm ??= App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
 
-    private MaterialPricesViewModel? _processOrderVm;
-    public MaterialPricesViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<MaterialPricesViewModel>();
+    private MaterialPricesViewModel? _materialPricesVm;
+    public MaterialPricesViewModel MaterialPricesVm => _materialPricesVm ??= App.ServiceProvider.GetRequiredService<MaterialPricesViewModel>();
 
-    private ProcessOrderViewModel? _reallyProcessOrderVm;
-    public ProcessOrderViewModel REALLYProcessOrderVm => _reallyProcessOrderVm ??= App.ServiceProvider.GetRequiredService<ProcessOrderViewModel>();
+    private ProcessOrderViewModel? _processOrderVm;
+    public ProcessOrderViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<ProcessOrderViewModel>();
 
     private POCustomerInfoViewModel? _poCustomerInfoVm;
     public POCustomerInfoViewModel POCustomerInfoVm => _poCustomerInfoVm ??= App.ServiceProvider.GetRequiredService<POCustomerInfoViewModel>();
@@ -318,8 +318,8 @@ public partial class MainWindowViewModel : ObservableValidator
             (_placeOrderVm as IDisposable)?.Dispose();
             _placeOrderVm = null;
             _defaultsVm = null;
+            _materialPricesVm = null;
             _processOrderVm = null;
-            _reallyProcessOrderVm = null;
 
             // Reset persistent "ordered" state for the new job
             _cabinet_service.OrderedAtLocal = null;
@@ -340,8 +340,8 @@ public partial class MainWindowViewModel : ObservableValidator
             OnPropertyChanged(nameof(PanelVm));
             OnPropertyChanged(nameof(PlaceOrderVm));
             OnPropertyChanged(nameof(DefaultsVm));
+            OnPropertyChanged(nameof(MaterialPricesVm));
             OnPropertyChanged(nameof(ProcessOrderVm));
-            OnPropertyChanged(nameof(REALLYProcessOrderVm));
 
             // 5) Ensure PlaceOrder tab's transient state is fresh (material totals, pricing)
             try
@@ -466,7 +466,7 @@ public partial class MainWindowViewModel : ObservableValidator
                     break;
 
                 case 7:
-                    (REALLYProcessOrderVm as IValidatableViewModel)?.RunValidationVisible();
+                    (ProcessOrderVm as IValidatableViewModel)?.RunValidationVisible();
                     ViewportVisible = false;
                     CabinetListVisible = false;
                     RightPanelVisible = false;
