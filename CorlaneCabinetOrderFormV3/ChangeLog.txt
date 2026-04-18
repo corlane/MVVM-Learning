@@ -426,3 +426,4 @@
 	Re-labeled "Cabinet Type" button & flyout title to "Cabinet Style", since that's how they are referred to in the rest of the app. commit
 	Deleted deprecated BaseCabinetView, UpperCabinetView, FillerView, PanelView, and DefaultSettingsView.
 	Adjusted alignment of items in Reveals tab in Defaults. commit
+	Renamed Rendering sub-files properly (ex. Back = UpperCabinetBuilder.Standard.Back). commit
