@@ -1,0 +1,13 @@
+<local:FlyoutUserControlBase
+    x:Class="CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts.BackThicknessFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts">
+    <local:FlyoutUserControlBase.Resources>
+        <Style TargetType="ListBox" BasedOn="{StaticResource FlyoutListBox}"/>
+    </local:FlyoutUserControlBase.Resources>
+    <StackPanel>
+        <TextBlock Text="Back Thickness" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+        <ListBox ItemsSource="{Binding ListBackThickness}" SelectedItem="{Binding BackThickness}"/>
+    </StackPanel>
+</local:FlyoutUserControlBase>

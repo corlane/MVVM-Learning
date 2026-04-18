@@ -44,9 +44,6 @@ BUGS:
 
 Upper angle front not showing calculated front width. AGAIN. It is only on initial load. When a dimension is modified, the number shows up.
 
-90 degree corner cabinets need to have 0 or 2 only in door count combobox. 1 door is not an option for these cabinets.
-
-
 
 
 

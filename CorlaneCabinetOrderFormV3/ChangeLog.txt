@@ -427,3 +427,4 @@
 	Deleted deprecated BaseCabinetView, UpperCabinetView, FillerView, PanelView, and DefaultSettingsView.
 	Adjusted alignment of items in Reveals tab in Defaults. commit
 	Renamed Rendering sub-files properly (ex. Back = UpperCabinetBuilder.Standard.Back). commit
+	Broke BaseCabinetViewV2 into subfiles. commit
