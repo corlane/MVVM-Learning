@@ -1,0 +1,112 @@
+<local:FlyoutUserControlBase
+    x:Class="CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts.DefaultsRevealsFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts">
+    <local:FlyoutUserControlBase.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
+        <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
+    </local:FlyoutUserControlBase.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <TextBlock Text="Reveals &amp; Gaps" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+            <TextBlock Text="Base Cabinets" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,6"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Left Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaulBasetLeftReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Corlane Default: 0.0625" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Right Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultBaseRightReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Corlane Default: 0.0625" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Top Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultBaseTopReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Corlane Default: 0.4375" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Bottom Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultBaseBottomReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="Corlane Default: 0.0625" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+            </Grid>
+
+            <Separator Margin="0,10,0,8"/>
+
+            <TextBlock Text="Upper Cabinets" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,6"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Left Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultUpperLeftReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Corlane Default: 0.0625" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Right Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultUpperRightReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Corlane Default: 0.0625" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Top Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultUpperTopReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Corlane Default: 0.125" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Bottom Reveal" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultUpperBottomReveal}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="Corlane Default: 0.125" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+            </Grid>
+
+            <Separator Margin="0,10,0,8"/>
+
+            <TextBlock Text="All Cabinets" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,6"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Content="Door Gaps" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Width="70" HorizontalAlignment="Left" Margin="0,2,0,4"
+                         Text="{Binding DefaultGapWidth}" GotFocus="TextBoxGotFocus"/>
+                <TextBlock Grid.Column="2" Text="Corlane Default: 0.125" FontSize="12" FontStyle="Italic"
+                           VerticalAlignment="Center" Foreground="Gray"/>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</local:FlyoutUserControlBase>

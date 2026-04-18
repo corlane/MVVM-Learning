@@ -1,0 +1,23 @@
+<local:FlyoutUserControlBase
+    x:Class="CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts.DefaultsAppearanceFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts">
+    <local:FlyoutUserControlBase.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource FlyoutComboBox}"/>
+    </local:FlyoutUserControlBase.Resources>
+    <StackPanel>
+        <TextBlock Text="Appearance" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+        <Label Content="Theme" Margin="0,4,0,0"/>
+        <ComboBox ItemsSource="{Binding ThemeOptions}" SelectedItem="{Binding SelectedTheme}"
+                  Width="150" HorizontalAlignment="Left" Margin="0,4,0,0"/>
+
+        <Separator Margin="0,16,0,12"/>
+
+        <Label Content="Dimension Format" Margin="0,0,0,0"/>
+        <ComboBox ItemsSource="{Binding ListDimensionFormat}" SelectedItem="{Binding DefaultDimensionFormat}"
+                  Width="150" HorizontalAlignment="Left" Margin="0,4,0,0"/>
+    </StackPanel>
+</local:FlyoutUserControlBase>

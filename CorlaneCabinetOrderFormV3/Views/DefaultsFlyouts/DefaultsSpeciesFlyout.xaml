@@ -1,0 +1,37 @@
+<local:FlyoutUserControlBase
+    x:Class="CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts.DefaultsSpeciesFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts">
+    <local:FlyoutUserControlBase.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource FlyoutComboBox}"/>
+    </local:FlyoutUserControlBase.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <TextBlock Text="Default Species" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Width="190" Margin="0,0,20,0">
+                    <Label Content="Cabinet Species" Margin="0,4,0,0"/>
+                    <ComboBox ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DefaultSpecies}" Margin="0,4,0,0"/>
+
+                    <Label Content="Edgebanding" Margin="0,12,0,0"/>
+                    <ComboBox ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding DefaultEBSpecies}" Margin="0,4,0,0"/>
+
+                    <Label Content="Door/Drw Front Species" Margin="0,12,0,0"/>
+                    <ComboBox ItemsSource="{Binding ListCabSpecies}" SelectedValue="{Binding DefaultDoorDrwSpecies}" Margin="0,4,0,0"/>
+                </StackPanel>
+                <StackPanel Width="190">
+                    <Label Content="Filler Species" Margin="0,4,0,0"/>
+                    <ComboBox ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DefaultFillerSpecies}" Margin="0,4,0,0"/>
+
+                    <Label Content="Panel Species" Margin="0,12,0,0"/>
+                    <ComboBox ItemsSource="{Binding ListCabSpecies}" SelectedValue="{Binding DefaultPanelSpecies}" Margin="0,4,0,0"/>
+
+                    <Label Content="Panel Edgebanding" Margin="0,12,0,0"/>
+                    <ComboBox ItemsSource="{Binding ListEBSpecies}" SelectedValue="{Binding DefaultPanelEBSpecies}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</local:FlyoutUserControlBase>
