@@ -432,3 +432,7 @@
 	Broke FillerV2 and PanelV2 views into subfiles. commit
 	Broke DefaultSettingsViewV2 into subfiles. commit
 	Changed POCustomerInfo fields to read-only (there is no need for them to be editable). commit
+	Changing version to 3.1.0.0. commit
+
+3.1.0.0
+	
