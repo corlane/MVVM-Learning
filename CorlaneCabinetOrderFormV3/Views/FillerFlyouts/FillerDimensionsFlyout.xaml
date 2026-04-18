@@ -1,0 +1,42 @@
+<local:FlyoutUserControlBase
+    x:Class="CorlaneCabinetOrderFormV3.Views.FillerFlyouts.FillerDimensionsFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts"
+    xmlns:appbehaviors="clr-namespace:CorlaneCabinetOrderFormV3.Behaviors">
+    <local:FlyoutUserControlBase.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
+        <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
+    </local:FlyoutUserControlBase.Resources>
+    <StackPanel>
+        <TextBlock Text="Dimensions" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+        <Label Content="Width" Margin="0,4,0,0"/>
+        <TextBox x:Name="textWidthFiller" Width="120" HorizontalAlignment="Left"
+                 Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
+                 GotFocus="TextBoxGotFocus"
+                 appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+        <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                   Visibility="{Binding (Validation.HasError), ElementName=textWidthFiller, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textWidthFiller, FallbackValue=''}"/>
+
+        <Label Content="Height" Margin="0,8,0,0"/>
+        <TextBox x:Name="textHeightFiller" Width="120" HorizontalAlignment="Left"
+                 Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
+                 GotFocus="TextBoxGotFocus"
+                 appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+        <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                   Visibility="{Binding (Validation.HasError), ElementName=textHeightFiller, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightFiller, FallbackValue=''}"/>
+
+        <Label Content="Depth" Margin="0,8,0,0"/>
+        <TextBox x:Name="textDepthFiller" Width="120" HorizontalAlignment="Left"
+                 Text="{Binding Depth, UpdateSourceTrigger=PropertyChanged}"
+                 GotFocus="TextBoxGotFocus"
+                 appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+        <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                   Visibility="{Binding (Validation.HasError), ElementName=textDepthFiller, Converter={StaticResource BoolToVisibilityConverter}}"
+                   Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textDepthFiller, FallbackValue=''}"/>
+    </StackPanel>
+</local:FlyoutUserControlBase>
