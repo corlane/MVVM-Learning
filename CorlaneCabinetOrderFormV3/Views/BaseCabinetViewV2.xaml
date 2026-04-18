@@ -83,7 +83,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
-                <TextBlock Text="Cabinet Type" FontSize="14"/>
+                <TextBlock Text="Cabinet Style" FontSize="14"/>
             </ToggleButton>
 
             <ToggleButton x:Name="btnDimensions" Padding="8,16" Margin="10">
@@ -245,7 +245,7 @@
             </ToggleButton>
         </StackPanel>
 
-        <!--========== CABINET TYPE FLYOUT ==========-->
+        <!--========== CABINET STYLE FLYOUT ==========-->
         <Border Grid.Column="1"
                 ClipToBounds="True"
                 Background="{DynamicResource ABrush.Tone2.Background.Static}"
@@ -296,7 +296,7 @@
                     <Style TargetType="ListBox" BasedOn="{StaticResource FlyoutListBox}"/>
                 </Border.Resources>
                 <StackPanel>
-                    <TextBlock Text="Cabinet Type" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <TextBlock Text="Cabinet Style" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
                     <ListBox ItemsSource="{Binding TypeList}"
                              SelectedValue="{Binding Style, Mode=TwoWay}">
                         <behaviors:Interaction.Triggers>
