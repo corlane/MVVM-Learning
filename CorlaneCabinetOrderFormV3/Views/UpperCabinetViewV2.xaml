@@ -1,0 +1,427 @@
+﻿<UserControl x:Class="CorlaneCabinetOrderFormV3.Views.UpperCabinetViewV2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:baseflyouts="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts"
+             xmlns:upperflyouts="clr-namespace:CorlaneCabinetOrderFormV3.Views.UpperCabinetFlyouts"
+             mc:Ignorable="d"
+             d:DesignHeight="960" d:DesignWidth="1000"
+             d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
+             Background="{DynamicResource ABrush.Tone1.Background.Static}">
+    <d:UserControl.DataContext>
+        <viewmodels:UpperCabinetViewModel/>
+    </d:UserControl.DataContext>
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="130"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--========== VERTICAL TAB STRIP ==========-->
+        <StackPanel Grid.Column="0" VerticalAlignment="Top"
+                    Background="{DynamicResource ABrush.Tone3.Background.Static}">
+
+            <ToggleButton x:Name="btnCabinetType" Padding="8,16" Margin="10">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Checked">
+                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TextBlock Text="Cabinet Style" FontSize="14"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="btnDimensions" Padding="8,16" Margin="10">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Checked">
+                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TextBlock Text="Dimensions" FontSize="14"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="btnSpecies" Padding="8,16" Margin="10">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Checked">
+                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TextBlock Text="Species" FontSize="14"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="btnBackThickness" Padding="8,16" Margin="10"
+                          Visibility="{Binding BackThicknessVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Checked">
+                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TextBlock Text="Back Thickness" FontSize="14"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="btnDoors" Padding="8,16" Margin="10">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Checked">
+                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TextBlock Text="Doors" FontSize="14"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="btnShelves" Padding="8,16" Margin="10">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Checked">
+                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TextBlock Text="Shelves" FontSize="14"/>
+            </ToggleButton>
+
+            <ToggleButton x:Name="btnReveals" Padding="8,16" Margin="10">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Checked">
+                        <behaviors:ChangePropertyAction TargetName="btnCabinetType" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDimensions" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnSpecies" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <TextBlock Text="Reveals" FontSize="14"/>
+            </ToggleButton>
+        </StackPanel>
+
+        <!--========== FLYOUT PANELS ==========-->
+
+        <!-- Cabinet Style -->
+        <Border Grid.Column="1" ClipToBounds="True"
+                Background="{DynamicResource ABrush.Tone2.Background.Static}"
+                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}" BorderThickness="0,0,1,0" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnCabinetType}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="220" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border Width="220" HorizontalAlignment="Left" Padding="10">
+                <upperflyouts:UpperCabinetStyleFlyout/>
+            </Border>
+        </Border>
+
+        <!-- Dimensions -->
+        <Border Grid.Column="1" ClipToBounds="True"
+                Background="{DynamicResource ABrush.Tone2.Background.Static}"
+                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}" BorderThickness="0,0,1,0" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnDimensions}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="220" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border Width="220" HorizontalAlignment="Left" Padding="10">
+                <upperflyouts:UpperDimensionsFlyout/>
+            </Border>
+        </Border>
+
+        <!-- Species (reused from BaseCabinetFlyouts) -->
+        <Border Grid.Column="1" ClipToBounds="True"
+                Background="{DynamicResource ABrush.Tone2.Background.Static}"
+                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}" BorderThickness="0,0,1,0" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnSpecies}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="700" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border Width="700" HorizontalAlignment="Left" Padding="10">
+                <baseflyouts:SpeciesFlyout/>
+            </Border>
+        </Border>
+
+        <!-- Back Thickness (reused from BaseCabinetFlyouts) -->
+        <Border Grid.Column="1" ClipToBounds="True"
+                Background="{DynamicResource ABrush.Tone2.Background.Static}"
+                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}" BorderThickness="0,0,1,0" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnBackThickness}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="220" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border Width="220" HorizontalAlignment="Left" Padding="10">
+                <baseflyouts:BackThicknessFlyout/>
+            </Border>
+        </Border>
+
+        <!-- Doors (reused from BaseCabinetFlyouts) -->
+        <Border Grid.Column="1" ClipToBounds="True"
+                Background="{DynamicResource ABrush.Tone2.Background.Static}"
+                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}" BorderThickness="0,0,1,0" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnDoors}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="320" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border Width="320" HorizontalAlignment="Left" Padding="10">
+                <baseflyouts:DoorsFlyout/>
+            </Border>
+        </Border>
+
+        <!-- Shelves -->
+        <Border Grid.Column="1" ClipToBounds="True"
+                Background="{DynamicResource ABrush.Tone2.Background.Static}"
+                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}" BorderThickness="0,0,1,0" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnShelves}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="220" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border Width="220" HorizontalAlignment="Left" Padding="10">
+                <upperflyouts:UpperShelvesFlyout/>
+            </Border>
+        </Border>
+
+        <!-- Reveals -->
+        <Border Grid.Column="1" ClipToBounds="True"
+                Background="{DynamicResource ABrush.Tone2.Background.Static}"
+                BorderBrush="{DynamicResource ABrush.Tone4.Border.Static}" BorderThickness="0,0,1,0" CornerRadius="10">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Width" Value="0"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=btnReveals}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="220" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="0" Duration="0:0:0.2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseIn"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border Width="220" HorizontalAlignment="Left" Padding="10">
+                <upperflyouts:UpperRevealsFlyout/>
+            </Border>
+        </Border>
+
+        <!--========== MAIN CONTENT AREA ==========-->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="ViewportHost" Grid.Row="0"/>
+
+            <baseflyouts:BottomActionPanel Grid.Row="1"/>
+        </Grid>
+    </Grid>
+</UserControl>

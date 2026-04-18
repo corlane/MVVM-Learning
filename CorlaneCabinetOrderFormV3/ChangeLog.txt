@@ -428,3 +428,4 @@
 	Adjusted alignment of items in Reveals tab in Defaults. commit
 	Renamed Rendering sub-files properly (ex. Back = UpperCabinetBuilder.Standard.Back). commit
 	Broke BaseCabinetViewV2 into subfiles. commit
+	Broke UpperCabinetViewV2 into subfiles. commit

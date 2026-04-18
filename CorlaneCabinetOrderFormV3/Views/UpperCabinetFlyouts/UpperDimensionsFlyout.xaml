@@ -1,0 +1,144 @@
+<local:FlyoutUserControlBase
+    x:Class="CorlaneCabinetOrderFormV3.Views.UpperCabinetFlyouts.UpperDimensionsFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts"
+    xmlns:appbehaviors="clr-namespace:CorlaneCabinetOrderFormV3.Behaviors">
+    <local:FlyoutUserControlBase.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource FlyoutTextBox}"/>
+        <Style TargetType="Label" BasedOn="{StaticResource FlyoutLabel}"/>
+    </local:FlyoutUserControlBase.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel>
+            <TextBlock Text="Dimensions" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+            <!--===== STANDARD UPPER =====-->
+            <StackPanel Visibility="{Binding StandardDimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Label Content="Width" Margin="0,4,0,0"/>
+                <TextBox x:Name="textWidthUpper" Width="120" HorizontalAlignment="Left"
+                         Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textWidthUpper, FallbackValue=''}"/>
+
+                <Label Content="Height" Margin="0,8,0,0"/>
+                <TextBox x:Name="textHeightUpper" Width="120" HorizontalAlignment="Left"
+                         Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textHeightUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightUpper, FallbackValue=''}"/>
+
+                <Label Content="Depth" Margin="0,8,0,0"/>
+                <TextBox x:Name="textDepthUpper" Width="120" HorizontalAlignment="Left"
+                         Text="{Binding Depth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textDepthUpper, FallbackValue=''}"/>
+            </StackPanel>
+
+            <!--===== CORNER 90° =====-->
+            <StackPanel Visibility="{Binding Corner90DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Label Content="Left Front Width" Padding="0" Margin="0,4,0,0"/>
+                <TextBox x:Name="textLeftFrontWidthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding LeftFrontWidth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textLeftFrontWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftFrontWidthUpper, FallbackValue=''}"/>
+
+                <Label Content="Right Front Width" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textRightFrontWidthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding RightFrontWidth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textRightFrontWidthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightFrontWidthUpper, FallbackValue=''}"/>
+
+                <Label Content="Left Depth" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textLeftDepthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding LeftDepth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textLeftDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepthUpper, FallbackValue=''}"/>
+
+                <Label Content="Right Depth" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textRightDepthUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding RightDepth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textRightDepthUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepthUpper, FallbackValue=''}"/>
+
+                <Label Content="Left Back Width" Padding="0" Margin="0,8,0,0"/>
+                <TextBox Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding LeftBackWidth90}" IsReadOnly="True" IsEnabled="False"
+                         appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+
+                <Label Content="Right Back Width" Padding="0" Margin="0,8,0,0"/>
+                <TextBox Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding RightBackWidth90}" IsReadOnly="True" IsEnabled="False"
+                         appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+
+                <Label Content="Height" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textHeightCornerUpper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textHeightCornerUpper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCornerUpper, FallbackValue=''}"/>
+            </StackPanel>
+
+            <!--===== CORNER 45° (ANGLE FRONT) =====-->
+            <StackPanel Visibility="{Binding Corner45DimsVisibility, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Label Content="Left Depth" Padding="0" Margin="0,4,0,0"/>
+                <TextBox x:Name="textLeftDepth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding LeftDepth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textLeftDepth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftDepth45Upper, FallbackValue=''}"/>
+
+                <Label Content="Right Depth" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textRightDepth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding RightDepth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textRightDepth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightDepth45Upper, FallbackValue=''}"/>
+
+                <Label Content="Left Back Width" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textLeftBackWidth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding LeftBackWidth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textLeftBackWidth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textLeftBackWidth45Upper, FallbackValue=''}"/>
+
+                <Label Content="Right Back Width" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textRightBackWidth45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding RightBackWidth, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textRightBackWidth45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textRightBackWidth45Upper, FallbackValue=''}"/>
+
+                <Label Content="Front Width" Padding="0" Margin="0,8,0,0"/>
+                <TextBox Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding FrontWidth}" IsReadOnly="True" IsEnabled="False"/>
+
+                <Label Content="Height" Padding="0" Margin="0,8,0,0"/>
+                <TextBox x:Name="textHeightCorner45Upper" Width="120" HorizontalAlignment="Left" Margin="0,4,0,0"
+                         Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"
+                         GotFocus="TextBoxGotFocus" appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
+                <TextBlock FontSize="12" Foreground="Red" Margin="0,2,0,0"
+                           Visibility="{Binding (Validation.HasError), ElementName=textHeightCorner45Upper, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="{Binding (Validation.Errors)[0].ErrorContent, ElementName=textHeightCorner45Upper, FallbackValue=''}"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</local:FlyoutUserControlBase>
