@@ -272,14 +272,17 @@ public partial class App : Application
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
-                "NEW FEATURES:\n\n" + 
-                "Global Item Modification!\n\n" +
-                "You can now select multiple cabinets in the list using\n" +
-                "the Select checkbox above each cabinet's Delete button,\n" +
-                "or click the Select All button above the Cabinet List.\n\n" +
-                "Then click Modify Selected, and you can globally change\n" +
-                "many properties of the cabinets at once, such as Species,\n" +
-                "edgabanding, door & drawer front options, etc.\n",
+                "NEW IN VERSION 3.1:\n\n" +
+                "Redesigned User Interface!\n\n" +
+                "• New streamlined layout with the 3D preview in the center\n" +
+                "  and the cabinet list filling the full height on the right.\n\n" +
+                "• Less cluttered using flyout menus (accessible on the left)\n" +
+                "  for cabinet style and options.\n\n" +
+                "• Cleaner, more spacious controls for base, upper,\n" +
+                "  filler, and panel cabinets.\n\n" +
+                "• New Edgeband Doors & Drawer Fronts option per cabinet.\n"+
+                "  Find it under the Species tab (on the left.)\n\n",
+
                 "What's New",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
