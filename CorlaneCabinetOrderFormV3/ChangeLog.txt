@@ -431,3 +431,4 @@
 	Broke UpperCabinetViewV2 into subfiles. commit
 	Broke FillerV2 and PanelV2 views into subfiles. commit
 	Broke DefaultSettingsViewV2 into subfiles. commit
+	Changed POCustomerInfo fields to read-only (there is no need for them to be editable). commit

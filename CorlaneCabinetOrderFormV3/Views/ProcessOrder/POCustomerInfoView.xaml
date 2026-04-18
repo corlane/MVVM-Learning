@@ -51,31 +51,31 @@
                 </Grid.RowDefinitions>
 
                 <Label Content="Company Name" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="textCompanyName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <TextBox x:Name="textCompanyName" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus" IsReadOnly="True"
                                  Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Content="Contact Name" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="textContactName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <TextBox x:Name="textContactName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus" IsReadOnly="True"
                                  Text="{Binding ContactName, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Content="Phone Number" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="textPhoneNumber" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <TextBox x:Name="textPhoneNumber" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus" IsReadOnly="True"
                                  Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Content="E-Mail Address" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="textEmailAddress" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <TextBox x:Name="textEmailAddress" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus" IsReadOnly="True"
                                  Text="{Binding EMail, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Content="Street" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="textStreet" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <TextBox x:Name="textStreet" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus" IsReadOnly="True"
                                  Text="{Binding Street, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Content="City" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="textCity" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <TextBox x:Name="textCity" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus" IsReadOnly="True"
                                  Text="{Binding City, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Content="Zip Code" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="2"/>
-                <TextBox x:Name="textZipCode" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus"
+                <TextBox x:Name="textZipCode" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" GotFocus="TextBoxGotFocus" IsReadOnly="True"
                                  Text="{Binding ZipCode, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </GroupBox>
