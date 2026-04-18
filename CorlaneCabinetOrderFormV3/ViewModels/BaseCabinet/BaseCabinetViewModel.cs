@@ -110,6 +110,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         ApplyStyleVisibility(newValue);
 
+        // Corner 90 only supports 0 or 2 doors; fix invalid selection and refresh list.
+        OnPropertyChanged(nameof(ListDoorCount));
+        if (newValue == Style3 && DoorCount == 1)
+            DoorCount = 2;
+
         TrashDrawer = (newValue != Style1) ? false : TrashDrawer;
 
         if (newValue == Style2)
@@ -392,7 +397,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
     [ObservableProperty] public partial string CustomDoorSpecies { get; set; } = "";
-    [ObservableProperty] public partial int DoorCount { get; set; } partial void OnDoorCountChanged(int oldValue, int newValue)
+    [ObservableProperty] public partial int DoorCount { get; set; }
+    partial void OnDoorCountChanged(int oldValue, int newValue)
     {
         if (_isMapping) return;
 
@@ -401,6 +407,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDoors = false;
             IncDoorsInList = false;
             DrillHingeHoles = false;
+        }
+        else
+        {
+            IncDoors = _defaults.DefaultIncDoors;
+            IncDoorsInList = _defaults.DefaultIncDoorsInList;
+            DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
         }
 
         ApplyStyleVisibility(Style);
@@ -637,7 +649,11 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public static List<string> TypeList => [Style1, Style2, Style3, Style4];
 
     public IReadOnlyList<string> ListDrawerStyle => CabinetOptions.DrawerStyles;
-    public IReadOnlyList<int> ListDoorCount => CabinetOptions.DoorCounts;
+
+    public IReadOnlyList<int> ListDoorCount => Style == Style3
+        ? CabinetOptions.Corner90DoorCounts
+        : CabinetOptions.DoorCounts;
+    
     public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
     public IReadOnlyList<string> ListShelfDepth => CabinetOptions.ShelfDepths;
     public IReadOnlyList<string> ListTopType => CabinetOptions.TopTypes;

@@ -98,6 +98,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
     {
         if (_isMapping) return;
         ApplyStyleVisibility(value);
+
+        // Corner 90 only supports 0 or 2 doors; fix invalid selection and refresh list.
+        OnPropertyChanged(nameof(ListDoorCount));
+        if (value == Style2 && DoorCount == 1)
+            DoorCount = 2;
+
         RunValidationVisible();
     }
     [ObservableProperty] public partial double MaterialThickness34 { get; set; } = MaterialDefaults.Thickness34;
@@ -223,7 +229,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
     [ObservableProperty] public partial bool DrillShelfHoles { get; set; }
 
-    [ObservableProperty] public partial int DoorCount { get; set; } partial void OnDoorCountChanged(int oldValue, int newValue)
+    [ObservableProperty] public partial int DoorCount { get; set; }
+    partial void OnDoorCountChanged(int oldValue, int newValue)
     {
         if (_isMapping) return;
 
@@ -232,6 +239,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
             IncDoors = false;
             IncDoorsInList = false;
             DrillHingeHoles = false;
+        }
+        else
+        {
+            IncDoors = _defaults.DefaultIncDoors;
+            IncDoorsInList = _defaults.DefaultIncDoorsInList;
+            DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
         }
 
         ApplyStyleVisibility(Style);
@@ -251,7 +264,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
     // Combobox options
     public IReadOnlyList<int> ComboShelfCount => CabinetOptions.ShelfCounts;
     public static List<string> TypeList => [Style1, Style2, Style3];
-    public IReadOnlyList<int> ListDoorCount => CabinetOptions.DoorCounts;
+    public IReadOnlyList<int> ListDoorCount => Style == Style2
+        ? CabinetOptions.Corner90DoorCounts
+        : CabinetOptions.DoorCounts;
     public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
 
     public List<string> ListBackThickness =>

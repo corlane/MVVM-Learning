@@ -39,6 +39,8 @@ public static class CabinetOptions
 
     public static readonly IReadOnlyList<int> DoorCounts = [0, 1, 2];
 
+    public static readonly IReadOnlyList<int> Corner90DoorCounts = [0, 2];
+
     public static readonly IReadOnlyList<int> ShelfCounts = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
     public static readonly IReadOnlyList<string> DrawerStyles =

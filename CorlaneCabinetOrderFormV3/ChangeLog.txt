@@ -421,4 +421,5 @@
 	Updated DI registration and ProcessOrderViewModel to support the new feature.
 	Remove ExperimentalView flag and related UI logic. Simplifies MainWindow and MainWindowViewModel by removing the ExperimentalView property and all associated triggers and visibility logic. commit
 	Adjustded Doors & Drawer Front methods to check for EdgebandDoorsAndDrawers and remove edgebanding as necessary. commit
-
+	Finally renamed ProcessOrder view and REALLYProcessOrderView to MaterialPricesView and ProcessOrderView, since that's what they actually are. commit
+	When setting door count to 0 and then back to 1 or 2, the default settings for the default settings for IncDoors, DrillHingeHoles, and IncInSizesList weren't being applied. Fixed. commit
