@@ -449,3 +449,4 @@
 	Reorganized DI registrations in App.xaml.cs to register main tab and PO exception tab ViewModels as singletons, matching their usage as cached instances. 
 	Only ViewModels requiring new instances remain transient. 
 	Updated comments for clarity on service lifetimes. commit
+	Merged refactoring branch back to master. commit
