@@ -450,3 +450,5 @@
 	Only ViewModels requiring new instances remain transient. 
 	Updated comments for clarity on service lifetimes. commit
 	Merged refactoring branch back to master. commit
+	Broke MainWindowViewModel into subfiles.
+	Cleaned up MainWindowViewModel, it was a mess. Rearranged methods, put related methods together, etc. commit

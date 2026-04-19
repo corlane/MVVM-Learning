@@ -14,7 +14,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.0";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.1";
 
     private readonly ICabinetService _cabinetService;
     private readonly AutoSaveService _autoSave;
@@ -66,27 +66,6 @@ public partial class MainWindowViewModel : ObservableValidator
         // design-time: nothing extra required here
     }
 
-    [ObservableProperty]
-    public partial bool IsAdmin { get; set; } = false;
-
-    [ObservableProperty] public partial bool ViewportVisible { get; set; } = true;
-
-    [ObservableProperty] public partial bool CabinetListVisible { get; set; } = true;
-
-    [ObservableProperty] public partial bool RightPanelVisible { get; set; } = true;
-
-    // ── UI Scale ───────────────────────────────────────────────
-    [ObservableProperty]
-    public partial double UIScale { get; set; } = 1.0;
-
-    partial void OnUIScaleChanged(double value)
-    {
-        _defaults.UIScale = value;
-        _ = _defaults.SaveAsync();
-    }
-
-
-
     // Lazy-resolved tab viewmodels — resolve once and reuse so validation runs against the same instances
     private BaseCabinetViewModel? _baseCabinetVm;
     public BaseCabinetViewModel BaseCabinetVm => _baseCabinetVm ??= _services.GetRequiredService<BaseCabinetViewModel>();
@@ -115,290 +94,38 @@ public partial class MainWindowViewModel : ObservableValidator
     private POCustomerInfoViewModel? _poCustomerInfoVm;
     public POCustomerInfoViewModel POCustomerInfoVm => _poCustomerInfoVm ??= _services.GetRequiredService<POCustomerInfoViewModel>();
 
-    [RelayCommand]
-    private async Task SaveJob()
+    // Flag used to avoid marking IsModified during programmatic operations (Load/New)
+    private bool _suppressIsModified;
+
+    // Computed display string used by the UI (appends marker when modified)
+    public string DisplayJobName => IsModified ? $"{CurrentJobName}   *MODIFIED*" : CurrentJobName;
+
+    [ObservableProperty] public partial bool IsAdmin { get; set; } = false;
+
+    [ObservableProperty] public partial bool ViewportVisible { get; set; } = true;
+
+    [ObservableProperty] public partial bool CabinetListVisible { get; set; } = true;
+
+    [ObservableProperty] public partial bool RightPanelVisible { get; set; } = true;
+
+    // ── UI Scale ───────────────────────────────────────────────
+    [ObservableProperty]
+    public partial double UIScale { get; set; } = 1.0; partial void OnUIScaleChanged(double value)
     {
-        var dialog = new SaveFileDialog
-        {
-            Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
-            DefaultExt = "cor",
-            FileName = CurrentJobName + ".cor",
-            InitialDirectory = _defaults.GetFileDialogDirectory(CurrentJobPath)
-        };
-
-        Notify2("Saving job...", Brushes.Blue, 100000);
-
-        if (dialog.ShowDialog() == true)
-        {
-            try
-            {
-                _suppressIsModified = true;
-                try
-                {
-                    var customer = BuildCustomerInfo();
-
-                    await _cabinetService.SaveAsync(
-                        dialog.FileName,
-                        customer,
-                        POCustomerInfoVm.QuotedTotalPrice,
-                        submittedWithAppTitle: AppTitle);
-
-                    Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Saved", Brushes.Green, 4000);
-                    CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
-                    CurrentJobPath = dialog.FileName;
-                    IsModified = false;
-
-                    _defaults.RememberFileDialogDirectory(dialog.FileName);
-
-                    // Successful save — no need for recovery file
-                    _autoSave.Stop();
-                    AutoSaveService.DeleteRecoveryFile();
-                }
-                finally
-                {
-                    _suppressIsModified = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error saving job: {ex.Message}", "Error");
-            }
-        }
-        else
-        {
-            Notify2("Save canceled", Brushes.Red, 2000);
-        }
+        _defaults.UIScale = value;
+        _ = _defaults.SaveAsync();
     }
 
-
-    [RelayCommand]
-    private async Task LoadJob()
+    [ObservableProperty] public partial string CurrentJobName { get; set; } = "Untitled Job"; partial void OnCurrentJobNameChanged(string oldValue, string newValue)
     {
-
-        if (IsModified)
-        {
-            var res = MessageBox.Show(
-                "The current job has unsaved changes. Loading a new job will discard these changes. Do you want to continue?",
-                "Unsaved Changes",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-            if (res != MessageBoxResult.Yes) return;
-        }
-
-        var dialog = new OpenFileDialog
-        {
-            Filter = "Corlane Cabinet Order Form Files (*.cor)|*.cor",
-            InitialDirectory = _defaults.GetFileDialogDirectory(CurrentJobPath)
-        };
-
-        Notify2("Loading job...", Brushes.Blue, 100000); // yes, 100 seconds - will be cleared on success
-
-        if (dialog.ShowDialog() == true)
-        {
-
-            _suppressIsModified = true;
-
-            try
-            {
-                try
-                {
-                    var job = await _cabinetService.LoadAsync(dialog.FileName);
-                    PlaceOrderVm.OrderedAtLocal = job?.OrderedAtLocal;
-
-                    if (job != null)
-                    {
-                        POCustomerInfoVm.CompanyName = job.CustomerInfo.CompanyName;
-                        POCustomerInfoVm.ContactName = job.CustomerInfo.ContactName;
-                        POCustomerInfoVm.PhoneNumber = job.CustomerInfo.PhoneNumber;
-                        POCustomerInfoVm.EMail = job.CustomerInfo.EMail;
-                        POCustomerInfoVm.Street = job.CustomerInfo.Street;
-                        POCustomerInfoVm.City = job.CustomerInfo.City;
-                        POCustomerInfoVm.ZipCode = job.CustomerInfo.ZipCode;
-                        POCustomerInfoVm.QuotedTotalPrice = job.QuotedTotalPrice;
-                        POCustomerInfoVm.SubmittedWithAppTitle = job.SubmittedWithAppTitle;
-                    }
-
-                    Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Loaded", Brushes.Green, 4000);
-                    CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
-                    CurrentJobPath = dialog.FileName;
-                    IsModified = false;
-
-                    _defaults.RememberFileDialogDirectory(dialog.FileName);
-
-                    // Clean load — no recovery needed
-                    _autoSave.Stop();
-                    AutoSaveService.DeleteRecoveryFile();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error loading job: {ex.Message}", "Error");
-                }
-            }
-            finally
-            {
-                _suppressIsModified = false;
-            }
-        }
-        else
-        {
-            // User cancelled load
-            Notify2("Load canceled", Brushes.Red, 2000);
-        }
+        OnPropertyChanged(nameof(DisplayJobName));
     }
-
-
-    // New: Create a fresh job state — clear cabinets, reset UI state and recreate tab VMs so they match freshly booted defaults.
-    [RelayCommand]
-    private void NewJob()
-    {
-        _suppressIsModified = true;
-        try
-        {
-            // If nothing to clear, be quick about it
-            if ((_cabinetService.Cabinets == null || _cabinetService.Cabinets.Count == 0) && CurrentJobName == "Untitled Job")
-            {
-                Notify2("Nothing to clear", Brushes.Gray);
-                return;
-            }
-
-            var res = MessageBox.Show(
-                "Create a new job? This will clear the current job from memory. Unsaved changes will be lost.",
-                "New Job",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (res != MessageBoxResult.Yes) return;
-
-            // 1) Clear the shared cabinets collection
-            try
-            {
-                _cabinetService.Cabinets.Clear();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Catch] NewJob: Cabinets.Clear failed: {ex.Message}");
-            }
-
-            // 2) Reset main-window state
-            CurrentJobName = "Untitled Job";
-            CurrentJobPath = null;
-            SelectedCabinet = null;
-            SelectedTabIndex = 0;
-
-            // 3) Clear preview immediately
-            try
-            {
-                _previewSvc.ClearPreview();
-                _previewSvc.SetActiveOwner(SelectedTabIndex);
-                CurrentPreviewCabinet = null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Catch] NewJob: ClearPreview failed: {ex.Message}");
-            }
-
-            // 4) Replace cached tab viewmodels with fresh instances from DI so their constructors run and they return to default values.
-            //    Raise property-changed so UI bindings pick up the new instances.
-            _baseCabinetVm = null;
-            _upperCabinetVm = null;
-            _fillerVm = null;
-            _panelVm = null;
-            (_placeOrderVm as IDisposable)?.Dispose();
-            _placeOrderVm = null;
-            _defaultsVm = null;
-            _materialPricesVm = null;
-            _processOrderVm = null;
-
-            // Reset persistent "ordered" state for the new job
-            _cabinetService.OrderedAtLocal = null;
-            _cabinetService.ExceptionDoneKeys.Clear();
-
-            try
-            {
-                PlaceOrderVm.OrderedAtLocal = null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Catch] NewJob: Reset OrderedAtLocal failed: {ex.Message}");
-            }
-
-            OnPropertyChanged(nameof(BaseCabinetVm));
-            OnPropertyChanged(nameof(UpperCabinetVm));
-            OnPropertyChanged(nameof(FillerVm));
-            OnPropertyChanged(nameof(PanelVm));
-            OnPropertyChanged(nameof(PlaceOrderVm));
-            OnPropertyChanged(nameof(DefaultsVm));
-            OnPropertyChanged(nameof(MaterialPricesVm));
-            OnPropertyChanged(nameof(ProcessOrderVm));
-
-            // 5) Ensure PlaceOrder tab's transient state is fresh (material totals, pricing)
-            try
-            {
-                var po = PlaceOrderVm;
-                po.MaterialTotals.Clear();
-                po.TotalPrice = 0m;
-
-                // Reset customer info to persisted defaults (if any)
-
-                po.CompanyName = _defaults.CompanyName;
-                po.ContactName = _defaults.ContactName;
-                po.PhoneNumber = _defaults.PhoneNumber;
-                po.EMail = _defaults.EMail;
-                po.Street = _defaults.Street;
-                po.City = _defaults.City;
-                po.ZipCode = _defaults.ZipCode;
-
-                // ALSO reset the job-file customer info VM (this is what Load/SaveJob uses)
-                var customerInfo = POCustomerInfoVm;
-                customerInfo.CompanyName = _defaults.CompanyName;
-                customerInfo.ContactName = _defaults.ContactName;
-                customerInfo.PhoneNumber = _defaults.PhoneNumber;
-                customerInfo.EMail = _defaults.EMail;
-                customerInfo.Street = _defaults.Street;
-                customerInfo.City = _defaults.City;
-                customerInfo.ZipCode = _defaults.ZipCode;
-                customerInfo.QuotedTotalPrice = 0m;
-                customerInfo.SubmittedWithAppTitle = null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Catch] NewJob: Reset PlaceOrder state failed: {ex.Message}");
-            }
-
-            // 6) New job — clear recovery file
-            _autoSave.Stop();
-            AutoSaveService.DeleteRecoveryFile();
-        }
-        finally
-        {
-            _suppressIsModified = false;
-        }
-
-        IsModified = false;
-        // 7) Final user feedback
-        Notify2("New job ready", Brushes.Green, 3000);
-    }
-
-
-    [ObservableProperty] public partial string CurrentJobName { get; set; } = "Untitled Job";
 
 
     /// <summary>Full file path of the last saved/loaded .cor file, or null for a fresh job.</summary>
     [ObservableProperty] public partial string? CurrentJobPath { get; set; }
 
-    [ObservableProperty]
-    public partial int SelectedTabIndex { get; set; } = 0;
-
-
-    [ObservableProperty]
-    public partial CabinetModel? CurrentPreviewCabinet { get; set; }
-
-
-    [ObservableProperty]
-    public partial CabinetModel? SelectedCabinet { get; set; }
-
-    [ObservableProperty] public partial int MainTabControlWidth { get; set; } = 1000;
-    partial void OnSelectedTabIndexChanged(int value)
+    [ObservableProperty] public partial int SelectedTabIndex { get; set; } = 0; partial void OnSelectedTabIndexChanged(int value)
     {
         _previewSvc.SetActiveOwner(value);
 
@@ -468,8 +195,9 @@ public partial class MainWindowViewModel : ObservableValidator
         }
     }
 
-    // When the user clicks the list (SelectedCabinet set), you may want to force preview:
-    partial void OnSelectedCabinetChanged(CabinetModel? value)
+    [ObservableProperty] public partial CabinetModel? CurrentPreviewCabinet { get; set; }
+
+    [ObservableProperty] public partial CabinetModel? SelectedCabinet { get; set; } partial void OnSelectedCabinetChanged(CabinetModel? value)
     {
         if (value == null)
         {
@@ -496,25 +224,10 @@ public partial class MainWindowViewModel : ObservableValidator
         _previewSvc.ForcePreview(value);
     }
 
-
-    // Flag used to avoid marking IsModified during programmatic operations (Load/New)
-    private bool _suppressIsModified;
+    [ObservableProperty] public partial int MainTabControlWidth { get; set; } = 1000; 
 
     // Track whether the in-memory job has unsaved changes
-    [ObservableProperty]
-    public partial bool IsModified { get; set; } = false;
-
-    // Computed display string used by the UI (appends marker when modified)
-    public string DisplayJobName => IsModified ? $"{CurrentJobName}   *MODIFIED*" : CurrentJobName;
-
-    // When CurrentJobName changes, notify DisplayJobName so UI updates
-    partial void OnCurrentJobNameChanged(string oldValue, string newValue)
-    {
-        OnPropertyChanged(nameof(DisplayJobName));
-    }
-
-    // When IsModified changes, notify DisplayJobName so UI updates
-    partial void OnIsModifiedChanged(bool oldValue, bool newValue)
+    [ObservableProperty] public partial bool IsModified { get; set; } = false; partial void OnIsModifiedChanged(bool oldValue, bool newValue)
     {
         OnPropertyChanged(nameof(DisplayJobName));
 
@@ -524,6 +237,7 @@ public partial class MainWindowViewModel : ObservableValidator
         else
             _autoSave.Stop();
     }
+
 
     // Call this once (e.g., in constructor) to wire collection/item change tracking
     private void InitializeModificationTracking()
@@ -600,26 +314,6 @@ public partial class MainWindowViewModel : ObservableValidator
         IsModified = true;
     }
 
-
-    [RelayCommand]
-    private void Help()
-    {
-        const string helpUrl = "https://corlanecabinetry.com/cabinet-order-form-help/";
-
-        try
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = helpUrl,
-                UseShellExecute = true
-            });
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Unable to open help page.\n\n{ex.Message}", "Help", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
-
     public void RefreshSelectedCabinet()
     {
         OnPropertyChanged(nameof(SelectedCabinet));
@@ -636,4 +330,24 @@ public partial class MainWindowViewModel : ObservableValidator
         City = POCustomerInfoVm.City,
         ZipCode = POCustomerInfoVm.ZipCode
     };
+
+
+    [RelayCommand]
+    private static void Help()
+    {
+        const string helpUrl = "https://corlanecabinetry.com/cabinet-order-form-help/";
+
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = helpUrl,
+                UseShellExecute = true
+            });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Unable to open help page.\n\n{ex.Message}", "Help", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
 }
