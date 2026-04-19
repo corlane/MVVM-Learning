@@ -74,42 +74,45 @@ public partial class App : Application
                 services.AddSingleton<IPriceBreakdownService, PriceBreakdownService>();
                 services.AddSingleton<POCustomerInfoViewModel>();
                 services.AddSingleton<IMaterialLookupService, MaterialLookupService>();
-                services.AddTransient<POJobMaterialListViewModel>();
                 services.AddSingleton<Cabinet3DView>();
 
-                // Register ViewModels as transients
-                services.AddTransient<BaseCabinetViewModel>();
-                services.AddTransient<UpperCabinetViewModel>();
-                services.AddTransient<CabinetListViewModel>();
-                services.AddTransient<FillerViewModel>();
-                services.AddTransient<PanelViewModel>();
-                services.AddTransient<DefaultSettingsViewModel>();
+                // Tab ViewModels — resolved once and cached in MainWindowViewModel
+                services.AddSingleton<BaseCabinetViewModel>();
+                services.AddSingleton<UpperCabinetViewModel>();
+                services.AddSingleton<CabinetListViewModel>();
+                services.AddSingleton<FillerViewModel>();
+                services.AddSingleton<PanelViewModel>();
+                services.AddSingleton<DefaultSettingsViewModel>();
+                services.AddSingleton<PlaceOrderViewModel>();
+                services.AddSingleton<MaterialPricesViewModel>();
+                services.AddSingleton<ProcessOrderViewModel>();
 
                 services.AddSingleton<Cabinet3DViewModel>();
 
                 // Thumbnail rendering for the cabinet list
                 services.AddSingleton<ThumbnailService>();
 
-                services.AddTransient<PlaceOrderViewModel>();
-                services.AddTransient<MaterialPricesViewModel>();
-                services.AddTransient<ProcessOrderViewModel>();
+                // PO exception tab ViewModels — resolved once and cached
+                services.AddSingleton<POIncludeDoorsViewModel>();
+                services.AddSingleton<POToekickViewModel>();
+                services.AddSingleton<POEdgebandingViewModel>();
+                services.AddSingleton<POHingeHolesViewModel>();
+                services.AddSingleton<POCabinetSpeciesViewModel>();
+                services.AddSingleton<PODoorDrwGrainDirViewModel>();
+                services.AddSingleton<PORevealsGapsViewModel>();
+                services.AddSingleton<POCornerCabinetDimsViewModel>();
+                services.AddSingleton<PONotesViewModel>();
+                services.AddSingleton<POOpeningDrwFrontHeightsViewModel>();
+                services.AddSingleton<PODrawerBoxesViewModel>();
+                services.AddSingleton<POBatchListViewModel>();
+                services.AddSingleton<PODrwStretcherWidthsViewModel>();
+                services.AddSingleton<POBackGrainDirViewModel>();
+                services.AddSingleton<POEdgebandDoorsViewModel>();
+
+                // Truly transient — new instance each time they're needed
+                services.AddTransient<POJobMaterialListViewModel>();
                 services.AddTransient<DoorSizesListViewModel>();
                 services.AddTransient<DrawerBoxSizesListViewModel>();
-                services.AddTransient<POToekickViewModel>();
-                services.AddTransient<POEdgebandingViewModel>();
-                services.AddTransient<POHingeHolesViewModel>();
-                services.AddTransient<POCabinetSpeciesViewModel>();
-                services.AddSingleton<POIncludeDoorsViewModel>();
-                services.AddTransient<PODoorDrwGrainDirViewModel>();
-                services.AddTransient<PORevealsGapsViewModel>();
-                services.AddTransient<POCornerCabinetDimsViewModel>();
-                services.AddTransient<PONotesViewModel>();
-                services.AddTransient<POOpeningDrwFrontHeightsViewModel>();
-                services.AddTransient<PODrawerBoxesViewModel>();
-                services.AddTransient<POBatchListViewModel>();
-                services.AddTransient<PODrwStretcherWidthsViewModel>();
-                services.AddTransient<POBackGrainDirViewModel>();
-                services.AddTransient<POEdgebandDoorsViewModel>();
             })
             .Build();
 

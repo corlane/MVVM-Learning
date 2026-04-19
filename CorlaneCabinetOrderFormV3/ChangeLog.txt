@@ -443,4 +443,8 @@
 	Updated tab ViewModel properties and all cabinet collection references to use injected services.
 	Extracted JobCustomerInfo creation to a helper method.
 	Improved testability and maintainability by centralizing service resolution. commit
+	Refactor DI: Register tab ViewModels as singletons
+	Reorganized DI registrations in App.xaml.cs to register main tab and PO exception tab ViewModels as singletons, matching their usage as cached instances. 
+	Only ViewModels requiring new instances remain transient. 
+	Updated comments for clarity on service lifetimes. commit
 
