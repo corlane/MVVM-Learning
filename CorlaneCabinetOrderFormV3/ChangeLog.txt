@@ -437,6 +437,8 @@
 3.1.0.0
 	Last commit before merging to main branch. commit
 	"Golden Commit" before branching for some refactoring. commit
+
+3.1.0.1
 	Refactor ViewModel to use DI for all services
 	Refactored MainWindowViewModel to inject all service dependencies (ICabinetService, DefaultSettingsService, IPrintService, IPreviewService, IServiceProvider) via the constructor, replacing all usages of App.ServiceProvider.
 	Renamed _cabinet_service to _cabinetService for consistency.
@@ -447,4 +449,3 @@
 	Reorganized DI registrations in App.xaml.cs to register main tab and PO exception tab ViewModels as singletons, matching their usage as cached instances. 
 	Only ViewModels requiring new instances remain transient. 
 	Updated comments for clarity on service lifetimes. commit
-
