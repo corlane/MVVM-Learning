@@ -16,42 +16,39 @@ public partial class MainWindowViewModel : ObservableValidator
 {
     public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.0";
 
-    private readonly ICabinetService _cabinet_service;
+    private readonly ICabinetService _cabinetService;
     private readonly AutoSaveService _autoSave;
     private readonly DefaultSettingsService _defaults;
     private readonly IPrintService _printer;
     private readonly IPreviewService _previewSvc;
+    private readonly IServiceProvider _services;
 
     // DI constructor used at runtime
-    public MainWindowViewModel(ICabinetService cabinetService)
+    public MainWindowViewModel(
+        ICabinetService cabinetService,
+        DefaultSettingsService defaults,
+        IPrintService printer,
+        IPreviewService previewSvc,
+        IServiceProvider services)
     {
-        _cabinet_service = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
-        InitializeModificationTracking();
+        _cabinetService = cabinetService ?? throw new ArgumentNullException(nameof(cabinetService));
+        _defaults = defaults ?? throw new ArgumentNullException(nameof(defaults));
+        _printer = printer ?? throw new ArgumentNullException(nameof(printer));
+        _previewSvc = previewSvc ?? throw new ArgumentNullException(nameof(previewSvc));
+        _services = services ?? throw new ArgumentNullException(nameof(services));
 
-        // ── Resolve shared services once ─────────────────────────────
-        _defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
-        _printer = App.ServiceProvider.GetRequiredService<IPrintService>();
-        _previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
+        InitializeModificationTracking();
 
         // ── Auto-save setup ──────────────────────────────────────────
         _autoSave = new AutoSaveService(cabinetService);
         _autoSave.Configure(
-            customerInfoProvider: () => new JobCustomerInfo
-            {
-                CompanyName = POCustomerInfoVm.CompanyName,
-                ContactName = POCustomerInfoVm.ContactName,
-                PhoneNumber = POCustomerInfoVm.PhoneNumber,
-                EMail = POCustomerInfoVm.EMail,
-                Street = POCustomerInfoVm.Street,
-                City = POCustomerInfoVm.City,
-                ZipCode = POCustomerInfoVm.ZipCode
-            },
+            customerInfoProvider: () => BuildCustomerInfo(),
             quotedPriceProvider: () => POCustomerInfoVm.QuotedTotalPrice);
 
         // Load persisted UI scale
         UIScale = _defaults.UIScale is > 0 ? _defaults.UIScale : 1.0;
 
-        _cabinet_service.ExceptionDoneStateChanged += () =>
+        _cabinetService.ExceptionDoneStateChanged += () =>
         {
             if (!_suppressIsModified)
                 IsModified = true;
@@ -59,7 +56,12 @@ public partial class MainWindowViewModel : ObservableValidator
     }
 
     // Parameterless ctor for design-time support
-    public MainWindowViewModel() : this(new CabinetService())
+    public MainWindowViewModel() : this(
+        new CabinetService(),
+        new DefaultSettingsService(),
+        null!,
+        null!,
+        null!)
     {
         // design-time: nothing extra required here
     }
@@ -79,43 +81,39 @@ public partial class MainWindowViewModel : ObservableValidator
 
     partial void OnUIScaleChanged(double value)
     {
-        // Persist the scale factor
-        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
-        defaults.UIScale = value;
-        _ = defaults.SaveAsync();
+        _defaults.UIScale = value;
+        _ = _defaults.SaveAsync();
     }
-
 
 
 
     // Lazy-resolved tab viewmodels — resolve once and reuse so validation runs against the same instances
     private BaseCabinetViewModel? _baseCabinetVm;
-    public BaseCabinetViewModel BaseCabinetVm => _baseCabinetVm ??= App.ServiceProvider.GetRequiredService<BaseCabinetViewModel>();
+    public BaseCabinetViewModel BaseCabinetVm => _baseCabinetVm ??= _services.GetRequiredService<BaseCabinetViewModel>();
 
     private UpperCabinetViewModel? _upperCabinetVm;
-    public UpperCabinetViewModel UpperCabinetVm => _upperCabinetVm ??= App.ServiceProvider.GetRequiredService<UpperCabinetViewModel>();
+    public UpperCabinetViewModel UpperCabinetVm => _upperCabinetVm ??= _services.GetRequiredService<UpperCabinetViewModel>();
 
     private FillerViewModel? _fillerVm;
-    public FillerViewModel FillerVm => _fillerVm ??= App.ServiceProvider.GetRequiredService<FillerViewModel>();
+    public FillerViewModel FillerVm => _fillerVm ??= _services.GetRequiredService<FillerViewModel>();
 
     private PanelViewModel? _panelVm;
-    public PanelViewModel PanelVm => _panelVm ??= App.ServiceProvider.GetRequiredService<PanelViewModel>();
+    public PanelViewModel PanelVm => _panelVm ??= _services.GetRequiredService<PanelViewModel>();
 
     private PlaceOrderViewModel? _placeOrderVm;
-    public PlaceOrderViewModel PlaceOrderVm => _placeOrderVm ??= App.ServiceProvider.GetRequiredService<PlaceOrderViewModel>();
+    public PlaceOrderViewModel PlaceOrderVm => _placeOrderVm ??= _services.GetRequiredService<PlaceOrderViewModel>();
 
     private DefaultSettingsViewModel? _defaultsVm;
-    public DefaultSettingsViewModel DefaultsVm => _defaultsVm ??= App.ServiceProvider.GetRequiredService<DefaultSettingsViewModel>();
+    public DefaultSettingsViewModel DefaultsVm => _defaultsVm ??= _services.GetRequiredService<DefaultSettingsViewModel>();
 
     private MaterialPricesViewModel? _materialPricesVm;
-    public MaterialPricesViewModel MaterialPricesVm => _materialPricesVm ??= App.ServiceProvider.GetRequiredService<MaterialPricesViewModel>();
+    public MaterialPricesViewModel MaterialPricesVm => _materialPricesVm ??= _services.GetRequiredService<MaterialPricesViewModel>();
 
     private ProcessOrderViewModel? _processOrderVm;
-    public ProcessOrderViewModel ProcessOrderVm => _processOrderVm ??= App.ServiceProvider.GetRequiredService<ProcessOrderViewModel>();
+    public ProcessOrderViewModel ProcessOrderVm => _processOrderVm ??= _services.GetRequiredService<ProcessOrderViewModel>();
 
     private POCustomerInfoViewModel? _poCustomerInfoVm;
-    public POCustomerInfoViewModel POCustomerInfoVm => _poCustomerInfoVm ??= App.ServiceProvider.GetRequiredService<POCustomerInfoViewModel>();
-
+    public POCustomerInfoViewModel POCustomerInfoVm => _poCustomerInfoVm ??= _services.GetRequiredService<POCustomerInfoViewModel>();
 
     [RelayCommand]
     private async Task SaveJob()
@@ -137,18 +135,9 @@ public partial class MainWindowViewModel : ObservableValidator
                 _suppressIsModified = true;
                 try
                 {
-                    var customer = new JobCustomerInfo
-                    {
-                        CompanyName = POCustomerInfoVm.CompanyName,
-                        ContactName = POCustomerInfoVm.ContactName,
-                        PhoneNumber = POCustomerInfoVm.PhoneNumber,
-                        EMail = POCustomerInfoVm.EMail,
-                        Street = POCustomerInfoVm.Street,
-                        City = POCustomerInfoVm.City,
-                        ZipCode = POCustomerInfoVm.ZipCode
-                    };
+                    var customer = BuildCustomerInfo();
 
-                    await _cabinet_service.SaveAsync(
+                    await _cabinetService.SaveAsync(
                         dialog.FileName,
                         customer,
                         POCustomerInfoVm.QuotedTotalPrice,
@@ -213,7 +202,7 @@ public partial class MainWindowViewModel : ObservableValidator
             {
                 try
                 {
-                    var job = await _cabinet_service.LoadAsync(dialog.FileName);
+                    var job = await _cabinetService.LoadAsync(dialog.FileName);
                     PlaceOrderVm.OrderedAtLocal = job?.OrderedAtLocal;
 
                     if (job != null)
@@ -266,7 +255,7 @@ public partial class MainWindowViewModel : ObservableValidator
         try
         {
             // If nothing to clear, be quick about it
-            if ((_cabinet_service.Cabinets == null || _cabinet_service.Cabinets.Count == 0) && CurrentJobName == "Untitled Job")
+            if ((_cabinetService.Cabinets == null || _cabinetService.Cabinets.Count == 0) && CurrentJobName == "Untitled Job")
             {
                 Notify2("Nothing to clear", Brushes.Gray);
                 return;
@@ -283,7 +272,7 @@ public partial class MainWindowViewModel : ObservableValidator
             // 1) Clear the shared cabinets collection
             try
             {
-                _cabinet_service.Cabinets.Clear();
+                _cabinetService.Cabinets.Clear();
             }
             catch (Exception ex)
             {
@@ -299,9 +288,8 @@ public partial class MainWindowViewModel : ObservableValidator
             // 3) Clear preview immediately
             try
             {
-                var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-                previewSvc.ClearPreview();
-                previewSvc.SetActiveOwner(SelectedTabIndex);
+                _previewSvc.ClearPreview();
+                _previewSvc.SetActiveOwner(SelectedTabIndex);
                 CurrentPreviewCabinet = null;
             }
             catch (Exception ex)
@@ -322,8 +310,8 @@ public partial class MainWindowViewModel : ObservableValidator
             _processOrderVm = null;
 
             // Reset persistent "ordered" state for the new job
-            _cabinet_service.OrderedAtLocal = null;
-            _cabinet_service.ExceptionDoneKeys.Clear();
+            _cabinetService.OrderedAtLocal = null;
+            _cabinetService.ExceptionDoneKeys.Clear();
 
             try
             {
@@ -351,25 +339,24 @@ public partial class MainWindowViewModel : ObservableValidator
                 po.TotalPrice = 0m;
 
                 // Reset customer info to persisted defaults (if any)
-                var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
 
-                po.CompanyName = defaults.CompanyName;
-                po.ContactName = defaults.ContactName;
-                po.PhoneNumber = defaults.PhoneNumber;
-                po.EMail = defaults.EMail;
-                po.Street = defaults.Street;
-                po.City = defaults.City;
-                po.ZipCode = defaults.ZipCode;
+                po.CompanyName = _defaults.CompanyName;
+                po.ContactName = _defaults.ContactName;
+                po.PhoneNumber = _defaults.PhoneNumber;
+                po.EMail = _defaults.EMail;
+                po.Street = _defaults.Street;
+                po.City = _defaults.City;
+                po.ZipCode = _defaults.ZipCode;
 
                 // ALSO reset the job-file customer info VM (this is what Load/SaveJob uses)
                 var customerInfo = POCustomerInfoVm;
-                customerInfo.CompanyName = defaults.CompanyName;
-                customerInfo.ContactName = defaults.ContactName;
-                customerInfo.PhoneNumber = defaults.PhoneNumber;
-                customerInfo.EMail = defaults.EMail;
-                customerInfo.Street = defaults.Street;
-                customerInfo.City = defaults.City;
-                customerInfo.ZipCode = defaults.ZipCode;
+                customerInfo.CompanyName = _defaults.CompanyName;
+                customerInfo.ContactName = _defaults.ContactName;
+                customerInfo.PhoneNumber = _defaults.PhoneNumber;
+                customerInfo.EMail = _defaults.EMail;
+                customerInfo.Street = _defaults.Street;
+                customerInfo.City = _defaults.City;
+                customerInfo.ZipCode = _defaults.ZipCode;
                 customerInfo.QuotedTotalPrice = 0m;
                 customerInfo.SubmittedWithAppTitle = null;
             }
@@ -413,8 +400,7 @@ public partial class MainWindowViewModel : ObservableValidator
     [ObservableProperty] public partial int MainTabControlWidth { get; set; } = 1000;
     partial void OnSelectedTabIndexChanged(int value)
     {
-        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-        previewSvc.SetActiveOwner(value);
+        _previewSvc.SetActiveOwner(value);
 
         try
         {
@@ -507,8 +493,7 @@ public partial class MainWindowViewModel : ObservableValidator
         }
 
         // Force preview immediately with the selected cabinet's data
-        var previewSvc = App.ServiceProvider.GetRequiredService<IPreviewService>();
-        previewSvc.ForcePreview(value);
+        _previewSvc.ForcePreview(value);
     }
 
 
@@ -543,12 +528,12 @@ public partial class MainWindowViewModel : ObservableValidator
     // Call this once (e.g., in constructor) to wire collection/item change tracking
     private void InitializeModificationTracking()
     {
-        if (_cabinet_service?.Cabinets is INotifyCollectionChanged coll)
+        if (_cabinetService?.Cabinets is INotifyCollectionChanged coll)
         {
             coll.CollectionChanged += Cabinets_CollectionChanged;
 
             // attach to any existing items
-            foreach (var item in _cabinet_service.Cabinets)
+            foreach (var item in _cabinetService.Cabinets)
             {
                 if (item is INotifyPropertyChanged inpc)
                     inpc.PropertyChanged += Item_PropertyChanged;
@@ -591,9 +576,9 @@ public partial class MainWindowViewModel : ObservableValidator
         }
 
         // On Reset (bulk load), NewItems is null — re-hook all current items
-        if (e.Action == NotifyCollectionChangedAction.Reset && _cabinet_service?.Cabinets != null)
+        if (e.Action == NotifyCollectionChangedAction.Reset && _cabinetService?.Cabinets != null)
         {
-            foreach (var item in _cabinet_service.Cabinets)
+            foreach (var item in _cabinetService.Cabinets)
             {
                 if (item is INotifyPropertyChanged inpc)
                     inpc.PropertyChanged += Item_PropertyChanged;
@@ -635,10 +620,20 @@ public partial class MainWindowViewModel : ObservableValidator
         }
     }
 
-
     public void RefreshSelectedCabinet()
     {
         OnPropertyChanged(nameof(SelectedCabinet));
         OnSelectedCabinetChanged(SelectedCabinet);
     }
+
+    private JobCustomerInfo BuildCustomerInfo() => new()
+    {
+        CompanyName = POCustomerInfoVm.CompanyName,
+        ContactName = POCustomerInfoVm.ContactName,
+        PhoneNumber = POCustomerInfoVm.PhoneNumber,
+        EMail = POCustomerInfoVm.EMail,
+        Street = POCustomerInfoVm.Street,
+        City = POCustomerInfoVm.City,
+        ZipCode = POCustomerInfoVm.ZipCode
+    };
 }

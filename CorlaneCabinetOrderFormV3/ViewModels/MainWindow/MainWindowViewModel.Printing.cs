@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
-using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using System.IO;
@@ -18,13 +17,13 @@ public partial class MainWindowViewModel
             companyName: _defaults.CompanyName ?? "",
             jobName: CurrentJobName,
             dimensionFormat: _defaults.DefaultDimensionFormat ?? "Fraction",
-            cabinets: _cabinet_service.Cabinets.ToList());
+            cabinets: _cabinetService.Cabinets.ToList());
     }
 
     [RelayCommand]
     private void PrintDoorList()
     {
-        var doorVm = App.ServiceProvider.GetRequiredService<DoorSizesListViewModel>();
+        var doorVm = _services.GetRequiredService<DoorSizesListViewModel>();
         doorVm.Rebuild();
 
         _printer.PrintDoorList(
@@ -36,7 +35,7 @@ public partial class MainWindowViewModel
     [RelayCommand]
     private void PrintDrawerBoxList()
     {
-        var drawerVm = App.ServiceProvider.GetRequiredService<DrawerBoxSizesListViewModel>();
+        var drawerVm = _services.GetRequiredService<DrawerBoxSizesListViewModel>();
         drawerVm.Rebuild();
 
         _printer.PrintDrawerBoxList(
@@ -87,7 +86,7 @@ public partial class MainWindowViewModel
             var sb = new StringBuilder();
             sb.AppendLine("Qty,Type,Style,Name,Width,Height,Depth");
 
-            foreach (var cab in _cabinet_service.Cabinets)
+            foreach (var cab in _cabinetService.Cabinets)
             {
                 var w = FormatDimensionString(cab.Width, dimensionFormat);
                 var h = FormatDimensionString(cab.Height, dimensionFormat);
@@ -115,8 +114,7 @@ public partial class MainWindowViewModel
     [RelayCommand]
     private void ExportDoorList()
     {
-        var defaults = App.ServiceProvider.GetRequiredService<DefaultSettingsService>();
-        var doorVm = App.ServiceProvider.GetRequiredService<DoorSizesListViewModel>();
+        var doorVm = _services.GetRequiredService<DoorSizesListViewModel>();
         doorVm.Rebuild();
 
         var dialog = new SaveFileDialog
@@ -173,7 +171,7 @@ public partial class MainWindowViewModel
     [RelayCommand]
     private void ExportDrawerBoxList()
     {
-        var drawerVm = App.ServiceProvider.GetRequiredService<DrawerBoxSizesListViewModel>();
+        var drawerVm = _services.GetRequiredService<DrawerBoxSizesListViewModel>();
         drawerVm.Rebuild();
 
         var dialog = new SaveFileDialog

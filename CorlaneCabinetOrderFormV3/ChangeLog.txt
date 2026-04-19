@@ -437,3 +437,10 @@
 3.1.0.0
 	Last commit before merging to main branch. commit
 	"Golden Commit" before branching for some refactoring. commit
+	Refactor ViewModel to use DI for all services
+	Refactored MainWindowViewModel to inject all service dependencies (ICabinetService, DefaultSettingsService, IPrintService, IPreviewService, IServiceProvider) via the constructor, replacing all usages of App.ServiceProvider.
+	Renamed _cabinet_service to _cabinetService for consistency.
+	Updated tab ViewModel properties and all cabinet collection references to use injected services.
+	Extracted JobCustomerInfo creation to a helper method.
+	Improved testability and maintainability by centralizing service resolution. commit
+
