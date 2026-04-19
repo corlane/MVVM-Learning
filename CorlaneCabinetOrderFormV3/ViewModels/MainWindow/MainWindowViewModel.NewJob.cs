@@ -44,13 +44,11 @@ public partial class MainWindowViewModel
             CurrentJobName = "Untitled Job";
             CurrentJobPath = null;
             SelectedCabinet = null;
-            SelectedTabIndex = 0;
 
             // 3) Clear preview immediately
             try
             {
                 _previewSvc.ClearPreview();
-                _previewSvc.SetActiveOwner(SelectedTabIndex);
                 CurrentPreviewCabinet = null;
             }
             catch (Exception ex)
@@ -69,6 +67,35 @@ public partial class MainWindowViewModel
             _defaultsVm = null;
             _materialPricesVm = null;
             _processOrderVm = null;
+
+            // Reset persistent "ordered" state for the new job
+            _cabinetService.OrderedAtLocal = null;
+            _cabinetService.ExceptionDoneKeys.Clear();
+
+            try
+            {
+                PlaceOrderVm.OrderedAtLocal = null;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Catch] NewJob: Reset OrderedAtLocal failed: {ex.Message}");
+            }
+
+            OnPropertyChanged(nameof(BaseCabinetVm));
+            OnPropertyChanged(nameof(UpperCabinetVm));
+            OnPropertyChanged(nameof(FillerVm));
+            OnPropertyChanged(nameof(PanelVm));
+            OnPropertyChanged(nameof(PlaceOrderVm));
+            OnPropertyChanged(nameof(DefaultsVm));
+            OnPropertyChanged(nameof(MaterialPricesVm));
+            OnPropertyChanged(nameof(ProcessOrderVm));
+
+            // 4b) Now that fresh VMs exist, force tab logic so the new BaseCabinetVm's
+            //     default preview is generated
+            if (SelectedTabIndex == 0)
+                OnSelectedTabIndexChanged(0);
+            else
+                SelectedTabIndex = 0;
 
             // Reset persistent "ordered" state for the new job
             _cabinetService.OrderedAtLocal = null;
