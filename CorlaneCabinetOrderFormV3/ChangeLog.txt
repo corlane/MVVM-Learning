@@ -457,3 +457,7 @@
 	Refactored MainWindowViewModel's NewJob logic to reset BaseCabinetVm, UpperCabinetVm, FillerVm, and PanelVm in place using new ResetToNewJob() methods, since these are DI singletons. 
 	Removed property change notifications for these VMs, as their instances are not replaced. 
 	Uploading 3.1.0.1
+
+3.1.0.2
+	Process Order & Material prices tabs now expand to full window width. commit
+

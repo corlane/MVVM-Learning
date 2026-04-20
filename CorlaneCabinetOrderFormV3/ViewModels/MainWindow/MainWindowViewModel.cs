@@ -3,18 +3,16 @@ using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Win32;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.1";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.2";
 
     private readonly ICabinetService _cabinetService;
     private readonly AutoSaveService _autoSave;
