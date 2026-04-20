@@ -18,7 +18,7 @@ public partial class MainWindowViewModel
             // If nothing to clear, be quick about it
             if ((_cabinetService.Cabinets == null || _cabinetService.Cabinets.Count == 0) && CurrentJobName == "Untitled Job")
             {
-                Notify2("Nothing to clear", Brushes.Gray);
+                NotifyMainWindow("Nothing to clear", Brushes.Gray);
                 return;
             }
 
@@ -140,6 +140,6 @@ public partial class MainWindowViewModel
 
         IsModified = false;
         // 7) Final user feedback
-        Notify2("New job ready", Brushes.Green, 3000);
+        NotifyMainWindow("New job ready", Brushes.Green, 3000);
     }
 }

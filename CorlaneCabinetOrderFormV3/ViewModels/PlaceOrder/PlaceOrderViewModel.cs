@@ -208,7 +208,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             if (CompanyName == "Corlane!")
             {
-                _mainVm.Notify2("😊 Hello, Corlane team!", Brushes.BlueViolet, 4000);
+                _mainVm.NotifyMainWindow("😊 Hello, Corlane team!", Brushes.BlueViolet, 4000);
                 _mainVm.IsAdmin = true;
             }
             else
@@ -346,7 +346,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 try
                 {
                     await UploadJobToWebsiteAsync(filePath);
-                    _mainVm.Notify2("Order placed. Job saved and sent to Corlane. Thank you!", Brushes.Green, 5000);
+                    _mainVm.NotifyMainWindow("Order placed. Job saved and sent to Corlane. Thank you!", Brushes.Green, 5000);
 
                     _ = Application.Current.Dispatcher.BeginInvoke(() =>
                     {
@@ -356,7 +356,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    _mainVm.Notify2($"Order saved, but upload failed: {ex.Message}", Brushes.OrangeRed, 6000);
+                    _mainVm.NotifyMainWindow($"Order saved, but upload failed: {ex.Message}", Brushes.OrangeRed, 6000);
                 }
 
                 _mainVm.CurrentJobName = Path.GetFileNameWithoutExtension(filePath);

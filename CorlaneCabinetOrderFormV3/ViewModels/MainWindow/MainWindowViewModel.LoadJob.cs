@@ -27,7 +27,7 @@ public partial class MainWindowViewModel
             InitialDirectory = _defaults.GetFileDialogDirectory(CurrentJobPath)
         };
 
-        Notify2("Loading job...", Brushes.Blue, 100000); // yes, 100 seconds - will be cleared on success
+        NotifyMainWindow("Loading job...", Brushes.Blue, 100000); // yes, 100 seconds - will be cleared on success
 
         if (dialog.ShowDialog() == true)
         {
@@ -53,7 +53,7 @@ public partial class MainWindowViewModel
                         POCustomerInfoVm.SubmittedWithAppTitle = job.SubmittedWithAppTitle;
                     }
 
-                    Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Loaded", Brushes.Green, 4000);
+                    NotifyMainWindow($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Loaded", Brushes.Green, 4000);
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     CurrentJobPath = dialog.FileName;
                     IsModified = false;
@@ -77,7 +77,7 @@ public partial class MainWindowViewModel
         else
         {
             // User cancelled load
-            Notify2("Load canceled", Brushes.Red, 2000);
+            NotifyMainWindow("Load canceled", Brushes.Red, 2000);
         }
     }
 }

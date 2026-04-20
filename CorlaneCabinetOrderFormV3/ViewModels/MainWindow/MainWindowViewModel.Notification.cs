@@ -23,9 +23,9 @@ public partial class MainWindowViewModel
 
 
     // Fire-and-forget helper (overload accepts optional background)
-    public void Notify(string message, Brush? background = null, int durationMs = 2000) => _ = ShowNotificationAsync(message, background, durationMs);
+    public void NotifyPreviewWindow(string message, Brush? background = null, int durationMs = 2000) => _ = ShowNotificationAsync(message, background, durationMs);
 
-    public void Notify2(string message, Brush? background = null, int durationMs = 2000) => _ = ShowNotification2Async(message, background, durationMs);
+    public void NotifyMainWindow(string message, Brush? background = null, int durationMs = 2000) => _ = ShowNotification2Async(message, background, durationMs);
 
     // Async notification that cancels previous one and hides after duration
     public async Task ShowNotificationAsync(string message, Brush? background = null, int durationMs = 2000)

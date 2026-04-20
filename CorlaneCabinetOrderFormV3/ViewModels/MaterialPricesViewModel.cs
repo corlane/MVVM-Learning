@@ -43,7 +43,7 @@ public partial class MaterialPricesViewModel : ObservableValidator
     [RelayCommand]
     private async Task DownloadPrices()
     {
-        _mainVm.Notify2("Downloading...", Brushes.MediumBlue);
+        _mainVm.NotifyMainWindow("Downloading...", Brushes.MediumBlue);
 
         try
         {
@@ -52,7 +52,7 @@ public partial class MaterialPricesViewModel : ObservableValidator
             var dto = JsonSerializer.Deserialize<MaterialPricesDto>(json, CorlaneApi.JsonWriteOptions);
             if (dto == null)
             {
-                _mainVm.Notify2("Failed to parse JSON.", Brushes.Red);
+                _mainVm.NotifyMainWindow("Failed to parse JSON.", Brushes.Red);
                 return;
             }
 
@@ -93,11 +93,11 @@ public partial class MaterialPricesViewModel : ObservableValidator
                 YieldBySpeciesJson = JsonSerializer.Serialize(y, CorlaneApi.JsonWriteOptions);
             });
 
-            _mainVm.Notify2("Download complete.", Brushes.Green);
+            _mainVm.NotifyMainWindow("Download complete.", Brushes.Green);
         }
         catch (Exception ex)
         {
-            _mainVm.Notify2($"Download failed: {ex.Message}", Brushes.Red);
+            _mainVm.NotifyMainWindow($"Download failed: {ex.Message}", Brushes.Red);
         }
     }
 
@@ -107,18 +107,18 @@ public partial class MaterialPricesViewModel : ObservableValidator
         var userName = Interaction.InputBox("Admin username:", "Upload Prices", "");
         if (string.IsNullOrWhiteSpace(userName))
         {
-            _mainVm.Notify2("Upload canceled.", Brushes.Red);
+            _mainVm.NotifyMainWindow("Upload canceled.", Brushes.Red);
             return;
         }
 
         var password = Interaction.InputBox("Admin password:", "Upload Prices", "");
         if (string.IsNullOrWhiteSpace(password))
         {
-            _mainVm.Notify2("Upload canceled.", Brushes.Red);
+            _mainVm.NotifyMainWindow("Upload canceled.", Brushes.Red);
             return;
         }
 
-        _mainVm.Notify2("Uploading...", Brushes.MediumBlue);
+        _mainVm.NotifyMainWindow("Uploading...", Brushes.MediumBlue);
 
         try
         {
@@ -130,7 +130,7 @@ public partial class MaterialPricesViewModel : ObservableValidator
             }
             catch (Exception ex)
             {
-                _mainVm.Notify2($"Yield JSON is invalid: {ex.Message}", Brushes.Red);
+                _mainVm.NotifyMainWindow($"Yield JSON is invalid: {ex.Message}", Brushes.Red);
                 return;
             }
 
@@ -171,15 +171,15 @@ public partial class MaterialPricesViewModel : ObservableValidator
 
             if (!response.IsSuccessStatusCode)
             {
-                _mainVm.Notify2($"Upload failed ({(int)response.StatusCode}): {body}", Brushes.Red);
+                _mainVm.NotifyMainWindow($"Upload failed ({(int)response.StatusCode}): {body}", Brushes.Red);
                 return;
             }
 
-            _mainVm.Notify2("Upload succeeded. material-prices.json updated.", Brushes.Green);
+            _mainVm.NotifyMainWindow("Upload succeeded. material-prices.json updated.", Brushes.Green);
         }
         catch (Exception ex)
         {
-            _mainVm.Notify2($"Upload failed: {ex.Message}", Brushes.Red);
+            _mainVm.NotifyMainWindow($"Upload failed: {ex.Message}", Brushes.Red);
         }
     }
 

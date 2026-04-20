@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -18,10 +19,11 @@ public partial class DefaultSettingsViewModel : ObservableObject
         _lookups = new MaterialLookupService();
     }
 
-    public DefaultSettingsViewModel(DefaultSettingsService defaults, IMaterialLookupService lookups)
+    public DefaultSettingsViewModel(DefaultSettingsService defaults, IMaterialLookupService lookups, MainWindowViewModel mainVm)
     {
         _defaults = defaults;
         _lookups = lookups;
+        _mainVm = mainVm;
 
         // Initialize SelectedTheme from persisted default (falls back to Light Theme)
         if (_defaults != null)
@@ -45,6 +47,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     private readonly DefaultSettingsService? _defaults;
     private readonly IMaterialLookupService _lookups;
+    private readonly MainWindowViewModel? _mainVm;
 
     // Flag used to avoid writing back to _defaults while we are applying values that came from _defaults.
     // This prevents re-entrant PropertyChanged loops and transient mismatches between SelectedItem and ItemsSource.
@@ -309,6 +312,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
     {
         await _defaults.SaveAsync();
         // Optional: show toast/message
+        _mainVm.NotifyMainWindow("Default Settings Updated", Brushes.MediumBlue);
     }
 
     private void Defaults_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

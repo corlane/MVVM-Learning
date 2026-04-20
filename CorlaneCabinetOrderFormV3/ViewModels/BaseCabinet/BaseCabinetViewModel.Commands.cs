@@ -29,7 +29,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
             catch (InvalidOperationException ex)
             {
-                _mainVm?.Notify(ex.Message, Brushes.Red, 3000);
+                _mainVm?.NotifyPreviewWindow(ex.Message, Brushes.Red, 3000);
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             TopType = tempTopType; // Restore user's top type choice after forcing a full top for shallow depths
 
-            _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
+            _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
             _mainVm?.IsModified = true;
 
             _mainVm.AutoSave();
@@ -61,7 +61,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
                 ApplyViewModelToModel(selected);
 
-                _mainVm?.Notify("Cabinet Updated", Brushes.Green);
+                _mainVm?.NotifyPreviewWindow("Cabinet Updated", Brushes.Green);
                 _mainVm?.IsModified = true;
 
                 TopType = tempTopType; // Restore user's top type choice after enforcing depth-specific rules
@@ -70,7 +70,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             else
             {
                 // No cabinet selected or wrong type
-                _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
+                _mainVm?.NotifyPreviewWindow("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
                 return;
             }
 

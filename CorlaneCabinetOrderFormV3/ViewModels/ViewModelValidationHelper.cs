@@ -57,7 +57,7 @@ internal static class ViewModelValidationHelper
 
         if (dup)
         {
-            mainVm?.Notify("Duplicate cabinet names are not allowed.", System.Windows.Media.Brushes.Red, 3000);
+            mainVm?.NotifyPreviewWindow("Duplicate cabinet names are not allowed.", System.Windows.Media.Brushes.Red, 3000);
             return false;
         }
 

@@ -19,7 +19,7 @@ public partial class MainWindowViewModel
             InitialDirectory = _defaults.GetFileDialogDirectory(CurrentJobPath)
         };
 
-        Notify2("Saving job...", Brushes.Blue, 100000);
+        NotifyMainWindow("Saving job...", Brushes.Blue, 100000);
 
         if (dialog.ShowDialog() == true)
         {
@@ -36,7 +36,7 @@ public partial class MainWindowViewModel
                         POCustomerInfoVm.QuotedTotalPrice,
                         submittedWithAppTitle: AppTitle);
 
-                    Notify2($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Saved", Brushes.Green, 4000);
+                    NotifyMainWindow($"{System.IO.Path.GetFileNameWithoutExtension(dialog.FileName)} Saved", Brushes.Green, 4000);
                     CurrentJobName = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
                     CurrentJobPath = dialog.FileName;
                     IsModified = false;
@@ -59,7 +59,7 @@ public partial class MainWindowViewModel
         }
         else
         {
-            Notify2("Save canceled", Brushes.Red, 2000);
+            NotifyMainWindow("Save canceled", Brushes.Red, 2000);
         }
     }
 }

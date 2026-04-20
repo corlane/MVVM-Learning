@@ -224,13 +224,13 @@ public partial class PanelViewModel : ObservableValidator
         }
         catch (InvalidOperationException ex)
         {
-            _mainVm?.Notify(ex.Message, Brushes.Red, 3000);
+            _mainVm?.NotifyPreviewWindow(ex.Message, Brushes.Red, 3000);
             return;
         }
 
         Notes = "";
 
-        _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
+        _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
 
         _mainVm.AutoSave();
@@ -249,12 +249,12 @@ public partial class PanelViewModel : ObservableValidator
 
             ApplyViewModelToModel(selected);
 
-            _mainVm?.Notify("Cabinet Updated", Brushes.Green);
+            _mainVm?.NotifyPreviewWindow("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
         }
         else
         {
-            _mainVm?.Notify("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
+            _mainVm?.NotifyPreviewWindow("No cabinet selected, or incorrect cabinet tab selected. Nothing updated.", Brushes.Red, 3000);
             return;
         }
 
