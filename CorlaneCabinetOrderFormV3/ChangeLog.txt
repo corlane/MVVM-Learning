@@ -460,4 +460,5 @@
 
 3.1.0.2
 	Process Order & Material prices tabs now expand to full window width. commit
+	Changed Autosave to run when IsModified flag is changed instead of on a timer. This way it will save after every change, instead of only every 5 minutes. commit
 

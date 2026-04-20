@@ -229,11 +229,7 @@ public partial class MainWindowViewModel : ObservableValidator
     {
         OnPropertyChanged(nameof(DisplayJobName));
 
-        // Start auto-save countdown when modifications begin; stop when saved
-        if (newValue)
-            _autoSave.Start();
-        else
-            _autoSave.Stop();
+        _ = _autoSave.SaveRecoveryAsync();
     }
 
 
