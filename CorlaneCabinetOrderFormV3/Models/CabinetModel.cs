@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel;
-using System.Text.Json.Serialization;  // For polymorphism in save/load
+using System.Text.Json.Serialization;
+using System.Windows.Media.Imaging;  // For polymorphism in save/load
 
 namespace CorlaneCabinetOrderFormV3.Models;
 
@@ -32,6 +33,21 @@ public abstract partial class CabinetModel : ObservableObject
 
     [JsonIgnore]
     public int GeometryVersion { get; private set; }
+
+    /// <summary>Cached thumbnail rendered by ThumbnailService. UI-only, not persisted.</summary>
+    [ObservableProperty]
+    [JsonIgnore]
+    public partial BitmapSource? Thumbnail { get; set; }
+
+    /// <summary>UI-only flag for multi-select batch operations. Not persisted.</summary>
+    [ObservableProperty]
+    [JsonIgnore]
+    public partial bool IsSelected { get; set; }
+
+    // Temporary UI-only flag used to animate/highlight a row when recently updated.
+    [ObservableProperty]
+    public partial bool IsHighlighted { get; set; }
+
 
     protected CabinetModel()
     {

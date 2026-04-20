@@ -465,3 +465,4 @@
 3.1.0.3
 	Modified Autosave to run on each Add or Update command. IsModified was not a good way to do it, because that only caught the initial change.
 	Also added a line in MainWindowViewModel shutdown to explicitly delete the Autosave file on successful shutdown, so that the app doesn't offer to recover an autosave if the last session was closed properly. commit
+	Removed 3 separate CabinetModel files that were just extensions containing one property each (Thumbnail, IsSelected, IsHighlighted), and instead added those properties to the main CabinetModel. commit
