@@ -56,12 +56,14 @@ public partial class MainWindowViewModel
                 Debug.WriteLine($"[Catch] NewJob: ClearPreview failed: {ex.Message}");
             }
 
-            // 4) Replace cached tab viewmodels with fresh instances from DI so their constructors run and they return to default values.
-            //    Raise property-changed so UI bindings pick up the new instances.
-            _baseCabinetVm = null;
-            _upperCabinetVm = null;
-            _fillerVm = null;
-            _panelVm = null;
+            // 4) Reset tab VMs to default state in-place.
+            //    These are DI singletons, so nulling the backing field and re-resolving
+            //    returns the SAME instance — no constructor re-runs. Instead, reset them directly.
+            BaseCabinetVm.ResetToNewJob();
+            UpperCabinetVm.ResetToNewJob();
+            FillerVm.ResetToNewJob();
+            PanelVm.ResetToNewJob();
+
             (_placeOrderVm as IDisposable)?.Dispose();
             _placeOrderVm = null;
             _defaultsVm = null;
@@ -81,43 +83,17 @@ public partial class MainWindowViewModel
                 Debug.WriteLine($"[Catch] NewJob: Reset OrderedAtLocal failed: {ex.Message}");
             }
 
-            OnPropertyChanged(nameof(BaseCabinetVm));
-            OnPropertyChanged(nameof(UpperCabinetVm));
-            OnPropertyChanged(nameof(FillerVm));
-            OnPropertyChanged(nameof(PanelVm));
             OnPropertyChanged(nameof(PlaceOrderVm));
             OnPropertyChanged(nameof(DefaultsVm));
             OnPropertyChanged(nameof(MaterialPricesVm));
             OnPropertyChanged(nameof(ProcessOrderVm));
 
-            // 4b) Now that fresh VMs exist, force tab logic so the new BaseCabinetVm's
+            // 4b) Now that VMs are reset, force tab logic so the BaseCabinetVm's
             //     default preview is generated
             if (SelectedTabIndex == 0)
                 OnSelectedTabIndexChanged(0);
             else
                 SelectedTabIndex = 0;
-
-            // Reset persistent "ordered" state for the new job
-            _cabinetService.OrderedAtLocal = null;
-            _cabinetService.ExceptionDoneKeys.Clear();
-
-            try
-            {
-                PlaceOrderVm.OrderedAtLocal = null;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[Catch] NewJob: Reset OrderedAtLocal failed: {ex.Message}");
-            }
-
-            OnPropertyChanged(nameof(BaseCabinetVm));
-            OnPropertyChanged(nameof(UpperCabinetVm));
-            OnPropertyChanged(nameof(FillerVm));
-            OnPropertyChanged(nameof(PanelVm));
-            OnPropertyChanged(nameof(PlaceOrderVm));
-            OnPropertyChanged(nameof(DefaultsVm));
-            OnPropertyChanged(nameof(MaterialPricesVm));
-            OnPropertyChanged(nameof(ProcessOrderVm));
 
             // 5) Ensure PlaceOrder tab's transient state is fresh (material totals, pricing)
             try

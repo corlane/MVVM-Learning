@@ -453,3 +453,7 @@
 	Broke MainWindowViewModel into subfiles.
 	Cleaned up MainWindowViewModel, it was a mess. Rearranged methods, put related methods together, etc. commit
 	Fixed bug in NewJob command that wasn't refreshing the BaseCabVM and therefore the view was blank. commit
+	REALLY fixed bug in NewJob command. Refactor NewJob to reset tab VMs in place
+	Refactored MainWindowViewModel's NewJob logic to reset BaseCabinetVm, UpperCabinetVm, FillerVm, and PanelVm in place using new ResetToNewJob() methods, since these are DI singletons. 
+	Removed property change notifications for these VMs, as their instances are not replaced. 
+	
