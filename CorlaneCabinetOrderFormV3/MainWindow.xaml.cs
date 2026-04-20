@@ -1,4 +1,5 @@
-﻿using CorlaneCabinetOrderFormV3.ViewModels;
+﻿using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.ViewModels;
 using CorlaneCabinetOrderFormV3.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
@@ -143,6 +144,9 @@ public partial class MainWindow : Window
     {
         try
         {
+            // Clean up recovery file on normal shutdown
+            AutoSaveService.DeleteRecoveryFile();
+
             var defaults = App.ServiceProvider.GetRequiredService<CorlaneCabinetOrderFormV3.Services.DefaultSettingsService>();
             var bounds = this.RestoreBounds;
 

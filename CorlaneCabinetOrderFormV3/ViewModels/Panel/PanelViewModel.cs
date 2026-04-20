@@ -232,6 +232,8 @@ public partial class PanelViewModel : ObservableValidator
 
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
+
+        _mainVm.AutoSave();
     }
 
     [RelayCommand]
@@ -259,6 +261,8 @@ public partial class PanelViewModel : ObservableValidator
         _mainVm!.SelectedCabinet = null;
 
         Notes = "";
+
+        _mainVm.AutoSave();
     }
 
     [RelayCommand]

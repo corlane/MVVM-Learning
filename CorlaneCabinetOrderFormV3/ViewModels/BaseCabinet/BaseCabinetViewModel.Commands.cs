@@ -39,6 +39,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
             _mainVm?.IsModified = true;
+
+            _mainVm.AutoSave();
         }
 
         [RelayCommand]
@@ -77,6 +79,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
 
+            _mainVm.AutoSave();
         }
 
         [RelayCommand]

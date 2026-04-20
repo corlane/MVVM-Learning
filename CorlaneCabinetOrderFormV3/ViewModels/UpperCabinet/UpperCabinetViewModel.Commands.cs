@@ -34,6 +34,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
+
+        _mainVm.AutoSave();
     }
 
     [RelayCommand]
@@ -63,6 +65,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         _mainVm!.SelectedCabinet = null;
 
         Notes = "";
+
+        _mainVm.AutoSave();
     }
 
     [RelayCommand]

@@ -12,7 +12,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.2";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.3";
 
     private readonly ICabinetService _cabinetService;
     private readonly AutoSaveService _autoSave;
@@ -229,7 +229,7 @@ public partial class MainWindowViewModel : ObservableValidator
     {
         OnPropertyChanged(nameof(DisplayJobName));
 
-        _ = _autoSave.SaveRecoveryAsync();
+        AutoSave();
     }
 
 
@@ -325,6 +325,10 @@ public partial class MainWindowViewModel : ObservableValidator
         ZipCode = POCustomerInfoVm.ZipCode
     };
 
+    public void AutoSave()
+    {
+        _ = _autoSave.SaveRecoveryAsync();
+    }
 
     [RelayCommand]
     private static void Help()

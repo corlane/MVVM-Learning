@@ -163,6 +163,8 @@ public partial class FillerViewModel : ObservableValidator
 
         _mainVm?.Notify($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
+
+        _mainVm.AutoSave();
     }
 
 
@@ -191,6 +193,8 @@ public partial class FillerViewModel : ObservableValidator
         _mainVm!.SelectedCabinet = null;
 
         Notes = "";
+
+        _mainVm.AutoSave();
     }
 
     [RelayCommand]

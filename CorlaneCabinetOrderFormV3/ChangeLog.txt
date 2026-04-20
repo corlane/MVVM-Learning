@@ -462,3 +462,6 @@
 	Process Order & Material prices tabs now expand to full window width. commit
 	Changed Autosave to run when IsModified flag is changed instead of on a timer. This way it will save after every change, instead of only every 5 minutes. commit
 
+3.1.0.3
+	Modified Autosave to run on each Add or Update command. IsModified was not a good way to do it, because that only caught the initial change.
+	Also added a line in MainWindowViewModel shutdown to explicitly delete the Autosave file on successful shutdown, so that the app doesn't offer to recover an autosave if the last session was closed properly. commit
