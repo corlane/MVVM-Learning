@@ -101,29 +101,6 @@ public partial class POJobMaterialListViewModel : ObservableObject
         var materials = MaterialYieldCalculator.AggregateMaterialAreas(snapshots);
         var edgebanding = MaterialYieldCalculator.AggregateEdgeBanding(snapshots);
 
-        // Upper cabinet extra edgebanding (bottom of end panels) — stays here because it needs CabinetModel type check
-        foreach (var cab in _cabinetService.Cabinets)
-        {
-            if (cab is UpperCabinetModel)
-            {
-                var qty = Math.Max(1, cab.Qty);
-                string upperCabExtraEbSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(cab.Species);
-
-                var depthIn = ConvertDimension.FractionToDouble(cab.Depth);
-                var extraFeet = ((2.0 * depthIn) / 12.0) * qty;
-
-                if (extraFeet > 0 &&
-                    !string.IsNullOrWhiteSpace(upperCabExtraEbSpecies) &&
-                    !string.Equals(upperCabExtraEbSpecies, "None", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (edgebanding.TryGetValue(upperCabExtraEbSpecies, out var existing))
-                        edgebanding[upperCabExtraEbSpecies] = existing + extraFeet;
-                    else
-                        edgebanding[upperCabExtraEbSpecies] = extraFeet;
-                }
-            }
-        }
-
         // Price breakdown
         var breakdown = _priceBreakdownService.Build(materials, edgebanding);
         foreach (var line in breakdown.Lines)

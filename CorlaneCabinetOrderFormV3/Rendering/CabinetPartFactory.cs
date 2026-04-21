@@ -217,6 +217,7 @@ internal static class CabinetPartFactory
         // Create a MeshBuilder with textures enabled (second param true)
         var panelMeshBuilder = new MeshBuilder(false, true);
         var edgebandMeshBuilder = new MeshBuilder(false, true); // For edgebanded side
+        var endPanelBottomEBMeshBuilder = new MeshBuilder(false, true); // PVC Hardrock Maple bottom edge
 
         // Find min/max for UV normalization (project XY to 0-1)
         double minX = polygonPoints.Min(p => p.X);
@@ -266,6 +267,7 @@ internal static class CabinetPartFactory
 
         // Track edgebanding total length (in inches) for this panel
         double edgeBandLengthInches = 0.0;
+        double endPanelBottomEBInches = 0.0; // Always accumulated as PVC Hardrock Maple
 
         // Determine whether this part gets edgebanding (totals + special material on edges)
         bool hasEdgebanding = partKind is not CabinetPartKind.Toekick
@@ -313,19 +315,28 @@ internal static class CabinetPartFactory
                     panelMeshBuilder.Positions[topIdx0],
                     uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
             }
+
             else if (!isPanelLikePart && !isCorner90Shape)
             {
-                // Standard structural part: only the front edge (sideIndex 0) gets edgebanding
-                if (sideIndex == 0)
+                // Standard structural part: front edge (sideIndex 0) gets cabinet EB species.
+                // Upper end panels also get PVC Hardrock Maple on the bottom edge (sideIndex 3).
+                bool isEndPanelBottomEdge = sideIndex == 3
+                    && partKind is CabinetPartKind.LeftEnd or CabinetPartKind.RightEnd;
+
+                if (sideIndex == 0 || isEndPanelBottomEdge)
                 {
-                    edgebandMeshBuilder.AddQuad(
+                    var targetBuilder = isEndPanelBottomEdge ? endPanelBottomEBMeshBuilder : edgebandMeshBuilder;
+                    targetBuilder.AddQuad(
                         panelMeshBuilder.Positions[bottomIdx0],
                         panelMeshBuilder.Positions[bottomIdx1],
                         panelMeshBuilder.Positions[topIdx1],
                         panelMeshBuilder.Positions[topIdx0],
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
 
-                    edgeBandLengthInches += sideLengths[sideIndex];
+                    if (isEndPanelBottomEdge)
+                        endPanelBottomEBInches += sideLengths[sideIndex];
+                    else
+                        edgeBandLengthInches += sideLengths[sideIndex];
                 }
                 else
                 {
@@ -337,6 +348,7 @@ internal static class CabinetPartFactory
                         uvBottomLeft, uvBottomRight, uvTopRight, uvTopLeft);
                 }
             }
+
             else if (isPanelLikePart)
             {
                 // Panel-like part: all edges get panel material, specific edges also get edgebanding overlay
@@ -433,11 +445,28 @@ internal static class CabinetPartFactory
             // swallow accumulation errors to keep preview resilient
         }
 
+        // Accumulate bottom end-panel edge — always PVC Hardrock Maple regardless of cabinet EB species
+        try
+        {
+            if (endPanelBottomEBInches > 0.0)
+            {
+                const string bottomEBSpecies = "PVC Hardrock Maple";
+                double feet = endPanelBottomEBInches / 12.0;
+                if (cab.EdgeBandingLengthBySpecies.ContainsKey(bottomEBSpecies))
+                    cab.EdgeBandingLengthBySpecies[bottomEBSpecies] += feet;
+                else
+                    cab.EdgeBandingLengthBySpecies[bottomEBSpecies] = feet;
+            }
+        }
+        catch { }
+
         panelMeshBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
         edgebandMeshBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
+        endPanelBottomEBMeshBuilder.ComputeNormalsAndTangents(MeshFaces.Default);
 
         var panelMesh = panelMeshBuilder.ToMesh(true);
         var edgebandMesh = edgebandMeshBuilder.ToMesh(true);
+        var endPanelBottomEBMesh = endPanelBottomEBMeshBuilder.ToMesh(true);
 
         var material = CabinetMaterials.GetPlywoodSpecies(panelSpecies, grainDirection, plywoodTextureRotationDegrees);
         var edgebandMaterial = CabinetMaterials.GetEdgeBandingSpecies(edgebandingSpecies);
@@ -464,6 +493,16 @@ internal static class CabinetPartFactory
         var partModel = new Model3DGroup();
         partModel.Children.Add(panelModel);
         partModel.Children.Add(edgebandingModel);
+        if (endPanelBottomEBMesh.Positions.Count > 0)
+        {
+            var bottomEBMaterial = CabinetMaterials.GetEdgeBandingSpecies("PVC Hardrock Maple");
+            partModel.Children.Add(new GeometryModel3D
+            {
+                Geometry = endPanelBottomEBMesh,
+                Material = bottomEBMaterial,
+                BackMaterial = bottomEBMaterial
+            });
+        }
 
         //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and {edgeBandLengthInches:F1} inches {edgebandingSpecies} edge banding");
 

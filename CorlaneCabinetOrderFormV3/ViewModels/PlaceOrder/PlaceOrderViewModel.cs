@@ -475,8 +475,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             {
                 try
                 {
-                    string upperCabExtraEbSpecies = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(cab.Species); // sets species extra banding on bottom of upper cabinet end panels
-
                     if (cab.MaterialAreaBySpecies != null)
                     {
                         foreach (var kv in cab.MaterialAreaBySpecies)
@@ -503,21 +501,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                         }
                     }
 
-                    // Pricing-only adjustment: + (2 * Depth) per Upper Cabinet (goes to a chosen EB species)
-                    if (cab is UpperCabinetModel)
-                    {
-                        var depthIn = ConvertDimension.FractionToDouble(cab.Depth);
-                        var extraFeetTimesQty = ((2.0 * depthIn) / 12.0) * cab.Qty;
-
-                        if (extraFeetTimesQty > 0 && !string.IsNullOrWhiteSpace(upperCabExtraEbSpecies) &&
-                            !string.Equals(upperCabExtraEbSpecies, "None", StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (aggEdgebanding.ContainsKey(upperCabExtraEbSpecies))
-                                aggEdgebanding[upperCabExtraEbSpecies] += extraFeetTimesQty;
-                            else
-                                aggEdgebanding[upperCabExtraEbSpecies] = extraFeetTimesQty;
-                        }
-                    }
                 }
                 catch (Exception ex) 
                 {
