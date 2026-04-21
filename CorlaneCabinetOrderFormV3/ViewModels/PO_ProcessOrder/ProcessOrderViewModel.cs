@@ -66,4 +66,5 @@ public partial class ProcessOrderViewModel : ObservableValidator
     public PONotesViewModel PONotesVm { get; }
     public POBackGrainDirViewModel POBackGrainDirVm { get; }
     public POEdgebandDoorsViewModel POEdgebandDoorsVm { get; }
+    public PORemovePartsViewModel PORemovePartsVm { get; }
 }
