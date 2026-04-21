@@ -18,6 +18,8 @@ internal static partial class UpperCabinetBuilder
         {
             double backThicknessForSpacing = backThickness;
 
+            if (!upperCab.HasBack && backThickness == 0.75) { backThicknessForSpacing = 0; shelfDepth += 0.75; }
+
             if (backThickness == 0.25) { backThicknessForSpacing = 0; }
 
             if (!upperCab.HasBack) { backThicknessForSpacing = 0; }

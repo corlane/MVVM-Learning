@@ -482,3 +482,4 @@
 	Currently this only includes setting the new properties (HasDeck, HasLeftEnd, etc.) to their default values, since those properties were added after the last version. 
 	This will ensure that older jobs will still work properly without throwing errors about missing properties, and will have the new properties set to their default values. commit
 	The above was only applied to Base cabinets. Added the same logic to Upper cabinets. commit
+	Adjusted Upper shelves to account for 3/4 back being removed (shelf gets deeper by that amount and shifted back). commit
