@@ -261,6 +261,14 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string BottomReveal { get; set; } = "";
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string GapWidth { get; set; } = "";
 
+    // Has (Top, Deck, Left End, Right End, Back) properties
+    [ObservableProperty] public partial bool HasTop { get; set; } = true;
+    [ObservableProperty] public partial bool HasDeck { get; set; } = true;
+    [ObservableProperty] public partial bool HasLeftEnd { get; set; } = true;
+    [ObservableProperty] public partial bool HasRightEnd { get; set; } = true;
+    [ObservableProperty] public partial bool HasBack { get; set; } = true;
+
+
     // Combobox options
     public IReadOnlyList<int> ComboShelfCount => CabinetOptions.ShelfCounts;
     public static List<string> TypeList => [Style1, Style2, Style3];

@@ -41,13 +41,13 @@ internal static partial class BaseCabinetBuilder
         double shelfDepth = dim.ShelfDepth;
         double opening1Height = dim.Opening1Height;
         double deckBackInset = 0;
-        Model3DGroup leftEnd;
-        Model3DGroup rightEnd;
-        Model3DGroup deck;
+        Model3DGroup leftEnd = new();
+        Model3DGroup rightEnd = new();
+        Model3DGroup deck = new();
         Model3DGroup top = new();
-        Model3DGroup shelf;
+        Model3DGroup shelf = new();
         Model3DGroup toekick = new();
-        Model3DGroup back;
+        Model3DGroup back = new();
         List<Point3D> endPanelPoints;
 
 
@@ -63,9 +63,15 @@ internal static partial class BaseCabinetBuilder
 
         endPanelPoints = BuildEndPanels(baseCab, height, depth, tk_Height, tk_Depth);
 
-        leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, isFaceUp: true, CabinetPartKind.LeftEnd);
+        if (baseCab.HasLeftEnd)
+        {
+            leftEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, isFaceUp: true, CabinetPartKind.LeftEnd);
+        }
 
-        rightEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, isFaceUp: true, CabinetPartKind.RightEnd);
+        if (baseCab.HasRightEnd)
+        {
+            rightEnd = CabinetPartFactory.CreatePanel(endPanelPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Vertical", baseCab, isFaceUp: true, CabinetPartKind.RightEnd);
+        }
 
         // ----------------------------
         // HOLES (base cabinets)
@@ -77,13 +83,25 @@ internal static partial class BaseCabinetBuilder
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
 
-        deck = BuildDeck(baseCab, MaterialThickness34, depth, backThickness, tk_Height, interiorWidth, deckBackInset);
+        if (baseCab.HasDeck)
+        {
+            deck = BuildDeck(baseCab, MaterialThickness34, depth, backThickness, tk_Height, interiorWidth, deckBackInset);
+        }
 
-        top = BuildTop(baseCab, MaterialThickness34, StretcherWidth, topStretcherBackWidth, width, height, depth, interiorWidth, top, out Model3DGroup? topStretcherFront, out Model3DGroup? topStretcherBack);
+        if (baseCab.HasTop)
+        {
+            top = BuildTop(baseCab, MaterialThickness34, StretcherWidth, topStretcherBackWidth, width, height, depth, interiorWidth, top, out Model3DGroup? topStretcherFront, out Model3DGroup? topStretcherBack);
+        }
 
-        toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, toekick);
+        if (baseCab.HasToeKickBoard)
+        {
+            toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, toekick);
+        }
 
-        back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight);
+        if (baseCab.HasBack)
+        {
+            back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight);
+        }
 
         // Drawer Stretchers
         BuildDrawerStretchers(cabinet, baseCab, dim);
@@ -105,11 +123,11 @@ internal static partial class BaseCabinetBuilder
         // Rollouts or Trash Drawer
         BuildRolloutsAndTrash(cabinet, baseCab, dim, addDrawerBoxRow, result);
 
-        if (!leftEndHidden) cabinet.Children.Add(leftEnd);
-        if (!rightEndHidden) cabinet.Children.Add(rightEnd);
-        if (!deckHidden) cabinet.Children.Add(deck);
-        if (!topHidden) cabinet.Children.Add(top);
-        cabinet.Children.Add(back);
-        cabinet.Children.Add(toekick);
+        if (baseCab.HasLeftEnd && !leftEndHidden) cabinet.Children.Add(leftEnd);
+        if (baseCab.HasRightEnd && !rightEndHidden) cabinet.Children.Add(rightEnd);
+        if (baseCab.HasDeck && !deckHidden) cabinet.Children.Add(deck);
+        if (baseCab.HasTop && !topHidden) cabinet.Children.Add(top);
+        if (baseCab.HasBack) cabinet.Children.Add(back);
+        if (baseCab.HasToeKickBoard) cabinet.Children.Add(toekick);
     }
 }

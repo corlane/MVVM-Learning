@@ -27,6 +27,12 @@ public partial class UpperCabinetModel : CabinetModel
     [ObservableProperty] public partial string BottomReveal { get; set; } = "";
     [ObservableProperty] public partial string GapWidth { get; set; } = "";
     [ObservableProperty] public partial bool EdgebandDoorsAndDrawers { get; set; }
+    [ObservableProperty] public partial bool HasTop { get; set; }
+    [ObservableProperty] public partial bool HasDeck { get; set; }
+    [ObservableProperty] public partial bool HasLeftEnd { get; set; }
+    [ObservableProperty] public partial bool HasRightEnd { get; set; }
+    [ObservableProperty] public partial bool HasBack { get; set; }
+
 
     private void BumpGeometry() => BumpGeometryVersion();
 
@@ -50,4 +56,9 @@ public partial class UpperCabinetModel : CabinetModel
     partial void OnBottomRevealChanged(string value) => BumpGeometry();
     partial void OnGapWidthChanged(string value) => BumpGeometry();
     partial void OnIncDoorsChanged(bool value) => BumpGeometry();
+    partial void OnHasTopChanged(bool value) => BumpGeometry();
+    partial void OnHasDeckChanged(bool value) => BumpGeometry();
+    partial void OnHasLeftEndChanged(bool value) => BumpGeometry();
+    partial void OnHasRightEndChanged(bool value) => BumpGeometry();
+    partial void OnHasBackChanged(bool value) => BumpGeometry();
 }

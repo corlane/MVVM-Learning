@@ -35,7 +35,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
             RightReveal = RightReveal,
             TopReveal = TopReveal,
             BottomReveal = BottomReveal,
-            GapWidth = GapWidth
+            GapWidth = GapWidth,
+            HasTop = HasTop,
+            HasDeck = HasDeck,
+            HasLeftEnd = HasLeftEnd,
+            HasRightEnd = HasRightEnd,
+            HasBack = HasBack
         };
 
         // Request preview using the tab index owner token (Upper tab = 1)
@@ -56,6 +61,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         nameof(IncDoors), nameof(DrillHingeHoles),
         nameof(LeftReveal), nameof(RightReveal),
         nameof(TopReveal), nameof(BottomReveal), nameof(GapWidth),
+        nameof(HasTop), nameof(HasDeck),
+        nameof(HasLeftEnd), nameof(HasRightEnd), nameof(HasBack)
     };
 
 }

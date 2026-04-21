@@ -34,33 +34,39 @@ internal static partial class UpperCabinetBuilder
                 double topYY = height - (MaterialThickness34 / 2);
                 double bottomYY = MaterialThickness34 / 2;
 
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: xx,
-                    centerY: topYY,
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                if (upperCab.HasLeftEnd)
+                {
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: xx,
+                        centerY: topYY,
+                        rimZ: MaterialThickness34,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
 
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: xx,
-                    centerY: topYY,
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: xx,
+                        centerY: bottomYY,
+                        rimZ: MaterialThickness34,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
+                }
 
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: xx,
-                    centerY: bottomYY,
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                if (upperCab.HasRightEnd)
+                {
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: xx,
+                        centerY: topYY,
+                        rimZ: 0,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
 
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: xx,
-                    centerY: bottomYY,
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: xx,
+                        centerY: bottomYY,
+                        rimZ: 0,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
+                }
             }
         }
 
@@ -87,19 +93,25 @@ internal static partial class UpperCabinetBuilder
                 double t = holeCountY == 1 ? 0 : (double)i / (holeCountY - 1);
                 double y = bottomY + (spanY * t);
 
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: x,
-                    centerY: y,
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                if (upperCab.HasLeftEnd)
+                {
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: x,
+                        centerY: y,
+                        rimZ: MaterialThickness34,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
+                }
 
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: x,
-                    centerY: y,
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                if (upperCab.HasRightEnd)
+                {
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: x,
+                        centerY: y,
+                        rimZ: 0,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
+                }
             }
         }
 
@@ -132,34 +144,39 @@ internal static partial class UpperCabinetBuilder
 
                 double y1 = hingeCenterY - (hingeBoreSpacing / 2);
                 double y2 = hingeCenterY + (hingeBoreSpacing / 2);
+                if (upperCab.HasLeftEnd)
+                {
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: hingeX,
+                        centerY: y1,
+                        rimZ: 0,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
 
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: hingeX,
-                    centerY: y1,
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: hingeX,
+                        centerY: y2,
+                        rimZ: 0,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
+                }
 
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: hingeX,
-                    centerY: y2,
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                if (upperCab.HasRightEnd)
+                {
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: hingeX,
+                        centerY: y1,
+                        rimZ: MaterialThickness34,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
 
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: hingeX,
-                    centerY: y1,
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
-
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: hingeX,
-                    centerY: y2,
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                        centerX: hingeX,
+                        centerY: y2,
+                        rimZ: MaterialThickness34,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter));
+                }
             }
         }
 
@@ -168,48 +185,54 @@ internal static partial class UpperCabinetBuilder
         {
             double shelfHoleCount = Math.Round((height - 12) / 1.26);
 
-            for (int i = 0; i < shelfHoleCount; i++)
+            if (upperCab.HasLeftEnd)
             {
-                var shelfHole = CabinetPartFactory.CreateHole(
-                    centerX: 1 + backThickness,
-                    centerY: 6 + (i * 1.26),
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter);
-                leftEnd.Children.Add(shelfHole);
+                for (int i = 0; i < shelfHoleCount; i++)
+                {
+                    var shelfHole = CabinetPartFactory.CreateHole(
+                        centerX: 1 + backThickness,
+                        centerY: 6 + (i * 1.26),
+                        rimZ: 0,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter);
+                    leftEnd.Children.Add(shelfHole);
+                }
+
+                for (int i = 0; i < shelfHoleCount; i++)
+                {
+                    var shelfHole = CabinetPartFactory.CreateHole(
+                        centerX: depth - 1,
+                        centerY: 6 + (i * 1.26),
+                        rimZ: 0,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter);
+                    leftEnd.Children.Add(shelfHole);
+                }
             }
 
-            for (int i = 0; i < shelfHoleCount; i++)
+            if (upperCab.HasRightEnd)
             {
-                var shelfHole = CabinetPartFactory.CreateHole(
-                    centerX: depth - 1,
-                    centerY: 6 + (i * 1.26),
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter);
-                leftEnd.Children.Add(shelfHole);
-            }
+                for (int i = 0; i < shelfHoleCount; i++)
+                {
+                    var shelfHole = CabinetPartFactory.CreateHole(
+                        centerX: 1 + backThickness,
+                        centerY: 6 + (i * 1.26),
+                        rimZ: MaterialThickness34,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter);
+                    rightEnd.Children.Add(shelfHole);
+                }
 
-            for (int i = 0; i < shelfHoleCount; i++)
-            {
-                var shelfHole = CabinetPartFactory.CreateHole(
-                    centerX: 1 + backThickness,
-                    centerY: 6 + (i * 1.26),
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter);
-                rightEnd.Children.Add(shelfHole);
-            }
-
-            for (int i = 0; i < shelfHoleCount; i++)
-            {
-                var shelfHole = CabinetPartFactory.CreateHole(
-                    centerX: depth - 1,
-                    centerY: 6 + (i * 1.26),
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter);
-                rightEnd.Children.Add(shelfHole);
+                for (int i = 0; i < shelfHoleCount; i++)
+                {
+                    var shelfHole = CabinetPartFactory.CreateHole(
+                        centerX: depth - 1,
+                        centerY: 6 + (i * 1.26),
+                        rimZ: MaterialThickness34,
+                        bottomZ: holeDepth,
+                        diameter: holeDiameter);
+                    rightEnd.Children.Add(shelfHole);
+                }
             }
         }
     }

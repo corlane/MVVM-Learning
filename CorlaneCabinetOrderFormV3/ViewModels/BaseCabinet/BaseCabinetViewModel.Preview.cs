@@ -72,7 +72,13 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 DrillSlideHolesOpening1 = DrillSlideHolesOpening1,
                 DrillSlideHolesOpening2 = DrillSlideHolesOpening2,
                 DrillSlideHolesOpening3 = DrillSlideHolesOpening3,
-                DrillSlideHolesOpening4 = DrillSlideHolesOpening4
+                DrillSlideHolesOpening4 = DrillSlideHolesOpening4,
+                HasTop = HasTop,
+                HasDeck = HasDeck,
+                HasLeftEnd = HasLeftEnd,
+                HasRightEnd = HasRightEnd,
+                HasBack = HasBack,
+                HasToeKickBoard = HasToeKickBoard
             };
 
             // Request preview using the tab index owner token (Base tab = 0)
@@ -103,6 +109,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             nameof(DrillHingeHoles), nameof(DrillShelfHoles),
             nameof(DrillSlideHolesOpening1), nameof(DrillSlideHolesOpening2),
             nameof(DrillSlideHolesOpening3), nameof(DrillSlideHolesOpening4),
+            nameof(HasTop), nameof(HasDeck), nameof(HasLeftEnd), nameof(HasRightEnd),
+            nameof(HasBack), nameof(HasToeKickBoard)
         };
 
     }

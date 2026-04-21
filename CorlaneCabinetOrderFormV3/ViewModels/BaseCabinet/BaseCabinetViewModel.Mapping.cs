@@ -65,7 +65,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.IncDoors = IncDoors;
         target.DrillHingeHoles = DrillHingeHoles;
         target.DrwFrontGrainDir = DrwFrontGrainDir;
-        // Derive vestigial master flags from per-item state (backward compat for saved files)
         target.IncDrwFrontsInList = IncDrwFrontInList1 || IncDrwFrontInList2 || IncDrwFrontInList3 || IncDrwFrontInList4;
         target.IncDrwFronts = IncDrwFront1 || IncDrwFront2 || IncDrwFront3 || IncDrwFront4;
         target.IncDrwBoxesInList = IncDrwBoxInListOpening1 || IncDrwBoxInListOpening2 || IncDrwBoxInListOpening3 || IncDrwBoxInListOpening4;
@@ -117,6 +116,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.EqualizeAllDrwFronts = EqualizeAllDrwFronts;
         target.EqualizeBottomDrwFronts = EqualizeBottomDrwFronts;
         target.EdgebandDoorsAndDrawers = EdgebandDoorsAndDrawers;
+        target.HasTop = HasTop;
+        target.HasDeck = HasDeck;
+        target.HasLeftEnd = HasLeftEnd;
+        target.HasRightEnd = HasRightEnd;
+        target.HasBack = HasBack;
+        target.HasToeKickBoard = HasToeKickBoard;
     }
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type

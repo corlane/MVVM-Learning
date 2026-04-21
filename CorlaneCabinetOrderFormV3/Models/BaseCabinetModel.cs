@@ -78,6 +78,13 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool EqualizeAllDrwFronts { get; set; }
     [ObservableProperty] public partial bool EqualizeBottomDrwFronts { get; set; }
     [ObservableProperty] public partial bool EdgebandDoorsAndDrawers { get; set; }
+    [ObservableProperty] public partial bool HasTop { get; set; }
+    [ObservableProperty] public partial bool HasDeck { get; set; }
+    [ObservableProperty] public partial bool HasLeftEnd { get; set; }
+    [ObservableProperty] public partial bool HasRightEnd { get; set; }
+    [ObservableProperty] public partial bool HasBack { get; set; }
+    [ObservableProperty] public partial bool HasToeKickBoard { get; set; }
+
 
     private void BumpGeometry() => BumpGeometryVersion();
 
@@ -118,4 +125,10 @@ public partial class BaseCabinetModel : CabinetModel
     partial void OnGapWidthChanged(string value) => BumpGeometry();
     partial void OnIncDoorsChanged(bool value) => BumpGeometry();
     partial void OnIncDrwFrontsChanged(bool value) => BumpGeometry();
+    partial void OnHasTopChanged(bool value) => BumpGeometry();
+    partial void OnHasDeckChanged(bool value) => BumpGeometry();
+    partial void OnHasLeftEndChanged(bool value) => BumpGeometry();
+    partial void OnHasRightEndChanged(bool value) => BumpGeometry();
+    partial void OnHasBackChanged(bool value) => BumpGeometry();
+    partial void OnHasToeKickBoardChanged(bool value) => BumpGeometry();
 }

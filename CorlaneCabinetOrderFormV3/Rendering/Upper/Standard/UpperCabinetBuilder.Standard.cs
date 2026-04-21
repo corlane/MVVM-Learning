@@ -18,8 +18,8 @@ internal static partial class UpperCabinetBuilder
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
         Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow)
-    {
 
+    {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double MaterialThickness14 = MaterialDefaults.Thickness14;
         double doubleMaterialThickness34 = MaterialThickness34 * 2;
@@ -63,10 +63,10 @@ internal static partial class UpperCabinetBuilder
 
         BuildDoors(cabinet, upperCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doorEdgebandingSpecies, width, height, depth, upperDoorGap, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, doorSideReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints);
 
-        if (!leftEndHidden) cabinet.Children.Add(leftEnd);
-        if (!rightEndHidden) cabinet.Children.Add(rightEnd);
-        if (!deckHidden) cabinet.Children.Add(deck);
-        if (!topHidden) cabinet.Children.Add(top);
-        cabinet.Children.Add(back);
+        if (upperCab.HasLeftEnd && !leftEndHidden) cabinet.Children.Add(leftEnd);
+        if (upperCab.HasRightEnd && !rightEndHidden) cabinet.Children.Add(rightEnd);
+        if (upperCab.HasDeck &&!deckHidden) cabinet.Children.Add(deck);
+        if (upperCab.HasTop && !topHidden) cabinet.Children.Add(top);
+        if (upperCab.HasBack) cabinet.Children.Add(back);
     }
 }

@@ -643,6 +643,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
     }
 
+    // Has (Top, Deck, Left End, Right End, Back, ToekickBoard) properties
+    [ObservableProperty] public partial bool HasTop { get; set; } = true;
+    [ObservableProperty] public partial bool HasDeck { get; set; } = true;
+    [ObservableProperty] public partial bool HasLeftEnd { get; set; } = true;
+    [ObservableProperty] public partial bool HasRightEnd { get; set; } = true;
+    [ObservableProperty] public partial bool HasBack { get; set; } = true;
+    [ObservableProperty] public partial bool HasToeKickBoard { get; set; } = true;
 
     // Combobox options
     public IReadOnlyList<int> ComboShelfCount => CabinetOptions.ShelfCounts;
