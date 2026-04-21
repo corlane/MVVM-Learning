@@ -484,3 +484,4 @@
 	The above was only applied to Base cabinets. Added the same logic to Upper cabinets. commit
 	Adjusted Upper shelves to account for 3/4 back being removed (shelf gets deeper by that amount and shifted back). commit
 	Removed if (DoorCount == 1) { DoorCount = 2; } from EnforceStyleConstraints for Base cabinets. It was messing with corner cabinet doorcount combobox, plus the upper corner has no such thing and it works fine. I think. commit
+	Adding PORemoveParts. It has a bug. Not sure what. commit

@@ -149,7 +149,15 @@
                 </TabItem.Header>
                 <views:POBackGrainDirView DataContext="{Binding POBackGrainDirVm}"/>
             </TabItem>
-            
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Remove Parts"
+                               Foreground="{Binding PORemovePartsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:PORemovePartsView DataContext="{Binding PORemovePartsVm}"/>
+            </TabItem>
+
         </TabControl>
     </Grid>
 </UserControl>

@@ -108,6 +108,7 @@ public partial class App : Application
                 services.AddSingleton<PODrwStretcherWidthsViewModel>();
                 services.AddSingleton<POBackGrainDirViewModel>();
                 services.AddSingleton<POEdgebandDoorsViewModel>();
+                services.AddSingleton<PORemovePartsViewModel>();
 
                 // Truly transient — new instance each time they're needed
                 services.AddTransient<POJobMaterialListViewModel>();
