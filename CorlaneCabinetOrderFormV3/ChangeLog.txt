@@ -481,3 +481,4 @@
 	Implemented version check in CabinetServices to check if job being loaded was created with an older version of the app, and if so, to apply any necessary conversions to update the job to the current version. 
 	Currently this only includes setting the new properties (HasDeck, HasLeftEnd, etc.) to their default values, since those properties were added after the last version. 
 	This will ensure that older jobs will still work properly without throwing errors about missing properties, and will have the new properties set to their default values. commit
+	The above was only applied to Base cabinets. Added the same logic to Upper cabinets. commit

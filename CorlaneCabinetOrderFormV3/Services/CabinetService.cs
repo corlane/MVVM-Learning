@@ -198,6 +198,16 @@ public class CabinetService : ICabinetService
                 cab.HasBack = true;
                 cab.HasToeKickBoard = true;
             }
+
+            foreach (var cab in loadedJob.Cabinets.OfType<UpperCabinetModel>())
+            {
+                cab.HasTop = true;
+                cab.HasDeck = true;
+                cab.HasLeftEnd = true;
+                cab.HasRightEnd = true;
+                cab.HasBack = true;
+            }
+
         }
 
         var bulk = (BulkObservableCollection<CabinetModel>)Cabinets;
