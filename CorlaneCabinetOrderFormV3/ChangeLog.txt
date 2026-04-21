@@ -478,3 +478,6 @@
 	Introduced _activeInputProperty to prevent ApplyLayoutResult from overwriting the property currently being edited. 
 	Cleaned up obsolete code and improved keyboard navigation in DrawersFlyout by setting IsTabStop="False" on option CheckBoxes. 
 	Default values for cabinet ends, top, deck, back, and toe kick are now explicitly set when loading defaults...they default to true. commit
+	Implemented version check in CabinetServices to check if job being loaded was created with an older version of the app, and if so, to apply any necessary conversions to update the job to the current version. 
+	Currently this only includes setting the new properties (HasDeck, HasLeftEnd, etc.) to their default values, since those properties were added after the last version. 
+	This will ensure that older jobs will still work properly without throwing errors about missing properties, and will have the new properties set to their default values. commit

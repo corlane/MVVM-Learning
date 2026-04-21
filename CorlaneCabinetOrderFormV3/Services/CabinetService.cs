@@ -185,6 +185,21 @@ public class CabinetService : ICabinetService
             }
         }
 
+        // Migration: HasTop/HasDeck/HasLeftEnd/HasRightEnd/HasBack/HasToeKickBoard were
+        // introduced in 3.1.0.3. Any job saved before that version needs them defaulted to true.
+        if (NeedsPartFlagsMigration(loadedJob.SubmittedWithAppTitle))
+        {
+            foreach (var cab in loadedJob.Cabinets.OfType<BaseCabinetModel>())
+            {
+                cab.HasTop = true;
+                cab.HasDeck = true;
+                cab.HasLeftEnd = true;
+                cab.HasRightEnd = true;
+                cab.HasBack = true;
+                cab.HasToeKickBoard = true;
+            }
+        }
+
         var bulk = (BulkObservableCollection<CabinetModel>)Cabinets;
 
         if (System.Windows.Application.Current?.Dispatcher != null)
@@ -264,5 +279,13 @@ public class CabinetService : ICabinetService
             _isAccumulating = false;
             _suppressDirty = false;
         }
+    }
+
+    private static bool NeedsPartFlagsMigration(string? appTitle)
+    {
+        if (appTitle is null) return true;
+        var match = System.Text.RegularExpressions.Regex.Match(appTitle, @"Version\s+(\d+\.\d+\.\d+\.\d+)");
+        if (!match.Success) return true;
+        return Version.TryParse(match.Groups[1].Value, out var v) && v < new Version(3, 1, 0, 3);
     }
 }
