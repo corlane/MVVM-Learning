@@ -470,3 +470,4 @@
 	Working on Remove Parts section. commit
 	"Remove Parts" seems to be working for Base & Upper std. cabinets.
 	Adusted tests to account for new Model properties (HasDeck, HasLeftEnd, etc.). commit
+	Adjusted Base cabinet deck to account for HasBack = false. commit

@@ -19,6 +19,9 @@ internal static partial class BaseCabinetBuilder
         Model3DGroup deck;
         // Deck
         if (backThickness == MaterialThickness34) { deckBackInset = MaterialThickness34; }
+
+        if (!baseCab.HasBack && backThickness == 0.75) { deckBackInset = 0; }
+
         List<Point3D> deckPoints =
         [
             new (0,0,0),
