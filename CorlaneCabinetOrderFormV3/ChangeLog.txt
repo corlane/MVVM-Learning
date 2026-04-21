@@ -473,3 +473,8 @@
 	Adjusted Base cabinet deck to account for HasBack = false. commit
 	FINALLY fixed Upper Cabinet end panel bottom edgebanding to run through the proper CreatePanel() method rather than arbitrarily adding it during material and price accumulation. commit
 	Fixed discrepancies causing tests to fail after the above change. commit
+	Refactor drawer height editing, remove debounce/edit buffer
+	Removed DrwFrontHeight1 edit buffer and debounce logic; TextBoxes now bind directly to DrwFrontHeight1 and related properties. 
+	Introduced _activeInputProperty to prevent ApplyLayoutResult from overwriting the property currently being edited. 
+	Cleaned up obsolete code and improved keyboard navigation in DrawersFlyout by setting IsTabStop="False" on option CheckBoxes. 
+	Default values for cabinet ends, top, deck, back, and toe kick are now explicitly set when loading defaults...they default to true. commit

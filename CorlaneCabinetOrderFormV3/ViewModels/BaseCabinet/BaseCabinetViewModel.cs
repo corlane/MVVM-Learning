@@ -30,12 +30,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public ObservableCollection<string> ListCabSpecies => _lookups.CabinetSpecies;
     public ObservableCollection<string> ListEBSpecies => _lookups.EBSpecies;
 
-    private readonly System.Timers.Timer _drwFrontHeight1DebounceTimer = new(90) { AutoReset = false };
-
-    private bool _suppressEditSync;
-
-    private bool _isEditingDrwFrontHeight1;
-
     public BaseCabinetViewModel(ICabinetService cabinetService, MainWindowViewModel mainVm, DefaultSettingsService defaults, IMaterialLookupService lookups, IPreviewService previewService)
     {
         _cabinetService = cabinetService;
@@ -468,7 +462,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isMapping) return;
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(OpeningHeight1);
             ResizeOpeningHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight2 { get; set; } = ""; partial void OnOpeningHeight2Changed(string oldValue, string newValue)
@@ -476,7 +472,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isMapping) return;
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(OpeningHeight2);
             ResizeOpeningHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight3 { get; set; } = ""; partial void OnOpeningHeight3Changed(string oldValue, string newValue)
@@ -484,7 +482,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isMapping) return;
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(OpeningHeight3);
             ResizeOpeningHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty] public partial string OpeningHeight4 { get; set; } = ""; partial void OnOpeningHeight4Changed(string oldValue, string newValue)
@@ -492,21 +492,20 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isMapping) return;
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(OpeningHeight4);
             ResizeOpeningHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = ""; partial void OnDrwFrontHeight1Changed(string oldValue, string newValue)
     {
         if (_isMapping) return;
-
-        // Keep edit buffer synced when not typing; never overwrite while user is mid-edit.
-        if (!_suppressEditSync && !_isEditingDrwFrontHeight1)
-            DrwFrontHeight1Edit = newValue;
-
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(DrwFrontHeight1);
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = ""; partial void OnDrwFrontHeight2Changed(string oldValue, string newValue)
@@ -514,7 +513,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isMapping) return;
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(DrwFrontHeight2);
             ResizeDrwFrontHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = ""; partial void OnDrwFrontHeight3Changed(string oldValue, string newValue)
@@ -522,7 +523,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isMapping) return;
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(DrwFrontHeight3);
             ResizeDrwFrontHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = ""; partial void OnDrwFrontHeight4Changed(string oldValue, string newValue)
@@ -530,7 +533,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         if (_isMapping) return;
         if (newValue != oldValue)
         {
+            _activeInputProperty = nameof(DrwFrontHeight4);
             ResizeDrwFrontHeights();
+            _activeInputProperty = null;
         }
     }
     [ObservableProperty] public partial string RolloutStyle { get; set; } = "";
@@ -726,49 +731,4 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
     [ObservableProperty] public partial bool ComboShelfDepthEnabled { get; set; } = true;
     [ObservableProperty] public partial bool ShelfDepthVisible { get; set; } = true;
-    [ObservableProperty] public partial string DrwFrontHeight1Edit { get; set; } = ""; partial void OnDrwFrontHeight1EditChanged(string oldValue, string newValue)
-    {
-        _isEditingDrwFrontHeight1 = true;
-
-        _drwFrontHeight1DebounceTimer.Stop();
-        _drwFrontHeight1DebounceTimer.Elapsed -= DrwFrontHeight1DebounceTimer_Elapsed;
-        _drwFrontHeight1DebounceTimer.Elapsed += DrwFrontHeight1DebounceTimer_Elapsed;
-        _drwFrontHeight1DebounceTimer.Start();
-    }
-    private void DrwFrontHeight1DebounceTimer_Elapsed(object? sender, ElapsedEventArgs e)
-    {
-        Application.Current.Dispatcher.Invoke(() =>
-        {
-            if (!TryParsePositiveDimension(DrwFrontHeight1Edit, out _))
-                return; // Option 1: keep last valid preview
-
-            try
-            {
-                _suppressEditSync = true;
-                DrwFrontHeight1 = DrwFrontHeight1Edit; // triggers your existing OnDrwFrontHeight1Changed -> Resize -> UpdatePreview
-                _isEditingDrwFrontHeight1 = false;
-            }
-            finally
-            {
-                _suppressEditSync = false;
-            }
-        });
-    }
-
-    private static bool TryParsePositiveDimension(string? text, out double value)
-    {
-        value = 0;
-
-        if (string.IsNullOrWhiteSpace(text))
-            return false;
-
-        // ConvertDimension returns 0 on invalid input AND for "0", so gate by allowing 0 explicitly if you want it.
-        value = ConvertDimension.FractionToDouble(text);
-
-        if (value > 0)
-            return true;
-
-        // if you actually want to allow 0, handle it here; for cabinet dimensions it’s typically invalid:
-        return false;
-    }
 }

@@ -9,6 +9,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class BaseCabinetViewModel : ObservableValidator
 {
+    private string? _activeInputProperty;
+
     private void ResizeOpeningHeights()
     {
         if (_isResizing || _isMapping) return;
@@ -56,14 +58,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     private void ApplyLayoutResult(CabinetLayoutCalculator.LayoutResult r)
     {
-        OpeningHeight1 = r.Opening1.ToString();
-        OpeningHeight2 = r.Opening2.ToString();
-        OpeningHeight3 = r.Opening3.ToString();
-        OpeningHeight4 = r.Opening4.ToString();
-        DrwFrontHeight1 = r.DrwFront1.ToString();
-        DrwFrontHeight2 = r.DrwFront2.ToString();
-        DrwFrontHeight3 = r.DrwFront3.ToString();
-        DrwFrontHeight4 = r.DrwFront4.ToString();
+        if (_activeInputProperty != nameof(OpeningHeight1)) OpeningHeight1 = r.Opening1.ToString();
+        if (_activeInputProperty != nameof(OpeningHeight2)) OpeningHeight2 = r.Opening2.ToString();
+        if (_activeInputProperty != nameof(OpeningHeight3)) OpeningHeight3 = r.Opening3.ToString();
+        if (_activeInputProperty != nameof(OpeningHeight4)) OpeningHeight4 = r.Opening4.ToString();
+        if (_activeInputProperty != nameof(DrwFrontHeight1)) DrwFrontHeight1 = r.DrwFront1.ToString();
+        if (_activeInputProperty != nameof(DrwFrontHeight2)) DrwFrontHeight2 = r.DrwFront2.ToString();
+        if (_activeInputProperty != nameof(DrwFrontHeight3)) DrwFrontHeight3 = r.DrwFront3.ToString();
+        if (_activeInputProperty != nameof(DrwFrontHeight4)) DrwFrontHeight4 = r.DrwFront4.ToString();
     }
 
     private void ResizeDrwFrontHeights()

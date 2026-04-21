@@ -192,6 +192,12 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 GapWidth = _defaults.DefaultGapWidth;
                 SinkCabinet = false;
                 TrashDrawer = false;
+                HasLeftEnd = true;
+                HasRightEnd = true;
+                HasTop = true;
+                HasDeck = true;
+                HasBack = true;
+                HasToeKickBoard = true;
             }
             finally
             {
@@ -200,7 +206,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             ApplyDrawerFrontEqualization();
             ResizeDrwFrontHeights();
-            DrwFrontHeight1Edit = DrwFrontHeight1;
             ApplyStyleVisibility(Style);
         }
 

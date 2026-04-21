@@ -92,6 +92,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
         TopReveal = _defaults.DefaultUpperTopReveal;
         BottomReveal = _defaults.DefaultUpperBottomReveal;
         GapWidth = _defaults.DefaultGapWidth;
+        HasLeftEnd = true;
+        HasRightEnd = true;
+        HasTop = true;
+        HasDeck = true;
+        HasBack = true;
     }
 
     /// <summary>

@@ -133,14 +133,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Map model -> VM with proper formatting for dimension properties
             MapModelToViewModel(baseCab, dimFormat);
 
-            // Kill any stale debounce timer that fired during mapping
-            // and resync the edit buffer to the final correct value.
-            _drwFrontHeight1DebounceTimer.Stop();
-            _isEditingDrwFrontHeight1 = false;
-            DrwFrontHeight1Edit = DrwFrontHeight1; // restarts timer via OnDrwFrontHeight1EditChanged
-            _drwFrontHeight1DebounceTimer.Stop();  // kill it again immediately
-            _isEditingDrwFrontHeight1 = false;
-
             // Recalculate derived angle-front fields that were skipped
             // during mapping (change handlers bail out while _isMapping is true).
             RecalculateFrontWidth();
