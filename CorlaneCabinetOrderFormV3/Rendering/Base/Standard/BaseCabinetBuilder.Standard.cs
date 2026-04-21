@@ -98,10 +98,7 @@ internal static partial class BaseCabinetBuilder
             toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, toekick);
         }
 
-        if (baseCab.HasBack)
-        {
-            back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight);
-        }
+        back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight);
 
         // Drawer Stretchers
         BuildDrawerStretchers(cabinet, baseCab, dim);

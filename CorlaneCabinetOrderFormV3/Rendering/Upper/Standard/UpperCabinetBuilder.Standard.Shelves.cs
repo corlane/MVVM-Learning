@@ -17,7 +17,10 @@ internal static partial class UpperCabinetBuilder
         for (int i = 1; i < upperCab.ShelfCount + 1; i++)
         {
             double backThicknessForSpacing = backThickness;
+
             if (backThickness == 0.25) { backThicknessForSpacing = 0; }
+
+            if (!upperCab.HasBack) { backThicknessForSpacing = 0; }
 
             shelfPoints =
             [
@@ -31,5 +34,4 @@ internal static partial class UpperCabinetBuilder
             cabinet.Children.Add(shelf);
         }
     }
-
 }

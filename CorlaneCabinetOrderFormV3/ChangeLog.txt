@@ -468,3 +468,5 @@
 	Removed 3 separate CabinetModel files that were just extensions containing one property each (Thumbnail, IsSelected, IsHighlighted), and instead added those properties to the main CabinetModel. commit
 	Added notification when Defaults auto-save. commit
 	Working on Remove Parts section. commit
+	"Remove Parts" seems to be working for Base & Upper std. cabinets.
+	Adusted tests to account for new Model properties (HasDeck, HasLeftEnd, etc.). commit

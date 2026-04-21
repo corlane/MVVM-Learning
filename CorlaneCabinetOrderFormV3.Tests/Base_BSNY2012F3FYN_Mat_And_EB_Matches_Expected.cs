@@ -219,6 +219,15 @@ public class Base_BSNY2012F3FYN_Mat_And_EB_Matches_Expected
             LeftDepth = "",
             RightDepth = "",
             FrontWidth = "",
+
+            // -- "Has X" options
+            HasBack = true,
+            HasTop = true,
+            HasDeck = true,
+            HasLeftEnd = true,
+            HasRightEnd = true,
+            HasToeKickBoard = true
+
         };
 
 }

@@ -182,6 +182,14 @@ public class Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test
             LeftDepth = "",
             RightDepth = "",
             FrontWidth = "",
+
+            // -- "Has X" options
+            HasBack = true,
+            HasTop = true,
+            HasDeck = true,
+            HasLeftEnd = true,
+            HasRightEnd = true,
+            HasToeKickBoard = true
         };
 
 }

@@ -118,5 +118,12 @@ public class UpperCabinetTest
             RightFrontWidth = "",
             LeftDepth = "",
             RightDepth = "",
+
+            // -- "Has X" options
+            HasBack = true,
+            HasTop = true,
+            HasDeck = true,
+            HasLeftEnd = true,
+            HasRightEnd = true,
         };
 }

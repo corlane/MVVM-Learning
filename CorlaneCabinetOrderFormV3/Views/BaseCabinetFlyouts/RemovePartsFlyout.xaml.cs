@@ -1,4 +1,6 @@
-﻿namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts;
+﻿using System.Runtime.Serialization.DataContracts;
+
+namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts;
 
 public partial class RemovePartsFlyout
 {

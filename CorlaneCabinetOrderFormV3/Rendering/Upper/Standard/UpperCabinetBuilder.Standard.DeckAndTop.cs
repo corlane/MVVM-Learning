@@ -9,10 +9,11 @@ internal static partial class UpperCabinetBuilder
     private static void BuildDeckAndTop(UpperCabinetModel upperCab, double MaterialThickness34, double depth, double backThickness, double interiorWidth, double backInsetForDeckAndTop, out Model3DGroup deck, out List<Point3D> deckPoints, out Model3DGroup top, out List<Point3D> topPoints, double height)
     {
         // Deck
-        if (backThickness == MaterialThickness34)
+        if (backThickness == MaterialThickness34 && upperCab.HasBack)
         {
             backInsetForDeckAndTop = MaterialThickness34;
         }
+        else { backInsetForDeckAndTop = 0; }
 
         deckPoints =
         [
@@ -23,11 +24,19 @@ internal static partial class UpperCabinetBuilder
         ];
 
         topPoints = deckPoints;
+        
+        if (upperCab.HasDeck)
+        {
+            deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Deck);
+            ModelTransforms.ApplyTransform(deck, -(interiorWidth / 2), -depth, 0, 270, 0, 0);
+        }
+        else { deck = null; }
 
-        deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Deck);
-        ModelTransforms.ApplyTransform(deck, -(interiorWidth / 2), -depth, 0, 270, 0, 0);
-
-        top = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Top);
-        ModelTransforms.ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
+        if (upperCab.HasTop)
+        {
+            top = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Top);
+            ModelTransforms.ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
+        }
+        else { top = null; }
     }
 }

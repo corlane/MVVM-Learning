@@ -9,44 +9,52 @@ internal static partial class BaseCabinetBuilder
     {
         Model3DGroup back;
         // Back
-        if (backThickness == 0.75)
+        if (baseCab.HasBack)
         {
-            List<Point3D> backPoints =
-            [
-                new (0,-MaterialThickness34,0),
+            if (backThickness == 0.75)
+            {
+                List<Point3D> backPoints =
+                [
+                    new (0,-MaterialThickness34,0),
                 new (interiorWidth,-MaterialThickness34,0),
                 new (interiorWidth,interiorHeight,0),
                 new (0,interiorHeight,0)
-            ];
-            if (width <= 47.75 + (2 * MaterialThickness34))
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.BackBase34);
+                ];
+                if (width <= 47.75 + (2 * MaterialThickness34))
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.BackBase34);
+                }
+                else
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.BackBase34);
+                }
+                ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34 + tk_Height, 0, 0, 0, 0);
             }
             else
             {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.BackBase34);
-            }
-            ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34 + tk_Height, 0, 0, 0, 0);
-        }
-        else
-        {
-            List<Point3D> backPoints =
-            [
-                new (0,0,0),
+                List<Point3D> backPoints =
+                [
+                    new (0,0,0),
                 new (width,0,0),
                 new (width,height-tk_Height,0),
                 new (0,height-tk_Height,0)
-            ];
-            if (width <= 47.75)
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.BackBase14);
-            }
-            else
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.BackBase14);
-            }
-            ModelTransforms.ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
+                ];
+                if (width <= 47.75)
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.BackBase14);
+                }
+                else
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.BackBase14);
+                }
+                ModelTransforms.ApplyTransform(back, -(width / 2), tk_Height, -MaterialThickness14, 0, 0, 0);
 
+            }
+        }
+        else { back = null; }
+
+        if (backThickness != 0.75)
+        {
             List<Point3D> nailerPoints =
             [
                 new (0,0,0),
@@ -59,7 +67,6 @@ internal static partial class BaseCabinetBuilder
             ModelTransforms.ApplyTransform(nailer, -(interiorWidth / 2), height - StretcherWidth - MaterialThickness34, 0, 0, 0, 0);
             cabinet.Children.Add(nailer);
         }
-
         return back;
     }
 

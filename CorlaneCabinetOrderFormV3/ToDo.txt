@@ -24,8 +24,6 @@ Corlane side:
 
 Add "Select All" for all "Done" buttons on PO tabs.
 
-Working on "Remove Parts" feature. Added a null-check to ApplyTransform call, that may have messed up the pricing. Not sure...check moar.
-
 
 
 

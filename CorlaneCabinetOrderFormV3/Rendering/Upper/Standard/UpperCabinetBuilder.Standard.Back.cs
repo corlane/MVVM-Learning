@@ -10,45 +10,53 @@ internal static partial class UpperCabinetBuilder
         nailer = null;
         nailerPoints = null;
 
-        // Back
-        if (backThickness == 0.75)
+        if (upperCab.HasBack)
         {
-            backPoints =
-            [
-                new (0,-MaterialThickness34,0),
+            // Back
+            if (backThickness == 0.75)
+            {
+                backPoints =
+                [
+                    new (0,-MaterialThickness34,0),
                 new (interiorWidth,-MaterialThickness34,0),
                 new (interiorWidth,interiorHeight + (MaterialThickness34),0),
                 new (0,interiorHeight + (MaterialThickness34),0)
-            ];
-            if (width <= 47.75 + (2 * MaterialThickness34))
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Vertical", upperCab, isFaceUp: false, CabinetPartKind.BackUpper34);
+                ];
+                if (width <= 47.75 + (2 * MaterialThickness34))
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Vertical", upperCab, isFaceUp: false, CabinetPartKind.BackUpper34);
+                }
+                else
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.BackUpper34);
+                }
+                ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34, 0, 0, 0, 0);
             }
             else
             {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness34, upperCab.Species, "PVC Hardrock Maple", "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.BackUpper34);
-            }
-            ModelTransforms.ApplyTransform(back, -(interiorWidth / 2), MaterialThickness34, 0, 0, 0, 0);
-        }
-        else
-        {
-            backPoints =
-            [
-                new (0,0,0),
+                backPoints =
+                [
+                    new (0,0,0),
                 new (width,0,0),
                 new (width,height,0),
                 new (0,height,0)
-            ];
-            if (width <= 47.75)
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, isFaceUp: false, CabinetPartKind.BackUpper14);
-            }
-            else
-            {
-                back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.BackUpper14);
-            }
-            ModelTransforms.ApplyTransform(back, -(width / 2), 0, -MaterialThickness14, 0, 0, 0);
+                ];
+                if (width <= 47.75)
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Vertical", upperCab, isFaceUp: false, CabinetPartKind.BackUpper14);
+                }
+                else
+                {
+                    back = CabinetPartFactory.CreatePanel(backPoints, MaterialThickness14, "PFP 1/4", "None", "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.BackUpper14);
+                }
+                ModelTransforms.ApplyTransform(back, -(width / 2), 0, -MaterialThickness14, 0, 0, 0);
 
+            }
+        }
+        else { back = null; backPoints = null; }
+
+        if (backThickness != 0.75)
+        {
             nailerPoints =
             [
                 new (0,0,0),

@@ -39,6 +39,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnRemoveParts" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Cabinet Style" FontSize="14"/>
@@ -53,6 +54,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnRemoveParts" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Dimensions" FontSize="14"/>
@@ -67,6 +69,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnRemoveParts" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Species" FontSize="14"/>
@@ -82,6 +85,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnRemoveParts" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Back Thickness" FontSize="14"/>
@@ -96,6 +100,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnRemoveParts" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Doors" FontSize="14"/>
@@ -110,6 +115,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnReveals" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnRemoveParts" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Shelves" FontSize="14"/>
@@ -124,6 +130,7 @@
                         <behaviors:ChangePropertyAction TargetName="btnBackThickness" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnDoors" PropertyName="IsChecked" Value="False"/>
                         <behaviors:ChangePropertyAction TargetName="btnShelves" PropertyName="IsChecked" Value="False"/>
+                        <behaviors:ChangePropertyAction TargetName="btnRemoveParts" PropertyName="IsChecked" Value="False"/>
                     </behaviors:EventTrigger>
                 </behaviors:Interaction.Triggers>
                 <TextBlock Text="Reveals" FontSize="14"/>
