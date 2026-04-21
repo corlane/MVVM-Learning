@@ -472,3 +472,4 @@
 	Adusted tests to account for new Model properties (HasDeck, HasLeftEnd, etc.). commit
 	Adjusted Base cabinet deck to account for HasBack = false. commit
 	FINALLY fixed Upper Cabinet end panel bottom edgebanding to run through the proper CreatePanel() method rather than arbitrarily adding it during material and price accumulation. commit
+	Fixed discrepancies causing tests to fail after the above change. commit

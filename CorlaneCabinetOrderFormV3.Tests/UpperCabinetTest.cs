@@ -58,7 +58,7 @@ public class UpperCabinetTest
 
             // EB edge 0 lengths: LeftEnd 12 + RightEnd 12 + Deck 10.5 + Top 10.5 + Back¾ 10.5
             // = 55.5 in → 4.625 ft
-            double expectedFt = 55.5 / 12.0;
+            double expectedFt = 79.5 / 12.0;
             Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 0);
         });
     }

@@ -321,6 +321,7 @@ internal static class CabinetPartFactory
                 // Standard structural part: front edge (sideIndex 0) gets cabinet EB species.
                 // Upper end panels also get PVC Hardrock Maple on the bottom edge (sideIndex 3).
                 bool isEndPanelBottomEdge = sideIndex == 3
+                    && cab is UpperCabinetModel
                     && partKind is CabinetPartKind.LeftEnd or CabinetPartKind.RightEnd;
 
                 if (sideIndex == 0 || isEndPanelBottomEdge)
@@ -504,7 +505,7 @@ internal static class CabinetPartFactory
             });
         }
 
-        //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and {edgeBandLengthInches:F1} inches {edgebandingSpecies} edge banding");
+        //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and {edgeBandLengthInches:F1} inches {edgebandingSpecies} edge banding, and {endPanelBottomEBInches:F1} inches PVC Hardrock Maple edge banding on bottom end panel.");
 
         return partModel;
     }
