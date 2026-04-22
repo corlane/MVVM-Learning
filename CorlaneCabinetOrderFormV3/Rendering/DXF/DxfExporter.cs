@@ -1,0 +1,247 @@
+using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Services;
+using netDxf;
+using netDxf.Entities;
+using netDxf.Tables;
+using System.IO;
+
+namespace CorlaneCabinetOrderFormV3.Rendering;
+
+/// <summary>
+/// Exports one DXF file per cabinet part, with separate CNC layers for:
+///   PART_OUTLINE           — closed cut boundary
+///   MACHINING_TENON_POCKET — thinning pocket on tenon-bearing panels
+///   MACHINING_MORTISE      — discrete mortise pockets on end panels
+///   MACHINING_SCREW_HOLES  — CNC pilot holes on end panels
+///   GRAIN_DIRECTION        — dashed centerline arrow
+///   LABELS                 — part name, species, thickness, EB info
+/// </summary>
+internal static class DxfExporter
+{
+    // ── Layer name constants ──────────────────────────────────────────────────
+
+    private const string LayerOutline = "PART_OUTLINE";
+    private const string LayerTenonPocket = "MACHINING_TENON_POCKET";
+    private const string LayerMortise = "MACHINING_MORTISE";
+    private const string LayerScrewHoles = "MACHINING_SCREW_HOLES";
+    private const string LayerGrain = "GRAIN_DIRECTION";
+    private const string LayerLabels = "LABELS";
+
+    // ── Public entry points ───────────────────────────────────────────────────
+
+    /// <summary>
+    /// Exports all parts to individual DXF files in <paramref name="outputFolder"/>.
+    /// End panels require the overload that accepts MortiseSpec — this path
+    /// exports them as plain rectangles; use ExportEndPanel() for full mortise data.
+    /// </summary>
+    internal static void ExportAll(
+        string outputFolder,
+        IEnumerable<PartListEntry> parts,
+        LockDadoSettings? joinery = null)
+    {
+        var s = joinery ?? LockDadoSettings.Default;
+        Directory.CreateDirectory(outputFolder);
+
+        foreach (var part in parts)
+        {
+            string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
+            string path = Path.Combine(outputFolder, safeName + ".dxf");
+            ExportPart(path, part, s);
+        }
+    }
+
+    /// <summary>Exports a single part to a DXF file.</summary>
+    internal static void ExportPart(
+        string filePath,
+        PartListEntry part,
+        LockDadoSettings? joinery = null)
+    {
+        var s = joinery ?? LockDadoSettings.Default;
+        var doc = CreateDocument();
+        double length = part.LengthIn;
+        double depth = part.WidthIn;
+        double thk = part.ThicknessIn;
+        var kind = ResolvePartKind(part.PartName);
+
+        // ── Outline ───────────────────────────────────────────────────────────
+        var outline = kind == DxfPartKind.TenonPanel
+            ? PartOutlineBuilder.TenonBothEnds(length, depth, s)
+            : PartOutlineBuilder.Rectangle(length, depth);
+        AddClosedPolyline(doc, LayerOutline, outline);
+
+        // ── Tenon thinning pockets ────────────────────────────────────────────
+        if (kind == DxfPartKind.TenonPanel)
+        {
+            foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, s))
+                AddRectangle(doc, LayerTenonPocket, x1, x2, y1, y2);
+        }
+
+        AddGrainArrow(doc, part.Notes, length, depth);
+        AddLabels(doc, part);
+
+        doc.Save(filePath);
+    }
+
+    /// <summary>
+    /// Exports an end panel with full mortise pocket and pilot hole geometry.
+    /// Call this instead of ExportPart() for Left End / Right End parts,
+    /// passing the MortiseSpec list from MortiseSpecBuilder.BuildForBaseStandard().
+    /// </summary>
+    internal static void ExportEndPanel(
+        string filePath,
+        PartListEntry part,
+        IEnumerable<MortiseSpec> mortiseSpecs,
+        LockDadoSettings? joinery = null)
+    {
+        var s = joinery ?? LockDadoSettings.Default;
+        var doc = CreateDocument();
+
+        // Outline — plain rectangle (length = cabinet height, depth = cabinet depth)
+        AddClosedPolyline(doc, LayerOutline, PartOutlineBuilder.Rectangle(part.LengthIn, part.WidthIn));
+
+        // Mortise pockets and pilot holes
+        foreach (var spec in mortiseSpecs)
+        {
+            foreach (var (x1, x2, y1, y2) in spec.Pockets)
+                AddRectangle(doc, LayerMortise, x1, x2, y1, y2);
+
+            foreach (var (cx, cy, dia) in spec.ScrewHoles)
+                AddCircle(doc, LayerScrewHoles, cx, cy, dia / 2.0);
+        }
+
+        AddGrainArrow(doc, part.Notes, part.LengthIn, part.WidthIn);
+        AddLabels(doc, part);
+
+        doc.Save(filePath);
+    }
+
+    // ── DXF helpers ───────────────────────────────────────────────────────────
+
+    private static DxfDocument CreateDocument()
+    {
+        var doc = new DxfDocument();
+        AddLayer(doc, LayerOutline, new AciColor(7));   // white
+        AddLayer(doc, LayerTenonPocket, new AciColor(1));   // red
+        AddLayer(doc, LayerMortise, new AciColor(1));   // red
+        AddLayer(doc, LayerScrewHoles, new AciColor(4));   // cyan
+        AddLayer(doc, LayerGrain, new AciColor(3));   // green
+        AddLayer(doc, LayerLabels, new AciColor(2));   // yellow
+        return doc;
+    }
+
+    private static void AddLayer(DxfDocument doc, string name, AciColor color)
+        => doc.Layers.Add(new Layer(name) { Color = color });
+
+    private static void AddClosedPolyline(DxfDocument doc, string layerName, List<Vector2> verts)
+    {
+        var poly = new Polyline2D(verts) { IsClosed = true, Layer = doc.Layers[layerName] };
+        doc.Entities.Add(poly);
+    }
+
+    private static void AddRectangle(
+        DxfDocument doc, string layerName,
+        double x1, double x2, double y1, double y2)
+    {
+        var verts = new List<Vector2>
+        {
+            new((float)x1, (float)y1),
+            new((float)x2, (float)y1),
+            new((float)x2, (float)y2),
+            new((float)x1, (float)y2),
+        };
+        var poly = new Polyline2D(verts) { IsClosed = true, Layer = doc.Layers[layerName] };
+        doc.Entities.Add(poly);
+    }
+
+    private static void AddCircle(
+        DxfDocument doc, string layerName,
+        double centerX, double centerY, double radius)
+    {
+        doc.Entities.Add(new Circle(new Vector3((float)centerX, (float)centerY, 0), radius)
+        {
+            Layer = doc.Layers[layerName],
+        });
+    }
+
+    private static void AddGrainArrow(
+        DxfDocument doc, string notes, double length, double depth)
+    {
+        bool vertical = notes.Contains("Vertical", StringComparison.OrdinalIgnoreCase);
+
+        Vector3 start, end;
+        if (vertical)
+        {
+            start = new((float)(length / 2.0), (float)(depth * 0.1), 0);
+            end = new((float)(length / 2.0), (float)(depth * 0.9), 0);
+        }
+        else
+        {
+            start = new((float)(length * 0.1), (float)(depth / 2.0), 0);
+            end = new((float)(length * 0.9), (float)(depth / 2.0), 0);
+        }
+
+        doc.Entities.Add(new Line(start, end)
+        {
+            Layer = doc.Layers[LayerGrain],
+            Linetype = Linetype.Dashed,
+        });
+    }
+
+    private static void AddLabels(DxfDocument doc, PartListEntry part)
+    {
+        var layer = doc.Layers[LayerLabels];
+        double y = -1.2;
+
+        AddText(doc, layer, $"{part.PartName}  ×{part.Qty}", 0, y, 0.5);
+        AddText(doc, layer, $"{part.Length}\" × {part.Width}\" × {part.Thickness}\"", 0, y - 0.9, 0.4);
+        AddText(doc, layer, $"Material: {part.Species}", 0, y - 1.7, 0.35);
+
+        if (!string.IsNullOrWhiteSpace(part.EdgeBandSpecies))
+            AddText(doc, layer, $"EB: {part.EdgeBandSpecies}  {part.EdgeBandLength}\"", 0, y - 2.4, 0.35);
+
+        if (!string.IsNullOrWhiteSpace(part.Notes))
+            AddText(doc, layer, $"Notes: {part.Notes}", 0, y - 3.1, 0.3);
+    }
+
+    private static void AddText(
+        DxfDocument doc, Layer layer,
+        string text, double x, double y, double height)
+    {
+        doc.Entities.Add(new Text(text, new Vector3((float)x, (float)y, 0), height)
+        {
+            Layer = layer,
+        });
+    }
+
+    // ── Part classification ───────────────────────────────────────────────────
+
+    private static DxfPartKind ResolvePartKind(string partName)
+    {
+        if (partName is "Left End" or "Right End")
+            return DxfPartKind.MortisePanel;
+
+        if (partName is "Deck"
+                     or "Top"
+                     or "Top Stretcher (Front)"
+                     or "Nailer"
+                     or "Toekick"
+                     or "Toekick (Left)"
+                     or "Toekick (Right)"
+                     or "Sink Stretcher"
+            || partName.StartsWith("Drawer Stretcher", StringComparison.OrdinalIgnoreCase))
+            return DxfPartKind.TenonPanel;
+
+        return DxfPartKind.Plain;
+    }
+
+    private enum DxfPartKind { Plain, TenonPanel, MortisePanel }
+
+    // ── Filename helper ───────────────────────────────────────────────────────
+
+    private static string SanitizeFileName(string name)
+    {
+        foreach (char c in Path.GetInvalidFileNameChars())
+            name = name.Replace(c, '_');
+        return name;
+    }
+}

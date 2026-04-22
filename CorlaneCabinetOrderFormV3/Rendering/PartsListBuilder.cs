@@ -90,6 +90,9 @@ internal static class PartsListBuilder
             Notes = notes,
             EdgeBandSpecies = string.Equals(ebSpecies, "None", StringComparison.OrdinalIgnoreCase) ? "" : ebSpecies,
             EdgeBandLength = FmtEB(ebLengthIn, ebSpecies),
+            LengthIn = lengthIn,
+            WidthIn = widthIn,
+            ThicknessIn = thicknessIn,
         });
     }
 

@@ -13,4 +13,10 @@ public sealed class PartListEntry
     public string Notes { get; init; } = "";
     public string EdgeBandSpecies { get; init; } = "";
     public string EdgeBandLength { get; init; } = "";
+
+
+    /// <summary>Raw numeric values for DXF export and other numeric consumers.</summary>
+    public double LengthIn { get; init; }
+    public double WidthIn { get; init; }
+    public double ThicknessIn { get; init; }
 }
