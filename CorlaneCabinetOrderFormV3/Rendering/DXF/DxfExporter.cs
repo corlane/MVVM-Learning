@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using netDxf;
 using netDxf.Entities;
@@ -51,10 +51,11 @@ internal static class DxfExporter
 
             // Build mortise specs once per cabinet (only applicable to base standard)
             List<MortiseSpec>? mortiseSpecs = null;
+            BaseCabinetDimensions dim = default;
             if (cab is BaseCabinetModel baseCab &&
                 string.Equals(baseCab.Style, "Standard", StringComparison.OrdinalIgnoreCase))
             {
-                var dim = BaseCabinetDimensions.From(baseCab);
+                dim = BaseCabinetDimensions.From(baseCab);
                 mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(dim, s);
             }
 
@@ -66,7 +67,9 @@ internal static class DxfExporter
                 var kind = ResolvePartKind(part.PartName);
 
                 if (kind == DxfPartKind.MortisePanel && mortiseSpecs is not null)
-                    ExportEndPanel(path, part, mortiseSpecs, s);
+                    ExportEndPanel(path, part, mortiseSpecs, s,
+                        tkHeight: dim.TKHeight,
+                        tkDepth: dim.TKDepth);
                 else
                     ExportPart(path, part, s);
             }
@@ -134,13 +137,18 @@ internal static class DxfExporter
         string filePath,
         PartListEntry part,
         IEnumerable<MortiseSpec> mortiseSpecs,
-        LockDadoSettings? joinery = null)
+        LockDadoSettings? joinery = null,
+        double tkHeight = 0,
+        double tkDepth = 0)
     {
         var s = joinery ?? LockDadoSettings.Default;
         var doc = CreateDocument();
 
-        // Outline — plain rectangle (length = cabinet height, depth = cabinet depth)
-        AddClosedPolyline(doc, LayerOutline, PartOutlineBuilder.Rectangle(part.LengthIn, part.WidthIn));
+        // Outline — notched if toekick present, otherwise plain rectangle
+        var outline = tkHeight > 0
+            ? PartOutlineBuilder.EndPanelWithToeKick(part.WidthIn, part.LengthIn, tkHeight, tkDepth)
+            : PartOutlineBuilder.Rectangle(part.LengthIn, part.WidthIn);
+        AddClosedPolyline(doc, LayerOutline, outline);
 
         // Mortise pockets and pilot holes
         foreach (var spec in mortiseSpecs)

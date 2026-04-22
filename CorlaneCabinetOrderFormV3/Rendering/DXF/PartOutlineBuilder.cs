@@ -239,4 +239,24 @@ internal static class PartOutlineBuilder
 
         return ranges;
     }
+
+    internal static List<Vector2> EndPanelWithToeKick(
+    double depth, double height, double tkHeight, double tkDepth)
+    {
+        // Matches BaseCabinetBuilder.Standard.EndPanels.cs BuildEndPanels(HasTK=true)
+        // X = depth direction (front=0 → back=depth), Y = height direction
+        return
+        [
+            V(depth,               tkHeight),
+            V(depth,               height),
+            V(0,                   height),
+            V(0,                   0),
+            V(3,                   0),
+            V(3,                   0.5),
+            V(depth - tkDepth - 3, 0.5),
+            V(depth - tkDepth - 3, 0),
+            V(depth - tkDepth,     0),
+            V(depth - tkDepth,     tkHeight),
+        ];
+    }
 }
