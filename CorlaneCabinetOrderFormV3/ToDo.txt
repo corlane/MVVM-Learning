@@ -22,9 +22,9 @@ Finish angle corner cabinet models -- DONE except angle front base toekick board
 
 Corlane side:
 
-Add "Select All" for all "Done" buttons on PO tabs.
+Split Toekick tab into 2 tabs: One for TK Height, one for TK Depth.
 
-
+Add a new tab for Door Species, and remove the Species check from the Include Doors tab.
 
 
 
