@@ -122,8 +122,7 @@ internal static class DxfExporter
                 AddRectangle(doc, LayerTenonPocket, x1, x2, y1, y2);
         }
 
-        AddGrainArrow(doc, part.Notes, length, depth);
-        AddLabels(doc, part);
+        AddGrainArrow(doc, length, depth); AddLabels(doc, part);
 
         doc.Save(filePath);
     }
@@ -144,23 +143,43 @@ internal static class DxfExporter
         var s = joinery ?? LockDadoSettings.Default;
         var doc = CreateDocument();
 
-        // Outline — notched if toekick present, otherwise plain rectangle
-        var outline = tkHeight > 0
-            ? PartOutlineBuilder.EndPanelWithToeKick(part.WidthIn, part.LengthIn, tkHeight, tkDepth)
-            : PartOutlineBuilder.Rectangle(part.LengthIn, part.WidthIn);
-        AddClosedPolyline(doc, LayerOutline, outline);
+        // End panel original coords: X = cabinet depth, Y = cabinet height.
+        // Rotate 90° CW so height (grain) runs along X axis.
+        double oldWidth = part.WidthIn;   // original X-extent = cabinet depth
 
-        // Mortise pockets and pilot holes
+        // After CW90: new X-extent = part.LengthIn (height), new Y-extent = part.WidthIn (depth)
+        double newLength = part.LengthIn;
+        double newDepth = part.WidthIn;
+
+        bool isLeft = part.PartName == "Left End";
+
+        // Outline — notched if toekick present, otherwise plain rectangle
+        var rawOutline = tkHeight > 0
+            ? PartOutlineBuilder.EndPanelWithToeKick(part.WidthIn, part.LengthIn, tkHeight, tkDepth)
+            : PartOutlineBuilder.Rectangle(part.WidthIn, part.LengthIn);
+        var rotatedOutline = RotateCW90(rawOutline, oldWidth);
+        if (isLeft) rotatedOutline = MirrorX(rotatedOutline, newLength);
+        AddClosedPolyline(doc, LayerOutline, rotatedOutline);
+
+        // Mortise pockets and pilot holes — rotate (and mirror for Left End) to match
         foreach (var spec in mortiseSpecs)
         {
             foreach (var (x1, x2, y1, y2) in spec.Pockets)
-                AddRectangle(doc, LayerMortise, x1, x2, y1, y2);
+            {
+                var (rx1, rx2, ry1, ry2) = RotatePocketCW90(x1, x2, y1, y2, oldWidth);
+                if (isLeft) (rx1, rx2) = (newLength - rx2, newLength - rx1);
+                AddRectangle(doc, LayerMortise, rx1, rx2, ry1, ry2);
+            }
 
             foreach (var (cx, cy, dia) in spec.ScrewHoles)
-                AddCircle(doc, LayerScrewHoles, cx, cy, dia / 2.0);
+            {
+                var (rcx, rcy, _) = RotateHoleCW90(cx, cy, dia, oldWidth);
+                if (isLeft) rcx = newLength - rcx;
+                AddCircle(doc, LayerScrewHoles, rcx, rcy, dia / 2.0);
+            }
         }
 
-        AddGrainArrow(doc, part.Notes, part.LengthIn, part.WidthIn);
+        AddGrainArrow(doc, newLength, newDepth);
         AddLabels(doc, part);
 
         doc.Save(filePath);
@@ -214,22 +233,11 @@ internal static class DxfExporter
         });
     }
 
-    private static void AddGrainArrow(
-        DxfDocument doc, string notes, double length, double depth)
+    private static void AddGrainArrow(DxfDocument doc, double length, double depth)
     {
-        bool vertical = notes.Contains("Vertical", StringComparison.OrdinalIgnoreCase);
-
-        Vector3 start, end;
-        if (vertical)
-        {
-            start = new((float)(length / 2.0), (float)(depth * 0.1), 0);
-            end = new((float)(length / 2.0), (float)(depth * 0.9), 0);
-        }
-        else
-        {
-            start = new((float)(length * 0.1), (float)(depth / 2.0), 0);
-            end = new((float)(length * 0.9), (float)(depth / 2.0), 0);
-        }
+        // Grain ALWAYS runs along X axis (left-to-right).
+        var start = new Vector3((float)(length * 0.1), (float)(depth / 2.0), 0);
+        var end = new Vector3((float)(length * 0.9), (float)(depth / 2.0), 0);
 
         doc.Entities.Add(new Line(start, end)
         {
@@ -237,6 +245,20 @@ internal static class DxfExporter
             Linetype = Linetype.Dashed,
         });
     }
+
+    // ── CW 90° rotation helpers (keeps geometry in positive quadrant) ──────────
+    // Transform: (x, y) → (y, oldWidth - x), where oldWidth = original X-extent.
+
+    private static List<Vector2> RotateCW90(List<Vector2> pts, double oldWidth)
+        => pts.Select(p => new Vector2(p.Y, (float)oldWidth - p.X)).ToList();
+
+    private static (double X1, double X2, double Y1, double Y2) RotatePocketCW90(
+        double x1, double x2, double y1, double y2, double oldWidth)
+        => (y1, y2, oldWidth - x2, oldWidth - x1);
+
+    private static (double CX, double CY, double Dia) RotateHoleCW90(
+        double cx, double cy, double dia, double oldWidth)
+        => (cy, oldWidth - cx, dia);
 
     private static void AddLabels(DxfDocument doc, PartListEntry part)
     {
@@ -253,6 +275,9 @@ internal static class DxfExporter
         if (!string.IsNullOrWhiteSpace(part.Notes))
             AddText(doc, layer, $"Notes: {part.Notes}", 0, y - 3.1, 0.3);
     }
+
+    private static List<Vector2> MirrorX(List<Vector2> pts, double panelLength)
+    => pts.Select(p => new Vector2((float)(panelLength - p.X), p.Y)).ToList();
 
     private static void AddText(
         DxfDocument doc, Layer layer,
