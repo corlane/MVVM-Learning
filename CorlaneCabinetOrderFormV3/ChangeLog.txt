@@ -488,3 +488,4 @@
 	Bug fixed, seems to work now. commit
 	"Golden commmit" before branching to work on joinery and DXF export features. commit
 	Commiting initial implementation of joinery and DXF export features. commit
+	Wired into the UI. Button saves a bunch of DXF files. Need to check them in CAD to make sure they look right. commit

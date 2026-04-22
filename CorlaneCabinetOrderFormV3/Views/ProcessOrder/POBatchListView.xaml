@@ -40,6 +40,11 @@
                     Command="{Binding SaveCsvCommand}"
                     MinWidth="180"/>
 
+            <Button Content="Export DXF Files"
+                    Command="{Binding ExportDxfCommand}"
+                    MinWidth="160"
+                    Margin="8,0,0,0"/>
+
             <TextBlock Margin="16,0,0,0"
                        VerticalAlignment="Center"
                        Text="{Binding TotalCabinetEntries, StringFormat=Total Qty: {0}}"/>

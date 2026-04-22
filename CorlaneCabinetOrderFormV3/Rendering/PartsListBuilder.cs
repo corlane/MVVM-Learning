@@ -29,11 +29,32 @@ internal static class PartsListBuilder
         return entries;
     }
 
+    /// <summary>
+    /// Builds parts for a single cabinet using the provided pre-formatted label.
+    /// Used by DxfExporter so label numbering stays consistent with the full list.
+    /// </summary>
+    internal static List<PartListEntry> BuildForCabinet(CabinetModel cab, string label)
+    {
+        var entries = new List<PartListEntry>();
+        string species = ResolveSpecies(cab.Species, cab.CustomSpecies);
+
+        switch (cab)
+        {
+            case BaseCabinetModel b: AddBaseParts(b, label, species, entries); break;
+            case UpperCabinetModel u: AddUpperParts(u, label, species, entries); break;
+            case FillerModel f: AddFillerParts(f, label, species, entries); break;
+            case PanelModel p: AddPanelParts(p, label, species, entries); break;
+        }
+
+        return entries;
+    }
+
     // ── Formatting helpers ─────────────────────────────────────────────
 
     private static string Fmt(double inches) => ConvertDimension.DoubleToFraction(inches);
 
-    private static string FormatLabel(CabinetModel cab, int index)
+    /// <summary>Formats a cabinet label for use in DXF filenames and part lists.</summary>
+    internal static string FormatLabel(CabinetModel cab, int index)
     {
         string name = !string.IsNullOrWhiteSpace(cab.Name) ? cab.Name : cab.CabinetType;
         string style = !string.IsNullOrWhiteSpace(cab.Style) ? $" ({cab.Style})" : "";

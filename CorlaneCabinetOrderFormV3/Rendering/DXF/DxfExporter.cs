@@ -30,9 +30,53 @@ internal static class DxfExporter
     // ── Public entry points ───────────────────────────────────────────────────
 
     /// <summary>
-    /// Exports all parts to individual DXF files in <paramref name="outputFolder"/>.
-    /// End panels require the overload that accepts MortiseSpec — this path
-    /// exports them as plain rectangles; use ExportEndPanel() for full mortise data.
+    /// Exports all parts for every cabinet in the job to individual DXF files
+    /// in <paramref name="outputFolder"/>. End panels on base standard cabinets
+    /// get full mortise and pilot-hole geometry; all other parts get tenon
+    /// outlines or plain rectangles as appropriate.
+    /// </summary>
+    internal static void ExportAll(
+        string outputFolder,
+        IEnumerable<CabinetModel> cabinets,
+        LockDadoSettings? joinery = null)
+    {
+        var s = joinery ?? LockDadoSettings.Default;
+        Directory.CreateDirectory(outputFolder);
+
+        int index = 1;
+        foreach (var cab in cabinets)
+        {
+            string label = PartsListBuilder.FormatLabel(cab, index++);
+            var parts = PartsListBuilder.BuildForCabinet(cab, label);
+
+            // Build mortise specs once per cabinet (only applicable to base standard)
+            List<MortiseSpec>? mortiseSpecs = null;
+            if (cab is BaseCabinetModel baseCab &&
+                string.Equals(baseCab.Style, "Standard", StringComparison.OrdinalIgnoreCase))
+            {
+                var dim = BaseCabinetDimensions.From(baseCab);
+                mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(dim, s);
+            }
+
+            foreach (var part in parts)
+            {
+                string safeName = SanitizeFileName($"{label} — {part.PartName}");
+                string path = Path.Combine(outputFolder, safeName + ".dxf");
+
+                var kind = ResolvePartKind(part.PartName);
+
+                if (kind == DxfPartKind.MortisePanel && mortiseSpecs is not null)
+                    ExportEndPanel(path, part, mortiseSpecs, s);
+                else
+                    ExportPart(path, part, s);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Exports all parts (already built) to individual DXF files.
+    /// End panels are exported as plain rectangles — use the CabinetModel
+    /// overload above to get full mortise geometry on end panels.
     /// </summary>
     internal static void ExportAll(
         string outputFolder,
@@ -60,7 +104,6 @@ internal static class DxfExporter
         var doc = CreateDocument();
         double length = part.LengthIn;
         double depth = part.WidthIn;
-        double thk = part.ThicknessIn;
         var kind = ResolvePartKind(part.PartName);
 
         // ── Outline ───────────────────────────────────────────────────────────

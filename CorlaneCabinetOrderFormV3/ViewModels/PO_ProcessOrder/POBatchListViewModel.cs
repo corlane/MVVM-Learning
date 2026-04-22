@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
@@ -548,5 +549,35 @@ public partial class POBatchListViewModel : ObservableObject
         [ObservableProperty] public partial double Width { get; set; }
         [ObservableProperty] public partial double Depth { get; set; }
         [ObservableProperty] public partial string NewName { get; set; } = "";
+    }
+
+
+    [RelayCommand]
+    private void ExportDxf()
+    {
+        if (_cabinetService is null) return;
+
+        var dlg = new Microsoft.Win32.OpenFolderDialog
+        {
+            Title = "Select output folder for DXF files",
+            InitialDirectory = _defaults?.GetFileDialogDirectory()
+                               ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        };
+
+        if (dlg.ShowDialog() != true) return;
+
+        _defaults?.RememberFileDialogDirectory(Path.Combine(dlg.FolderName, "_"));
+
+        try
+        {
+            DxfExporter.ExportAll(dlg.FolderName, _cabinetService.Cabinets);
+            MessageBox.Show($"DXF files exported to:\n{dlg.FolderName}", "Export Complete",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error exporting DXF files: {ex.Message}", "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
