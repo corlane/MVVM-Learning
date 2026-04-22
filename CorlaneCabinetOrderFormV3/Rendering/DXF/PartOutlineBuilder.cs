@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Services;
+﻿using CorlaneCabinetOrderFormV3.Services;
 using netDxf;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
@@ -206,10 +206,10 @@ internal static class PartOutlineBuilder
     {
         double pocketY1 = s.BlindStart - s.TenonPocketOversize;
         double pocketY2 = depth - s.BlindStop + s.TenonPocketOversize;
-        double dd = s.DadoDepth;
+        double dd = s.DadoDepth + 0.03937;
 
-        var leftPocket = (X1: 0.0, X2: dd, Y1: pocketY1, Y2: pocketY2);
-        var rightPocket = (X1: length - dd, X2: length, Y1: pocketY1, Y2: pocketY2);
+        var leftPocket = (X1: -dd, X2: 0.0, Y1: pocketY1, Y2: pocketY2);
+        var rightPocket = (X1: length, X2: length + dd, Y1: pocketY1, Y2: pocketY2);
 
         return [leftPocket, rightPocket];
     }
