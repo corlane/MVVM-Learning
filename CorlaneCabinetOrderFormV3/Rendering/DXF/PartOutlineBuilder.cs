@@ -34,6 +34,28 @@ internal static class PartOutlineBuilder
         ];
     }
 
+    // ── End Panel With Toekick ─────────────────────────────────────────────────────────────
+
+    internal static List<Vector2> EndPanelWithToeKick(double depth, double height, double tkHeight, double tkDepth)
+    {
+        // Matches BaseCabinetBuilder.Standard.EndPanels.cs BuildEndPanels(HasTK=true)
+        // X = depth direction (front=0 → back=depth), Y = height direction
+        return
+        [
+            V(depth,               tkHeight),
+            V(depth,               height),
+            V(0,                   height),
+            V(0,                   0),
+            V(3,                   0),
+            V(3,                   0.5),
+            V(depth - tkDepth - 3, 0.5),
+            V(depth - tkDepth - 3, 0),
+            V(depth - tkDepth,     0),
+            V(depth - tkDepth,     tkHeight),
+        ];
+    }
+
+
     // ── Tenon panel: comb on BOTH short edges ─────────────────────────────────
 
     internal static List<Vector2> TenonBothEnds(
@@ -90,7 +112,8 @@ internal static class PartOutlineBuilder
         double partDepth,
         double mortiseBottomY,
         TenonFlushFace flushFace,
-        LockDadoSettings s)
+        LockDadoSettings s,
+        double xOffset = 0)
     {
         double mt34 = MaterialDefaults.Thickness34;
         double slotHeight = s.MortiseSlotHeight;
@@ -109,13 +132,14 @@ internal static class PartOutlineBuilder
 
         foreach (var (tStart, tEnd) in tenons)
         {
-            double x1 = Math.Max(tStart - s.MortiseOversize, usableStart);
-            double x2 = Math.Min(tEnd + s.MortiseOversize, usableEnd);
+            double x1 = Math.Max(tStart - s.MortiseOversize, usableStart) + xOffset;
+            double x2 = Math.Min(tEnd + s.MortiseOversize, usableEnd) + xOffset;
             pockets.Add((x1, x2, slotBottomY, slotTopY));
         }
 
         return pockets;
     }
+
 
     // ── Mortise pockets: height-direction joint (toekick) ─────────────────────
 
@@ -150,7 +174,8 @@ internal static class PartOutlineBuilder
         double partDepth,
         double mortiseBottomY,
         TenonFlushFace flushFace,
-        LockDadoSettings s)
+        LockDadoSettings s,
+        double xOffset = 0)
     {
         double mt34 = MaterialDefaults.Thickness34;
         double slotBottomY = flushFace switch
@@ -165,12 +190,13 @@ internal static class PartOutlineBuilder
 
         for (int i = 0; i < tenons.Count - 1; i++)
         {
-            double gapCenterX = (tenons[i].EndY + tenons[i + 1].StartY) / 2.0;
+            double gapCenterX = (tenons[i].EndY + tenons[i + 1].StartY) / 2.0 + xOffset;
             holes.Add((gapCenterX, holeCenterY, s.ScrewPilotHoleDiameter));
         }
 
         return holes;
     }
+
 
     // ── Screw pilot holes: height-direction joint (toekick) ───────────────────
 
@@ -240,23 +266,4 @@ internal static class PartOutlineBuilder
         return ranges;
     }
 
-    internal static List<Vector2> EndPanelWithToeKick(
-    double depth, double height, double tkHeight, double tkDepth)
-    {
-        // Matches BaseCabinetBuilder.Standard.EndPanels.cs BuildEndPanels(HasTK=true)
-        // X = depth direction (front=0 → back=depth), Y = height direction
-        return
-        [
-            V(depth,               tkHeight),
-            V(depth,               height),
-            V(0,                   height),
-            V(0,                   0),
-            V(3,                   0),
-            V(3,                   0.5),
-            V(depth - tkDepth - 3, 0.5),
-            V(depth - tkDepth - 3, 0),
-            V(depth - tkDepth,     0),
-            V(depth - tkDepth,     tkHeight),
-        ];
-    }
 }

@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
@@ -11,14 +11,15 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 internal static class MortiseSpecBuilder
 {
     internal static List<MortiseSpec> BuildForBaseStandard(
+        BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,
         LockDadoSettings s)
     {
-        double mt34   = MaterialDefaults.Thickness34;
+        double mt34 = MaterialDefaults.Thickness34;
         double height = dim.Height;
-        double depth  = dim.Depth;
-        double tkH    = dim.TKHeight;
-        double tkD    = dim.TKDepth;
+        double depth = dim.Depth;
+        double tkH = dim.TKHeight;
+        double tkD = dim.TKDepth;
 
         const double stretcherWidth = 6.0;
 
@@ -27,25 +28,42 @@ internal static class MortiseSpecBuilder
         // ── Deck (flush Top face) ────────────────────────────────────────────
         // ApplyTransform Y = tkHeight
         specs.Add(BuildDepthSpec("Deck",
-            partDepth      : depth,
-            mortiseBottomY : tkH,
-            flushFace      : TenonFlushFace.Top,
+            partDepth: depth,
+            mortiseBottomY: tkH,
+            flushFace: TenonFlushFace.Top,
             s));
 
-        // ── Top / Top Stretcher Front (flush Bottom face) ────────────────────
-        // ApplyTransform Y = height - Mt34
-        specs.Add(BuildDepthSpec("Top / Top Stretcher Front",
-            partDepth      : depth,
-            mortiseBottomY : height - mt34,
-            flushFace      : TenonFlushFace.Bottom,
-            s));
+        // ── Top or Top Stretcher Front ───────────────────────────────────────
+        // Full Top: same geometry as Deck but placed at top (flush Top face).
+        // Stretcher Top: tenon is only on the 6" stretcher width, flush Bottom face.
+        bool isFull = string.Equals(baseCab.TopType, CabinetOptions.TopType.Full, StringComparison.OrdinalIgnoreCase);
+        if (isFull)
+        {
+            // Full top — same flush face as Deck (outer/top face is flush)
+            specs.Add(BuildDepthSpec("Top",
+                partDepth: depth,
+                mortiseBottomY: height - mt34,
+                flushFace: TenonFlushFace.Top,
+                s));
+        }
+        else
+        {
+            // Stretcher top — tenon runs along the 6" stretcher width, flush Bottom face
+            specs.Add(BuildDepthSpec("Top Stretcher Front",
+                partDepth: stretcherWidth,
+                mortiseBottomY: height - mt34,
+                flushFace: TenonFlushFace.Bottom,
+                s,
+                xOffset: depth - stretcherWidth));
+        }
+
 
         // ── Nailer (flush InteriorFront face, same offset as Bottom) ─────────
         // ApplyTransform Y = height - stretcherWidth - Mt34
         specs.Add(BuildDepthSpec("Nailer",
-            partDepth      : depth,
-            mortiseBottomY : height - stretcherWidth - mt34,
-            flushFace      : TenonFlushFace.InteriorFront,
+            partDepth: depth,
+            mortiseBottomY: height - stretcherWidth - mt34,
+            flushFace: TenonFlushFace.InteriorFront,
             s));
 
         // ── Drawer Stretchers (flush Bottom face) ────────────────────────────
@@ -57,9 +75,9 @@ internal static class MortiseSpecBuilder
             if (openings[i] <= 0) break;
             runningY -= openings[i] + 2 * mt34;
             specs.Add(BuildDepthSpec($"Drawer Stretcher {i + 1}",
-                partDepth      : depth,
-                mortiseBottomY : runningY,
-                flushFace      : TenonFlushFace.Bottom,
+                partDepth: depth,
+                mortiseBottomY: runningY,
+                flushFace: TenonFlushFace.Bottom,
                 s));
         }
 
@@ -67,9 +85,9 @@ internal static class MortiseSpecBuilder
         if (tkH > 0 && tkD > 0)
         {
             specs.Add(BuildHeightSpec("Toekick",
-                tkHeight       : tkH,
-                tkDepth        : tkD,
-                cabinetDepth   : depth,
+                tkHeight: tkH,
+                tkDepth: tkD,
+                cabinetDepth: depth,
                 s));
         }
 
@@ -80,15 +98,15 @@ internal static class MortiseSpecBuilder
 
     private static MortiseSpec BuildDepthSpec(
         string label, double partDepth, double mortiseBottomY,
-        TenonFlushFace flushFace, LockDadoSettings s)
+        TenonFlushFace flushFace, LockDadoSettings s, double xOffset = 0)
     {
         return new MortiseSpec
         {
-            Label      = label,
-            Pockets    = PartOutlineBuilder.ComputeDepthDirectionMortisePockets(
-                             partDepth, mortiseBottomY, flushFace, s),
+            Label = label,
+            Pockets = PartOutlineBuilder.ComputeDepthDirectionMortisePockets(
+                             partDepth, mortiseBottomY, flushFace, s, xOffset),
             ScrewHoles = PartOutlineBuilder.ComputeDepthDirectionScrewHoles(
-                             partDepth, mortiseBottomY, flushFace, s),
+                             partDepth, mortiseBottomY, flushFace, s, xOffset),
         };
     }
 
@@ -98,8 +116,8 @@ internal static class MortiseSpecBuilder
     {
         return new MortiseSpec
         {
-            Label      = label,
-            Pockets    = PartOutlineBuilder.ComputeHeightDirectionMortisePockets(
+            Label = label,
+            Pockets = PartOutlineBuilder.ComputeHeightDirectionMortisePockets(
                              tkHeight, tkDepth, cabinetDepth, s),
             ScrewHoles = PartOutlineBuilder.ComputeHeightDirectionScrewHoles(
                              tkHeight, tkDepth, cabinetDepth, s),

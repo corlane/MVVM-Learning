@@ -56,7 +56,7 @@ internal static class DxfExporter
                 string.Equals(baseCab.Style, "Standard", StringComparison.OrdinalIgnoreCase))
             {
                 dim = BaseCabinetDimensions.From(baseCab);
-                mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(dim, s);
+                mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(baseCab, dim, s);
             }
 
             foreach (var part in parts)

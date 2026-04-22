@@ -218,16 +218,6 @@ internal static class PartsListBuilder
                 shelfEB, iw);
         }
 
-
-
-
-
-
-
-
-
-
-
         // Shelves — front edge banded (shelf width)
         if (b.ShelfCount > 0 && b.Style != CabinetStyles.Base.Drawer)
             Add(entries, label, "Shelf", b.ShelfCount, species, iw - 0.125, sd, Mt34, "Horizontal",
