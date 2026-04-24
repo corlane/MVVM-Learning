@@ -12,7 +12,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.3";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.4";
 
     private readonly ICabinetService _cabinetService;
     private readonly AutoSaveService _autoSave;
@@ -193,8 +193,6 @@ public partial class MainWindowViewModel : ObservableValidator
         }
     }
 
-    [ObservableProperty] public partial CabinetModel? CurrentPreviewCabinet { get; set; }
-
     [ObservableProperty] public partial CabinetModel? SelectedCabinet { get; set; } partial void OnSelectedCabinetChanged(CabinetModel? value)
     {
         if (value == null)
@@ -221,8 +219,6 @@ public partial class MainWindowViewModel : ObservableValidator
         // Force preview immediately with the selected cabinet's data
         _previewSvc.ForcePreview(value);
     }
-
-    [ObservableProperty] public partial int MainTabControlWidth { get; set; } = 1000; 
 
     // Track whether the in-memory job has unsaved changes
     [ObservableProperty] public partial bool IsModified { get; set; } = false; partial void OnIsModifiedChanged(bool oldValue, bool newValue)

@@ -49,7 +49,6 @@ public partial class MainWindowViewModel
             try
             {
                 _previewSvc.ClearPreview();
-                CurrentPreviewCabinet = null;
             }
             catch (Exception ex)
             {

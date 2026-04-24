@@ -30,4 +30,4 @@
 - For cabinet 3D preview holes (shelf pin, assembly), use flat dark disc overlays via `CabinetPartFactory.CreateHole` rather than attempting CSG boolean subtraction or cylinder geometry behind panel faces. The user confirmed the flat disc approach looks great and no 3D holes are needed.
 - Allow intentional flipping of `rimZ` values to place preview holes on the opposite panel face (e.g., outside cabinet).
 - For base cabinet drawer slide holes, calculate the opening for the first bottom reference as `height - MaterialThickness34 - opening1Height`.
-- For WPF GridSplitter state, persist/restore using RowDefinition.ActualHeight captured on GridSplitter.DragCompleted; restoring just GridLength on a star row can snap back due to layout.
+- Complete the `BuildCabinetWithResult` in `CabinetPreviewBuilder.cs` as a standard testing pattern by: (1) adding a `result` parameter to `UpperCabinetBuilder.BuildUpper` to capture testable intermediate values, (2) adding `UpperCabinetModel`, `FillerModel`, and `PanelModel` branches to `BuildCabinetWithResult`, and (3) removing the "demo" framing from the comment to promote this as the standard testing pattern.
