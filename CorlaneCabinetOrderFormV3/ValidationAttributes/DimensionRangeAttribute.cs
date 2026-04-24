@@ -3,6 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CorlaneCabinetOrderFormV3.ValidationAttributes;
 
+// DimensionRangeAttribute.cs
+// General-purpose DataAnnotations validation attribute for cabinet dimension
+// fields (width, height, depth, etc.) that are entered as fraction or decimal
+// strings (e.g., "18", "18 1/2", "18.5"). Both the minimum and maximum allowed
+// values are supplied at the attribute declaration site in inches. The attribute
+// uses ConvertDimension.FractionToDouble to parse the input, rejects unparseable
+// strings with a format error, and rejects values outside the declared range with
+// a descriptive message that includes the display name and the allowed bounds.
+// Unlike BaseCabinetDepthRangeAttribute, the bounds here are static (no runtime
+// reflection); this attribute is the standard choice for straightforward fixed-
+// range dimension validation across base, upper, and other cabinet view models.
+
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
 public class DimensionRangeAttribute(double minimum, double maximum) : ValidationAttribute
 {

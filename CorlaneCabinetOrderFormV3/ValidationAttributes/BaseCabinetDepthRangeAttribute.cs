@@ -3,6 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CorlaneCabinetOrderFormV3.ValidationAttributes;
 
+// BaseCabinetDepthRangeAttribute.cs
+// Custom DataAnnotations validation attribute for the Depth field on base cabinet
+// view models. Accepts a fraction or decimal dimension string and validates it
+// falls within an allowed range. The maximum is supplied at the attribute
+// declaration site. The minimum is dynamic: if the cabinet has a toe kick (HasTK
+// = true), the minimum is 6.5" plus the toe kick depth (TKDepth); otherwise the
+// minimum is a fixed 4.0". Both HasTK and TKDepth are read from the validated
+// object at runtime via reflection so the attribute remains self-contained.
+// Invalid dimension strings (unparseable by ConvertDimension) are rejected with
+// a format error. Empty/null values are allowed through so [Required] can handle
+// them separately without producing duplicate validation messages.
+
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
 public sealed class BaseCabinetDepthRangeAttribute(double maximum) : ValidationAttribute
 {
