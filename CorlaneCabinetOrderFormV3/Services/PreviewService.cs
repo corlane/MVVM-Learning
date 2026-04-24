@@ -1,9 +1,39 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Models;
 using System;
 using System.Collections.Concurrent;
 
 namespace CorlaneCabinetOrderFormV3.Services;
+
+// PreviewService.cs
+// Concrete implementation of IPreviewService. Coordinates which cabinet model is
+// currently displayed in the shared HelixViewport3D 3D preview panel, arbitrating
+// between multiple input tab ViewModels (Base, Upper, Filler, Panel) that all compete
+// to drive the same preview window.
+//
+// Active-owner token pattern:
+//   Each input tab ViewModel calls SetActiveOwner(this) when its tab gains focus.
+//   RequestPreview calls are only applied to the live preview immediately if the
+//   requesting owner matches the current active owner — preventing a background tab's
+//   UpdatePreview() from overwriting what the user is currently looking at.
+//
+// Per-owner model cache (ConcurrentDictionary):
+//   Every RequestPreview call caches the model for that owner regardless of whether
+//   it is active. When SetActiveOwner is called, the cached model for the newly active
+//   owner is restored instantly — so switching tabs shows the last-built preview for
+//   that tab without requiring a full rebuild.
+//
+// ForcePreview():
+//   Bypasses the active-owner check entirely. Used when the user clicks a cabinet in
+//   the cabinet list to preview it directly, regardless of which input tab is active.
+//   Also updates the active owner's cache to keep per-owner state consistent.
+//
+// Thread safety:
+//   _activeOwner and _current are guarded by a lock (_sync) for all reads/writes.
+//   The per-owner cache uses ConcurrentDictionary since cache writes (RequestPreview)
+//   happen outside the lock to minimize contention. PreviewChanged event and
+//   OnPropertyChanged are raised from within the lock on the calling thread —
+//   callers should ensure they call from the UI thread when binding is involved.
 
 public class PreviewService : ObservableObject, IPreviewService
 {
@@ -42,7 +72,7 @@ public class PreviewService : ObservableObject, IPreviewService
             }
             else
             {
-                // No cached model for this owner � don't forcibly clear the preview.
+                // No cached model for this owner — don't forcibly clear the preview.
                 // Optionally you could clear: CurrentPreviewCabinet = null;
             }
         }
@@ -64,7 +94,7 @@ public class PreviewService : ObservableObject, IPreviewService
             }
             else
             {
-                // Not active � cached above so it will be applied when the owner becomes active.
+                // Not active — cached above so it will be applied when the owner becomes active.
             }
         }
     }
@@ -89,7 +119,7 @@ public class PreviewService : ObservableObject, IPreviewService
         {
             CurrentPreviewCabinet = null;
 
-            // Optionally clear cache for active owner only, or all owners � keep cache as-is by default.
+            // Optionally clear cache for active owner only, or all owners — keep cache as-is by default.
             if (_activeOwner != null)
             {
                 _cache[_activeOwner] = null;

@@ -2,6 +2,20 @@
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
+// PriceBreakdownService.cs
+// Concrete implementation of IPriceBreakdownService responsible for calculating
+// the full material cost breakdown for a cabinet order. Given two dictionaries —
+// one mapping species names to total square footage of sheet goods used, and one
+// mapping species names to total linear feet of edgebanding used — it looks up
+// current prices via IMaterialPricesService to produce a PriceBreakdownResult
+// containing per-line MaterialTotal entries and a rounded grand total.
+//
+// Sheet quantities are rounded up to whole sheets (ceiling), and CNC cutting
+// charges are billed based on the total billable sheet area (sheets × sheet size)
+// rather than net square footage, using a baseline of the default 48×96 sheet
+// area defined in MaterialDefaults. Edgebanding is billed per linear foot.
+// Species values of null, empty, or "None" are treated as free (price = $0).
+
 public sealed class PriceBreakdownService : IPriceBreakdownService
 {
     private const double BaselineCncSheetAreaSqFt = MaterialDefaults.DefaultSheetAreaSqFt;

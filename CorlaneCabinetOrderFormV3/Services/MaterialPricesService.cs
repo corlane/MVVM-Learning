@@ -3,6 +3,34 @@ using System.Text.Json;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
+// MaterialPricesService.cs
+// Concrete implementation of IMaterialPricesService. Fetches and caches the current
+// material and edge banding price data from the Corlane API server for use in job
+// quoting and price breakdown calculations.
+//
+// All cached data starts empty (HasPrices = false) and is populated by calling
+// RefreshFromServerAsync(), which is triggered at app startup and optionally by the
+// admin UI in ProcessOrderViewModel. Until a successful fetch, quoting features that
+// depend on prices are disabled or hidden in the UI.
+//
+// RefreshFromServerAsync() downloads material-prices.json, deserializes it via
+// MaterialPriceDtos, maps the DTOs into domain model types (MaterialPriceRow,
+// EdgeBandPriceRow), and replaces all cached data atomically under lock.
+//
+// Thread safety: all private fields are guarded by a single lock (_gate). Read
+// properties return defensive copies (ToList, new Dictionary) so callers can't
+// mutate the cached data. TryGet methods also run under the same lock. This allows
+// RefreshFromServerAsync to run on a background thread without racing against the
+// UI thread reading prices for a quote calculation.
+//
+// Species lookups are case-insensitive throughout (StringComparer.OrdinalIgnoreCase)
+// to match loosely against species strings that may come from user input or saved
+// job files with inconsistent casing.
+//
+// Falls back to MaterialDefaults constants (DefaultCncPricePerSheet, DefaultYield,
+// DefaultSheetAreaSqFt) when the server data is missing or a species is not found,
+// so the quoting logic always has a usable value even without a successful fetch.
+
 public sealed class MaterialPricesService : IMaterialPricesService
 {
     private readonly object _gate = new();

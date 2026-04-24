@@ -12,6 +12,26 @@ using System.Windows.Threading;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
+// ThumbnailService.cs
+// Responsible for automatically generating and updating 128×128 px offscreen
+// 3D thumbnail images for each CabinetModel displayed in the cabinet list.
+//
+// On construction it subscribes to the shared ICabinetService.Cabinets
+// ObservableCollection and to each cabinet's PropertyChanged event, so thumbnails
+// are regenerated reactively whenever a cabinet is added or its geometry changes
+// (tracked via CabinetModel.GeometryVersion to avoid redundant re-renders).
+//
+// To keep the UI responsive during bulk loads, regeneration requests are batched
+// and debounced: a 250ms DispatcherTimer coalesces rapid changes into a single
+// batch, then renders one thumbnail per Dispatcher frame at Background priority.
+//
+// Each thumbnail is rendered offscreen using a WPF Viewport3D with an
+// OrthographicCamera set to a slight 10°/10° azimuth/elevation angle for a
+// subtle 3D perspective. The cabinet geometry comes from CabinetPreviewBuilder,
+// which also recomputes material and edge totals as a side-effect. The result is
+// a frozen RenderTargetBitmap written back to CabinetModel.Thumbnail, where the
+// list UI binds to display it.
+
 /// <summary>
 /// Renders small thumbnail images for cabinets in the list.
 /// Fully reactive: subscribes to the shared Cabinets collection and

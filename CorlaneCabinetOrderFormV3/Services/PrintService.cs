@@ -6,6 +6,20 @@ using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
+// PrintService.cs
+// Concrete implementation of IPrintService that generates and sends formatted
+// FlowDocument print jobs for the three main order-summary lists in the cabinet
+// order form: the cabinet list, the door/drawer-front list, and the drawer box
+// list. Each print job builds a paginated WPF FlowDocument with a company name
+// header, job name sub-header, and a section title, followed by a fixed-column
+// table of relevant data rows. Column widths and headers are tailored per list
+// type. Dimension values (width, height, depth, etc.) are formatted as either
+// fractions or decimals based on the active dimension format setting.
+// CNC cutting is not represented here; this service is purely for print output.
+// A standard Windows PrintDialog is shown before each job so the user can select
+// a printer and confirm. All documents use a 0.75-inch page margin and Segoe UI
+// at 10.5pt with a 96 DPI baseline.
+
 public sealed class PrintService : IPrintService
 {
     private const double MarginInch = 0.75;

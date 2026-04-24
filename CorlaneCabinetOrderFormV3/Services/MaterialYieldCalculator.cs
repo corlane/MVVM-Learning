@@ -1,5 +1,32 @@
 ﻿namespace CorlaneCabinetOrderFormV3.Services;
 
+// MaterialYieldCalculator.cs
+// Pure static math helper for sheet goods and edge banding yield calculations.
+// Extracted from POJobMaterialListViewModel so the core arithmetic can be unit-tested
+// independently of the UI layer.
+//
+// ComputeSheetCount(): converts a total square footage into a whole sheet count by
+//   applying a yield factor (to account for waste/offcuts) and dividing by sheet area,
+//   then rounding up to the nearest whole sheet. Returns 0 if sheet area or yield is
+//   missing/invalid.
+//
+// AggregateMaterialAreas(): rolls up per-cabinet material square footage across the
+//   full cabinet list into a single Dictionary<species, totalSqFt>, multiplying each
+//   cabinet's area by its Qty. Resolves "Custom" species keys to the cabinet's actual
+//   user-entered custom species name, and preserves UP/DOWN face-direction suffixes
+//   (used for prefinished ply to distinguish face-up vs face-down sheet orientation).
+//
+// AggregateEdgeBanding(): same aggregation pattern for edge banding linear footage,
+//   rolling up per-cabinet EB totals by species across the full cabinet list, resolving
+//   "Custom" EB keys to the cabinet's user-entered custom EB species name.
+//
+// CollapseFaceKey(): strips UP/DOWN suffixes from a species key to produce a combined
+//   species name for display contexts where face direction doesn't matter (e.g., showing
+//   a single "Prefinished Ply" total rather than separate UP and DOWN rows).
+//
+// All species key comparisons are case-insensitive. "None" and blank values are
+// normalized to "None" throughout to avoid spurious duplicate keys in aggregations.
+
 /// <summary>
 /// Pure math for sheet goods and edgebanding yield calculations.
 /// Extracted from POJobMaterialListViewModel so it can be unit-tested.

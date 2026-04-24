@@ -1,9 +1,44 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
-using System.Runtime;
 using System.Text.Json;
 
 namespace CorlaneCabinetOrderFormV3.Services;
+
+// DefaultSettingsService.cs
+// Persists and exposes all user-configurable default settings for the cabinet order form.
+// Settings are saved to a JSON file in the user's LocalApplicationData folder
+// (%LOCALAPPDATA%\CorlaneCabinetOrderFormV3\default-settings.json) and survive across
+// application sessions.
+//
+// Implements ObservableObject so that ViewModels (e.g., DefaultSettingsViewModel,
+// UpperCabinetViewModel) can bind directly to its properties and react to changes via
+// PropertyChanged — for example, refreshing dimension format displays when
+// DefaultDimensionFormat changes.
+//
+// Covers the following categories of defaults:
+//   - Dimension format (fraction vs decimal)
+//   - Species and edge banding species for base, upper, filler, and panel cabinets
+//   - Toe kick dimensions and visibility
+//   - Shelf counts, shelf depth style, and shelf hole drilling
+//   - Door and drawer counts, species, grain direction, reveal/gap sizes, and include flags
+//   - Drawer front heights and equalization behavior
+//   - Door and drawer slide hole drilling
+//   - Base and upper cabinet reveal values and gap width
+//   - UI theme, UI scale, and main window size/position (persisted across sessions)
+//   - Company/contact info pre-filled on new job customer info forms
+//   - One-time popup dismissal tracking (HasSeenPopup stores last-seen version string)
+//   - Last file dialog directory (restored on next open/save dialog)
+//
+// LoadAsync(): deserializes the JSON file and copies all public properties onto this
+//   instance using reflection, so new properties added to the class automatically
+//   participate without any manual mapping code.
+//
+// SaveAsync(): serializes this instance to JSON using a temp-file + atomic Move pattern
+//   to prevent corruption if the app is closed mid-write. Protected by a SemaphoreSlim
+//   to prevent concurrent writes.
+//
+// GetFileDialogDirectory() / RememberFileDialogDirectory(): convenience helpers used by
+//   open/save/export dialogs to default to the last-used folder.
 
 public partial class DefaultSettingsService : ObservableObject
 {
