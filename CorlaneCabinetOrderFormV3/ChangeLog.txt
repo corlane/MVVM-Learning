@@ -493,3 +493,4 @@
 	Removed 2 bits of dead code: MainTabControlWidth & CurrentPreviewCabinet from MainWindowViewModel. commit
 	Removed "AddOneConverter". It was not being used. commit
 	Updated version number...forgot again. commit
+	Edited copilot instructions to remove reference to the GridSplitter since it has been removed. commit
