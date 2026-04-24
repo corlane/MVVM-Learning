@@ -489,3 +489,4 @@
 	"Golden commmit" before branching to work on joinery and DXF export features. commit
 	Uploading 3.1.0.3
 	Removed 2 bits of dead code: MainTabControlWidth & CurrentPreviewCabinet from MainWindowViewModel. commit
+	Removed "AddOneConverter". It was not being used. commit

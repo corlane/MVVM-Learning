@@ -14,10 +14,6 @@
         <viewmodels:DoorSizesListViewModel/>
     </d:UserControl.DataContext>
 
-    <UserControl.Resources>
-        <converters:AddOneConverter x:Key="AddOneConverter"/>
-    </UserControl.Resources>
-
     <Grid>
         <ListView Margin="20"
                   FontSize="14"
