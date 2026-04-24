@@ -10,6 +10,36 @@ using System.Windows.Threading;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
+// CabinetService.cs
+// The central data service for the cabinet order form. Acts as the single source of truth
+// for the current job's cabinet list and owns all persistence (save/load JSON) and
+// material/edge accumulation logic.
+//
+// Responsibilities:
+//   - Holds the master Cabinets collection (BulkObservableCollection<CabinetModel>) that
+//     all ViewModels observe. Add/Remove go through this service to enforce rules such as
+//     duplicate name prevention.
+//
+//   - Save/Load: serializes the full job (cabinets + customer info + quoted price + order
+//     timestamp) to a JSON file. Handles backward compatibility with old files that were
+//     saved as a bare cabinet array, and migrates pre-3.1.0.3 files that are missing
+//     HasTop/HasDeck/HasLeftEnd/HasRightEnd/HasBack/HasToeKickBoard flags.
+//
+//   - Material & Edge Accumulation: drives CabinetPreviewBuilder.BuildCabinetForTotals()
+//     to compute per-cabinet material and edge banding totals. Uses an incremental dirty-
+//     tracking system (_dirtyCabinets HashSet) so that only cabinets whose properties have
+//     changed since the last accumulation are rebuilt — not the entire list every time.
+//     AccumulateAllMaterialAndEdgeTotals() is called by DoorSizesListViewModel and
+//     DrawerBoxSizesListViewModel before reading pre-computed totals.
+//     AccumulateMaterialAndEdgeTotals(cab) handles both on-thread and off-thread callers
+//     safely, and includes a reentrancy guard to prevent Dispatcher message-pump loops.
+//
+//   - Exception Done Keys: persists the "mark as done" state for cabinet exceptions across
+//     save/load cycles, keyed by a per-cabinet string identifier.
+//
+//   - OrderedAtLocal: stores the timestamp of when the job was submitted/ordered.
+
+
 public class CabinetService : ICabinetService
 {
     public ObservableCollection<CabinetModel> Cabinets { get; } = new BulkObservableCollection<CabinetModel>();
