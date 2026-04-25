@@ -15,6 +15,7 @@ internal static partial class BaseCabinetBuilder
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim)
+
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double doubleMaterialThickness34 = MaterialThickness34 * 2;
@@ -56,9 +57,6 @@ internal static partial class BaseCabinetBuilder
                   }
                 : stretcherPoints;
 
-
-
-
             var stretcher = CabinetPartFactory.CreatePanel(points, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.DrawerStretcher);
             if (baseCab.SinkCabinet)
             {
@@ -68,20 +66,20 @@ internal static partial class BaseCabinetBuilder
             ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - topDeckAndStretcherThickness - opening1Height, 270, 0, 0);
             cabinet.Children.Add(stretcher);
 
-            //if (baseCab.SinkCabinet)
-            //{
-            //    List<Point3D> sinkStretcherPoints =
-            //    [
-            //        new (0,0,0),
-            //        new (interiorWidth,0,0),
-            //        new (interiorWidth,opening1Height,0),
-            //        new (0,opening1Height,0)
-            //    ];
+            if (baseCab.SinkCabinet)
+            {
+                List<Point3D> sinkStretcherPoints =
+                [
+                    new (0,0,0),
+                    new (interiorWidth,0,0),
+                    new (interiorWidth,opening1Height,0),
+                    new (0,opening1Height,0)
+                ];
 
-            //    stretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.SinkStretcher);
-            //    ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
-            //    cabinet.Children.Add(stretcher);
-            //}
+                stretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.SinkStretcher);
+                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
+                cabinet.Children.Add(stretcher);
+            }
         }
 
         // Drawer style (2–4 drawers)
