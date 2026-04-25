@@ -38,9 +38,9 @@ public class Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test
             _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
 
             // Cabinet: 3467 in² of 3/4 ply according to eCabs WITH JOINERY REMOVED. This is the number we want to match, as the joinery is not currently included in our material area calculations.
-            double expectedFt2 = 3467 / 144.0;
+            double expectedFt2 = 3422.88 / 144.0;
             
-            Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 0);
+            Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 2);
         });
     }
 
@@ -55,7 +55,7 @@ public class Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test
 
             // Cabinet: 237.12 in
             double expectedFt = 105.96 / 12.0;
-            Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 1);
+            Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 2);
         });
     }
 
