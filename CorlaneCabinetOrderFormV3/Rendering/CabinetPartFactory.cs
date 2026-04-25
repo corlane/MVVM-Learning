@@ -7,6 +7,39 @@ using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
+// =============================================================================
+// CabinetPartFactory.cs
+// CorlaneCabinetOrderFormV3.Rendering
+//
+// Central factory for building all 3D geometry models used in the cabinet
+// preview viewport. Every visual panel, edge, hole, and cut in the preview
+// originates here.
+//
+// Responsibilities:
+//   - CreatePanel: Builds a full 3D extruded panel from an arbitrary polygon
+//     (rectangle or Corner90 arc shape). Handles per-edge edgebanding overlays
+//     using separate MeshBuilders so edgebanded edges render with a distinct
+//     species material. Also accumulates material area (ft²) and edgebanding
+//     length (ft) directly into the CabinetModel's running totals, including
+//     the special "PVC Hardrock Maple" bottom edge on upper cabinet end panels.
+//     Supports grain direction and plywood texture rotation for face materials.
+//
+//   - CreateHole: Produces a flat dark disc overlay to represent a drilled hole
+//     (shelf pin, assembly hardware) on a panel face. Uses a slight Z offset to
+//     render proud of the surface. No CSG — purely visual.
+//
+//   - CreateRectangularCut: Produces a flat dark quad overlay to represent a
+//     saw cut on a panel face. Same Z-offset convention as CreateHole.
+//
+// Notes:
+//   - Material/edge totals are always accumulated for ALL parts, regardless of
+//     preview hide flags — hide toggles are visualization-only.
+//   - Edge accumulation is resilient: accumulation failures are swallowed so a
+//     bad cabinet config never breaks the 3D preview render.
+//   - The endPanelBottomEBMeshBuilder path always writes to "PVC Hardrock Maple"
+//     independent of the cabinet's configured edgebanding species.
+// =============================================================================
+
 internal static class CabinetPartFactory
 {
     /// <summary>

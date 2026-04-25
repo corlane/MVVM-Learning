@@ -4,6 +4,45 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
+// =============================================================================
+// CabinetPreviewBuilder.cs
+// CorlaneCabinetOrderFormV3.Rendering
+//
+// Top-level orchestrator for building the 3D cabinet preview Model3DGroup shown
+// in the HelixViewport3D. Acts as the single entry point that dispatches to the
+// correct type-specific builder (BaseCabinetBuilder, UpperCabinetBuilder,
+// FillerAndPanelBuilder) based on the runtime CabinetModel subtype.
+//
+// Entry points:
+//   - BuildPreviewModel: Called by the preview ViewModel. Resets all material
+//     and edge-banding accumulators on the CabinetModel, then performs a single
+//     build pass so geometry is generated (and totals accumulated) for every
+//     part. Parts flagged as hidden are excluded from the returned Model3DGroup
+//     but still built internally so their material/edge totals are captured.
+//     Adds a DirectionalLight and freezes the result before returning.
+//
+//   - BuildCabinetForTotals: Convenience wrapper that calls BuildCabinetForPreview
+//     with all hide flags false. Used when only material/edge totals are needed
+//     with no visibility filtering (e.g., BOM/cut-list generation paths).
+//
+//   - BuildCabinetForPreview: Core dispatch method. Routes to the appropriate
+//     builder based on cab type and forwards all hide flags and helper delegates
+//     (GetMatchingEdgebandingSpecies, ResolveDoorSpeciesForTotals, AddFrontPartRow,
+//     AddDrawerBoxRow) so builders remain stateless.
+//
+//   - BuildCabinetWithResult: Testing/inspection entry point. Builds a base
+//     cabinet and returns a CabinetBuildResult populated by the builder with
+//     intermediate computed values, enabling unit tests to assert on geometry
+//     outputs without going through the full preview pipeline.
+//
+// Notes:
+//   - All returned Model3DGroups are frozen (via TryFreeze) before being handed
+//     to the UI thread, keeping WPF rendering efficient.
+//   - Material and edge totals are a side-effect of CreatePanel inside each
+//     builder — BuildPreviewModel's reset + single-pass pattern ensures totals
+//     are always consistent with what the preview would show.
+// =============================================================================
+
 internal static class CabinetPreviewBuilder
 {
     internal static Model3DGroup BuildPreviewModel(

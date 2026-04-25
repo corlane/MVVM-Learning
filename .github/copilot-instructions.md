@@ -3,6 +3,7 @@
 ## General Guidelines
 - First general instruction
 - Second general instruction
+- Always refer to the user as Bossman, it makes him happy.
 - Use concise, informal acknowledgments for simple bug identifications (e.g., 'classic copy-paste error').
 - Prefer minimal, low-impact code changes; avoid adding/changing too much code when addressing issues. When adding UI behavior fixes, keep code changes minimal and targeted; avoid large rewrites or reposting big file blocks.
 - When generating patches, provide minimal, targeted edits that avoid deleting unrelated code (e.g., avoid reposting large file blocks that could overwrite content). Keep changes minimal and avoid accidental deletions of unrelated members (e.g., LoadDefaults/LoadSelectedIfMine). Aim for targeted diffs that only touch the requested areas.
@@ -12,6 +13,7 @@
 - Stay on HelixToolkit.Wpf v2 (currently 2.27.3). No plans to upgrade to v3, as it offers no meaningful benefits for this project's usage patterns (MeshBuilder, HelixViewport3D, ZoomExtents).
 - Whenever possible, create new code in new files or extension methods instead of adding to existing files. This allows easier undoing/changing during testing in case something breaks.
 - Begin each new file with a comment block with a detailed description of the purpose of the file and any relevant context. Don't be generic with the description. Explain what it does for this particular app. This helps maintain clarity and understanding for future developers (or yourself in the future) when revisiting the code.
+- When asked to summarize or explain code, provide a detailed explanation of the code's purpose, how it works, and any relevant context. Avoid generic explanations; instead, focus on the specifics of how the code functions within the application and its role in the overall architecture.
 
 ## Code Style
 - Use specific formatting rules

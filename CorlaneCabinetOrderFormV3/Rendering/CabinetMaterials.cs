@@ -3,6 +3,29 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 
+// =============================================================================
+// CabinetMaterials.cs
+// CorlaneCabinetOrderFormV3.Rendering
+//
+// Provides WPF DiffuseMaterial instances used to texture 3D cabinet panels and
+// edge banding in the cabinet preview viewport.
+//
+// GetPlywoodSpecies: Loads a tiled ImageBrush from Images/Plywood/{species}.png
+//   and applies a rotation to simulate grain direction (90° for Horizontal,
+//   0° for Vertical). Falls back to Custom.png if the species image is missing,
+//   then to a plain gray brush if neither image exists. "PFP 1/4" is normalized
+//   to "Prefinished Ply" before lookup.
+//
+// GetEdgeBandingSpecies: Loads a tiled ImageBrush from
+//   Images/Edgebanding/{species}.png. Strips the word "Prefinished" from the
+//   species name before the lookup so entries like "Wood Prefinished Maple"
+//   resolve correctly. Falls back to a solid brown brush when no image is found
+//   or when species is null/None.
+//
+// All brushes and materials are Frozen after creation for thread safety and
+// rendering performance.
+// =============================================================================
+
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static class CabinetMaterials

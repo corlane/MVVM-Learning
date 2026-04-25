@@ -2,6 +2,36 @@
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
+// CabinetBuildHelpers.cs
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared static helpers used by both base and upper cabinet builders during
+// material/edge-total accumulation and BOM construction.
+//
+// Responsibilities:
+//   - GetMatchingEdgebandingSpecies: Maps cabinet species/material names (e.g.,
+//     "Maple Ply", "White Melamine", "Prefinished Ply") to their corresponding
+//     edgebanding product names (e.g., "Wood Maple", "PVC White"). Used when
+//     building material totals so the correct EB species is recorded per part.
+//
+//   - GetDoorEdgebandingSpecies: Thin wrapper over GetMatchingEdgebandingSpecies
+//     specifically for door species resolution.
+//
+//   - ResolveDoorSpeciesForTotals: Resolves the effective door species string,
+//     substituting the user-entered custom species name when the selected species
+//     is "Custom" — preventing the literal word "Custom" from appearing in totals.
+//
+//   - AddFrontPartRow (overloads for Base/Upper): Appends a FrontPartRow entry
+//     (door or drawer front) to a cabinet model's FrontParts list. Cabinet
+//     number and name are left as defaults here and assigned later by the
+//     list view-model.
+//
+//   - AddDrawerBoxRow: Appends a DrawerBoxRow entry to a base cabinet model's
+//     DrawerBoxes list for BOM/cut-list output.
+//
+// Note: BOM and material total calculations must always include all cabinet
+// parts regardless of preview hide flags — hide toggles are visualization-only.
+// ─────────────────────────────────────────────────────────────────────────────
+
 internal static class CabinetBuildHelpers
 {
     internal static string GetMatchingEdgebandingSpecies(string? fillerSpecies) // Helper to map common species/material names to edgebanding names

@@ -4,6 +4,48 @@ using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
+// =============================================================================
+// PartsListBuilder.cs
+// CorlaneCabinetOrderFormV3.Rendering
+//
+// Generates the flat cut-list (List<PartListEntry>) used for the parts/BOM
+// report from a collection of CabinetModel objects. This is entirely separate
+// from the 3D preview pipeline — it computes part dimensions purely from the
+// cabinet model's properties and dimension helpers, with no geometry or mesh
+// involvement.
+//
+// Entry point:
+//   - Build(IEnumerable<CabinetModel>): Iterates all cabinets, assigns a
+//     sequential #index label (with name, style, and qty), then dispatches to
+//     the appropriate AddXxxParts method based on runtime cabinet subtype.
+//
+// Supported cabinet subtypes and their part sets:
+//   - BaseCabinetModel (Standard/Drawer): End panels, deck, top/stretchers,
+//     toekick, back, nailer, shelves, drawer stretchers, sink stretcher, doors,
+//     drawer fronts, drawer boxes (sides/front-back/bottom), rollouts, trash drawer.
+//   - BaseCabinetModel (Corner90): L-shaped deck/top/shelves, two end panels,
+//     two backs, two toekicks, two doors.
+//   - BaseCabinetModel (AngleFront): Pentagonal deck/top/shelves, two end panels,
+//     two backs, angled toekick, one or two doors with computed diagonal front width.
+//   - UpperCabinetModel (Standard/Corner90/AngleFront): Same structural breakdown
+//     as base variants minus toekick/drawer box paths; includes PVC Hardrock Maple
+//     back EB for 3/4" back uppers.
+//   - FillerModel: End panel + back.
+//   - PanelModel: Single panel with user-selected T/B/L/R edge banding.
+//
+// Dimension/EB conventions:
+//   - All dimensions are in inches; formatted as fractional strings via Fmt().
+//   - Edge banding species is resolved via ResolveEBSpecies (box parts) and
+//     ResolveDoorEBSpecies (face frame / door parts).
+//   - Doors and drawer fronts always receive TBLR (all-four-edge) banding.
+//   - Toekick, back (14/34), sink stretcher, top stretcher back, and drawer box
+//     bottoms carry no edge banding, matching the CabinetPartFactory rules.
+//   - ByGrain() swaps length/width for horizontal grain direction on doors/fronts.
+//   - AddComplex() is used for L-shaped and pentagonal parts where a simple L×W
+//     cell is meaningless; those rows show "—" for length and width with a
+//     detailed Notes description instead.
+// =============================================================================
+
 internal static class PartsListBuilder
 {
     private const double Mt34 = MaterialDefaults.Thickness34;
