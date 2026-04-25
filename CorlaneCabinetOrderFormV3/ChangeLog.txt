@@ -494,3 +494,4 @@
 	Removed "AddOneConverter". It was not being used. commit
 	Updated version number...forgot again. commit
 	Edited copilot instructions to remove reference to the GridSplitter since it has been removed. commit
+	Removed SinkStretcher code from BaseCabinetBuilder.DrawerStretchers.cs. It wasn't being used, since sink cab is disabled for Drawer cabinets. commit
