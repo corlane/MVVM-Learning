@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class UpperCabinetBuilder
 {
-    private static void BuildDoors(Model3DGroup cabinet, UpperCabinetModel upperCab, bool doorsHidden, Func<string?, string?, string> resolveDoorSpeciesForTotals, Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow, double MaterialThickness34, string doorEdgebandingSpecies, double width, double height, double depth, double upperDoorGap, double doorLeftReveal, double doorRightReveal, double doorTopReveal, double doorBottomReveal, double doorSideReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints)
+    private static void BuildDoors(Model3DGroup cabinet, UpperCabinetModel upperCab, bool doorsHidden, Func<string?, string?, string> resolveDoorSpeciesForTotals, Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow, double MaterialThickness34, string doorEdgebandingSpecies, double width, double height, double depth, double upperDoorGap, double doorLeftReveal, double doorRightReveal, double doorTopReveal, double doorBottomReveal, double doorSideReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, CabinetBuildResult? result = null)
     {
         door1 = null;
         door2 = null;
@@ -21,11 +21,19 @@ internal static partial class UpperCabinetBuilder
         // Doors
         if (upperCab.DoorCount > 0 && upperCab.IncDoors || upperCab.DoorCount > 0 && upperCab.IncDoorsInList)
         {
-
             var doorSpeciesForTotals = resolveDoorSpeciesForTotals(upperCab.DoorSpecies, upperCab.CustomDoorSpecies);
 
             double doorWidth = width - (doorSideReveal * 2);
             double doorHeight = height - doorTopReveal - doorBottomReveal;
+
+            if (result is not null)
+            {
+                // For 2-door cabinets store the per-door width after pair-splitting.
+                result.DoorWidth = upperCab.DoorCount == 2
+                    ? (doorWidth / 2) - (upperDoorGap / 2)
+                    : doorWidth;
+                result.DoorHeight = doorHeight;
+            }
 
             if (upperCab.DoorCount == 1)
             {
@@ -84,6 +92,5 @@ internal static partial class UpperCabinetBuilder
                 }
             }
         }
-
     }
 }

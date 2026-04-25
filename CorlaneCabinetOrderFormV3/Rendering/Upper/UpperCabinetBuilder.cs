@@ -15,16 +15,25 @@ internal static partial class UpperCabinetBuilder
         bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
-        Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow)
+        Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow,
+        CabinetBuildResult? result = null)
     {
         var dim = UpperCabinetDimensions.From(upperCab);
+
+        if (result is not null)
+        {
+            result.InteriorWidth  = dim.InteriorWidth;
+            result.InteriorDepth  = dim.InteriorDepth;
+            result.InteriorHeight = dim.InteriorHeight;
+            result.ShelfDepth     = dim.ShelfDepth;
+        }
 
         if (string.Equals(upperCab.Style, CabinetStyles.Upper.Standard, StringComparison.OrdinalIgnoreCase))
         {
             BuildStandard(cabinet, upperCab, dim,
                 leftEndHidden, rightEndHidden, deckHidden, topHidden, doorsHidden,
                 getMatchingEdgebandingSpecies, resolveDoorSpeciesForTotals,
-                addFrontPartRow);
+                addFrontPartRow, result);
         }
         else if (upperCab.Style == CabinetStyles.Upper.Corner90)
         {

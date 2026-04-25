@@ -140,7 +140,8 @@ internal static class CabinetPreviewBuilder
 
     /// <summary>
     /// Builds the cabinet and returns a <see cref="CabinetBuildResult"/> populated
-    /// by the builders as they compute values. Single source of truth.
+    /// by the builders as they compute values. Single source of truth for all cabinet types
+    /// (Base, Upper, Filler, Panel). Use this in tests to assert against computed values.
     /// </summary>
     internal static CabinetBuildResult BuildCabinetWithResult(CabinetModel cab)
     {
@@ -165,6 +166,29 @@ internal static class CabinetPreviewBuilder
                 CabinetBuildHelpers.AddFrontPartRow,
                 CabinetBuildHelpers.AddDrawerBoxRow,
                 result);
+        }
+        else if (cab is UpperCabinetModel upperCab)
+        {
+            UpperCabinetBuilder.BuildUpper(
+                cabinet,
+                upperCab,
+                leftEndHidden: false,
+                rightEndHidden: false,
+                deckHidden: false,
+                topHidden: false,
+                doorsHidden: false,
+                getEb,
+                resolveDoorSpecies,
+                CabinetBuildHelpers.AddFrontPartRow,
+                result);
+        }
+        else if (cab is FillerModel fillerCab)
+        {
+            FillerAndPanelBuilder.BuildFiller(cabinet, fillerCab, getEb);
+        }
+        else if (cab is PanelModel panelCab)
+        {
+            FillerAndPanelBuilder.BuildPanel(cabinet, panelCab);
         }
 
         TryFreeze(cabinet);

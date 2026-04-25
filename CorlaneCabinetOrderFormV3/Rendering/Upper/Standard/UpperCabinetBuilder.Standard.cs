@@ -17,8 +17,8 @@ internal static partial class UpperCabinetBuilder
         bool doorsHidden,
         Func<string?, string> getMatchingEdgebandingSpecies,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
-        Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow)
-
+        Action<UpperCabinetModel, string, double, double, string?, string?> addFrontPartRow,
+        CabinetBuildResult? result = null)
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double MaterialThickness14 = MaterialDefaults.Thickness14;
@@ -45,13 +45,8 @@ internal static partial class UpperCabinetBuilder
 
         BuildEndPanels(upperCab, MaterialThickness34, height, depth, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> endPanelPoints);
 
-        // ----------------------------
-        // HOLES
-        // IMPORTANT: add holes before ApplyTransform(leftEnd/rightEnd, ...)
-        // ----------------------------
         AddHoles(upperCab, MaterialThickness34, StretcherWidth, height, depth, backThickness, holeDiameter, holeDepth, leftEnd, rightEnd);
 
-        // End panel transforms
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
 
@@ -61,11 +56,11 @@ internal static partial class UpperCabinetBuilder
 
         BuildShelves(cabinet, upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, backThickness, interiorWidth, interiorHeight, shelfDepth, out Model3DGroup? shelf, out List<Point3D>? shelfPoints);
 
-        BuildDoors(cabinet, upperCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doorEdgebandingSpecies, width, height, depth, upperDoorGap, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, doorSideReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints);
+        BuildDoors(cabinet, upperCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doorEdgebandingSpecies, width, height, depth, upperDoorGap, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, doorSideReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, result);
 
         if (upperCab.HasLeftEnd && !leftEndHidden) cabinet.Children.Add(leftEnd);
         if (upperCab.HasRightEnd && !rightEndHidden) cabinet.Children.Add(rightEnd);
-        if (upperCab.HasDeck &&!deckHidden) cabinet.Children.Add(deck);
+        if (upperCab.HasDeck && !deckHidden) cabinet.Children.Add(deck);
         if (upperCab.HasTop && !topHidden) cabinet.Children.Add(top);
         if (upperCab.HasBack) cabinet.Children.Add(back);
     }
