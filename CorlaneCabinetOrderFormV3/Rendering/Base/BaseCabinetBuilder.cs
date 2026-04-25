@@ -56,7 +56,7 @@ internal static partial class BaseCabinetBuilder
             BuildCorner90(cabinet, baseCab, dim,
                 leftEndHidden, rightEndHidden, deckHidden, topHidden, doorsHidden,
                 getMatchingEdgebandingSpecies, resolveDoorSpeciesForTotals,
-                addFrontPartRow);
+                addFrontPartRow, result);
         }
         else if (baseCab.Style == CabinetStyles.Base.AngleFront)
         {

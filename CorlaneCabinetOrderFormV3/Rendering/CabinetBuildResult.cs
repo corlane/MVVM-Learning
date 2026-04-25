@@ -58,6 +58,10 @@ internal sealed class CabinetBuildResult
     public double DoorWidth { get; set; }
     public double DoorHeight { get; set; }
 
+    // For Corner90 cabinets, door widths are independent (left vs right front).
+    public double Door1Width { get; set; }
+    public double Door2Width { get; set; }
+
     // ── Drawer fronts (Base only) ──
     public double DrawerFrontWidth { get; set; }
     public List<double> DrawerFrontHeights { get; } = [];

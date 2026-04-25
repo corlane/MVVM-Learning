@@ -5,7 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    private static void BuildDoors(Model3DGroup cabinet, BaseCabinetModel baseCab, bool doorsHidden, Func<string?, string?, string> resolveDoorSpeciesForTotals, Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow, double MaterialThickness34, double doubleMaterialThickness34, string doorEdgebandingSpecies, double height, double leftFrontWidth, double rightFrontWidth, double leftDepth, double tk_Height, double doorLeftReveal, double doorRightReveal, double doorTopReveal, double doorBottomReveal, out Model3DGroup door1, out Model3DGroup door2, out List<Point3D> doorPoints)
+    private static void BuildDoors(Model3DGroup cabinet, BaseCabinetModel baseCab, bool doorsHidden, Func<string?, string?, string> resolveDoorSpeciesForTotals, Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow, double MaterialThickness34, double doubleMaterialThickness34, string doorEdgebandingSpecies, double height, double leftFrontWidth, double rightFrontWidth, double leftDepth, double tk_Height, double doorLeftReveal, double doorRightReveal, double doorTopReveal, double doorBottomReveal, out Model3DGroup door1, out Model3DGroup door2, out List<Point3D> doorPoints, CabinetBuildResult? result)
     {
         // Initialize out parameters
         door1 = null!;
@@ -29,6 +29,13 @@ internal static partial class BaseCabinetBuilder
             double door2Width = rightFrontWidth - doorRightReveal - cornerCabDoorOpenSideReveal;
 
             double doorHeight = height - doorTopReveal - doorBottomReveal - tk_Height;
+
+            if (result is not null)
+            {
+                result.Door1Width = door1Width;
+                result.Door2Width = door2Width;
+                result.DoorHeight = doorHeight;
+            }
 
             if (baseCab.IncDoorsInList)
             {
