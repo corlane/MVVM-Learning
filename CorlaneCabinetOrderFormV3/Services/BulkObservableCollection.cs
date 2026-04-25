@@ -16,6 +16,7 @@ namespace CorlaneCabinetOrderFormV3.Services;
 /// list, then fires a single Reset event at the end. The bound ItemsControl or DataGrid
 /// rebuilds its layout exactly once regardless of how many items were added.
 /// </summary>
+/// 
 public class BulkObservableCollection<T> : ObservableCollection<T>
 {
     /// <summary>

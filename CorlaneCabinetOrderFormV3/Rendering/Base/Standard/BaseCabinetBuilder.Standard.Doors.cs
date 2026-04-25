@@ -18,7 +18,8 @@ internal static partial class BaseCabinetBuilder
         string doorEdgebandingSpecies,
         bool doorsHidden,
         Func<string?, string?, string> resolveDoorSpeciesForTotals,
-        Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow)
+        Action<BaseCabinetModel, string, double, double, string?, string?> addFrontPartRow,
+        CabinetBuildResult? result = null)
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double halfMaterialThickness34 = MaterialThickness34 / 2;
@@ -39,6 +40,8 @@ internal static partial class BaseCabinetBuilder
         double doorHeight = height - doorTopReveal - doorBottomReveal - tk_Height;
         bool edgeBandingOnDoorsAndDrawerFronts = baseCab.EdgebandDoorsAndDrawers;
 
+
+
         if (!edgeBandingOnDoorsAndDrawerFronts)
         {
             doorEdgebandingSpecies = "None";
@@ -47,6 +50,17 @@ internal static partial class BaseCabinetBuilder
         if (cabType == style1 && baseCab.DrwCount == 1)
         {
             doorHeight = height - opening1Height - MaterialThickness34 - halfMaterialThickness34 - (baseDoorGap / 2) - doorBottomReveal - tk_Height;
+        }
+
+        if (result is not null)
+        {
+            // For 2-door cabinets doorWidth is halved later, so store the full-width single-door value.
+            // The width split is a display concern; result stores the per-door value after any split.
+            double singleDoorWidth = baseCab.DoorCount == 2
+                ? (doorWidth / 2) - (baseDoorGap / 2)
+                : doorWidth;
+            result.DoorWidth = singleDoorWidth;
+            result.DoorHeight = doorHeight;
         }
 
         if (baseCab.DoorCount == 1)

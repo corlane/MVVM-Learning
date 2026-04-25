@@ -108,7 +108,7 @@ internal static partial class BaseCabinetBuilder
         // Doors
         if (baseCab.DoorCount > 0 && baseCab.IncDoors && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2)
         {
-            BuildDoors(cabinet, baseCab, dim, opening1Height, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow);
+            BuildDoors(cabinet, baseCab, dim, opening1Height, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, result);
         }
 
         // Drawer Fronts
