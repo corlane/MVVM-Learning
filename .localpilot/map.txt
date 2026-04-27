@@ -1,0 +1,785 @@
+## WORKSPACE EXECUTIVE SUMMARY (YAML)
+# Generated: 2026-04-26T21:33:58.2870266-04:00
+# Root: C:\Users\trifid\source\repos\corlane\CorlaneCabinetOrderFormV3
+---
+- File: CorlaneCabinetOrderFormV3\CorlaneCabinetOrderFormV3.csproj
+  Preview: "<Project Sdk='Microsoft.NET.Sdk'>  <PropertyGroup>   <OutputType>WinExe</OutputType>   <TargetFramework>net10.0-windows</TargetFramework>   <RootNames..."
+- File: CorlaneCabinetOrderFormV3.Tests\CorlaneCabinetOrderFormV3.Tests.csproj
+  Preview: "<Project Sdk='Microsoft.NET.Sdk'>  <PropertyGroup>   <TargetFramework>net10.0-windows</TargetFramework>   <ImplicitUsings>enable</ImplicitUsings>   <N..."
+- File: CONTRIBUTING.md
+  Preview: "# Contributing ## Overview This repository contains a WPF MVVM application. ## Guidelines - Keep changes small and focused. - Prefer MVVM patterns (Vi..."
+- File: CorlaneCabinetOrderFormV3.slnx
+  Preview: "<Solution>  <Project Path='CorlaneCabinetOrderFormV3.Tests/CorlaneCabinetOrderFormV3.Tests.csproj' Id='e51badf4-6956-4aab-b346-ad3029b26cc0' />  <Proj..."
+- File: delete-job.php
+  Preview: "<?php declare(strict_types=1); $apiKey = $_SERVER['HTTP_X_API_KEY'] ?? ''; if ($apiKey !== 'corlanejobupload') {   http_response_code(401);   header('..."
+- File: download-job.php
+  Preview: "<?php declare(strict_types=1); $apiKey = $_SERVER['HTTP_X_API_KEY'] ?? ''; if ($apiKey !== 'corlanejobupload') {   http_response_code(401);   header('..."
+- File: list-jobs.php
+  Preview: "<?php declare(strict_types=1); $apiKey = $_SERVER['HTTP_X_API_KEY'] ?? ''; if ($apiKey !== 'corlanejobupload') {   http_response_code(401);   header('..."
+- File: upload-job.php
+  Symbols: [fail]
+  Preview: "<?php declare(strict_types=1); header('Content-Type: text/plain; charset=UTF-8'); const API_KEY = 'corlanejobupload'; const UPLOAD_DIR = __DIR__ . '/f..."
+- File: .github\copilot-instructions.md
+  Preview: "# Copilot Instructions ## General Guidelines - First general instruction - Second general instruction - Always refer to the user as Bossman, it makes ..."
+- File: CorlaneCabinetOrderFormV3\App.xaml.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Services; using CorlaneCabinetOrderFormV3.Themes; using CorlaneCabinetOrderFormV3.ViewModels; using CorlaneCabinetOrde..."
+- File: CorlaneCabinetOrderFormV3\AssemblyInfo.cs
+  Preview: "using System.Runtime.CompilerServices; using System.Windows; [assembly: ThemeInfo(   ResourceDictionaryLocation.None,      //where theme specific reso..."
+- File: CorlaneCabinetOrderFormV3\ChangeLog.txt
+  Preview: ". . . . 3.0.1.1 	Changed ZoomExtents helper to allow a threshold before zooming to extents. Also disabled ResetToFrontView for the Hide buttons. Now c..."
+- File: CorlaneCabinetOrderFormV3\MainWindow.xaml.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Services; using CorlaneCabinetOrderFormV3.ViewModels; using CorlaneCabinetOrderFormV3.Views; using Microsoft.Extension..."
+- File: CorlaneCabinetOrderFormV3\ToDo.txt
+  Preview: ". . . . https://corlanecabinetry.com/cabinetorderformprog/V3/Corlane_Cabinet_Order_Form_V3_Setup.zip Corlane_Cabinet_Order_Form_V3_Setup <-- copy this..."
+- File: CorlaneCabinetOrderFormV3\Behaviors\DimensionAutoFormatBehavior.cs
+  Preview: "using System.ComponentModel; using System.Windows; using System.Windows.Controls; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrde..."
+- File: CorlaneCabinetOrderFormV3\Converters\BoolInverter.cs
+  Symbols: [BoolInverter]
+  Preview: "using System.Globalization; using System.Windows.Data; namespace CorlaneCabinetOrderFormV3.Converters; [ValueConversion(typeof(bool), typeof(bool))] p..."
+- File: CorlaneCabinetOrderFormV3\Converters\ConvertDimension.cs
+  Symbols: [ConvertDimension, FractionToDouble]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Converters; public static class ConvertDimension {   public static double FractionToDouble(string fraction)   {   ..."
+- File: CorlaneCabinetOrderFormV3\Converters\DimensionFormatConverter.cs
+  Symbols: [DimensionFormatConverter]
+  Preview: "using System; using System.Globalization; using System.Windows.Data; using CorlaneCabinetOrderFormV3.Services; using CorlaneCabinetOrderFormV3.Convert..."
+- File: CorlaneCabinetOrderFormV3\Converters\ListViewItemIndexConverter.cs
+  Symbols: [ListViewItemIndexConverter]
+  Preview: "using System; using System.Globalization; using System.Windows.Controls; using System.Windows.Data; namespace CorlaneCabinetOrderFormV3.Converters; pu..."
+- File: CorlaneCabinetOrderFormV3\Converters\StringToIntConverter.cs
+  Symbols: [StringToIntConverter]
+  Preview: "using System; using System.Globalization; using System.Windows.Data; namespace CorlaneCabinetOrderFormV3.Converters; public class StringToIntConverter..."
+- File: CorlaneCabinetOrderFormV3\Helpers\ZoomExtentsHelper.cs
+  Symbols: [ZoomExtentsHelper]
+  Preview: "using HelixToolkit.Wpf; using System.Runtime.CompilerServices; using System.Windows; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrder..."
+- File: CorlaneCabinetOrderFormV3\Models\BaseCabinetModel.cs
+  Symbols: [BaseCabinetModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.Models; public partial class BaseCabinetModel : CabinetModel {   // Ty..."
+- File: CorlaneCabinetOrderFormV3\Models\CabinetModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using System.ComponentModel; using System.Text.Json.Serialization; using System.Windows.Media.Imaging; // ..."
+- File: CorlaneCabinetOrderFormV3\Models\CabinetOptions.cs
+  Symbols: [CabinetOptions, TopType]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Models; public static class CabinetOptions {   public static class TopType   {     public const string Full = 'Ful..."
+- File: CorlaneCabinetOrderFormV3\Models\CabinetStyles.cs
+  Symbols: [CabinetStyles, Base]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Models; public static class CabinetStyles {   public static class Base   {     public const string Standard = 'Sta..."
+- File: CorlaneCabinetOrderFormV3\Models\DrawerBoxRow.cs
+  Preview: "using System.Text.Json.Serialization; namespace CorlaneCabinetOrderFormV3.Models; public sealed record DrawerBoxRow(   int CabinetNumber,   string Cab..."
+- File: CorlaneCabinetOrderFormV3\Models\EdgeBandPriceRow.cs
+  Symbols: [EdgeBandPriceRow]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.Models; public partial class EdgeBandPriceRow : ObservableObject {   [..."
+- File: CorlaneCabinetOrderFormV3\Models\FillerModel.cs
+  Symbols: [FillerModel]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Models; public partial class FillerModel : CabinetModel {   } "
+- File: CorlaneCabinetOrderFormV3\Models\FrontPartRow.cs
+  Preview: "using System.Text.Json.Serialization; namespace CorlaneCabinetOrderFormV3.Models; public sealed record FrontPartRow(   int CabinetNumber,   string Cab..."
+- File: CorlaneCabinetOrderFormV3\Models\JobCustomerInfo.cs
+  Symbols: [JobCustomerInfo]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Models; public sealed class JobCustomerInfo {   public string? CompanyName { get; set; }   public string? ContactN..."
+- File: CorlaneCabinetOrderFormV3\Models\JobFileModel.cs
+  Symbols: [JobFileModel]
+  Preview: "using System.Collections.ObjectModel; namespace CorlaneCabinetOrderFormV3.Models; public sealed class JobFileModel {   public ObservableCollection<Cab..."
+- File: CorlaneCabinetOrderFormV3\Models\MaterialBreakdownRow.cs
+  Symbols: [MaterialBreakdownRow]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Models; public sealed class MaterialBreakdownRow {   public string Species { get; init; } = '';   // Sheet goods  ..."
+- File: CorlaneCabinetOrderFormV3\Models\MaterialPriceRow.cs
+  Symbols: [MaterialPriceRow]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.Models; public partial class MaterialPriceRow : ObservableObject {   [..."
+- File: CorlaneCabinetOrderFormV3\Models\MaterialTotal.cs
+  Symbols: [MaterialTotal]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.Models; public partial class MaterialTotal : ObservableObject {   [Obs..."
+- File: CorlaneCabinetOrderFormV3\Models\PanelModel.cs
+  Symbols: [PanelModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.Models; public partial class PanelModel : CabinetModel {   // Type-spe..."
+- File: CorlaneCabinetOrderFormV3\Models\PartListEntry.cs
+  Symbols: [PartListEntry]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Models; public sealed class PartListEntry {   /// <summary>Used for DataGrid grouping.</summary>   public string C..."
+- File: CorlaneCabinetOrderFormV3\Models\UpperCabinetModel.cs
+  Symbols: [UpperCabinetModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.Models; public partial class UpperCabinetModel : CabinetModel {   // T..."
+- File: CorlaneCabinetOrderFormV3\Rendering\CabinetBuildHelpers.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Rendering; // CabinetBuildHelpers.cs // ──────────────────────────────────..."
+- File: CorlaneCabinetOrderFormV3\Rendering\CabinetBuildResult.cs
+  Preview: "// CabinetBuildResult.cs // ───────────────────────────────────────────────────────────────────────────── // A mutable result bag populated by base an..."
+- File: CorlaneCabinetOrderFormV3\Rendering\CabinetMaterials.cs
+  Preview: "using System.Windows; using System.Windows.Media; using System.Windows.Media.Imaging; using System.Windows.Media.Media3D; // =========================..."
+- File: CorlaneCabinetOrderFormV3\Rendering\CabinetPartFactory.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using HelixToolkit.Wpf; using System.Diagnostics; using System.Windows; using System.Windows.Media; using Syst..."
+- File: CorlaneCabinetOrderFormV3\Rendering\CabinetPartKind.cs
+  Preview: "namespace CorlaneCabinetOrderFormV3.Rendering; // ============================================================================= // CabinetPartKind.cs ..."
+- File: CorlaneCabinetOrderFormV3\Rendering\CabinetPreviewBuilder.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; using System.Windows; using System.Windows.Media; using System.Wind..."
+- File: CorlaneCabinetOrderFormV3\Rendering\ModelTransforms.cs
+  Preview: "using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; // ================================================================..."
+- File: CorlaneCabinetOrderFormV3\Rendering\PartsListBuilder.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinet..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\BaseCabinetBuilder.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using System.Windows.Media.Media3D; using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\BaseCabinetDimensions.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinet..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.Back.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.DeckAndTop.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.Doors.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.EndPanels.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.Holes.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.Shelves.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\AngleFront\BaseCabinetBuilder.AngleFront.Toekick.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.Back.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.DeckAndTop.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.Doors.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.EndPanels.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.Holes.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.Shelves.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Corner90\BaseCabinetBuilder.Corner90.Toekick.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.Back.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.Deck.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.Doors.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.DrawerBoxes.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.DrawerFronts.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.DrawerStretchers.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media; using System.Windows.Media.Media3D; name..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.EndPanelHoles.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.EndPanels.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.RolloutsAndTrashDrw.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.Shelves.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.SinkCuts.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.Toekick.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Base\Standard\BaseCabinetBuilder.Standard.Top.cs
+  Symbols: [BaseCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\FillerAndPanel\FillerAndPanelBuilder.cs
+  Symbols: [FillerAndPanelBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderF..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\UpperCabinetBuilder.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\UpperCabinetDimensions.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinet..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\AngleFront\UpperCabinetBuilder.AngleFront.Back.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\AngleFront\UpperCabinetBuilder.AngleFront.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\AngleFront\UpperCabinetBuilder.AngleFront.DeckAndTop.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\AngleFront\UpperCabinetBuilder.AngleFront.Doors.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\AngleFront\UpperCabinetBuilder.AngleFront.EndPanels.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\AngleFront\UpperCabinetBuilder.AngleFront.Holes.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\AngleFront\UpperCabinetBuilder.AngleFront.Shelves.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Corner90\UpperCabinetBuilder.Corner90.Back.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Corner90\UpperCabinetBuilder.Corner90.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Corner90\UpperCabinetBuilder.Corner90.DeckAndTop.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Corner90\UpperCabinetBuilder.Corner90.Doors.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Corner90\UpperCabinetBuilder.Corner90.EndPanels.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Corner90\UpperCabinetBuilder.Corner90.Holes.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Corner90\UpperCabinetBuilder.Corner90.Shelves.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Standard\UpperCabinetBuilder.Standard.Back.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Standard\UpperCabinetBuilder.Standard.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFor..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Standard\UpperCabinetBuilder.Standard.DeckAndTop.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Standard\UpperCabinetBuilder.Standard.Doors.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Standard\UpperCabinetBuilder.Standard.EndPanels.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Standard\UpperCabinetBuilder.Standard.Holes.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Rendering\Upper\Standard\UpperCabinetBuilder.Standard.Shelves.cs
+  Symbols: [UpperCabinetBuilder]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Windows.Media.Media3D; namespace CorlaneCabinetOrderFormV3.Rendering; internal static partial cla..."
+- File: CorlaneCabinetOrderFormV3\Services\AutoSaveService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Diagnostics; using System.IO; using System.Text.Json; using System.Windows.Threading; namespace C..."
+- File: CorlaneCabinetOrderFormV3\Services\BulkObservableCollection.cs
+  Preview: "using System.Collections.ObjectModel; using System.Collections.Specialized; namespace CorlaneCabinetOrderFormV3.Services; /// <summary> /// A performa..."
+- File: CorlaneCabinetOrderFormV3\Services\CabinetLayoutCalculator.cs
+  Preview: "namespace CorlaneCabinetOrderFormV3.Services; using CorlaneCabinetOrderFormV3.Models; /// <summary> /// Pure math for drawer/opening height calculatio..."
+- File: CorlaneCabinetOrderFormV3\Services\CabinetService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Collections.ObjectModel; using System.Collections.Specialized; using System.ComponentModel; using..."
+- File: CorlaneCabinetOrderFormV3\Services\CorlaneApi.cs
+  Preview: "using System.Net.Http; using System.Text.Json; namespace CorlaneCabinetOrderFormV3.Services; /// <summary> /// Single source of truth for Corlane web ..."
+- File: CorlaneCabinetOrderFormV3\Services\DefaultSettingsService.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using System.IO; using System.Text.Json; namespace CorlaneCabinetOrderFormV3.Services; // DefaultSettingsS..."
+- File: CorlaneCabinetOrderFormV3\Services\ICabinetService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Collections.ObjectModel; namespace CorlaneCabinetOrderFormV3.Services; // ICabinetService.cs // D..."
+- File: CorlaneCabinetOrderFormV3\Services\IMaterialLookupService.cs
+  Preview: "using System.Collections.ObjectModel; namespace CorlaneCabinetOrderFormV3.Services; // IMaterialLookupService.cs // Defines the contract for the mater..."
+- File: CorlaneCabinetOrderFormV3\Services\IMaterialPricesService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Services; // IMaterialPricesService.cs // Defines the contract for the mat..."
+- File: CorlaneCabinetOrderFormV3\Services\IPreviewService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System; namespace CorlaneCabinetOrderFormV3.Services; // IPreviewService.cs // Defines the contract for ..."
+- File: CorlaneCabinetOrderFormV3\Services\IPriceBreakdownService.cs
+  Preview: "namespace CorlaneCabinetOrderFormV3.Services; // IPriceBreakdownService.cs // Defines the contract for the service that converts accumulated material ..."
+- File: CorlaneCabinetOrderFormV3\Services\IPrintService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Services; // IPrintService.cs // Defines the contract for the print servic..."
+- File: CorlaneCabinetOrderFormV3\Services\MaterialDefaults.cs
+  Symbols: [Ma]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Services; /// <summary> /// Single source of truth for material-related fallback constants. /// Every service and ..."
+- File: CorlaneCabinetOrderFormV3\Services\MaterialLookupService.cs
+  Preview: "using System.Collections.ObjectModel;  namespace CorlaneCabinetOrderFormV3.Services; // MaterialLookupService.cs // Concrete implementation of IMateri..."
+- File: CorlaneCabinetOrderFormV3\Services\MaterialPriceDtos.cs
+  Preview: "using System.Text.Json.Serialization; namespace CorlaneCabinetOrderFormV3.Services; // MaterialPriceDtos.cs // Internal JSON deserialization DTOs for ..."
+- File: CorlaneCabinetOrderFormV3\Services\MaterialPricesExtensions.cs
+  Preview: "namespace CorlaneCabinetOrderFormV3.Services; // MaterialPricesExtensions.cs // Extension methods on IMaterialPricesService that provide the single so..."
+- File: CorlaneCabinetOrderFormV3\Services\MaterialPricesService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Text.Json; namespace CorlaneCabinetOrderFormV3.Services; // MaterialPricesService.cs // Concrete ..."
+- File: CorlaneCabinetOrderFormV3\Services\MaterialYieldCalculator.cs
+  Preview: "namespace CorlaneCabinetOrderFormV3.Services; // MaterialYieldCalculator.cs // Pure static math helper for sheet goods and edge banding yield calculat..."
+- File: CorlaneCabinetOrderFormV3\Services\PreviewService.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Models; using System; using System.Collections.Concurrent; namespace Corla..."
+- File: CorlaneCabinetOrderFormV3\Services\PriceBreakdownResult.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Services; // PriceBreakdownResult.cs // Immutable result record returned b..."
+- File: CorlaneCabinetOrderFormV3\Services\PriceBreakdownService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Services; // PriceBreakdownService.cs // Concrete implementation of IPrice..."
+- File: CorlaneCabinetOrderFormV3\Services\PrintService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using System.Windows; using System.Windows.Documents; using System..."
+- File: CorlaneCabinetOrderFormV3\Services\ThumbnailService.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; using System.Collections.Specialized; using System.ComponentModel; ..."
+- File: CorlaneCabinetOrderFormV3\Themes\Controls.xaml.cs
+  Symbols: [Controls, CloseWindow_Event]
+  Preview: "using System.Windows; namespace CorlaneCabinetOrderFormV3.Themes {   public partial class Controls   {     private void CloseWindow_Event(object sende..."
+- File: CorlaneCabinetOrderFormV3\Themes\readme.md
+  Preview: "# New Theme Library I decided to upgrade the theme library so that, instead of having each theme contain all of the control styles, there is instead j..."
+- File: CorlaneCabinetOrderFormV3\Themes\ScrollViewerInnerBorderThicknessConverter.cs
+  Symbols: [ScrollViewerInnerBorderThicknessConverter]
+  Preview: "using System; using System.Globalization; using System.Windows; using System.Windows.Data; namespace CorlaneCabinetOrderFormV3.Themes {   public class..."
+- File: CorlaneCabinetOrderFormV3\Themes\ThemesController.cs
+  Symbols: [ThemesController]
+  Preview: "using System; using System.Collections.ObjectModel; using System.Windows; using System.Windows.Media; namespace CorlaneCabinetOrderFormV3.Themes {   p..."
+- File: CorlaneCabinetOrderFormV3\Themes\ThemeType.cs
+  Symbols: [ThemeT]
+  Preview: "using System; namespace CorlaneCabinetOrderFormV3.Themes {   public enum ThemeType   {     SoftDark,     RedBlackTheme,     DeepDark,     GreyTheme,  ..."
+- File: CorlaneCabinetOrderFormV3\Themes\Attached\CornerRadiusHelper.cs
+  Symbols: [CornerRadiusHelper]
+  Preview: "using System.Windows; namespace CorlaneCabinetOrderFormV3.Themes.Attached {   public static class CornerRadiusHelper   {     public static readonly De..."
+- File: CorlaneCabinetOrderFormV3\Themes\Attached\HorizontalScrolling.cs
+  Preview: "using System; using System.ComponentModel; using System.Runtime.InteropServices; using System.Security; using System.Windows; using System.Windows.Con..."
+- File: CorlaneCabinetOrderFormV3\Themes\Attached\MenuHelper.cs
+  Symbols: [MenuHelper]
+  Preview: "using System.Windows; namespace CorlaneCabinetOrderFormV3.Themes.Attached {   public static class MenuHelper   {     public static readonly Dependency..."
+- File: CorlaneCabinetOrderFormV3\Themes\Attached\PasswordBoxHelper.cs
+  Symbols: [PasswordBoxHelper]
+  Preview: "using System; using System.Windows; using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Themes.Attached {   public class PasswordBoxHel..."
+- File: CorlaneCabinetOrderFormV3\Themes\Attached\TextBoxAutoSelect.cs
+  Symbols: [TextBoxAutoSelect]
+  Preview: "using System.Windows; using System.Windows.Controls; using System.Windows.Controls.Primitives; namespace CorlaneCabinetOrderFormV3.Themes.Attached {  ..."
+- File: CorlaneCabinetOrderFormV3\Themes\Attached\TextHinting.cs
+  Symbols: [for]
+  Preview: "using System; using System.Windows; using System.Windows.Controls; using System.Windows.Controls.Primitives; namespace CorlaneCabinetOrderFormV3.Theme..."
+- File: CorlaneCabinetOrderFormV3\ValidationAttributes\BaseCabinetDepthRangeAttribute.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using System.ComponentModel.DataAnnotations; namespace CorlaneCabinetOrderFormV3.ValidationAttributes; // ..."
+- File: CorlaneCabinetOrderFormV3\ValidationAttributes\DimensionRangeAttribute.cs
+  Symbols: [using]
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; // Import for your ConvertDimension class using System.ComponentModel.DataAnnotations; namespace CorlaneCa..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BatchModifyViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOr..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\Cabinet3DViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\CabinetListViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\DefaultSettingsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\IValidatableViewModel.cs
+  Symbols: [allowing]
+  Preview: "namespace CorlaneCabinetOrderFormV3.ViewModels; /// <summary> /// Simple interface allowing MainWindowViewModel to request validation from tab viewmod..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\MaterialPricesViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\ViewModelMappingHelper.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using System.Reflection; namespace CorlaneCabinetOrderFormV3.ViewM..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\ViewModelValidationHelper.cs
+  Symbols: [ViewModelValidationHelper]
+  Preview: "using System.Windows; namespace CorlaneCabinetOrderFormV3.ViewModels; /// <summary> /// Shared validation checks used by all cabinet ViewModel Add/Upd..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.Commands.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOr..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.Layout.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Services; using System; using ..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.Mapping.cs
+  Symbols: [BaseCabinetViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabin..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.Preview.cs
+  Symbols: [BaseCabinetViewM]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Models; using System; using System.Collections.Generic; using System.Text;..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.Reset.cs
+  Symbols: [BaseCabinetViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class BaseCabinetViewModel : ObservableVali..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.Validation.cs
+  Symbols: [BaseCabinetViewModel]
+  Preview: "namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class BaseCabinetViewModel : IValidatableViewModel {   // Expose the protected Validate..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\BaseCabinet\BaseCabinetViewModel.Visibility.cs
+  Symbols: [BaseCabinetViewM]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using System; using System.Collections.Generic; using System.T..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\FillerEnd\FillerViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\FillerEnd\FillerViewModel.Reset.cs
+  Symbols: [FillerViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class FillerViewModel : ObservableValidator..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\FillerEnd\FillerViewModel.Validation.cs
+  Symbols: [FillerViewModel]
+  Preview: "namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class FillerViewModel : IValidatableViewModel {   public void RunValidation() => Valida..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\MainWindow\MainWindowViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\MainWindow\MainWindowViewModel.LoadJob.cs
+  Symbols: [MainWindowViewModel]
+  Preview: "using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Services; using Microsoft.Win32; using System.Windows; using System.Windows.Media; ..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\MainWindow\MainWindowViewModel.NewJob.cs
+  Symbols: [MainWindowViewMode]
+  Preview: "using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Services; using System.Diagnostics; using System.Windows; using System.Windows.Medi..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\MainWindow\MainWindowViewModel.Notification.cs
+  Symbols: [MainWindowViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using System.Windows; using System.Windows.Media; namespace CorlaneCabinetOrderFormV3.ViewModels; public p..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\MainWindow\MainWindowViewModel.Printing.cs
+  Preview: "using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using Microsoft.Extensions.DependencyInjection; using Microsoft.Win32; ..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\MainWindow\MainWindowViewModel.SaveJob.cs
+  Symbols: [MainWindowViewModel]
+  Preview: "using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Services; using Microsoft.Win32; using System.Windows; using System.Windows.Media; ..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\Panel\PanelViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\Panel\PanelViewModel.Reset.cs
+  Symbols: [PanelViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class PanelViewModel : ObservableValidator ..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\Panel\PanelViewModel.Validation.cs
+  Symbols: [PanelViewModel]
+  Preview: "namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class PanelViewModel : IValidatableViewModel {   public void RunValidation() => Validat..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PlaceOrder\PlaceOrderViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PlaceOrder\PlaceOrderViewModel.Validation.cs
+  Symbols: [PlaceOrderViewModel]
+  Preview: "namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class PlaceOrderViewModel : IValidatableViewModel {   public void RunValidation() => Va..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POBackGrainDirViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POBatchListViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POCabinetSpeciesViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Services; using System.Collections.Obje..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POCornerCabinetDimsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POCustomerInfoViewModel.cs
+  Symbols: [POCustomerInfoViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class POCustomerInfoViewModel : ObservableO..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\PODoorDrwGrainDirViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\PODrawerBoxesViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\PODrwStretcherWidthsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POEdgebandDoorsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POEdgebandingViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POHingeHolesViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POIncludeDoorsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POJobMaterialListViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\PONotesViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Services; using System.Collections.ObjectModel; using System.Collections.S..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POOpeningDrwFrontHeightsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\PORemovePartsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\PORevealsGapsViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\POToekickViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\PO_ProcessOrder\ProcessOrderViewModel.cs
+  Symbols: [ProcessOrderViewModel, ProcessOrderViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class ProcessOrderViewModel : ObservableVal..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\SizesLists\DoorSizesListViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOr..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\SizesLists\DrawerBoxSizesListViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOr..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.Commands.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFo..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.cs
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using CorlaneCabinetOrde..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.Layout.cs
+  Symbols: [UpperCabinetViewModel, RecalculateFrontWidth]
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class UpperCabinetViewModel {   private voi..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.Mapping.cs
+  Symbols: [UpperCabinetViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabin..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.Preview.cs
+  Symbols: [UpperCabinetViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial cla..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.Reset.cs
+  Symbols: [UpperCabinetViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class UpperCabinetViewModel : ObservableVal..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.Validation.cs
+  Symbols: [UpperCabinetViewModel, RunValidationVisible]
+  Preview: "namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class UpperCabinetViewModel : IValidatableViewModel {   public void RunValidation() => ..."
+- File: CorlaneCabinetOrderFormV3\ViewModels\UpperCabinet\UpperCabinetViewModel.Visibility.cs
+  Symbols: [UpperCabinetViewModel]
+  Preview: "using CommunityToolkit.Mvvm.ComponentModel; namespace CorlaneCabinetOrderFormV3.ViewModels; public partial class UpperCabinetViewModel : ObservableVal..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetViewV2.xaml.cs
+  Symbols: [BaseCabinetViewV2, BaseCabinetViewV2]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class BaseCabinetViewV2 : UserControl {   public BaseCabinetV..."
+- File: CorlaneCabinetOrderFormV3\Views\BatchModifyWindow.xaml.cs
+  Symbols: [BatchModifyWindow, BatchModifyWindow]
+  Preview: "using System.Windows; using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class BatchModifyWindow : Window {   pu..."
+- File: CorlaneCabinetOrderFormV3\Views\Cabinet3DView.xaml.cs
+  Preview: "using CommunityToolkit.Mvvm.Input; using CorlaneCabinetOrderFormV3.ViewModels; using Microsoft.Extensions.DependencyInjection; using System; using Sys..."
+- File: CorlaneCabinetOrderFormV3\Views\CabinetListView.xaml.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.ViewModels; using Microsoft.Extensions.DependencyInjection; using System; usin..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultSettingsViewV2.xaml.cs
+  Symbols: [DefaultSettingsViewV2, DefaultSettingsViewV2]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class DefaultSettingsViewV2 : UserControl {   public DefaultS..."
+- File: CorlaneCabinetOrderFormV3\Views\DoorSizesListView.xaml.cs
+  Symbols: [DoorSizesListView]
+  Preview: "using CorlaneCabinetOrderFormV3.ViewModels; using Microsoft.Extensions.DependencyInjection; using System.Windows.Controls; namespace CorlaneCabinetOrd..."
+- File: CorlaneCabinetOrderFormV3\Views\DrawerBoxSizesListView.xaml.cs
+  Symbols: [DrawerBoxSizesListView]
+  Preview: "using CorlaneCabinetOrderFormV3.ViewModels; using Microsoft.Extensions.DependencyInjection; using System.Windows.Controls; namespace CorlaneCabinetOrd..."
+- File: CorlaneCabinetOrderFormV3\Views\FillerViewV2.xaml.cs
+  Symbols: [FillerViewV2, FillerViewV2]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class FillerViewV2 : UserControl {   public FillerViewV2()   ..."
+- File: CorlaneCabinetOrderFormV3\Views\MaterialPricesView.xaml.cs
+  Symbols: [MaterialPricesView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views {   /// <summary>   /// Interaction logic for MaterialPricesView.xaml   /// <..."
+- File: CorlaneCabinetOrderFormV3\Views\PanelViewV2.xaml.cs
+  Symbols: [PanelViewV2, PanelViewV2]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class PanelViewV2 : UserControl {   public PanelViewV2()   { ..."
+- File: CorlaneCabinetOrderFormV3\Views\PartsListWindow.xaml.cs
+  Symbols: [PartsListWindow, PartsListWindow]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using System.Text; using System.Windows; namespace CorlaneCabinetOrderFormV3.Views; public partial class Parts..."
+- File: CorlaneCabinetOrderFormV3\Views\PlaceOrderView.xaml.cs
+  Symbols: [PlaceOrderView]
+  Preview: "using System.Windows; using System.Windows.Controls; using System.Windows.Input; namespace CorlaneCabinetOrderFormV3.Views {   public partial class Pl..."
+- File: CorlaneCabinetOrderFormV3\Views\UpperCabinetViewV2.xaml.cs
+  Symbols: [UpperCabinetViewV2, UpperCabinetViewV2]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class UpperCabinetViewV2 : UserControl {   public UpperCabine..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\BackThicknessFlyout.xaml.cs
+  Symbols: [BackThicknessFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class BackThicknessFlyout : FlyoutUserControlBase {   public BackThicknes..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\BottomActionPanel.xaml.cs
+  Symbols: [BottomActionPanel]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class BottomActionPanel : FlyoutUserControlBase {   public BottomActionPa..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\CabinetStyleFlyout.xaml.cs
+  Symbols: [CabinetStyleFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class CabinetStyleFlyout : FlyoutUserControlBase {   public CabinetStyleF..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\DimensionsFlyout.xaml.cs
+  Symbols: [DimensionsFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class DimensionsFlyout : FlyoutUserControlBase {   public DimensionsFlyou..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\DoorsFlyout.xaml.cs
+  Symbols: [DoorsFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class DoorsFlyout : FlyoutUserControlBase {   public DoorsFlyout() => Ini..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\DrawersFlyout.xaml.cs
+  Symbols: [DrawersFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class DrawersFlyout : FlyoutUserControlBase {   public DrawersFlyout() =>..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\FlyoutUserControlBase.cs
+  Symbols: [FlyoutUserControlBase, TextBoxGotFocus]
+  Preview: "using System.Windows; using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public class FlyoutUserControlBase ..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\RemovePartsFlyout.xaml.cs
+  Symbols: [RemovePartsFlyout]
+  Preview: "using System.Runtime.Serialization.DataContracts; namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class RemovePartsFlyout..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\RevealsFlyout.xaml.cs
+  Symbols: [RevealsFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class RevealsFlyout : FlyoutUserControlBase {   public RevealsFlyout() =>..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\ShelvesFlyout.xaml.cs
+  Symbols: [ShelvesFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class ShelvesFlyout : FlyoutUserControlBase {   public ShelvesFlyout() =>..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\SpeciesFlyout.xaml.cs
+  Symbols: [SpeciesFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class SpeciesFlyout : FlyoutUserControlBase {   public SpeciesFlyout() =>..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\ToekickFlyout.xaml.cs
+  Symbols: [ToekickFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class ToekickFlyout : FlyoutUserControlBase {   public ToekickFlyout() =>..."
+- File: CorlaneCabinetOrderFormV3\Views\BaseCabinetFlyouts\TopTypeFlyout.xaml.cs
+  Symbols: [TopTypeFlyout]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; public partial class TopTypeFlyout : FlyoutUserControlBase {   public TopTypeFlyout() =>..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultsFlyouts\DefaultsAppearanceFlyout.xaml.cs
+  Symbols: [DefaultsAppearanceFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts; public partial class DefaultsAppe..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultsFlyouts\DefaultsDoorsFlyout.xaml.cs
+  Symbols: [DefaultsDoorsFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts; public partial class DefaultsDoor..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultsFlyouts\DefaultsDrawersFlyout.xaml.cs
+  Symbols: [DefaultsDrawersFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts; public partial class DefaultsDraw..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultsFlyouts\DefaultsRevealsFlyout.xaml.cs
+  Symbols: [DefaultsRevealsFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts; public partial class DefaultsReve..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultsFlyouts\DefaultsShelvesFlyout.xaml.cs
+  Symbols: [DefaultsShelvesFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts; public partial class DefaultsShel..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultsFlyouts\DefaultsSpeciesFlyout.xaml.cs
+  Symbols: [DefaultsSpeciesFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts; public partial class DefaultsSpec..."
+- File: CorlaneCabinetOrderFormV3\Views\DefaultsFlyouts\DefaultsThicknessFlyout.xaml.cs
+  Symbols: [DefaultsThicknessFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts; public partial class DefaultsThic..."
+- File: CorlaneCabinetOrderFormV3\Views\FillerFlyouts\FillerDimensionsFlyout.xaml.cs
+  Symbols: [FillerDimensionsFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.FillerFlyouts; public partial class FillerDimensio..."
+- File: CorlaneCabinetOrderFormV3\Views\FillerFlyouts\FillerSpeciesFlyout.xaml.cs
+  Symbols: [FillerSpeciesFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.FillerFlyouts; public partial class FillerSpeciesF..."
+- File: CorlaneCabinetOrderFormV3\Views\PanelFlyouts\PanelDimensionsFlyout.xaml.cs
+  Symbols: [PanelDimensionsFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.PanelFlyouts; public partial class PanelDimensions..."
+- File: CorlaneCabinetOrderFormV3\Views\PanelFlyouts\PanelEdgebandingFlyout.xaml.cs
+  Symbols: [PanelEdgebandingFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.PanelFlyouts; public partial class PanelEdgebandin..."
+- File: CorlaneCabinetOrderFormV3\Views\PanelFlyouts\PanelSpeciesFlyout.xaml.cs
+  Symbols: [PanelSpeciesFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.PanelFlyouts; public partial class PanelSpeciesFly..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POBackGrainDirView.xaml.cs
+  Symbols: [POBackGrainDirView, POBackGrainDirView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views {   public partial class POBackGrainDirView : UserControl   {     public POBa..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POBatchListView.xaml.cs
+  Symbols: [POBatchListView, POBatchListView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POBatchListView : UserControl {   public POBatchListVie..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POCabinetSpeciesView.xaml.cs
+  Symbols: [POCabinetSpeciesView, POCabinetSpeciesView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POCabinetSpeciesView : UserControl {   public POCabinet..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POCornerCabinetDimsView.xaml.cs
+  Symbols: [POCornerCabinetDimsView, POCornerCabinetDimsView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POCornerCabinetDimsView : UserControl {   public POCorn..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POCustomerInfoView.xaml.cs
+  Preview: "using System; using System.Collections.Generic; using System.Text; using System.Windows; using System.Windows.Controls; using System.Windows.Data; usi..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\PODoorDrwGrainDirView.xaml.cs
+  Symbols: [PODoorDrwGrainDirView, PODoorDrwGrainDirView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class PODoorDrwGrainDirView : UserControl {   public PODoorDr..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\PODrawerBoxesView.xaml.cs
+  Symbols: [PODrawerBoxesView, PODrawerBoxesView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class PODrawerBoxesView : UserControl {   public PODrawerBoxe..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\PODrwStretcherWidthsView.xaml.cs
+  Symbols: [PODrwStretcherWidthsView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; /// <summary> /// Interaction logic for PODrwStretcherWidthsView.xaml /// </..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POEdgebandDoorsView.xaml.cs
+  Symbols: [POEdgebandDoorsView, POEdgebandDoorsView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POEdgebandDoorsView : UserControl {   public POEdgeband..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POEdgebandingView.xaml.cs
+  Symbols: [POEdgebandingView, POEdgebandingView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POEdgebandingView : UserControl {   public POEdgebandin..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POHingeHolesView.xaml.cs
+  Symbols: [POHingeHolesView, POHingeHolesView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POHingeHolesView : UserControl {   public POHingeHolesV..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POIncludeDoorsView.xaml.cs
+  Symbols: [POIncludeDoorsView, POIncludeDoorsView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POIncludeDoorsView : UserControl {   public POIncludeDo..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POJobMaterialListView.xaml.cs
+  Preview: "using System; using System.Collections.Generic; using System.Text; using System.Windows; using System.Windows.Controls; using System.Windows.Data; usi..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\PONotesView.xaml.cs
+  Symbols: [PONotesView, PONotesView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class PONotesView : UserControl {   public PONotesView()   { ..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POOpeningDrwFrontHeightsView.xaml.cs
+  Symbols: [POOpeningDrwFrontHeightsView, POOpeningDrwFrontHeightsView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POOpeningDrwFrontHeightsView : UserControl {   public P..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\PORemovePartsView.xaml.cs
+  Symbols: [PORemovePartsView, PORemovePartsView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class PORemovePartsView : UserControl {   public PORemovePart..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\PORevealsGapsView.xaml.cs
+  Symbols: [PORevealsGapsView, PORevealsGapsView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class PORevealsGapsView : UserControl {   public PORevealsGap..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\POToekickView.xaml.cs
+  Symbols: [POToekickView, POToekickView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views; public partial class POToekickView : UserControl {   public POToekickView() ..."
+- File: CorlaneCabinetOrderFormV3\Views\ProcessOrder\ProcessOrderView.xaml.cs
+  Symbols: [ProcessOrderView]
+  Preview: "using System.Windows.Controls; namespace CorlaneCabinetOrderFormV3.Views {   /// <summary>   /// Interaction logic for ProcessOrderView.xaml   /// </s..."
+- File: CorlaneCabinetOrderFormV3\Views\UpperCabinetFlyouts\UpperCabinetStyleFlyout.xaml.cs
+  Symbols: [UpperCabinetStyleFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.UpperCabinetFlyouts; public partial class UpperCab..."
+- File: CorlaneCabinetOrderFormV3\Views\UpperCabinetFlyouts\UpperDimensionsFlyout.xaml.cs
+  Symbols: [UpperDimensionsFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.UpperCabinetFlyouts; public partial class UpperDim..."
+- File: CorlaneCabinetOrderFormV3\Views\UpperCabinetFlyouts\UpperRemovePartsFlyout.xaml.cs
+  Symbols: [UpperRemovePartsFlyout]
+  Preview: " namespace CorlaneCabinetOrderFormV3.Views.UpperCabinetFlyouts; public partial class UpperRemovePartsFlyout {   public UpperRemovePartsFlyout() => Ini..."
+- File: CorlaneCabinetOrderFormV3\Views\UpperCabinetFlyouts\UpperRevealsFlyout.xaml.cs
+  Symbols: [UpperRevealsFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.UpperCabinetFlyouts; public partial class UpperRev..."
+- File: CorlaneCabinetOrderFormV3\Views\UpperCabinetFlyouts\UpperShelvesFlyout.xaml.cs
+  Symbols: [UpperShelvesFlyout]
+  Preview: "using CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts; namespace CorlaneCabinetOrderFormV3.Views.UpperCabinetFlyouts; public partial class UpperShe..."
+- File: CorlaneCabinetOrderFormV3.Tests\AdditionalConstraintTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests for business rules identified as coverage g..."
+- File: CorlaneCabinetOrderFormV3.Tests\AutoSaveRecoveryTests.cs
+  Symbols: [AutoSaveRecoveryTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.IO; namespace CorlaneCabinetOrderFormV3.Tests; public c..."
+- File: CorlaneCabinetOrderFormV3.Tests\BackGrainDirThresholdTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests..."
+- File: CorlaneCabinetOrderFormV3.Tests\BaseCabinetDepthValidationTests.cs
+  Symbols: [BaseCabinetDepthValidationTests]
+  Preview: "using System.ComponentModel.DataAnnotations; using CorlaneCabinetOrderFormV3.ValidationAttributes; namespace CorlaneCabinetOrderFormV3.Tests; public c..."
+- File: CorlaneCabinetOrderFormV3.Tests\BaseCabinetMappingFidelityTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.ViewModels; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Guard..."
+- File: CorlaneCabinetOrderFormV3.Tests\Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test.cs
+  Symbols: [Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; public class Base_BDNY04..."
+- File: CorlaneCabinetOrderFormV3.Tests\Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test.cs
+  Symbols: [Base_BSNY1000F3XNN_Mat_And_EB_Matches_Expected_Test]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; public class Base_BSNY10..."
+- File: CorlaneCabinetOrderFormV3.Tests\Base_BSNY2012F3FYN_Mat_And_EB_Matches_Expected.cs
+  Symbols: [Base_BSNY2012F3FYN_Mat_And_EB_Matches_Expected]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering;  namespace CorlaneCabinetOrderFormV3.Tests; public class Base_BSNY2..."
+- File: CorlaneCabinetOrderFormV3.Tests\CabinetBuildHelpersTests.cs
+  Symbols: [CabinetBuildHelpersTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; public class CabinetBuildHelpersTests {   [Theory]   [InlineData..."
+- File: CorlaneCabinetOrderFormV3.Tests\CabinetLayoutCalculatorTests.cs
+  Symbols: [CabinetLayoutCalculatorTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; public class CabinetLayou..."
+- File: CorlaneCabinetOrderFormV3.Tests\CabinetModelAccumulatorTests.cs
+  Symbols: [CabinetModelAccumulatorTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests the material/edgebanding accumulator dictio..."
+- File: CorlaneCabinetOrderFormV3.Tests\CabinetServiceExtendedTests.cs
+  Symbols: [Cabi]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Extende..."
+- File: CorlaneCabinetOrderFormV3.Tests\CabinetServiceTests.cs
+  Symbols: [CabinetServiceTests, Add_UniqueNames_Succeeds]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; public class CabinetServi..."
+- File: CorlaneCabinetOrderFormV3.Tests\ConvertDimensionEdgeCaseTests.cs
+  Symbols: [Conve]
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Additional edge case tests for ConvertDimensi..."
+- File: CorlaneCabinetOrderFormV3.Tests\ConvertDimensionTests.cs
+  Symbols: [ConvertDimensionTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Converters; namespace CorlaneCabinetOrderFormV3.Tests; public class ConvertDimensionTests {   //######################..."
+- File: CorlaneCabinetOrderFormV3.Tests\Corner90DoorSizeDimensionTests.cs
+  Preview: "// Corner90DoorSizeDimensionTests.cs // ───────────────────────────────────────────────────────────────────────────── // Verifies that CabinetPreviewB..."
+- File: CorlaneCabinetOrderFormV3.Tests\CornerAndAngleFrontMatAndEBTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Materi..."
+- File: CorlaneCabinetOrderFormV3.Tests\CustomSpeciesResolutionTests.cs
+  Symbols: [CustomSpeciesResolu]
+  Preview: "using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Verifies that 'Custom' species always resolves..."
+- File: CorlaneCabinetOrderFormV3.Tests\DimensionRangeAttributeTests.cs
+  Symbols: [DimensionRangeAttributeTests, FakeCab]
+  Preview: "using System.ComponentModel.DataAnnotations; using CorlaneCabinetOrderFormV3.ValidationAttributes; namespace CorlaneCabinetOrderFormV3.Tests; public c..."
+- File: CorlaneCabinetOrderFormV3.Tests\DoorSizeDimensionTests.cs
+  Preview: "// DoorSizeDimensionTests.cs // ───────────────────────────────────────────────────────────────────────────── // Verifies that CabinetPreviewBuilder.B..."
+- File: CorlaneCabinetOrderFormV3.Tests\DrawerFrontEqualizationTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests the drawer front equalization math via Ca..."
+- File: CorlaneCabinetOrderFormV3.Tests\DrawerFrontWidthTests.cs
+  Preview: "// DrawerFrontWidthTests.cs // ───────────────────────────────────────────────────────────────────────────── // Verifies that CabinetPreviewBuilder.Bu..."
+- File: CorlaneCabinetOrderFormV3.Tests\Drawer_Front_Height_Test_Using_CabinetBuildResults_Output.cs
+  Symbols: [Drawer_Front_Height_Test_Using_Cab]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; using CorlaneCabinetOrderFormV3.Services; using System.Windows; nam..."
+- File: CorlaneCabinetOrderFormV3.Tests\EnforceStyleConstraintsTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests that style-specific constraints are enforce..."
+- File: CorlaneCabinetOrderFormV3.Tests\FillerAndPanelMatAndEBTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Materi..."
+- File: CorlaneCabinetOrderFormV3.Tests\GlobalExceptionHandlerTests.cs
+  Symbols: [GlobalExceptionHandlerTests, BuildDispatcherExceptionResponse_ReturnsMessageContainingExceptionText]
+  Preview: "namespace CorlaneCabinetOrderFormV3.Tests; public class GlobalExceptionHandlerTests {   [Fact]   public void BuildDispatcherExceptionResponse_ReturnsM..."
+- File: CorlaneCabinetOrderFormV3.Tests\HiddenPartsMaterialTotalsTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Verifi..."
+- File: CorlaneCabinetOrderFormV3.Tests\JobFileRoundTripEdgeCaseTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.IO; namespace CorlaneCabinetOrderFormV3.Tests; /// <sum..."
+- File: CorlaneCabinetOrderFormV3.Tests\JobFileRoundTripExtendedTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.IO; namespace CorlaneCabinetOrderFormV3.Tests; /// <sum..."
+- File: CorlaneCabinetOrderFormV3.Tests\JobFileRoundTripTests.cs
+  Symbols: [JobFileRoundTripTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.IO; namespace CorlaneCabinetOrderFormV3.Tests; public c..."
+- File: CorlaneCabinetOrderFormV3.Tests\MappingGuardAuditTests.cs
+  Preview: "using System.IO; using System.Runtime.CompilerServices; using System.Text.RegularExpressions; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary>..."
+- File: CorlaneCabinetOrderFormV3.Tests\MaterialAggregationEdgeCaseTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Edge-case tests for MaterialYieldCalculator agg..."
+- File: CorlaneCabinetOrderFormV3.Tests\MaterialYieldCalculatorTests.cs
+  Symbols: [MaterialYieldCalculatorTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; public class MaterialYieldCalculatorTests {   [Theory]   [InlineD..."
+- File: CorlaneCabinetOrderFormV3.Tests\MultiSpeciesPricingTests.cs
+  Symbols: [M]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests p..."
+- File: CorlaneCabinetOrderFormV3.Tests\PriceBreakdownServiceTests.cs
+  Symbols: [PriceBreakdownServiceTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Tests; public class PriceBreakdo..."
+- File: CorlaneCabinetOrderFormV3.Tests\RolloutAndDrawerBoxDimensionTests.cs
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests ..."
+- File: CorlaneCabinetOrderFormV3.Tests\UpperCabinetTest.cs
+  Symbols: [UpperCabinetTest]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; public class UpperCabine..."
+- File: CorlaneCabinetOrderFormV3.Tests\ViewModelMappingHelperTests.cs
+  Symbols: [ViewModelMappingHelperTests]
+  Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.ViewModels; namespace CorlaneCabinetOrderFormV3.Tests; public class ViewModelM..."
