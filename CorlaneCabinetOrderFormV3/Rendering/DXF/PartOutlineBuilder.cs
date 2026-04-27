@@ -59,12 +59,12 @@ internal static class PartOutlineBuilder
     // ── Tenon panel: comb on BOTH short edges ─────────────────────────────────
 
     internal static List<Vector2> TenonBothEnds(
-        double length, double depth, LockDadoSettings s)
+        double length, double depth, LockDadoSettings s, bool forceTwoTenons = false)
     {
         double dd = s.DadoDepth;
         double blindStart = s.BlindStart;
         double blindEnd = depth - s.BlindStop;
-        var tenons = ComputeTenonRanges(depth, s);
+        var tenons = ComputeTenonRanges(depth, s, forceTwoTenons);
         var verts = new List<Vector2>();
 
         // Front edge (Y=0): left → right, no joinery
@@ -113,7 +113,8 @@ internal static class PartOutlineBuilder
         double mortiseBottomY,
         TenonFlushFace flushFace,
         LockDadoSettings s,
-        double xOffset = 0)
+        double xOffset = 0,
+        bool forceTwoTenons = false)
     {
         double mt34 = MaterialDefaults.Thickness34;
         double slotHeight = s.MortiseSlotHeight;
@@ -127,7 +128,7 @@ internal static class PartOutlineBuilder
         };
         double slotTopY = slotBottomY + slotHeight;
 
-        var tenons = ComputeTenonRanges(partDepth, s);
+        var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons);
         var pockets = new List<(double, double, double, double)>(tenons.Count);
 
         foreach (var (tStart, tEnd) in tenons)
@@ -144,24 +145,33 @@ internal static class PartOutlineBuilder
     // ── Mortise pockets: height-direction joint (toekick) ─────────────────────
 
     internal static List<(double X1, double X2, double Y1, double Y2)> ComputeHeightDirectionMortisePockets(
-        double tkHeight,
-        double tkDepth,
-        double cabinetDepth,
+        double edgeLength,
+        double xPosition,
+        double bottomY,
+        TenonFlushFace flushFace,
         LockDadoSettings s)
     {
-        double toekickEdgeLen = tkHeight - 0.5;
-        double toekickBottomY = 0.5;
-        double toekickBackX = cabinetDepth - tkDepth;
-        double slotX1 = toekickBackX - s.TenonThickness;
-        double slotX2 = toekickBackX + s.TenonClearance;
+        double slotX1 = flushFace switch
+        {
+            TenonFlushFace.Back => xPosition - s.TenonThickness,
+            TenonFlushFace.InteriorFront => xPosition,
+            _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
+        };
 
-        var tenons = ComputeTenonRanges(toekickEdgeLen, s);
+        double slotX2 = flushFace switch
+        {
+            TenonFlushFace.Back => xPosition + s.TenonClearance,
+            TenonFlushFace.InteriorFront => xPosition + s.MortiseSlotHeight,
+            _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
+        };
+
+        var tenons = ComputeTenonRanges(edgeLength, s);
         var pockets = new List<(double, double, double, double)>(tenons.Count);
 
         foreach (var (tStart, tEnd) in tenons)
         {
-            double y1 = toekickBottomY + Math.Max(tStart - s.MortiseOversize, s.BlindStart);
-            double y2 = toekickBottomY + Math.Min(tEnd + s.MortiseOversize, toekickEdgeLen - s.BlindStop);
+            double y1 = bottomY + Math.Max(tStart - s.MortiseOversize, s.BlindStart);
+            double y2 = bottomY + Math.Min(tEnd + s.MortiseOversize, edgeLength - s.BlindStop);
             pockets.Add((slotX1, slotX2, y1, y2));
         }
 
@@ -175,7 +185,8 @@ internal static class PartOutlineBuilder
         double mortiseBottomY,
         TenonFlushFace flushFace,
         LockDadoSettings s,
-        double xOffset = 0)
+        double xOffset = 0,
+        bool forceTwoTenons = false)
     {
         double mt34 = MaterialDefaults.Thickness34;
         double slotBottomY = flushFace switch
@@ -185,7 +196,7 @@ internal static class PartOutlineBuilder
         };
         double holeCenterY = slotBottomY + (s.MortiseSlotHeight / 2.0);
 
-        var tenons = ComputeTenonRanges(partDepth, s);
+        var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons);
         var holes = new List<(double, double, double)>();
 
         for (int i = 0; i < tenons.Count - 1; i++)
@@ -201,22 +212,25 @@ internal static class PartOutlineBuilder
     // ── Screw pilot holes: height-direction joint (toekick) ───────────────────
 
     internal static List<(double CenterX, double CenterY, double Diameter)> ComputeHeightDirectionScrewHoles(
-        double tkHeight,
-        double tkDepth,
-        double cabinetDepth,
+        double edgeLength,
+        double xPosition,
+        double bottomY,
+        TenonFlushFace flushFace,
         LockDadoSettings s)
     {
-        double toekickEdgeLen = tkHeight - 0.5;
-        double toekickBottomY = 0.5;
-        double toekickBackX = cabinetDepth - tkDepth;
-        double holeCenterX = toekickBackX - (s.TenonThickness / 2.0);
+        double holeCenterX = flushFace switch
+        {
+            TenonFlushFace.Back => xPosition - (s.TenonThickness / 2.0),
+            TenonFlushFace.InteriorFront => xPosition + (s.MortiseSlotHeight / 2.0),
+            _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
+        };
 
-        var tenons = ComputeTenonRanges(toekickEdgeLen, s);
+        var tenons = ComputeTenonRanges(edgeLength, s);
         var holes = new List<(double, double, double)>();
 
         for (int i = 0; i < tenons.Count - 1; i++)
         {
-            double gapCenterY = toekickBottomY + (tenons[i].EndY + tenons[i + 1].StartY) / 2.0;
+            double gapCenterY = bottomY + (tenons[i].EndY + tenons[i + 1].StartY) / 2.0;
             holes.Add((holeCenterX, gapCenterY, s.ScrewPilotHoleDiameter));
         }
 
@@ -243,16 +257,29 @@ internal static class PartOutlineBuilder
     // ── Core tenon layout algorithm ───────────────────────────────────────────
 
     internal static List<(double StartY, double EndY)> ComputeTenonRanges(
-        double edgeLength, LockDadoSettings s)
+        double edgeLength, LockDadoSettings s, bool forceTwoTenons = false)
     {
         double usableStart = s.BlindStart;
         double usableEnd = edgeLength - s.BlindStop;
         double usableLength = usableEnd - usableStart;
 
+
         int gapCount = s.GapCount(edgeLength);
         int tenonCount = gapCount + 1;
         double totalGapLen = gapCount * s.GapWidth;
         double tenonWidth = (usableLength - totalGapLen) / tenonCount;
+
+        // DrawerStretcher / TopStretcherFront always get exactly 2 tenons with
+        // the screw-access gap centred in the usable zone.
+        if (forceTwoTenons)
+        {
+            tenonWidth = (usableLength - s.GapWidth) / 2.0;
+            return
+            [
+                (usableStart,                    usableStart + tenonWidth),
+                (usableStart + tenonWidth + s.GapWidth, usableEnd),
+            ];
+        }
 
         var ranges = new List<(double, double)>(tenonCount);
         double y = usableStart;

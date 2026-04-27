@@ -53,7 +53,8 @@ internal static class DxfExporter
             List<MortiseSpec>? mortiseSpecs = null;
             BaseCabinetDimensions dim = default;
             if (cab is BaseCabinetModel baseCab &&
-                string.Equals(baseCab.Style, "Standard", StringComparison.OrdinalIgnoreCase))
+                (string.Equals(baseCab.Style, CabinetStyles.Base.Standard, StringComparison.OrdinalIgnoreCase) ||
+                 string.Equals(baseCab.Style, CabinetStyles.Base.Drawer, StringComparison.OrdinalIgnoreCase)))
             {
                 dim = BaseCabinetDimensions.From(baseCab);
                 mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(baseCab, dim, s);
@@ -108,12 +109,12 @@ internal static class DxfExporter
         double length = part.LengthIn;
         double depth = part.WidthIn;
         var kind = ResolvePartKind(part.PartName);
+        bool forceTwoTenons = part.PartName is "Drawer Stretcher" or "Top Stretcher (Front)";
 
         // ── Outline ───────────────────────────────────────────────────────────
         var outline = kind == DxfPartKind.TenonPanel
-            ? PartOutlineBuilder.TenonBothEnds(length, depth, s)
-            : PartOutlineBuilder.Rectangle(length, depth);
-        AddClosedPolyline(doc, LayerOutline, outline);
+            ? PartOutlineBuilder.TenonBothEnds(length, depth, s, forceTwoTenons)
+            : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
 
         // ── Tenon thinning pockets ────────────────────────────────────────────
         if (kind == DxfPartKind.TenonPanel)
