@@ -109,12 +109,22 @@ internal static class DxfExporter
         double length = part.LengthIn;
         double depth = part.WidthIn;
         var kind = ResolvePartKind(part.PartName);
-        bool forceTwoTenons = part.PartName is "Drawer Stretcher" or "Top Stretcher (Front)";
+        bool forceTwoTenons = part.PartName is "Drawer Stretcher" or "Top Stretcher (Front)" or "Toekick";
 
         // ── Outline ───────────────────────────────────────────────────────────
-        var outline = kind == DxfPartKind.TenonPanel
+        if (part.PartName is "Toekick")
+        {
+            var outline = kind == DxfPartKind.TenonPanel
+            ? PartOutlineBuilder.TenonBothEnds(length, depth, s = s with { BlindStart = 0, BlindStop = 0 }, forceTwoTenons = true)
+            : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
+
+        }
+        else
+        {
+            var outline = kind == DxfPartKind.TenonPanel
             ? PartOutlineBuilder.TenonBothEnds(length, depth, s, forceTwoTenons)
             : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
+        }
 
         // ── Tenon thinning pockets ────────────────────────────────────────────
         if (kind == DxfPartKind.TenonPanel)

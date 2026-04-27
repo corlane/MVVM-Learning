@@ -13,8 +13,9 @@ internal static class MortiseSpecBuilder
     internal static List<MortiseSpec> BuildForBaseStandard(
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,
-        LockDadoSettings s)
+        LockDadoSettings? s = null)
     {
+        s ??= LockDadoSettings.Default;
         double mt34 = MaterialDefaults.Thickness34;
         double height = dim.Height;
         double depth = dim.Depth;
@@ -66,17 +67,18 @@ internal static class MortiseSpecBuilder
         {
             specs.Add(BuildHeightSpec("Nailer",
                 edgeLength: stretcherWidth,
-                xPosition: mt34,
+                xPosition: mt34/2,
                 bottomY: height - mt34 - stretcherWidth,
                 flushFace: TenonFlushFace.InteriorFront,
-                s));
+                s,
+                forceTwoTenons: true));
         }
 
         // ── Drawer Stretchers (flush Bottom face) ────────────────────────────
         double[] openings = [dim.Opening1Height, dim.Opening2Height,
                              dim.Opening3Height, dim.Opening4Height];
         double runningY = height;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (openings[i] <= 0) break;
             runningY -= openings[i] + 2 * mt34;
@@ -97,7 +99,8 @@ internal static class MortiseSpecBuilder
                 xPosition: depth - tkD,
                 bottomY: 0.5,
                 flushFace: TenonFlushFace.Back,
-                s));
+                s = s with { BlindStart = 0, BlindStop = 0 },
+                forceTwoTenons: true));
         }
 
         return specs;
@@ -122,13 +125,13 @@ internal static class MortiseSpecBuilder
 
     private static MortiseSpec BuildHeightSpec(
         string label, double edgeLength, double xPosition, double bottomY, 
-        TenonFlushFace flushFace, LockDadoSettings s) 
+        TenonFlushFace flushFace, LockDadoSettings s, bool forceTwoTenons = false) 
     { 
         return new MortiseSpec 
         { Label = label, Pockets = PartOutlineBuilder.ComputeHeightDirectionMortisePockets(
-            edgeLength, xPosition, bottomY, flushFace, s), 
+            edgeLength, xPosition, bottomY, flushFace, s, forceTwoTenons), 
             ScrewHoles = PartOutlineBuilder.ComputeHeightDirectionScrewHoles(
-                edgeLength, xPosition, bottomY, flushFace, s), 
+                edgeLength, xPosition, bottomY, flushFace, s, forceTwoTenons), 
         }; 
     }
 }

@@ -149,7 +149,8 @@ internal static class PartOutlineBuilder
         double xPosition,
         double bottomY,
         TenonFlushFace flushFace,
-        LockDadoSettings s)
+        LockDadoSettings s,
+        bool forceTwoTenons = false)
     {
         double slotX1 = flushFace switch
         {
@@ -165,7 +166,7 @@ internal static class PartOutlineBuilder
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
-        var tenons = ComputeTenonRanges(edgeLength, s);
+        var tenons = ComputeTenonRanges(edgeLength, s, forceTwoTenons);
         var pockets = new List<(double, double, double, double)>(tenons.Count);
 
         foreach (var (tStart, tEnd) in tenons)
@@ -216,7 +217,8 @@ internal static class PartOutlineBuilder
         double xPosition,
         double bottomY,
         TenonFlushFace flushFace,
-        LockDadoSettings s)
+        LockDadoSettings s,
+        bool forceTwoTenons = false)
     {
         double holeCenterX = flushFace switch
         {
@@ -225,7 +227,7 @@ internal static class PartOutlineBuilder
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
-        var tenons = ComputeTenonRanges(edgeLength, s);
+        var tenons = ComputeTenonRanges(edgeLength, s, forceTwoTenons);
         var holes = new List<(double, double, double)>();
 
         for (int i = 0; i < tenons.Count - 1; i++)
