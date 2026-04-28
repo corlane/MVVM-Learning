@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -34,6 +35,15 @@ internal static class MortiseSpecBuilder
             flushFace: TenonFlushFace.Top,
             s));
 
+        // ── Back  ───────────────────────────────────────
+        specs.Add(BuildHeightSpec("Back",
+            edgeLength: height - mt34 - tkH,
+            xPosition: mt34 / 2,
+            bottomY: tkH,
+            flushFace: TenonFlushFace.InteriorFront,
+            s,
+            forceTwoTenons: false));
+
         // ── Top or Top Stretcher Front ───────────────────────────────────────
         // Full Top: same geometry as Deck but placed at top (flush Top face).
         // Stretcher Top: tenon is only on the 6" stretcher width, flush Bottom face.
@@ -62,7 +72,7 @@ internal static class MortiseSpecBuilder
 
         // ── Nailer (height-direction, tenon faces toward inside/front) ───────
         // Panel height = stretcherWidth, with top edge at height - mt34.
-        bool hasNailer = string.Equals(baseCab.BackThickness, CabinetOptions.BackThickness.QuarterFraction, StringComparison.OrdinalIgnoreCase) == false;
+        bool hasNailer = string.Equals(baseCab.BackThickness, CabinetOptions.BackThickness.QuarterFraction, StringComparison.OrdinalIgnoreCase);
         if (hasNailer)
         {
             specs.Add(BuildHeightSpec("Nailer",

@@ -19,7 +19,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 internal static class PartOutlineBuilder
 {
     /// <summary>Casts double coords to netDxf.Vector2 (which requires float) in one place.</summary>
-    private static Vector2 V(double x, double y) => new((float)x, (float)y);
+    private static Vector2 Vertex(double x, double y) => new((float)x, (float)y);
 
     // ── Rectangle ─────────────────────────────────────────────────────────────
 
@@ -27,10 +27,10 @@ internal static class PartOutlineBuilder
     {
         return
         [
-            V(0,      0),
-            V(length, 0),
-            V(length, depth),
-            V(0,      depth),
+            Vertex(0,      0),
+            Vertex(length, 0),
+            Vertex(length, depth),
+            Vertex(0,      depth),
         ];
     }
 
@@ -42,16 +42,16 @@ internal static class PartOutlineBuilder
         // X = depth direction (front=0 → back=depth), Y = height direction
         return
         [
-            V(depth,               tkHeight),
-            V(depth,               height),
-            V(0,                   height),
-            V(0,                   0),
-            V(3,                   0),
-            V(3,                   0.5),
-            V(depth - tkDepth - 3, 0.5),
-            V(depth - tkDepth - 3, 0),
-            V(depth - tkDepth,     0),
-            V(depth - tkDepth,     tkHeight),
+            Vertex(depth,               tkHeight),
+            Vertex(depth,               height),
+            Vertex(0,                   height),
+            Vertex(0,                   0),
+            Vertex(3,                   0),
+            Vertex(3,                   0.5),
+            Vertex(depth - tkDepth - 3, 0.5),
+            Vertex(depth - tkDepth - 3, 0),
+            Vertex(depth - tkDepth,     0),
+            Vertex(depth - tkDepth,     tkHeight),
         ];
     }
 
@@ -68,35 +68,82 @@ internal static class PartOutlineBuilder
         var verts = new List<Vector2>();
 
         // Front edge (Y=0): left → right, no joinery
-        verts.Add(V(0, 0));
-        verts.Add(V(length, 0));
+        verts.Add(Vertex(0, 0));
+        verts.Add(Vertex(length, 0));
 
         // Right edge (X=length): front → back, comb in usable zone
-        verts.Add(V(length, blindStart));
+        verts.Add(Vertex(length, blindStart));
         foreach (var (tStart, tEnd) in tenons)
         {
-            verts.Add(V(length, tStart));
-            verts.Add(V(length + dd, tStart));   // protrude right
-            verts.Add(V(length + dd, tEnd));
-            verts.Add(V(length, tEnd));
+            verts.Add(Vertex(length, tStart));
+            verts.Add(Vertex(length + dd, tStart));   // protrude right
+            verts.Add(Vertex(length + dd, tEnd));
+            verts.Add(Vertex(length, tEnd));
         }
-        verts.Add(V(length, blindEnd));
-        verts.Add(V(length, depth));
+        verts.Add(Vertex(length, blindEnd));
+        verts.Add(Vertex(length, depth));
 
         // Back edge (Y=depth): right → left, no joinery
-        verts.Add(V(0, depth));
+        verts.Add(Vertex(0, depth));
 
         // Left edge (X=0): back → front, comb in usable zone (reversed)
-        verts.Add(V(0, blindEnd));
+        verts.Add(Vertex(0, blindEnd));
         for (int i = tenons.Count - 1; i >= 0; i--)
         {
             var (tStart, tEnd) = tenons[i];
-            verts.Add(V(0, tEnd));
-            verts.Add(V(-dd, tEnd));
-            verts.Add(V(-dd, tStart));
-            verts.Add(V(0, tStart));
+            verts.Add(Vertex(0, tEnd));
+            verts.Add(Vertex(-dd, tEnd));
+            verts.Add(Vertex(-dd, tStart));
+            verts.Add(Vertex(0, tStart));
         }
-        verts.Add(V(0, blindStart));
+        verts.Add(Vertex(0, blindStart));
+
+        return verts;
+    }
+
+    internal static List<Vector2> TenonTopAndBottom(
+    double length, double height, LockDadoSettings s, bool forceTwoTenons = false)
+    {
+        double dadoDepth = s.DadoDepth;
+        double blindStart = s.BlindStart;
+        double blindEnd = length - s.BlindStop;
+        var tenons = ComputeTenonRanges(length, s, forceTwoTenons);
+        var verts = new List<Vector2>();
+
+        // Bottom edge (Y=0): left → right, comb in usable zone
+        verts.Add(Vertex(0, 0));
+        verts.Add(Vertex(blindStart, 0));   // protrude bottom
+
+        foreach (var (tStart, tEnd) in tenons)
+        {
+            verts.Add(Vertex(tStart, 0));
+            verts.Add(Vertex(tStart, -dadoDepth));      // retract to edge
+            verts.Add(Vertex(tEnd, -dadoDepth));
+            verts.Add(Vertex(tEnd, 0));       // protrude bottom again
+        }
+
+        verts.Add(Vertex(blindEnd, 0));
+        verts.Add(Vertex(length, 0));
+
+        // Right edge: go up to top-right corner
+        verts.Add(Vertex(length, height));
+
+        // Top edge (traverse right → left): comb in usable zone (reverse order)
+        verts.Add(Vertex(blindEnd, height));   // first usable boundary from the right
+
+        for (int i = tenons.Count - 1; i >= 0; i--)
+        {
+            var (tStart, tEnd) = tenons[i];
+            verts.Add(Vertex(tEnd, height));
+            verts.Add(Vertex(tEnd, height + dadoDepth));      // retract to edge (towards outside)
+            verts.Add(Vertex(tStart, height + dadoDepth));
+            verts.Add(Vertex(tStart, height));       // back to top face
+        }
+
+        verts.Add(Vertex(blindStart, height));
+        verts.Add(Vertex(0, height));
+
+        // Left edge: will naturally close back to the starting bottom-left vertex
 
         return verts;
     }

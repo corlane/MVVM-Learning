@@ -4,6 +4,7 @@ using netDxf;
 using netDxf.Entities;
 using netDxf.Tables;
 using System.IO;
+using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -67,12 +68,12 @@ internal static class DxfExporter
 
                 var kind = ResolvePartKind(part.PartName);
 
-                if (kind == DxfPartKind.MortisePanel && mortiseSpecs is not null)
+                if (kind == DxfPartKind.MortisePanel && mortiseSpecs is not null) // Add mortieses 
                     ExportEndPanel(path, part, mortiseSpecs, s,
                         tkHeight: dim.TKHeight,
                         tkDepth: dim.TKDepth);
                 else
-                    ExportPart(path, part, s);
+                    ExportPart(path, part, s); // Add Tenons or plain outline as appropriate
             }
         }
     }
@@ -112,22 +113,29 @@ internal static class DxfExporter
         bool forceTwoTenons = part.PartName is "Drawer Stretcher" or "Top Stretcher (Front)" or "Toekick";
 
         // ── Outline ───────────────────────────────────────────────────────────
-        if (part.PartName is "Toekick")
+        if (part.PartName is "Toekick") // Toekicks get BlindStart & BlindStop = 0 because they are too narrow to accommodate normal tenons.
         {
-            var outline = kind == DxfPartKind.TenonPanel
+            var outline = kind == DxfPartKind.TenonLeftAndRight
             ? PartOutlineBuilder.TenonBothEnds(length, depth, s = s with { BlindStart = 0, BlindStop = 0 }, forceTwoTenons = true)
             : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
-
         }
+
+        else if (part.PartName is "Back")
+        {
+            var outline = kind == DxfPartKind.TenonTopAndBottom
+            ? PartOutlineBuilder.TenonTopAndBottom(length, depth, s, forceTwoTenons = false)
+            : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
+        }
+
         else
         {
-            var outline = kind == DxfPartKind.TenonPanel
+            var outline = kind == DxfPartKind.TenonLeftAndRight
             ? PartOutlineBuilder.TenonBothEnds(length, depth, s, forceTwoTenons)
             : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
         }
 
         // ── Tenon thinning pockets ────────────────────────────────────────────
-        if (kind == DxfPartKind.TenonPanel)
+        if (kind == DxfPartKind.TenonLeftAndRight)
         {
             foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, s))
                 AddRectangle(doc, LayerTenonPocket, x1, x2, y1, y2);
@@ -271,6 +279,10 @@ internal static class DxfExporter
         double cx, double cy, double dia, double oldWidth)
         => (cy, oldWidth - cx, dia);
 
+    private static List<Vector2> MirrorX(List<Vector2> pts, double panelLength)
+        => pts.Select(p => new Vector2((float)(panelLength - p.X), p.Y)).ToList();
+
+
     private static void AddLabels(DxfDocument doc, PartListEntry part)
     {
         var layer = doc.Layers[LayerLabels];
@@ -287,18 +299,16 @@ internal static class DxfExporter
             AddText(doc, layer, $"Notes: {part.Notes}", 0, y - 3.1, 0.3);
     }
 
-    private static List<Vector2> MirrorX(List<Vector2> pts, double panelLength)
-    => pts.Select(p => new Vector2((float)(panelLength - p.X), p.Y)).ToList();
-
     private static void AddText(
-        DxfDocument doc, Layer layer,
-        string text, double x, double y, double height)
+    DxfDocument doc, Layer layer,
+    string text, double x, double y, double height)
     {
         doc.Entities.Add(new Text(text, new Vector3((float)x, (float)y, 0), height)
         {
             Layer = layer,
         });
     }
+
 
     // ── Part classification ───────────────────────────────────────────────────
 
@@ -316,12 +326,14 @@ internal static class DxfExporter
                      or "Toekick (Right)"
                      or "Sink Stretcher"
             || partName.StartsWith("Drawer Stretcher", StringComparison.OrdinalIgnoreCase))
-            return DxfPartKind.TenonPanel;
+            return DxfPartKind.TenonLeftAndRight;
 
+        if (partName is "Back")
+            return DxfPartKind.TenonTopAndBottom;
         return DxfPartKind.Plain;
     }
 
-    private enum DxfPartKind { Plain, TenonPanel, MortisePanel }
+    private enum DxfPartKind { Plain, TenonLeftAndRight, TenonTopAndBottom, MortisePanel }
 
     // ── Filename helper ───────────────────────────────────────────────────────
 
