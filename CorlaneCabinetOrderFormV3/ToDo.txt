@@ -47,6 +47,23 @@ Upper angle front not showing calculated front width. AGAIN. It is only on initi
 
 
 TESTING NOTES:
-									
+		
+Summary of what we are working on right now:
 
+Summary: DXF Exporter Refactoring for Multi-Edge Tenons
+Branch: joinery_and_DXF_export
+Goal: Support tenon generation on arbitrary edge combinations (not just predefined pairs) to handle parts like the toekick, which requires tenons on 3 edges: left, right, and top.
+Key Findings:
+•	EdgeDesignators is already a [Flags] enum, supporting arbitrary edge combinations via bitwise OR
+•	PartOutlineBuilder.ComputeTenonThinningPockets() already uses HasFlag() to handle multiple edges correctly
+•	The issue was in DxfExporter.cs—it only had hardcoded switch cases for 2-edge combinations
+Changes Made:
+1.	Added DxfPartKind.TenonTopLeftRight enum value
+2.	Updated ResolvePartKind() to classify toekick variants ("Toekick", "Toekick (Left)", "Toekick (Right)") as TenonTopLeftRight
+3.	Refactored outline generation to use a unified switch expression with BuildPanelWithTenons() calls
+4.	Preserved forceTwoTenons flag for parts that need it (Drawer Stretcher, Top Stretcher, Toekick)
+5.	Centralized part-specific setting overrides (BlindStart/BlindStop) into a single resolution block
+Current Challenge: Parts need edge-specific blind value overrides. For example, the toekick's left/right tenons use BlindStart=0, BlindStop=0, but the top tenons might need different values. Currently exploring whether to:
+•	Add per-edge fields to LockDadoSettings record with nullable overrides
+•	Or build separate outline geometries per edge group and merge them
 
