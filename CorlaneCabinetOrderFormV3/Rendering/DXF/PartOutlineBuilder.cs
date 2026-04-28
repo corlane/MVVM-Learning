@@ -156,7 +156,8 @@ internal static class PartOutlineBuilder
     double length,
     double depth,
     LockDadoSettings s,
-    EdgeDesignators tenonEdges = EdgeDesignators.None)
+    EdgeDesignators tenonEdges = EdgeDesignators.None,
+    bool forceTwoTenons = false)
     {
         var pockets = new List<(double, double, double, double)>();
         double dd = s.DadoDepth + 0.03937;
@@ -301,7 +302,6 @@ internal static class PartOutlineBuilder
 
 
     // ── Screw pilot holes: height-direction joint (toekick) ───────────────────
-
     internal static List<(double CenterX, double CenterY, double Diameter)> ComputeHeightDirectionScrewHoles(
         double edgeLength,
         double xPosition,
@@ -328,38 +328,6 @@ internal static class PartOutlineBuilder
 
         return holes;
     }
-
-    // ── Tenon thinning pockets ────────────────────────────────────────────────
-
-    //internal static (double X1, double X2, double Y1, double Y2)[] ComputeTenonThinningPocketsVertical(
-    //    double length,
-    //    double depth,
-    //    LockDadoSettings s)
-    //{
-    //    double pocketY1 = s.BlindStart - s.TenonPocketOversize;
-    //    double pocketY2 = depth - s.BlindStop + s.TenonPocketOversize;
-    //    double dd = s.DadoDepth + 0.03937;
-
-    //    var leftPocket = (X1: -dd, X2: 0.0, Y1: pocketY1, Y2: pocketY2);
-    //    var rightPocket = (X1: length, X2: length + dd, Y1: pocketY1, Y2: pocketY2);
-
-    //    return [leftPocket, rightPocket];
-    //}
-
-    //internal static (double X1, double X2, double Y1, double Y2)[] ComputeTenonThinningPocketsHorizontal(
-    //double length,
-    //double depth,
-    //LockDadoSettings s)
-    //{
-    //    double pocketX1 = s.BlindStart - s.TenonPocketOversize;
-    //    double pocketX2 = length - s.BlindStop + s.TenonPocketOversize;
-    //    double dd = s.DadoDepth + 0.03937;
-
-    //    var bottomPocket = (X1: pocketX1, X2: pocketX2, Y1: -dd, Y2: 0.0);
-    //    var topPocket = (X1: pocketX1, X2: pocketX2, Y1: depth, Y2: depth + dd);
-
-    //    return [bottomPocket, topPocket];
-    //}
 
     // ── Core tenon layout algorithm ───────────────────────────────────────────
 

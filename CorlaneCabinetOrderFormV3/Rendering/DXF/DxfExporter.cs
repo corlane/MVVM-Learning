@@ -111,41 +111,36 @@ internal static class DxfExporter
         double length = part.LengthIn;
         double depth = part.WidthIn;
         var kind = ResolvePartKind(part.PartName);
-        bool forceTwoTenons = part.PartName is "Drawer Stretcher" or "Top Stretcher (Front)" or "Toekick";
 
-        // ── Outline ───────────────────────────────────────────────────────────
-        if (part.PartName is "Toekick")
+        // ── Resolve part-specific customizations ──────────────────────────────
+        var (tenonEdges, effectiveSettings, forceTwoTenons) = part.PartName switch
         {
-            var outline = PartOutlineBuilder.BuildPanelWithTenons(length, depth, s with { BlindStart = 0, BlindStop = 0 }, EdgeDesignators.LeftRight, forceTwoTenons: true);
-            AddClosedPolyline(doc, LayerOutline, outline);
-        }
-        else if (part.PartName is "Back")
-        {
-            var outline = PartOutlineBuilder.BuildPanelWithTenons(length, depth, s, EdgeDesignators.TopBottom, forceTwoTenons: false);
-            AddClosedPolyline(doc, LayerOutline, outline);
-        }
-        else if (part.PartName is "Deck")
-        {
-            var outline = PartOutlineBuilder.BuildPanelWithTenons(length, depth, s, EdgeDesignators.LeftRight, forceTwoTenons: false);
-            AddClosedPolyline(doc, LayerOutline, outline);
-        }
-        else
-        {
-            var outline = kind == DxfPartKind.TenonLeftAndRight
-                ? PartOutlineBuilder.BuildPanelWithTenons(length, depth, s, EdgeDesignators.None, forceTwoTenons: false)
-                : PartOutlineBuilder.Rectangle(length, depth);
-            AddClosedPolyline(doc, LayerOutline, outline);
-        }
-
-        // ── Tenon thinning pockets ────────────────────────────────────────────
-        var tenonEdges = kind switch
-        {
-            DxfPartKind.TenonLeftAndRight => EdgeDesignators.LeftRight,
-            DxfPartKind.TenonTopAndBottom => EdgeDesignators.TopBottom,
-            _ => EdgeDesignators.None,
+            "Toekick" or "Toekick (Left)" or "Toekick (Right)" =>
+                (EdgeDesignators.Top | EdgeDesignators.Left | EdgeDesignators.Right,
+                 s with { BlindStart = 0, BlindStop = 0 },
+                 true),
+            "Top Stretcher (Front)" or "Drawer Stretcher" =>
+                (EdgeDesignators.LeftRight, s with { BlindStart = 1.25, BlindStop = 1.25 }, true),
+            "Back" =>
+                (EdgeDesignators.TopBottom, s, false),
+            "Deck" =>
+                (EdgeDesignators.LeftRight, s, false),
+            _ => (EdgeDesignators.None, s, false),
         };
 
-        foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, s, tenonEdges))
+        // ── Outline ───────────────────────────────────────────────────────────
+        var outline = kind switch
+        {
+            DxfPartKind.MortisePanel => PartOutlineBuilder.Rectangle(length, depth),
+            DxfPartKind.TenonLeftAndRight => PartOutlineBuilder.BuildPanelWithTenons(length, depth, effectiveSettings, tenonEdges, forceTwoTenons),
+            DxfPartKind.TenonTopAndBottom => PartOutlineBuilder.BuildPanelWithTenons(length, depth, effectiveSettings, tenonEdges, forceTwoTenons),
+            DxfPartKind.TenonTopLeftRight => PartOutlineBuilder.BuildPanelWithTenons(length, depth, effectiveSettings, tenonEdges, forceTwoTenons),
+            _ => PartOutlineBuilder.Rectangle(length, depth),
+        };
+        AddClosedPolyline(doc, LayerOutline, outline);
+
+        // ── Tenon thinning pockets ────────────────────────────────────────────
+        foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, effectiveSettings, tenonEdges, forceTwoTenons))
             AddRectangle(doc, LayerTenonPocket, x1, x2, y1, y2);
 
 
@@ -321,18 +316,20 @@ internal static class DxfExporter
 
     // ── Part classification ───────────────────────────────────────────────────
 
+    private enum DxfPartKind { Plain, TenonLeftAndRight, TenonTopAndBottom, TenonTopLeftRight, MortisePanel }
+
     private static DxfPartKind ResolvePartKind(string partName)
     {
         if (partName is "Left End" or "Right End")
             return DxfPartKind.MortisePanel;
 
+        if (partName is "Toekick" or "Toekick (Left)" or "Toekick (Right)")
+            return DxfPartKind.TenonTopLeftRight;
+
         if (partName is "Deck"
                      or "Top"
                      or "Top Stretcher (Front)"
                      or "Nailer"
-                     or "Toekick"
-                     or "Toekick (Left)"
-                     or "Toekick (Right)"
                      or "Sink Stretcher"
             || partName.StartsWith("Drawer Stretcher", StringComparison.OrdinalIgnoreCase))
             return DxfPartKind.TenonLeftAndRight;
@@ -342,8 +339,6 @@ internal static class DxfExporter
 
         return DxfPartKind.Plain;
     }
-
-    private enum DxfPartKind { Plain, TenonLeftAndRight, TenonTopAndBottom, MortisePanel }
 
     // ── Filename helper ───────────────────────────────────────────────────────
 
