@@ -3,6 +3,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using netDxf;
 using netDxf.Entities;
 using netDxf.Tables;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Windows;
 
@@ -21,10 +22,10 @@ internal static class DxfExporter
 {
     // ── Layer name constants ──────────────────────────────────────────────────
 
-    private const string LayerOutline = "PART_OUTLINE";
-    private const string LayerTenonPocket = "MACHINING_TENON_POCKET";
-    private const string LayerMortise = "MACHINING_MORTISE";
-    private const string LayerScrewHoles = "MACHINING_SCREW_HOLES";
+    private const string LayerOutline = "outline z18p6";
+    private const string LayerTenonPocket = "pocket z9p0";
+    private const string LayerMortise = "pocket z6p35";
+    private const string LayerScrewHoles = "drill z12p0";
     private const string LayerGrain = "GRAIN_DIRECTION";
     private const string LayerLabels = "LABELS";
 
@@ -113,33 +114,41 @@ internal static class DxfExporter
         bool forceTwoTenons = part.PartName is "Drawer Stretcher" or "Top Stretcher (Front)" or "Toekick";
 
         // ── Outline ───────────────────────────────────────────────────────────
-        if (part.PartName is "Toekick") // Toekicks get BlindStart & BlindStop = 0 because they are too narrow to accommodate normal tenons.
+        if (part.PartName is "Toekick")
         {
-            var outline = kind == DxfPartKind.TenonLeftAndRight
-            ? PartOutlineBuilder.TenonBothEnds(length, depth, s = s with { BlindStart = 0, BlindStop = 0 }, forceTwoTenons = true)
-            : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
+            var outline = PartOutlineBuilder.BuildPanelWithTenons(length, depth, s with { BlindStart = 0, BlindStop = 0 }, EdgeDesignators.LeftRight, forceTwoTenons: true);
+            AddClosedPolyline(doc, LayerOutline, outline);
         }
-
         else if (part.PartName is "Back")
         {
-            var outline = kind == DxfPartKind.TenonTopAndBottom
-            ? PartOutlineBuilder.TenonTopAndBottom(length, depth, s, forceTwoTenons = false)
-            : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
+            var outline = PartOutlineBuilder.BuildPanelWithTenons(length, depth, s, EdgeDesignators.TopBottom, forceTwoTenons: false);
+            AddClosedPolyline(doc, LayerOutline, outline);
         }
-
+        else if (part.PartName is "Deck")
+        {
+            var outline = PartOutlineBuilder.BuildPanelWithTenons(length, depth, s, EdgeDesignators.LeftRight, forceTwoTenons: false);
+            AddClosedPolyline(doc, LayerOutline, outline);
+        }
         else
         {
             var outline = kind == DxfPartKind.TenonLeftAndRight
-            ? PartOutlineBuilder.TenonBothEnds(length, depth, s, forceTwoTenons)
-            : PartOutlineBuilder.Rectangle(length, depth); AddClosedPolyline(doc, LayerOutline, outline);
+                ? PartOutlineBuilder.BuildPanelWithTenons(length, depth, s, EdgeDesignators.None, forceTwoTenons: false)
+                : PartOutlineBuilder.Rectangle(length, depth);
+            AddClosedPolyline(doc, LayerOutline, outline);
         }
 
         // ── Tenon thinning pockets ────────────────────────────────────────────
-        if (kind == DxfPartKind.TenonLeftAndRight)
+        var tenonEdges = kind switch
         {
-            foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, s))
-                AddRectangle(doc, LayerTenonPocket, x1, x2, y1, y2);
-        }
+            DxfPartKind.TenonLeftAndRight => EdgeDesignators.LeftRight,
+            DxfPartKind.TenonTopAndBottom => EdgeDesignators.TopBottom,
+            _ => EdgeDesignators.None,
+        };
+
+        foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, s, tenonEdges))
+            AddRectangle(doc, LayerTenonPocket, x1, x2, y1, y2);
+
+
 
         AddGrainArrow(doc, length, depth); AddLabels(doc, part);
 
@@ -330,6 +339,7 @@ internal static class DxfExporter
 
         if (partName is "Back")
             return DxfPartKind.TenonTopAndBottom;
+
         return DxfPartKind.Plain;
     }
 

@@ -64,7 +64,7 @@ internal static class MortiseSpecBuilder
                 partDepth: stretcherWidth,
                 mortiseBottomY: height - mt34,
                 flushFace: TenonFlushFace.Bottom,
-                s,
+                s = s with { BlindStart = 1.25, BlindStop = 1.25},
                 xOffset: depth - stretcherWidth,
                 forceTwoTenons: true));          // ← always 2 tenons
         }
@@ -96,7 +96,7 @@ internal static class MortiseSpecBuilder
                 partDepth: stretcherWidth,
                 mortiseBottomY: runningY,
                 flushFace: TenonFlushFace.Bottom,
-                s,
+                s = s with { TenonThickness = mt34},
                 xOffset: depth - stretcherWidth,
                 forceTwoTenons: true));          // ← always 2 tenons
         }
@@ -106,10 +106,10 @@ internal static class MortiseSpecBuilder
         {
             specs.Add(BuildHeightSpec("Toekick",
                 edgeLength: tkH - 0.5,
-                xPosition: depth - tkD,
+                xPosition: depth - tkD - mt34,
                 bottomY: 0.5,
-                flushFace: TenonFlushFace.Back,
-                s = s with { BlindStart = 0, BlindStop = 0 },
+                flushFace: TenonFlushFace.InteriorFront,
+                s = s with { BlindStart = 0, BlindStop = 0, TenonThickness = mt34 * 0.4},
                 forceTwoTenons: true));
         }
 

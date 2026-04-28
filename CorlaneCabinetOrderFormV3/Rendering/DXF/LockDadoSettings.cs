@@ -11,10 +11,10 @@ internal sealed record LockDadoSettings
     // ── Blind zone ────────────────────────────────────────────────────────────
 
     /// <summary>Distance from the front face where the tenon/mortise zone begins.</summary>
-    public double BlindStart { get; init; } = 1.5;
+    public double BlindStart { get; init; } = 2;
 
     /// <summary>Distance from the back edge where the tenon/mortise zone ends.</summary>
-    public double BlindStop { get; init; } = 1.5;
+    public double BlindStop { get; init; } = 2;
 
     // ── Dado / tenon protrusion ───────────────────────────────────────────────
 
@@ -37,7 +37,7 @@ internal sealed record LockDadoSettings
     /// The tenon is flush on one face; the other face is routed down to this thickness.
     /// Typically MaterialThickness34 / 2.
     /// </summary>
-    public double TenonThickness { get; init; } = MaterialDefaults.Thickness34 / 2.0;
+    public double TenonThickness { get; init; } = MaterialDefaults.Thickness34 * 0.4;
 
     /// <summary>
     /// Clearance added to the mortise slot height so the tenon slides in freely (0.5mm).
@@ -66,7 +66,7 @@ internal sealed record LockDadoSettings
     // ── Gap / screw access ────────────────────────────────────────────────────
 
     /// <summary>Fixed width of each screw-access gap between tenon segments.</summary>
-    public double GapWidth { get; init; } = 1.5;
+    public double GapWidth { get; init; } = 0.75;
 
     /// <summary>One gap per approximately this many inches of usable tenon zone.</summary>
     public double GapSpacing { get; init; } = 10.0;

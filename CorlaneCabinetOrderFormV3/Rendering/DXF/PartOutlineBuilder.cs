@@ -16,6 +16,25 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 ///   X      = depth direction  (front=0 → back=depthIn)
 ///   Y      = height direction (bottom=0 → top=heightIn)
 /// </summary>
+/// 
+
+
+[Flags]
+internal enum EdgeDesignators
+{
+    None = 0,
+    Left = 1,      // X=0 edge
+    Right = 2,     // X=length edge
+    Bottom = 4,    // Y=0 edge
+    Top = 8,       // Y=height/depth edge
+
+    // Shortcuts
+    LeftRight = Left | Right,        // Both vertical edges (tenons on both short edges)
+    TopBottom = Top | Bottom,        // Both horizontal edges (tenons on top and bottom)
+    All = Left | Right | Top | Bottom
+}
+
+
 internal static class PartOutlineBuilder
 {
     /// <summary>Casts double coords to netDxf.Vector2 (which requires float) in one place.</summary>
@@ -56,97 +75,121 @@ internal static class PartOutlineBuilder
     }
 
 
-    // ── Tenon panel: comb on BOTH short edges ─────────────────────────────────
-
-    internal static List<Vector2> TenonBothEnds(
-        double length, double depth, LockDadoSettings s, bool forceTwoTenons = false)
+    // ── Tenon panel: Apply tenons to designated edges ──────────────────────────
+    internal static List<Vector2> BuildPanelWithTenons(
+    double length, double depth, LockDadoSettings s,
+    EdgeDesignators tenonEdges = EdgeDesignators.None, bool forceTwoTenons = false)
     {
         double dd = s.DadoDepth;
         double blindStart = s.BlindStart;
         double blindEnd = depth - s.BlindStop;
-        var tenons = ComputeTenonRanges(depth, s, forceTwoTenons);
+
         var verts = new List<Vector2>();
 
-        // Front edge (Y=0): left → right, no joinery
+        // Bottom edge (Y=0): left → right
         verts.Add(Vertex(0, 0));
+        if (tenonEdges.HasFlag(EdgeDesignators.Bottom))
+        {
+            var tenons = ComputeTenonRanges(length, s, forceTwoTenons);
+            verts.Add(Vertex(blindStart, 0));
+            foreach (var (tStart, tEnd) in tenons)
+            {
+                verts.Add(Vertex(tStart, 0));
+                verts.Add(Vertex(tStart, -dd));
+                verts.Add(Vertex(tEnd, -dd));
+                verts.Add(Vertex(tEnd, 0));
+            }
+        }
         verts.Add(Vertex(length, 0));
 
-        // Right edge (X=length): front → back, comb in usable zone
-        verts.Add(Vertex(length, blindStart));
-        foreach (var (tStart, tEnd) in tenons)
+        // Right edge (X=length): front → back
+        if (tenonEdges.HasFlag(EdgeDesignators.Right))
         {
-            verts.Add(Vertex(length, tStart));
-            verts.Add(Vertex(length + dd, tStart));   // protrude right
-            verts.Add(Vertex(length + dd, tEnd));
-            verts.Add(Vertex(length, tEnd));
+            var tenons = ComputeTenonRanges(depth, s, forceTwoTenons);
+            foreach (var (tStart, tEnd) in tenons)
+            {
+                verts.Add(Vertex(length, tStart));
+                verts.Add(Vertex(length + dd, tStart));
+                verts.Add(Vertex(length + dd, tEnd));
+                verts.Add(Vertex(length, tEnd));
+            }
+            verts.Add(Vertex(length, blindEnd));
         }
-        verts.Add(Vertex(length, blindEnd));
-        verts.Add(Vertex(length, depth));
 
-        // Back edge (Y=depth): right → left, no joinery
+        // Top edge (Y=depth): right → left
+        verts.Add(Vertex(length, depth));
+        if (tenonEdges.HasFlag(EdgeDesignators.Top))
+        {
+            var tenons = ComputeTenonRanges(length, s, forceTwoTenons);
+            for (int i = tenons.Count - 1; i >= 0; i--)
+            {
+                var (tStart, tEnd) = tenons[i];
+                verts.Add(Vertex(tEnd, depth));
+                verts.Add(Vertex(tEnd, depth + dd));
+                verts.Add(Vertex(tStart, depth + dd));
+                verts.Add(Vertex(tStart, depth));
+            }
+            verts.Add(Vertex(blindStart, depth));
+        }
         verts.Add(Vertex(0, depth));
 
-        // Left edge (X=0): back → front, comb in usable zone (reversed)
-        verts.Add(Vertex(0, blindEnd));
-        for (int i = tenons.Count - 1; i >= 0; i--)
+        // Left edge (X=0): back → front
+        if (tenonEdges.HasFlag(EdgeDesignators.Left))
         {
-            var (tStart, tEnd) = tenons[i];
-            verts.Add(Vertex(0, tEnd));
-            verts.Add(Vertex(-dd, tEnd));
-            verts.Add(Vertex(-dd, tStart));
-            verts.Add(Vertex(0, tStart));
+            var tenons = ComputeTenonRanges(depth, s, forceTwoTenons);
+            for (int i = tenons.Count - 1; i >= 0; i--)
+            {
+                var (tStart, tEnd) = tenons[i];
+                verts.Add(Vertex(0, tEnd));
+                verts.Add(Vertex(-dd, tEnd));
+                verts.Add(Vertex(-dd, tStart));
+                verts.Add(Vertex(0, tStart));
+            }
+            verts.Add(Vertex(0, blindStart));
         }
-        verts.Add(Vertex(0, blindStart));
+
 
         return verts;
     }
 
-    internal static List<Vector2> TenonTopAndBottom(
-    double length, double height, LockDadoSettings s, bool forceTwoTenons = false)
+    internal static List<(double X1, double X2, double Y1, double Y2)> ComputeTenonThinningPockets(
+    double length,
+    double depth,
+    LockDadoSettings s,
+    EdgeDesignators tenonEdges = EdgeDesignators.None)
     {
-        double dadoDepth = s.DadoDepth;
-        double blindStart = s.BlindStart;
-        double blindEnd = length - s.BlindStop;
-        var tenons = ComputeTenonRanges(length, s, forceTwoTenons);
-        var verts = new List<Vector2>();
+        var pockets = new List<(double, double, double, double)>();
+        double dd = s.DadoDepth + 0.03937;
 
-        // Bottom edge (Y=0): left → right, comb in usable zone
-        verts.Add(Vertex(0, 0));
-        verts.Add(Vertex(blindStart, 0));   // protrude bottom
-
-        foreach (var (tStart, tEnd) in tenons)
+        // Vertical pockets (left/right edges)
+        if (tenonEdges.HasFlag(EdgeDesignators.Left) || tenonEdges.HasFlag(EdgeDesignators.Right))
         {
-            verts.Add(Vertex(tStart, 0));
-            verts.Add(Vertex(tStart, -dadoDepth));      // retract to edge
-            verts.Add(Vertex(tEnd, -dadoDepth));
-            verts.Add(Vertex(tEnd, 0));       // protrude bottom again
+            double pocketY1 = s.BlindStart - s.TenonPocketOversize;
+            double pocketY2 = depth - s.BlindStop + s.TenonPocketOversize;
+
+            if (tenonEdges.HasFlag(EdgeDesignators.Left))
+                pockets.Add((-dd, 0.0, pocketY1, pocketY2));
+
+            if (tenonEdges.HasFlag(EdgeDesignators.Right))
+                pockets.Add((length, length + dd, pocketY1, pocketY2));
         }
 
-        verts.Add(Vertex(blindEnd, 0));
-        verts.Add(Vertex(length, 0));
-
-        // Right edge: go up to top-right corner
-        verts.Add(Vertex(length, height));
-
-        // Top edge (traverse right → left): comb in usable zone (reverse order)
-        verts.Add(Vertex(blindEnd, height));   // first usable boundary from the right
-
-        for (int i = tenons.Count - 1; i >= 0; i--)
+        // Horizontal pockets (top/bottom edges)
+        if (tenonEdges.HasFlag(EdgeDesignators.Top) || tenonEdges.HasFlag(EdgeDesignators.Bottom))
         {
-            var (tStart, tEnd) = tenons[i];
-            verts.Add(Vertex(tEnd, height));
-            verts.Add(Vertex(tEnd, height + dadoDepth));      // retract to edge (towards outside)
-            verts.Add(Vertex(tStart, height + dadoDepth));
-            verts.Add(Vertex(tStart, height));       // back to top face
+            double pocketX1 = s.BlindStart - s.TenonPocketOversize;
+            double pocketX2 = length - s.BlindStop + s.TenonPocketOversize;
+
+            if (tenonEdges.HasFlag(EdgeDesignators.Bottom))
+                pockets.Add((pocketX1, pocketX2, -dd, 0.0));
+
+            if (tenonEdges.HasFlag(EdgeDesignators.Top))
+                pockets.Add((pocketX1, pocketX2, depth, depth + dd));
         }
 
-        verts.Add(Vertex(blindStart, height));
-        verts.Add(Vertex(0, height));
-
-        // Left edge: will naturally close back to the starting bottom-left vertex
-
-        return verts;
+        return pockets;
     }
+
 
     // ── End panel ─────────────────────────────────────────────────────────────
 
@@ -189,7 +232,7 @@ internal static class PartOutlineBuilder
     }
 
 
-    // ── Mortise pockets: height-direction joint (toekick) ─────────────────────
+    // ── Mortise pockets: height-direction joint ─────────────────────
 
     internal static List<(double X1, double X2, double Y1, double Y2)> ComputeHeightDirectionMortisePockets(
         double edgeLength,
@@ -288,20 +331,35 @@ internal static class PartOutlineBuilder
 
     // ── Tenon thinning pockets ────────────────────────────────────────────────
 
-    internal static (double X1, double X2, double Y1, double Y2)[] ComputeTenonThinningPockets(
-        double length,
-        double depth,
-        LockDadoSettings s)
-    {
-        double pocketY1 = s.BlindStart - s.TenonPocketOversize;
-        double pocketY2 = depth - s.BlindStop + s.TenonPocketOversize;
-        double dd = s.DadoDepth + 0.03937;
+    //internal static (double X1, double X2, double Y1, double Y2)[] ComputeTenonThinningPocketsVertical(
+    //    double length,
+    //    double depth,
+    //    LockDadoSettings s)
+    //{
+    //    double pocketY1 = s.BlindStart - s.TenonPocketOversize;
+    //    double pocketY2 = depth - s.BlindStop + s.TenonPocketOversize;
+    //    double dd = s.DadoDepth + 0.03937;
 
-        var leftPocket = (X1: -dd, X2: 0.0, Y1: pocketY1, Y2: pocketY2);
-        var rightPocket = (X1: length, X2: length + dd, Y1: pocketY1, Y2: pocketY2);
+    //    var leftPocket = (X1: -dd, X2: 0.0, Y1: pocketY1, Y2: pocketY2);
+    //    var rightPocket = (X1: length, X2: length + dd, Y1: pocketY1, Y2: pocketY2);
 
-        return [leftPocket, rightPocket];
-    }
+    //    return [leftPocket, rightPocket];
+    //}
+
+    //internal static (double X1, double X2, double Y1, double Y2)[] ComputeTenonThinningPocketsHorizontal(
+    //double length,
+    //double depth,
+    //LockDadoSettings s)
+    //{
+    //    double pocketX1 = s.BlindStart - s.TenonPocketOversize;
+    //    double pocketX2 = length - s.BlindStop + s.TenonPocketOversize;
+    //    double dd = s.DadoDepth + 0.03937;
+
+    //    var bottomPocket = (X1: pocketX1, X2: pocketX2, Y1: -dd, Y2: 0.0);
+    //    var topPocket = (X1: pocketX1, X2: pocketX2, Y1: depth, Y2: depth + dd);
+
+    //    return [bottomPocket, topPocket];
+    //}
 
     // ── Core tenon layout algorithm ───────────────────────────────────────────
 
