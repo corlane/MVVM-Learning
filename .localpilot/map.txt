@@ -1,5 +1,5 @@
 ## WORKSPACE EXECUTIVE SUMMARY (YAML)
-# Generated: 2026-04-28T07:32:35.1481472-04:00
+# Generated: 2026-04-29T08:31:56.5365765-04:00
 # Root: C:\Users\trifid\source\repos\corlane\CorlaneCabinetOrderFormV3
 ---
 - File: CorlaneCabinetOrderFormV3\CorlaneCabinetOrderFormV3.csproj
@@ -220,10 +220,12 @@
 - File: CorlaneCabinetOrderFormV3\Rendering\DXF\DxfExporter.cs
   Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using netDxf; using netDxf.Entities; using netDxf.Tables; using Syst..."
 - File: CorlaneCabinetOrderFormV3\Rendering\DXF\LockDadoSettings.cs
+  Symbols: [GapCount]
   Preview: "using CorlaneCabinetOrderFormV3.Services; namespace CorlaneCabinetOrderFormV3.Rendering; /// <summary> /// All shop-specific lock dado parameters in o..."
 - File: CorlaneCabinetOrderFormV3\Rendering\DXF\MortiseSpecBuilder.cs
   Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.Windows; namespace CorlaneCabinetOrderFormV3.Rendering;..."
 - File: CorlaneCabinetOrderFormV3\Rendering\DXF\PartOutlineBuilder.cs
+  Symbols: [for, for, for, for, for, PartOutlineBuilder, Rectangle, EndPanelWithToeKick, BuildPanelWithTenons, ComputeTenonThinningPockets, ComputeDepthDirectionMortisePockets, ComputeHeightDirectionMortisePockets, ComputeDepthDirectionScrewHoles, ComputeHeightDirectionScrewHoles, ComputeTenonRanges]
   Preview: "using CorlaneCabinetOrderFormV3.Services; using netDxf; namespace CorlaneCabinetOrderFormV3.Rendering; /// <summary> /// Generates closed 2D polygons ..."
 - File: CorlaneCabinetOrderFormV3\Rendering\DXF\TenonFlushFace.cs
   Preview: "namespace CorlaneCabinetOrderFormV3.Rendering; /// <summary> /// Which face of a tenon panel is flush (unrouted). /// The OPPOSITE face receives the C..."
@@ -790,8 +792,6 @@
 - File: CorlaneCabinetOrderFormV3.Tests\JobFileRoundTripTests.cs
   Symbols: [JobFileRoundTripTests]
   Preview: "using CorlaneCabinetOrderFormV3.Models; using CorlaneCabinetOrderFormV3.Services; using System.IO; namespace CorlaneCabinetOrderFormV3.Tests; public c..."
-- File: CorlaneCabinetOrderFormV3.Tests\LockDado_PartOutlineBuilder_Tests.cs
-  Preview: "using CorlaneCabinetOrderFormV3.Rendering; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary> /// Tests for lock dado geometry: tenon ranges, mo..."
 - File: CorlaneCabinetOrderFormV3.Tests\MappingGuardAuditTests.cs
   Preview: "using System.IO; using System.Runtime.CompilerServices; using System.Text.RegularExpressions; namespace CorlaneCabinetOrderFormV3.Tests; /// <summary>..."
 - File: CorlaneCabinetOrderFormV3.Tests\MaterialAggregationEdgeCaseTests.cs

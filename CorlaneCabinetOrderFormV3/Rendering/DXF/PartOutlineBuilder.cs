@@ -90,7 +90,8 @@ internal static class PartOutlineBuilder
         verts.Add(Vertex(0, 0));
         if (tenonEdges.HasFlag(EdgeDesignators.Bottom))
         {
-            var tenons = ComputeTenonRanges(length, s, forceTwoTenons);
+            var tenons = ComputeTenonRanges(length, s, forceTwoTenons, s.ResolveBlindStart(EdgeDesignators.Bottom), s.ResolveBlindStop(EdgeDesignators.Bottom));
+
             verts.Add(Vertex(blindStart, 0));
             foreach (var (tStart, tEnd) in tenons)
             {
@@ -105,7 +106,8 @@ internal static class PartOutlineBuilder
         // Right edge (X=length): front → back
         if (tenonEdges.HasFlag(EdgeDesignators.Right))
         {
-            var tenons = ComputeTenonRanges(depth, s, forceTwoTenons);
+            var tenons = ComputeTenonRanges(length, s, forceTwoTenons, s.ResolveBlindStart(EdgeDesignators.Right), s.ResolveBlindStop(EdgeDesignators.Right));
+
             foreach (var (tStart, tEnd) in tenons)
             {
                 verts.Add(Vertex(length, tStart));
@@ -120,7 +122,8 @@ internal static class PartOutlineBuilder
         verts.Add(Vertex(length, depth));
         if (tenonEdges.HasFlag(EdgeDesignators.Top))
         {
-            var tenons = ComputeTenonRanges(length, s, forceTwoTenons);
+            var tenons = ComputeTenonRanges(length, s, forceTwoTenons, s.ResolveBlindStart(EdgeDesignators.Top), s.ResolveBlindStop(EdgeDesignators.Top));
+
             for (int i = tenons.Count - 1; i >= 0; i--)
             {
                 var (tStart, tEnd) = tenons[i];
@@ -136,7 +139,8 @@ internal static class PartOutlineBuilder
         // Left edge (X=0): back → front
         if (tenonEdges.HasFlag(EdgeDesignators.Left))
         {
-            var tenons = ComputeTenonRanges(depth, s, forceTwoTenons);
+            var tenons = ComputeTenonRanges(length, s, forceTwoTenons, s.ResolveBlindStart(EdgeDesignators.Left), s.ResolveBlindStop(EdgeDesignators.Left));
+
             for (int i = tenons.Count - 1; i >= 0; i--)
             {
                 var (tStart, tEnd) = tenons[i];
@@ -219,8 +223,8 @@ internal static class PartOutlineBuilder
         };
         double slotTopY = slotBottomY + slotHeight;
 
-        var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons);
-        var pockets = new List<(double, double, double, double)>(tenons.Count);
+        var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons,
+                    blindStart: null, blindStop: null); var pockets = new List<(double, double, double, double)>(tenons.Count);
 
         foreach (var (tStart, tEnd) in tenons)
         {
@@ -257,8 +261,8 @@ internal static class PartOutlineBuilder
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
-        var tenons = ComputeTenonRanges(edgeLength, s, forceTwoTenons);
-        var pockets = new List<(double, double, double, double)>(tenons.Count);
+        var tenons = ComputeTenonRanges(edgeLength, s, forceTwoTenons,
+                    blindStart: null, blindStop: null); var pockets = new List<(double, double, double, double)>(tenons.Count);
 
         foreach (var (tStart, tEnd) in tenons)
         {
@@ -288,8 +292,8 @@ internal static class PartOutlineBuilder
         };
         double holeCenterY = slotBottomY + (s.MortiseSlotHeight / 2.0);
 
-        var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons);
-        var holes = new List<(double, double, double)>();
+        var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons,
+                    blindStart: null, blindStop: null); var holes = new List<(double, double, double)>();
 
         for (int i = 0; i < tenons.Count - 1; i++)
         {
@@ -317,8 +321,8 @@ internal static class PartOutlineBuilder
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
-        var tenons = ComputeTenonRanges(edgeLength, s, forceTwoTenons);
-        var holes = new List<(double, double, double)>();
+        var tenons = ComputeTenonRanges(edgeLength, s, forceTwoTenons,
+                    blindStart: null, blindStop: null); var holes = new List<(double, double, double)>();
 
         for (int i = 0; i < tenons.Count - 1; i++)
         {
@@ -332,10 +336,11 @@ internal static class PartOutlineBuilder
     // ── Core tenon layout algorithm ───────────────────────────────────────────
 
     internal static List<(double StartY, double EndY)> ComputeTenonRanges(
-        double edgeLength, LockDadoSettings s, bool forceTwoTenons = false)
+            double edgeLength, LockDadoSettings s, bool forceTwoTenons = false,
+            double? blindStart = null, double? blindStop = null)
     {
-        double usableStart = s.BlindStart;
-        double usableEnd = edgeLength - s.BlindStop;
+        double usableStart = blindStart ?? s.BlindStart;
+        double usableEnd = edgeLength - (blindStop ?? s.BlindStop);
         double usableLength = usableEnd - usableStart;
 
 
@@ -367,5 +372,4 @@ internal static class PartOutlineBuilder
 
         return ranges;
     }
-
 }

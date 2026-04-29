@@ -128,6 +128,20 @@ internal static class DxfExporter
             _ => (EdgeDesignators.None, s, false),
         };
 
+        // For toekick: left/right tenons use BlindStart=0, BlindStop=0
+        // Top tenons keep default blind values
+        if (kind == DxfPartKind.TenonTopLeftRight)
+        {
+            effectiveSettings = effectiveSettings with
+            {
+                BlindStartLeft = 0,
+                BlindStopLeft = 0,
+                BlindStartRight = 0,
+                BlindStopRight = 0,
+                // Top keeps defaults (no override)
+            };
+        }
+
         // ── Outline ───────────────────────────────────────────────────────────
         var outline = kind switch
         {
