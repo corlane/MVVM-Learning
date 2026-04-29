@@ -108,7 +108,7 @@ internal static class MortiseSpecBuilder
                 edgeLength: tkH - 0.5,
                 xPosition: depth - tkD - mt34,
                 bottomY: 0.5,
-                flushFace: TenonFlushFace.InteriorFront,
+                flushFace: TenonFlushFace.Back,
                 s = s with { BlindStart = 0, BlindStop = 0, TenonThickness = mt34 * 0.4},
                 forceTwoTenons: true));
         }

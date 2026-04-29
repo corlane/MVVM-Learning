@@ -191,12 +191,6 @@ internal static class PartOutlineBuilder
         return pockets;
     }
 
-
-    // ── End panel ─────────────────────────────────────────────────────────────
-
-    internal static List<Vector2> MortisePanel(double length, double depth)
-        => Rectangle(length, depth);
-
     // ── Mortise pockets: depth-direction joints ───────────────────────────────
 
     internal static List<(double X1, double X2, double Y1, double Y2)> ComputeDepthDirectionMortisePockets(
@@ -245,15 +239,15 @@ internal static class PartOutlineBuilder
     {
         double slotX1 = flushFace switch
         {
-            TenonFlushFace.Back => xPosition - s.TenonThickness,
+            TenonFlushFace.Back => xPosition,
             TenonFlushFace.InteriorFront => xPosition,
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
         double slotX2 = flushFace switch
         {
-            TenonFlushFace.Back => xPosition + s.TenonClearance,
-            TenonFlushFace.InteriorFront => xPosition + s.MortiseSlotHeight,
+            TenonFlushFace.Back => xPosition + s.MortiseSlotHeight,
+            TenonFlushFace.InteriorFront => xPosition + s.MortiseSlotHeight + 10,
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
@@ -286,7 +280,7 @@ internal static class PartOutlineBuilder
             TenonFlushFace.Top => mortiseBottomY + (mt34 - s.TenonThickness),
             _ => mortiseBottomY,
         };
-        double holeCenterY = slotBottomY + (s.MortiseSlotHeight / 2.0);
+        double holeCenterY = mortiseBottomY + (mt34 / 2);
 
         var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons);
         var holes = new List<(double, double, double)>();
@@ -310,10 +304,11 @@ internal static class PartOutlineBuilder
         LockDadoSettings s,
         bool forceTwoTenons = false)
     {
+        double mt34 = MaterialDefaults.Thickness34;
         double holeCenterX = flushFace switch
         {
-            TenonFlushFace.Back => xPosition - (s.TenonThickness / 2.0),
-            TenonFlushFace.InteriorFront => xPosition + (s.MortiseSlotHeight / 2.0),
+            TenonFlushFace.Back => xPosition + (mt34 /2),
+            TenonFlushFace.InteriorFront => xPosition,
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 

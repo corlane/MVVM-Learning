@@ -23,7 +23,7 @@ internal static class DxfExporter
     // ── Layer name constants ──────────────────────────────────────────────────
 
     private const string LayerOutline = "outline z18p6";
-    private const string LayerTenonPocket = "pocket z9p0";
+    private const string LayerTenonThinningPocket = "pocket z9p0";
     private const string LayerMortise = "pocket z6p35";
     private const string LayerScrewHoles = "drill z12p0";
     private const string LayerGrain = "GRAIN_DIRECTION";
@@ -141,7 +141,7 @@ internal static class DxfExporter
 
         // ── Tenon thinning pockets ────────────────────────────────────────────
         foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, effectiveSettings, tenonEdges, forceTwoTenons))
-            AddRectangle(doc, LayerTenonPocket, x1, x2, y1, y2);
+            AddRectangle(doc, LayerTenonThinningPocket, x1, x2, y1, y2);
 
 
 
@@ -214,7 +214,7 @@ internal static class DxfExporter
     {
         var doc = new DxfDocument();
         AddLayer(doc, LayerOutline, new AciColor(7));   // white
-        AddLayer(doc, LayerTenonPocket, new AciColor(1));   // red
+        AddLayer(doc, LayerTenonThinningPocket, new AciColor(1));   // red
         AddLayer(doc, LayerMortise, new AciColor(1));   // red
         AddLayer(doc, LayerScrewHoles, new AciColor(4));   // cyan
         AddLayer(doc, LayerGrain, new AciColor(3));   // green

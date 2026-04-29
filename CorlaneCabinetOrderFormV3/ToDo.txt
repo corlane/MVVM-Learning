@@ -47,23 +47,35 @@ Upper angle front not showing calculated front width. AGAIN. It is only on initi
 
 
 TESTING NOTES:
-		
+	
+working on partoutlinebuilder.cs lines 242-250, tryint to get the back mortise to be in the right damn place.	
+
+
+
+
+
+
+
+
 Summary of what we are working on right now:
 
-Summary: DXF Exporter Refactoring for Multi-Edge Tenons
-Branch: joinery_and_DXF_export
-Goal: Support tenon generation on arbitrary edge combinations (not just predefined pairs) to handle parts like the toekick, which requires tenons on 3 edges: left, right, and top.
-Key Findings:
-•	EdgeDesignators is already a [Flags] enum, supporting arbitrary edge combinations via bitwise OR
-•	PartOutlineBuilder.ComputeTenonThinningPockets() already uses HasFlag() to handle multiple edges correctly
-•	The issue was in DxfExporter.cs—it only had hardcoded switch cases for 2-edge combinations
-Changes Made:
-1.	Added DxfPartKind.TenonTopLeftRight enum value
-2.	Updated ResolvePartKind() to classify toekick variants ("Toekick", "Toekick (Left)", "Toekick (Right)") as TenonTopLeftRight
-3.	Refactored outline generation to use a unified switch expression with BuildPanelWithTenons() calls
-4.	Preserved forceTwoTenons flag for parts that need it (Drawer Stretcher, Top Stretcher, Toekick)
-5.	Centralized part-specific setting overrides (BlindStart/BlindStop) into a single resolution block
-Current Challenge: Parts need edge-specific blind value overrides. For example, the toekick's left/right tenons use BlindStart=0, BlindStop=0, but the top tenons might need different values. Currently exploring whether to:
-•	Add per-edge fields to LockDadoSettings record with nullable overrides
-•	Or build separate outline geometries per edge group and merge them
+Proposed DXF geometry creation approach
 
+Each operation goes on the appropriate layer (tenons, mortises, thinning pockets, screw holes, etc.) so that we can easily turn layers on/off in CAD software to check the geometry and for manufacturing purposes.
+
+0. get each cabinet part, including partKind/name, and grain direction. This will determine the orientation of the part outline and the tenon/mortise geometry. For the purposes of the DXF geometry creation, each part will be treated as a flat 2D shape, and the grain direction will determine which axes will be deemed Height and Width, and which edges are considered "top/bottom" vs. "left/right"
+
+1. parts with tenons (create first, before parts with mortises)
+	1a: call GenerateTenons, passing in partKind/name
+	1b: designate tenon edges (top, bottom, left, right) based on partKind/name
+	1c: set blind start, blind stop, tenon width, tenon count, gap width for the current edge
+	1d: iterate through each edge, calling ComputeTenons for each edge; ComputeTenons will generate the tenon geometry (based on the previous step) for that edge and add it to the part outline
+	1e: call GenerateTenonThinningPockets, passing in the part outline and the tenon edges; this will generate the thinning pocket geometry for all tenon edges and add it to a new layer
+	1f: if the part also has mortises, call GenerateMortises, passing in the partKind/name.
+
+2. parts with mortises & screw holes (create second, after all tenon geometry is generated)
+	2a: left & right end panels: add mortises for top or top stretcher front, deck, back (if back thickness = 3/4"), drawer stretchers (need to know each opening height to determine spacing between mortises), and toekick (if applicable). Use same calculation logic or method as tenons, to be sure the mortises will always match.
+	2b: left & right end panels: add screw holes in between mortise gaps, and in the blindstart/blindstop areas.
+	2c: 3/4" back: add mortises for deck. add screw holes in between mortise gaps.
+	2d: top stetcher back: add mortises for back. add screw holes in between mortise gaps, and in the blindstart/blindstop areas.
+	
