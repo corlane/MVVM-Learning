@@ -16,6 +16,37 @@ internal sealed record LockDadoSettings
     /// <summary>Distance from the back edge where the tenon/mortise zone ends.</summary>
     public double BlindStop { get; init; } = 2;
 
+    // ── Per-edge blind overrides (nullable, fall back to global above) ──
+
+    public double? BlindStartLeft { get; init; }
+    public double? BlindStopLeft { get; init; }
+    public double? BlindStartRight { get; init; }
+    public double? BlindStopRight { get; init; }
+    public double? BlindStartTop { get; init; }
+    public double? BlindStopTop { get; init; }
+    public double? BlindStartBottom { get; init; }
+    public double? BlindStopBottom { get; init; }
+
+    /// <summary>Resolve effective BlindStart for a given edge, falling back to global.</summary>
+    public double ResolveBlindStart(EdgeDesignators edge) => edge switch
+    {
+        EdgeDesignators.Left => BlindStartLeft ?? BlindStart,
+        EdgeDesignators.Right => BlindStartRight ?? BlindStart,
+        EdgeDesignators.Top => BlindStartTop ?? BlindStart,
+        EdgeDesignators.Bottom => BlindStartBottom ?? BlindStart,
+        _ => BlindStart
+    };
+
+    /// <summary>Resolve effective BlindStop for a given edge, falling back to global.</summary>
+    public double ResolveBlindStop(EdgeDesignators edge) => edge switch
+    {
+        EdgeDesignators.Left => BlindStopLeft ?? BlindStop,
+        EdgeDesignators.Right => BlindStopRight ?? BlindStop,
+        EdgeDesignators.Top => BlindStopTop ?? BlindStop,
+        EdgeDesignators.Bottom => BlindStopBottom ?? BlindStop,
+        _ => BlindStop
+    };
+
     // ── Dado / tenon protrusion ───────────────────────────────────────────────
 
     /// <summary>
