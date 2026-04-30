@@ -94,26 +94,34 @@ internal static partial class PartOutlineBuilder
 
         if (tenonEdges.HasFlag(EdgeDesignators.Left) || tenonEdges.HasFlag(EdgeDesignators.Right))
         {
-            double pocketY1 = s.BlindStart - s.TenonPocketOversize;
-            double pocketY2 = depth - s.BlindStop + s.TenonPocketOversize;
+            double pocketY1 = s.ResolveBlindStart(EdgeDesignators.Left) - s.TenonPocketOversize;
+            double pocketY2 = depth - s.ResolveBlindStop(EdgeDesignators.Left) + s.TenonPocketOversize;
 
             if (tenonEdges.HasFlag(EdgeDesignators.Left))
                 pockets.Add((-dd, 0.0, pocketY1, pocketY2));
 
             if (tenonEdges.HasFlag(EdgeDesignators.Right))
+            {
+                pocketY1 = s.ResolveBlindStart(EdgeDesignators.Right) - s.TenonPocketOversize;
+                pocketY2 = depth - s.ResolveBlindStop(EdgeDesignators.Right) + s.TenonPocketOversize;
                 pockets.Add((length, length + dd, pocketY1, pocketY2));
+            }
         }
 
         if (tenonEdges.HasFlag(EdgeDesignators.Top) || tenonEdges.HasFlag(EdgeDesignators.Bottom))
         {
-            double pocketX1 = s.BlindStart - s.TenonPocketOversize;
-            double pocketX2 = length - s.BlindStop + s.TenonPocketOversize;
+            double pocketX1 = s.ResolveBlindStart(EdgeDesignators.Bottom) - s.TenonPocketOversize;
+            double pocketX2 = length - s.ResolveBlindStop(EdgeDesignators.Bottom) + s.TenonPocketOversize;
 
             if (tenonEdges.HasFlag(EdgeDesignators.Bottom))
                 pockets.Add((pocketX1, pocketX2, -dd, 0.0));
 
             if (tenonEdges.HasFlag(EdgeDesignators.Top))
+            {
+                pocketX1 = s.ResolveBlindStart(EdgeDesignators.Top) - s.TenonPocketOversize;
+                pocketX2 = length - s.ResolveBlindStop(EdgeDesignators.Top) + s.TenonPocketOversize;
                 pockets.Add((pocketX1, pocketX2, depth, depth + dd));
+            }
         }
 
         return pockets;

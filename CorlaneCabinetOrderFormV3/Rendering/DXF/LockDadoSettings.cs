@@ -18,14 +18,14 @@ internal sealed record LockDadoSettings
 
     // ── Per-edge blind overrides (nullable, fall back to global above) ──
 
-    public double? BlindStartLeft { get; init; }
-    public double? BlindStopLeft { get; init; }
-    public double? BlindStartRight { get; init; }
-    public double? BlindStopRight { get; init; }
-    public double? BlindStartTop { get; init; }
-    public double? BlindStopTop { get; init; }
-    public double? BlindStartBottom { get; init; }
-    public double? BlindStopBottom { get; init; }
+    public double? BlindStartLeft { get; init; } = 2;
+    public double? BlindStopLeft { get; init; } = 2;
+    public double? BlindStartRight { get; init; } = 2;
+    public double? BlindStopRight { get; init; } = 2;
+    public double? BlindStartTop { get; init; } = 2;
+    public double? BlindStopTop { get; init; } = 2;
+    public double? BlindStartBottom { get; init; } = 2;
+    public double? BlindStopBottom { get; init; } = 2;
 
     /// <summary>Resolve effective BlindStart for a given edge, falling back to global.</summary>
     public double ResolveBlindStart(EdgeDesignators edge) => edge switch

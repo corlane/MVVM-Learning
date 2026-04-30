@@ -82,11 +82,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 ///       Counter-clockwise when viewed from front (Z facing viewer).
 ///       Top/Left edges traversed in reverse to maintain consistent winding
 ///       (prevents DXF CAM software from misinterpreting polygon direction).
-/// 
-/// Placeholder:
-///   MortisePanel()
-///     Currently returns Rectangle() — reserved for future mortise panel outlines
-///     (currently end panels use ExportEndPanel() for full mortise geometry).
+///       
 /// </summary>
 
 internal static partial class PartOutlineBuilder
@@ -109,20 +105,18 @@ internal static partial class PartOutlineBuilder
         ];
     }
 
-    internal static List <Vector2> BuildPanelWithTenons(
+    internal static List<Vector2> BuildPanelWithTenons(
         double length, double depth, LockDadoSettings s,
         EdgeDesignators tenonEdges = EdgeDesignators.None, bool forceTwoTenons = false)
     {
         double dd = s.DadoDepth;
-        double blindStart = s.BlindStart;
-        double blindEnd = depth - s.BlindStop;
         var verts = new List<Vector2>();
 
         verts.Add(Vertex(0, 0));
         if (tenonEdges.HasFlag(EdgeDesignators.Bottom))
         {
             var tenons = ComputeTenonRanges(length, s, forceTwoTenons, s.ResolveBlindStart(EdgeDesignators.Bottom), s.ResolveBlindStop(EdgeDesignators.Bottom));
-            verts.Add(Vertex(blindStart, 0));
+            verts.Add(Vertex(s.ResolveBlindStart(EdgeDesignators.Bottom), 0));
             foreach (var (tStart, tEnd) in tenons)
             {
                 verts.Add(Vertex(tStart, 0));
@@ -143,7 +137,7 @@ internal static partial class PartOutlineBuilder
                 verts.Add(Vertex(length + dd, tEnd));
                 verts.Add(Vertex(length, tEnd));
             }
-            verts.Add(Vertex(length, blindEnd));
+            verts.Add(Vertex(length, depth - s.ResolveBlindStop(EdgeDesignators.Right)));
         }
 
         verts.Add(Vertex(length, depth));
@@ -158,7 +152,7 @@ internal static partial class PartOutlineBuilder
                 verts.Add(Vertex(tStart, depth + dd));
                 verts.Add(Vertex(tStart, depth));
             }
-            verts.Add(Vertex(blindStart, depth));
+            verts.Add(Vertex(s.ResolveBlindStart(EdgeDesignators.Top), depth));
         }
         verts.Add(Vertex(0, depth));
 
@@ -173,11 +167,9 @@ internal static partial class PartOutlineBuilder
                 verts.Add(Vertex(-dd, tStart));
                 verts.Add(Vertex(0, tStart));
             }
-            verts.Add(Vertex(0, blindStart));
+            verts.Add(Vertex(0, s.ResolveBlindStart(EdgeDesignators.Left)));
         }
 
         return verts;
     }
-
-    internal static List<Vector2> MortisePanel(double length, double depth) => Rectangle(length, depth);
 }

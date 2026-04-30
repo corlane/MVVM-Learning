@@ -41,7 +41,7 @@ internal static partial class DxfExporter
         PartListEntry part,
         LockDadoSettings? joinery = null)
     {
-        var s = joinery ?? LockDadoSettings.Default;
+        var s = joinery ?? new LockDadoSettings();
         var doc = CreateDocument();
         double length = part.LengthIn;
         double depth = part.WidthIn;
@@ -52,10 +52,18 @@ internal static partial class DxfExporter
         {
             "Toekick" or "Toekick (Left)" or "Toekick (Right)" =>
                 (EdgeDesignators.Top | EdgeDesignators.Left | EdgeDesignators.Right,
-                 s with { BlindStart = 0, BlindStop = 0 },
+                 s with
+                 {
+                     BlindStartLeft = 0,
+                     BlindStopLeft = 0,
+                     BlindStartRight = 0,
+                     BlindStopRight = 0,
+                     BlindStartTop = 1.5,  // Custom top value
+                     BlindStopTop = 1.5   // Custom top value
+                 },
                  true),
             "Top Stretcher (Front)" or "Drawer Stretcher" =>
-                (EdgeDesignators.LeftRight, s with { BlindStart = 1.25, BlindStop = 1.25 }, true),
+                (EdgeDesignators.LeftRight, s, true),
             "Back" =>
                 (EdgeDesignators.TopBottom, s, false),
             "Deck" =>
