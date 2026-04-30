@@ -147,7 +147,7 @@ internal static class MortiseSpecBuilder
         BaseCabinetDimensions dim,
         LockDadoSettings? s = null)
     {
-        s ??= LockDadoSettings.Default;
+        s ??= new LockDadoSettings();
         double mt34 = MaterialDefaults.Thickness34;
         double height = dim.Height;
         double depth = dim.Depth;
@@ -161,7 +161,7 @@ internal static class MortiseSpecBuilder
         // ── Deck (flush Top face) ────────────────────────────────────────────
         // ApplyTransform Y = tkHeight
         specs.Add(BuildDepthSpec("Deck",
-            partDepth: depth - mt34,
+            partDepth: depth - mt34, // TEMPORARY MT34 SUBTRACT FOR 3/4" BACK. NEEDS TO CHECK BACK THICKNESS = 3/4" AND USE IT INSTEAD. 0" FOR 1/4" BACK.
             mortiseBottomY: tkH,
             flushFace: TenonFlushFace.Top,
             s));
@@ -169,7 +169,7 @@ internal static class MortiseSpecBuilder
         // ── Back  ───────────────────────────────────────
         specs.Add(BuildHeightSpec("Back",
             edgeLength: height - mt34 - tkH,
-            xPosition: mt34 / 2,
+            xPosition: mt34 - s.MortiseSlotHeight,
             bottomY: tkH,
             flushFace: TenonFlushFace.InteriorFront,
             s,

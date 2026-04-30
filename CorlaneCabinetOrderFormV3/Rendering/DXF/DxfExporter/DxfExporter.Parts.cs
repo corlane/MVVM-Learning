@@ -63,7 +63,7 @@ internal static partial class DxfExporter
                  },
                  true),
             "Top Stretcher (Front)" or "Drawer Stretcher" =>
-                (EdgeDesignators.LeftRight, s, true),
+                (EdgeDesignators.LeftRight, s with { BlindStartLeft = 1.25, BlindStopLeft = 1.25, BlindStartRight = 1.25, BlindStopRight = 1.25 }, true),
             "Back" =>
                 (EdgeDesignators.TopBottom, s, false),
             "Deck" =>
@@ -71,18 +71,6 @@ internal static partial class DxfExporter
             _ => (EdgeDesignators.None, s, false),
         };
 
-        // For toekick: left/right tenons use BlindStart=0, BlindStop=0
-        // Top tenons keep default blind values
-        if (kind == DxfPartKind.TenonTopLeftRight)
-        {
-            effectiveSettings = effectiveSettings with
-            {
-                BlindStartLeft = 0,
-                BlindStopLeft = 0,
-                BlindStartRight = 0,
-                BlindStopRight = 0,
-            };
-        }
 
         // ── Outline ───────────────────────────────────────────────────────────
         var outline = kind switch
@@ -95,11 +83,19 @@ internal static partial class DxfExporter
         };
         AddClosedPolyline(doc, LayerOutline, outline);
 
+        AddClosedPolyline(doc, LayerOutline, outline);
+
         // ── Tenon thinning pockets ────────────────────────────────────────────
-        foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, effectiveSettings, tenonEdges, forceTwoTenons))
-            AddRectangle(doc, LayerTenonThinningPocket, x1, x2, y1, y2);
+        bool skipThinningPockets = part.PartName == "Drawer Stretcher";
+        if (!skipThinningPockets)
+        {
+            foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, effectiveSettings, tenonEdges, forceTwoTenons))
+                AddRectangle(doc, LayerTenonThinningPocket, x1, x2, y1, y2);
+        }
 
         AddGrainArrow(doc, length, depth);
+
+
         AddLabels(doc, part);
 
         doc.Save(filePath);

@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Services;
+﻿using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -39,14 +39,14 @@ internal static partial class PartOutlineBuilder
     {
         double slotX1 = flushFace switch
         {
-            TenonFlushFace.Back => xPosition - s.TenonThickness,
+            TenonFlushFace.Back => xPosition,
             TenonFlushFace.InteriorFront => xPosition,
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
         double slotX2 = flushFace switch
         {
-            TenonFlushFace.Back => xPosition + s.TenonClearance,
+            TenonFlushFace.Back => xPosition + s.MortiseSlotHeight,
             TenonFlushFace.InteriorFront => xPosition + s.MortiseSlotHeight,
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
