@@ -113,10 +113,12 @@ internal static partial class PartOutlineBuilder
         double edgeLength, double xPosition, double bottomY, TenonFlushFace flushFace, LockDadoSettings s,
         bool forceTwoTenons = false)
     {
+        double mt34 = MaterialDefaults.Thickness34;
+
         double holeCenterX = flushFace switch
         {
-            TenonFlushFace.Back => xPosition - (s.TenonThickness / 2.0),
-            TenonFlushFace.InteriorFront => xPosition + (s.MortiseSlotHeight / 2.0),
+            TenonFlushFace.Back => xPosition + s.TenonClearance + (mt34 / 2),
+            TenonFlushFace.InteriorFront => xPosition - xPosition + (mt34 / 2),
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
