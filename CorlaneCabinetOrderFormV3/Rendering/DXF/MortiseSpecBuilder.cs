@@ -30,7 +30,7 @@ internal static class MortiseSpecBuilder
         // ── Deck (flush Top face) ────────────────────────────────────────────
         // ApplyTransform Y = tkHeight
         specs.Add(BuildDepthSpec("Deck",
-            partDepth: depth,
+            partDepth: depth - mt34,
             mortiseBottomY: tkH,
             flushFace: TenonFlushFace.Top,
             s));

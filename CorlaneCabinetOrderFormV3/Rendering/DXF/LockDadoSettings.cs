@@ -97,7 +97,7 @@ internal sealed record LockDadoSettings
     // ── Gap / screw access ────────────────────────────────────────────────────
 
     /// <summary>Fixed width of each screw-access gap between tenon segments.</summary>
-    public double GapWidth { get; init; } = 0.75;
+    public double GapWidth { get; init; } = 1.5;
 
     /// <summary>One gap per approximately this many inches of usable tenon zone.</summary>
     public double GapSpacing { get; init; } = 10.0;
