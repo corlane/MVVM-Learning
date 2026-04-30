@@ -117,7 +117,7 @@ internal static partial class PartOutlineBuilder
 
         double holeCenterX = flushFace switch
         {
-            TenonFlushFace.Back => xPosition + s.TenonClearance + (mt34 / 2),
+            TenonFlushFace.Back => xPosition + (mt34 / 2),
             TenonFlushFace.InteriorFront => xPosition - xPosition + (mt34 / 2),
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
