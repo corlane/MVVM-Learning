@@ -162,7 +162,7 @@ internal static class MortiseSpecBuilder
         // ApplyTransform Y = tkHeight
         specs.Add(BuildDepthSpec("Deck",
             partDepth: depth - mt34, // TEMPORARY MT34 SUBTRACT FOR 3/4" BACK. NEEDS TO CHECK BACK THICKNESS = 3/4" AND USE IT INSTEAD. 0" FOR 1/4" BACK.
-            mortiseBottomY: tkH,
+            mortiseBottomY: tkH - s.TenonClearance,
             flushFace: TenonFlushFace.Top,
             s));
 

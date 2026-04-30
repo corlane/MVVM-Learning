@@ -91,7 +91,8 @@ internal static partial class PartOutlineBuilder
         double mt34 = MaterialDefaults.Thickness34;
         double slotBottomY = flushFace switch
         {
-            TenonFlushFace.Top => mortiseBottomY + (mt34 - s.TenonThickness),
+            TenonFlushFace.Top => mortiseBottomY + s.TenonClearance + (mt34 / 2),
+            TenonFlushFace.Bottom => mortiseBottomY + (mt34 / 2),
             _ => mortiseBottomY
         };
         double holeCenterY = slotBottomY;
