@@ -216,20 +216,38 @@ internal static class MortiseSpecBuilder
         }
 
         // ── Drawer Stretchers (flush Bottom face) ────────────────────────────
-        double[] openings = [dim.Opening1Height, dim.Opening2Height,
-                             dim.Opening3Height, dim.Opening4Height];
-        double runningY = height;
-        for (int i = 0; i < 3; i++)
+        double[] openings = [dim.Opening1Height, dim.Opening2Height, dim.Opening3Height, dim.Opening4Height];
+
+        if (string.Equals(baseCab.Style, CabinetStyles.Base.Standard, StringComparison.OrdinalIgnoreCase) && baseCab.DrwCount == 1)
         {
-            if (openings[i] <= 0) break;
-            runningY -= openings[i] + 2 * mt34;
-            specs.Add(BuildDepthSpec($"Drawer Stretcher {i + 1}",
+            // Standard cabinet with single drawer: one stretcher below opening 1
+            double stretcher1Y = height - (2 * mt34) - openings[0];
+            specs.Add(BuildDepthSpec("Drawer Stretcher",
                 partDepth: stretcherWidth,
-                mortiseBottomY: runningY,
+                mortiseBottomY: stretcher1Y,
                 flushFace: TenonFlushFace.Bottom,
-                s = s with { TenonThickness = mt34},
+                s = s with { TenonThickness = mt34 },
                 xOffset: depth - stretcherWidth,
-                forceTwoTenons: true));          // ← always 2 tenons
+                forceTwoTenons: true));
+        }
+        else if (string.Equals(baseCab.Style, CabinetStyles.Base.Drawer, StringComparison.OrdinalIgnoreCase) && baseCab.DrwCount > 1)
+        {
+            // Drawer cabinet with multiple drawers: stretchers between each pair
+            double runningY = height - (2 * mt34);  // Start below top panel
+            for (int i = 0; i < baseCab.DrwCount - 1; i++)
+            {
+                if (openings[i] <= 0) break;
+
+                runningY -= openings[i];       // Subtract opening height to reach stretcher position
+                specs.Add(BuildDepthSpec($"Drawer Stretcher {i + 1}",
+                    partDepth: stretcherWidth,
+                    mortiseBottomY: runningY,
+                    flushFace: TenonFlushFace.Bottom,
+                    s = s with { TenonThickness = mt34 },
+                    xOffset: depth - stretcherWidth,
+                    forceTwoTenons: true));
+                runningY -= mt34;              // Subtract stretcher thickness to start next opening
+            }
         }
 
         // ── Toekick (flush Back face, comb runs in height direction) ─────────

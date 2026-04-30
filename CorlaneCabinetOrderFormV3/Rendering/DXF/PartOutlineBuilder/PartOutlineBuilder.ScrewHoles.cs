@@ -94,7 +94,7 @@ internal static partial class PartOutlineBuilder
             TenonFlushFace.Top => mortiseBottomY + (mt34 - s.TenonThickness),
             _ => mortiseBottomY
         };
-        double holeCenterY = slotBottomY + (s.MortiseSlotHeight / 2.0);
+        double holeCenterY = slotBottomY;
 
         var tenons = ComputeTenonRanges(partDepth, s, forceTwoTenons, blindStart: null, blindStop: null);
         var holes = new List<(double, double, double)>();
