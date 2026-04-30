@@ -8,6 +8,7 @@ internal static partial class PartOutlineBuilder
         double partDepth, double mortiseBottomY, TenonFlushFace flushFace, LockDadoSettings s,
         double xOffset = 0, bool forceTwoTenons = false)
     {
+        s ??= new LockDadoSettings();
         double mt34 = MaterialDefaults.Thickness34;
         double slotHeight = s.MortiseSlotHeight;
         double usableStart = s.BlindStart;
@@ -40,14 +41,14 @@ internal static partial class PartOutlineBuilder
         double slotX1 = flushFace switch
         {
             TenonFlushFace.Back => xPosition,
-            TenonFlushFace.InteriorFront => xPosition,
+            TenonFlushFace.Front => xPosition,
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 
         double slotX2 = flushFace switch
         {
             TenonFlushFace.Back => xPosition + s.MortiseSlotHeight,
-            TenonFlushFace.InteriorFront => xPosition + s.MortiseSlotHeight,
+            TenonFlushFace.Front => xPosition + s.MortiseSlotHeight,
             _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
         };
 

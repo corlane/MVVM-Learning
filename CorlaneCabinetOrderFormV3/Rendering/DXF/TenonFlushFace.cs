@@ -1,4 +1,4 @@
-namespace CorlaneCabinetOrderFormV3.Rendering;
+﻿namespace CorlaneCabinetOrderFormV3.Rendering;
 
 /// <summary>
 /// Which face of a tenon panel is flush (unrouted).
@@ -7,15 +7,15 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 /// </summary>
 internal enum TenonFlushFace
 {
-    /// <summary>Top / interior face is flush. Pocket routed from bottom face. (Deck)</summary>
+    /// <summary>Top face is flush. Pocket routed from bottom face. (Deck)</summary>
     Top,
 
     /// <summary>Bottom face is flush. Pocket routed from top face. (Top, Drawer Stretchers)</summary>
     Bottom,
 
-    /// <summary>Front-facing interior face is flush. Pocket routed from back face. (Nailer)</summary>
-    InteriorFront,
+    /// <summary>Front-facing face is flush. Pocket routed from back face. (Nailer)</summary>
+    Front,
 
-    /// <summary>Back face is flush. Pocket routed from front face. (Toekick)</summary>
+    /// <summary>Back-facing face is flush. Pocket routed from front face. (Toekick)</summary>
     Back,
 }

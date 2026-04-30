@@ -149,6 +149,7 @@ internal static class MortiseSpecBuilder
     {
         s ??= new LockDadoSettings();
         double mt34 = MaterialDefaults.Thickness34;
+        double backThickness = dim.BackThickness;
         double height = dim.Height;
         double depth = dim.Depth;
         double tkH = dim.TKHeight;
@@ -161,19 +162,22 @@ internal static class MortiseSpecBuilder
         // ── Deck (flush Top face) ────────────────────────────────────────────
         // ApplyTransform Y = tkHeight
         specs.Add(BuildDepthSpec("Deck",
-            partDepth: depth - mt34, // TEMPORARY MT34 SUBTRACT FOR 3/4" BACK. NEEDS TO CHECK BACK THICKNESS = 3/4" AND USE IT INSTEAD. 0" FOR 1/4" BACK.
+            partDepth: depth - backThickness,
             mortiseBottomY: tkH - s.TenonClearance,
             flushFace: TenonFlushFace.Top,
             s));
 
         // ── Back  ───────────────────────────────────────
-        specs.Add(BuildHeightSpec("Back",
-            edgeLength: height - mt34 - tkH,
-            xPosition: mt34 - s.MortiseSlotHeight,
-            bottomY: tkH,
-            flushFace: TenonFlushFace.InteriorFront,
-            s,
-            forceTwoTenons: false));
+        if (dim.BackThickness == mt34)
+        {
+            specs.Add(BuildHeightSpec("Back",
+                edgeLength: height - mt34 - tkH,
+                xPosition: mt34 - s.MortiseSlotHeight,
+                bottomY: tkH,
+                flushFace: TenonFlushFace.Front,
+                s,
+                forceTwoTenons: false));
+        }
 
         // ── Top or Top Stretcher Front ───────────────────────────────────────
         // Full Top: same geometry as Deck but placed at top (flush Top face).
@@ -185,7 +189,7 @@ internal static class MortiseSpecBuilder
             specs.Add(BuildDepthSpec("Top",
                 partDepth: depth,
                 mortiseBottomY: height - mt34,
-                flushFace: TenonFlushFace.Top,
+                flushFace: TenonFlushFace.Bottom,
                 s));
         }
         else
@@ -203,14 +207,14 @@ internal static class MortiseSpecBuilder
 
         // ── Nailer (height-direction, tenon faces toward inside/front) ───────
         // Panel height = stretcherWidth, with top edge at height - mt34.
-        bool hasNailer = string.Equals(baseCab.BackThickness, CabinetOptions.BackThickness.QuarterFraction, StringComparison.OrdinalIgnoreCase);
-        if (hasNailer)
+        //bool hasNailer = string.Equals(baseCab.BackThickness, CabinetOptions.BackThickness.QuarterFraction, StringComparison.OrdinalIgnoreCase);
+        if (backThickness == 0.25)
         {
             specs.Add(BuildHeightSpec("Nailer",
                 edgeLength: stretcherWidth,
-                xPosition: mt34/2,
+                xPosition: mt34 - s.MortiseSlotHeight,
                 bottomY: height - mt34 - stretcherWidth,
-                flushFace: TenonFlushFace.InteriorFront,
+                flushFace: TenonFlushFace.Front,
                 s,
                 forceTwoTenons: true));
         }
