@@ -557,7 +557,7 @@ public partial class POBatchListViewModel : ObservableObject
     {
         if (_cabinetService is null) return;
 
-        var dlg = new Microsoft.Win32.OpenFolderDialog
+        var dlg = new OpenFolderDialog
         {
             Title = "Select output folder for DXF files",
             InitialDirectory = _defaults?.GetFileDialogDirectory()

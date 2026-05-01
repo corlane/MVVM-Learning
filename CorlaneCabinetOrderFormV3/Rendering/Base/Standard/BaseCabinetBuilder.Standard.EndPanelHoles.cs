@@ -201,7 +201,7 @@ internal static partial class BaseCabinetBuilder
         // Shelf holes (inside face)
         if (baseCab.DrillShelfHoles && baseCab.Style != style2)
         {
-            var shelfHoles = EndPanelHoleCalculator.ComputeShelfHoles(baseCab, dim);
+            var shelfHoles = ShelfHoleCalculator.ComputeShelfHoles(baseCab, dim);
             foreach (var h in shelfHoles)
             {
                 leftEnd.Children.Add(CabinetPartFactory.CreateHole(h.X, h.Y, 0, holeDepth, holeDiameter));

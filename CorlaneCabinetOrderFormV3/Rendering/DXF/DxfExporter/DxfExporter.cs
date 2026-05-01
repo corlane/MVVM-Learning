@@ -102,19 +102,19 @@ internal static partial class DxfExporter
     /// End panels are exported as plain rectangles — use the CabinetModel
     /// overload above to get full mortise geometry on end panels.
     /// </summary>
-    internal static void ExportAll(
-        string outputFolder,
-        IEnumerable<PartListEntry> parts,
-        LockDadoSettings? joinery = null)
-    {
-        var s = joinery ?? LockDadoSettings.Default;
-        Directory.CreateDirectory(outputFolder);
+    //internal static void ExportAll(
+    //    string outputFolder,
+    //    IEnumerable<PartListEntry> parts,
+    //    LockDadoSettings? joinery = null)
+    //{
+    //    var s = joinery ?? LockDadoSettings.Default;
+    //    Directory.CreateDirectory(outputFolder);
 
-        foreach (var part in parts)
-        {
-            string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
-            string path = Path.Combine(outputFolder, safeName + ".dxf");
-            ExportPart(path, part, s);
-        }
-    }
+    //    foreach (var part in parts)
+    //    {
+    //        string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
+    //        string path = Path.Combine(outputFolder, safeName + ".dxf");
+    //        ExportPart(path, part, s);
+    //    }
+    //}
 }

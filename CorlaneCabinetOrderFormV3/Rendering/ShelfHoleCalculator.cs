@@ -2,7 +2,7 @@
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 
-internal static class EndPanelHoleCalculator
+internal static class ShelfHoleCalculator
 {
     public record ShelfHole(double X, double Y);
 
