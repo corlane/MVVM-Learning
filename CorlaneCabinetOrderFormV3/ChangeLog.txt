@@ -494,3 +494,5 @@
 	Removed "AddOneConverter". It was not being used. commit
 	Updated version number...forgot again. commit
 	Edited copilot instructions to remove reference to the GridSplitter since it has been removed. commit
+	Fixed Door Count bug caused by clicking on 90 degree corner cabinets in Cabinet List. OnPropertyChanged for ListDoorCount was blocked behind IsMapping. Had to put it in the mapping method so it would execute. commit
+

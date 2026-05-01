@@ -107,7 +107,9 @@ public partial class BaseCabinetViewModel : ObservableValidator
         // Corner 90 only supports 0 or 2 doors; fix invalid selection and refresh list.
         OnPropertyChanged(nameof(ListDoorCount));
         if (newValue == Style3 && DoorCount == 1)
+        {
             DoorCount = 2;
+        }
 
         TrashDrawer = (newValue != Style1) ? false : TrashDrawer;
 
@@ -121,7 +123,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // Standard or corner cabinet selected
             if (DrwCount == 1)
             {
-                DrwFrontHeight1 = _defaults.DefaultDrwFrontHeight1;
+                DrwFrontHeight1 = _defaults!.DefaultDrwFrontHeight1;
             }
         }
         RecalculateFrontWidth();
@@ -181,7 +183,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         else
         {
-            bool incBoxes = _defaults.DefaultIncDrwBoxes;
+            bool incBoxes = _defaults!.DefaultIncDrwBoxes;
             IncDrwBoxOpening1 = incBoxes;
             IncDrwBoxOpening2 = incBoxes;
             IncDrwBoxOpening3 = incBoxes;
@@ -195,7 +197,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         else
         {
-            ShelfDepth = _defaults.DefaultShelfDepth;
+            ShelfDepth = _defaults!.DefaultShelfDepth;
         }
     }
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Species { get; set; } = ""; partial void OnSpeciesChanged(string oldValue, string newValue)
@@ -372,7 +374,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         if (value > 0)
         {
-            DrillShelfHoles = _defaults.DefaultDrillShelfHoles;
+            DrillShelfHoles = _defaults!.DefaultDrillShelfHoles;
         }
     }
     [ObservableProperty] public partial string ShelfDepth { get; set; } = "";
@@ -404,11 +406,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
         else
         {
-            IncDoors = _defaults.DefaultIncDoors;
-            IncDoorsInList = _defaults.DefaultIncDoorsInList;
-            DrillHingeHoles = _defaults.DefaultDrillHingeHoles;
+            IncDoors = _defaults!.DefaultIncDoors;
+            IncDoorsInList = _defaults!.DefaultIncDoorsInList;
+            DrillHingeHoles = _defaults!.DefaultDrillHingeHoles;
         }
-
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial bool DrillHingeHoles { get; set; }
@@ -559,7 +560,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
             if (RolloutCount > 0)
             {
                 ShelfCount = 0;
-                IncRollouts = _defaults.DefaultIncDrwBoxes;
+                IncRollouts = _defaults!.DefaultIncDrwBoxes;
             }
             else
             { 
@@ -665,7 +666,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public IReadOnlyList<int> ListDoorCount => Style == Style3
         ? CabinetOptions.Corner90DoorCounts
         : CabinetOptions.DoorCounts;
-    
+
+
     public IReadOnlyList<string> ListGrainDirection => CabinetOptions.GrainDirections;
     public IReadOnlyList<string> ListShelfDepth => CabinetOptions.ShelfDepths;
     public IReadOnlyList<string> ListTopType => CabinetOptions.TopTypes;

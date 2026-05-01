@@ -19,6 +19,13 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             _isMapping = false;
 
+            // Corner 90 only supports 0 or 2 doors; fix invalid selection and refresh list.
+            OnPropertyChanged(nameof(ListDoorCount));
+            if (model.Style == Style3 && DoorCount == 1)
+            {
+                DoorCount = 2;
+            }
+
             // Only update visibility/state — do NOT recalculate values.
             // The model's values are authoritative after mapping.
             ApplyStyleVisibility(model.Style);
