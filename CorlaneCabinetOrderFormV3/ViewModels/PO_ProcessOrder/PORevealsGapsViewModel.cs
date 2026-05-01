@@ -252,11 +252,11 @@ public partial class PORevealsGapsViewModel : ObservableObject
                 BottomReveal = bottom,
                 GapWidth = gap,
 
-                DefaultLeftReveal = isBase ? (DefaultBaseLeftReveal ?? "") : (DefaultUpperLeftReveal ?? ""),
-                DefaultRightReveal = isBase ? (DefaultBaseRightReveal ?? "") : (DefaultUpperRightReveal ?? ""),
-                DefaultTopReveal = isBase ? (DefaultBaseTopReveal ?? "") : (DefaultUpperTopReveal ?? ""),
-                DefaultBottomReveal = isBase ? (DefaultBaseBottomReveal ?? "") : (DefaultUpperBottomReveal ?? ""),
-                DefaultGapWidth = DefaultGapWidth ?? "",
+                //DefaultLeftReveal = isBase ? (DefaultBaseLeftReveal ?? "") : (DefaultUpperLeftReveal ?? ""),
+                //DefaultRightReveal = isBase ? (DefaultBaseRightReveal ?? "") : (DefaultUpperRightReveal ?? ""),
+                //DefaultTopReveal = isBase ? (DefaultBaseTopReveal ?? "") : (DefaultUpperTopReveal ?? ""),
+                //DefaultBottomReveal = isBase ? (DefaultBaseBottomReveal ?? "") : (DefaultUpperBottomReveal ?? ""),
+                //DefaultGapWidth = DefaultGapWidth ?? "",
 
                 IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
             };

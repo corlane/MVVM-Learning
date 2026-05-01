@@ -182,7 +182,7 @@
                                     IsReadOnly="True"
                                     Width="*"/>
 
-                <DataGridTextColumn Header="Def Top"
+                <!--<DataGridTextColumn Header="Def Top"
                                     Binding="{Binding DefaultTopReveal}"
                                     IsReadOnly="True"
                                     Width="*"/>
@@ -205,7 +205,7 @@
                 <DataGridTextColumn Header="Def Gap"
                                     Binding="{Binding DefaultGapWidth}"
                                     IsReadOnly="True"
-                                    Width="*"/>
+                                    Width="*"/>-->
             </DataGrid.Columns>
         </DataGrid>
 
