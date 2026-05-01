@@ -15,6 +15,7 @@ internal static partial class BaseCabinetBuilder
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim)
+
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
         double doubleMaterialThickness34 = MaterialThickness34 * 2;
@@ -84,64 +85,23 @@ internal static partial class BaseCabinetBuilder
         // Drawer style (2–4 drawers)
         if (cabType == style2)
         {
-            double opening1HeightAdjusted = opening1Height;
-            double opening2HeightAdjusted = opening2Height;
-            double opening3HeightAdjusted = opening3Height;
+            double[] openingHeights = [opening1Height, opening2Height, opening3Height];
 
-            if (baseCab.DrwCount == 2)
+            // First stretcher always gets doubleMaterialThickness34 added; subsequent ones get single
+            double[] thicknessOffsets = [doubleMaterialThickness34, MaterialThickness34, MaterialThickness34];
+
+            int stretcherCount = baseCab.DrwCount - 1;
+            double cumulativeHeight = 0;
+
+            for (int i = 0; i < stretcherCount; i++)
             {
-                opening1HeightAdjusted += doubleMaterialThickness34;
+                double adjustedOpening = openingHeights[i] + thicknessOffsets[i];
+                cumulativeHeight += adjustedOpening;
+
                 var stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
+                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - cumulativeHeight, 270, 0, 0);
                 cabinet.Children.Add(stretcher);
-            }
-
-            if (baseCab.DrwCount == 3)
-            {
-                opening1HeightAdjusted += doubleMaterialThickness34;
-                var stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
-
-                opening2HeightAdjusted += MaterialThickness34;
-                var stretcher2 = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher2, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher2);
-            }
-
-            if (baseCab.DrwCount == 4)
-            {
-                opening1HeightAdjusted += doubleMaterialThickness34;
-                var stretcher = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher);
-
-                opening2HeightAdjusted += MaterialThickness34;
-                var stretcher2 = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher2, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher2);
-
-                opening3HeightAdjusted += MaterialThickness34;
-                var stretcher3 = CabinetPartFactory.CreatePanel(stretcherPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.DrawerStretcher);
-                ModelTransforms.ApplyTransform(stretcher3, -(interiorWidth / 2), -depth, height - opening1HeightAdjusted - opening2HeightAdjusted - opening3HeightAdjusted, 270, 0, 0);
-                cabinet.Children.Add(stretcher3);
-            }
-
-            if (baseCab.SinkCabinet)
-            {
-                List<Point3D> sinkStretcherPoints =
-                [
-                    new (0,0,0),
-                    new (interiorWidth,0,0),
-                    new (interiorWidth,opening1Height,0),
-                    new (0,opening1Height,0)
-                ];
-
-                var sinkStretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.SinkStretcher);
-                ModelTransforms.ApplyTransform(sinkStretcher, -(interiorWidth / 2), -height + MaterialThickness34, -depth, 180, 0, 0);
-                cabinet.Children.Add(sinkStretcher);
             }
         }
     }
-
 }
