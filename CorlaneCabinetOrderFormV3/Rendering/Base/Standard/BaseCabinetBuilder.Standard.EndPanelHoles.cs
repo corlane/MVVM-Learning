@@ -145,59 +145,71 @@ internal static partial class BaseCabinetBuilder
         }
 
         // Shelf holes (inside face)
+        //if (baseCab.DrillShelfHoles && baseCab.Style != style2)
+        //{
+        //    double shelfHoleCount = Math.Round(((height - 12) / 1.26) - tk_Height);
+
+        //    double yStart = tk_Height + 6;
+
+        //    double? maxShelfHoleY = null;
+        //    if (baseCab.DrwCount == 1)
+        //    {
+        //        double drawerStretcherBottomY = height - opening1Height - (2 * MaterialThickness34);
+        //        maxShelfHoleY = drawerStretcherBottomY - 6;
+        //    }
+
+        //    double frontShelfHoleX = shelfDepth + backThickness - 1;
+
+        //    for (int i = 0; i < shelfHoleCount; i++)
+        //    {
+        //        double y = yStart + (i * 1.26);
+
+        //        if (maxShelfHoleY is not null && y > maxShelfHoleY.Value)
+        //        {
+        //            break;
+        //        }
+
+        //        leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+        //            centerX: 1 + backThickness,
+        //            centerY: y,
+        //            rimZ: 0,
+        //            bottomZ: holeDepth,
+        //            diameter: holeDiameter));
+
+        //        leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+        //            centerX: frontShelfHoleX,
+        //            centerY: y,
+        //            rimZ: 0,
+        //            bottomZ: holeDepth,
+        //            diameter: holeDiameter));
+
+        //        rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+        //            centerX: 1 + backThickness,
+        //            centerY: y,
+        //            rimZ: MaterialThickness34,
+        //            bottomZ: holeDepth,
+        //            diameter: holeDiameter));
+
+        //        rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+        //            centerX: frontShelfHoleX,
+        //            centerY: y,
+        //            rimZ: MaterialThickness34,
+        //            bottomZ: holeDepth,
+        //            diameter: holeDiameter));
+        //    }
+        //}
+        // Shelf holes (inside face)
         if (baseCab.DrillShelfHoles && baseCab.Style != style2)
         {
-            double shelfHoleCount = Math.Round(((height - 12) / 1.26) - tk_Height);
-
-            double yStart = tk_Height + 6;
-
-            double? maxShelfHoleY = null;
-            if (baseCab.DrwCount == 1)
+            var shelfHoles = EndPanelHoleCalculator.ComputeShelfHoles(baseCab, dim);
+            foreach (var h in shelfHoles)
             {
-                double drawerStretcherBottomY = height - opening1Height - (2 * MaterialThickness34);
-                maxShelfHoleY = drawerStretcherBottomY - 6;
-            }
-
-            double frontShelfHoleX = shelfDepth + backThickness - 1;
-
-            for (int i = 0; i < shelfHoleCount; i++)
-            {
-                double y = yStart + (i * 1.26);
-
-                if (maxShelfHoleY is not null && y > maxShelfHoleY.Value)
-                {
-                    break;
-                }
-
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: 1 + backThickness,
-                    centerY: y,
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
-
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: frontShelfHoleX,
-                    centerY: y,
-                    rimZ: 0,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
-
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: 1 + backThickness,
-                    centerY: y,
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
-
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(
-                    centerX: frontShelfHoleX,
-                    centerY: y,
-                    rimZ: MaterialThickness34,
-                    bottomZ: holeDepth,
-                    diameter: holeDiameter));
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(h.X, h.Y, 0, holeDepth, holeDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(h.X, h.Y, MaterialThickness34, holeDepth, holeDiameter));
             }
         }
+
+
 
         // Drawer slide holes (inside face)
         if (baseCab.DrwCount > 0)
