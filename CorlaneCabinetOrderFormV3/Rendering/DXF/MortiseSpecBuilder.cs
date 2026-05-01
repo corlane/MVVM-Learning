@@ -170,7 +170,7 @@ internal static class MortiseSpecBuilder
         // ApplyTransform Y = tkHeight
         specs.Add(BuildDepthSpec("Deck",
             partDepth: depth - backThickness,
-            mortiseBottomY: tkH - s.TenonClearance,
+            mortiseBottomY: tkH - baseSettings.TenonClearance,
             flushFace: TenonFlushFace.Top,
             s: baseSettings));
 
@@ -179,7 +179,7 @@ internal static class MortiseSpecBuilder
         {
             specs.Add(BuildHeightSpec("Back",
                 edgeLength: height - mt34 - tkH,
-                xPosition: mt34 - s.MortiseSlotHeight,
+                xPosition: mt34 - baseSettings.MortiseSlotHeight,
                 bottomY: tkH,
                 flushFace: TenonFlushFace.Front,
                 s: baseSettings,
@@ -219,7 +219,7 @@ internal static class MortiseSpecBuilder
         {
             specs.Add(BuildHeightSpec("Nailer",
                 edgeLength: stretcherWidth,
-                xPosition: mt34 - s.MortiseSlotHeight,
+                xPosition: mt34 - baseSettings.MortiseSlotHeight,
                 bottomY: height - mt34 - stretcherWidth,
                 flushFace: TenonFlushFace.Front,
                 s: baseSettings,
