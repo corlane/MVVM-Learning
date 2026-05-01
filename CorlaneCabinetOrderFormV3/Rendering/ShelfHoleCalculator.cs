@@ -1,7 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
-using System.Windows.Documents;
 
 internal static class EndPanelHoleCalculator
 {

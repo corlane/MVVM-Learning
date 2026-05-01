@@ -69,7 +69,7 @@ internal static partial class DxfExporter
             string label = PartsListBuilder.FormatLabel(cab, index++);
             var parts = PartsListBuilder.BuildForCabinet(cab, label);
 
-            // Build mortise specs once per cabinet (only applicable to base standard)
+            // Build mortise specs once per cabinet (currently only applicable to base standard & base drawer)
             List<MortiseSpec>? mortiseSpecs = null;
             BaseCabinetDimensions dim = default;
             if (cab is BaseCabinetModel baseCab &&
