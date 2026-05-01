@@ -147,7 +147,7 @@ internal static class MortiseSpecBuilder
         BaseCabinetDimensions dim,
         LockDadoSettings? s = null)
     {
-        s ??= new LockDadoSettings();
+        var baseSettings = s ?? new LockDadoSettings();
         double mt34 = MaterialDefaults.Thickness34;
         double backThickness = dim.BackThickness;
         double height = dim.Height;
@@ -157,6 +157,13 @@ internal static class MortiseSpecBuilder
 
         const double stretcherWidth = 6.0;
 
+        // Add settings below for custom overrides to default parameters
+        var topStretcherFrontSettings = baseSettings with { BlindStart = 1.25, BlindStop = 1.25 };
+        var drwStretcherSettings = baseSettings with { TenonThickness = mt34, BlindStart = 1.25, BlindStop = 1.25 };
+        var toekickSettings = baseSettings with { BlindStart = 0, BlindStop = 0, TenonThickness = mt34 * 0.4 };
+        // -------------------------------------------------------------
+
+
         var specs = new List<MortiseSpec>();
 
         // ── Deck (flush Top face) ────────────────────────────────────────────
@@ -165,7 +172,7 @@ internal static class MortiseSpecBuilder
             partDepth: depth - backThickness,
             mortiseBottomY: tkH - s.TenonClearance,
             flushFace: TenonFlushFace.Top,
-            s));
+            s: baseSettings));
 
         // ── Back  ───────────────────────────────────────
         if (dim.BackThickness == mt34)
@@ -175,7 +182,7 @@ internal static class MortiseSpecBuilder
                 xPosition: mt34 - s.MortiseSlotHeight,
                 bottomY: tkH,
                 flushFace: TenonFlushFace.Front,
-                s,
+                s: baseSettings,
                 forceTwoTenons: false));
         }
 
@@ -190,7 +197,7 @@ internal static class MortiseSpecBuilder
                 partDepth: depth,
                 mortiseBottomY: height - mt34,
                 flushFace: TenonFlushFace.Bottom,
-                s));
+                s: baseSettings));
         }
         else
         {
@@ -199,7 +206,7 @@ internal static class MortiseSpecBuilder
                 partDepth: stretcherWidth,
                 mortiseBottomY: height - mt34,
                 flushFace: TenonFlushFace.Bottom,
-                s = s with { BlindStart = 1.25, BlindStop = 1.25},
+                s: topStretcherFrontSettings,
                 xOffset: depth - stretcherWidth,
                 forceTwoTenons: true));          // ← always 2 tenons
         }
@@ -215,7 +222,7 @@ internal static class MortiseSpecBuilder
                 xPosition: mt34 - s.MortiseSlotHeight,
                 bottomY: height - mt34 - stretcherWidth,
                 flushFace: TenonFlushFace.Front,
-                s,
+                s: baseSettings,
                 forceTwoTenons: true));
         }
 
@@ -230,7 +237,7 @@ internal static class MortiseSpecBuilder
                 partDepth: stretcherWidth,
                 mortiseBottomY: stretcher1Y,
                 flushFace: TenonFlushFace.Bottom,
-                s = s with { TenonThickness = mt34 },
+                s: drwStretcherSettings,
                 xOffset: depth - stretcherWidth,
                 forceTwoTenons: true));
         }
@@ -247,7 +254,7 @@ internal static class MortiseSpecBuilder
                     partDepth: stretcherWidth,
                     mortiseBottomY: runningY,
                     flushFace: TenonFlushFace.Bottom,
-                    s = s with { TenonThickness = mt34 },
+                    s: drwStretcherSettings,
                     xOffset: depth - stretcherWidth,
                     forceTwoTenons: true));
                 runningY -= mt34;              // Subtract stretcher thickness to start next opening
@@ -262,7 +269,7 @@ internal static class MortiseSpecBuilder
                 xPosition: depth - tkD - mt34,
                 bottomY: 0.5,
                 flushFace: TenonFlushFace.Back,
-                s = s with { BlindStart = 0, BlindStop = 0, TenonThickness = mt34 * 0.4},
+                s: toekickSettings,
                 forceTwoTenons: true));
         }
 
