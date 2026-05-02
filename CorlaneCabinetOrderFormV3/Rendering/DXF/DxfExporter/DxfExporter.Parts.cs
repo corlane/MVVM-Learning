@@ -78,6 +78,7 @@ internal static partial class DxfExporter
         if (isLeft) rotatedOutline = MirrorX(rotatedOutline, newLength);
         AddClosedPolyline(doc, LayerOutline, rotatedOutline);
 
+        // ── Mortise Pockets and Screw Holes ───────────────────────────────────
         foreach (var spec in mortiseSpecs)
         {
             foreach (var (x1, x2, y1, y2) in spec.Pockets)
