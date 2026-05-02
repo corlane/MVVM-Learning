@@ -42,7 +42,8 @@ BUGS:
 
 Upper angle front not showing calculated front width. AGAIN. It is only on initial load. When a dimension is modified, the number shows up.
 
-
+If Supply Drw Boxes is unchecked, they become checked again on cabinet Depth change. The reason is: During typing, as the depth changes, it triggers if (ConvertDimension.FractionToDouble(Depth) < 10.625) IncDrwBoxOpening1 = false; etc.
+	I tried capturing the values of the checkboxes before the depth check and reapplying them after, and that didn't work. For some reason, it then started REMOVING the drw boxes, the opposite effect.
 
 
 

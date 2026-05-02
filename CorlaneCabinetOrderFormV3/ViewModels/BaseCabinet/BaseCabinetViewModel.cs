@@ -188,7 +188,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             IncDrwBoxOpening2 = incBoxes;
             IncDrwBoxOpening3 = incBoxes;
             IncDrwBoxOpening4 = incBoxes;
-            TopType = _defaults.DefaultTopType;
+
+            TopType = _defaults!.DefaultTopType;
             ApplyStyleVisibility(Style);
         }
         if (ConvertDimension.FractionToDouble(Depth) < 8)
