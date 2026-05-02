@@ -53,10 +53,7 @@ internal static partial class DxfExporter
                 // Compute drawer slide holes if cabinet has drawers
                 if (baseCab.DrwCount > 0)
                 {
-                    drawerSlideHoles = DrawerSlideHolesCalculator.Compute(
-                        baseCab, dim,
-                        x1: dim.Depth - 1.4567, x2: dim.Depth - 3.9764, x3: dim.Depth - 5.2362, x4: dim.Depth - 6.4961, x5: dim.Depth - 9.0158, x6: dim.Depth - 10.2756, dim.Depth - 14.0551, dim.Depth - 17.8346, dim.Depth - 20.3543,
-                        yOffsetFromBottom: 1.5);
+                    drawerSlideHoles = DrawerSlideHolesCalculator.Compute(baseCab, dim,yOffsetFromBottom: 1.5);
                 }
             }
 
