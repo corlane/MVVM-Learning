@@ -83,7 +83,10 @@ internal static partial class DxfExporter
             {
                 dim = BaseCabinetDimensions.From(baseCab);
                 mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(baseCab, dim, s);
-                shelfHoles = ShelfHoleCalculator.ComputeShelfHoles(baseCab, dim);
+                if (baseCab.DrillShelfHoles)
+                {
+                    shelfHoles = ShelfHoleCalculator.ComputeShelfHoles(baseCab, dim);
+                }
             }
 
             foreach (var part in parts)

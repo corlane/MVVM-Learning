@@ -156,7 +156,7 @@ internal static partial class DxfExporter
         // ── Shelf Holes ───────────────────────────────────────────────────────
         if (shelfHoles is not null)
         {
-            const double shelfHoleDia = 0.28125; // 9/32" standard shelf pin
+            const double shelfHoleDia = 0.1968; // 5mm standard shelf pin
             foreach (var hole in shelfHoles)
             {
                 var (rcx, rcy, _) = RotateHoleCW90(hole.X, hole.Y, shelfHoleDia, oldWidth);
