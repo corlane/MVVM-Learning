@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using netDxf;
+using System.Collections;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -112,7 +113,8 @@ internal static partial class DxfExporter
         IEnumerable<MortiseSpec> mortiseSpecs,
         LockDadoSettings? joinery = null,
         double tkHeight = 0,
-        double tkDepth = 0)
+        double tkDepth = 0,
+        List <ShelfHoleCalculator.ShelfHole>? shelfHoles = null)
     {
         var s = joinery ?? LockDadoSettings.Default;
         var doc = CreateDocument();
@@ -148,6 +150,18 @@ internal static partial class DxfExporter
                 var (rcx, rcy, _) = RotateHoleCW90(cx, cy, dia, oldWidth);
                 if (isLeft) rcx = newLength - rcx;
                 AddCircle(doc, LayerScrewHoles, rcx, rcy, dia / 2.0);
+            }
+        }
+
+        // ── Shelf Holes ───────────────────────────────────────────────────────
+        if (shelfHoles is not null)
+        {
+            const double shelfHoleDia = 0.28125; // 9/32" standard shelf pin
+            foreach (var hole in shelfHoles)
+            {
+                var (rcx, rcy, _) = RotateHoleCW90(hole.X, hole.Y, shelfHoleDia, oldWidth);
+                if (isLeft) rcx = newLength - rcx;
+                AddCircle(doc, LayerShelfHoles, rcx, rcy, shelfHoleDia / 2.0);
             }
         }
 

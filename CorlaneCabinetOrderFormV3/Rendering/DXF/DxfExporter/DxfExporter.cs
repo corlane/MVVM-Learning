@@ -4,6 +4,8 @@ using netDxf;
 using netDxf.Entities;
 using netDxf.Tables;
 using System.IO;
+using System.Windows.Documents;
+using static ShelfHoleCalculator;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -45,6 +47,7 @@ internal static partial class DxfExporter
     private const string LayerScrewHoles = "drill z12p0";
     private const string LayerGrain = "GRAIN_DIRECTION";
     private const string LayerLabels = "LABELS";
+    private const string LayerShelfHoles = "drill z12p0";
 
     // ── Public entry points ───────────────────────────────────────────────────
 
@@ -71,13 +74,16 @@ internal static partial class DxfExporter
 
             // Build mortise specs once per cabinet (currently only applicable to base standard & base drawer)
             List<MortiseSpec>? mortiseSpecs = null;
+            List<ShelfHoleCalculator.ShelfHole>? shelfHoles = null;
             BaseCabinetDimensions dim = default;
+
             if (cab is BaseCabinetModel baseCab &&
                 (string.Equals(baseCab.Style, CabinetStyles.Base.Standard, StringComparison.OrdinalIgnoreCase) ||
                  string.Equals(baseCab.Style, CabinetStyles.Base.Drawer, StringComparison.OrdinalIgnoreCase)))
             {
                 dim = BaseCabinetDimensions.From(baseCab);
                 mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(baseCab, dim, s);
+                shelfHoles = ShelfHoleCalculator.ComputeShelfHoles(baseCab, dim);
             }
 
             foreach (var part in parts)
@@ -90,7 +96,8 @@ internal static partial class DxfExporter
                 if (kind == DxfPartKind.MortisePanel && mortiseSpecs is not null)
                     ExportEndPanel(path, part, mortiseSpecs, s,
                         tkHeight: dim.TKHeight,
-                        tkDepth: dim.TKDepth);
+                        tkDepth: dim.TKDepth,
+                        shelfHoles);
                 else
                     ExportPart(path, part, s);
             }
