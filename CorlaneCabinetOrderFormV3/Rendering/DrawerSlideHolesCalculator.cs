@@ -11,7 +11,7 @@ internal static class DrawerSlideHolesCalculator
     public static List<DrawerSlideHole> Compute(
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,
-        double x1, double x2, double x3, double x4, double x5, double x6,
+        double x1, double x2, double x3, double x4, double x5, double x6, double x7, double x8, double x9,
         double yOffsetFromBottom = 1.5)
     {
         // FIX 2: Specify the generic type List<DrawerSlideHole>
@@ -28,7 +28,7 @@ internal static class DrawerSlideHolesCalculator
             baseCab.DrillSlideHolesOpening4
         ];
 
-        double[] holeXPositions = [x1, x2, x3, x4, x5, x6];
+        double[] holeXPositions = [x1, x2, x3, x4, x5, x6, x7, x8, x9];
 
         // Start Y at the bottom of the first opening
         double openingBottomY = height - mt34 - openingHeights[0];

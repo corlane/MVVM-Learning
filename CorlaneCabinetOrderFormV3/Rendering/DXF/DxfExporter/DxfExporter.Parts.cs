@@ -92,7 +92,7 @@ internal static partial class DxfExporter
             {
                 var (rcx, rcy, _) = RotateHoleCW90(cx, cy, dia, oldWidth);
                 if (isLeft) rcx = newLength - rcx;
-                AddCircle(doc, LayerScrewHoles, rcx, rcy, dia / 2.0);
+                AddCircle(doc, LayerThruHoles, rcx, rcy, dia / 2.0);
             }
         }
 
@@ -118,7 +118,7 @@ internal static partial class DxfExporter
                 // Apply same CW90 rotation and Left-End mirroring as shelf holes
                 var (rcx, rcy, _) = RotateHoleCW90(hole.X, hole.Y, slideHoleDia, oldWidth);
                 if (isLeft) rcx = newLength - rcx;
-                AddCircle(doc, LayerDrawerSlides, rcx, rcy, slideHoleDia / 2.0);
+                AddCircle(doc, LayerDrawerSlideHoles, rcx, rcy, slideHoleDia / 2.0);
             }
         }
 

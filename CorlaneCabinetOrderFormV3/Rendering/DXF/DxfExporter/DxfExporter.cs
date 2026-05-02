@@ -6,13 +6,15 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 internal static partial class DxfExporter
 {
     private const string LayerOutline = "outline z18p6";
-    private const string LayerTenonThinningPocket = "pocket z9p0";
-    private const string LayerMortise = "pocket z6p35";
-    private const string LayerScrewHoles = "drill z12p0";
+    private const string LayerTenonThinningPocket = "pocket z10p0";
+    private const string LayerMortise = "pocket [3185] z9p0";
+    private const string LayerThruHoles = "drill z18p8";
+    private const string LayerShelfHoles = "drill z13p0";
+    private const string LayerDrawerSlideHoles = "drill z13p0";
+    private const string LayerHingeHoles = "drill z13p0";
+
     private const string LayerGrain = "GRAIN_DIRECTION";
     private const string LayerLabels = "LABELS";
-    private const string LayerShelfHoles = "drill z12p0";
-    private const string LayerDrawerSlides = "drill z12p0"; // NEW: Dedicated layer for slide holes
 
     internal static void ExportAll(
         string outputFolder,
@@ -30,7 +32,7 @@ internal static partial class DxfExporter
 
             List<MortiseSpec>? mortiseSpecs = null;
             List<ShelfHoleCalculator.ShelfHole>? shelfHoles = null;
-            List<DrawerSlideHolesCalculator.DrawerSlideHole>? drawerSlideHoles = null; // NEW
+            List<DrawerSlideHolesCalculator.DrawerSlideHole>? drawerSlideHoles = null;
             BaseCabinetDimensions dim = default;
 
             if (cab is BaseCabinetModel baseCab &&
@@ -38,6 +40,8 @@ internal static partial class DxfExporter
                  string.Equals(baseCab.Style, CabinetStyles.Base.Drawer, StringComparison.OrdinalIgnoreCase)))
             {
                 dim = BaseCabinetDimensions.From(baseCab);
+
+                // --------- Mortises and Tenon Thinning Pockets
                 mortiseSpecs = MortiseSpecBuilder.BuildForBaseStandard(baseCab, dim, s);
 
                 // ---------Shelf Holes
@@ -49,10 +53,9 @@ internal static partial class DxfExporter
                 // Compute drawer slide holes if cabinet has drawers
                 if (baseCab.DrwCount > 0)
                 {
-                    // TODO: Replace placeholder x1..x6 with actual slide mounting depths from your UI/Settings
                     drawerSlideHoles = DrawerSlideHolesCalculator.Compute(
                         baseCab, dim,
-                        x1: dim.Depth - (32/25.4), x2: dim.Depth - (64/25.4), x3: dim.Depth - (128/25.4), x4: dim.Depth - (256/25.4), x5: dim.Depth - (288/25.4), x6: dim.Depth - (320/25.4),
+                        x1: dim.Depth - 1.4567, x2: dim.Depth - 3.9764, x3: dim.Depth - 5.2362, x4: dim.Depth - 6.4961, x5: dim.Depth - 9.0158, x6: dim.Depth - 10.2756, dim.Depth - 14.0551, dim.Depth - 17.8346, dim.Depth - 20.3543,
                         yOffsetFromBottom: 1.5);
                 }
             }
