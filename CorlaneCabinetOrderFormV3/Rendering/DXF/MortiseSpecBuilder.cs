@@ -185,7 +185,6 @@ internal static class MortiseSpecBuilder
                 bottomY: tkH,
                 flushFace: TenonFlushFace.Front,
                 s: baseSettings,
-                tkH,
                 forceTwoTenons: false));
         }
 
@@ -226,7 +225,6 @@ internal static class MortiseSpecBuilder
                 bottomY: height - mt34 - stretcherWidth,
                 flushFace: TenonFlushFace.Front,
                 s: nailerSettings,
-                tkH,
                 forceTwoTenons: true));
         }
 
@@ -274,7 +272,6 @@ internal static class MortiseSpecBuilder
                 bottomY: 0.5,
                 flushFace: TenonFlushFace.Back,
                 s: toekickSettings,
-                tkH,
                 forceTwoTenons: true));
         }
 
@@ -300,13 +297,13 @@ internal static class MortiseSpecBuilder
 
     private static MortiseSpec BuildHeightSpec(
         string label, double edgeLength, double xPosition, double bottomY, 
-        TenonFlushFace flushFace, LockDadoSettings s, double tkHeight, bool forceTwoTenons = false) 
+        TenonFlushFace flushFace, LockDadoSettings s, bool forceTwoTenons = false) 
     { 
         return new MortiseSpec 
         { Label = label, Pockets = PartOutlineBuilder.ComputeHeightDirectionMortisePockets(
             edgeLength, xPosition, bottomY, flushFace, s, forceTwoTenons), 
             ScrewHoles = PartOutlineBuilder.ComputeHeightDirectionScrewHoles(
-                edgeLength, xPosition, bottomY, flushFace, s, tkHeight, forceTwoTenons) 
+                edgeLength, xPosition, bottomY, flushFace, s, forceTwoTenons) 
         }; 
     }
 }

@@ -1,6 +1,4 @@
-﻿using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Services;
-using System.Diagnostics;
+﻿using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -118,10 +116,9 @@ internal static partial class PartOutlineBuilder
     }
 
     internal static List<(double CenterX, double CenterY, double Diameter)> ComputeHeightDirectionScrewHoles(
-        double edgeLength, double xPosition, double bottomY, TenonFlushFace flushFace, LockDadoSettings s, double tkHeight,
+        double edgeLength, double xPosition, double bottomY, TenonFlushFace flushFace, LockDadoSettings s,
         bool forceTwoTenons = false)
     {
-        Debug.WriteLine($"xPositiong {xPosition}, bottomY {bottomY}, forceTwoTenons {forceTwoTenons}");
         double mt34 = MaterialDefaults.Thickness34;
 
         double holeCenterX = flushFace switch
@@ -142,8 +139,8 @@ internal static partial class PartOutlineBuilder
 
         if (!forceTwoTenons)
         {
-            holes.Add((xPosition, tkHeight + 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
-            holes.Add((xPosition, edgeLength + tkHeight - 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
+            holes.Add((xPosition, bottomY + 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
+            holes.Add((xPosition, bottomY + edgeLength - 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
         }
 
         return holes;
