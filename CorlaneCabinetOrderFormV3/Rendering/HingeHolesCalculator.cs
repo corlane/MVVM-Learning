@@ -31,16 +31,24 @@ internal static class HingeHolesCalculator
         double height = dim.Height;
         double tk_Height = dim.TKHeight;
         double opening1Height = dim.Opening1Height;
+        double topReveal = dim.DoorTopReveal;
+        double bottomReveal = dim.DoorBottomReveal;
+        double doorGap = dim.BaseDoorGap;
 
         double hingeX = depth - hingeXFromFront;
 
         double topCenterY = height - hingeCenterInset;
-        double bottomCenterY = tk_Height + hingeCenterInset;
+        double bottomCenterY = tk_Height + bottomReveal + hingeCenterInset;
 
         if (baseCab.DrwCount == 1)
         {
             double drawerStretcherBottomY = height - opening1Height - (2 * materialThickness34);
-            topCenterY = drawerStretcherBottomY - hingeCenterInset;
+            double drawerStretcherCenterY = drawerStretcherBottomY + (materialThickness34 / 2); // this places the reference point in the center of the drawer stretcher
+            topCenterY = drawerStretcherCenterY - (doorGap / 2) - hingeCenterInset;
+        }
+        else
+        {
+            topCenterY = height - topReveal - hingeCenterInset;
         }
 
         if (topCenterY < bottomCenterY)
