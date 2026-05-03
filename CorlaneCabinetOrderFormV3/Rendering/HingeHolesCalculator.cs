@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// Serves as the single source of truth for both manufacturing data generation and 3D WYSIWYG rendering.
 /// </summary>
 /// <remarks>
-/// Calculates hinge positions based on cabinet height, toe kick height, and optional drawer stretcher adjustments.
+/// Calculates hinge positions based on cabinet height, toe kick height, and optional drawer stretcher adjustments, and accounts for door top/bottom reveals and gaps.
 /// Returns a flat list of HingeBore records, where each hinge is represented by two bores (top and bottom)
 /// spaced 1.26" apart vertically. Horizontal position is fixed at 1.456" from the front edge.
 /// </remarks>
