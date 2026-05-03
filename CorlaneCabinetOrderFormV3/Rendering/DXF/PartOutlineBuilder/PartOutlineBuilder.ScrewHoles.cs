@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -107,13 +108,20 @@ internal static partial class PartOutlineBuilder
             holes.Add((gapCenterX, holeCenterY, s.ScrewPilotHoleDiameter));
         }
 
+        if (!forceTwoTenons)
+        {
+            holes.Add((partDepth - 1.5, holeCenterY, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
+            holes.Add((1.5, holeCenterY, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
+        }
+
         return holes;
     }
 
     internal static List<(double CenterX, double CenterY, double Diameter)> ComputeHeightDirectionScrewHoles(
-        double edgeLength, double xPosition, double bottomY, TenonFlushFace flushFace, LockDadoSettings s,
+        double edgeLength, double xPosition, double bottomY, TenonFlushFace flushFace, LockDadoSettings s, double tkHeight,
         bool forceTwoTenons = false)
     {
+        Debug.WriteLine($"xPositiong {xPosition}, bottomY {bottomY}, forceTwoTenons {forceTwoTenons}");
         double mt34 = MaterialDefaults.Thickness34;
 
         double holeCenterX = flushFace switch
@@ -130,6 +138,12 @@ internal static partial class PartOutlineBuilder
         {
             double gapCenterY = bottomY + (tenons[i].EndY + tenons[i + 1].StartY) / 2.0;
             holes.Add((holeCenterX, gapCenterY, s.ScrewPilotHoleDiameter));
+        }
+
+        if (!forceTwoTenons)
+        {
+            holes.Add((xPosition, tkHeight + 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
+            holes.Add((xPosition, edgeLength + tkHeight - 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
         }
 
         return holes;
