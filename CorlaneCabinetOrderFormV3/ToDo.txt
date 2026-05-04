@@ -76,4 +76,21 @@ All depth-direction joints use ComputeDepthDirectionScrewHoles(); height-directi
 Z-offset pattern: Outside-face construction holes use Z = MaterialThickness34 (left) / 0 (right). Inside-face holes (hinges, shelves, slides) use Z = 0 (left) / MaterialThickness34 (right).
 Current State:
 Drawer stretchers for both Standard (1 drawer) and Drawer (>1 drawer) styles are now correctly positioned. Top, bottom, back vertical, toekick, and drawer slide/hinge/shelf holes are all delegated to the truth calculator. Ready for next phase (e.g., upper cabinets, wall units, or additional component refinements).
-	
+
+Here are the files used in this conversation for context:
+
+PartOutlineBuilder.ScrewHoles.cs
+
+Role: The "truth calculator" for mortise/screw hole geometry.
+Key Methods: ComputeDepthDirectionScrewHoles() and ComputeHeightDirectionScrewHoles().
+Usage: Provided the authoritative algorithm and parameter expectations (partDepth, mortiseBottomY, flushFace, xOffset, forceTwoTenons) that BaseCabinetBuilder was refactored to delegate to.
+
+BaseCabinetBuilder.Standard.EndPanelHoles.cs
+
+Role: The primary file being refactored.
+Usage: Contained the inline linear-spacing logic that was replaced. We updated its method signature to accept LockDadoSettings, mapped its hole creation to the truth calculator's output, and fixed the cumulative Y-offset drift in the multi-drawer stretcher loop.
+
+MortiseSpecBuilder.cs
+
+Role: DXF export reference / validation source.
+Usage: Provided when the drawer stretcher holes were rendering progressively higher. Comparing its loop logic (runningY -= openings[i]; ... runningY -= mt34;) against BaseCabinetBuilder revealed the missing stretcher-thickness subtraction, which was the exact fix needed to achieve WYSIWYG parity.
