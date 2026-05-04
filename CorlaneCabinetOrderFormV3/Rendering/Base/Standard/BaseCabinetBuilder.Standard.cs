@@ -49,7 +49,7 @@ internal static partial class BaseCabinetBuilder
         Model3DGroup toekick = new();
         Model3DGroup back = new();
         List<Point3D> endPanelPoints;
-
+        LockDadoSettings lockDadoSettings = LockDadoSettings.Default;
 
         // ── Capture core dimensions ──
         if (result is not null)
@@ -77,7 +77,7 @@ internal static partial class BaseCabinetBuilder
         // HOLES (base cabinets)
         // IMPORTANT: add holes before ApplyTransform(leftEnd/rightEnd, ...)
         // ----------------------------
-        DrillEndPanelHoles(leftEnd, rightEnd, baseCab, dim);
+        DrillEndPanelHoles(leftEnd, rightEnd, baseCab, dim, lockDadoSettings);
 
         // End panel transforms
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
