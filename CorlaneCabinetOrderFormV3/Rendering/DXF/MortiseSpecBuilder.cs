@@ -211,6 +211,20 @@ internal static class MortiseSpecBuilder
                 s: topStretcherFrontSettings,
                 xOffset: depth - stretcherWidth,
                 forceTwoTenons: true));          // ← always 2 tenons
+
+            // Top Stretcher Back — single centered hole at back edge (NO mortise)
+            specs.Add(new MortiseSpec
+            {
+                Label = "Top Stretcher Back",
+                Pockets = [], // Explicitly empty to suppress mortise generation
+                ScrewHoles = PartOutlineBuilder.ComputeDepthDirectionScrewHoles(
+                    partDepth: 3.0,
+                    mortiseBottomY: height - mt34,
+                    flushFace: TenonFlushFace.Bottom,
+                    s: topStretcherFrontSettings,
+                    xOffset: 0,
+                    forceTwoTenons: false)
+            });
         }
 
 

@@ -49,6 +49,16 @@ internal static partial class BaseCabinetBuilder
                 rightEnd.Children.Add(CabinetPartFactory.CreateHole(h.CenterX, h.CenterY, 0, holeDepth, h.Diameter));
             }
 
+            // Top Stretcher Back hole (single centered hole)
+            if (topIsStretcher)
+            {
+                double backStretcherCenterX = 1.5; // 3" width / 2 from back edge
+                double backStretcherCenterY = height - (MaterialThickness34 / 2.0); // Centered vertically on top edge
+
+                leftEnd.Children.Add(CabinetPartFactory.CreateHole(backStretcherCenterX, backStretcherCenterY, MaterialThickness34, holeDepth, settings.ScrewPilotHoleDiameter));
+                rightEnd.Children.Add(CabinetPartFactory.CreateHole(backStretcherCenterX, backStretcherCenterY, 0, holeDepth, settings.ScrewPilotHoleDiameter));
+            }
+
             // Bottom edge holes (unchanged)
             var bottomHoles = PartOutlineBuilder.ComputeDepthDirectionScrewHoles(
                 partDepth: depth,
