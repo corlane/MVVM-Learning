@@ -1,4 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -9,13 +10,11 @@ internal static partial class DxfExporter
         PartListEntry part,
         LockDadoSettings? joinery = null)
     {
-        // ... [Keep your existing ExportPart method exactly as is] ...
         var s = joinery ?? new LockDadoSettings();
         var doc = CreateDocument();
         double length = part.LengthIn;
         double depth = part.WidthIn;
         var kind = ResolvePartKind(part.PartName);
-
         var (tenonEdges, effectiveSettings, forceTwoTenons) = part.PartName switch
         {
             "Toekick" or "Toekick (Left)" or "Toekick (Right)" =>
@@ -24,8 +23,8 @@ internal static partial class DxfExporter
                  true),
             "Top Stretcher (Front)" or "Drawer Stretcher" =>
                 (EdgeDesignators.LeftRight, s with { BlindStartLeft = 1.25, BlindStopLeft = 1.25, BlindStartRight = 1.25, BlindStopRight = 1.25 }, true),
-            "Back" => (EdgeDesignators.TopBottom, s, false),
-            "Deck" => (EdgeDesignators.LeftRight, s, false),
+            "Back" => (EdgeDesignators.TopBottom | EdgeDesignators.Left, s, false),
+            "Deck" => (EdgeDesignators.LeftRight | EdgeDesignators.Bottom, s, false),
             _ => (EdgeDesignators.None, s, false),
         };
 
@@ -38,7 +37,6 @@ internal static partial class DxfExporter
             _ => PartOutlineBuilder.Rectangle(length, depth),
         };
         AddClosedPolyline(doc, LayerOutline, outline);
-        AddClosedPolyline(doc, LayerOutline, outline);
 
         bool skipThinningPockets = part.PartName == "Drawer Stretcher";
         if (!skipThinningPockets)
@@ -46,6 +44,39 @@ internal static partial class DxfExporter
             foreach (var (x1, x2, y1, y2) in PartOutlineBuilder.ComputeTenonThinningPockets(length, depth, effectiveSettings, tenonEdges, forceTwoTenons))
                 AddRectangle(doc, LayerTenonThinningPocket, x1, x2, y1, y2);
         }
+
+
+        // ── Top Stretcher Back: Mortise & Screw Pattern ──────────────────────────────
+        if (part.PartName == "Top Stretcher (Back)")
+        {
+            // Match the cabinet Back's tenon pattern (vertical/height-direction joints)
+            // edgeLength corresponds to the vertical span (part.WidthIn in this orientation)
+            // xPosition = 0 aligns the joint with the left edge (matching Back panel tenons)
+            var mortisePockets = PartOutlineBuilder.ComputeDepthDirectionMortisePockets(
+                partDepth: length,
+                //xPosition: 0,
+                mortiseBottomY: MaterialDefaults.Thickness34 - new LockDadoSettings().TenonThickness - new LockDadoSettings().TenonClearance,
+                flushFace: TenonFlushFace.Back,
+                s: effectiveSettings,
+                forceTwoTenons: false // Set to true if the Back panel uses exactly 2 tenons
+            );
+
+            var screwHoles = PartOutlineBuilder.ComputeDepthDirectionScrewHoles(
+                partDepth: length,
+                //xPosition: 0,
+                mortiseBottomY: MaterialDefaults.Thickness34 / 2,
+                flushFace: TenonFlushFace.Back,
+                s: effectiveSettings,
+                forceTwoTenons: false
+            );
+
+            foreach (var (x1, x2, y1, y2) in mortisePockets)
+                AddRectangle(doc, LayerMortise, x1, x2, y1, y2);
+
+            foreach (var (cx, cy, dia) in screwHoles)
+                AddCircle(doc, LayerThruHoles, cx, cy, dia / 2.0);
+        }
+
 
         AddGrainArrow(doc, length, depth);
         AddLabels(doc, part);

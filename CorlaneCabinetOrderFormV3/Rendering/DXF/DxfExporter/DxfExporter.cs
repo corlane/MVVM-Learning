@@ -13,6 +13,7 @@ internal static partial class DxfExporter
     private const string LayerShelfHoles = "drill z13p0";
     private const string LayerDrawerSlideHoles = "drill z13p0";
     private const string LayerHingeHoles = "drill z13p0";
+    private const string LayerMortiseThru = "pocket [3185] z18p6";
 
     private const string LayerGrain = "GRAIN_DIRECTION";
     private const string LayerLabels = "LABELS";
