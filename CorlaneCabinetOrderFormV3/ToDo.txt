@@ -49,4 +49,31 @@ Upper angle front not showing calculated front width. AGAIN. It is only on initi
 TESTING NOTES:
 	
 
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Conversation Context Summary for Next Session:
+
+Goal: Refactor BaseCabinetBuilder.Standard.EndPanelHoles.cs to delegate all construction & back vertical hole positioning to PartOutlineBuilder.ScrewHoles.cs (the absolute truth) for exact WYSIWYG parity with DXF output.
+
+Changes Implemented:
+
+Removed inline linear-spacing algorithms for construction/back holes.
+Added LockDadoSettings to the DrillEndPanelHoles() method signature.
+Mapped returned (CenterX, CenterY, Diameter) tuples to left/right 3D end panels with correct Z-offsets (MaterialThickness34 for left, 0 for right) and consistent holeDepth.
+Split drawer stretcher logic into two blocks: Standard (1 drawer) and Drawer (>1 drawer) to match MortiseSpecBuilder.cs conditional structure.
+Key Issues & Fixes:
+
+Top Stretcher Alignment: Initially rendered centered instead of at the front edge. Resolved by aligning parameters with the truth calculator: partDepth: 6.0, flushFace: TenonFlushFace.Bottom, forceTwoTenons: true, xOffset: depth - stretcherWidth, mortiseBottomY: height - MaterialThickness34.
+Multi-Drawer Stretcher Y-Drift: In CabinetStyles.Base.Drawer, stretchers under openings 2 & 3 appeared progressively higher (0.75" & 1.5" offsets). Fixed by adding runningY -= MaterialThickness34; at the end of the loop. This accounts for the physical stretcher thickness between openings, perfectly syncing the 3D hole positions with the DXF MortiseSpecBuilder math.
+Dependencies/Notes:
+
+Caller must inject LockDadoSettings; TenonFlushFace enum must be in scope.
+Original thickness/conditional checks (e.g., backThickness == 0.25, onlyEndHolesOnTop) were mapped to forceTwoTenons or handled via parameter overrides to respect truth calculator behavior.
+All depth-direction joints use ComputeDepthDirectionScrewHoles(); height-direction joints use ComputeHeightDirectionScrewHoles().
+Z-offset pattern: Outside-face construction holes use Z = MaterialThickness34 (left) / 0 (right). Inside-face holes (hinges, shelves, slides) use Z = 0 (left) / MaterialThickness34 (right).
+Current State:
+Drawer stretchers for both Standard (1 drawer) and Drawer (>1 drawer) styles are now correctly positioned. Top, bottom, back vertical, toekick, and drawer slide/hinge/shelf holes are all delegated to the truth calculator. Ready for next phase (e.g., upper cabinets, wall units, or additional component refinements).
 	
