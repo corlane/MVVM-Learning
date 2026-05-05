@@ -50,6 +50,11 @@ TESTING NOTES:
 	
 
 
+---------------------------------------------------------------------------------------------------------------------------------------------
+Mortise/Tenon Specs:
+	For back edge of deck & full top, and top & bottom edges of 3/4" backs (or bottom edge of 3/4" back if Base Cabinet):
+	Mortises will be fixed width of 3", with the gaps between them being variable. If a gap exceeds ~10", it will add another mortise. The BlindStart/Stop will be ~2".
+
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
