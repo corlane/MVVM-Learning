@@ -46,7 +46,7 @@ internal static partial class DxfExporter
         }
 
 
-        // ── Top Stretcher Back: Mortise & Screw Pattern ──────────────────────────────
+        // ── Top Stretcher Back: Thru-Mortise & Screw Pattern ──────────────────────────────
         if (part.PartName == "Top Stretcher (Back)")
         {
             // Match the cabinet Back's tenon pattern (vertical/height-direction joints)
@@ -72,6 +72,38 @@ internal static partial class DxfExporter
 
             foreach (var (x1, x2, y1, y2) in mortisePockets)
                 AddRectangle(doc, LayerMortise, x1, x2, y1, y2);
+
+            foreach (var (cx, cy, dia) in screwHoles)
+                AddCircle(doc, LayerThruHoles, cx, cy, dia / 2.0);
+        }
+
+        // ── Back: Thru-Mortise & Screw Pattern ──────────────────────────────
+
+        if (part.PartName == "Back")
+        {
+            // Match the cabinet Back's tenon pattern (vertical/height-direction joints)
+            // edgeLength corresponds to the vertical span (part.WidthIn in this orientation)
+            // xPosition = 0 aligns the joint with the left edge (matching Back panel tenons)
+            var mortisePockets = PartOutlineBuilder.ComputeHeightDirectionMortisePockets(
+                edgeLength: depth,
+                xPosition: length - MaterialDefaults.Thickness34,
+                bottomY: 0,
+                flushFace: TenonFlushFace.Back,
+                s: effectiveSettings,
+                forceTwoTenons: false
+            );
+
+            var screwHoles = PartOutlineBuilder.ComputeHeightDirectionScrewHolesForHorizontalPart(
+                edgeLength: depth,
+                xPosition: length - MaterialDefaults.Thickness34,
+                bottomY: 0,
+                flushFace: TenonFlushFace.Back,
+                s: effectiveSettings,
+                forceTwoTenons: false
+            );
+
+            foreach (var (x1, x2, y1, y2) in mortisePockets)
+                AddRectangle(doc, LayerMortiseThru, x1, x2, y1, y2);
 
             foreach (var (cx, cy, dia) in screwHoles)
                 AddCircle(doc, LayerThruHoles, cx, cy, dia / 2.0);

@@ -71,6 +71,7 @@ internal static partial class DxfExporter
         AddLayer(doc, LayerHingeHoles, new AciColor(4));   // cyan
         AddLayer(doc, LayerGrain, new AciColor(3));   // green
         AddLayer(doc, LayerLabels, new AciColor(2));   // yellow
+        AddLayer(doc, LayerMortiseThru, new AciColor(1));   // red
         return doc;
     }
 

@@ -145,4 +145,36 @@ internal static partial class PartOutlineBuilder
 
         return holes;
     }
+
+    internal static List<(double CenterX, double CenterY, double Diameter)> ComputeHeightDirectionScrewHolesForHorizontalPart(
+    double edgeLength, double xPosition, double bottomY, TenonFlushFace flushFace, LockDadoSettings s,
+    bool forceTwoTenons = false)
+    {
+        double mt34 = MaterialDefaults.Thickness34;
+
+        double holeCenterX = flushFace switch
+        {
+            TenonFlushFace.Back => xPosition + (mt34 / 2),
+            TenonFlushFace.Front => xPosition - xPosition + (mt34 / 2),
+            _ => throw new ArgumentOutOfRangeException(nameof(flushFace), flushFace, "Height-direction joints must use Back or InteriorFront.")
+        };
+
+        var tenons = ComputeTenonRanges(edgeLength, s, forceTwoTenons, blindStart: null, blindStop: null);
+        var holes = new List<(double, double, double)>();
+
+        for (int i = 0; i < tenons.Count - 1; i++)
+        {
+            double gapCenterY = bottomY + (tenons[i].EndY + tenons[i + 1].StartY) / 2.0;
+            holes.Add((holeCenterX, gapCenterY, s.ScrewPilotHoleDiameter));
+        }
+
+        if (!forceTwoTenons)
+        {
+            holes.Add((xPosition + (MaterialDefaults.Thickness34 / 2), bottomY + 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
+            holes.Add((xPosition + (MaterialDefaults.Thickness34 / 2), bottomY + edgeLength - 1.5, s.ScrewPilotHoleDiameter)); // Add hole at end of part for additional fastening. Should not apply to any stretcher-type parts.
+        }
+
+        return holes;
+    }
+
 }
