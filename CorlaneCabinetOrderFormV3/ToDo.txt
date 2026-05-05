@@ -54,43 +54,72 @@ TESTING NOTES:
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
-Conversation Context Summary for Next Session:
+Here is a detailed context summary you can paste into future conversations to provide full context without re-uploading files.
 
-Goal: Refactor BaseCabinetBuilder.Standard.EndPanelHoles.cs to delegate all construction & back vertical hole positioning to PartOutlineBuilder.ScrewHoles.cs (the absolute truth) for exact WYSIWYG parity with DXF output.
+Context Summary: CorlaneCabinetOrderFormV3 DXF Exporter
+Overview
+This is a C# module for exporting cabinet parts to DXF format for CNC machining. It uses the netDxf library to generate machine-ready files containing part outlines, joinery geometry (tenons/mortises), thinning pockets, screw pilot holes, shelf/drawer/hinge holes, grain direction arrows, and text labels.
 
-Changes Implemented:
+Core Workflow
+Orchestration (DxfExporter.ExportAll): Iterates through CabinetModel instances, builds parts via PartsListBuilder, and calculates joinery specs.
+Routing: Parts are routed to ExportPart (standard panels) or ExportEndPanel (Left/Right ends with mortises).
+Geometry Generation: PartOutlineBuilder computes tenon ranges, outlines, pockets, and hole positions based on LockDadoSettings.
+DXF Construction: DxfExporter.Document helpers create layers, add polylines/circles/text, and save the file.
+Key Classes & Responsibilities
+DxfExporter (Partial Class)
+ExportAll: Entry point. Calculates MortiseSpec, shelf holes, drawer slide holes, and hinge holes for base cabinets.
+ExportPart: Handles standard parts (Deck, Back, Stretcher, Toekick). Adds outlines, tenon thinning pockets, and specific mortise/screw patterns for stretchers and backs.
+ExportEndPanel: Handles Left/Right end panels. Applies CW90 rotation and X-mirroring (for Left ends) to outlines, mortise pockets, and holes.
+ResolvePartKind: Maps part names to DxfPartKind enum to determine joinery requirements.
+PartOutlineBuilder
+ComputeTenonRanges: Divides an edge into alternating tenons and gaps.
+Algorithm: Calculates usable length after blind pockets, determines gap/tenon count based on edge length, and distributes tenons evenly. Supports forceTwoTenons override.
+BuildPanelWithTenons: Generates closed polyline vertices for parts with tenon protrusions. Traces perimeter counter-clockwise, adding protrusions on specified edges (EdgeDesignators).
+ComputeTenonThinningPockets: Generates rectangular pockets on the flat face around tenons for weight reduction and CNC efficiency. Extends DadoDepth + 0.03937" outward from edges.
+ComputeDepthDirectionMortisePockets / ComputeHeightDirectionMortisePockets: Calculates mortise pocket bounds for end panels based on tenon ranges and flush face.
+ComputeDepthDirectionScrewHoles / ComputeHeightDirectionScrewHoles: Places screw pilot holes in gaps between tenons. Adds end fastening holes unless forceTwoTenons is true.
+MortiseSpecBuilder
+Computes MortiseSpec entries for end panels (Deck, Back, Top, Stretcher, Nailer, Toekick).
+Handles component-specific overrides for BlindStart/Stop, TenonThickness, and forceTwoTenons.
+Uses TenonFlushFace to determine mortise slot positioning relative to the end panel face.
+Configuration & Models
+LockDadoSettings (Record)
+Shop-specific joinery parameters. Supports global defaults and per-edge overrides (BlindStartLeft, BlindStopRight, etc.).
 
-Removed inline linear-spacing algorithms for construction/back holes.
-Added LockDadoSettings to the DrillEndPanelHoles() method signature.
-Mapped returned (CenterX, CenterY, Diameter) tuples to left/right 3D end panels with correct Z-offsets (MaterialThickness34 for left, 0 for right) and consistent holeDepth.
-Split drawer stretcher logic into two blocks: Standard (1 drawer) and Drawer (>1 drawer) to match MortiseSpecBuilder.cs conditional structure.
-Key Issues & Fixes:
+Key Properties: BlindStart, BlindStop, GapWidth, GapCount, TenonThickness, TenonClearance, MortiseSlotHeight, MortiseOversize, DadoDepth, TenonPocketOversize, ScrewPilotHoleDiameter.
+TenonFlushFace (Enum)
+Controls which face of a tenon panel is flush (unrouted) and how mortise slots are positioned on the mating end panel.
 
-Top Stretcher Alignment: Initially rendered centered instead of at the front edge. Resolved by aligning parameters with the truth calculator: partDepth: 6.0, flushFace: TenonFlushFace.Bottom, forceTwoTenons: true, xOffset: depth - stretcherWidth, mortiseBottomY: height - MaterialThickness34.
-Multi-Drawer Stretcher Y-Drift: In CabinetStyles.Base.Drawer, stretchers under openings 2 & 3 appeared progressively higher (0.75" & 1.5" offsets). Fixed by adding runningY -= MaterialThickness34; at the end of the loop. This accounts for the physical stretcher thickness between openings, perfectly syncing the 3D hole positions with the DXF MortiseSpecBuilder math.
-Dependencies/Notes:
+Top: Mortise on outer/top surface (Deck, Full Top).
+Bottom: Mortise on underside (Top Stretcher, Drawer Stretchers).
+Front: Mortise recessed into interior (Nailer).
+Back: Mortise on rear surface (Toekick).
+EdgeDesignators (Flags Enum)
+Specifies which edges have tenons: Left, Right, Top, Bottom, LeftRight, TopBottom, All.
 
-Caller must inject LockDadoSettings; TenonFlushFace enum must be in scope.
-Original thickness/conditional checks (e.g., backThickness == 0.25, onlyEndHolesOnTop) were mapped to forceTwoTenons or handled via parameter overrides to respect truth calculator behavior.
-All depth-direction joints use ComputeDepthDirectionScrewHoles(); height-direction joints use ComputeHeightDirectionScrewHoles().
-Z-offset pattern: Outside-face construction holes use Z = MaterialThickness34 (left) / 0 (right). Inside-face holes (hinges, shelves, slides) use Z = 0 (left) / MaterialThickness34 (right).
-Current State:
-Drawer stretchers for both Standard (1 drawer) and Drawer (>1 drawer) styles are now correctly positioned. Top, bottom, back vertical, toekick, and drawer slide/hinge/shelf holes are all delegated to the truth calculator. Ready for next phase (e.g., upper cabinets, wall units, or additional component refinements).
+DxfPartKind (Enum)
+Classifies parts for export routing: Plain, TenonLeftAndRight, TenonTopAndBottom, TenonTopLeftRight, MortisePanel.
 
-Here are the files used in this conversation for context:
+Coordinate System & Transformations
+Standard Parts: Origin (0,0) at bottom-left. X = left-to-right, Y = bottom-to-top. Tenons extend outward beyond panel bounds.
+End Panels:
+Original Axes: X = cabinet depth, Y = cabinet height.
+Export Transformation: Rotated 90° Clockwise so grain runs horizontally along X-axis.
+Rotation Formula: (x, y) → (y, oldWidth - x).
+Left End Mirroring: Mirrored across X-axis midpoint: x' = panelLength - x.
+Hole/Pocket Rotation: Corresponding helpers (RotateHoleCW90, RotatePocketCW90) apply the same transformation to ensure geometry aligns with the rotated outline.
+DXF Layers & Colors
+Layers are pre-configured in CreateDocument with specific ACI colors for CAM differentiation:
 
-PartOutlineBuilder.ScrewHoles.cs
-
-Role: The "truth calculator" for mortise/screw hole geometry.
-Key Methods: ComputeDepthDirectionScrewHoles() and ComputeHeightDirectionScrewHoles().
-Usage: Provided the authoritative algorithm and parameter expectations (partDepth, mortiseBottomY, flushFace, xOffset, forceTwoTenons) that BaseCabinetBuilder was refactored to delegate to.
-
-BaseCabinetBuilder.Standard.EndPanelHoles.cs
-
-Role: The primary file being refactored.
-Usage: Contained the inline linear-spacing logic that was replaced. We updated its method signature to accept LockDadoSettings, mapped its hole creation to the truth calculator's output, and fixed the cumulative Y-offset drift in the multi-drawer stretcher loop.
-
-MortiseSpecBuilder.cs
-
-Role: DXF export reference / validation source.
-Usage: Provided when the drawer stretcher holes were rendering progressively higher. Comparing its loop logic (runningY -= openings[i]; ... runningY -= mt34;) against BaseCabinetBuilder revealed the missing stretcher-thickness subtraction, which was the exact fix needed to achieve WYSIWYG parity.
+outline z18p6 (White, 7): Part outlines.
+pocket z10p0 (Red, 1): Tenon thinning pockets.
+pocket [3185] z9p0 (Red, 1): Mortise pockets.
+pocket [3185] z18p6 (Red, 1): Thru-mortise pockets.
+drill z18p8 (Cyan, 4): Thru holes / Screw holes.
+drill z13p0 (Cyan, 4): Shelf, Drawer Slide, and Hinge holes.
+GRAIN_DIRECTION (Green, 3): Dashed line indicating grain direction.
+LABELS (Yellow, 2): Part name, quantity, dimensions, material, edge band, and notes.
+Constants & Defaults
+MaterialDefaults.Thickness34: 0.75" (standard material thickness).
+Shelf/Drawer/Hinge Hole Diameter: 0.1968" (~5mm).
+Tenon Pocket Oversize Margin: 0.03937" (~1mm) added to DadoDepth for tool compensation.
