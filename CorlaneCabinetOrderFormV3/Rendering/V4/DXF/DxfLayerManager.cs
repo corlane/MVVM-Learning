@@ -21,7 +21,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF
             // netDxf requires Layer(name) constructor + explicit Color property assignment
             _layers = new Dictionary<LayerType, Layer>
             {
-                { LayerType.PartOutline, new Layer("CHAINCOMPRIGHT [3185] z17p8") { Color = new AciColor(7) } }, // white CHANGE THIS TO ACTUAL MATERIAL THICKNESS!
+                { LayerType.PartOutline, new Layer("OUTLINE z17p8") { Color = new AciColor(7) } }, // white CHANGE THIS TO ACTUAL MATERIAL THICKNESS!
                 { LayerType.TenonThinningPocket, new Layer("CHAINCOMPRIGHT [3185] z9p0") { Color = new AciColor(1) } }, // red
                 { LayerType.MortisePocket, new Layer("POCKET [3115] z9p0") { Color = new AciColor(5) } }, // blue
                 { LayerType.DrillHolesBlind, new Layer("DRILL z12p7") { Color = new AciColor(4) } }, // cyan

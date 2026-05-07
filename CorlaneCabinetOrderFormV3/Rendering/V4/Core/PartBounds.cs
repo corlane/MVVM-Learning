@@ -7,7 +7,18 @@
 internal record PartBounds(double Width, double Height);
 
 [Flags]
-internal enum Edge
+internal enum TenonEdge
+{
+    None = 0,
+    Left = 1,
+    Right = 2,
+    Top = 4,
+    Bottom = 8,
+    All = Left | Right | Top | Bottom
+}
+
+[Flags]
+internal enum MortiseEdge
 {
     None = 0,
     Left = 1,
@@ -22,11 +33,12 @@ internal record PartInfo(
     PartBounds Bounds,
     string Material,
     int Quantity,
-    Edge TenonEdges,
+    TenonEdge TenonEdges,
+    MortiseEdge MortiseEdges,
     string? EdgeBand,
     string? Notes,
-    double TkHeight = 0,   
-    double TkDepth = 0);  
+    double TkHeight = 0,
+    double TkDepth = 0);
 
 /// <summary>
 /// Standardized joinery configuration for the new pipeline.

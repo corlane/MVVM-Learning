@@ -12,13 +12,13 @@ internal static class TenonCalculator
     /// </summary>
     internal static List<(double start, double end)> ComputeTenonRanges(
         double edgeLength,
-        JoineryConfig config,
+        JoineryConfig joinery,
         bool forceTwoTenons = false,
         double? blindStartOverride = null,
         double? blindStopOverride = null)
     {
-        var blindStart = blindStartOverride ?? config.BlindStart;
-        var blindStop = blindStopOverride ?? config.BlindStop;
+        var blindStart = blindStartOverride ?? joinery.BlindStart;
+        var blindStop = blindStopOverride ?? joinery.BlindStop;
 
         double usableStart = blindStart;
         double usableEnd = edgeLength - blindStop;
@@ -27,11 +27,11 @@ internal static class TenonCalculator
         if (usableLength <= 0) return [];
 
         // Determine tenon count
-        int tenonCount = forceTwoTenons ? 2 : CalculateTenonCount(usableLength, config);
+        int tenonCount = forceTwoTenons ? 2 : CalculateTenonCount(usableLength, joinery);
         int gapCount = tenonCount - 1;
 
         // Calculate dimensions
-        double totalGapWidth = gapCount * config.GapWidth;
+        double totalGapWidth = gapCount * joinery.GapWidth;
         double totalTenonWidth = usableLength - totalGapWidth;
 
         if (totalTenonWidth < 0) totalTenonWidth = 0; // Safety clamp
@@ -49,7 +49,7 @@ internal static class TenonCalculator
             ranges.Add((tStart, tEnd));
 
             // Move to next tenon position (add tenon width + gap width)
-            currentX += singleTenonWidth + (i < gapCount ? config.GapWidth : 0);
+            currentX += singleTenonWidth + (i < gapCount ? joinery.GapWidth : 0);
         }
 
         return ranges;

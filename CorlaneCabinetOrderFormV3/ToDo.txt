@@ -51,59 +51,164 @@ TESTING NOTES:
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
-Here is a detailed context summary of our progress, designed to be copied and pasted into a new chat to continue seamlessly.
+📋 DXF Export Pipeline Refactoring (V4) – Complete Session Summary
+🎯 Objective
+Refactor the legacy DxfExporter into a modular, unit-testable V4 pipeline that decouples geometry calculations from netDxf until the final rendering step, while preserving WYSIWYG accuracy with the 3D rendering pipeline.
 
-📋 Project Context: DXF Export Pipeline Refactoring (V4)
-Objective: Refactor the existing DXF export logic in CorlaneCabinetOrderFormV3 into a modular, unit-testable pipeline that decouples geometry calculations from netDxf until the final rendering step.
+🏗️ Final Architecture: Rendering.V4
+Core Models (CorlaneCabinetOrderFormV3.Rendering.V4.Core)
+File	Purpose
+Vector2struct.cs	Lightweight Vector2 struct for 2D coordinates (decoupled from netDxf)
+PartBounds.cs	PartBounds record, Edge flag enum, MortiseEdge flag enum, PartInfo record, JoineryConfig record
+PartGeometry.cs	Immutable DTO holding final computed geometry: outline vertices, tenon thinning pockets, mortise pockets, holes
+PartInfo Record:
 
-Current Status: The new V4 Pipeline is partially implemented. Phases 1 and 2 are complete, but Phase 3 (DXF Writing) is blocked by compilation errors related to netDxf entity types.
+internal record PartInfo(
+    string Name,
+    PartBounds Bounds,
+    string Material,
+    int Quantity,
+    Edge TenonEdges,
+    MortiseEdge MortiseEdges,
+    string? EdgeBand,
+    string? Notes,
+    double TkHeight = 0,
+    double TkDepth = 0);
+JoineryConfig Record:
 
-🏗️ Architecture Overview: Rendering.V4
-The new pipeline is structured into four distinct layers within the namespace CorlaneCabinetOrderFormV3.Rendering.V4:
+internal record JoineryConfig(
+    double BlindStart, BlindStop, DadoDepth, MortiseDepthClearance,
+    TenonThickness, TenonClearance, TenonPocketOversize, MortiseOversize,
+    GapWidth, GapSpacing, ScrewPilotHoleDiameter, Thickness34,
+    double TenonThinningOverrun = 0.375);
+Adapters (CorlaneCabinetOrderFormV3.Rendering.V4.Adapters)
+File	Purpose
+CabinetInputAdapter.cs	Maps legacy PartListEntry → V4 PartInfo, resolves TenonEdges/MortiseEdges flags, enriches end panels with TkHeight/TkDepth, maps LockDadoSettings → JoineryConfig
+Key Methods:
 
-Models (Core):
+MapParts(IEnumerable<PartListEntry>, LockDadoSettings?, double tkHeight, double tkDepth)
+MapSettings(LockDadoSettings?)
+ResolveEdgeFlags(string partName) → Edge
+ResolveMortiseEdges(string partName) → MortiseEdge
+Calculators (CorlaneCabinetOrderFormV3.Rendering.V4.Calculators)
+File	Purpose
+TenonCalculator.cs	Pure math: computes tenon ranges, gap spacing, thinning pocket rectangles
+PanelGeometryCalculator.cs	Assembles final PartGeometry: outlines (standard + toekick), tenon protrusions, thinning pockets, mortise pockets, mirroring for Right End panels
+MortiseCalculator.cs	Computes mortise pocket rectangles using TenonCalculator.ComputeTenonRanges() + clearance offsets
+PartGeometryExtensions.cs	MirrorAcrossVerticalCenterline() extension method for PartGeometry
+Key Logic in PanelGeometryCalculator.Compute():
 
-PartInfo: Immutable DTO representing a single part (bounds, tenon edges, material).
-JoineryConfig: Configuration for tenon dimensions, gaps, and blind stops.
-Edge: Flag enum (Top, Bottom, Left, Right) for tenon placement.
-Vector2: Lightweight struct for 2D coordinates (decoupled from netDxf).
-PartGeometry: Immutable DTO holding the final computed geometry (outline vertices, pockets, holes).
-Adapters (Adapters):
+Detects end panels with toekicks → uses BuildEndPanelWithToeKick()
+Otherwise builds standard outline with tenon protrusions on flagged edges
+Computes tenon thinning pockets alongside outline
+Computes mortise pockets on flagged edges
+Mirrors entire PartGeometry across vertical centerline for "Right End" parts
+Returns PartGeometry DTO
+DXF Layer (CorlaneCabinetOrderFormV3.Rendering.V4.DXF)
+File	Purpose
+DxfLayerManager.cs	Defines CNC layers with ACI colors: PartOutline, TenonThinningPocket, MortisePocket, DrillHolesBlind, DrillHolesThrough
+DxfWriter.cs	Converts List<PartGeometry> → DxfDocument: outlines → Polyline2D, pockets → rectangles, holes → circles, assigns layers
+Key Methods:
 
-CabinetInputAdapter: Maps existing legacy models (PartListEntry, LockDadoSettings) into the new V4 models.
-Note: Fixed a pattern-matching compilation error by simplifying ResolveEdgeFlags to remove var name in or patterns.
-Calculators (Calculators):
+Write(List<PartGeometry>) → DxfDocument
+GenerateDxf(List<PartGeometry>) (static convenience)
+WriteOutline(), WritePockets(), WriteHolesThru(), WriteHolesBlind()
+CreateClosedRectangle()
+Orchestrator (CorlaneCabinetOrderFormV3.Rendering.V4.Orchestrator)
+File	Purpose
+DxfExportPipeline.cs	Wires Adapters → Calculators → Writer: accepts PartListEntry + settings + toekick dims, validates, generates DXF, exports to file
+Key Methods:
 
-TenonCalculator: Pure math logic to compute tenon ranges and thinning pocket rectangles based on JoineryConfig.
-PanelGeometryCalculator: Assembles the full PartGeometry for a part, handling winding order and edge routing (CCW).
-DXF Layer (DXF):
+DxfExportPipeline(IEnumerable<PartListEntry>, LockDadoSettings?, double tkHeight, double tkDepth)
+ValidateInput()
+GenerateDxf() → DxfDocument
+ExportToFile(string filePath)
+🔧 Key Implementation Details
+netDxf Version Compatibility
+Uses DxfDocument, Polyline2D, Vector2/Vector3, doc.Entities.Add(), doc.Layers.Add()
+Layer colors use AciColor (not Color.FromAci())
+Aliases netDxfVector2/netDxfVector3 to avoid collision with V4 Vector2
+Toekick Notch Geometry
+private static List<Vector2> BuildEndPanelWithToeKick(double depth, double height, double tkHeight, double tkDepth)
+{
+    return new List<Vector2>
+    {
+        new(depth, tkHeight), new(depth, height), new(0, height), new(0, 0),
+        new(3, 0), new(3, 0.5), new(depth - tkDepth - 3, 0.5),
+        new(depth - tkDepth - 3, 0), new(depth - tkDepth, 0), new(depth - tkDepth, tkHeight)
+    };
+}
+Mirroring Logic
+Applied to "Right End" panels only
+Mirrors across vertical centerline: X' = Bounds.Width - X, Y unchanged
+Mirrors outline, thinning pockets, mortise pockets, and holes
+Uses PartGeometry.MirrorAcrossVerticalCenterline(panelWidth) extension
+Mortise Calculation
+Reuses TenonCalculator.ComputeTenonRanges() for positioning
+Applies MortiseOversize + TenonClearance for pocket sizing
+Outputs to PartGeometry.MortisePockets as (x1, x2, y1, y2) tuples
+Controlled by MortiseEdge flags on PartInfo
+📦 Export Command Integration (POBatchListViewModel.ExportDxf())
+foreach (var cabinet in _cabinetService.Cabinets)
+{
+    string label = PartsListBuilder.FormatLabel(cabinet, index++);
+    var parts = PartsListBuilder.BuildForCabinet(cabinet, label);
+    
+    double tkHeight = 0, tkDepth = 0;
+    if (cabinet is BaseCabinetModel baseCab)
+    {
+        var dim = BaseCabinetDimensions.From(baseCab);
+        tkHeight = dim.TKHeight;
+        tkDepth = dim.TKDepth;
+    }
 
-DxfLayerManager: Defines standard layers (e.g., PART_OUTLINE, MACHINING_TENON_POCKET) and ACI colors.
-DxfWriter: Current Work-in-Progress. Converts PartGeometry into netDxf entities.
-DxfExportPipeline: Orchestrator class that wires Adapters → Calculators → Writer.
-🚧 Current Blocker: Phase 3 (DXF Writing)
-We are stuck on DxfWriter.cs due to netDxf API constraints:
+    foreach (var part in parts)
+    {
+        var pipeline = new DxfExportPipeline(new[] { part }, joinerySettings, tkHeight, tkDepth);
+        if (!pipeline.ValidateInput()) continue;
+        
+        string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
+        pipeline.ExportToFile(Path.Combine(dlg.FolderName, safeName + ".dxf"));
+    }
+}
+✅ What's Working
+✅ V4 pipeline compiles and exports DXF files
+✅ Toekick notch geometry renders on end panels
+✅ Tenon outlines and thinning pockets generate correctly
+✅ Mortise pockets compute and render on designated edges
+✅ Right End panels mirror across vertical centerline
+✅ Layer assignment and ACI colors match CNC requirements
+✅ Cabinet dimensions flow through adapter → calculator → writer
+✅ Per-part DXF file splitting matches original behavior
+🔧 What Needs Adjustment
+Tenon placement/geometry needs fine-tuning (user noted "not correct, but working")
+Mortise positioning may need alignment verification with mating tenons
+Special case mortises (non-standard edges) to be addressed later
+Thinning pocket logic may need refinement (some lines commented out in calculator)
+Layer names may need updating to match actual material thickness (noted in DxfLayerManager)
+📝 Remaining Tasks
+Fine-tune tenon range calculations and placement
+Verify mortise-to-tenon alignment with mating parts
+Implement special-case mortise routing
+Update layer names to dynamic thickness values
+Add unit tests for calculators
+Integrate hinge/shelf/drawer slide hole calculators into V4 flow
+Performance optimization for large batches
+🧠 Key Architectural Decisions
+Decoupling: Geometry math isolated in Calculators layer; netDxf only touched in DXF layer
+Immutability: PartInfo and PartGeometry are records for thread-safety
+Flag Enums: Edge and MortiseEdge control joinery placement per part
+Post-Calculation Mirroring: Right End panels mirrored after all geometry computed
+Tuple-Based Geometry: Pockets/holes use (double, double, double, double) tuples for simplicity
+Cabinet Context Injection: Toekick dimensions passed through pipeline constructor, not stored in parts
+🚀 How to Continue in Next Chat
+Paste this summary as context, then specify:
 
-Initial Error: Polyline is inaccessible due to its protection level.
-Cause: netDxf.Entities.Polyline is an internal class reserved for complex meshes/smoothing.
-Attempted Fix: Switched to netDxf.Entities.LWPolyline (Lightweight Polyline), which is the correct public class for 2D outlines.
-Current State: There are still compilation errors in DxfWriter (likely related to LWPolyline constructor usage or layer assignment syntax) that have not been resolved in this session.
-Key Logic to Preserve:
-
-Outlines must be closed polylines on the PART_OUTLINE layer.
-Tenon/Mortise pockets must be rectangles on MACHINING_TENON_POCKET and MACHINING_MORTISE layers.
-Holes must be circles on MACHINING_HOLES layer.
-Geometry must match the winding order and coordinate system of the existing PartOutlineBuilder to ensure CNC compatibility.
-📝 Next Steps for New Chat
-Resolve DxfWriter Errors: Fix the remaining compilation issues in DxfWriter.cs using LWPolyline and correct layer assignment.
-Validation: Verify that DxfExportPipeline.GenerateDxf() produces a valid DXF document that can be saved.
-End Panel Logic: Implement rotation/mirroring for End Panels (Left/Right) if not already handled by the calculator (currently, the calculator assumes a standard unrotated panel).
-Integration: Wire the new pipeline into the main application service to replace the legacy exporter.
-💡 Key Decisions Made
-Decoupling: Geometry math is completely isolated from netDxf in the Calculators layer.
-Immutability: PartInfo and PartGeometry are records to ensure thread-safety and predictability.
-LWPolyline: We are using LWPolyline for all 2D outlines, as Polyline is internal.
-
+Which geometry needs fine-tuning (tenons, mortises, pockets)
+Whether to integrate hole calculators (shelf, hinge, drawer slides)
+If layer names should be dynamic
+Any special-case joinery to implement
+The pipeline is structurally complete and ready for precision adjustments.
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------

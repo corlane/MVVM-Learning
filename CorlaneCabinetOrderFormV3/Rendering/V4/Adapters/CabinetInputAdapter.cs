@@ -29,24 +29,42 @@ internal static class CabinetInputAdapter
                 EdgeBand: entry.EdgeBandSpecies,
                 Notes: entry.Notes,
                 TkHeight: partTkH,   // ← Actually assigns the value
-                TkDepth: partTkD     // ← Actually assigns the value
+                TkDepth: partTkD,
+                MortiseEdges: ResolveMortiseEdges(entry.PartName)
             ));
         }
 
         return mapped;
     }
 
-    private static Edge ResolveEdgeFlags(string partName)
+    private static TenonEdge ResolveEdgeFlags(string partName)
     {
         return partName switch
         {
-            "Toekick" or "Toekick (Left)" or "Toekick (Right)" => Edge.Top | Edge.Left | Edge.Right,
-            "Top Stretcher (Front)" or "Drawer Stretcher" => Edge.Left | Edge.Right,
-            "Back" => Edge.Top | Edge.Bottom | Edge.Left,
-            "Deck" => Edge.Left | Edge.Right | Edge.Bottom,
-            _ => Edge.None
+            "Toekick" or "Toekick (Left)" or "Toekick (Right)" => TenonEdge.Top | TenonEdge.Left | TenonEdge.Right,
+            "Top Stretcher (Front)" or "Drawer Stretcher" => TenonEdge.Left | TenonEdge.Right,
+            "Back" => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
+            "Deck" => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
+            _ => TenonEdge.None
         };
     }
+
+
+    private static MortiseEdge ResolveMortiseEdges(string partName)
+    {
+        return partName.ToLowerInvariant() switch
+        {
+            // End panels receive mortises on left/right edges
+            "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right,
+
+            // Back panel receives mortises on top/bottom (mating with deck/top)
+            "back" => MortiseEdge.All,
+
+            // Other parts as needed
+            _ => MortiseEdge.None
+        };
+    }
+
 
     internal static JoineryConfig MapSettings(LockDadoSettings? settings)
     {

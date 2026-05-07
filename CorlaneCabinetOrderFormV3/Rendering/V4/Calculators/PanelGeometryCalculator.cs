@@ -32,7 +32,7 @@ internal static class PanelGeometryCalculator
             outline.Add(new Vector2(0, 0));
 
             // Bottom Edge
-            if (part.TenonEdges.HasFlag(Edge.Bottom))
+            if (part.TenonEdges.HasFlag(TenonEdge.Bottom))
             {
                 var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
                 outline.Add(new Vector2(joinery.BlindStart, 0));
@@ -49,7 +49,7 @@ internal static class PanelGeometryCalculator
             outline.Add(new Vector2(length, 0));
 
             // Right Edge
-            if (part.TenonEdges.HasFlag(Edge.Right))
+            if (part.TenonEdges.HasFlag(TenonEdge.Right))
             {
                 var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
                 foreach (var (tStart, tEnd) in tenons)
@@ -65,7 +65,7 @@ internal static class PanelGeometryCalculator
             outline.Add(new Vector2(length, height));
 
             // Top Edge (Reverse order for winding)
-            if (part.TenonEdges.HasFlag(Edge.Top))
+            if (part.TenonEdges.HasFlag(TenonEdge.Top))
             {
                 var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
                 for (int i = tenons.Count - 1; i >= 0; i--)
@@ -82,7 +82,7 @@ internal static class PanelGeometryCalculator
             outline.Add(new Vector2(0, height));
 
             // Left Edge (Reverse order for winding)
-            if (part.TenonEdges.HasFlag(Edge.Left))
+            if (part.TenonEdges.HasFlag(TenonEdge.Left))
             {
                 var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
                 for (int i = tenons.Count - 1; i >= 0; i--)
@@ -96,15 +96,37 @@ internal static class PanelGeometryCalculator
                 }
                 thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
             }
+
+            // ── Compute Mortise Pockets ──────────────────────────────────────────────
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, MortiseEdge.Left, joinery));
+
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, MortiseEdge.Right, joinery));
+
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, MortiseEdge.Bottom, joinery));
+
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, MortiseEdge.Top, joinery));
+
         }
 
-        return new PartGeometry(
+        // ── Mirror Right End Panels ──────────────────────────────────────────────
+        PartGeometry result = new PartGeometry(
             PartInfo: part,
             OutlineVertices: outline,
             TenonThinningPockets: thinningPockets,
             MortisePockets: mortisePockets,
             Holes: holes
         );
+
+        if (part.Name.Contains("Right End", StringComparison.OrdinalIgnoreCase))
+        {
+            result = result.MirrorAcrossVerticalCenterline(part.Bounds.Width);
+        }
+
+        return result;
     }
 
 
@@ -127,7 +149,4 @@ internal static class PanelGeometryCalculator
             new (0, height),
         };
     }
-
-
-
 }
