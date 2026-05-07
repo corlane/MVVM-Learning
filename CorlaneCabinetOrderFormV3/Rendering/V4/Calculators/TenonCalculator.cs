@@ -20,6 +20,8 @@ internal static class TenonCalculator
         var blindStart = blindStartOverride ?? joinery.BlindStart;
         var blindStop = blindStopOverride ?? joinery.BlindStop;
 
+        if (forceTwoTenons) { blindStart = 0; blindStop = 0;  }
+
         double usableStart = blindStart;
         double usableEnd = edgeLength - blindStop;
         double usableLength = usableEnd - usableStart;
@@ -54,25 +56,6 @@ internal static class TenonCalculator
 
         return ranges;
     }
-
-
-    ///// <summary>
-    ///// Computes thinning pocket rectangles for a given edge.
-    ///// </summary>
-    //internal static List<(double x1, double x2, double y1, double y2)> ComputeThinningPockets(
-    //    List<(double start, double end)> tenonRanges,
-    //    double pocketDepth)
-    //{
-    //    var pockets = new List<(double x1, double x2, double y1, double y2)>();
-
-    //    foreach (var (start, end) in tenonRanges)
-    //    {
-    //        // Pocket extends from surface (0) to pocketDepth
-    //        pockets.Add((start, end, 0, pocketDepth));
-    //    }
-
-    //    return pockets;
-    //}
 
     private static int CalculateTenonCount(double usableLength, JoineryConfig config)
     {

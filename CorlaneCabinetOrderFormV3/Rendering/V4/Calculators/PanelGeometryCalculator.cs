@@ -35,7 +35,8 @@ internal static class PanelGeometryCalculator
             // Bottom Edge
             if (part.TenonEdges.HasFlag(TenonEdge.Bottom))
             {
-                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+                //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
                 outline.Add(new Vector2(joinery.BlindStart, 0));
                 foreach (var (tStart, tEnd) in tenons)
                 {
@@ -46,7 +47,14 @@ internal static class PanelGeometryCalculator
                 }
                 if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Bottom))
                 {
-                    thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, 0, 0));
+                    if (length < 6)
+                    {
+                        thinningPockets.Add((-joinery.TenonThinningOverrun, length + joinery.TenonThinningOverrun, 0, 0));
+                    }
+                    else
+                    {
+                        thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, 0, 0));
+                    }
                 }
             }
             outline.Add(new Vector2(length, 0));
@@ -57,7 +65,8 @@ internal static class PanelGeometryCalculator
             // Right Edge
             if (part.TenonEdges.HasFlag(TenonEdge.Right))
             {
-                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+                //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
                 foreach (var (tStart, tEnd) in tenons)
                 {
                     outline.Add(new Vector2(length, tStart));
@@ -67,7 +76,14 @@ internal static class PanelGeometryCalculator
                 }
                 if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Right))
                 {
-                    thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    if (height < 6)
+                    {
+                        thinningPockets.Add((length, length, -joinery.TenonThinningOverrun, height + joinery.TenonThinningOverrun));
+                    }
+                    else
+                    {
+                        thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    }
                 }
             }
             outline.Add(new Vector2(length, height));
@@ -78,7 +94,8 @@ internal static class PanelGeometryCalculator
             // Top Edge (Reverse order for winding)
             if (part.TenonEdges.HasFlag(TenonEdge.Top))
             {
-                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+                //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
                 for (int i = tenons.Count - 1; i >= 0; i--)
                 {
                     var (tStart, tEnd) = tenons[i];
@@ -89,7 +106,14 @@ internal static class PanelGeometryCalculator
                 }
                 if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Top))
                 {
-                    thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, height, height));
+                    if (length < 6)
+                    {
+                        thinningPockets.Add((-joinery.TenonThinningOverrun, length + joinery.TenonThinningOverrun, height, height));
+                    }
+                    else
+                    {
+                        thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, height, height));
+                    }
                 }
             }
             outline.Add(new Vector2(0, height));
@@ -100,7 +124,8 @@ internal static class PanelGeometryCalculator
             // Left Edge (Reverse order for winding)
             if (part.TenonEdges.HasFlag(TenonEdge.Left))
             {
-                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+                //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
                 for (int i = tenons.Count - 1; i >= 0; i--)
                 {
                     var (tStart, tEnd) = tenons[i];
@@ -111,7 +136,14 @@ internal static class PanelGeometryCalculator
                 }
                 if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Left))
                 {
-                    thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    if (height < 6)
+                    {
+                        thinningPockets.Add((0, 0, -joinery.TenonThinningOverrun, height + joinery.TenonThinningOverrun));
+                    }
+                    else
+                    {
+                        thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    }
                 }
             }
 
