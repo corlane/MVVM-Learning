@@ -26,12 +26,17 @@ internal static class PartGeometryExtensions
             .Select(h => (panelWidth - h.x, h.y, h.radius))
             .ToList();
 
+        var mirroredHolesThru = geometry.Holes
+            .Select(h => (panelWidth - h.x, h.y, h.radius))
+            .ToList();
+
         return new PartGeometry(
             PartInfo: geometry.PartInfo,
             OutlineVertices: mirroredOutline,
             TenonThinningPockets: mirroredThinningPockets,
             MortisePockets: mirroredMortisePockets,
-            Holes: mirroredHoles
+            Holes: mirroredHoles,
+            HolesThru: mirroredHolesThru
         );
     }
 }

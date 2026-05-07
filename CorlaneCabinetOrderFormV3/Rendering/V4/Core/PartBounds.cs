@@ -28,6 +28,17 @@ internal enum MortiseEdge
     All = Left | Right | Top | Bottom
 }
 
+[Flags]
+internal enum ScrewHoleEdge
+{
+    None = 0,
+    Left = 1 << 0,
+    Right = 1 << 1,
+    Bottom = 1 << 2,
+    Top = 1 << 3
+}
+
+
 internal record PartInfo(
     string Name,
     PartBounds Bounds,
@@ -35,6 +46,7 @@ internal record PartInfo(
     int Quantity,
     TenonEdge TenonEdges,
     MortiseEdge MortiseEdges,
+    ScrewHoleEdge ScrewHoleEdges,
     string? EdgeBand,
     string? Notes,
     double TkHeight = 0,

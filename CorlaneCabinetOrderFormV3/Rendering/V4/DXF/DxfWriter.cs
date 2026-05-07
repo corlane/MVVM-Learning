@@ -74,7 +74,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF
         private void WriteHolesThru(DxfDocument doc, PartGeometry part)
         {
             // Deconstruct (x, y, radius) tuple directly
-            foreach (var (x, y, radius) in part.Holes)
+            foreach (var (x, y, radius) in part.HolesThru)
             {
                 var circle = new Circle(new netDxfVector3((float)x, (float)y, 0), (float)radius);
                 circle.Layer = _layerManager.GetLayer(DxfLayerManager.LayerType.DrillHolesThrough);

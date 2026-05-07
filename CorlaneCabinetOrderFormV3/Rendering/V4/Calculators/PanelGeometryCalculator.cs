@@ -16,6 +16,7 @@ internal static class PanelGeometryCalculator
         var thinningPockets = new List<(double x1, double x2, double y1, double y2)>();
         var mortisePockets = new List<(double x1, double x2, double y1, double y2)>();
         var holes = new List<(double x, double y, double radius)>();
+        var holesThru = new List<(double x, double y, double radius)>();
 
         double length = part.Bounds.Width;
         double height = part.Bounds.Height;
@@ -110,6 +111,22 @@ internal static class PanelGeometryCalculator
             if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery));
 
+
+
+            // ── Compute Screw Holes in Gaps ─────────────────────────────────────────
+            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left))
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery));
+
+            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery));
+
+            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery));
+
+            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery));
+
+
         }
 
         // ── Mirror Right End Panels ──────────────────────────────────────────────
@@ -118,7 +135,8 @@ internal static class PanelGeometryCalculator
             OutlineVertices: outline,
             TenonThinningPockets: thinningPockets,
             MortisePockets: mortisePockets,
-            Holes: holes
+            Holes: holes,
+            HolesThru: holesThru
         );
 
         if (part.Name.Contains("Right End", StringComparison.OrdinalIgnoreCase))

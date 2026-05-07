@@ -2,6 +2,7 @@
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 using CorlaneCabinetOrderFormV3.Services;
+using System.Diagnostics;
 
 internal static class CabinetInputAdapter
 {
@@ -20,20 +21,21 @@ internal static class CabinetInputAdapter
             double partTkH = isEndPanel ? tkHeight : 0;
             double partTkD = isEndPanel ? tkDepth : 0;
 
-            mapped.Add(new PartInfo(
+            var mappedPart = new PartInfo(
                 Name: entry.PartName,
                 Bounds: new PartBounds(entry.LengthIn, entry.WidthIn),
                 Material: entry.Species,
                 Quantity: entry.Qty,
                 TenonEdges: ResolveEdgeFlags(entry.PartName),
+                MortiseEdges: ResolveMortiseEdges(entry.PartName),
+                ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName),
                 EdgeBand: entry.EdgeBandSpecies,
                 Notes: entry.Notes,
-                TkHeight: partTkH,   // ← Actually assigns the value
-                TkDepth: partTkD,
-                MortiseEdges: ResolveMortiseEdges(entry.PartName)
-            ));
+                TkHeight: tkHeight,
+                TkDepth: tkDepth
+                );
+            mapped.Add( mappedPart );
         }
-
         return mapped;
     }
 
