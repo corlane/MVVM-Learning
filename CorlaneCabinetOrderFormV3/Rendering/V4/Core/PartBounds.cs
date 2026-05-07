@@ -24,7 +24,9 @@ internal record PartInfo(
     int Quantity,
     Edge TenonEdges,
     string? EdgeBand,
-    string? Notes);
+    string? Notes,
+    double TkHeight = 0,   
+    double TkDepth = 0);  
 
 /// <summary>
 /// Standardized joinery configuration for the new pipeline.
@@ -41,4 +43,5 @@ internal record JoineryConfig(
     double GapWidth,
     double GapSpacing,
     double ScrewPilotHoleDiameter,
-    double Thickness34);
+    double Thickness34,
+    double TenonThinningOverrun = 0.375);

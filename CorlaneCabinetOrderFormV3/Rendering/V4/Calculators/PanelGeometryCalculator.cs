@@ -7,8 +7,11 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 /// </summary>
 internal static class PanelGeometryCalculator
 {
-    internal static PartGeometry Compute(PartInfo part, JoineryConfig config)
+    internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery)
     {
+        bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase)
+                              && part.TkHeight > 0 && part.TkDepth > 0;
+
         var outline = new List<Vector2>();
         var thinningPockets = new List<(double x1, double x2, double y1, double y2)>();
         var mortisePockets = new List<(double x1, double x2, double y1, double y2)>();
@@ -16,84 +19,115 @@ internal static class PanelGeometryCalculator
 
         double length = part.Bounds.Width;
         double height = part.Bounds.Height;
-        double dadoDepth = config.DadoDepth;
+        double dadoDepth = joinery.DadoDepth;
 
-        // 1. Build Outline Vertices (Counter-Clockwise)
-        outline.Add(new Vector2(0, 0));
-
-        // Bottom Edge
-        if (part.TenonEdges.HasFlag(Edge.Bottom))
+        // ── Branch to Toekick Outline ──────────────────────────────────────────
+        if (isEndPanelWithTk)
         {
-            var tenons = TenonCalculator.ComputeTenonRanges(length, config);
-            outline.Add(new Vector2(config.BlindStart, 0));
-            foreach (var (tStart, tEnd) in tenons)
-            {
-                outline.Add(new Vector2(tStart, 0));
-                outline.Add(new Vector2(tStart, -dadoDepth));
-                outline.Add(new Vector2(tEnd, -dadoDepth));
-                outline.Add(new Vector2(tEnd, 0));
-
-                // Add thinning pocket for this tenon
-                thinningPockets.Add((tStart, tEnd, -dadoDepth, 0));
-            }
+            outline = BuildEndPanelWithToeKick(length, height, part.TkHeight, part.TkDepth);
         }
-        outline.Add(new Vector2(length, 0));
-
-        // Right Edge
-        if (part.TenonEdges.HasFlag(Edge.Right))
+        else
         {
-            var tenons = TenonCalculator.ComputeTenonRanges(height, config);
-            foreach (var (tStart, tEnd) in tenons)
-            {
-                outline.Add(new Vector2(length, tStart));
-                outline.Add(new Vector2(length + dadoDepth, tStart));
-                outline.Add(new Vector2(length + dadoDepth, tEnd));
-                outline.Add(new Vector2(length, tEnd));
+            // ── Standard Panel Outline ─────────────────────────────────────────
+            outline.Add(new Vector2(0, 0));
 
-                thinningPockets.Add((length, length + dadoDepth, tStart, tEnd));
+            // Bottom Edge
+            if (part.TenonEdges.HasFlag(Edge.Bottom))
+            {
+                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+                outline.Add(new Vector2(joinery.BlindStart, 0));
+                foreach (var (tStart, tEnd) in tenons)
+                {
+                    outline.Add(new Vector2(tStart, 0));
+                    outline.Add(new Vector2(tStart, -dadoDepth));
+                    outline.Add(new Vector2(tEnd, -dadoDepth));
+                    outline.Add(new Vector2(tEnd, 0));
+                    //thinningPockets.Add((tStart, tEnd, -dadoDepth, 0));
+                }
+                thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, 0, 0));
             }
-        }
-        outline.Add(new Vector2(length, height));
+            outline.Add(new Vector2(length, 0));
 
-        // Top Edge (Reverse order for winding)
-        if (part.TenonEdges.HasFlag(Edge.Top))
-        {
-            var tenons = TenonCalculator.ComputeTenonRanges(length, config);
-            for (int i = tenons.Count - 1; i >= 0; i--)
+            // Right Edge
+            if (part.TenonEdges.HasFlag(Edge.Right))
             {
-                var (tStart, tEnd) = tenons[i];
-                outline.Add(new Vector2(tEnd, height));
-                outline.Add(new Vector2(tEnd, height + dadoDepth));
-                outline.Add(new Vector2(tStart, height + dadoDepth));
-                outline.Add(new Vector2(tStart, height));
-
-                thinningPockets.Add((tStart, tEnd, height, height + dadoDepth));
+                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+                foreach (var (tStart, tEnd) in tenons)
+                {
+                    outline.Add(new Vector2(length, tStart));
+                    outline.Add(new Vector2(length + dadoDepth, tStart));
+                    outline.Add(new Vector2(length + dadoDepth, tEnd));
+                    outline.Add(new Vector2(length, tEnd));
+                    //thinningPockets.Add((length, length + dadoDepth, tStart, tEnd));
+                }
+                thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
             }
-        }
-        outline.Add(new Vector2(0, height));
+            outline.Add(new Vector2(length, height));
 
-        // Left Edge (Reverse order for winding)
-        if (part.TenonEdges.HasFlag(Edge.Left))
-        {
-            var tenons = TenonCalculator.ComputeTenonRanges(height, config);
-            for (int i = tenons.Count - 1; i >= 0; i--)
+            // Top Edge (Reverse order for winding)
+            if (part.TenonEdges.HasFlag(Edge.Top))
             {
-                var (tStart, tEnd) = tenons[i];
-                outline.Add(new Vector2(0, tEnd));
-                outline.Add(new Vector2(-dadoDepth, tEnd));
-                outline.Add(new Vector2(-dadoDepth, tStart));
-                outline.Add(new Vector2(0, tStart));
+                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+                for (int i = tenons.Count - 1; i >= 0; i--)
+                {
+                    var (tStart, tEnd) = tenons[i];
+                    outline.Add(new Vector2(tEnd, height));
+                    outline.Add(new Vector2(tEnd, height + dadoDepth));
+                    outline.Add(new Vector2(tStart, height + dadoDepth));
+                    outline.Add(new Vector2(tStart, height));
+                    //thinningPockets.Add((tStart, tEnd, height, height + dadoDepth));
+                }
+                thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, height, height));
+            }
+            outline.Add(new Vector2(0, height));
 
-                thinningPockets.Add((-dadoDepth, 0, tStart, tEnd));
+            // Left Edge (Reverse order for winding)
+            if (part.TenonEdges.HasFlag(Edge.Left))
+            {
+                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+                for (int i = tenons.Count - 1; i >= 0; i--)
+                {
+                    var (tStart, tEnd) = tenons[i];
+                    outline.Add(new Vector2(0, tEnd));
+                    outline.Add(new Vector2(-dadoDepth, tEnd));
+                    outline.Add(new Vector2(-dadoDepth, tStart));
+                    outline.Add(new Vector2(0, tStart));
+                    //thinningPockets.Add((-dadoDepth, 0, tStart, tEnd));
+                }
+                thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
             }
         }
 
         return new PartGeometry(
             PartInfo: part,
             OutlineVertices: outline,
-            ThinningPockets: thinningPockets,
+            TenonThinningPockets: thinningPockets,
             MortisePockets: mortisePockets,
             Holes: holes
         );
     }
+
+
+    /// <summary>
+    /// Generates end panel outline with rectangular toekick notch at bottom.
+    /// </summary>
+    private static List<Vector2> BuildEndPanelWithToeKick(double length, double height, double tkHeight, double tkDepth)
+    {
+        return new List<Vector2>
+        {
+            new (0,0),
+            new (length-tkHeight, 0),
+            new (length-tkHeight, tkDepth),
+            new (length, tkDepth),
+            new (length, tkDepth+3),
+            new (length-0.5, tkDepth+3),
+            new (length-0.5, height-3),
+            new (length, height-3),
+            new (length, height),
+            new (0, height),
+        };
+    }
+
+
+
 }

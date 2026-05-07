@@ -1,28 +1,51 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 using CorlaneCabinetOrderFormV3.Services;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.Adapters;
-
-/// <summary>
-/// Bridges existing cabinet models into the new standardized pipeline.
-/// </summary>
 internal static class CabinetInputAdapter
 {
-    internal static List<PartInfo> MapParts(IEnumerable<PartListEntry> existingParts)
+    internal static List<PartInfo> MapParts(
+        IEnumerable<PartListEntry> parts,
+        LockDadoSettings? settings = null,
+        double tkHeight = 0,
+        double tkDepth = 0)
     {
-        return existingParts.Select(p => new PartInfo(
-            Name: p.PartName,
-            Bounds: new PartBounds(
-                Width: p.WidthIn,       // X-axis
-                Height: p.LengthIn      // Y-axis
-            ),
-            Material: p.Species ?? "Standard",
-            Quantity: p.Qty,
-            TenonEdges: ResolveEdgeFlags(p.PartName),
-            EdgeBand: string.IsNullOrEmpty(p.EdgeBandSpecies) ? null : $"{p.EdgeBandSpecies} ({p.EdgeBandLength})",
-            Notes: p.Notes
-        )).ToList();
+        var mapped = new List<PartInfo>();
+
+        foreach (var entry in parts)
+        {
+            // Enrich end panels with cabinet toekick dimensions
+            bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
+            double partTkH = isEndPanel ? tkHeight : 0;
+            double partTkD = isEndPanel ? tkDepth : 0;
+
+            mapped.Add(new PartInfo(
+                Name: entry.PartName,
+                Bounds: new PartBounds(entry.LengthIn, entry.WidthIn),
+                Material: entry.Species,
+                Quantity: entry.Qty,
+                TenonEdges: ResolveEdgeFlags(entry.PartName),
+                EdgeBand: entry.EdgeBandSpecies,
+                Notes: entry.Notes,
+                TkHeight: partTkH,   // ← Actually assigns the value
+                TkDepth: partTkD     // ← Actually assigns the value
+            ));
+        }
+
+        return mapped;
+    }
+
+    private static Edge ResolveEdgeFlags(string partName)
+    {
+        return partName switch
+        {
+            "Toekick" or "Toekick (Left)" or "Toekick (Right)" => Edge.Top | Edge.Left | Edge.Right,
+            "Top Stretcher (Front)" or "Drawer Stretcher" => Edge.Left | Edge.Right,
+            "Back" => Edge.Top | Edge.Bottom | Edge.Left,
+            "Deck" => Edge.Left | Edge.Right | Edge.Bottom,
+            _ => Edge.None
+        };
     }
 
     internal static JoineryConfig MapSettings(LockDadoSettings? settings)
@@ -42,28 +65,5 @@ internal static class CabinetInputAdapter
             ScrewPilotHoleDiameter: s.ScrewPilotHoleDiameter,
             Thickness34: MaterialDefaults.Thickness34
         );
-    }
-
-    /// <summary>
-    /// Replicates existing DxfPartKind logic to determine tenon placement 
-    /// without relying on a missing property in PartListEntry.
-    /// </summary>
-    private static Edge ResolveEdgeFlags(string partName)
-    {
-        return partName.ToLowerInvariant() switch
-        {
-            // TenonLeftAndRight
-            "deck" or "top" or "top stretcher (front)" or "nailer" or "sink stretcher"
-                or "drawer stretcher" => Edge.Left | Edge.Right,
-
-            // TenonTopAndBottom
-            "back" => Edge.Top | Edge.Bottom,
-
-            // TenonTopLeftRight
-            "toekick" or "toekick (left)" or "toekick (right)" => Edge.Top | Edge.Left | Edge.Right,
-
-            // MortisePanel / Plain (No tenons on the panel itself)
-            "left end" or "right end" or _ => Edge.None
-        };
     }
 }

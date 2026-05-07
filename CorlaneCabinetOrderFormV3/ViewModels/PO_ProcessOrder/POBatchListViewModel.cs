@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
+using CorlaneCabinetOrderFormV3.Rendering.V4.DXF;
+using CorlaneCabinetOrderFormV3.Rendering.V4.Orchestrator;
 using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
@@ -552,6 +554,36 @@ public partial class POBatchListViewModel : ObservableObject
     }
 
 
+    //[RelayCommand]
+    //private void ExportDxf()
+    //{
+    //    if (_cabinetService is null) return;
+
+    //    var dlg = new OpenFolderDialog
+    //    {
+    //        Title = "Select output folder for DXF files",
+    //        InitialDirectory = _defaults?.GetFileDialogDirectory()
+    //                           ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+    //    };
+
+    //    if (dlg.ShowDialog() != true) return;
+
+    //    _defaults?.RememberFileDialogDirectory(Path.Combine(dlg.FolderName, "_"));
+
+    //    try
+    //    {
+    //        DxfExporter.ExportAll(dlg.FolderName, _cabinetService.Cabinets);
+    //        MessageBox.Show($"DXF files exported to:\n{dlg.FolderName}", "Export Complete",
+    //                        MessageBoxButton.OK, MessageBoxImage.Information);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show($"Error exporting DXF files: {ex.Message}", "Error",
+    //                        MessageBoxButton.OK, MessageBoxImage.Error);
+    //    }
+    //}
+
+
     [RelayCommand]
     private void ExportDxf()
     {
@@ -570,7 +602,45 @@ public partial class POBatchListViewModel : ObservableObject
 
         try
         {
-            DxfExporter.ExportAll(dlg.FolderName, _cabinetService.Cabinets);
+            var joinerySettings = LockDadoSettings.Default;
+            int index = 1;
+
+            // ── Iterate cabinets to preserve dimensional context ────────────────
+            foreach (var cabinet in _cabinetService.Cabinets)
+            {
+                string label = PartsListBuilder.FormatLabel(cabinet, index++);
+                var parts = PartsListBuilder.BuildForCabinet(cabinet, label);
+
+                double tkHeight = 0;
+                double tkDepth = 0;
+
+                // Extract toekick dimensions from base cabinets
+                if (cabinet is BaseCabinetModel baseCab)
+                {
+                    var dim = BaseCabinetDimensions.From(baseCab);
+                    tkHeight = dim.TKHeight;
+                    tkDepth = dim.TKDepth;
+                }
+
+                // ── Export each part with cabinet context ────────────────────────
+                foreach (var part in parts)
+                {
+                    var pipeline = new DxfExportPipeline(
+                        new[] { part },
+                        joinerySettings,
+                        tkHeight: tkHeight,
+                        tkDepth: tkDepth
+                    );
+
+                    if (!pipeline.ValidateInput()) continue;
+
+                    string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
+                    string filePath = Path.Combine(dlg.FolderName, safeName + ".dxf");
+
+                    pipeline.ExportToFile(filePath);
+                }
+            }
+
             MessageBox.Show($"DXF files exported to:\n{dlg.FolderName}", "Export Complete",
                             MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -580,4 +650,14 @@ public partial class POBatchListViewModel : ObservableObject
                             MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+
+    /// <summary>Matches original DxfExporter.SanitizeFileName()</summary>
+    private static string SanitizeFileName(string name)
+    {
+        foreach (char c in Path.GetInvalidFileNameChars())
+            name = name.Replace(c, '_');
+        return name;
+    }
+
 }

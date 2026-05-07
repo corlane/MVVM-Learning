@@ -55,12 +55,12 @@ internal static class TenonCalculator
         return ranges;
     }
 
+
     /// <summary>
     /// Computes thinning pocket rectangles for a given edge.
     /// </summary>
     internal static List<(double x1, double x2, double y1, double y2)> ComputeThinningPockets(
         List<(double start, double end)> tenonRanges,
-        double panelThickness,
         double pocketDepth)
     {
         var pockets = new List<(double x1, double x2, double y1, double y2)>();

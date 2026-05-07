@@ -6,6 +6,6 @@
 internal record PartGeometry(
     PartInfo PartInfo,
     List<Vector2> OutlineVertices,      // Closed polyline vertices
-    List<(double x1, double x2, double y1, double y2)> ThinningPockets, // Tenon pockets
+    List<(double x1, double x2, double y1, double y2)> TenonThinningPockets, // Tenon pockets
     List<(double x1, double x2, double y1, double y2)> MortisePockets,  // Mortise pockets (if applicable)
     List<(double x, double y, double radius)> Holes); // Screw/Hinge holes

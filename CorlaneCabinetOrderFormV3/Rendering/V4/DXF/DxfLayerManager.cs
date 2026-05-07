@@ -1,30 +1,35 @@
-﻿using netDxf.Tables;
-using netDxf;
+﻿using netDxf;
+using netDxf.Tables;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF;
-
-/// <summary>
-/// Manages DXF layers and colors for the new pipeline.
-/// </summary>
-internal static class DxfLayerManager
+namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF
 {
-    public const string LayerOutline = "PART_OUTLINE";
-    public const string LayerTenonPocket = "MACHINING_TENON_POCKET";
-    public const string LayerMortisePocket = "MACHINING_MORTISE";
-    public const string LayerHoles = "MACHINING_HOLES";
-    public const string LayerGrain = "GRAIN_DIRECTION";
-    public const string LayerLabels = "LABELS";
-
-    public static Layer[] GetStandardLayers()
+    public class DxfLayerManager
     {
-        return new[]
+        public enum LayerType
         {
-            new Layer(LayerOutline) { Color = new AciColor(2) }, // red
-            new Layer(LayerTenonPocket) { Color = new AciColor(3) }, // green
-            new Layer(LayerMortisePocket) { Color = new AciColor(5) }, // blue
-            new Layer(LayerHoles) { Color = new AciColor(6) }, // cyan
-            new Layer(LayerGrain) { Color = new AciColor(8) }, // gray
-            new Layer(LayerLabels) { Color = new AciColor(7) } // white
-        };
+            PartOutline,
+            TenonThinningPocket,
+            MortisePocket,
+            DrillHolesBlind,
+            DrillHolesThrough
+        }
+
+        private readonly Dictionary<LayerType, Layer> _layers;
+
+        public DxfLayerManager()
+        {
+            // netDxf requires Layer(name) constructor + explicit Color property assignment
+            _layers = new Dictionary<LayerType, Layer>
+            {
+                { LayerType.PartOutline, new Layer("CHAINCOMPRIGHT [3185] z17p8") { Color = new AciColor(7) } }, // white CHANGE THIS TO ACTUAL MATERIAL THICKNESS!
+                { LayerType.TenonThinningPocket, new Layer("CHAINCOMPRIGHT [3185] z9p0") { Color = new AciColor(1) } }, // red
+                { LayerType.MortisePocket, new Layer("POCKET [3115] z9p0") { Color = new AciColor(5) } }, // blue
+                { LayerType.DrillHolesBlind, new Layer("DRILL z12p7") { Color = new AciColor(4) } }, // cyan
+                { LayerType.DrillHolesThrough, new Layer("DRILL z17p8") { Color = new AciColor(1) } } // red CHANGE THIS TO ACTUAL MATERIAL THICKNESS!
+            };
+        }
+
+        public Layer GetLayer(LayerType type) => _layers[type];
+        public IEnumerable<Layer> GetLayers() => _layers.Values;
     }
 }
