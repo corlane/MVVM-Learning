@@ -99,16 +99,16 @@ internal static class PanelGeometryCalculator
 
             // ── Compute Mortise Pockets ──────────────────────────────────────────────
             if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, MortiseEdge.Left, joinery));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery));
 
             if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, MortiseEdge.Right, joinery));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery));
 
             if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, MortiseEdge.Bottom, joinery));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery));
 
             if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, MortiseEdge.Top, joinery));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery));
 
         }
 
