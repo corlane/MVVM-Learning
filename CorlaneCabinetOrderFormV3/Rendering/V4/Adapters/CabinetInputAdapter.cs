@@ -2,7 +2,6 @@
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 using CorlaneCabinetOrderFormV3.Services;
-using System.Diagnostics;
 
 internal static class CabinetInputAdapter
 {
@@ -26,9 +25,10 @@ internal static class CabinetInputAdapter
                 Bounds: new PartBounds(entry.LengthIn, entry.WidthIn),
                 Material: entry.Species,
                 Quantity: entry.Qty,
-                TenonEdges: ResolveEdgeFlags(entry.PartName),
+                TenonEdges: ResolveTenonEdges(entry.PartName),
                 MortiseEdges: ResolveMortiseEdges(entry.PartName),
                 ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName),
+                ThinningPockets: (ThinningPocketEdge) ResolveTenonThinningEdges(entry.PartName),
                 EdgeBand: entry.EdgeBandSpecies,
                 Notes: entry.Notes,
                 TkHeight: tkHeight,
@@ -39,7 +39,7 @@ internal static class CabinetInputAdapter
         return mapped;
     }
 
-    private static TenonEdge ResolveEdgeFlags(string partName)
+    private static TenonEdge ResolveTenonEdges(string partName)
     {
         return partName switch
         {
@@ -48,6 +48,18 @@ internal static class CabinetInputAdapter
             "Back" => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
             "Deck" => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
             _ => TenonEdge.None
+        };
+    }
+
+    private static ThinningPocketEdge ResolveTenonThinningEdges(string partName)
+    {
+        return partName switch
+        {
+            "Toekick" or "Toekick (Left)" or "Toekick (Right)" => ThinningPocketEdge.Top | ThinningPocketEdge.Left | ThinningPocketEdge.Right,
+            "Top Stretcher (Front)" => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
+            "Back" => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom | ThinningPocketEdge.Left,
+            "Deck" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
+            _ => ThinningPocketEdge.None
         };
     }
 

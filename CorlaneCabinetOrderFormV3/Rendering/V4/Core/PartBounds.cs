@@ -38,6 +38,15 @@ internal enum ScrewHoleEdge
     Top = 1 << 3
 }
 
+[Flags]
+internal enum ThinningPocketEdge
+{
+    None = 0,
+    Left = 1 << 0,
+    Right = 1 << 1,
+    Bottom = 1 << 2,
+    Top = 1 << 3
+}
 
 internal record PartInfo(
     string Name,
@@ -47,6 +56,7 @@ internal record PartInfo(
     TenonEdge TenonEdges,
     MortiseEdge MortiseEdges,
     ScrewHoleEdge ScrewHoleEdges,
+    ThinningPocketEdge ThinningPockets,
     string? EdgeBand,
     string? Notes,
     double TkHeight = 0,

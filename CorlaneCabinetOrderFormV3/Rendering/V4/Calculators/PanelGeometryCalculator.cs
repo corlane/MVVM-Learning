@@ -43,11 +43,16 @@ internal static class PanelGeometryCalculator
                     outline.Add(new Vector2(tStart, -dadoDepth));
                     outline.Add(new Vector2(tEnd, -dadoDepth));
                     outline.Add(new Vector2(tEnd, 0));
-                    //thinningPockets.Add((tStart, tEnd, -dadoDepth, 0));
                 }
-                thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, 0, 0));
+                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Bottom))
+                {
+                    thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, 0, 0));
+                }
             }
             outline.Add(new Vector2(length, 0));
+
+
+
 
             // Right Edge
             if (part.TenonEdges.HasFlag(TenonEdge.Right))
@@ -59,11 +64,16 @@ internal static class PanelGeometryCalculator
                     outline.Add(new Vector2(length + dadoDepth, tStart));
                     outline.Add(new Vector2(length + dadoDepth, tEnd));
                     outline.Add(new Vector2(length, tEnd));
-                    //thinningPockets.Add((length, length + dadoDepth, tStart, tEnd));
                 }
-                thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Right))
+                {
+                    thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                }
             }
             outline.Add(new Vector2(length, height));
+
+
+
 
             // Top Edge (Reverse order for winding)
             if (part.TenonEdges.HasFlag(TenonEdge.Top))
@@ -76,11 +86,16 @@ internal static class PanelGeometryCalculator
                     outline.Add(new Vector2(tEnd, height + dadoDepth));
                     outline.Add(new Vector2(tStart, height + dadoDepth));
                     outline.Add(new Vector2(tStart, height));
-                    //thinningPockets.Add((tStart, tEnd, height, height + dadoDepth));
                 }
-                thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, height, height));
+                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Top))
+                {
+                    thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, height, height));
+                }
             }
             outline.Add(new Vector2(0, height));
+
+
+
 
             // Left Edge (Reverse order for winding)
             if (part.TenonEdges.HasFlag(TenonEdge.Left))
@@ -93,10 +108,14 @@ internal static class PanelGeometryCalculator
                     outline.Add(new Vector2(-dadoDepth, tEnd));
                     outline.Add(new Vector2(-dadoDepth, tStart));
                     outline.Add(new Vector2(0, tStart));
-                    //thinningPockets.Add((-dadoDepth, 0, tStart, tEnd));
                 }
-                thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Left))
+                {
+                    thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                }
             }
+
+
 
             // ── Compute Mortise Pockets ──────────────────────────────────────────────
             if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
@@ -125,8 +144,6 @@ internal static class PanelGeometryCalculator
 
             if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
                 holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery));
-
-
         }
 
         // ── Mirror Right End Panels ──────────────────────────────────────────────
