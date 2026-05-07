@@ -27,8 +27,8 @@ internal static class CabinetInputAdapter
                 Quantity: entry.Qty,
                 TenonEdges: ResolveTenonEdges(entry.PartName),
                 MortiseEdges: ResolveMortiseEdges(entry.PartName),
-                ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName),
-                ThinningPockets: (ThinningPocketEdge) ResolveTenonThinningEdges(entry.PartName),
+                ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName), // This automatically adds screw holes where there are mortises. Can be changed to be independent.
+                ThinningPockets: ResolveTenonThinningEdges(entry.PartName),
                 EdgeBand: entry.EdgeBandSpecies,
                 Notes: entry.Notes,
                 TkHeight: tkHeight,
@@ -72,7 +72,9 @@ internal static class CabinetInputAdapter
             "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right,
 
             // Back panel receives mortises on top/bottom (mating with deck/top)
-            "back" => MortiseEdge.Right,
+            "back" => MortiseEdge.All,
+
+            "toekick" => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Bottom,
 
             // Other parts as needed
             _ => MortiseEdge.None
