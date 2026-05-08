@@ -1,4 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 
@@ -9,8 +10,7 @@ internal static class PanelGeometryCalculator
 {
     internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery)
     {
-        bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase)
-                              && part.TkHeight > 0 && part.TkDepth > 0;
+        bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.TkHeight > 0 && part.TkDepth > 0;
 
         var outline = new List<Vector2>();
         var thinningPockets = new List<(double x1, double x2, double y1, double y2)>();
@@ -31,151 +31,156 @@ internal static class PanelGeometryCalculator
         {
             // ── Standard Panel Outline ─────────────────────────────────────────
             outline.Add(new Vector2(0, 0));
+        }
 
-            // Bottom Edge
-            if (part.TenonEdges.HasFlag(TenonEdge.Bottom))
+        // Bottom Edge
+        if (part.TenonEdges.HasFlag(TenonEdge.Bottom))
+        {
+            //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+            var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
+            outline.Add(new Vector2(joinery.BlindStart, 0));
+            foreach (var (tStart, tEnd) in tenons)
             {
-                //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
-                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
-                outline.Add(new Vector2(joinery.BlindStart, 0));
-                foreach (var (tStart, tEnd) in tenons)
+                outline.Add(new Vector2(tStart, 0));
+                outline.Add(new Vector2(tStart, -dadoDepth));
+                outline.Add(new Vector2(tEnd, -dadoDepth));
+                outline.Add(new Vector2(tEnd, 0));
+            }
+            if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Bottom))
+            {
+                if (length < 6)
                 {
-                    outline.Add(new Vector2(tStart, 0));
-                    outline.Add(new Vector2(tStart, -dadoDepth));
-                    outline.Add(new Vector2(tEnd, -dadoDepth));
-                    outline.Add(new Vector2(tEnd, 0));
+                    thinningPockets.Add((-joinery.TenonThinningOverrun, length + joinery.TenonThinningOverrun, 0, 0));
                 }
-                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Bottom))
+                else
                 {
-                    if (length < 6)
-                    {
-                        thinningPockets.Add((-joinery.TenonThinningOverrun, length + joinery.TenonThinningOverrun, 0, 0));
-                    }
-                    else
-                    {
-                        thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, 0, 0));
-                    }
+                    thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, 0, 0));
                 }
             }
-            outline.Add(new Vector2(length, 0));
+        }
+        if (!isEndPanelWithTk) outline.Add(new Vector2(length, 0));
+        
 
 
 
-
-            // Right Edge
-            if (part.TenonEdges.HasFlag(TenonEdge.Right))
+        // Right Edge
+        if (part.TenonEdges.HasFlag(TenonEdge.Right))
+        {
+            //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+            var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
+            foreach (var (tStart, tEnd) in tenons)
             {
-                //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
-                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
-                foreach (var (tStart, tEnd) in tenons)
+                outline.Add(new Vector2(length, tStart));
+                outline.Add(new Vector2(length + dadoDepth, tStart));
+                outline.Add(new Vector2(length + dadoDepth, tEnd));
+                outline.Add(new Vector2(length, tEnd));
+            }
+            if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Right))
+            {
+                if (height < 6)
                 {
-                    outline.Add(new Vector2(length, tStart));
-                    outline.Add(new Vector2(length + dadoDepth, tStart));
-                    outline.Add(new Vector2(length + dadoDepth, tEnd));
-                    outline.Add(new Vector2(length, tEnd));
+                    thinningPockets.Add((length, length, -joinery.TenonThinningOverrun, height + joinery.TenonThinningOverrun));
                 }
-                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Right))
+                else
                 {
-                    if (height < 6)
-                    {
-                        thinningPockets.Add((length, length, -joinery.TenonThinningOverrun, height + joinery.TenonThinningOverrun));
-                    }
-                    else
-                    {
-                        thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
-                    }
+                    thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
                 }
             }
-            outline.Add(new Vector2(length, height));
+        }
+        if (!isEndPanelWithTk) outline.Add(new Vector2(length, height));
 
 
 
 
-            // Top Edge (Reverse order for winding)
-            if (part.TenonEdges.HasFlag(TenonEdge.Top))
+        // Top Edge (Reverse order for winding)
+        if (part.TenonEdges.HasFlag(TenonEdge.Top))
+        {
+            //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
+            var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
+            for (int i = tenons.Count - 1; i >= 0; i--)
             {
-                //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
-                var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
-                for (int i = tenons.Count - 1; i >= 0; i--)
+                var (tStart, tEnd) = tenons[i];
+                outline.Add(new Vector2(tEnd, height));
+                outline.Add(new Vector2(tEnd, height + dadoDepth));
+                outline.Add(new Vector2(tStart, height + dadoDepth));
+                outline.Add(new Vector2(tStart, height));
+            }
+            if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Top))
+            {
+                if (length < 6)
                 {
-                    var (tStart, tEnd) = tenons[i];
-                    outline.Add(new Vector2(tEnd, height));
-                    outline.Add(new Vector2(tEnd, height + dadoDepth));
-                    outline.Add(new Vector2(tStart, height + dadoDepth));
-                    outline.Add(new Vector2(tStart, height));
+                    thinningPockets.Add((-joinery.TenonThinningOverrun, length + joinery.TenonThinningOverrun, height, height));
                 }
-                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Top))
+                else
                 {
-                    if (length < 6)
-                    {
-                        thinningPockets.Add((-joinery.TenonThinningOverrun, length + joinery.TenonThinningOverrun, height, height));
-                    }
-                    else
-                    {
-                        thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, height, height));
-                    }
+                    thinningPockets.Add((joinery.BlindStart - joinery.TenonThinningOverrun, length - joinery.BlindStop + joinery.TenonThinningOverrun, height, height));
                 }
             }
-            outline.Add(new Vector2(0, height));
+        }
+        if (!isEndPanelWithTk) outline.Add(new Vector2(0, height));
 
 
 
 
-            // Left Edge (Reverse order for winding)
-            if (part.TenonEdges.HasFlag(TenonEdge.Left))
+        // Left Edge (Reverse order for winding)
+        if (part.TenonEdges.HasFlag(TenonEdge.Left))
+        {
+            //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
+            var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
+            for (int i = tenons.Count - 1; i >= 0; i--)
             {
-                //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
-                var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
-                for (int i = tenons.Count - 1; i >= 0; i--)
+                var (tStart, tEnd) = tenons[i];
+                outline.Add(new Vector2(0, tEnd));
+                outline.Add(new Vector2(-dadoDepth, tEnd));
+                outline.Add(new Vector2(-dadoDepth, tStart));
+                outline.Add(new Vector2(0, tStart));
+            }
+            if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Left))
+            {
+                if (height < 6)
                 {
-                    var (tStart, tEnd) = tenons[i];
-                    outline.Add(new Vector2(0, tEnd));
-                    outline.Add(new Vector2(-dadoDepth, tEnd));
-                    outline.Add(new Vector2(-dadoDepth, tStart));
-                    outline.Add(new Vector2(0, tStart));
+                    thinningPockets.Add((0, 0, -joinery.TenonThinningOverrun, height + joinery.TenonThinningOverrun));
                 }
-                if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Left))
+                else
                 {
-                    if (height < 6)
-                    {
-                        thinningPockets.Add((0, 0, -joinery.TenonThinningOverrun, height + joinery.TenonThinningOverrun));
-                    }
-                    else
-                    {
-                        thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
-                    }
+                    thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
                 }
             }
+        }
 
 
 
-            // ── Compute Mortise Pockets ──────────────────────────────────────────────
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery));
+        // ── Compute Mortise Pockets ──────────────────────────────────────────────
+        if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
+            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery));
 
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery));
+        if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
+            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery));
 
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery));
+        if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
+            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery));
 
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery));
+        if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
+            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery));
 
 
 
-            // ── Compute Screw Holes in Gaps ─────────────────────────────────────────
-            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left))
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery));
+        // ── Compute Screw Holes in Gaps ─────────────────────────────────────────
+        if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left))
+            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery));
 
-            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery));
+        if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))
+            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery));
 
-            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery)); // for some reason these have to be backwards like this.
+        if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
+            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery)); // for some reason these have to be backwards like this.
 
-            if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery)); // for some reason these have to be backwards like this.
+        if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
+            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery)); // for some reason these have to be backwards like this.
+
+        if (part.Name.Contains("End", StringComparison.OrdinalIgnoreCase))
+        {
+            holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery));
         }
 
         // ── Mirror Right End Panels ──────────────────────────────────────────────

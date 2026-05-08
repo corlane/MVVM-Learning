@@ -16,7 +16,8 @@ internal static class MortiseScrewHoleCalculator
         JoineryConfig joinery)
     {
         var holes = new List<(double, double, double)>();
-        var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery);
+        //var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery);
+        var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: edgeLength < 6.0);
         double radius = joinery.ScrewPilotHoleDiameter / 2.0;
         double edgeOffset = joinery.Thickness34 / 2.0;
 

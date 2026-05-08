@@ -9,7 +9,8 @@ internal static class CabinetInputAdapter
         IEnumerable<PartListEntry> parts,
         LockDadoSettings? settings = null,
         double tkHeight = 0,
-        double tkDepth = 0)
+        double tkDepth = 0,
+        CabinetModel? cabinet = null)
     {
         var mapped = new List<PartInfo>();
 
@@ -32,7 +33,8 @@ internal static class CabinetInputAdapter
                 EdgeBand: entry.EdgeBandSpecies,
                 Notes: entry.Notes,
                 TkHeight: tkHeight,
-                TkDepth: tkDepth
+                TkDepth: tkDepth,
+                Cabinet: isEndPanel ? cabinet : null
                 );
             mapped.Add( mappedPart );
         }

@@ -629,7 +629,8 @@ public partial class POBatchListViewModel : ObservableObject
                         new[] { part },
                         joinerySettings,
                         tkHeight: tkHeight,
-                        tkDepth: tkDepth
+                        tkDepth: tkDepth,
+                        cabinetModel: cabinet
                     );
 
                     if (!pipeline.ValidateInput()) continue;

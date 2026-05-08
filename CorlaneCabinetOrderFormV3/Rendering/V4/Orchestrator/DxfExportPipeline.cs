@@ -16,7 +16,9 @@ internal class DxfExportPipeline
         IEnumerable<PartListEntry> existingParts,
         LockDadoSettings? settings = null,
         double tkHeight = 0,
-        double tkDepth = 0)
+        double tkDepth = 0,
+        CabinetModel? cabinetModel = null
+        )
     {
         _parts = CabinetInputAdapter.MapParts(existingParts, settings, tkHeight, tkDepth);
         _config = CabinetInputAdapter.MapSettings(settings);

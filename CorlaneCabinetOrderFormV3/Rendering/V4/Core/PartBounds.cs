@@ -1,4 +1,6 @@
-﻿namespace CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+﻿using CorlaneCabinetOrderFormV3.Models;
+
+namespace CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 
 /// <summary>
 /// Represents the 2D dimensions of a part in the export plane.
@@ -60,7 +62,8 @@ internal record PartInfo(
     string? EdgeBand,
     string? Notes,
     double TkHeight = 0,
-    double TkDepth = 0);
+    double TkDepth = 0,
+    CabinetModel? Cabinet = null);
 
 /// <summary>
 /// Standardized joinery configuration for the new pipeline.

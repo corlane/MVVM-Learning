@@ -26,7 +26,7 @@ internal static class PartGeometryExtensions
             .Select(h => (panelWidth - h.x, h.y, h.radius))
             .ToList();
 
-        var mirroredHolesThru = geometry.Holes
+        var mirroredHolesThru = geometry.HolesThru
             .Select(h => (panelWidth - h.x, h.y, h.radius))
             .ToList();
 
