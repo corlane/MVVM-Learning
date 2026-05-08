@@ -631,6 +631,7 @@ public partial class POBatchListViewModel : ObservableObject
                         tkHeight: tkHeight,
                         tkDepth: tkDepth,
                         cabinetModel: cabinet
+                        
                     );
 
                     if (!pipeline.ValidateInput()) continue;

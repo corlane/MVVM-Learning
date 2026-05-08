@@ -17,10 +17,10 @@ internal class DxfExportPipeline
         LockDadoSettings? settings = null,
         double tkHeight = 0,
         double tkDepth = 0,
-        CabinetModel? cabinetModel = null
-        )
+        CabinetModel? cabinetModel = null,
+        BaseCabinetDimensions? baseCabDim = null)
     {
-        _parts = CabinetInputAdapter.MapParts(existingParts, settings, tkHeight, tkDepth);
+        _parts = CabinetInputAdapter.MapParts(existingParts, settings, tkHeight, tkDepth, cabinetModel);
         _config = CabinetInputAdapter.MapSettings(settings);
     }
 
