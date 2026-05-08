@@ -99,7 +99,14 @@ internal static class PanelGeometryCalculator
                 }
                 else
                 {
-                    thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    if (part.Name.Equals("Top Stretcher (Front)"))
+                    {
+                        thinningPockets.Add((length, length, 0, height));
+                    }
+                    else
+                    {
+                        thinningPockets.Add((length, length, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    }
                 }
             }
         }
@@ -170,7 +177,14 @@ internal static class PanelGeometryCalculator
                 }
                 else
                 {
-                    thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    if (part.Name.Equals("Top Stretcher (Front)"))
+                    {
+                        thinningPockets.Add((0, 0, 0, height));
+                    }
+                    else
+                    {
+                        thinningPockets.Add((0, 0, joinery.BlindStart - joinery.TenonThinningOverrun, height - joinery.BlindStop + joinery.TenonThinningOverrun));
+                    }
                 }
             }
         }
