@@ -172,10 +172,10 @@ internal static class PanelGeometryCalculator
                 holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery));
 
             if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery));
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery)); // for some reason these have to be backwards like this.
 
             if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery));
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery)); // for some reason these have to be backwards like this.
         }
 
         // ── Mirror Right End Panels ──────────────────────────────────────────────

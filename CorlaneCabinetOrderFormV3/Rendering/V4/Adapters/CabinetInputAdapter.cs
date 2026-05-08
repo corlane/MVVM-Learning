@@ -72,7 +72,7 @@ internal static class CabinetInputAdapter
             "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right,
 
             // Back panel receives mortises on top/bottom (mating with deck/top)
-            "back" => MortiseEdge.All,
+            "back" => MortiseEdge.Left | MortiseEdge.Top,
 
             "toekick" => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Bottom,
 
