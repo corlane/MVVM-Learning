@@ -20,7 +20,7 @@ internal static class TenonCalculator
         var blindStart = blindStartOverride ?? joinery.BlindStart;
         var blindStop = blindStopOverride ?? joinery.BlindStop;
 
-        if (forceTwoTenons) { blindStart = 0; blindStop = 0;  }
+        //if (forceTwoTenons) { blindStart = 0; blindStop = 0;  }
 
         double usableStart = blindStart;
         double usableEnd = edgeLength - blindStop;

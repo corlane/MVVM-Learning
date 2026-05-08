@@ -11,10 +11,10 @@ internal sealed record LockDadoSettings
     // ── Blind zone ────────────────────────────────────────────────────────────
 
     /// <summary>Distance from the front face where the tenon/mortise zone begins.</summary>
-    public double BlindStart { get; init; } = 2;
+    public double BlindStart { get; init; } = 2.75;
 
     /// <summary>Distance from the back edge where the tenon/mortise zone ends.</summary>
-    public double BlindStop { get; init; } = 2;
+    public double BlindStop { get; init; } = 2.75;
 
     // ── Per-edge blind overrides (nullable, fall back to global above) ──
 

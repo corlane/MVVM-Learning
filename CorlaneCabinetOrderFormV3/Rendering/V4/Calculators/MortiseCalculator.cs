@@ -15,7 +15,8 @@ internal static class MortiseCalculator
         double partWidth,
         double partHeight,
         MortiseEdge edge,
-        JoineryConfig joinery)
+        JoineryConfig joinery,
+        double additionalInset)
     {
         double materialThickness34 = MaterialDefaults.Thickness34;
 
@@ -26,8 +27,8 @@ internal static class MortiseCalculator
         var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: edgeLength < 6.0);
         double slotWidth = joinery.TenonThickness + joinery.TenonClearance;
         double oversize = joinery.MortiseOversize;
-        double blindStart = joinery.BlindStart;
-        double blindStop = joinery.BlindStop;
+        //double blindStart = joinery.BlindStart;
+        //double blindStop = joinery.BlindStop;
 
         foreach (var (tStart, tEnd) in tenonRanges)
         {
@@ -38,19 +39,19 @@ internal static class MortiseCalculator
             {
                 case MortiseEdge.Left:
                     // Mortise on left edge: X runs 0→slotWidth, Y runs along edge
-                    pockets.Add((materialThickness34, materialThickness34 - slotWidth, mStart, mEnd));
+                    pockets.Add((materialThickness34 + additionalInset, materialThickness34 + additionalInset - slotWidth, mStart, mEnd));
                     break;
                 case MortiseEdge.Right:
                     // Mortise on right edge: X runs (partWidth-slotWidth)→partWidth
-                    pockets.Add((partWidth - materialThickness34, partWidth - materialThickness34 + slotWidth, mStart, mEnd));
+                    pockets.Add((partWidth - materialThickness34 - additionalInset, partWidth - materialThickness34 - additionalInset + slotWidth, mStart, mEnd));
                     break;
                 case MortiseEdge.Bottom:
                     // Mortise on bottom edge: Y runs 0→slotWidth, X runs along edge
-                    pockets.Add((mStart, mEnd, materialThickness34, materialThickness34 - slotWidth));
+                    pockets.Add((mStart, mEnd, materialThickness34 + additionalInset, materialThickness34 + additionalInset - slotWidth));
                     break;
                 case MortiseEdge.Top:
                     // Mortise on top edge: Y runs (partHeight-slotWidth)→partHeight
-                    pockets.Add((mStart, mEnd, partHeight - materialThickness34 + slotWidth, partHeight - materialThickness34));
+                    pockets.Add((mStart, mEnd, partHeight - materialThickness34 - additionalInset + slotWidth, partHeight - materialThickness34 - additionalInset));
                     break;
             }
         }

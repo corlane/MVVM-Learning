@@ -1,4 +1,5 @@
-﻿using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+﻿using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
@@ -8,7 +9,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 /// </summary>
 internal static class PanelGeometryCalculator
 {
-    internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery)
+    internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery, CabinetModel cabinet)
     {
         bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.TkHeight > 0 && part.TkDepth > 0;
 
@@ -21,6 +22,8 @@ internal static class PanelGeometryCalculator
         double length = part.Bounds.Width;
         double height = part.Bounds.Height;
         double dadoDepth = joinery.DadoDepth;
+
+        double stretcherWidth = 6;
 
         // ── Branch to Toekick Outline ──────────────────────────────────────────
         if (isEndPanelWithTk)
@@ -68,6 +71,19 @@ internal static class PanelGeometryCalculator
         {
             //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
+
+            // Check to see if top stretcher front or drawer stretcher, if so, adjust blind start & blind stop so the part will have 2 tenons with 1 screw.
+
+            if (part.Name.Contains("Stretcher"))
+            {
+                tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
+            }
+
+            if (part.Name.Equals("Toekick"))
+            {
+                tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 0, blindStopOverride: 0, forceTwoTenons: true);
+            }
+
             foreach (var (tStart, tEnd) in tenons)
             {
                 outline.Add(new Vector2(length, tStart));
@@ -127,6 +143,17 @@ internal static class PanelGeometryCalculator
         {
             //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
+
+            if (part.Name.Contains("Stretcher"))
+            {
+                tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
+            }
+
+            if (part.Name.Equals("Toekick"))
+            {
+                tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 0, blindStopOverride: 0, forceTwoTenons: true);
+            }
+
             for (int i = tenons.Count - 1; i >= 0; i--)
             {
                 var (tStart, tEnd) = tenons[i];
@@ -152,38 +179,76 @@ internal static class PanelGeometryCalculator
 
         // ── Compute Mortise Pockets ──────────────────────────────────────────────
         if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
-            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery));
+        {
+            if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
+            {
+                if (baseCab.TopType == "Stretcher")
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: 0));
+                }
+            }
+            else
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0));
+            }
+        }
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
-            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery));
+        {
+            if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight));
+            }
+            else
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: 0));
+            }
+        }
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
-            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery));
+            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0));
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
-            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery));
+            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0));
+
 
 
 
         // ── Compute Screw Holes in Gaps ─────────────────────────────────────────
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left))
-            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery));
+        {
+            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery, additionalInset: 0));
+        }
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))
-            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery));
+        {
+            if (part.Cabinet is BaseCabinetModel baseCab)
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery, additionalInset: part.TkHeight));
+            }
+            else
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery, additionalInset: 0));
+            }
+        }
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
-            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery)); // for some reason these have to be backwards like this.
+            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery, additionalInset: 0));
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
-            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery)); // for some reason these have to be backwards like this.
+            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery, additionalInset: 0));
 
+
+
+
+        // ── Compute Shelf Holes ─────────────────────────────────────────
         if (part.Name.Contains("End", StringComparison.OrdinalIgnoreCase))
         {
             holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery));
         }
 
-        // ── Mirror Right End Panels ──────────────────────────────────────────────
+
+        // ── Mirror Right End Panels To Create Left End Panels ──────────────────────────────────────────────
         PartGeometry result = new PartGeometry(
             PartInfo: part,
             OutlineVertices: outline,

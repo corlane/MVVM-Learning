@@ -13,7 +13,8 @@ internal static class MortiseScrewHoleCalculator
         double partWidth,
         double partHeight,
         ScrewHoleEdge edge,
-        JoineryConfig joinery)
+        JoineryConfig joinery,
+        double additionalInset = 0)
     {
         var holes = new List<(double, double, double)>();
         //var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery);
@@ -30,20 +31,20 @@ internal static class MortiseScrewHoleCalculator
             switch (edge)
             {
                 case ScrewHoleEdge.Left:
-                    holeX = edgeOffset;
+                    holeX = edgeOffset + additionalInset;
                     holeY = gapCenter;
                     break;
                 case ScrewHoleEdge.Right:
-                    holeX = partWidth - edgeOffset;
+                    holeX = partWidth - edgeOffset - additionalInset;
                     holeY = gapCenter;
                     break;
                 case ScrewHoleEdge.Bottom:
                     holeX = gapCenter;
-                    holeY = edgeOffset;
+                    holeY = edgeOffset + additionalInset;
                     break;
                 case ScrewHoleEdge.Top:
                     holeX = gapCenter;
-                    holeY = partHeight - edgeOffset;
+                    holeY = partHeight - edgeOffset - additionalInset;
                     break;
                 default:
                     continue;
