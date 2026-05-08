@@ -12,30 +12,53 @@ internal static class ShelfHoleCalculator
 
         if (part.Cabinet is BaseCabinetModel baseCab)
         {
-            //if (baseCab == null) return holes;
-
             var dim = BaseCabinetDimensions.From(baseCab);
             double mt34 = MaterialDefaults.Thickness34;
+            double width = part.Bounds.Width;
             double height = part.Bounds.Height;
             double tkH = part.TkHeight;
 
-            int count = (int)Math.Round(((height - 12) / 1.26) - tkH);
-            double yStart = tkH + 6;
-            double? maxY = baseCab.DrwCount == 1
-                ? (height - dim.Opening1Height - (2 * mt34)) - 6
+            int count = (int)Math.Round((width - 12 - tkH) / 1.26);
+            double xStart = width - tkH - mt34 - 6;
+            double? xStop = baseCab.DrwCount == 1
+                ? dim.Opening1Height + (2 * mt34) + 6
                 : null;
 
-            double backX = 1 + dim.BackThickness;
-            double frontX = dim.ShelfDepth + dim.BackThickness - 1;
+            double backY = height - 1 - dim.BackThickness;
+            double frontY = height - dim.ShelfDepth + 1 - dim.BackThickness;
             double radius = 0.19685 / 2.0; // 5mm diameter
 
             for (int i = 0; i < count; i++)
             {
-                double y = yStart + (i * 1.26);
-                if (maxY.HasValue && y > maxY.Value) break;
+                double x = xStart - (i * 1.26);
+                if (xStop.HasValue && x < xStop.Value) break;
 
-                holes.Add((backX, y, radius));
-                holes.Add((frontX, y, radius));
+                holes.Add((x, backY, radius));
+                holes.Add((x, frontY, radius));
+            }
+        }
+
+        else if (part.Cabinet is UpperCabinetModel upperCab)
+        {
+            var dim = UpperCabinetDimensions.From(upperCab);
+            double mt34 = MaterialDefaults.Thickness34;
+            double width = part.Bounds.Width;
+            double height = part.Bounds.Height;
+            double tkH = part.TkHeight;
+
+            int count = (int)Math.Round((width - 12) / 1.26);
+            double xStart = width - mt34 - 6;
+
+            double backY = height - 1 - dim.BackThickness;
+            double frontY = height - dim.ShelfDepth + 1 - dim.BackThickness;
+            double radius = 0.19685 / 2.0; // 5mm diameter
+
+            for (int i = 0; i < count; i++)
+            {
+                double x = xStart - (i * 1.26);
+
+                holes.Add((x, backY, radius));
+                holes.Add((x, frontY, radius));
             }
         }
 
