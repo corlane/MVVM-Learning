@@ -19,7 +19,8 @@ internal static class MortiseCalculator
         double additionalInset,
         bool forceTwoTenons = false,
         double blindStartOverride = 2,
-        double blindStopOverride = 2)
+        double blindStopOverride = 2,
+        bool fullThicknessTenon = false)
     {
         double materialThickness34 = MaterialDefaults.Thickness34;
 
@@ -42,7 +43,14 @@ internal static class MortiseCalculator
             {
                 case MortiseEdge.Left:
                     // Mortise on left edge: X runs 0→slotWidth, Y runs along edge
-                    pockets.Add((materialThickness34 + additionalInset, materialThickness34 + additionalInset - slotWidth, mStart, mEnd));
+                    if (fullThicknessTenon)
+                    {
+                        pockets.Add((materialThickness34 + additionalInset, materialThickness34 + additionalInset - materialThickness34, mStart, mEnd));
+                    }
+                    else
+                    {
+                        pockets.Add((materialThickness34 + additionalInset, materialThickness34 + additionalInset - slotWidth, mStart, mEnd));
+                    }
                     break;
                 case MortiseEdge.Right:
                     // Mortise on right edge: X runs (partWidth-slotWidth)→partWidth

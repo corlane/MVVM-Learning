@@ -110,7 +110,6 @@ internal static class MortiseScrewHoleCalculator
                     holes.Add((holeX, holeY, radius));
                     break;
             }
-
         }
         return holes;
     }

@@ -1,5 +1,7 @@
-﻿using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Converters;
+using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using CorlaneCabinetOrderFormV3.Services;
 using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
@@ -22,7 +24,7 @@ internal static class PanelGeometryCalculator
         double length = part.Bounds.Width;
         double height = part.Bounds.Height;
         double dadoDepth = joinery.DadoDepth;
-
+        double materialThickness34 = MaterialDefaults.Thickness34;
         double stretcherWidth = 6;
 
         // ── Branch to Toekick Outline ──────────────────────────────────────────
@@ -211,6 +213,12 @@ internal static class PanelGeometryCalculator
                 else
                 {
                     mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0));
+                }
+
+                // Drawer Stretchers
+                if (baseCab.Style == CabinetStyles.Base.Standard && baseCab.DrwCount == 1)
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: ConvertDimension.FractionToDouble(baseCab.OpeningHeight1) + materialThickness34, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true));
                 }
             }
             else
