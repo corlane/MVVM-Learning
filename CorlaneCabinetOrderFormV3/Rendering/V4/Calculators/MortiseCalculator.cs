@@ -16,7 +16,10 @@ internal static class MortiseCalculator
         double partHeight,
         MortiseEdge edge,
         JoineryConfig joinery,
-        double additionalInset)
+        double additionalInset,
+        bool forceTwoTenons = false,
+        double blindStartOverride = 0,
+        double blindStopOverride = 0)
     {
         double materialThickness34 = MaterialDefaults.Thickness34;
 
@@ -24,7 +27,7 @@ internal static class MortiseCalculator
 
         // Get tenon ranges for positioning
         //var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery);
-        var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: edgeLength < 6.0);
+        var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: forceTwoTenons, blindStartOverride: blindStartOverride, blindStopOverride: blindStopOverride);
         double slotWidth = joinery.TenonThickness + joinery.TenonClearance;
         double oversize = joinery.MortiseOversize;
         //double blindStart = joinery.BlindStart;
