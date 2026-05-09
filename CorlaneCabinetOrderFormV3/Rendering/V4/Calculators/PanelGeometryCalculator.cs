@@ -49,6 +49,8 @@ internal static class PanelGeometryCalculator
                 outline.Add(new Vector2(tEnd, -dadoDepth));
                 outline.Add(new Vector2(tEnd, 0));
             }
+
+            // Tenon Thinning Pockets
             if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Bottom))
             {
                 if (length < 6)
@@ -74,12 +76,12 @@ internal static class PanelGeometryCalculator
 
             // Check to see if top stretcher front or drawer stretcher, if so, adjust blind start & blind stop so the part will have 2 tenons with 1 screw.
 
-            if (part.Name.Contains("Stretcher"))
+            if (part.Name.Contains("Stretcher")) // Force two tenons and adjust blind start/stop for stretchers
             {
                 tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
             }
 
-            if (part.Name.Equals("Toekick"))
+            if (part.Name.Equals("Toekick")) // Force two tenons and adjust blind start/stop for Toekick
             {
                 tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 0, blindStopOverride: 0, forceTwoTenons: true);
             }
@@ -91,6 +93,8 @@ internal static class PanelGeometryCalculator
                 outline.Add(new Vector2(length + dadoDepth, tEnd));
                 outline.Add(new Vector2(length, tEnd));
             }
+
+            // Tenon Thinning Pockets
             if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Right))
             {
                 if (height < 6)
@@ -128,6 +132,8 @@ internal static class PanelGeometryCalculator
                 outline.Add(new Vector2(tStart, height + dadoDepth));
                 outline.Add(new Vector2(tStart, height));
             }
+
+            // Tenon Thinning Pockets
             if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Top))
             {
                 if (length < 6)
@@ -151,12 +157,12 @@ internal static class PanelGeometryCalculator
             //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
 
-            if (part.Name.Contains("Stretcher"))
+            if (part.Name.Contains("Stretcher")) // Force two tenons and adjust blind start/stop for stretchers
             {
                 tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
             }
 
-            if (part.Name.Equals("Toekick"))
+            if (part.Name.Equals("Toekick")) // Force two tenons and adjust blind start/stop for Toekick
             {
                 tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 0, blindStopOverride: 0, forceTwoTenons: true);
             }
@@ -169,6 +175,8 @@ internal static class PanelGeometryCalculator
                 outline.Add(new Vector2(-dadoDepth, tStart));
                 outline.Add(new Vector2(0, tStart));
             }
+
+            // Tenon Thinning Pockets
             if (part.ThinningPockets.HasFlag(ThinningPocketEdge.Left))
             {
                 if (height < 6)
@@ -196,7 +204,7 @@ internal static class PanelGeometryCalculator
         {
             if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
-                if (baseCab.TopType == "Stretcher")
+                if (baseCab.TopType == "Stretcher") // Force two tenons and adjust blind start/stop for stretchers
                 {
                     mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25));
                 }
@@ -237,7 +245,7 @@ internal static class PanelGeometryCalculator
         {
             if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
-                if (baseCab.TopType == "Stretcher")
+                if (baseCab.TopType == "Stretcher") // Force two tenons and adjust blind start/stop for stretchers
                 {
                     holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(stretcherWidth, length, stretcherWidth, ScrewHoleEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25));
                 }
@@ -281,7 +289,7 @@ internal static class PanelGeometryCalculator
         }
 
 
-        // ── Mirror Right End Panels To Create Left End Panels ──────────────────────────────────────────────
+        // ── Mirror Left End Panels To Create Right End Panels ──────────────────────────────────────────────
         PartGeometry result = new PartGeometry(
             PartInfo: part,
             OutlineVertices: outline,
@@ -301,7 +309,7 @@ internal static class PanelGeometryCalculator
 
 
     /// <summary>
-    /// Generates end panel outline with rectangular toekick notch at bottom.
+    /// Generates a Left end panel outline with rectangular toekick notch at bottom.
     /// </summary>
     private static List<Vector2> BuildEndPanelWithToeKick(double length, double height, double tkHeight, double tkDepth)
     {

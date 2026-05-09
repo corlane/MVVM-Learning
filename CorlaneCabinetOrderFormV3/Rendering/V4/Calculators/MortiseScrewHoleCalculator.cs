@@ -55,6 +55,63 @@ internal static class MortiseScrewHoleCalculator
             }
             holes.Add((holeX, holeY, radius));
         }
+
+        // Add holes at the start and end of each mortise run (If ForceTwoTenons is false)
+        if (!forceTwoTenons)
+        {
+            double holeX, holeY;
+
+            // First hole (Left edge for horizontal, bottom edge for vertical)
+            switch (edge)
+            {
+                case ScrewHoleEdge.Left:
+                    holeX = edgeOffset + additionalInset;
+                    holeY = blindStartOverride - joinery.MortiseOversize - (joinery.GapWidth / 2);
+                    holes.Add((holeX, holeY, radius));
+                    break;
+                case ScrewHoleEdge.Right:
+                    holeX = partWidth - edgeOffset - additionalInset;
+                    holeY = blindStartOverride - joinery.MortiseOversize - (joinery.GapWidth / 2);
+                    holes.Add((holeX, holeY, radius));
+                    break;
+                case ScrewHoleEdge.Bottom:
+                    holeX = blindStartOverride - joinery.MortiseOversize - (joinery.GapWidth / 2);
+                    holeY = edgeOffset + additionalInset;
+                    holes.Add((holeX, holeY, radius));
+                    break;
+                case ScrewHoleEdge.Top:
+                    holeX = blindStartOverride - joinery.MortiseOversize - (joinery.GapWidth / 2);
+                    holeY = partHeight - edgeOffset - additionalInset;
+                    holes.Add((holeX, holeY, radius));
+                    break;
+            }
+
+            // Second hole (Right edge for horizontal, top edge for vertical)
+            switch (edge)
+            {
+                case ScrewHoleEdge.Left:
+                    holeX = edgeOffset + additionalInset;
+                    holeY = partHeight - blindStopOverride + joinery.MortiseOversize + (joinery.GapWidth / 2);
+                    holes.Add((holeX, holeY, radius));
+                    break;
+                case ScrewHoleEdge.Right:
+                    holeX = partWidth - edgeOffset - additionalInset;
+                    holeY = partHeight - blindStopOverride + joinery.MortiseOversize + (joinery.GapWidth / 2);
+                    holes.Add((holeX, holeY, radius));
+                    break;
+                case ScrewHoleEdge.Bottom:
+                    holeX = partWidth - blindStopOverride + joinery.MortiseOversize + (joinery.GapWidth / 2);
+                    holeY = edgeOffset + additionalInset;
+                    holes.Add((holeX, holeY, radius));
+                    break;
+                case ScrewHoleEdge.Top:
+                    holeX = partWidth - blindStopOverride + joinery.MortiseOversize + (joinery.GapWidth / 2);
+                    holeY = partHeight - edgeOffset - additionalInset;
+                    holes.Add((holeX, holeY, radius));
+                    break;
+            }
+
+        }
         return holes;
     }
 }
