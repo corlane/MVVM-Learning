@@ -192,13 +192,17 @@ internal static class PanelGeometryCalculator
 
 
         // ── Compute Mortise Pockets ──────────────────────────────────────────────
-        if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
+        if (part.MortiseEdges.HasFlag(MortiseEdge.Left)) // All of the end panel operations happen only on the left end because the right end panels are mirrored from the left end panels, so we only need to compute mortises on the left edge for the end panels and then mirror them to the right edge.
         {
             if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
                 if (baseCab.TopType == "Stretcher")
                 {
                     mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25));
+                }
+                else
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0));
                 }
             }
             else
@@ -231,7 +235,22 @@ internal static class PanelGeometryCalculator
         // ── Compute Screw Holes in Gaps ─────────────────────────────────────────
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left))
         {
-            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery, additionalInset: 0));
+            if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
+            {
+                if (baseCab.TopType == "Stretcher")
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(stretcherWidth, length, stretcherWidth, ScrewHoleEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25));
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery, additionalInset: 0));
+                }
+
+            }
+            else
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery, additionalInset: 0));
+            }
         }
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))

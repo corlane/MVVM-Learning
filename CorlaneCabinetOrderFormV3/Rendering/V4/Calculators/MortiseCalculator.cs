@@ -18,8 +18,8 @@ internal static class MortiseCalculator
         JoineryConfig joinery,
         double additionalInset,
         bool forceTwoTenons = false,
-        double blindStartOverride = 0,
-        double blindStopOverride = 0)
+        double blindStartOverride = 2,
+        double blindStopOverride = 2)
     {
         double materialThickness34 = MaterialDefaults.Thickness34;
 
