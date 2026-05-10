@@ -26,6 +26,7 @@ internal static class PanelGeometryCalculator
         double dadoDepth = joinery.DadoDepth;
         double materialThickness34 = MaterialDefaults.Thickness34;
         double stretcherWidth = 6;
+        double topStretcherBackWidth = 3;
 
         // ── Branch to Toekick Outline ──────────────────────────────────────────
         if (isEndPanelWithTk)
@@ -257,23 +258,37 @@ internal static class PanelGeometryCalculator
         }
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
+        {
             mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0));
+        }
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
-            // Nailer
-            if (part.Name.Equals("Nailer"))
+        {
+            if (part.Name.Contains("End"))
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25));
+                // Base Cab Back
+                if (part.Cabinet is BaseCabinetModel baseCab) 
+                {
+                    if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
+                    {
+                        mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true));
+                    }
+                    else
+                    {
+                        mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length - ConvertDimension.FractionToDouble(baseCab.TKHeight), length, height, MortiseEdge.Top, joinery, additionalInset: 0));
+                    }
+                }
             }
             else
             {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0));
             }
+        }
 
 
 
 
-        // ── Compute Screw Holes in Gaps ─────────────────────────────────────────
+        // ── Compute Assembly Screw Holes in Gaps ─────────────────────────────────────────
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left))
         {
 
@@ -287,6 +302,7 @@ internal static class PanelGeometryCalculator
                 if (baseCab.TopType == "Stretcher") // Force two tenons and adjust blind start/stop for stretchers
                 {
                     holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(stretcherWidth, length, stretcherWidth, ScrewHoleEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25));
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, height - topStretcherBackWidth, blindStopOverride: 0));
                 }
                 else
                 {
@@ -330,10 +346,32 @@ internal static class PanelGeometryCalculator
         }
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
+        {
             holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery, additionalInset: 0));
+        }
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
-            holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery, additionalInset: 0));
+        {
+            if (part.Name.Contains("End"))
+            {
+                // Base Cab Back
+                if (part.Cabinet is BaseCabinetModel baseCab)
+                {
+                    if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
+                    {
+                        holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(stretcherWidth, length, height, ScrewHoleEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true));
+                    }
+                    else
+                    {
+                        holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length - ConvertDimension.FractionToDouble(baseCab.TKHeight), length - ConvertDimension.FractionToDouble(baseCab.TKHeight), height, ScrewHoleEdge.Top, joinery, additionalInset: 0));
+                    }
+                }
+            }
+            else
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery, additionalInset: 0));
+            }
+        }
 
 
 
