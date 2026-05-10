@@ -1,4 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 
@@ -24,7 +25,7 @@ internal static class MortiseScrewHoleCalculator
         //var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery);
         var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: forceTwoTenons, blindStartOverride: blindStartOverride, blindStopOverride: blindStopOverride);
         double radius = joinery.ScrewPilotHoleDiameter / 2.0;
-        double edgeOffset = joinery.Thickness34 / 2.0;
+        double edgeOffset = MaterialDefaults.Thickness34 / 2.0;
 
         // Iterate through gaps between consecutive tenons
         for (int i = 0; i < tenonRanges.Count - 1; i++)
