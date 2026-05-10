@@ -27,6 +27,7 @@ internal static class PanelGeometryCalculator
         double materialThickness34 = MaterialDefaults.Thickness34;
         double stretcherWidth = 6;
         double topStretcherBackWidth = 3;
+        double upperNailerWidth = 4;
 
         // ── Branch to Toekick Outline ──────────────────────────────────────────
         if (isEndPanelWithTk)
@@ -42,7 +43,6 @@ internal static class PanelGeometryCalculator
         // Bottom Edge
         if (part.TenonEdges.HasFlag(TenonEdge.Bottom))
         {
-            //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
             outline.Add(new Vector2(joinery.BlindStart, 0));
             foreach (var (tStart, tEnd) in tenons)
@@ -74,7 +74,6 @@ internal static class PanelGeometryCalculator
         // Right Edge
         if (part.TenonEdges.HasFlag(TenonEdge.Right))
         {
-            //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
 
             // Check to see if top stretcher front or drawer stretcher, if so, adjust blind start & blind stop so the part will have 2 tenons with 1 screw.
@@ -125,7 +124,6 @@ internal static class PanelGeometryCalculator
         // Top Edge (Reverse order for winding)
         if (part.TenonEdges.HasFlag(TenonEdge.Top))
         {
-            //var tenons = TenonCalculator.ComputeTenonRanges(length, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(length, joinery, forceTwoTenons: length < 6);
             for (int i = tenons.Count - 1; i >= 0; i--)
             {
@@ -157,7 +155,6 @@ internal static class PanelGeometryCalculator
         // Left Edge (Reverse order for winding)
         if (part.TenonEdges.HasFlag(TenonEdge.Left))
         {
-            //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
 
             if (part.Name.Contains("Stretcher") || part.Name.Equals("Nailer")) // Force two tenons and adjust blind start/stop for stretchers
@@ -202,7 +199,7 @@ internal static class PanelGeometryCalculator
 
 
 
-        // ── Compute Mortise Pockets ──────────────────────────────────────────────
+        // ── Compute Mortises to match Tenons of adjoining parts  ──────────────────────────────────────────────
         if (part.MortiseEdges.HasFlag(MortiseEdge.Left)) // All of the end panel operations happen only on the left end because the right end panels are mirrored from the left end panels, so we only need to compute mortises on the left edge for the end panels and then mirror them to the right edge.
         {
             if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
@@ -271,13 +268,29 @@ internal static class PanelGeometryCalculator
                 {
                     if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
                     {
+                        // Mortises for Nailer
                         mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true));
                     }
                     else
                     {
+                        // Mortises for 3/4" Back
                         mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length - ConvertDimension.FractionToDouble(baseCab.TKHeight), length, height, MortiseEdge.Top, joinery, additionalInset: 0));
                     }
                 }
+                // Upper Cab Back
+                else if (part.Cabinet is UpperCabinetModel upperCab)
+                {
+                    if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
+                    {
+                        mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(upperNailerWidth, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true));
+                    }
+                    else
+                    {
+                        mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0));
+                    }
+                }
+
+
             }
             else
             {
@@ -364,6 +377,18 @@ internal static class PanelGeometryCalculator
                     else
                     {
                         holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length - ConvertDimension.FractionToDouble(baseCab.TKHeight), length - ConvertDimension.FractionToDouble(baseCab.TKHeight), height, ScrewHoleEdge.Top, joinery, additionalInset: 0));
+                    }
+                }
+                // Upper Cab Back
+                else if (part.Cabinet is UpperCabinetModel upperCab)
+                {
+                    if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
+                    {
+                        holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(upperNailerWidth, length, height, ScrewHoleEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true));
+                    }
+                    else
+                    {
+                        holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery, additionalInset: 0));
                     }
                 }
             }
