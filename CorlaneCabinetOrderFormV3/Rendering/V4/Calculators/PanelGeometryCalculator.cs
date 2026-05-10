@@ -246,7 +246,14 @@ internal static class PanelGeometryCalculator
         {
             if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight));
+                if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight));
+                }
+                else
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height - materialThickness34, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight));
+                }
             }
             else
             {
@@ -350,7 +357,14 @@ internal static class PanelGeometryCalculator
         {
             if (part.Cabinet is BaseCabinetModel baseCab)
             {
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery, additionalInset: part.TkHeight));
+                if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery, additionalInset: part.TkHeight));
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height - materialThickness34, length, height, ScrewHoleEdge.Right, joinery, additionalInset: part.TkHeight));
+                }
             }
             else
             {

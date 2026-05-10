@@ -20,8 +20,6 @@ internal static class TenonCalculator
         var blindStart = blindStartOverride ?? joinery.BlindStart;
         var blindStop = blindStopOverride ?? joinery.BlindStop;
 
-        //if (forceTwoTenons) { blindStart = 0; blindStop = 0;  }
-
         double usableStart = blindStart;
         double usableEnd = edgeLength - blindStop;
         double usableLength = usableEnd - usableStart;
@@ -61,7 +59,7 @@ internal static class TenonCalculator
     {
         // Simple heuristic: 1 tenon for short edges, more for longer ones
         // Mirrors existing GapCount logic but isolated
-        if (usableLength < 10) return 1;
+        if (usableLength < 9) return 1;
         if (usableLength < 20) return 2;
         if (usableLength < 30) return 3;
         return 4;

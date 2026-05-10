@@ -50,7 +50,12 @@ internal static class CabinetInputAdapter
             "Top Stretcher (Front)" or "Drawer Stretcher" => TenonEdge.Left | TenonEdge.Right,
             "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
             "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom,
-            "Deck" => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
+            "Deck" when cabinet is BaseCabinetModel baseCab && ConvertDimension.FractionToDouble(baseCab.BackThickness) != 0.25 => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
+            "Deck" when cabinet is BaseCabinetModel baseCab && ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
+            "Deck" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) != 0.25 => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
+            "Deck" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
+            "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) != 0.25 => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
+            "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
             "Nailer" => TenonEdge.Left | TenonEdge.Right | TenonEdge.Top,
             _ => TenonEdge.None
         };
@@ -66,6 +71,8 @@ internal static class CabinetInputAdapter
             "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom,
             "Deck" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
             "Nailer" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Top,
+            "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) != 0.25 => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
+            "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
             _ => ThinningPocketEdge.None
         };
     }
