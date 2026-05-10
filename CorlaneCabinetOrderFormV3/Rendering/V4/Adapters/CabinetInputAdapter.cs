@@ -1,4 +1,5 @@
-﻿using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Converters;
+using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 using CorlaneCabinetOrderFormV3.Services;
@@ -26,10 +27,10 @@ internal static class CabinetInputAdapter
                 Bounds: new PartBounds(entry.LengthIn, entry.WidthIn),
                 Material: entry.Species,
                 Quantity: entry.Qty,
-                TenonEdges: ResolveTenonEdges(entry.PartName),
-                MortiseEdges: ResolveMortiseEdges(entry.PartName),
-                ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName), // This automatically adds screw holes where there are mortises. Can be changed to be independent.
-                ThinningPockets: ResolveTenonThinningEdges(entry.PartName),
+                TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
+                MortiseEdges: ResolveMortiseEdges(entry.PartName, cabinet),
+                ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName, cabinet), // This automatically adds screw holes where there are mortises. Can be changed to be independent.
+                ThinningPockets: ResolveTenonThinningEdges(entry.PartName, cabinet),
                 EdgeBand: entry.EdgeBandSpecies,
                 Notes: entry.Notes,
                 TkHeight: tkHeight,
@@ -41,37 +42,42 @@ internal static class CabinetInputAdapter
         return mapped;
     }
 
-    private static TenonEdge ResolveTenonEdges(string partName)
+    private static TenonEdge ResolveTenonEdges(string partName, CabinetModel? cabinet)
     {
         return partName switch
         {
             "Toekick" or "Toekick (Left)" or "Toekick (Right)" => TenonEdge.Top | TenonEdge.Left | TenonEdge.Right,
             "Top Stretcher (Front)" or "Drawer Stretcher" => TenonEdge.Left | TenonEdge.Right,
-            "Back" => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
+            "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
+            "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom,
             "Deck" => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
+            "Nailer" => TenonEdge.Left | TenonEdge.Right | TenonEdge.Top,
             _ => TenonEdge.None
         };
     }
 
-    private static ThinningPocketEdge ResolveTenonThinningEdges(string partName)
+    private static ThinningPocketEdge ResolveTenonThinningEdges(string partName, CabinetModel? cabinet)
     {
         return partName switch
         {
             "Toekick" or "Toekick (Left)" or "Toekick (Right)" => ThinningPocketEdge.Top | ThinningPocketEdge.Left | ThinningPocketEdge.Right,
             "Top Stretcher (Front)" => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
-            "Back" => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom | ThinningPocketEdge.Left,
+            "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom | ThinningPocketEdge.Left,
+            "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom,
             "Deck" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
+            "Nailer" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Top,
             _ => ThinningPocketEdge.None
         };
     }
 
 
-    private static MortiseEdge ResolveMortiseEdges(string partName)
+    private static MortiseEdge ResolveMortiseEdges(string partName, CabinetModel? cabinet)
     {
         return partName.ToLowerInvariant() switch
         {
-            "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right,
-            "back" => MortiseEdge.Right,
+            "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
+            "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseEdge.Right,
+            "back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseEdge.Right | MortiseEdge.Left,
             "top stretcher (back)" => MortiseEdge.Bottom,
             _ => MortiseEdge.None
         };

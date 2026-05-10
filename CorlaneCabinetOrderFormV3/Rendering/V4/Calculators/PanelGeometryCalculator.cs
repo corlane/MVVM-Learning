@@ -78,7 +78,7 @@ internal static class PanelGeometryCalculator
 
             // Check to see if top stretcher front or drawer stretcher, if so, adjust blind start & blind stop so the part will have 2 tenons with 1 screw.
 
-            if (part.Name.Contains("Stretcher")) // Force two tenons and adjust blind start/stop for stretchers
+            if (part.Name.Contains("Stretcher") || part.Name.Equals("Nailer")) // Force two tenons and adjust blind start/stop for stretchers
             {
                 tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
             }
@@ -105,7 +105,7 @@ internal static class PanelGeometryCalculator
                 }
                 else
                 {
-                    if (part.Name.Equals("Top Stretcher (Front)"))
+                    if (part.Name.Equals("Top Stretcher (Front)") || part.Name.Equals("Nailer"))
                     {
                         thinningPockets.Add((length, length, 0, height));
                     }
@@ -159,7 +159,7 @@ internal static class PanelGeometryCalculator
             //var tenons = TenonCalculator.ComputeTenonRanges(height, joinery);
             var tenons = TenonCalculator.ComputeTenonRanges(height, joinery, forceTwoTenons: height < 6);
 
-            if (part.Name.Contains("Stretcher")) // Force two tenons and adjust blind start/stop for stretchers
+            if (part.Name.Contains("Stretcher") || part.Name.Equals("Nailer")) // Force two tenons and adjust blind start/stop for stretchers
             {
                 tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
             }
@@ -187,7 +187,7 @@ internal static class PanelGeometryCalculator
                 }
                 else
                 {
-                    if (part.Name.Equals("Top Stretcher (Front)"))
+                    if (part.Name.Equals("Top Stretcher (Front)") || part.Name.Equals("Nailer"))
                     {
                         thinningPockets.Add((0, 0, 0, height));
                     }
@@ -260,7 +260,15 @@ internal static class PanelGeometryCalculator
             mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0));
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
-            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0));
+            // Nailer
+            if (part.Name.Equals("Nailer"))
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25));
+            }
+            else
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0));
+            }
 
 
 
@@ -307,8 +315,6 @@ internal static class PanelGeometryCalculator
             {
                 holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery, additionalInset: 0));
             }
-
-
         }
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))
@@ -333,9 +339,16 @@ internal static class PanelGeometryCalculator
 
 
         // ── Compute Shelf Holes ─────────────────────────────────────────
-        if (part.Name.Contains("End", StringComparison.OrdinalIgnoreCase))
+        if (part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.Cabinet is BaseCabinetModel || part.Cabinet is UpperCabinetModel)
         {
-            holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery));
+            if (part.Cabinet is BaseCabinetModel baseCab && part.Cabinet.Style != CabinetStyles.Base.Drawer & baseCab.DrillShelfHoles == true)
+            {
+                holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery));
+            }
+            else if (part.Cabinet is UpperCabinetModel upperCab && upperCab.DrillShelfHoles == true)
+            {
+                holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery));
+            }
         }
 
 
