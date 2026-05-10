@@ -8,6 +8,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -608,6 +609,8 @@ public partial class POBatchListViewModel : ObservableObject
             // ── Iterate cabinets to preserve dimensional context ────────────────
             foreach (var cabinet in _cabinetService.Cabinets)
             {
+                double materialThickness34 = SetMaterialThicknessBySpecies(cabinet.Species);
+
                 string label = PartsListBuilder.FormatLabel(cabinet, index++);
                 var parts = PartsListBuilder.BuildForCabinet(cabinet, label);
 
@@ -630,8 +633,8 @@ public partial class POBatchListViewModel : ObservableObject
                         joinerySettings,
                         tkHeight: tkHeight,
                         tkDepth: tkDepth,
-                        cabinetModel: cabinet
-                        
+                        cabinetModel: cabinet,
+                        materialThickness34: materialThickness34
                     );
 
                     if (!pipeline.ValidateInput()) continue;
@@ -639,7 +642,9 @@ public partial class POBatchListViewModel : ObservableObject
                     string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
                     string filePath = Path.Combine(dlg.FolderName, safeName + ".dxf");
 
-                    pipeline.ExportToFile(filePath);
+                    Debug.WriteLine($"Exporting {filePath} with material thickness {materialThickness34}\"");
+
+                    pipeline.ExportToFile(filePath, materialThickness34);
                 }
             }
 
@@ -662,4 +667,56 @@ public partial class POBatchListViewModel : ObservableObject
         return name;
     }
 
+
+    // Material thicknesses
+    [ObservableProperty] public partial double PrefinishedPly { get; set; } = MaterialSpeciesThickness.PrefinishedPly;
+    [ObservableProperty] public partial double MaplePly { get; set; } = MaterialSpeciesThickness.MaplePly;
+    [ObservableProperty] public partial double RedOakPly { get; set; } = MaterialSpeciesThickness.RedOakPly;
+    [ObservableProperty] public partial double WhiteOakPly { get; set; } = MaterialSpeciesThickness.WhiteOakPly;
+    [ObservableProperty] public partial double CherryPly { get; set; } = MaterialSpeciesThickness.CherryPly;
+    [ObservableProperty] public partial double AlderPly { get; set; } = MaterialSpeciesThickness.AlderPly;
+    [ObservableProperty] public partial double MahoganyPly { get; set; } = MaterialSpeciesThickness.MahoganyPly;
+    [ObservableProperty] public partial double WalnutPly { get; set; } = MaterialSpeciesThickness.WalnutPly;
+    [ObservableProperty] public partial double HickoryPly { get; set; } = MaterialSpeciesThickness.HickoryPly;
+    [ObservableProperty] public partial double MDF { get; set; } = MaterialSpeciesThickness.MDF;
+    [ObservableProperty] public partial double WhiteMelamine { get; set; } = MaterialSpeciesThickness.WhiteMelamine;
+    [ObservableProperty] public partial double BlackMelamine { get; set; } = MaterialSpeciesThickness.BlackMelamine;
+    [ObservableProperty] public partial double Custom { get; set; } = MaterialSpeciesThickness.Custom;
+
+    private double SetMaterialThicknessBySpecies(string species)
+    {
+        MaterialSpeciesThickness.PrefinishedPly = PrefinishedPly;
+        MaterialSpeciesThickness.MaplePly = MaplePly;
+        MaterialSpeciesThickness.RedOakPly = RedOakPly;
+        MaterialSpeciesThickness.WhiteOakPly = WhiteOakPly;
+        MaterialSpeciesThickness.CherryPly = CherryPly;
+        MaterialSpeciesThickness.AlderPly = AlderPly;
+        MaterialSpeciesThickness.MahoganyPly = MahoganyPly;
+        MaterialSpeciesThickness.WalnutPly = WalnutPly;
+        MaterialSpeciesThickness.HickoryPly = HickoryPly;
+        MaterialSpeciesThickness.MDF = MDF;
+        MaterialSpeciesThickness.WhiteMelamine = WhiteMelamine;
+        MaterialSpeciesThickness.BlackMelamine = BlackMelamine;
+        MaterialSpeciesThickness.Custom = Custom;
+
+        double materialThickness34 = 0.75;
+
+        if (species == "Prefinished Ply") materialThickness34 = MaterialSpeciesThickness.PrefinishedPly;
+        else if (species == "Maple Ply") materialThickness34 = MaterialSpeciesThickness.MaplePly;
+        else if (species == "Red Oak Ply") materialThickness34 = MaterialSpeciesThickness.RedOakPly;
+        else if (species == "White Oak Ply") materialThickness34 = MaterialSpeciesThickness.WhiteOakPly;
+        else if (species == "Cherry Ply") materialThickness34 = MaterialSpeciesThickness.CherryPly;
+        else if (species == "Alder Ply") materialThickness34 = MaterialSpeciesThickness.AlderPly;
+        else if (species == "Mahogany Ply") materialThickness34 = MaterialSpeciesThickness.MahoganyPly;
+        else if (species == "Walnut Ply") materialThickness34 = MaterialSpeciesThickness.WalnutPly;
+        else if (species == "Hickory Ply") materialThickness34 = MaterialSpeciesThickness.HickoryPly;
+        else if (species == "MDF") materialThickness34 = MaterialSpeciesThickness.MDF;
+        else if (species == "White Melamine") materialThickness34 = MaterialSpeciesThickness.WhiteMelamine;
+        else if (species == "Black Melamine") materialThickness34 = MaterialSpeciesThickness.BlackMelamine;
+        else if (species == "Custom") materialThickness34 = MaterialSpeciesThickness.Custom;
+
+        Debug.WriteLine($"Set material thickness for species '{species}' to {materialThickness34}\"");
+
+        return (materialThickness34);
+    }
 }

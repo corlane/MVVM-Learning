@@ -18,9 +18,11 @@ internal class DxfExportPipeline
         double tkHeight = 0,
         double tkDepth = 0,
         CabinetModel? cabinetModel = null,
-        BaseCabinetDimensions? baseCabDim = null)
+        BaseCabinetDimensions? baseCabDim = null,
+        double materialThickness34 = 0
+        )
     {
-        _parts = CabinetInputAdapter.MapParts(existingParts, settings, tkHeight, tkDepth, cabinetModel);
+        _parts = CabinetInputAdapter.MapParts(existingParts, settings, tkHeight, tkDepth, cabinetModel, baseCabDim, materialThickness34);
         _config = CabinetInputAdapter.MapSettings(settings);
     }
 
@@ -29,22 +31,22 @@ internal class DxfExportPipeline
         return _parts.All(p => p.Bounds.Width > 0 && p.Bounds.Height > 0);
     }
 
-    internal DxfDocument GenerateDxf()
+    internal DxfDocument GenerateDxf(double materialThickness34)
     {
         var geometries = new List<PartGeometry>();
 
         foreach (var part in _parts)
         {
-            var geometry = PanelGeometryCalculator.Compute(part, _config, part.Cabinet!);
+            var geometry = PanelGeometryCalculator.Compute(part, _config, part.Cabinet!, materialThickness34);
             geometries.Add(geometry);
         }
 
         return DxfWriter.GenerateDxf(geometries);
     }
 
-    internal void ExportToFile(string filePath)
+    internal void ExportToFile(string filePath, double materialThickness34)
     {
-        var doc = GenerateDxf();
+        var doc = GenerateDxf(materialThickness34);
         doc.Save(filePath);
     }
 }

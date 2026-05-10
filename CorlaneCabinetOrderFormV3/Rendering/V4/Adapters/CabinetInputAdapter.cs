@@ -11,7 +11,10 @@ internal static class CabinetInputAdapter
         LockDadoSettings? settings = null,
         double tkHeight = 0,
         double tkDepth = 0,
-        CabinetModel? cabinet = null)
+        CabinetModel? cabinet = null,
+        BaseCabinetDimensions? baseCabDim = null,
+        double materialThickness34 = 0
+        )
     {
         var mapped = new List<PartInfo>();
 
@@ -25,7 +28,7 @@ internal static class CabinetInputAdapter
             var mappedPart = new PartInfo(
                 Name: entry.PartName,
                 Bounds: new PartBounds(entry.LengthIn, entry.WidthIn),
-                Material: entry.Species,
+                Species: entry.Species,
                 Quantity: entry.Qty,
                 TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
                 MortiseEdges: ResolveMortiseEdges(entry.PartName, cabinet),
@@ -105,8 +108,8 @@ internal static class CabinetInputAdapter
             MortiseOversize: s.MortiseOversize,
             GapWidth: s.GapWidth,
             GapSpacing: s.GapSpacing,
-            ScrewPilotHoleDiameter: s.ScrewPilotHoleDiameter,
-            Thickness34: MaterialDefaults.Thickness34
+            ScrewPilotHoleDiameter: s.ScrewPilotHoleDiameter
+            //Thickness34: MaterialDefaults.Thickness34
         );
     }
 }

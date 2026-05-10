@@ -53,7 +53,7 @@ internal enum ThinningPocketEdge
 internal record PartInfo(
     string Name,
     PartBounds Bounds,
-    string Material,
+    string Species,
     int Quantity,
     TenonEdge TenonEdges,
     MortiseEdge MortiseEdges,
@@ -63,7 +63,8 @@ internal record PartInfo(
     string? Notes,
     double TkHeight = 0,
     double TkDepth = 0,
-    CabinetModel? Cabinet = null);
+    CabinetModel? Cabinet = null
+    );
 
 /// <summary>
 /// Standardized joinery configuration for the new pipeline.
@@ -80,5 +81,5 @@ internal record JoineryConfig(
     double GapWidth,
     double GapSpacing,
     double ScrewPilotHoleDiameter,
-    double Thickness34,
+    //double Thickness34,
     double TenonThinningOverrun = 0.375);

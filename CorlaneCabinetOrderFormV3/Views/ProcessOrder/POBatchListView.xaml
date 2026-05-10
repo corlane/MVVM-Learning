@@ -50,7 +50,64 @@
                        Text="{Binding TotalCabinetEntries, StringFormat=Total Qty: {0}}"/>
         </StackPanel>
 
+        <StackPanel Grid.Row="4">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Prefinished Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding PrefinishedPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Maple Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MaplePly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Red Oak Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding RedOakPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="White Oak Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WhiteOakPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Cherry Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding CherryPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Alder Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding AlderPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Mahogany Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MahoganyPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Walnut Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WalnutPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Hickory Ply Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding HickoryPly}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="MDF Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MDF}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="White Melamine Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WhiteMelamine}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Black Melamine Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding BlackMelamine}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Custom Actual Thickness:" Margin="10,6,0,0"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding Custom}"/>
+            </StackPanel>
+
+        </StackPanel>
+
         <DataGrid Grid.Row="4"
+                  Visibility="Collapsed"
                   ItemsSource="{Binding Rows}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"

@@ -20,9 +20,10 @@ internal static class MortiseCalculator
         bool forceTwoTenons = false,
         double blindStartOverride = 2,
         double blindStopOverride = 2,
-        bool fullThicknessTenon = false)
+        bool fullThicknessTenon = false,
+        double materialThickness34 = 0)
     {
-        double materialThickness34 = MaterialDefaults.Thickness34;
+        //double materialThickness34 = MaterialDefaults.Thickness34;
 
         var pockets = new List<(double, double, double, double)>();
 

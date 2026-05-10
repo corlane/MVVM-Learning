@@ -15,7 +15,8 @@ internal static class TenonCalculator
         JoineryConfig joinery,
         bool forceTwoTenons = false,
         double? blindStartOverride = null,
-        double? blindStopOverride = null)
+        double? blindStopOverride = null,
+        double materialThickness34 = 0)
     {
         var blindStart = blindStartOverride ?? joinery.BlindStart;
         var blindStop = blindStopOverride ?? joinery.BlindStop;
