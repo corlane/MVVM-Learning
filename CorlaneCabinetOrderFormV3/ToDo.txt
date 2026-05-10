@@ -50,6 +50,8 @@ TESTING NOTES:
 	
 Upper cabinet nailer is 4" wide, so forcetwotenons with 1.25" blindstart/stop doesn't work. How are the actual ones constructed? And do upper tops and decks have thru-mortises to attach the nailers?
 
+Pass Material Thickness by species thru DXF export pipeline so that calculators can use it for tenon/gap/shelf hole placement instead of hardcoding 0.75".
+
 ---------------------------------------------------------------------------------------------------------------------------------------------
 📋 DXF Export Pipeline Refactoring (V4) – Session Summary & Current Status
 
