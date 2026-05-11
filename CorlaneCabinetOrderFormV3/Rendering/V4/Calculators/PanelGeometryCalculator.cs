@@ -12,23 +12,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 internal static class PanelGeometryCalculator
 {
     internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery, CabinetModel cabinet, double materialThickness34)
-    {
-        //double materialThickness34 = MaterialDefaults.Thickness34;
-
-        //if (part.Species == "Prefinished Ply") materialThickness34 = MaterialSpeciesThickness.PrefinishedPly;
-        //else if (part.Species == "Maple Ply") materialThickness34 = MaterialSpeciesThickness.MaplePly;
-        //else if (part.Species == "Red Oak Ply") materialThickness34 = MaterialSpeciesThickness.RedOakPly;
-        //else if (part.Species == "White Oak Ply") materialThickness34 = MaterialSpeciesThickness.WhiteOakPly;
-        //else if (part.Species == "Cherry Ply") materialThickness34 = MaterialSpeciesThickness.CherryPly;
-        //else if (part.Species == "Alder Ply") materialThickness34 = MaterialSpeciesThickness.AlderPly;
-        //else if (part.Species == "Mahogany Ply") materialThickness34 = MaterialSpeciesThickness.MahoganyPly;
-        //else if (part.Species == "Walnut Ply") materialThickness34 = MaterialSpeciesThickness.WalnutPly;
-        //else if (part.Species == "Hickory Ply") materialThickness34 = MaterialSpeciesThickness.HickoryPly;
-        //else if (part.Species == "MDF") materialThickness34 = MaterialSpeciesThickness.MDF;
-        //else if (part.Species == "White Melamine") materialThickness34 = MaterialSpeciesThickness.WhiteMelamine;
-        //else if (part.Species == "Black Melamine") materialThickness34 = MaterialSpeciesThickness.BlackMelamine;
-        //else if (part.Species == "Custom") materialThickness34 = MaterialSpeciesThickness.Custom;
-        
+    {        
         Debug.WriteLine($"Material Thickness for {part.Species}: {materialThickness34}\"");
 
         bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.TkHeight > 0 && part.TkDepth > 0;

@@ -50,7 +50,6 @@ TESTING NOTES:
 	
 Upper cabinet nailer is 4" wide, so forcetwotenons with 1.25" blindstart/stop doesn't work. How are the actual ones constructed? And do upper tops and decks have thru-mortises to attach the nailers?
 
-Material thickness is passing through properly now. Holes and  mortise widths are obviously referencing an old materialThickness34.
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
