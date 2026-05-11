@@ -643,9 +643,7 @@ public partial class POBatchListViewModel : ObservableObject
                     string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
                     string filePath = Path.Combine(dlg.FolderName, safeName + ".dxf");
 
-                    Debug.WriteLine($"Exporting {filePath} with material thickness {materialThickness34}\"");
-
-                    pipeline.ExportToFile(filePath, materialThickness34);
+                    pipeline.ExportToFile(filePath);
                 }
             }
 

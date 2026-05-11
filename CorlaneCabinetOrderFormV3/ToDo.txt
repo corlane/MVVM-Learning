@@ -46,80 +46,10 @@ Upper angle front not showing calculated front width. AGAIN. It is only on initi
 
 
 
-TESTING NOTES:
+
 	
 Upper cabinet nailer is 4" wide, so forcetwotenons with 1.25" blindstart/stop doesn't work. How are the actual ones constructed? And do upper tops and decks have thru-mortises to attach the nailers?
 
+Still need to add hinge holes to DXF pipeline.
 
-
----------------------------------------------------------------------------------------------------------------------------------------------
-📋 DXF Export Pipeline Refactoring (V4) – Session Summary & Current Status
-
-🎯 Objective
-Refactor legacy DxfExporter into a modular, unit-testable V4 pipeline that decouples geometry calculations from netDxf until the final rendering step, while preserving WYSIWYG accuracy with the 3D rendering pipeline.
-
-🏗️ Final Architecture: Rendering.V4
-
-Core Models (PartBounds.cs, PartGeometry.cs, Vector2struct.cs): Lightweight Vector2 struct, PartBounds record, flag enums (TenonEdge, MortiseEdge, ScrewHoleEdge, ThinningPocketEdge), PartInfo record, JoineryConfig record, PartGeometry DTO.
-Adapters (CabinetInputAdapter.cs): Maps legacy PartListEntry → V4 PartInfo, resolves edge flags, enriches end panels with toekick dims, maps LockDadoSettings → JoineryConfig.
-Calculators (TenonCalculator.cs, PanelGeometryCalculator.cs, MortiseCalculator.cs, MortiseScrewHoleCalculator.cs, PartGeometryExtensions.cs): Pure math logic for tenon ranges, panel outlines (standard + toekick), mortise pockets, screw holes, and vertical mirroring.
-DXF Layer (DxfLayerManager.cs, DxfWriter.cs): Defines CNC layers with ACI colors, converts PartGeometry → DxfDocument (polylines, rectangles, circles), assigns layers.
-Orchestrator (DxfExportPipeline.cs): Wires adapters → calculators → writer, validates input, exports to file.
-✅ Completed & Verified
-
-V4 pipeline compiles and exports DXF correctly
-Toekick notch geometry renders on end panels
-Tenon outlines and thinning pockets generate correctly
-Mortise pockets compute/render on designated edges, centered on tenons with full oversize expansion
-Screw holes place correctly in gaps between mortises, offset by half material thickness
-Right End panels mirror across vertical centerline
-Layer assignment and ACI colors match CNC requirements
-Per-part DXF file splitting matches original behavior
-CabinetInputAdapter correctly populates PartInfo without silent drops
-🔧 Bug Fixed
-
-Issue: MortiseScrewHoleCalculator produced no holes when forceTwoTenons was true for short edges (< 6.0).
-Root Cause: Calculator called TenonCalculator.ComputeTenonRanges(edgeLength, joinery) without forceTwoTenons, falling back to heuristic that returned 1 tenon → 0 gaps → loop skipped.
-Fix: Updated call to TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: edgeLength < 6.0) to align with MortiseCalculator.
-📦 Shelf Hole Integration (In Progress)
-
-Specs: 0.19685" diameter (5mm), blind holes, DrillHolesBlind layer, constants: spacing 1.26, Y start offset 6, X offsets 1 and -1 from edges, drawer-aware maxY cutoff.
-Changes Provided:
-Added BaseCabinetModel? CabinetContext = null to PartInfo
-Updated CabinetInputAdapter.MapParts() to accept & attach cabinetContext to end panels
-Created V4 ShelfHoleCalculator.cs using legacy logic + constants
-Added call in PanelGeometryCalculator.Compute() for end panels
-Updated DxfExportPipeline constructor to accept & pass cabinetContext
-Noted export command integration update
-Current Status: Holes are not rendering. Diagnostic checklist provided:
-Verify shelf hole call is outside the if/else toekick branch (must run for all end panels)
-Confirm part.CabinetContext is actually attached & non-null
-Verify holes are added to holes list (not holesThru)
-Check BaseCabinetDimensions.From() isn't failing/returning bad dims
-Validate coordinates fall within 0 → Width and 0 → Height
-Pending: User to report which diagnostic step fails so exact fix can be applied.
-📝 Remaining Tasks
-
-Fine-tune tenon range calculations and placement
-Verify mortise-to-tenon alignment with mating parts
-Implement special-case mortise routing
-Update layer names to dynamic thickness values
-Add unit tests for calculators
-Integrate hinge/drawer slide hole calculators into V4 flow
-Performance optimization for large batches
-🧠 Key Architectural Constraints & Decisions
-
-netDxf only touched in DXF layer; geometry math isolated in Calculators
-PartInfo and PartGeometry are immutable records
-Flag enums control joinery/placement per part independently
-Post-calculation mirroring applied only to "Right End" panels
-Tuple-based geometry (x1, x2, y1, y2) or (x, y, radius) for simplicity
-Cabinet context (toekick dims, shelf config) injected through pipeline constructor, not stored in parts
-Coordinate system: (0,0) bottom-left, X=width, Y=height
-🚀 How to Continue in Next Chat
-Paste this summary, then specify:
-
-Which diagnostic step failed for shelf holes (or confirm they're now rendering)
-Which remaining task to tackle next (tenon fine-tuning, dynamic layers, hinge/drawer calculators, unit tests, etc.)
-Any new legacy code/config to adapt into V4
-The pipeline is structurally complete and ready for precision adjustments and remaining feature integrations.
+TESTING NOTES:
