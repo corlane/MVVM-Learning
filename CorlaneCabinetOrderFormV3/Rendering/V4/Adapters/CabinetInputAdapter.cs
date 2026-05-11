@@ -22,8 +22,10 @@ internal static class CabinetInputAdapter
         {
             // Enrich end panels with cabinet toekick dimensions
             bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
-            double partTkH = isEndPanel ? tkHeight : 0;
-            double partTkD = isEndPanel ? tkDepth : 0;
+            double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
+            double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
+            //double partTkH = isEndPanel ? tkHeight : 0;
+            //double partTkD = isEndPanel ? tkDepth : 0;
 
             var mappedPart = new PartInfo(
                 Name: entry.PartName,
@@ -38,7 +40,7 @@ internal static class CabinetInputAdapter
                 Notes: entry.Notes,
                 TkHeight: tkHeight,
                 TkDepth: tkDepth,
-                Cabinet: isEndPanel ? cabinet : null
+                cabinet
                 );
             mapped.Add( mappedPart );
         }
@@ -59,7 +61,9 @@ internal static class CabinetInputAdapter
             "Deck" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
             "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) != 0.25 => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
             "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
-            "Nailer" => TenonEdge.Left | TenonEdge.Right | TenonEdge.Top,
+            "Nailer" when cabinet is BaseCabinetModel => TenonEdge.Left | TenonEdge.Right | TenonEdge.Top,
+            "Nailer" when cabinet is UpperCabinetModel => TenonEdge.Left | TenonEdge.Right,
+
             _ => TenonEdge.None
         };
     }
@@ -73,7 +77,8 @@ internal static class CabinetInputAdapter
             "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom | ThinningPocketEdge.Left,
             "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom,
             "Deck" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
-            "Nailer" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Top,
+            "Nailer" when cabinet is BaseCabinetModel => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Top,
+            "Nailer" when cabinet is UpperCabinetModel => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
             "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) != 0.25 => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
             "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
             _ => ThinningPocketEdge.None

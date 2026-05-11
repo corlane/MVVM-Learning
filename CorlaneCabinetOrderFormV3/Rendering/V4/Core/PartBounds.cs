@@ -63,7 +63,7 @@ internal record PartInfo(
     string? Notes,
     double TkHeight = 0,
     double TkDepth = 0,
-    CabinetModel? Cabinet = null
+    CabinetModel? CabinetModel = null
     );
 
 /// <summary>

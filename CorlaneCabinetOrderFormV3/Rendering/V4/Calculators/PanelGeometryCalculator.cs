@@ -82,7 +82,15 @@ internal static class PanelGeometryCalculator
 
             if (part.Name.Contains("Stretcher") || part.Name.Equals("Nailer")) // Force two tenons and adjust blind start/stop for stretchers
             {
-                tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
+
+                if (cabinet is BaseCabinetModel)
+                {
+                    tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
+                }
+                else if (cabinet is UpperCabinetModel && part.Name.Contains("Nailer")) // Upper cabinets have 1 tenon on nailers
+                {
+                    tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1, blindStopOverride: 1, forceTwoTenons: false);
+                }
             }
 
             if (part.Name.Equals("Toekick")) // Force two tenons and adjust blind start/stop for Toekick
@@ -161,7 +169,14 @@ internal static class PanelGeometryCalculator
 
             if (part.Name.Contains("Stretcher") || part.Name.Equals("Nailer")) // Force two tenons and adjust blind start/stop for stretchers
             {
-                tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
+                if (cabinet is BaseCabinetModel)
+                {
+                    tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1.25, blindStopOverride: 1.25, forceTwoTenons: true);
+                }
+                else if (cabinet is UpperCabinetModel && part.Name.Contains("Nailer")) // Upper cabinets have 1 tenon on nailers
+                {
+                    tenons = TenonCalculator.ComputeTenonRanges(height, joinery, blindStartOverride: 1, blindStopOverride: 1, forceTwoTenons: false);
+                }
             }
 
             if (part.Name.Equals("Toekick")) // Force two tenons and adjust blind start/stop for Toekick
@@ -204,7 +219,7 @@ internal static class PanelGeometryCalculator
         // ── Compute Mortises to match Tenons of adjoining parts  ──────────────────────────────────────────────
         if (part.MortiseEdges.HasFlag(MortiseEdge.Left)) // All of the end panel operations happen only on the left end because the right end panels are mirrored from the left end panels, so we only need to compute mortises on the left edge for the end panels and then mirror them to the right edge.
         {
-            if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
+            if (part.CabinetModel is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
                 double openingHeight = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1) + materialThickness34;
                 double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1);
@@ -246,7 +261,7 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
         {
-            if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
+            if (part.CabinetModel is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
                 if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
                 {
@@ -273,7 +288,7 @@ internal static class PanelGeometryCalculator
             if (part.Name.Contains("End"))
             {
                 // Base Cab Back
-                if (part.Cabinet is BaseCabinetModel baseCab) 
+                if (part.CabinetModel is BaseCabinetModel baseCab) 
                 {
                     if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
                     {
@@ -287,7 +302,7 @@ internal static class PanelGeometryCalculator
                     }
                 }
                 // Upper Cab Back
-                else if (part.Cabinet is UpperCabinetModel upperCab)
+                else if (part.CabinetModel is UpperCabinetModel upperCab)
                 {
                     if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
                     {
@@ -314,7 +329,7 @@ internal static class PanelGeometryCalculator
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left))
         {
 
-            if (part.Cabinet is BaseCabinetModel baseCab && part.Name.Contains("End"))
+            if (part.CabinetModel is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
                 double openingHeight = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1) + materialThickness34;
                 double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1);
@@ -357,7 +372,7 @@ internal static class PanelGeometryCalculator
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))
         {
-            if (part.Cabinet is BaseCabinetModel baseCab)
+            if (part.CabinetModel is BaseCabinetModel baseCab)
             {
                 if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
                 {
@@ -384,7 +399,7 @@ internal static class PanelGeometryCalculator
             if (part.Name.Contains("End"))
             {
                 // Base Cab Back
-                if (part.Cabinet is BaseCabinetModel baseCab)
+                if (part.CabinetModel is BaseCabinetModel baseCab)
                 {
                     if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
                     {
@@ -396,7 +411,7 @@ internal static class PanelGeometryCalculator
                     }
                 }
                 // Upper Cab Back
-                else if (part.Cabinet is UpperCabinetModel upperCab)
+                else if (part.CabinetModel is UpperCabinetModel upperCab)
                 {
                     if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
                     {
@@ -418,13 +433,13 @@ internal static class PanelGeometryCalculator
 
 
         // ── Compute Shelf Holes ─────────────────────────────────────────
-        if (part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.Cabinet is BaseCabinetModel || part.Cabinet is UpperCabinetModel)
+        if (part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.CabinetModel is BaseCabinetModel || part.CabinetModel is UpperCabinetModel && part.Name.Contains("End", StringComparison.OrdinalIgnoreCase))
         {
-            if (part.Cabinet is BaseCabinetModel baseCab && part.Cabinet.Style != CabinetStyles.Base.Drawer & baseCab.DrillShelfHoles == true)
+            if (part.CabinetModel is BaseCabinetModel baseCab && part.CabinetModel.Style != CabinetStyles.Base.Drawer & baseCab.DrillShelfHoles == true)
             {
                 holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: materialThickness34));
             }
-            else if (part.Cabinet is UpperCabinetModel upperCab && upperCab.DrillShelfHoles == true)
+            else if (part.CabinetModel is UpperCabinetModel upperCab && upperCab.DrillShelfHoles == true)
             {
                 holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: materialThickness34));
             }

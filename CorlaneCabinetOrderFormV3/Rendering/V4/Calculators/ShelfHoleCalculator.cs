@@ -10,7 +10,7 @@ internal static class ShelfHoleCalculator
     {
         var holes = new List<(double, double, double)>();
 
-        if (part.Cabinet is BaseCabinetModel baseCab)
+        if (part.CabinetModel is BaseCabinetModel baseCab)
         {
             var dim = BaseCabinetDimensions.From(baseCab);
 
@@ -44,7 +44,7 @@ internal static class ShelfHoleCalculator
             }
         }
 
-        else if (part.Cabinet is UpperCabinetModel upperCab)
+        else if (part.CabinetModel is UpperCabinetModel upperCab)
         {
             var dim = UpperCabinetDimensions.From(upperCab);
             double mt34 = materialThickness34;
