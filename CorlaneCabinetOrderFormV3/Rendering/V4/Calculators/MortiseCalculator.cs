@@ -23,13 +23,13 @@ internal static class MortiseCalculator
         bool fullThicknessTenon = false,
         double materialThickness34 = 0)
     {
-        //double materialThickness34 = MaterialDefaults.Thickness34;
+        materialThickness34 = materialThickness34;
 
         var pockets = new List<(double, double, double, double)>();
 
         // Get tenon ranges for positioning
         var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: forceTwoTenons, blindStartOverride: blindStartOverride, blindStopOverride: blindStopOverride);
-        double slotWidth = joinery.TenonThickness + joinery.TenonClearance;
+        double slotWidth = (joinery.TenonThickness * materialThickness34) + joinery.TenonClearance;
         double oversize = joinery.MortiseOversize;
 
         foreach (var (tStart, tEnd) in tenonRanges)

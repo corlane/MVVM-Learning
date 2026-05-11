@@ -68,7 +68,7 @@ internal sealed record LockDadoSettings
     /// The tenon is flush on one face; the other face is routed down to this thickness.
     /// Typically MaterialThickness34 / 2.
     /// </summary>
-    public double TenonThickness { get; init; } = MaterialDefaults.Thickness34 * 0.4;
+    public double TenonThickness { get; init; } = 0.4;
 
     /// <summary>
     /// Clearance added to the mortise slot height so the tenon slides in freely (0.5mm).
