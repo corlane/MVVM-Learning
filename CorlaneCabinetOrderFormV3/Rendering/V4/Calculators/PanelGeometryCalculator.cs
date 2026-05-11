@@ -372,7 +372,7 @@ internal static class PanelGeometryCalculator
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right))
         {
-            if (part.CabinetModel is BaseCabinetModel baseCab)
+            if (part.CabinetModel is BaseCabinetModel baseCab && part.Name.Contains("End"))
             {
                 if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
                 {
