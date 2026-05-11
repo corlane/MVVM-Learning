@@ -66,7 +66,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF
         {
             double mm = thicknessInches * 25.4;
             // Matches your format: 17.8mm → 17p8
-            return Math.Round(mm, 1).ToString("0.0").Replace('.', 'p');
+            return Math.Round(mm, 2).ToString("0.00").Replace('.', 'p');
         }
 
         public Layer GetLayer(LayerType type, double thicknessInches)
