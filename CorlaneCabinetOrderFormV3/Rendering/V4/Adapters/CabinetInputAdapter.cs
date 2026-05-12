@@ -20,29 +20,81 @@ internal static class CabinetInputAdapter
 
         foreach (var entry in parts)
         {
-            // Enrich end panels with cabinet toekick dimensions
-            bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
-            double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
-            double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
-            //double partTkH = isEndPanel ? tkHeight : 0;
-            //double partTkD = isEndPanel ? tkDepth : 0;
+            PartInfo mappedPart;
+            bool isCorner90 = cabinet is BaseCabinetModel bCab && bCab.Style == CabinetStyles.Base.Corner90;
+            var baseCab = cabinet as BaseCabinetModel;
 
-            var mappedPart = new PartInfo(
-                Name: entry.PartName,
-                Bounds: new PartBounds(entry.LengthIn, entry.WidthIn),
-                Species: entry.Species,
-                Quantity: entry.Qty,
-                TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
-                MortiseEdges: ResolveMortiseEdges(entry.PartName, cabinet),
-                ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName, cabinet), // This automatically adds screw holes where there are mortises. Can be changed to be independent.
-                ThinningPockets: ResolveTenonThinningEdges(entry.PartName, cabinet),
-                EdgeBand: entry.EdgeBandSpecies,
-                Notes: entry.Notes,
-                TkHeight: tkHeight,
-                TkDepth: tkDepth,
-                cabinet
-                );
-            mapped.Add( mappedPart );
+            // ── Resolve Bounds (handle "—" dimensions for Corner90 L-shapes) ──
+            double partLength = entry.LengthIn;
+            double partWidth = entry.WidthIn;
+
+            if (isCorner90 && (partLength == 0 || partWidth == 0))
+            {
+                bool isLShape = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck") || entry.PartName.Contains("Shelf");
+                if (isLShape && baseCab != null)
+                {
+                    // Assign bounding box dimensions so ValidateInput() passes
+                    double lf = ConvertDimension.FractionToDouble(baseCab.LeftFrontWidth);
+                    double rf = ConvertDimension.FractionToDouble(baseCab.RightFrontWidth);
+                    double ld = ConvertDimension.FractionToDouble(baseCab.LeftDepth);
+                    double rd = ConvertDimension.FractionToDouble(baseCab.RightDepth);
+                    double mt = materialThickness34;
+
+                    partLength = Math.Max(lf, ld) + Math.Max(rf, rd) - mt;
+                    partWidth = Math.Max(lf, ld) - mt;
+                }
+            }
+
+            if (isCorner90)
+            {
+                bool isEnd = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
+                bool isBack = entry.PartName.Contains("Back", StringComparison.OrdinalIgnoreCase);
+                bool isTopOrDeck = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck");
+                bool isShelf = entry.PartName.Contains("Shelf");
+                bool isDoor = entry.PartName.Contains("Door");
+                bool isToekick = entry.PartName.Contains("Toekick");
+
+                if (isEnd)
+                {
+                    mappedPart = new PartInfo(
+                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
+                        TenonEdges: TenonEdge.None,
+                        MortiseEdges: MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
+                        ScrewHoleEdges: ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top,
+                        ThinningPockets: ThinningPocketEdge.None,
+                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
+                }
+                else if (isBack || isTopOrDeck || isShelf || isDoor || isToekick)
+                {
+                    mappedPart = new PartInfo(
+                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
+                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
+                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
+                }
+                else
+                {
+                    mappedPart = new PartInfo(
+                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
+                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
+                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
+                }
+            }
+            else
+            {
+                // Original mapping for Standard/Drawer
+                bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
+                double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
+                double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
+
+                mappedPart = new PartInfo(
+                    Name: entry.PartName, Bounds: new PartBounds(entry.LengthIn, entry.WidthIn), Species: entry.Species, Quantity: entry.Qty,
+                    TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
+                    MortiseEdges: ResolveMortiseEdges(entry.PartName, cabinet),
+                    ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName, cabinet),
+                    ThinningPockets: ResolveTenonThinningEdges(entry.PartName, cabinet),
+                    EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: partTkH, TkDepth: partTkD, CabinetModel: cabinet);
+            }
+            mapped.Add(mappedPart);
         }
         return mapped;
     }

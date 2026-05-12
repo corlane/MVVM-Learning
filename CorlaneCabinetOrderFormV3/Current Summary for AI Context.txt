@@ -1,0 +1,85 @@
+﻿# 📦 Project Context Summary: Corner90 Base Cabinet DXF Integration
+
+## 🎯 Project Goal
+Integrate a 90° L-shaped Corner Base Cabinet (`Corner90`) into an existing C# DXF export pipeline that currently supports Standard and Drawer base cabinets. The pipeline generates 2D DXF files for CNC routing, including outlines, tenon/mortise pockets, screw holes, and shelf pin holes.
+
+## 📂 Files Provided & Their Roles
+| File | Purpose |
+|------|---------|
+| `CabinetInputAdapter.cs` | Maps UI/order `PartListEntry` objects to internal `PartInfo` structures with joinery flags |
+| `PanelGeometryCalculator.cs` | Computes 2D outlines, tenon notches, mortise pockets, screw holes, and shelf holes for each part |
+| `TenonCalculator.cs` | Pure math for computing tenon ranges along edges based on joinery config |
+| `MortiseCalculator.cs` | Computes mortise pocket rectangles aligned with tenon positions |
+| `MortiseScrewHoleCalculator.cs` | Computes assembly screw holes in gaps between tenons |
+| `ShelfHoleCalculator.cs` | Computes shelf pin holes for end panels |
+| `PartGeometryExtensions.cs` | Mirrors geometry across vertical centerline for right end panels |
+| `DxfLayerManager.cs` | Manages DXF layers with thickness-based naming and colors |
+| `DxfWriter.cs` | Converts `PartGeometry` lists into `netDxf` documents with polylines and circles |
+| `MetricGeometryConverter.cs` | Converts imperial geometry to millimeters for DXF export |
+| `DxfExportPipeline.cs` | Orchestrates mapping, validation, geometry computation, and DXF generation |
+| `PartBounds.cs` | Defines `PartBounds`, `PartInfo`, `JoineryConfig`, and edge flag enums |
+| `PartGeometry.cs` | Record holding computed outline vertices, pockets, and holes |
+| `Vector2struct.cs` | Lightweight 2D vector struct for geometry calculations |
+| `BaseCabinetBuilder.Corner90.*` | 3D rendering reference showing Corner90 construction, dimensions, and L-shape logic |
+| `BaseCabinetBuilder.cs` & `BaseCabinetDimensions.cs` | Standard/Drawer builder reference and dimension parsing utilities |
+
+## 🔧 Changes Made During This Session
+
+### 1. `CabinetInputAdapter.cs`
+- Added `Corner90` detection: `bool isCorner90 = cabinet is BaseCabinetModel bCab && bCab.Style == CabinetStyles.Base.Corner90;`
+- Mapped Corner90 parts with correct joinery flags:
+  - **Ends**: `TenonEdges: None`, `MortiseEdges: Left | Right | Top`, `ScrewHoleEdges: Left | Right | Top` (identical to Standard ends)
+  - **Backs, Top, Deck, Shelves, Doors, Toekicks**: All joinery flags set to `None` to bypass rectangular processing blocks
+- Preserved `tkHeight` and `tkDepth` for toe-kick logic on ends
+- Fallback mapping for unmapped parts
+
+### 2. `PanelGeometryCalculator.cs`
+- Added early detection: `var baseCab = part.CabinetModel as BaseCabinetModel;` and `bool isCorner90 = baseCab != null && baseCab.Style == CabinetStyles.Base.Corner90;`
+- Added `bool isLShape = isCorner90 && (part.Name.Contains("Top") || part.Name.Contains("Deck") || part.Name.Contains("Shelf"));`
+- **Outline Generation**:
+  - `isEndPanelWithTk` → uses existing `BuildEndPanelWithToeKick`
+  - `isLShape` → calls new `BuildLShapedPanel` with inset gap (0.125" for shelves), 1.0" inside radius, 8 arc segments
+  - Fallback → standard `(0,0)` start
+- **Standard Processing Guard**: Wrapped **all** rectangular tenon/mortise/screw/shelf-hole blocks (including corner `outline.Add()` calls) inside `if (!isCorner90)` to prevent vertex corruption
+- **Mirroring Bypass**: Changed `if (part.Name.Contains("Right End", ...))` to `if (!isCorner90 && part.Name.Contains("Right End", ...))` so Corner90 ends are generated independently with correct depths
+- Added helper methods:
+  - `BuildLShapedPanel(...)`: Generates L-shaped outline with inside corner arc
+  - `GenerateInsideCornerArc(...)`: Computes arc points for inside corner radius
+
+### 3. DXF Pipeline Behavior
+- `DxfExportPipeline.GenerateDxf()` → computes geometry → converts to metric → writes DXF
+- `DxfWriter.WriteOutline()` skips parts with `< 3` vertices
+- Layer naming uses thickness in mm (e.g., `OUTLINE z19.05`)
+- Tenon thinning pockets use 40% remaining material depth by default
+
+## ✅ What Works Now
+- Corner90 **End Panels** export correctly with proper toe-kick notches, mortises, and screw holes
+- Different left/right depths are handled independently (no mirroring)
+- Standard/Drawer cabinets continue to work unchanged
+- DXF layer assignment and metric conversion function correctly
+
+## ⚠️ Current Issue
+- **Top, Deck, and Shelves are not appearing in the DXF output**
+- The `isLShape` detection and `BuildLShapedPanel` logic are implemented, but parts are not reaching the pipeline from the calling method
+- Suspected causes:
+  - Part names from the order form may not contain `"Top"`, `"Deck"`, or `"Shelf"` exactly
+  - The calling method may filter out Corner90 Top/Deck/Shelves before reaching `DxfExportPipeline`
+  - `PartListEntry` generation for Corner90 may skip these parts entirely
+  - `isCorner90` or `baseCab` may be null/incorrect at the point of part mapping
+
+## 📋 Next Steps for Future Session
+1. **Trace part flow**: Add debug logging in `DxfExportPipeline` constructor to print `existingParts.Count()` and each `PartListEntry.PartName` for Corner90 orders
+2. **Verify part naming**: Confirm exact strings used for Top/Deck/Shelves in the order form
+3. **Check calling method**: Inspect whatever method instantiates `DxfExportPipeline` to ensure it passes Top/Deck/Shelves for Corner90 style
+4. **Fallback detection**: If naming is inconsistent, switch to index-based or style-based detection instead of string matching
+5. **Re-enable joinery** (optional): Once outlines appear, consider adding simple dados/screw holes for Corner90 Top/Deck/Shelves if required by manufacturing
+
+## 🔑 Key Architectural Notes
+- The pipeline is **stateless and functional**: `MapParts` → `Compute` → `GenerateDxf`
+- All geometry is computed in **inches**, converted to **mm** before DXF write
+- `PartInfo` carries joinery flags that drive calculator behavior
+- Corner90 breaks the symmetry assumption (identical ends, rectangular horizontals)
+- The DXF writer expects closed polylines with consistent winding order
+- Mirroring is an optimization, not a requirement; bypassing it for Corner90 is correct
+
+---

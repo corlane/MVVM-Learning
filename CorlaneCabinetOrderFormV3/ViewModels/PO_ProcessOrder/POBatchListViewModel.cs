@@ -644,11 +644,14 @@ public partial class POBatchListViewModel : ObservableObject
                     string filePath = Path.Combine(dlg.FolderName, safeName + ".dxf");
 
                     pipeline.ExportToFile(filePath);
+
+                    Debug.WriteLine($"Exporting {safeName}");
                 }
             }
 
-            MessageBox.Show($"DXF files exported to:\n{dlg.FolderName}", "Export Complete",
-                            MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show($"DXF files exported to:\n{dlg.FolderName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            Debug.WriteLine($"DXF files exported to:\n{dlg.FolderName}");
         }
         catch (Exception ex)
         {
