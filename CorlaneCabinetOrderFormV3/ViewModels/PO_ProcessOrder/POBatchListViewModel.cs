@@ -635,7 +635,7 @@ public partial class POBatchListViewModel : ObservableObject
                         tkHeight: tkHeight,
                         tkDepth: tkDepth,
                         cabinetModel: cabinet,
-                        materialThickness34: materialThickness34
+                        materialThickness34: materialThickness34 / 25.4 // User enters metric thickness. Entire DXF pipeline uses imperial until file generation where it is translated to metric. This is an easy way to make it act end-to-end metric.
                     );
 
                     if (!pipeline.ValidateInput()) continue;
@@ -668,19 +668,19 @@ public partial class POBatchListViewModel : ObservableObject
 
 
     // Material thicknesses
-    [ObservableProperty] public partial double PrefinishedPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double MaplePly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double RedOakPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double WhiteOakPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double CherryPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double AlderPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double MahoganyPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double WalnutPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double HickoryPly { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double MDF { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double WhiteMelamine { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double BlackMelamine { get; set; } = MaterialDefaults.Thickness34;
-    [ObservableProperty] public partial double Custom { get; set; } = MaterialDefaults.Thickness34;
+    [ObservableProperty] public partial double PrefinishedPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double MaplePly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double RedOakPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double WhiteOakPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double CherryPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double AlderPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double MahoganyPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double WalnutPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double HickoryPly { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double MDF { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double WhiteMelamine { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double BlackMelamine { get; set; } = MaterialDefaults.Thickness34 * 25.4;
+    [ObservableProperty] public partial double Custom { get; set; } = MaterialDefaults.Thickness34 * 25.4;
 
     private double SetMaterialThicknessBySpecies(string species)
     {

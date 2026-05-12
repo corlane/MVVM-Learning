@@ -31,16 +31,36 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.Orchestrator
 
         internal bool ValidateInput() => _parts.All(p => p.Bounds.Width > 0 && p.Bounds.Height > 0);
 
+        // ------------ Original DXF generation method without metric conversion -----------
+        //internal DxfDocument GenerateDxf()
+        //{        
+        //    var geometries = new List<PartGeometry>();
+        //    foreach (var part in _parts)
+        //    {
+        //        var geometry = PanelGeometryCalculator.Compute(part, _config, part.CabinetModel!, _materialThickness);
+        //        geometries.Add(geometry);
+        //    }
+        //    return DxfWriter.GenerateDxf(geometries, _materialThickness, _tenonThinningRatio);
+        //}
+
+
+        // ------------- New DXF generation method with metric conversion ------------
         internal DxfDocument GenerateDxf()
-        {        
+        {
             var geometries = new List<PartGeometry>();
             foreach (var part in _parts)
             {
                 var geometry = PanelGeometryCalculator.Compute(part, _config, part.CabinetModel!, _materialThickness);
                 geometries.Add(geometry);
             }
-            return DxfWriter.GenerateDxf(geometries, _materialThickness, _tenonThinningRatio);
+
+            // Convert geometry to metric
+            var metricGeometries = MetricGeometryConverter.ConvertToMetric(geometries);
+
+            // Keep thickness in inches so DxfLayerManager can format layer names correctly
+            return DxfWriter.GenerateDxf(metricGeometries, _materialThickness, _tenonThinningRatio);
         }
+
 
         internal void ExportToFile(string filePath)
         {

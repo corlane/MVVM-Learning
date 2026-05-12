@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
+             xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
              mc:Ignorable="d"
              d:DesignHeight="920"
              d:DesignWidth="1000"
@@ -14,6 +15,9 @@
         <viewmodels:POBatchListViewModel />
     </d:UserControl.DataContext>
 
+    <UserControl.Resources>
+        <local:DecimalRoundConverter x:Key="RoundConverter"/>
+    </UserControl.Resources>
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -51,57 +55,74 @@
         </StackPanel>
 
         <StackPanel Grid.Row="4">
+            <TextBlock Text="Enter actual material thickness in MM" 
+                       Margin="5,20,0,8"
+                       TextWrapping="Wrap"
+                       FontSize="16"/>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Prefinished Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding PrefinishedPly}"/>
+                <Label Content="Prefinished Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding PrefinishedPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Maple Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MaplePly}"/>
+                <Label Content="Maple Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MaplePly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Red Oak Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding RedOakPly}"/>
+                <Label Content="Red Oak Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding RedOakPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="White Oak Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WhiteOakPly}"/>
+                <Label Content="White Oak Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WhiteOakPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Cherry Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding CherryPly}"/>
+                <Label Content="Cherry Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding CherryPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Alder Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding AlderPly}"/>
+                <Label Content="Alder Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding AlderPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Mahogany Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MahoganyPly}"/>
+                <Label Content="Mahogany Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MahoganyPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Walnut Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WalnutPly}"/>
+                <Label Content="Walnut Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WalnutPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Hickory Ply Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding HickoryPly}"/>
+                <Label Content="Hickory Ply Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding HickoryPly, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="MDF Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MDF}"/>
+                <Label Content="MDF Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding MDF, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="White Melamine Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WhiteMelamine}"/>
+                <Label Content="White Melamine Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding WhiteMelamine, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Black Melamine Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding BlackMelamine}"/>
+                <Label Content="Black Melamine Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding BlackMelamine, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Custom Actual Thickness:" Margin="10,6,0,0"/>
-                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding Custom}"/>
+                <Label Content="Custom Actual Thickness:" Margin="10,6,0,0" FontSize="14"/>
+                <TextBox Grid.Row="4" Height="Auto" Width="60" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Text="{Binding Custom, Converter={StaticResource RoundConverter}, 
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}" FontSize="14"/>
             </StackPanel>
 
         </StackPanel>

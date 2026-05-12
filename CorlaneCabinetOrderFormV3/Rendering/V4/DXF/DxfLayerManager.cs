@@ -27,7 +27,6 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF
         private static string FormatThicknessKey(double thicknessInches)
         {
             double mm = thicknessInches * 25.4;
-            // Matches your format: 17.8mm → 17p8
             return Math.Round(mm, 2).ToString("0.00").Replace('.', 'p');
         }
 
