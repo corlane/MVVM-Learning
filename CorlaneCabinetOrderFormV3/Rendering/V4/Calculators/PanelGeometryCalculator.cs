@@ -538,9 +538,14 @@ internal static class PanelGeometryCalculator
         if (!part.Name.Contains("End", StringComparison.OrdinalIgnoreCase)) return;
 
         if (part.CabinetModel is BaseCabinetModel bCab && bCab.Style != CabinetStyles.Base.Drawer && bCab.DrillShelfHoles)
+        {
             holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
+        }
+
         else if (part.CabinetModel is UpperCabinetModel uCab && uCab.DrillShelfHoles)
+        {
             holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
+        }
     }
     #endregion
 }
