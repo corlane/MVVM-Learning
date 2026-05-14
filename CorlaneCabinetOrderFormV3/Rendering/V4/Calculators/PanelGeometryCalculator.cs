@@ -537,10 +537,21 @@ internal static class PanelGeometryCalculator
     {
         if (!part.Name.Contains("End", StringComparison.OrdinalIgnoreCase)) return;
 
-        if (part.CabinetModel is BaseCabinetModel bCab && bCab.Style != CabinetStyles.Base.Drawer && bCab.DrillShelfHoles)
+        if (part.CabinetModel is BaseCabinetModel bCab && bCab.Style == CabinetStyles.Base.Standard && bCab.DrillShelfHoles)
         {
             holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
         }
+
+        if (part.CabinetModel is BaseCabinetModel bCab90Left && bCab90Left.Style == CabinetStyles.Base.Corner90 && bCab90Left.DrillShelfHoles && part.Name.Contains("Left End"))
+        {
+            holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
+        }
+
+        if (part.CabinetModel is BaseCabinetModel bCab90Right && bCab90Right.Style == CabinetStyles.Base.Corner90 && bCab90Right.DrillShelfHoles && part.Name.Contains("Right End"))
+        {
+            holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
+        }
+
 
         else if (part.CabinetModel is UpperCabinetModel uCab && uCab.DrillShelfHoles)
         {
