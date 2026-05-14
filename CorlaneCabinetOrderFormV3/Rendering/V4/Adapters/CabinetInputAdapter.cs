@@ -2,7 +2,6 @@
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
-using CorlaneCabinetOrderFormV3.Services;
 
 internal static class CabinetInputAdapter
 {
@@ -166,7 +165,6 @@ internal static class CabinetInputAdapter
             GapWidth: s.GapWidth,
             GapSpacing: s.GapSpacing,
             ScrewPilotHoleDiameter: s.ScrewPilotHoleDiameter
-            //Thickness34: MaterialDefaults.Thickness34
         );
     }
 }
