@@ -645,13 +645,13 @@ public partial class POBatchListViewModel : ObservableObject
 
                     pipeline.ExportToFile(filePath);
 
-                    Debug.WriteLine($"Exporting {safeName}");
+                    //Debug.WriteLine($"Exporting {safeName}");
                 }
             }
 
             //MessageBox.Show($"DXF files exported to:\n{dlg.FolderName}", "Export Complete", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            Debug.WriteLine($"DXF files exported to:\n{dlg.FolderName}");
+            //Debug.WriteLine($"DXF files exported to:\n{dlg.FolderName}");
         }
         catch (Exception ex)
         {

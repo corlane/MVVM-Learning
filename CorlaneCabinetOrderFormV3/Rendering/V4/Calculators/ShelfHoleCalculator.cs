@@ -47,7 +47,6 @@ internal static class ShelfHoleCalculator
 
         else if (part.CabinetModel is BaseCabinetModel baseCab90 && baseCab90.Style == CabinetStyles.Base.Corner90)
         {
-            Debug.WriteLine($"part bounds height {part.Bounds.Height} for {part.Name}");
             var dim = BaseCabinetDimensions.From(baseCab90);
 
             double mt34 = materialThickness34;

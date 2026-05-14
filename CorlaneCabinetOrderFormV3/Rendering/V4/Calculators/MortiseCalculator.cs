@@ -23,7 +23,7 @@ internal static class MortiseCalculator
         bool fullThicknessTenon = false,
         double materialThickness34 = 0)
     {
-        materialThickness34 = materialThickness34;
+        //materialThickness34 = materialThickness34;
 
         var pockets = new List<(double, double, double, double)>();
 

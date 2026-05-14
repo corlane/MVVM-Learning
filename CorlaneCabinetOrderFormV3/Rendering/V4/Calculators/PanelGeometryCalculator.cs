@@ -1,6 +1,7 @@
 ﻿using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 
@@ -21,6 +22,7 @@ internal static class PanelGeometryCalculator
         var mortisePockets = new List<(double x1, double x2, double y1, double y2)>();
         var holes = new List<(double x, double y, double radius)>();
         var holesThru = new List<(double x, double y, double radius)>();
+
 
         // 1. Build Outline
         BuildOutline(part, baseCab, isEndPanelWithTk, isLShape, materialThickness34, outline);
@@ -410,6 +412,8 @@ internal static class PanelGeometryCalculator
             mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
         }
 
+
+
         if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && baseCab != null)
         {
             if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
@@ -422,8 +426,25 @@ internal static class PanelGeometryCalculator
             mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: 0, materialThickness34: mt34));
         }
 
+
+
+
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
-            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
+        {
+            if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90)
+            {
+                Debug.WriteLine($"Ran mortise bottom for {part.Name}");
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(ConvertDimension.FractionToDouble(base90corner.RightBackWidth), ConvertDimension.FractionToDouble(base90corner.RightBackWidth),height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
+            }
+            else
+            {
+                Debug.WriteLine($"Ran mortise bottom for standard {part.Name}");
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
+            }
+        }
+
+
+
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
         {
@@ -440,6 +461,10 @@ internal static class PanelGeometryCalculator
                     mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(upperNailerWidth, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true, materialThickness34: mt34));
                 else
                     mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
+            }
+            else if (part.Name.Contains("Deck") && part.CabinetModel is BaseCabinetModel)
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: part.TkDepth, materialThickness34: mt34));
             }
             else
             {

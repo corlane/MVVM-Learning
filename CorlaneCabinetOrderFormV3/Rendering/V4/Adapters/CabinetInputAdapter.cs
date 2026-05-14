@@ -3,6 +3,7 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 using System.Diagnostics;
+using System.Windows;
 
 internal static class CabinetInputAdapter
 {
@@ -55,6 +56,11 @@ internal static class CabinetInputAdapter
                 bool isDoor = entry.PartName.Contains("Door");
                 bool isToekick = entry.PartName.Contains("Toekick");
 
+                bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
+                double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
+                double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
+
+
                 if (isEnd)
                 {
                     mappedPart = new PartInfo(
@@ -65,11 +71,11 @@ internal static class CabinetInputAdapter
                         ThinningPockets: ThinningPocketEdge.None,
                         EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
                 }
-                else if (isTopOrDeck || isShelf || isDoor)
+                else if (isTopOrDeck)
                 {
                     mappedPart = new PartInfo(
                         Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
+                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.Bottom, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
                         EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
                 }
                 else if (isLeftBack)
@@ -128,6 +134,8 @@ internal static class CabinetInputAdapter
             "Toekick" or "Toekick (Left)" or "Toekick (Right)" => TenonEdge.Top | TenonEdge.Left | TenonEdge.Right,
             "Top Stretcher (Front)" or "Drawer Stretcher" => TenonEdge.Left | TenonEdge.Right,
             "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
+            "Left Back" when cabinet is BaseCabinetModel basecab => TenonEdge.Left,
+            "Right Back" when cabinet is BaseCabinetModel basecab => TenonEdge.Right,
             "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom,
             "Deck" when cabinet is BaseCabinetModel baseCab && ConvertDimension.FractionToDouble(baseCab.BackThickness) != 0.25 => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
             "Deck" when cabinet is BaseCabinetModel baseCab && ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
@@ -150,6 +158,8 @@ internal static class CabinetInputAdapter
             "Top Stretcher (Front)" => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
             "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom | ThinningPocketEdge.Left,
             "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom,
+            "Left Back" when cabinet is BaseCabinetModel basecab => ThinningPocketEdge.Left,
+            "Right Back" when cabinet is BaseCabinetModel basecab => ThinningPocketEdge.Right,
             "Deck" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
             "Nailer" when cabinet is BaseCabinetModel => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Top,
             "Nailer" when cabinet is UpperCabinetModel => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
@@ -166,8 +176,11 @@ internal static class CabinetInputAdapter
         {
             "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
             "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseEdge.Right,
+            "left back" when cabinet is BaseCabinetModel basecab => MortiseEdge.Bottom,
+            "right back" when cabinet is BaseCabinetModel basecab => MortiseEdge.Bottom,
             "back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseEdge.Right | MortiseEdge.Left,
             "top stretcher (back)" => MortiseEdge.Bottom,
+            "deck" when cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Top,
             _ => MortiseEdge.None
         };
     }
