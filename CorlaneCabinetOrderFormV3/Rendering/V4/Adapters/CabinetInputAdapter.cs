@@ -2,6 +2,7 @@
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using System.Diagnostics;
 
 internal static class CabinetInputAdapter
 {
@@ -47,7 +48,8 @@ internal static class CabinetInputAdapter
             if (isCorner90)
             {
                 bool isEnd = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
-                bool isBack = entry.PartName.Contains("Back", StringComparison.OrdinalIgnoreCase);
+                bool isLeftBack = entry.PartName.Contains("Left Back", StringComparison.OrdinalIgnoreCase);
+                bool isRightBack = entry.PartName.Contains("Right Back", StringComparison.OrdinalIgnoreCase);
                 bool isTopOrDeck = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck");
                 bool isShelf = entry.PartName.Contains("Shelf");
                 bool isDoor = entry.PartName.Contains("Door");
@@ -63,11 +65,32 @@ internal static class CabinetInputAdapter
                         ThinningPockets: ThinningPocketEdge.None,
                         EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
                 }
-                else if (isBack || isTopOrDeck || isShelf || isDoor || isToekick)
+                else if (isTopOrDeck || isShelf || isDoor)
                 {
                     mappedPart = new PartInfo(
                         Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
                         TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
+                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
+                }
+                else if (isLeftBack)
+                {
+                    mappedPart = new PartInfo(
+                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
+                        TenonEdges: TenonEdge.Left, MortiseEdges: MortiseEdge.Bottom, ScrewHoleEdges: ScrewHoleEdge.Bottom, ThinningPockets: ThinningPocketEdge.Left,
+                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
+                }
+                else if (isRightBack)
+                {
+                    mappedPart = new PartInfo(
+                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
+                        TenonEdges: TenonEdge.Right, MortiseEdges: MortiseEdge.Bottom, ScrewHoleEdges: ScrewHoleEdge.Bottom, ThinningPockets: ThinningPocketEdge.Right,
+                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
+                }
+                else if (isToekick)
+                {
+                    mappedPart = new PartInfo(
+                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
+                        TenonEdges: TenonEdge.Right | TenonEdge.Left | TenonEdge.Top, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.Right | ThinningPocketEdge.Left | ThinningPocketEdge.Top,
                         EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
                 }
                 else

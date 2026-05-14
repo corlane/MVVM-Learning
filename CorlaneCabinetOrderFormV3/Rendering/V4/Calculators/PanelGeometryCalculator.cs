@@ -363,7 +363,7 @@ internal static class PanelGeometryCalculator
             else if (cabinet is UpperCabinetModel && partName.Contains("Nailer"))
                 tenons = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, blindStartOverride: 1, blindStopOverride: 1, forceTwoTenons: false);
         }
-        else if (partName.Equals("Toekick"))
+        else if (partName.Contains("Toekick"))
         {
             tenons = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, blindStartOverride: 0, blindStopOverride: 0, forceTwoTenons: true);
         }
@@ -551,7 +551,6 @@ internal static class PanelGeometryCalculator
         {
             holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
         }
-
 
         else if (part.CabinetModel is UpperCabinetModel uCab && uCab.DrillShelfHoles)
         {
