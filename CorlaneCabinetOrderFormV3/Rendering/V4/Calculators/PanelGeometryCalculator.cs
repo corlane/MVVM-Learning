@@ -66,7 +66,7 @@ internal static class PanelGeometryCalculator
         }
 
 
-        if (isLShape && part.Name.Contains("Deck"))
+        if (isLShape && part.Name.Contains("Top"))
         {
             result = result.MirrorAcrossVerticalCenterline(part.Bounds.Width);
         }
@@ -146,24 +146,24 @@ internal static class PanelGeometryCalculator
         outline.Clear();
 
         // 1. Start at (0,0)
-        outline.Add(new Vector2(0, 0));
+        outline.Add(new Vector2(0, 0 + insetLd)); // Added + insetLd to all vertical Y points to bring X0, Y0 to the lower left of the part.
 
         // 2. Draw inner radius arc (NO TENONS)
-        var arc = GenerateInsideCornerArc(insetLf, 0, radius, segments);
+        var arc = GenerateInsideCornerArc(insetLf, 0 + insetLd, radius, segments);
         foreach (var p in arc) outline.Add(new Vector2(p.X, p.Y));
 
         // 3. Draw the 4 outer edges sequentially with tenons
         // Edge 1: Top (Horizontal, Y=insetRf, X: insetLf → insetLf+insetRd)
-        AppendHorizontalEdgeWithTenons(outline, new Vector2(insetLf, insetRf), new Vector2(insetLf + insetRd, insetRf), joinery, dadoDepth, protrudePositiveY: true, thinningPockets, part);
+        AppendHorizontalEdgeWithTenons(outline, new Vector2(insetLf, insetRf + insetLd), new Vector2(insetLf + insetRd, insetRf + insetLd), joinery, dadoDepth, protrudePositiveY: true, thinningPockets, part);
 
         // Edge 2: Right (Vertical, X=insetLf+insetRd, Y: insetRf → -insetLd)
-        AppendVerticalEdgeWithTenons(outline, new Vector2(insetLf + insetRd, insetRf), new Vector2(insetLf + insetRd, -insetLd), joinery, dadoDepth, protrudePositiveX: true, thinningPockets, part);
+        AppendVerticalEdgeWithTenons(outline, new Vector2(insetLf + insetRd, insetRf + insetLd), new Vector2(insetLf + insetRd, -insetLd + insetLd), joinery, dadoDepth, protrudePositiveX: true, thinningPockets, part);
 
         // Edge 3: Bottom (Horizontal, Y=-insetLd, X: insetLf+insetRd → 0)
-        AppendHorizontalEdgeWithTenons(outline, new Vector2(insetLf + insetRd, -insetLd), new Vector2(0, -insetLd), joinery, dadoDepth, protrudePositiveY: false, thinningPockets, part);
+        AppendHorizontalEdgeWithTenons(outline, new Vector2(insetLf + insetRd, -insetLd + insetLd), new Vector2(0, -insetLd + insetLd), joinery, dadoDepth, protrudePositiveY: false, thinningPockets, part);
 
         // Edge 4: Left (Vertical, X=0, Y: -insetLd → 0)
-        AppendVerticalEdgeWithTenons(outline, new Vector2(0, -insetLd), new Vector2(0, 0), joinery, dadoDepth, protrudePositiveX: false, thinningPockets, part);
+        AppendVerticalEdgeWithTenons(outline, new Vector2(0, -insetLd + insetLd), new Vector2(0, 0 + insetLd), joinery, dadoDepth, protrudePositiveX: false, thinningPockets, part);
     }
 
     private static void AppendHorizontalEdgeWithTenons(List<Vector2> outline, Vector2 start, Vector2 end, JoineryConfig joinery, double dadoDepth, bool protrudePositiveY, List<(double, double, double, double)> thinningPockets, PartInfo part)
@@ -386,46 +386,48 @@ internal static class PanelGeometryCalculator
         double height = part.Bounds.Height;
         double stretcherWidth = 6;
         double upperNailerWidth = 4;
-        
-        if (part.MortiseEdges.HasFlag(MortiseEdge.Left) && part.Name.Contains("End") && baseCab != null)
+
+        // --------------------------------------------------------- LEFT -------------------------------------------------------------------
+
+        if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
         {
-            double openingHeight = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1) + mt34;
-            double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1);
-            double opening2Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2);
-            double opening3Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3);
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Left) && part.Name.Contains("End") && baseCab != null)
+            {
+                double openingHeight = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1) + mt34;
+                double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1);
+                double opening2Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2);
+                double opening3Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3);
 
-            if (baseCab.TopType == "Stretcher")
-            {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, materialThickness34: mt34));
-            }
-            else
-            {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
-            }
-
-            if (baseCab.Style == CabinetStyles.Base.Standard && baseCab.DrwCount == 1)
-            {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: opening1Height + mt34, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
-            }
-
-            if (baseCab.Style == CabinetStyles.Base.Drawer && baseCab.DrwCount > 1)
-            {
-                for (int i = 0; i < baseCab.DrwCount; i++)
+                if (baseCab.TopType == "Stretcher")
                 {
-                    if (i == 1) openingHeight += opening2Height + mt34;
-                    if (i == 2) openingHeight += opening3Height + mt34;
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: openingHeight, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, materialThickness34: mt34));
+                }
+                else
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
+                }
+
+                if (baseCab.Style == CabinetStyles.Base.Standard && baseCab.DrwCount == 1)
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: opening1Height + mt34, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
+                }
+
+                if (baseCab.Style == CabinetStyles.Base.Drawer && baseCab.DrwCount > 1)
+                {
+                    for (int i = 0; i < baseCab.DrwCount; i++)
+                    {
+                        if (i == 1) openingHeight += opening2Height + mt34;
+                        if (i == 2) openingHeight += opening3Height + mt34;
+                        mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: openingHeight, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
+                    }
                 }
             }
 
-        }
-        else if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
-        {
-            if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
+            else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
             {
-                // For some reason, I have to use the Left toekick dimension for the Right toekick here. Probably because the deck is flipped. Who knows...
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickRightWidth, 0, 0, MortiseEdge.Left, joinery, additionalInset: ConvertDimension.FractionToDouble(base90corner.LeftFrontWidth) - mt34 + ConvertDimension.FractionToDouble(base90corner.TKDepth), materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickRightWidth, 0, 0, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
             }
+
             else
             {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
@@ -433,23 +435,28 @@ internal static class PanelGeometryCalculator
         }
 
 
+        // --------------------------------------------------------- RIGHT -------------------------------------------------------------------
 
-        if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && baseCab != null)
+        if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
         {
-            if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight, materialThickness34: mt34));
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && baseCab != null)
+            {
+                if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight, materialThickness34: mt34));
+                else
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height - mt34, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight, materialThickness34: mt34));
+            }
+
+
             else
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height - mt34, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight, materialThickness34: mt34));
-        }
-
-
-        else if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
-        {
-            mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: 0, materialThickness34: mt34));
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: 0, materialThickness34: mt34));
+            }
         }
 
 
 
+        // --------------------------------------------------------- BOTTOM -------------------------------------------------------------------
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
         {
@@ -459,6 +466,7 @@ internal static class PanelGeometryCalculator
 
 
 
+        // --------------------------------------------------------- TOP -------------------------------------------------------------------
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
         {
@@ -483,8 +491,7 @@ internal static class PanelGeometryCalculator
 
             else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
             {
-                // For some reason, I have to use the Left toekick dimension for the Right toekick here. Probably because the deck is flipped. Who knows...
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickLeftWidth, base90corner.ToeKickLeftWidth, 0, MortiseEdge.Top, joinery, additionalInset: ConvertDimension.FractionToDouble(base90corner.TKDepth), materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickLeftWidth, base90corner.ToeKickLeftWidth, 0, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
             }
 
             else
@@ -503,6 +510,8 @@ internal static class PanelGeometryCalculator
         double stretcherWidth = 6;
         double upperNailerWidth = 4;
         double topStretcherBackWidth = 3;
+
+        // --------------------------------------------------------- LEFT -------------------------------------------------------------------
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left) && part.Name.Contains("End") && baseCab != null)
         {
@@ -539,6 +548,9 @@ internal static class PanelGeometryCalculator
             holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
         }
 
+
+        // --------------------------------------------------------- RIGHT -------------------------------------------------------------------
+
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right) && part.Name.Contains("End") && baseCab != null)
         {
             if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
@@ -551,8 +563,15 @@ internal static class PanelGeometryCalculator
             holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(height, length, height, ScrewHoleEdge.Right, joinery, additionalInset: 0, materialThickness34: mt34));
         }
 
+
+        // --------------------------------------------------------- BOTTOM -------------------------------------------------------------------
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
             holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
+
+
+
+
+        // --------------------------------------------------------- TOP -------------------------------------------------------------------
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
         {
