@@ -75,7 +75,7 @@ internal static class CabinetInputAdapter
                 {
                     mappedPart = new PartInfo(
                         Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.Top, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
+                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.Top | MortiseEdge.Left, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
                         EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
                 }
                 else if (isLeftBack)
