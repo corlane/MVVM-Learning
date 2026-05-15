@@ -491,7 +491,7 @@ internal static class PanelGeometryCalculator
 
             else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickLeftWidth, base90corner.ToeKickLeftWidth, 0, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickLeftWidth, base90corner.ToeKickLeftWidth, 10, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
             }
 
             else
