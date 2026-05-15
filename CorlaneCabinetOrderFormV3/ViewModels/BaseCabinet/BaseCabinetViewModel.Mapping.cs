@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.Services;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -122,6 +124,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.HasRightEnd = HasRightEnd;
         target.HasBack = HasBack;
         target.HasToeKickBoard = HasToeKickBoard;
+        target.ToeKickLeftWidth = ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
+        target.ToeKickRightWidth = ConvertDimension.FractionToDouble(RightFrontWidth) + MaterialDefaults.Thickness34 + ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
     }
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type

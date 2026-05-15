@@ -359,8 +359,8 @@ internal static class PartsListBuilder
         if (b.HasTK)
         {
             double tkD = dim.TKDepth;
-            Add(entries, label, "Toekick (Left)", 1, species, lf - Mt34 + tkD, tkH - 0.5, Mt34, "Horizontal");
-            Add(entries, label, "Toekick (Right)", 1, species, rf + tkD, tkH - 0.5, Mt34, "Horizontal");
+            Add(entries, label, "Toekick (Left)", 1, species, lf + tkD, tkH - 0.5, Mt34, "Horizontal");
+            Add(entries, label, "Toekick (Right)", 1, species, rf + tkD + Mt34, tkH - 0.5, Mt34, "Horizontal");
         }
 
         // Shelves (L-shaped) — edges 0+1 banded

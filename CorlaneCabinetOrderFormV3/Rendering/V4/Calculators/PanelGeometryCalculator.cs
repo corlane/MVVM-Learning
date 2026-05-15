@@ -2,6 +2,7 @@
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 using System.Diagnostics;
+using System.Transactions;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 
@@ -31,6 +32,10 @@ internal static class PanelGeometryCalculator
         if (isLShape && baseCab != null)
         {
             ComputeLShapeJoinery(part, outline, thinningPockets, joinery, baseCab, materialThickness34);
+            if (baseCab.HasTK && part.Name.Contains("Deck"))
+            {
+                ComputeMortisePockets(part, mortisePockets, joinery, baseCab, cabinet, materialThickness34);
+            }
         }
         else if (!isLShape)
         {
@@ -381,7 +386,7 @@ internal static class PanelGeometryCalculator
         double height = part.Bounds.Height;
         double stretcherWidth = 6;
         double upperNailerWidth = 4;
-
+        
         if (part.MortiseEdges.HasFlag(MortiseEdge.Left) && part.Name.Contains("End") && baseCab != null)
         {
             double openingHeight = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1) + mt34;
@@ -390,9 +395,13 @@ internal static class PanelGeometryCalculator
             double opening3Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3);
 
             if (baseCab.TopType == "Stretcher")
+            {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, materialThickness34: mt34));
+            }
             else
+            {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
+            }
 
             if (baseCab.Style == CabinetStyles.Base.Standard && baseCab.DrwCount == 1)
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: opening1Height + mt34, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
@@ -406,6 +415,14 @@ internal static class PanelGeometryCalculator
                     mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: openingHeight, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
                 }
             }
+
+            if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
+            {
+                // For some reason, I have to use the Left toekick dimension for the Right toekick here. Probably because the deck is flipped. Who knows...
+                Debug.WriteLine("Is this thing on");
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickRightWidth, 0, base90corner.ToeKickRightWidth, MortiseEdge.Left, joinery, additionalInset: -ConvertDimension.FractionToDouble(base90corner.LeftFrontWidth), materialThickness34: mt34));
+            }
+
         }
         else if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
         {
@@ -421,6 +438,8 @@ internal static class PanelGeometryCalculator
             else
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height - mt34, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight, materialThickness34: mt34));
         }
+
+
         else if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
         {
             mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: 0, materialThickness34: mt34));
@@ -431,16 +450,8 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
         {
-            if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90)
-            {
-                Debug.WriteLine($"Ran mortise bottom for {part.Name}");
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(ConvertDimension.FractionToDouble(base90corner.RightBackWidth), ConvertDimension.FractionToDouble(base90corner.RightBackWidth),height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
-            }
-            else
-            {
-                Debug.WriteLine($"Ran mortise bottom for standard {part.Name}");
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
-            }
+            
         }
 
 
@@ -462,10 +473,17 @@ internal static class PanelGeometryCalculator
                 else
                     mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
             }
-            else if (part.Name.Contains("Deck") && part.CabinetModel is BaseCabinetModel)
+            else if (part.Name.Contains("Deck") && part.CabinetModel is BaseCabinetModel baseCabStd && baseCabStd.Style == CabinetStyles.Base.Standard)
             {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: part.TkDepth, materialThickness34: mt34));
             }
+
+            else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
+            {
+                // For some reason, I have to use the Left toekick dimension for the Right toekick here. Probably because the deck is flipped. Who knows...
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickLeftWidth, base90corner.ToeKickLeftWidth, 0, MortiseEdge.Top, joinery, additionalInset: ConvertDimension.FractionToDouble(base90corner.TKDepth), materialThickness34: mt34));
+            }
+
             else
             {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));

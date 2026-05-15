@@ -84,6 +84,8 @@ public partial class BaseCabinetModel : CabinetModel
     [ObservableProperty] public partial bool HasRightEnd { get; set; }
     [ObservableProperty] public partial bool HasBack { get; set; }
     [ObservableProperty] public partial bool HasToeKickBoard { get; set; }
+    [ObservableProperty] public partial double ToeKickLeftWidth { get; set; }
+    [ObservableProperty] public partial double ToeKickRightWidth { get; set; }
 
 
     private void BumpGeometry() => BumpGeometryVersion();
