@@ -21,7 +21,9 @@ internal static class MortiseCalculator
         double blindStartOverride = 2,
         double blindStopOverride = 2,
         bool fullThicknessTenon = false,
-        double materialThickness34 = 0)
+        double materialThickness34 = 0,
+        double mStartAdditional = 0,
+        double mEndAdditional = 0)
     {
         //materialThickness34 = materialThickness34;
 
@@ -34,8 +36,8 @@ internal static class MortiseCalculator
 
         foreach (var (tStart, tEnd) in tenonRanges)
         {
-            double mStart = tStart - oversize;
-            double mEnd = tEnd + oversize;
+            double mStart = tStart - oversize + mStartAdditional;
+            double mEnd = tEnd + oversize + mEndAdditional;
 
             switch (edge)
             {
