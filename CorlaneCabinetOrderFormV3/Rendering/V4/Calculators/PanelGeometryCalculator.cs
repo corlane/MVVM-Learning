@@ -460,8 +460,14 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
         {
+            if (part.Name.Contains("End") && baseCab != null &&  baseCab.HasTK)
+            {
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, height, MortiseEdge.Bottom, joinery, additionalInset: part.TkDepth, materialThickness34: mt34, forceTwoTenons: true, blindStartOverride: 0, blindStopOverride: 0, mStartAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight), mEndAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight)));
+            }
+            else
+            {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
-            
+            }
         }
 
 

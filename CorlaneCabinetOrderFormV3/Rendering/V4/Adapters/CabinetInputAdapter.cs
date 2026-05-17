@@ -174,7 +174,7 @@ internal static class CabinetInputAdapter
     {
         return partName.ToLowerInvariant() switch
         {
-            "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
+            "left end" or "right end" => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
             "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseEdge.Right,
             "left back" when cabinet is BaseCabinetModel basecab => MortiseEdge.Bottom,
             "right back" when cabinet is BaseCabinetModel basecab => MortiseEdge.Bottom,
