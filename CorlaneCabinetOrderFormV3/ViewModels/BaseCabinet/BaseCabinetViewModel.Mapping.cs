@@ -124,8 +124,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.HasRightEnd = HasRightEnd;
         target.HasBack = HasBack;
         target.HasToeKickBoard = HasToeKickBoard;
-        target.ToeKickLeftWidth = ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
-        target.ToeKickRightWidth = ConvertDimension.FractionToDouble(RightFrontWidth) + MaterialDefaults.Thickness34 + ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
+        target.ToeKickLeftWidth = ConvertDimension.FractionToDouble(LeftFrontWidth) - MaterialDefaults.Thickness34 - ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
+        target.ToeKickRightWidth = ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
     }
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type
