@@ -426,14 +426,14 @@ internal static class PanelGeometryCalculator
 
             else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
             {
-                double leftDeckOffsetAlong = ConvertDimension.FractionToDouble(base90corner.RightBackWidth) - (2 * mt34) - base90corner.ToeKickRightWidth;
+                double leftDeckOffsetAlong = ConvertDimension.FractionToDouble(base90corner.RightBackWidth) - (3 * mt34) - base90corner.ToeKickRightWidth;
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
                 (
                     Edge: MortiseEdge.Left,
                     EdgeLength: base90corner.ToeKickRightWidth,
                     PartWidth: 0,//length,
                     PartHeight: 0,//height,
-                    OffsetFromEdge: 0,//ConvertDimension.FractionToDouble(base90corner.LeftFrontWidth) - mt34 + ConvertDimension.FractionToDouble(base90corner.TKDepth),
+                    OffsetFromEdge: ConvertDimension.FractionToDouble(base90corner.LeftFrontWidth) - mt34 + ConvertDimension.FractionToDouble(base90corner.TKDepth),
                     OffsetAlongEdge: leftDeckOffsetAlong,
                     ForceTwoTenons: false,
                     BlindStartOverride: 0,
@@ -441,10 +441,6 @@ internal static class PanelGeometryCalculator
                     FullThicknessTenon: false,
                     MaterialThickness34: mt34), joinery)
                 );
-
-                Debug.WriteLine($"L-Shape Deck Left Mortises: Length={base90corner.ToeKickRightWidth}, BlindStartOverride = {joinery.BlindStart}, BlindStopOverride = {joinery.BlindStop}");
-
-                //mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(base90corner.ToeKickRightWidth, 0, 0, MortiseEdge.Left, joinery, additionalInset: ConvertDimension.FractionToDouble(base90corner.LeftFrontWidth) - mt34 + ConvertDimension.FractionToDouble(base90corner.TKDepth), materialThickness34: mt34, mStartAdditional: ConvertDimension.FractionToDouble(base90corner.RightBackWidth) - (2*mt34) - base90corner.ToeKickRightWidth, mEndAdditional: ConvertDimension.FractionToDouble(base90corner.RightBackWidth) - (2*mt34) - base90corner.ToeKickRightWidth)); //ConvertDimension.FractionToDouble(base90corner.LeftDepth)
             }
 
             else
@@ -534,17 +530,16 @@ internal static class PanelGeometryCalculator
                 (
                     Edge: MortiseEdge.Top,
                     EdgeLength: base90corner.ToeKickLeftWidth,
-                    PartWidth: length,
-                    PartHeight: ConvertDimension.FractionToDouble(base90corner.LeftDepth) - (2 * mt34) - ConvertDimension.FractionToDouble(base90corner.TKDepth),
-                    OffsetFromEdge: 0,
-                    OffsetAlongEdge: -mt34,
+                    PartWidth: 0, //length,
+                    PartHeight: ConvertDimension.FractionToDouble(base90corner.LeftDepth) - (2 * mt34),
+                    OffsetFromEdge: ConvertDimension.FractionToDouble(base90corner.TKDepth),
+                    OffsetAlongEdge: 0,
                     ForceTwoTenons: false,
-                    BlindStartOverride: joinery.BlindStart,
-                    BlindStopOverride: joinery.BlindStop,
+                    BlindStartOverride: 0,
+                    BlindStopOverride: 0,
                     FullThicknessTenon: false,
                     MaterialThickness34: mt34), joinery)
                 );
-
             }
 
             else

@@ -124,7 +124,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.HasRightEnd = HasRightEnd;
         target.HasBack = HasBack;
         target.HasToeKickBoard = HasToeKickBoard;
-        target.ToeKickLeftWidth = ConvertDimension.FractionToDouble(LeftFrontWidth) - MaterialDefaults.Thickness34 - ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
+        target.ToeKickLeftWidth = ConvertDimension.FractionToDouble(LeftFrontWidth) - MaterialDefaults.Thickness34 + ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
         target.ToeKickRightWidth = ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(TKDepth); // THESE ARE CORRECT. THE CUT LIST AND PROBABLY THE 3D MODEL ARE WRONG.
     }
 
