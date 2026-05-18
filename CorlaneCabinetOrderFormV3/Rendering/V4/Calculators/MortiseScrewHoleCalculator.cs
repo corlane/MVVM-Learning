@@ -19,11 +19,12 @@ internal static class MortiseScrewHoleCalculator
         bool forceTwoTenons = false,
         double blindStartOverride = 2,
         double blindStopOverride = 2,
-        double materialThickness34 = 0)
+        double materialThickness34 = 0,
+        double mStartAdditional = 0,
+        double mEndAdditional = 0)
 
     {
         var holes = new List<(double, double, double)>();
-        //var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery);
         var tenonRanges = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: forceTwoTenons, blindStartOverride: blindStartOverride, blindStopOverride: blindStopOverride, materialThickness34: materialThickness34);
         double radius = joinery.ScrewPilotHoleDiameter / 2.0;
         double edgeOffset = materialThickness34 / 2.0;
@@ -115,4 +116,78 @@ internal static class MortiseScrewHoleCalculator
         }
         return holes;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    internal static List<(double x, double y, double radius)> ComputeScrewHolesFromSpecs(
+    ScrewHolePlacementSpec spec,
+    JoineryConfig joinery)
+    {
+        var holes = new List<(double, double, double)>();
+        var tenonRanges = TenonCalculator.ComputeTenonRanges(
+            spec.EdgeLength, joinery,
+            forceTwoTenons: spec.ForceTwoTenons,
+            blindStartOverride: spec.BlindStartOverride,
+            blindStopOverride: spec.BlindStopOverride,
+            materialThickness34: spec.MaterialThickness34);
+
+        double radius = joinery.ScrewPilotHoleDiameter / 2.0;
+        double edgeOffset = spec.MaterialThickness34 / 2.0;
+
+        for (int i = 0; i < tenonRanges.Count - 1; i++)
+        {
+            // Apply uniform offset along edge to gap centers
+            double gapCenter = ((tenonRanges[i].end + tenonRanges[i + 1].start) / 2.0) + spec.OffsetAlongEdge;
+            holes.Add(GetHoleCoords(spec, gapCenter, edgeOffset));
+        }
+
+        if (!spec.ForceTwoTenons)
+        {
+            double startHolePos = spec.BlindStartOverride - joinery.MortiseOversize - (joinery.GapWidth / 2) + spec.OffsetAlongEdge;
+            double endHolePos = spec.PartHeight - spec.BlindStopOverride + joinery.MortiseOversize + (joinery.GapWidth / 2) + spec.OffsetAlongEdge;
+
+            holes.Add(GetHoleCoords(spec, startHolePos, edgeOffset));
+            holes.Add(GetHoleCoords(spec, endHolePos, edgeOffset));
+        }
+
+        return holes;
+
+        (double x, double y, double r) GetHoleCoords(ScrewHolePlacementSpec s, double posAlongEdge, double off)
+        {
+            return s.Edge switch
+            {
+                ScrewHoleEdge.Left => (off + s.OffsetFromEdge, posAlongEdge, radius),
+                ScrewHoleEdge.Right => (s.PartWidth - off - s.OffsetFromEdge, posAlongEdge, radius),
+                ScrewHoleEdge.Bottom => (posAlongEdge, off + s.OffsetFromEdge, radius),
+                ScrewHoleEdge.Top => (posAlongEdge, s.PartHeight - off - s.OffsetFromEdge, radius),
+                _ => (0, 0, radius)
+            };
+        }
+    }
+
 }

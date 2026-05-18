@@ -1,75 +1,34 @@
-﻿Session Summary: Corlane Cabinet Order Form – DXF Export Pipeline & 90° Corner Cabinet Joinery
-🎯 Session Overview
-Successfully implemented sequential tenon placement for Base 90° corner cabinet Tops, Decks, and Shelves (L-shaped panels). Refactored the outline generation strategy from fragile index-based insertion to a robust, sequential edge-chaining approach. Resolved compilation errors related to Vector2 equality checks. Documented next-phase requirements for mortises, screw holes, and asymmetric shelf hole drilling on 90° corner cabinets.
+﻿📜 Session Summary: Mortise & Screw Hole Placement Refactor
+🎯 Objective
+Replace the fragmented mStartAdditional/mEndAdditional hacks in MortiseCalculator and MortiseScrewHoleCalculator with a clean, discrete placement model that allows uniform shifting of entire mortise/screw hole groups along an edge, while keeping screw holes perfectly synced.
 
-🐛 Problem Identified
-The initial attempt to add tenons to L-shaped panels used index-based vertex insertion into a pre-built List<Vector2>. This approach:
+🧱 Architecture Changes
+New Spec Records (Rendering/V4/Core/JoineryPlacementSpecs.cs)
 
-Broke clockwise winding order when multiple tenons were inserted
-Caused index-shifting bugs that corrupted subsequent edge coordinates
-Produced "spaghetti" DXF output with crossing lines and invalid polylines
-Failed to respect the constraint that the two edges intersecting the inner radius corner must remain joinery-free
-✅ Solution Implemented
-Replaced index manipulation with a sequential, edge-by-edge outline builder. The new flow constructs the L-shape clockwise, chaining vertices naturally so the end of one edge becomes the start of the next.
+MortisePlacementSpec & ScrewHolePlacementSpec records
+Replaced mStartAdditional/mEndAdditional with a single OffsetAlongEdge parameter
+Maintains all existing parameters (Edge, EdgeLength, PartWidth, PartHeight, OffsetFromEdge, ForceTwoTenons, BlindStart/StopOverride, FullThicknessTenon, MaterialThickness34)
+Placed in CorlaneCabinetOrderFormV3.Rendering.V4.Core for clean MVVM separation
+New Calculator Methods
 
-🔹 Core Changes in PanelGeometryCalculator.cs
-ComputeLShapeJoinery Method
+MortiseCalculator.ComputeMortisePocketsFromSpecs(MortisePlacementSpec, JoineryConfig)
+MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(ScrewHolePlacementSpec, JoineryConfig)
+Existing methods remain untouched for backward compatibility
+OffsetAlongEdge is applied uniformly to all computed ranges, eliminating asymmetric shifts
+Call Site Mapping (PanelGeometryCalculator.cs)
 
-Clears the seed point and rebuilds the outline sequentially
-Draws the inner radius arc first (no joinery)
-Chains 4 outer edges using dedicated builders:
-AppendHorizontalEdgeWithTenons (Top & Bottom edges)
-AppendVerticalEdgeWithTenons (Right & Left edges)
-Explicitly skips joinery on the 2 edges touching the inner radius corner
-Maintains strict clockwise winding order
-Edge Builder Helpers
-
-Compute edge length and direction (left→right or top→bottom)
-Call TenonCalculator.ComputeTenonRanges for proper spacing
-Project tenons outward using dadoDepth and directional flags (protrudePositiveY/protrudePositiveX)
-Append vertices sequentially: straight segment → tenon start → protrude → across → return → next segment
-Record global thinning pocket coordinates for each edge
-Handle zero-tenon edges gracefully by drawing a single straight line
-Vector2 Equality Fix
-
-Replaced outline.Last() != start with coordinate comparison:
-
-Copy
-csharp
-if (outline.Count == 0 || outline.Last().X != start.X || outline.Last().Y != start.Y) outline.Add(start);
-Resolves CS0019 compilation errors without modifying the Vector2 struct
-📐 Architectural Decisions
-Sequential Chaining > Index Insertion: Eliminates winding order corruption and index-shifting bugs. DXF polylines are now mathematically guaranteed to be valid.
-Direction-Aware Protrusion: Tenons always face outward from the L-shape boundary, regardless of edge traversal direction.
-Inner Corner Protection: The two edges adjacent to the radius are explicitly excluded from joinery calculation, preserving structural integrity and CNC toolpath safety.
-Modular Helpers: AppendHorizontalEdgeWithTenons and AppendVerticalEdgeWithTenons isolate axis-specific logic, making future adjustments (e.g., custom blind starts, asymmetric tenons) trivial.
-🔜 Next Tasks (Queued)
-Mortises & Screw Holes for 90° Corner Backs
-
-Left and right back panels of the 90° corner cabinet require mortise pockets and screw holes
-Must align with the existing end panel joinery logic
-Coordinate system and edge orientation must match the corner cabinet's asymmetric layout
-Will likely require new methods in PanelGeometryCalculator or extensions to MortiseCalculator / MortiseScrewHoleCalculator
-Asymmetric Shelf Hole Drilling for 90° Corner End Panels
-
-Left and right end panels can have different depths
-Shelf holes must be calculated independently per panel, not mirrored or shared
-Will require modifications to ComputeShelfHoles or a dedicated corner-cabinet shelf hole routine
-Must respect each panel's actual depth, opening heights, and material thickness
-Should integrate cleanly with existing ShelfHoleCalculator while bypassing standard mirroring logic
-📦 Files Modified
-PanelGeometryCalculator.cs
-Compute() method: Added L-shape joinery routing
-BuildOutline(): Simplified L-shape seeding
-Added ComputeLShapeJoinery()
-Added AppendHorizontalEdgeWithTenons()
-Added AppendVerticalEdgeWithTenons()
-Fixed Vector2 equality checks in both append helpers
-🔍 Context Notes for Future Sessions
-The DXF pipeline expects clockwise winding order for valid polylines
-TenonCalculator.ComputeTenonRanges remains the single source of truth for tenon spacing
-Thinning pockets are recorded as (x1, x2, y1, y2) tuples and passed to DxfWriter
-Vector2 is a lightweight readonly struct without equality operators; always compare .X and .Y directly
-L-shape geometry uses insetLf, insetRf, insetLd, insetRd derived from cabinet dimensions minus material thickness and gaps
-Inner radius corner is generated via GenerateInsideCornerArc with 8 segments and 1.0" radius
-All joinery protrusions use joinery.DadoDepth and respect outward-facing directionality
+Left Edge (Corner90 Deck): OffsetAlongEdge = RightBackWidth - (2*mt34) - ToeKickRightWidth
+Top Edge (Corner90 Deck): OffsetAlongEdge = -mt34
+Bottom Edge (End Panel w/ TK): OffsetAlongEdge = length - TKHeight
+Screw holes use identical OffsetAlongEdge values to stay mathematically locked to their mortise groups
+All replacements use the new ...FromSpecs methods; legacy calls remain intact
+✅ Key Benefits
+Single source of truth for positioning: OffsetAlongEdge shifts entire groups uniformly
+Zero desync risk: Screw holes consume identical offset values
+MVVM-aligned: Pure data records, pure math calculators, no UI/state coupling
+Incrementally safe: Original methods preserved; call sites can be migrated at your pace
+Fully testable: Specs are immutable records; calculators are deterministic functions
+📍 Next Steps
+Continue replacing remaining mStartAdditional/mEndAdditional call sites in PanelGeometryCalculator.cs with the spec-driven approach
+Verify DXF output and 3D viewport alignment for migrated edges
+Optional: Add unit tests for ComputeMortisePocketsFromSpecs and ComputeScrewHolesFromSpecs to lock in expected offset behavior
