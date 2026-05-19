@@ -399,32 +399,86 @@ internal static class PanelGeometryCalculator
                 double opening2Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2);
                 double opening3Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3);
 
-                if (baseCab.TopType == "Stretcher")
+                if (baseCab.TopType == "Stretcher") // Stretcher Top
                 {
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: 0, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, materialThickness34: mt34));
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Left,
+                        EdgeLength: stretcherWidth,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+
                 }
-                else
+                else // Full Top
                 {
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Left,
+                        EdgeLength: height,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
                 }
 
-                if (baseCab.Style == CabinetStyles.Base.Standard && baseCab.DrwCount == 1)
+                if (baseCab.Style == CabinetStyles.Base.Standard && baseCab.DrwCount == 1) // Base Std 1 Drw Stretcher
                 {
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: opening1Height + mt34, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Left,
+                        EdgeLength: stretcherWidth,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: opening1Height + mt34,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        FullThicknessTenon: true,
+                        MaterialThickness34: mt34), joinery)
+                    );
                 }
 
-                if (baseCab.Style == CabinetStyles.Base.Drawer && baseCab.DrwCount > 1)
+                if (baseCab.Style == CabinetStyles.Base.Drawer && baseCab.DrwCount > 1) // Drw Base Stretchers
                 {
                     for (int i = 0; i < baseCab.DrwCount; i++)
                     {
                         if (i == 1) openingHeight += opening2Height + mt34;
                         if (i == 2) openingHeight += opening3Height + mt34;
-                        mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, stretcherWidth, MortiseEdge.Left, joinery, additionalInset: openingHeight, forceTwoTenons: true, blindStartOverride: 1.25, blindStopOverride: 1.25, fullThicknessTenon: true, materialThickness34: mt34));
+
+                        mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                        (
+                            Edge: MortiseEdge.Left,
+                            EdgeLength: stretcherWidth,
+                            PartWidth: length,
+                            PartHeight: height,
+                            OffsetFromEdge: openingHeight,
+                            OffsetAlongEdge: 0,
+                            ForceTwoTenons: true,
+                            BlindStartOverride: 1.25,
+                            BlindStopOverride: 1.25,
+                            FullThicknessTenon: true,
+                            MaterialThickness34: mt34), joinery)
+                        );
                     }
                 }
             }
 
-            else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
+            else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck")) // Base Corner 90 deg Toekick (right)
             {
                 double leftDeckOffsetAlong = ConvertDimension.FractionToDouble(base90corner.RightBackWidth) - (3 * mt34) - base90corner.ToeKickRightWidth;
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
@@ -443,9 +497,22 @@ internal static class PanelGeometryCalculator
                 );
             }
 
-            else
+            else // Standard catch-all Left Edge mortise
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Left, joinery, additionalInset: 0, materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                (
+                    Edge: MortiseEdge.Left,
+                    EdgeLength: height,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    FullThicknessTenon: false,
+                    MaterialThickness34: mt34), joinery)
+                );
             }
         }
 
@@ -454,18 +521,61 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
         {
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && baseCab != null)
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && baseCab != null) // Base Cabinet Deck, accounting for Back Thickness
             {
                 if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight, materialThickness34: mt34));
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Right,
+                        EdgeLength: height,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: ConvertDimension.FractionToDouble(baseCab.TKHeight),
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+                }
                 else
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height - mt34, length, height, MortiseEdge.Right, joinery, additionalInset: part.TkHeight, materialThickness34: mt34));
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Right,
+                        EdgeLength: height - mt34,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: ConvertDimension.FractionToDouble(baseCab.TKHeight),
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+                }
             }
 
 
-            else
+            else // Standard catch-all Right Edge mortise
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(height, length, height, MortiseEdge.Right, joinery, additionalInset: 0, materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                (
+                    Edge: MortiseEdge.Right,
+                    EdgeLength: height,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    FullThicknessTenon: false,
+                    MaterialThickness34: mt34), joinery)
+                );
             }
         }
 
@@ -475,10 +585,8 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
         {
-            if (part.Name.Contains("End") && baseCab != null &&  baseCab.HasTK)
+            if (part.Name.Contains("End") && cabinet is BaseCabinetModel &&  baseCab!.HasTK) // Std Base Toekick End Panel Mortises
             {
-                //mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, height, MortiseEdge.Bottom, joinery, additionalInset: part.TkDepth, materialThickness34: mt34, forceTwoTenons: true, blindStartOverride: 0, blindStopOverride: 0, mStartAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight), mEndAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight)));
-
                 double tkBottomOffsetAlong = length - ConvertDimension.FractionToDouble(baseCab.TKHeight);
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
                 (
@@ -495,7 +603,7 @@ internal static class PanelGeometryCalculator
                     MaterialThickness34: mt34), joinery)
                 );
             }
-            else
+            else // Standard catch-all for Bottom Edge mortises
             {
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
                 (
@@ -511,8 +619,6 @@ internal static class PanelGeometryCalculator
                     FullThicknessTenon: false,
                     MaterialThickness34: mt34), joinery)
                 );
-
-                //mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
             }
         }
 
@@ -522,23 +628,111 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
         {
-            if (part.Name.Contains("End") && baseCab != null)
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
             {
-                if (ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25)
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(stretcherWidth, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true, materialThickness34: mt34));
-                else
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length - ConvertDimension.FractionToDouble(baseCab.TKHeight), length, height, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
+                if (ConvertDimension.FractionToDouble(baseCab!.BackThickness) == 0.25) // Base Nailer mortise (1/4" back)
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Top,
+                        EdgeLength: stretcherWidth,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: mt34,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+                }
+                else // Base Back mortise (3/4" back)
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Top,
+                        EdgeLength: length - (ConvertDimension.FractionToDouble(baseCab.TKHeight)) - mt34,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: mt34,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+                }
             }
             else if (part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
             {
-                if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(upperNailerWidth, length, height, MortiseEdge.Top, joinery, additionalInset: 0, forceTwoTenons: true, materialThickness34: mt34));
-                else
-                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
+                if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25) // Upper Cabinet 1/4" back end panel nailer mortises
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Top,
+                        EdgeLength: upperNailerWidth,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: mt34,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Top,
+                        EdgeLength: upperNailerWidth,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: length - upperNailerWidth - mt34,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+                }
+                else // Upper Cabinet 3/4" back end panel mortises
+                {
+                    mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                    (
+                        Edge: MortiseEdge.Top,
+                        EdgeLength: length,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        FullThicknessTenon: false,
+                        MaterialThickness34: mt34), joinery)
+                    );
+                }
             }
-            else if (part.Name.Contains("Deck") && part.CabinetModel is BaseCabinetModel baseCabStd && baseCabStd.Style == CabinetStyles.Base.Standard)
+            else if (part.Name.Contains("Deck") && part.CabinetModel is BaseCabinetModel baseCabStd && baseCabStd.Style == CabinetStyles.Base.Standard) // Base Std & Drw toekick top mortises
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: part.TkDepth, materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                (
+                    Edge: MortiseEdge.Top,
+                    EdgeLength: length,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: ConvertDimension.FractionToDouble(baseCabStd.TKDepth),
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 1.25,
+                    BlindStopOverride: 1.25,
+                    FullThicknessTenon: false,
+                    MaterialThickness34: mt34), joinery)
+                );
             }
 
             else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
@@ -559,9 +753,22 @@ internal static class PanelGeometryCalculator
                 );
             }
 
-            else
+            else // Standard catch-all for Top Edge mortises
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                (
+                    Edge: MortiseEdge.Top,
+                    EdgeLength: length,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    FullThicknessTenon: false,
+                    MaterialThickness34: mt34), joinery)
+                );
             }
         }
     }
