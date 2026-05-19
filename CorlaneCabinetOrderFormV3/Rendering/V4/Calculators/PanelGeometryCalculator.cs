@@ -30,10 +30,10 @@ internal static class PanelGeometryCalculator
         BuildOutline(part, baseCab, isEndPanelWithTk, isLShape, materialThickness34, outline);
 
         // 2. Compute Joinery
-        if (isLShape && baseCab != null)
+        if (isLShape && cabinet is BaseCabinetModel)
         {
-            ComputeLShapeJoinery(part, outline, thinningPockets, joinery, baseCab, materialThickness34);
-            if (baseCab.HasTK && part.Name.Contains("Deck"))
+            ComputeLShapeJoinery(part, outline, thinningPockets, joinery, baseCab!, materialThickness34);
+            if (baseCab!.HasTK && part.Name.Contains("Deck"))
             {
                 ComputeMortisePockets(part, mortisePockets, joinery, baseCab, cabinet, materialThickness34);
             }
