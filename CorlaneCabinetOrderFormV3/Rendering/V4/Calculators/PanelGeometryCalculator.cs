@@ -1,14 +1,14 @@
 ﻿using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
-using System.Diagnostics;
-using System.Drawing.Imaging.Effects;
-using System.Transactions;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 
 /// <summary>
 /// Assembles the final geometry for a part, handling winding order and edge routing.
+/// 
+/// Builds Outlines, Tenon Thinning Pockets, Mortise Pockets, Assembly Holes & Shelf Holes based on the PartInfo and JoineryConfig.
+/// 
 /// </summary>
 internal static class PanelGeometryCalculator
 {
