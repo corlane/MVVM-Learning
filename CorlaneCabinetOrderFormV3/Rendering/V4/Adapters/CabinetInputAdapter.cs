@@ -23,7 +23,6 @@ internal static class CabinetInputAdapter
         {
             PartInfo mappedPart;
             bool isCorner90 = cabinet is BaseCabinetModel bCab && bCab.Style == CabinetStyles.Base.Corner90;
-            var baseCab = cabinet as BaseCabinetModel;
 
             // ── Resolve Bounds (handle "—" dimensions for Corner90 L-shapes) ──
             double partLength = entry.LengthIn;
@@ -32,7 +31,7 @@ internal static class CabinetInputAdapter
             if (isCorner90 && (partLength == 0 || partWidth == 0))
             {
                 bool isLShape = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck") || entry.PartName.Contains("Shelf");
-                if (isLShape && baseCab != null)
+                if (isLShape && cabinet is BaseCabinetModel baseCab)
                 {
                     // Assign bounding box dimensions so ValidateInput() passes
                     double lf = ConvertDimension.FractionToDouble(baseCab.LeftFrontWidth);
