@@ -67,7 +67,7 @@ internal static class CabinetInputAdapter
                         Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
                         TenonEdges: TenonEdge.None,
                         MortiseEdges: MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
-                        ScrewHoleEdges: ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top,
+                        ScrewHoleEdges: ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top | ScrewHoleEdge.Bottom,
                         ThinningPockets: ThinningPocketEdge.None,
                         EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
                 }

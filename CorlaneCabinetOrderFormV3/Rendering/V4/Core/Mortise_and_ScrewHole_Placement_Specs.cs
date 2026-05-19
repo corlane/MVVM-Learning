@@ -4,7 +4,8 @@ using System.Text;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Core;
 
-internal record MortisePlacementSpec(
+internal record MortisePlacementSpec
+(
     MortiseEdge Edge,
     double EdgeLength,
     double PartWidth,
@@ -15,9 +16,11 @@ internal record MortisePlacementSpec(
     double BlindStartOverride,
     double BlindStopOverride,
     bool FullThicknessTenon,
-    double MaterialThickness34);
+    double MaterialThickness34
+);
 
-internal record ScrewHolePlacementSpec(
+internal record ScrewHolePlacementSpec
+(
     ScrewHoleEdge Edge,
     double EdgeLength,
     double PartWidth,
@@ -27,4 +30,6 @@ internal record ScrewHolePlacementSpec(
     bool ForceTwoTenons,
     double BlindStartOverride,
     double BlindStopOverride,
-    double MaterialThickness34);
+    double MaterialThickness34,
+    bool IncludeEndHoles = true
+);

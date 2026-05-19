@@ -81,5 +81,4 @@ internal record JoineryConfig(
     double GapWidth,
     double GapSpacing,
     double ScrewPilotHoleDiameter,
-    //double Thickness34,
     double TenonThinningOverrun = 0.375);

@@ -480,7 +480,8 @@ internal static class PanelGeometryCalculator
                 //mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, height, MortiseEdge.Bottom, joinery, additionalInset: part.TkDepth, materialThickness34: mt34, forceTwoTenons: true, blindStartOverride: 0, blindStopOverride: 0, mStartAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight), mEndAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight)));
 
                 double tkBottomOffsetAlong = length - ConvertDimension.FractionToDouble(baseCab.TKHeight);
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec(
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                (
                     Edge: MortiseEdge.Bottom,
                     EdgeLength: ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5,
                     PartWidth: length,
@@ -491,11 +492,27 @@ internal static class PanelGeometryCalculator
                     BlindStartOverride: 0,
                     BlindStopOverride: 0,
                     FullThicknessTenon: false,
-                    MaterialThickness34: mt34), joinery));
+                    MaterialThickness34: mt34), joinery)
+                );
             }
             else
             {
-                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                (
+                    Edge: MortiseEdge.Bottom,
+                    EdgeLength: length,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    FullThicknessTenon: false,
+                    MaterialThickness34: mt34), joinery)
+                );
+
+                //mortisePockets.AddRange(MortiseCalculator.ComputeMortisePockets(length, length, height, MortiseEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
             }
         }
 
@@ -618,7 +635,8 @@ internal static class PanelGeometryCalculator
             if (part.Name.Contains("End") && baseCab != null && baseCab.HasTK)
             {
                 double tkBottomOffsetAlong = length - ConvertDimension.FractionToDouble(baseCab.TKHeight);
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec(
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
                     Edge: ScrewHoleEdge.Bottom,
                     EdgeLength: ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5,
                     PartWidth: length,
@@ -628,13 +646,30 @@ internal static class PanelGeometryCalculator
                     ForceTwoTenons: true,
                     BlindStartOverride: 0,
                     BlindStopOverride: 0,
-                    MaterialThickness34: mt34), joinery));
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: false), joinery)
+                );
 
                 //holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5, height, MortiseEdge.Bottom, joinery, additionalInset: part.TkDepth, materialThickness34: mt34, forceTwoTenons: true, blindStartOverride: 0, blindStopOverride: 0, mStartAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight), mEndAdditional: length - ConvertDimension.FractionToDouble(baseCab.TKHeight)));
             }
             else
             {
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Bottom,
+                    EdgeLength: length,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
+                Debug.WriteLine($"Added screw holes to {part.Name}, length = {length}, height = {height}");
+                //holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Bottom, joinery, additionalInset: 0, materialThickness34: mt34));
             }
         }
 
@@ -661,7 +696,23 @@ internal static class PanelGeometryCalculator
             }
             else
             {
-                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHoles(length, length, height, ScrewHoleEdge.Top, joinery, additionalInset: 0, materialThickness34: mt34));
+                if (!part.Name.Contains("Deck"))
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Top,
+                        EdgeLength: length,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: part.TkDepth,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 0,
+                        BlindStopOverride: 0,
+                        MaterialThickness34: mt34), joinery)
+                    );
+
+                }
             }
         }
     }
