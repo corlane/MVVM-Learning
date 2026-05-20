@@ -618,6 +618,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         ApplyStyleVisibility(Style);
     }
+    [ObservableProperty] public partial bool DrwBoxCustomSpecies { get; set; } = false;
 
     // Reveal and gap properties
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string LeftReveal { get; set; } = "";

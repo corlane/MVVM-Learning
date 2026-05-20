@@ -1,4 +1,4 @@
-<local:FlyoutUserControlBase
+﻿<local:FlyoutUserControlBase
     x:Class="CorlaneCabinetOrderFormV3.Views.FillerFlyouts.FillerSpeciesFlyout"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -12,8 +12,8 @@
         <TextBlock Text="Species" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,8"/>
         <ListBox ItemsSource="{Binding ListCabSpecies}"
                  SelectedItem="{Binding Species}"/>
-        <Label Content="Custom Species:" Margin="0,6,0,0" Padding="0"/>
+        <Label Content="Custom Species:" Margin="0,6,0,0" Padding="0" Visibility="{Binding CustomCabSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
         <TextBox Text="{Binding CustomSpecies}" HorizontalAlignment="Stretch" Margin="0,4,0,0"
-                 IsEnabled="{Binding CustomCabSpeciesEnabled}"/>
+                 Visibility="{Binding CustomCabSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
     </StackPanel>
 </local:FlyoutUserControlBase>

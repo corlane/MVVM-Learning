@@ -1,4 +1,4 @@
-<local:FlyoutUserControlBase
+﻿<local:FlyoutUserControlBase
     x:Class="CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts.SpeciesFlyout"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,25 +17,27 @@
             <StackPanel Width="190" Margin="0,0,30,0">
                 <TextBlock Text="Cabinet Species" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
                 <ListBox ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding Species}"/>
-                <Label Content="Custom Species:" Margin="0,6,0,0" Padding="0"/>
+                <Label Content="Custom Species:" Margin="0,6,0,0" Padding="0" Visibility="{Binding CustomCabSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
                 <TextBox Text="{Binding CustomSpecies}" HorizontalAlignment="Stretch" Margin="0,4,0,0"
-                         IsEnabled="{Binding CustomCabSpeciesEnabled}"/>
+                         Visibility="{Binding CustomCabSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
+                <CheckBox Content="Use Custom Species&#xA;for Drawer Boxes" Margin="0,10,0,4" IsChecked="{Binding DrwBoxCustomSpecies}"
+                          Visibility="{Binding CustomCabSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
             </StackPanel>
             <!-- Edgebanding Species -->
             <StackPanel Width="240" Margin="0,0,30,0">
                 <TextBlock Text="Edgebanding" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
                 <ListBox ItemsSource="{Binding ListEBSpecies}" SelectedItem="{Binding EBSpecies}"/>
-                <Label Content="Custom Edgebanding:" Margin="0,6,0,0" Padding="0"/>
+                <Label Content="Custom Edgebanding:" Margin="0,6,0,0" Padding="0" Visibility="{Binding CustomEBSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
                 <TextBox Text="{Binding CustomEBSpecies}" HorizontalAlignment="Stretch" Margin="0,4,0,0"
-                         IsEnabled="{Binding CustomEBSpeciesEnabled}"/>
+                         Visibility="{Binding CustomEBSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
             </StackPanel>
             <!-- Door / Drawer Front Species -->
             <StackPanel Width="190">
                 <TextBlock Text="Door / Drw. Front" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
                 <ListBox ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DoorSpecies}"/>
-                <Label Content="Custom Door Species:" Margin="0,6,0,0" Padding="0"/>
+                <Label Content="Custom Door Species:" Margin="0,6,0,0" Padding="0" Visibility="{Binding CustomDoorSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
                 <TextBox Text="{Binding CustomDoorSpecies}" HorizontalAlignment="Stretch" Margin="0,4,0,0"
-                         IsEnabled="{Binding CustomDoorSpeciesEnabled}"/>
+                         Visibility="{Binding CustomDoorSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
                 <CheckBox Content="Apply Matching&#xA;Edgebanding To Doors&#xA;&amp; Drawer Fronts" Margin="0,10,0,4"
                           IsChecked="{Binding EdgebandDoorsAndDrawers}"/>
             </StackPanel>
