@@ -55,24 +55,3 @@ internal static class MortiseCalculator
         return pockets;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
