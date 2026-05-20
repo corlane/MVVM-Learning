@@ -45,9 +45,9 @@ internal static class ShelfHoleCalculator
             }
         }
 
-        else if (part.CabinetModel is BaseCabinetModel baseCab90 && baseCab90.Style == CabinetStyles.Base.Corner90)
+        else if (part.CabinetModel is BaseCabinetModel baseCorner && (baseCorner.Style == CabinetStyles.Base.Corner90 || baseCorner.Style == CabinetStyles.Base.AngleFront))
         {
-            var dim = BaseCabinetDimensions.From(baseCab90);
+            var dim = BaseCabinetDimensions.From(baseCorner);
 
             double mt34 = materialThickness34;
 

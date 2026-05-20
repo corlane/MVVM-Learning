@@ -44,6 +44,7 @@ internal static class PanelGeometryCalculator
             ComputeMortisePockets(part, mortisePockets, joinery, baseCab, cabinet, materialThickness34);
             ComputeScrewHoles(part, holesThru, joinery, baseCab, cabinet, materialThickness34);
             ComputeShelfHoles(part, holes, joinery, baseCab, materialThickness34);
+            ComputeDrawerSlideHoles(part, holes, joinery, baseCab, materialThickness34);
         }
 
         // 3. Finalize & Mirror if needed
@@ -1305,6 +1306,16 @@ internal static class PanelGeometryCalculator
         {
             holes.AddRange(ShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
         }
+    }
+    #endregion
+
+    #region Drawer Slide Holes
+    private static void ComputeDrawerSlideHoles(PartInfo part, List<(double, double, double)> holes, JoineryConfig joinery, BaseCabinetModel? baseCab, double mt34)
+    {
+        if (!part.Name.Contains("End", StringComparison.OrdinalIgnoreCase)) return;
+        if (part.CabinetModel is not BaseCabinetModel bCab) return;
+        
+        holes.AddRange(DrawerSlideHoleCalculator.Compute(part, joinery, materialThickness34: mt34));
     }
     #endregion
 }
