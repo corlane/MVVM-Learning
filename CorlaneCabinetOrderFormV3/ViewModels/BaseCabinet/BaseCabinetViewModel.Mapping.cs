@@ -146,6 +146,25 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RecalculateFrontWidth();
             RecalculateBackWidths90();
 
+            // Rebuild rollout count list based on the loaded cabinet's height.
+            // OnHeightChanged is suppressed during mapping, so this must be done explicitly.
+            if (Style == Style1)
+            {
+                double interiorHeight = ConvertDimension.FractionToDouble(Height) - (2 * 0.75);
+                if (DrwCount == 1)
+                {
+                    interiorHeight -= ConvertDimension.FractionToDouble(OpeningHeight1) - 0.75;
+                }
+
+                ListRolloutCount = BuildRolloutCountList(interiorHeight);
+            }
+            else
+            {
+                ListRolloutCount = [0];
+                RolloutCount = 0;
+                IncRollouts = false;
+            }
+
             UpdatePreview();
         }
     }
