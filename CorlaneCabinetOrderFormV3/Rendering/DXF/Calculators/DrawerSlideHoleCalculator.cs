@@ -28,44 +28,50 @@ internal class DrawerSlideHoleCalculator
             {
                 slidePositionX -= 1.4961; // Height of drawer slide pattern above Drw Stretcher
 
-                double hole1Y = 1.4567;
-                double hole2Y = 3.9764;
-                double hole3Y = 0;
+                double hole1Y = 0.3937;
+                double hole2Y = 1.4567;
+                double hole3Y = 2.7165;
                 double hole4Y = 0;
                 double hole5Y = 0;
 
                 holes.Add((slidePositionX, hole1Y, radius));
                 holes.Add((slidePositionX, hole2Y, radius));
 
-                if (dim.Depth > 21)
+                if (dim.Depth >= 24)
                 {
-                    hole3Y = 5.2362;
-                    hole4Y = 6.4961;
-                    hole5Y = 9.0157;
+                    hole4Y = hole2Y + (224 / 25.4); // Convert mm to inches
+                    hole5Y = hole4Y + (256 / 25.4);
                 }
-                else if (dim.Depth > 18 && dim.Depth <= 21)
+                else if (dim.Depth >= 21 && dim.Depth < 24)
                 {
-                    hole3Y = 5.2362;
-                    hole4Y = 6.4961;
-                    hole5Y = 9.0157;
+                    hole4Y = hole2Y + (224 / 25.4);
+                    hole5Y = hole4Y + (192 / 25.4);
                 }
-                else if (dim.Depth > 15 && dim.Depth <= 18)
+                else if (dim.Depth >= 18 && dim.Depth < 21)
                 {
-                    hole3Y = 5.2362;
-                    hole4Y = 6.4961;
-                    hole5Y = 9.0157;
+                    hole4Y = hole2Y + (128 / 25.4);
+                    hole5Y = hole4Y + (192 / 25.4);
                 }
-                else if (dim.Depth > 11.99 && dim.Depth <= 15)
+                else if (dim.Depth >= 15 && dim.Depth < 18)
                 {
-                    hole3Y = 5.2362;
-                    hole4Y = 6.4961;
-                    hole5Y = 9.0157;
+                    hole4Y = hole2Y + (128 / 25.4);
+                    hole5Y = hole4Y + (96 / 25.4);
+                }
+                else if (dim.Depth >= 12 && dim.Depth < 15)
+                {
+                    hole3Y = hole2Y + (96 / 25.4);
+                    hole4Y = hole3Y + (96 / 25.4);
+                    holes.Add((slidePositionX, hole2Y, radius));
+                    holes.Add((slidePositionX, hole3Y, radius));
+                    holes.Add((slidePositionX, hole4Y, radius));
                 }
 
-                holes.Add((slidePositionX, hole3Y, radius));
-                holes.Add((slidePositionX, hole4Y, radius));
-                holes.Add((slidePositionX, hole5Y, radius));
-
+                if (dim.Depth >= 15)
+                {
+                    holes.Add((slidePositionX, hole3Y, radius));
+                    holes.Add((slidePositionX, hole4Y, radius));
+                    holes.Add((slidePositionX, hole5Y, radius));
+                }
             }
         }
 
