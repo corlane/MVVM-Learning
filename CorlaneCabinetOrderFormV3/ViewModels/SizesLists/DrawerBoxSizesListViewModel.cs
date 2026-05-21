@@ -146,6 +146,7 @@ public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
             var cab = _cabinetService.Cabinets[i];
             int cabinetNumber = i + 1;
             string cabinetName = cab.Name ?? "";
+            int qty = cab.Qty;
 
             foreach (var row in cab.DrawerBoxes)
             {
@@ -153,6 +154,7 @@ public sealed partial class DrawerBoxSizesListViewModel : ObservableObject
                 {
                     CabinetNumber = cabinetNumber,
                     CabinetName = cabinetName,
+                    Qty = qty,
                     DisplayHeight = FormatDimension(row.Height),
                     DisplayWidth = FormatDimension(row.Width),
                     DisplayLength = FormatDimension(row.Length)

@@ -90,6 +90,7 @@ internal static class CabinetBuildHelpers
         cab.FrontParts.Add(new FrontPartRow(
             CabinetNumber: 0,
             CabinetName: "",
+            Qty: cab.Qty,
             Type: type,
             Height: height,
             Width: width,
@@ -108,6 +109,7 @@ internal static class CabinetBuildHelpers
         cab.FrontParts.Add(new FrontPartRow(
             CabinetNumber: 0,
             CabinetName: "",
+            Qty: cab.Qty,
             Type: type,
             Height: height,
             Width: width,
@@ -125,6 +127,7 @@ internal static class CabinetBuildHelpers
         cab.DrawerBoxes.Add(new DrawerBoxRow(
             CabinetNumber: 0,
             CabinetName: "",
+            Qty: cab.Qty,
             Type: type,
             Height: height,
             Width: width,

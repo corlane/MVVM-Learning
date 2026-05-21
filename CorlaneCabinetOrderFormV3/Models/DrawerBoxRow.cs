@@ -5,6 +5,7 @@ namespace CorlaneCabinetOrderFormV3.Models;
 public sealed record DrawerBoxRow(
     int CabinetNumber,
     string CabinetName,
+    int Qty,
     string Type,
     double Height,
     double Width,

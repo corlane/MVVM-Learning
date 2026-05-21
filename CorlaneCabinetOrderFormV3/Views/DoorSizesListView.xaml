@@ -23,6 +23,7 @@
                 <GridView>
                     <GridViewColumn Header="Cabinet #" DisplayMemberBinding="{Binding CabinetNumber}" Width="Auto"/>
                     <GridViewColumn Header="Cabinet Name" DisplayMemberBinding="{Binding CabinetName}" Width="Auto"/>
+                    <GridViewColumn Header="Qty" DisplayMemberBinding="{Binding Qty}" Width="Auto"/>
                     <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" Width="Auto"/>
                     <GridViewColumn Header="Height" DisplayMemberBinding="{Binding DisplayHeight}" Width="Auto"/>
                     <GridViewColumn Header="Width" DisplayMemberBinding="{Binding DisplayWidth}" Width="Auto"/>

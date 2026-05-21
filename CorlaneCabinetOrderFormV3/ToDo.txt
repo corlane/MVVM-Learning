@@ -35,7 +35,6 @@ OPTIONAL: Change pricing to account for linear inches of perimeter around parts.
 
 
 Add checkbox to apply Custom material to drawer boxes as well. **ONLY** for Custom material.
-Doors & drawer boxes lists not accounting for cabinet qty
 Drawer cabinets are not being flagged in reveals/gaps exception tab
 
 
