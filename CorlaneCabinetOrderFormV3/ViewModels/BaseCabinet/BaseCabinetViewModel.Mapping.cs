@@ -129,6 +129,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         target.HasRightEnd = HasRightEnd;
         target.HasBack = HasBack;
         target.HasToeKickBoard = HasToeKickBoard;
+        target.DrwBoxCustomSpecies = DrwBoxCustomSpecies;
     }
 
     private void LoadSelectedIfMine() // Populate fields on Cab List click if selected cabinet is of this type

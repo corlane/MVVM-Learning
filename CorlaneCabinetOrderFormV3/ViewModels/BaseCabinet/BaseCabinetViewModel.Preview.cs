@@ -18,7 +18,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 Depth = Depth,
                 Species = Species,
                 EBSpecies = EBSpecies,
-
+                CustomEBSpecies = CustomSpecies,
+                CustomSpecies = CustomSpecies,
                 TKHeight = TKHeight,  // Subtype-specific
                 LeftBackWidth = LeftBackWidth,
                 RightBackWidth = RightBackWidth,
@@ -78,7 +79,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 HasLeftEnd = HasLeftEnd,
                 HasRightEnd = HasRightEnd,
                 HasBack = HasBack,
-                HasToeKickBoard = HasToeKickBoard
+                HasToeKickBoard = HasToeKickBoard,
+                DrwBoxCustomSpecies = DrwBoxCustomSpecies,
             };
 
             // Request preview using the tab index owner token (Base tab = 0)
@@ -90,6 +92,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         {
             nameof(Style), nameof(Width), nameof(Height), nameof(Depth),
             nameof(Species), nameof(EBSpecies),
+            nameof(DrwBoxCustomSpecies), nameof(CustomEBSpecies), nameof(CustomSpecies),
             nameof(TKHeight), nameof(TKDepth), nameof(HasTK),
             nameof(LeftBackWidth), nameof(RightBackWidth),
             nameof(LeftFrontWidth), nameof(RightFrontWidth),

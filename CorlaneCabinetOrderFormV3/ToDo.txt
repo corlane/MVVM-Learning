@@ -32,10 +32,9 @@ Door Reveal tab: ONLY show reveals that differ from default. It currently shows 
 OPTIONAL: Add fixed shelf option (FULL DEPTH ONLY) - This will introduce the possibility of splitting the cabinet into more than 1 opening: Allow adjustable shelves and doors per opening? That's CAD territory...
 OPTIONAL: Change pricing to account for linear inches of perimeter around parts. This would mean that jobs with a lot of small parts would be more expensive than jobs with fewer, larger parts.
 
-
+OPTIONAL: Have PO tabs be GREEN if no modifications exist, RED if modifications need to be done, and BLUE if modifications are DONE.
 
 Add checkbox to apply Custom material to drawer boxes as well. **ONLY** for Custom material.
-Drawer cabinets are not being flagged in reveals/gaps exception tab
 
 
 
@@ -51,6 +50,14 @@ Upper angle front not showing calculated front width. AGAIN. It is only on initi
 
 If Supply Drw Boxes is unchecked, they become checked again on cabinet Depth change. The reason is: During typing, as the depth changes, it triggers if (ConvertDimension.FractionToDouble(Depth) < 10.625) IncDrwBoxOpening1 = false; etc.
 	I tried capturing the values of the checkboxes before the depth check and reapplying them after, and that didn't work. For some reason, it then started REMOVING the drw boxes, the opposite effect.
+
+
+Drawer cabinets are not being flagged in reveals/gaps exception tab. NOTE: It is working properly: They aren't flagged if they are not included, since no machining depends on those reveals/gaps.
+
+Supply Rollouts With Cabinet checkbox not obeying. RolloutCount is.
+
+clicking on a short cabinet, then a tall cabinet in the list will not re-populate rollout qty dropdown with correct number, it will retain the previous cabinet's rollout count max
+
 
 
 

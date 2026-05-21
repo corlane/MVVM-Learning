@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 
 namespace CorlaneCabinetOrderFormV3.Tests;
 
@@ -20,6 +20,7 @@ public class CabinetModelAccumulatorTests
         cab.FrontParts.Add(new FrontPartRow(
             CabinetNumber: 1,
             CabinetName: "Test",
+            Qty: 1,
             Type: "Door",
             Height: 24.0,
             Width: 12.0,
@@ -28,6 +29,7 @@ public class CabinetModelAccumulatorTests
         cab.DrawerBoxes.Add(new DrawerBoxRow(
             CabinetNumber: 1,
             CabinetName: "Test",
+            Qty: 1,
             Type: "Drawer",
             Height: 4.0,
             Width: 12.0,

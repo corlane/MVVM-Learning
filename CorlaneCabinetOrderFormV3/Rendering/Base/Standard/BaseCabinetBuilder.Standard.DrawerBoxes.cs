@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using System.Diagnostics;
 using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
@@ -131,11 +132,21 @@ internal static partial class BaseCabinetBuilder
             new(0, dbxDepth - (materialThickness * 2), 0)
         };
 
-        var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
-        var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
-        var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxFront);
-        var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, "Prefinished Ply", "PVC Hardrock Maple", "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxBack);
-        var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, "Prefinished Ply", "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.DrawerBoxBottom);
+        string drwBoxSpecies = "Prefinished Ply";
+        string drwBoxEB = "PVC Hardrock Maple";
+        if (baseCab.Species == "Custom" && baseCab.DrwBoxCustomSpecies)
+        {
+            drwBoxSpecies = baseCab.CustomSpecies;
+            drwBoxEB = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(baseCab.CustomEBSpecies);
+        }
+
+        Debug.WriteLine($"BaseCabinetBuilder.Standard.DrawerBoxes: Drawer box species changed to {drwBoxSpecies}");
+
+        var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
+        var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
+        var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxFront);
+        var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxBack);
+        var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, drwBoxSpecies, "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.DrawerBoxBottom);
 
         ModelTransforms.ApplyTransform(leftSide, 0, 0, -(dbxWidth - materialThickness), 0, 0, 0);
         ModelTransforms.ApplyTransform(front, 0, 0, 0, 0, 90, 0);
