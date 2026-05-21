@@ -16,6 +16,7 @@ public partial class POBackGrainDirViewModel : ObservableObject
 
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
+    private static readonly SolidColorBrush s_allDoneBlue = new(Color.FromRgb(135, 206, 250));
 
     // Default thresholds matching the rendering code in BaseCabinetBuilder.Standard.cs / UpperCabinetBuilder.Standard.cs.
     // 3/4" back: width > 49.25  (47.75 + 2 * 0.75)
@@ -214,7 +215,7 @@ public partial class POBackGrainDirViewModel : ObservableObject
         }
 
         bool allDone = Exceptions.All(r => r.IsDone);
-        TabHeaderBrush = allDone ? s_okGreen : s_warnRed;
+        TabHeaderBrush = allDone ? s_allDoneBlue : s_warnRed;
     }
 
     public sealed partial class BackGrainDirExceptionRow : ObservableObject

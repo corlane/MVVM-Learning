@@ -17,6 +17,7 @@ public partial class PORevealsGapsViewModel : ObservableObject
 
     private static readonly SolidColorBrush s_okGreen = Brushes.ForestGreen;
     private static readonly SolidColorBrush s_warnRed = new(Color.FromRgb(255, 88, 113));
+    private static readonly SolidColorBrush s_allDoneBlue = new(Color.FromRgb(135, 206, 250));
 
     private readonly ICabinetService? _cabinetService;
     private readonly DefaultSettingsService? _defaults;
@@ -325,7 +326,7 @@ public partial class PORevealsGapsViewModel : ObservableObject
         }
 
         bool allDone = RevealsGapsToChange.All(r => r.IsDone);
-        TabHeaderBrush = allDone ? s_okGreen : s_warnRed;
+        TabHeaderBrush = allDone ? s_allDoneBlue : s_warnRed;
     }
 
     private static bool NearlyEqual(double a, double b)
