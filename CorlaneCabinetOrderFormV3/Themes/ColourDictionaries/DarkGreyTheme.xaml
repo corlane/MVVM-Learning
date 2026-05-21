@@ -51,8 +51,10 @@
     <Color x:Key="AColour.Tone5.Border.MouseOver" R="94" G="94" B="94" A="255"/>
     <Color x:Key="AColour.Tone5.Background.MouseDown" R="78" G="78" B="78" A="255"/>
     <Color x:Key="AColour.Tone5.Border.MouseDown" R="88" G="88" B="88" A="255"/>
-    <Color x:Key="AColour.Tone5.Background.Selected" R="82" G="82" B="82" A="255"/>
-    <Color x:Key="AColour.Tone5.Background.Selected.Inactive" R="74" G="74" B="74" A="255"/>
+    
+    <Color x:Key="AColour.Tone5.Background.Selected" R="45" G="138" B="212" A="255"/>
+    <Color x:Key="AColour.Tone5.Background.Selected.Inactive" R="45" G="138" B="212" A="255"/>
+    
     <Color x:Key="AColour.Tone5.Border.Selected" R="88" G="88" B="88" A="255"/>
     <Color x:Key="AColour.Tone5.Border.Selected.Inactive" R="84" G="84" B="84" A="255"/>
     <Color x:Key="AColour.Tone5.Background.Disabled" R="111" G="111" B="111" A="255"/>

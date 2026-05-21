@@ -56,11 +56,15 @@
     <Color x:Key="AColour.Tone6.Border.MouseDown" R="72" G="72" B="72" A="255"/>
     <Color x:Key="AColour.Tone7.Border.MouseDown" R="80" G="80" B="80" A="255"/>
     <Color x:Key="AColour.Tone4.Background.Selected" R="48" G="48" B="48" A="255"/>
-    <Color x:Key="AColour.Tone5.Background.Selected" R="58" G="58" B="58" A="255"/>
+    
+    <Color x:Key="AColour.Tone5.Background.Selected" R="45" G="138" B="212" A="255"/>
+    
     <Color x:Key="AColour.Tone6.Background.Selected" R="66" G="66" B="66" A="255"/>
     <Color x:Key="AColour.Tone7.Background.Selected" R="75" G="75" B="75" A="255"/>
     <Color x:Key="AColour.Tone4.Background.Selected.Inactive" R="44" G="44" B="44" A="255"/>
-    <Color x:Key="AColour.Tone5.Background.Selected.Inactive" R="54" G="54" B="54" A="255"/>
+    
+    <Color x:Key="AColour.Tone5.Background.Selected.Inactive" R="45" G="138" B="212" A="255"/>
+    
     <Color x:Key="AColour.Tone6.Background.Selected.Inactive" R="62" G="62" B="62" A="255"/>
     <Color x:Key="AColour.Tone7.Background.Selected.Inactive" R="71" G="71" B="71" A="255"/>
     <Color x:Key="AColour.Tone4.Border.Selected" R="58" G="58" B="58" A="255"/>

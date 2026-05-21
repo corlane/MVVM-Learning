@@ -34,9 +34,7 @@ OPTIONAL: Change pricing to account for linear inches of perimeter around parts.
 
 
 
-Hide Custom Species box instead of disabling it in cabinet Species tab.
 Add checkbox to apply Custom material to drawer boxes as well. **ONLY** for Custom material.
-Change color of ListBox Background Active and Inactive for each theme. (Example: LightTheme.xaml line 53 & 54).
 Doors & drawer boxes lists not accounting for cabinet qty
 Drawer cabinets are not being flagged in reveals/gaps exception tab
 
