@@ -1,6 +1,7 @@
 ﻿using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 
@@ -44,7 +45,10 @@ internal static class PanelGeometryCalculator
             ComputeMortisePockets(part, mortisePockets, joinery, baseCab, cabinet, materialThickness34);
             ComputeScrewHoles(part, holesThru, joinery, baseCab, cabinet, materialThickness34);
             ComputeShelfHoles(part, holes, joinery, baseCab, materialThickness34);
-            ComputeDrawerSlideHoles(part, holes, joinery, baseCab, materialThickness34);
+            if (part.Name.Contains("End"))
+            {
+                ComputeDrawerSlideHoles(baseCab!, holes, joinery, materialThickness34);
+            }
         }
 
         // 3. Finalize & Mirror if needed
@@ -1310,12 +1314,9 @@ internal static class PanelGeometryCalculator
     #endregion
 
     #region Drawer Slide Holes
-    private static void ComputeDrawerSlideHoles(PartInfo part, List<(double, double, double)> holes, JoineryConfig joinery, BaseCabinetModel? baseCab, double mt34)
+    private static void ComputeDrawerSlideHoles(BaseCabinetModel baseCab, List<(double, double, double)> holes, JoineryConfig joinery, double mt34)
     {
-        if (!part.Name.Contains("End", StringComparison.OrdinalIgnoreCase)) return;
-        if (part.CabinetModel is not BaseCabinetModel bCab) return;
-        
-        holes.AddRange(DrawerSlideHoleCalculator.Compute(part, joinery, materialThickness34: mt34));
+        holes.AddRange(DrawerSlideHoleCalculator.Compute(baseCab, joinery, materialThickness34: mt34));
     }
     #endregion
 }
