@@ -1,34 +1,25 @@
-﻿📜 Session Summary: Mortise & Screw Hole Placement Refactor
-🎯 Objective
-Replace the fragmented mStartAdditional/mEndAdditional hacks in MortiseCalculator and MortiseScrewHoleCalculator with a clean, discrete placement model that allows uniform shifting of entire mortise/screw hole groups along an edge, while keeping screw holes perfectly synced.
+﻿accuride:
 
-🧱 Architecture Changes
-New Spec Records (Rendering/V4/Core/JoineryPlacementSpecs.cs)
+1: 35 + fi  12 and up cabinet
+2: 1 + 224
 
-MortisePlacementSpec & ScrewHolePlacementSpec records
-Replaced mStartAdditional/mEndAdditional with a single OffsetAlongEdge parameter
-Maintains all existing parameters (Edge, EdgeLength, PartWidth, PartHeight, OffsetFromEdge, ForceTwoTenons, BlindStart/StopOverride, FullThicknessTenon, MaterialThickness34)
-Placed in CorlaneCabinetOrderFormV3.Rendering.V4.Core for clean MVVM separation
-New Calculator Methods
+16" slide: 17-18.999 cabinet
+3: 1 + 320
 
-MortiseCalculator.ComputeMortisePocketsFromSpecs(MortisePlacementSpec, JoineryConfig)
-MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(ScrewHolePlacementSpec, JoineryConfig)
-Existing methods remain untouched for backward compatibility
-OffsetAlongEdge is applied uniformly to all computed ranges, eliminating asymmetric shifts
-Call Site Mapping (PanelGeometryCalculator.cs)
+18" slide: 19-20.999 cabinet
+3: 1 + 352
 
-Left Edge (Corner90 Deck): OffsetAlongEdge = RightBackWidth - (2*mt34) - ToeKickRightWidth
-Top Edge (Corner90 Deck): OffsetAlongEdge = -mt34
-Bottom Edge (End Panel w/ TK): OffsetAlongEdge = length - TKHeight
-Screw holes use identical OffsetAlongEdge values to stay mathematically locked to their mortise groups
-All replacements use the new ...FromSpecs methods; legacy calls remain intact
-✅ Key Benefits
-Single source of truth for positioning: OffsetAlongEdge shifts entire groups uniformly
-Zero desync risk: Screw holes consume identical offset values
-MVVM-aligned: Pure data records, pure math calculators, no UI/state coupling
-Incrementally safe: Original methods preserved; call sites can be migrated at your pace
-Fully testable: Specs are immutable records; calculators are deterministic functions
-📍 Next Steps
-Continue replacing remaining mStartAdditional/mEndAdditional call sites in PanelGeometryCalculator.cs with the spec-driven approach
-Verify DXF output and 3D viewport alignment for migrated edges
-Optional: Add unit tests for ComputeMortisePocketsFromSpecs and ComputeScrewHolesFromSpecs to lock in expected offset behavior
+20" slide: 21-22.999 cabinet
+3: 1 + 416
+
+22" slide: 23-24.999 cabinet
+3: 1 + 352
+4: 1 + 448
+
+24" slide: 25-26.999 cabinet
+3: 1 + 352
+4: 1 + 480
+
+26" & 28" slide: 27 and up cabinet
+3: 1 + 352
+4: 1 + 544
