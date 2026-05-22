@@ -141,66 +141,71 @@ internal static class DrawerSlideHoleCalculator
         }
     }
 
+
     private static void ApplyAccurideHolePattern(
-        List<(double x, double y, double radius)> holes,
-        BaseCabinetDimensions dim,
-        double slidePositionX)
+    List<(double x, double y, double radius)> holes,
+    BaseCabinetDimensions dim,
+    double slidePositionX)
     {
         double hole1Y = AccurideHole1Y;
         double hole2Y = AccurideHole2Y;
-        double hole3Y = 0;
-        double hole4Y = 0;
 
         holes.Add((slidePositionX, hole1Y, HoleRadius));
         holes.Add((slidePositionX, hole2Y, HoleRadius));
 
-        // 16" slide:
-        if (dim.Depth >= 17 && dim.Depth < 18.999)
+        double depth = dim.Depth;
+
+        if (depth < 17)
         {
-            hole3Y = hole1Y + (224 * MmToInch);
-            holes.Add((slidePositionX, hole3Y, HoleRadius));
+            // No additional holes for shallow cabinets
+            return;
         }
 
-        // 18" slide:
-        if (dim.Depth >= 19 && dim.Depth < 20.999)
+        double hole3OffsetMm = 0;
+        double hole4OffsetMm = 0;
+
+        if (depth <= 19)
         {
-            hole3Y = hole1Y + (352 * MmToInch);
-            holes.Add((slidePositionX, hole3Y, HoleRadius));
+            // 16" slide
+            hole3OffsetMm = 224;
+        }
+        else if (depth <= 21)
+        {
+            // 18" slide
+            hole3OffsetMm = 352;
+        }
+        else if (depth <= 23)
+        {
+            // 20" slide
+            hole3OffsetMm = 416;
+        }
+        else if (depth <= 25)
+        {
+            // 22" slide
+            hole3OffsetMm = 352;
+            hole4OffsetMm = 448;
+        }
+        else if (depth <= 27)
+        {
+            // 24" slide
+            hole3OffsetMm = 352;
+            hole4OffsetMm = 480;
+        }
+        else
+        {
+            // 26" & 28" slides
+            hole3OffsetMm = 352;
+            hole4OffsetMm = 544;
         }
 
-        // 20" slide:
-        if (dim.Depth >= 21 && dim.Depth < 22.999)
+        if (hole3OffsetMm > 0)
         {
-            hole3Y = hole1Y + (416 * MmToInch);
-            holes.Add((slidePositionX, hole3Y, HoleRadius));
+            holes.Add((slidePositionX, hole1Y + hole3OffsetMm * MmToInch, HoleRadius));
         }
 
-        // 22" slide:
-        if (dim.Depth >= 23 && dim.Depth < 24.999)
+        if (hole4OffsetMm > 0)
         {
-            hole3Y = hole1Y + (352 * MmToInch);
-            hole4Y = hole1Y + (448 * MmToInch);
-            holes.Add((slidePositionX, hole3Y, HoleRadius));
-            holes.Add((slidePositionX, hole4Y, HoleRadius));
+            holes.Add((slidePositionX, hole1Y + hole4OffsetMm * MmToInch, HoleRadius));
         }
-
-        // 24" slide:
-        if (dim.Depth >= 25 && dim.Depth < 26.999)
-        {
-            hole3Y = hole1Y + (352 * MmToInch);
-            hole4Y = hole1Y + (480 * MmToInch);
-            holes.Add((slidePositionX, hole3Y, HoleRadius));
-            holes.Add((slidePositionX, hole4Y, HoleRadius));
-        }
-
-        // 26" & 28" slides:
-        if (dim.Depth >= 27)
-        {
-            hole3Y = hole1Y + (352 * MmToInch);
-            hole4Y = hole1Y + (544 * MmToInch);
-            holes.Add((slidePositionX, hole3Y, HoleRadius));
-            holes.Add((slidePositionX, hole4Y, HoleRadius));
-        }
-
     }
 }
