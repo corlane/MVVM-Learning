@@ -49,6 +49,20 @@ internal static class PanelGeometryCalculator
             {
                 ComputeDrawerSlideHoles(baseCab!, holes, joinery, materialThickness34);
             }
+
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel baseCabHinge && baseCabHinge.DrillHingeHoles && baseCabHinge.Style != CabinetStyles.Base.Drawer)
+            {
+                var baseDim = BaseCabinetDimensions.From(baseCabHinge);
+                double panelDepth = ResolveBasePanelDepth(baseCabHinge, baseDim, part.Name);
+                ComputeHingeHoles(baseCabHinge, baseDim, panelDepth, holes, materialThickness34);
+            }
+
+            if (part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCabHinge && upperCabHinge.DrillHingeHoles)
+            {
+                var upperDim = UpperCabinetDimensions.From(upperCabHinge);
+                double panelDepth = ResolveUpperPanelDepth(upperCabHinge, upperDim, part.Name);
+                ComputeUpperHingeHoles(upperCabHinge, upperDim, panelDepth, holes);
+            }
         }
 
         // 3. Finalize & Mirror if needed
@@ -1319,6 +1333,38 @@ internal static class PanelGeometryCalculator
     private static void ComputeDrawerSlideHoles(BaseCabinetModel baseCab, List<(double, double, double)> holes, JoineryConfig joinery, double mt34)
     {
         holes.AddRange(DrawerSlideHoleCalculator.Compute(baseCab, joinery, materialThickness34: mt34));
+    }
+    #endregion
+
+    #region Hinge Holes
+    private static double ResolveBasePanelDepth(BaseCabinetModel baseCab, BaseCabinetDimensions dim, string partName)
+    {
+        if (baseCab.Style == CabinetStyles.Base.Corner90 || baseCab.Style == CabinetStyles.Base.AngleFront)
+        {
+            bool isLeft = partName.Contains("Left End", StringComparison.OrdinalIgnoreCase);
+            return isLeft ? dim.LeftDepth : dim.RightDepth;
+        }
+        return dim.Depth;
+    }
+
+    private static double ResolveUpperPanelDepth(UpperCabinetModel upperCab, UpperCabinetDimensions dim, string partName)
+    {
+        if (upperCab.Style == CabinetStyles.Upper.Corner90 || upperCab.Style == CabinetStyles.Upper.AngleFront)
+        {
+            bool isLeft = partName.Contains("Left End", StringComparison.OrdinalIgnoreCase);
+            return isLeft ? dim.LeftDepth : dim.RightDepth;
+        }
+        return dim.Depth;
+    }
+
+    private static void ComputeHingeHoles(BaseCabinetModel baseCab, BaseCabinetDimensions dim, double panelDepth, List<(double, double, double)> holes, double mt34)
+    {
+        holes.AddRange(HingeHoleCalculator.Compute(baseCab, dim, panelDepth, mt34));
+    }
+
+    private static void ComputeUpperHingeHoles(UpperCabinetModel upperCab, UpperCabinetDimensions dim, double panelDepth, List<(double, double, double)> holes)
+    {
+        holes.AddRange(HingeHoleCalculator.Compute(upperCab, dim, panelDepth));
     }
     #endregion
 }
