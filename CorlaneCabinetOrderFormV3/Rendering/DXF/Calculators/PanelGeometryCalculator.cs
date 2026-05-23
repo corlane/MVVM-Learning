@@ -13,7 +13,7 @@ namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
 /// </summary>
 internal static class PanelGeometryCalculator
 {
-    internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery, CabinetModel cabinet, double materialThickness34)
+    internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery, double materialThickness34)
     {
         var baseCab = part.CabinetModel as BaseCabinetModel;
         bool isCorner90 = baseCab != null && baseCab.Style == CabinetStyles.Base.Corner90;
@@ -31,21 +31,21 @@ internal static class PanelGeometryCalculator
         BuildOutline(part, isEndPanelWithTk, isLShape, materialThickness34, outline);
 
         // 2. Compute Joinery
-        if (isLShape && cabinet is BaseCabinetModel)
+        if (isLShape && part.CabinetModel is BaseCabinetModel)
         {
             ComputeLShapeJoinery(part, outline, thinningPockets, joinery, baseCab!, materialThickness34);
             if (baseCab!.HasTK && part.Name.Contains("Deck"))
             {
-                ComputeMortisePockets(part, mortisePockets, joinery, baseCab, cabinet, materialThickness34);
+                ComputeMortisePockets(part, mortisePockets, joinery, materialThickness34);
             }
         }
         else if (!isLShape)
         {
-            ComputeTenonsAndThinningPockets(part, outline, thinningPockets, joinery, baseCab, cabinet, materialThickness34);
-            ComputeMortisePockets(part, mortisePockets, joinery, baseCab, cabinet, materialThickness34);
-            ComputeScrewHoles(part, holesThru, joinery, baseCab, cabinet, materialThickness34);
-            ComputeShelfHoles(part, holes, joinery, baseCab, materialThickness34);
-            if (part.Name.Contains("End") && cabinet is BaseCabinetModel)
+            ComputeTenonsAndThinningPockets(part, outline, thinningPockets, joinery, materialThickness34);
+            ComputeMortisePockets(part, mortisePockets, joinery, materialThickness34);
+            ComputeScrewHoles(part, holesThru, joinery, materialThickness34);
+            ComputeShelfHoles(part, holes, joinery, materialThickness34);
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
             {
                 ComputeDrawerSlideHoles(baseCab!, holes, joinery, materialThickness34);
             }
@@ -276,7 +276,7 @@ internal static class PanelGeometryCalculator
     #endregion
 
     #region Tenons & Thinning Pockets
-    private static void ComputeTenonsAndThinningPockets(PartInfo part, List<Vector2> outline, List<(double, double, double, double)> thinningPockets, JoineryConfig joinery, BaseCabinetModel? baseCab, CabinetModel cabinet, double mt34)
+    private static void ComputeTenonsAndThinningPockets(PartInfo part, List<Vector2> outline, List<(double, double, double, double)> thinningPockets, JoineryConfig joinery, double mt34)
     {
         double length = part.Bounds.Width;
         double height = part.Bounds.Height;
@@ -305,7 +305,7 @@ internal static class PanelGeometryCalculator
 
         if (part.TenonEdges.HasFlag(TenonEdge.Right))
         {
-            var tenons = ResolveTenonRanges(height, joinery, part.Name, cabinet);
+            var tenons = ResolveTenonRanges(height, joinery, part.Name, part.CabinetModel);
             foreach (var (tStart, tEnd) in tenons)
             {
                 outline.Add(new Vector2(length, tStart));
@@ -346,7 +346,7 @@ internal static class PanelGeometryCalculator
 
         if (part.TenonEdges.HasFlag(TenonEdge.Left))
         {
-            var tenons = ResolveTenonRanges(height, joinery, part.Name, cabinet);
+            var tenons = ResolveTenonRanges(height, joinery, part.Name, part.CabinetModel);
             for (int i = tenons.Count - 1; i >= 0; i--)
             {
                 var (tStart, tEnd) = tenons[i];
@@ -366,7 +366,7 @@ internal static class PanelGeometryCalculator
         }
     }
 
-    private static List<(double start, double end)> ResolveTenonRanges(double edgeLength, JoineryConfig joinery, string partName, CabinetModel cabinet)
+    private static List<(double start, double end)> ResolveTenonRanges(double edgeLength, JoineryConfig joinery, string partName, CabinetModel? cabinet)
     {
         var tenons = TenonCalculator.ComputeTenonRanges(edgeLength, joinery, forceTwoTenons: edgeLength < 6);
 
@@ -387,8 +387,9 @@ internal static class PanelGeometryCalculator
     #endregion
 
     #region Mortises
-    private static void ComputeMortisePockets(PartInfo part, List<(double, double, double, double)> mortisePockets, JoineryConfig joinery, BaseCabinetModel? baseCab, CabinetModel cabinet, double mt34)
+    private static void ComputeMortisePockets(PartInfo part, List<(double, double, double, double)> mortisePockets, JoineryConfig joinery, double mt34)
     {
+        var baseCab = part.CabinetModel as BaseCabinetModel;
         double length = part.Bounds.Width;
         double height = part.Bounds.Height;
         double stretcherWidth = 6;
@@ -566,7 +567,7 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
         {
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && cabinet is BaseCabinetModel) // Base Cabinet Deck, accounting for Back Thickness
+            if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel) // Base Cabinet Deck, accounting for Back Thickness
             {
                 if (ConvertDimension.FractionToDouble(baseCab!.BackThickness) == 0.25)
                 {
@@ -669,7 +670,7 @@ internal static class PanelGeometryCalculator
 
         if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
         {
-            if (part.Name.Contains("End") && cabinet is BaseCabinetModel &&  baseCab!.HasTK) // Std Base Toekick End Panel Mortises
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel &&  baseCab!.HasTK) // Std Base Toekick End Panel Mortises
             {
                 double tkBottomOffsetAlong = length - ConvertDimension.FractionToDouble(baseCab.TKHeight);
                 mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
@@ -859,8 +860,9 @@ internal static class PanelGeometryCalculator
     #endregion
 
     #region Screw Holes
-    private static void ComputeScrewHoles(PartInfo part, List<(double, double, double)> holesThru, JoineryConfig joinery, BaseCabinetModel? baseCab, CabinetModel cabinet, double mt34)
+    private static void ComputeScrewHoles(PartInfo part, List<(double, double, double)> holesThru, JoineryConfig joinery, double mt34)
     {
+        var baseCab = part.CabinetModel as BaseCabinetModel;
         double length = part.Bounds.Width;
         double height = part.Bounds.Height;
         double stretcherWidth = 6;
@@ -971,7 +973,7 @@ internal static class PanelGeometryCalculator
             }
         }
 
-        else if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left) && cabinet is UpperCabinetModel upperCab && part.Name.Contains("End")) // Upper Cabinet Top screw holes
+        else if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left) && part.CabinetModel is UpperCabinetModel upperCab && part.Name.Contains("End")) // Upper Cabinet Top screw holes
         {
             if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
             {
@@ -1030,7 +1032,7 @@ internal static class PanelGeometryCalculator
 
         // --------------------------------------------------------- RIGHT -------------------------------------------------------------------
 
-        if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right) && part.Name.Contains("End") && cabinet is BaseCabinetModel)
+        if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right) && part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
         {
             if (ConvertDimension.FractionToDouble(baseCab!.BackThickness) == 0.25) // Base Cabinet End Panel Deck Screw Holes, 1/4" back
             {
@@ -1068,7 +1070,7 @@ internal static class PanelGeometryCalculator
             }
         }
 
-        else if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left) && cabinet is UpperCabinetModel upperCab && part.Name.Contains("End")) // Upper Cabinet Deck screw holes
+        else if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left) && part.CabinetModel is UpperCabinetModel upperCab && part.Name.Contains("End")) // Upper Cabinet Deck screw holes
         {
             if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
             {
@@ -1128,7 +1130,7 @@ internal static class PanelGeometryCalculator
         // --------------------------------------------------------- BOTTOM -------------------------------------------------------------------
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Bottom))
         {
-            if (part.Name.Contains("End") && cabinet is BaseCabinetModel && baseCab!.HasTK) // End Panel Screw Holes for toekick
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel && baseCab!.HasTK) // End Panel Screw Holes for toekick
             {
                 double tkBottomOffsetAlong = length - ConvertDimension.FractionToDouble(baseCab.TKHeight);
                 holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
@@ -1173,7 +1175,7 @@ internal static class PanelGeometryCalculator
 
         if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Top))
         {
-            if (part.Name.Contains("End") && cabinet is BaseCabinetModel)
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
             {
                 if (ConvertDimension.FractionToDouble(baseCab!.BackThickness) == 0.25) // Base Cab nailer screw holes, 1/4" back
                 {
@@ -1265,7 +1267,7 @@ internal static class PanelGeometryCalculator
 
             else // Generic catch-all for Top Edge screw holes
             {
-                if (cabinet is BaseCabinetModel && !part.Name.Contains("Deck")) // Base cabinet decks do not get screw holes for toekick mortises
+                if (part.CabinetModel is BaseCabinetModel && !part.Name.Contains("Deck")) // Base cabinet decks do not get screw holes for toekick mortises
                 {
                     holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
                     (
@@ -1287,7 +1289,7 @@ internal static class PanelGeometryCalculator
     #endregion
 
     #region Shelf Holes
-    private static void ComputeShelfHoles(PartInfo part, List<(double, double, double)> holes, JoineryConfig joinery, BaseCabinetModel? baseCab, double mt34)
+    private static void ComputeShelfHoles(PartInfo part, List<(double, double, double)> holes, JoineryConfig joinery, double mt34)
     {
         if (!part.Name.Contains("End", StringComparison.OrdinalIgnoreCase)) return;
 

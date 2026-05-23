@@ -46,7 +46,7 @@ internal class DxfExportPipeline
         var geometries = new List<PartGeometry>();
         foreach (var part in _parts)
         {
-            var geometry = PanelGeometryCalculator.Compute(part, _config, part.CabinetModel!, _materialThickness);
+            var geometry = PanelGeometryCalculator.Compute(part, _config, _materialThickness);
             geometries.Add(geometry);
         }
 
