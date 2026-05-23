@@ -10,6 +10,7 @@
 - Prefer using the Visual Studio UI for Git operations (inspect old commit and return to latest) when possible.
 - When debugging, check for missing property mappings in preview/model construction (e.g., `UpdatePreview()` not copying a VM property into the preview model) and call that out explicitly.
 - Stay on HelixToolkit.Wpf v2 (currently 2.27.3). No plans to upgrade to v3, as it offers no meaningful benefits for this project's usage patterns (MeshBuilder, HelixViewport3D, ZoomExtents).
+-  Critical: YOU MUST THINK EVERYTIME BEFORE YOU CALL THE TOOLS.
 
 ## Code Style
 - Use specific formatting rules
