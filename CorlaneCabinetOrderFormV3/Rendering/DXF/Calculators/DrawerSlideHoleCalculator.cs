@@ -1,7 +1,7 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
+namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Calculators;
 
 internal static class DrawerSlideHoleCalculator
 {

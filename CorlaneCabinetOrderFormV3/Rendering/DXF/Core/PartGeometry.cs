@@ -1,4 +1,4 @@
-﻿namespace CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+﻿namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 
 /// <summary>
 /// Represents the computed geometry for a single part, ready for DXF export.

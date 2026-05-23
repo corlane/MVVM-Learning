@@ -1,6 +1,6 @@
-﻿using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+﻿using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
+namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Calculators;
 
 /// <summary>
 /// Pure math logic for computing tenon ranges and thinning pockets.

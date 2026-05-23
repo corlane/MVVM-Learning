@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 
 internal record MortisePlacementSpec
 (

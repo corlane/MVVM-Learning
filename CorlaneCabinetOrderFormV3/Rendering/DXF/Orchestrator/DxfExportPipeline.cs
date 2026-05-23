@@ -1,10 +1,10 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
-using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
-using CorlaneCabinetOrderFormV3.Rendering.V4.DXF;
+using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
+using CorlaneCabinetOrderFormV3.Rendering.DXF.DXF;
 using netDxf;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.Orchestrator;
+namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Orchestrator;
 
 internal record DxfExportOptions(
     LockDadoSettings? Settings,

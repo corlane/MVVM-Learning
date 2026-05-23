@@ -1,11 +1,10 @@
-﻿using CorlaneCabinetOrderFormV3.Rendering.DXF.DXF;
-using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+﻿using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 using netDxf;
 using netDxf.Entities;
 using netDxfVector2 = netDxf.Vector2;
 using netDxfVector3 = netDxf.Vector3;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF
+namespace CorlaneCabinetOrderFormV3.Rendering.DXF.DXF
 {
     internal class DxfWriter
     {

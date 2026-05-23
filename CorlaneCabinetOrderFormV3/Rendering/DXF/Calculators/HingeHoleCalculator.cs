@@ -1,7 +1,6 @@
 using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.Calculators;
+namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Calculators;
 
 /// <summary>
 /// Calculates hinge bore positions for DXF end-panel output.

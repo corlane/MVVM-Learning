@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CorlaneCabinetOrderFormV3.Rendering.V4.Core;
+using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 
-namespace CorlaneCabinetOrderFormV3.Rendering.V4.DXF
+namespace CorlaneCabinetOrderFormV3.Rendering.DXF.DXF
 {
     // Changed to internal to match PartGeometry accessibility
     internal static class MetricGeometryConverter
