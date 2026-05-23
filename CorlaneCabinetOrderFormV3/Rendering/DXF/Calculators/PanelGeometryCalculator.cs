@@ -28,7 +28,7 @@ internal static class PanelGeometryCalculator
 
 
         // 1. Build Outline
-        BuildOutline(part, baseCab, isEndPanelWithTk, isLShape, materialThickness34, outline);
+        BuildOutline(part, isEndPanelWithTk, isLShape, materialThickness34, outline);
 
         // 2. Compute Joinery
         if (isLShape && cabinet is BaseCabinetModel)
@@ -45,7 +45,7 @@ internal static class PanelGeometryCalculator
             ComputeMortisePockets(part, mortisePockets, joinery, baseCab, cabinet, materialThickness34);
             ComputeScrewHoles(part, holesThru, joinery, baseCab, cabinet, materialThickness34);
             ComputeShelfHoles(part, holes, joinery, baseCab, materialThickness34);
-            if (part.Name.Contains("End"))
+            if (part.Name.Contains("End") && cabinet is BaseCabinetModel)
             {
                 ComputeDrawerSlideHoles(baseCab!, holes, joinery, materialThickness34);
             }
@@ -82,13 +82,13 @@ internal static class PanelGeometryCalculator
     }
 
     #region Outline Building
-    private static void BuildOutline(PartInfo part, BaseCabinetModel? baseCab, bool isEndPanelWithTk, bool isLShape, double mt34, List<Vector2> outline)
+    private static void BuildOutline(PartInfo part, bool isEndPanelWithTk, bool isLShape, double mt34, List<Vector2> outline)
     {
         if (isEndPanelWithTk)
         {
             outline.AddRange(BuildEndPanelWithToeKick(part.Bounds.Width, part.Bounds.Height, part.TkHeight, part.TkDepth));
         }
-        else if (isLShape && baseCab != null)
+        else if (isLShape)
         {
             // L-shape outline is built sequentially in ComputeLShapeJoinery
             // We just seed it with the first point here to keep the signature consistent

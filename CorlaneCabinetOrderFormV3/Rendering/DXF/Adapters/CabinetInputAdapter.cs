@@ -13,7 +13,6 @@ internal static class CabinetInputAdapter
         double tkHeight = 0,
         double tkDepth = 0,
         CabinetModel? cabinet = null,
-        BaseCabinetDimensions? baseCabDim = null,
         double materialThickness34 = 0
         )
     {

@@ -629,14 +629,15 @@ public partial class POBatchListViewModel : ObservableObject
                 {
                     double materialThickness34 = SetMaterialThicknessBySpecies(part.Species);
 
-                    var pipeline = new DxfExportPipeline(
-                        new[] { part },
-                        joinerySettings,
-                        tkHeight: tkHeight,
-                        tkDepth: tkDepth,
-                        cabinetModel: cabinet,
-                        materialThickness34: materialThickness34 / 25.4 // User enters metric thickness. Entire DXF pipeline uses imperial until file generation where it is translated to metric. This is an easy way to make it act end-to-end metric.
+                    var options = new DxfExportOptions(
+                        Settings: joinerySettings,
+                        TkHeight: tkHeight,
+                        TkDepth: tkDepth,
+                        CabinetModel: cabinet,
+                        MaterialThickness34: materialThickness34 / 25.4
                     );
+
+                    var pipeline = new DxfExportPipeline(new[] { part }, options);
 
                     if (!pipeline.ValidateInput()) continue;
 
@@ -644,8 +645,6 @@ public partial class POBatchListViewModel : ObservableObject
                     string filePath = Path.Combine(dlg.FolderName, safeName + ".dxf");
 
                     pipeline.ExportToFile(filePath);
-
-                    //Debug.WriteLine($"Exporting {safeName}");
                 }
             }
 
