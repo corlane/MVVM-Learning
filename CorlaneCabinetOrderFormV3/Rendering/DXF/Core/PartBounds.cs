@@ -31,6 +31,16 @@ internal enum MortiseEdge
 }
 
 [Flags]
+internal enum MortiseThruEdge
+{
+    None = 0,
+    Left = 1 << 0,
+    Right = 1 << 1,
+    Top = 1 << 2,
+    Bottom = 1 << 3
+}
+
+[Flags]
 internal enum ScrewHoleEdge
 {
     None = 0,
@@ -61,6 +71,7 @@ internal record PartInfo(
     ThinningPocketEdge ThinningPockets,
     string? EdgeBand,
     string? Notes,
+    MortiseThruEdge MortiseThruEdges = 0,
     double TkHeight = 0,
     double TkDepth = 0,
     CabinetModel? CabinetModel = null

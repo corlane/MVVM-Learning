@@ -20,9 +20,9 @@ internal static class MortiseThruCalculator
 
         // --------------------------------------------------------- LEFT -------------------------------------------------------------------
 
-        if (part.MortiseEdges.HasFlag(MortiseEdge.Left))
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Left))
         {
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Left) && part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
+            if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Left) && part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
             {
                 double openingHeight = ConvertDimension.FractionToDouble(baseCab!.OpeningHeight1) + mt34;
                 double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1);
@@ -127,7 +127,7 @@ internal static class MortiseThruCalculator
                 );
             }
 
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Left) && part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
+            if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Left) && part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
             {
                 if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25) // Upper cab Top Mortises, 1/4" back
                 {
@@ -188,9 +188,9 @@ internal static class MortiseThruCalculator
 
         // --------------------------------------------------------- RIGHT -------------------------------------------------------------------
 
-        if (part.MortiseEdges.HasFlag(MortiseEdge.Right))
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Right))
         {
-            if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel) // Base Cabinet Deck, accounting for Back Thickness
+            if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Right) && part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel) // Base Cabinet Deck, accounting for Back Thickness
             {
                 if (ConvertDimension.FractionToDouble(baseCab!.BackThickness) == 0.25)
                 {
@@ -228,7 +228,7 @@ internal static class MortiseThruCalculator
                 }
             }
 
-            else if (part.MortiseEdges.HasFlag(MortiseEdge.Left) && part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
+            else if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Right) && part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
             {
                 if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25) // Upper cab Top Mortises, 1/4" back
                 {
@@ -291,7 +291,7 @@ internal static class MortiseThruCalculator
 
         // --------------------------------------------------------- BOTTOM -------------------------------------------------------------------
 
-        if (part.MortiseEdges.HasFlag(MortiseEdge.Bottom))
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Bottom))
         {
             if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel && baseCab!.HasTK) // Std Base Toekick End Panel Mortises
             {
@@ -334,7 +334,7 @@ internal static class MortiseThruCalculator
 
         // --------------------------------------------------------- TOP -------------------------------------------------------------------
 
-        if (part.MortiseEdges.HasFlag(MortiseEdge.Top))
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Top))
         {
             if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
             {
