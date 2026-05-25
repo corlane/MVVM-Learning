@@ -23,7 +23,10 @@ namespace CorlaneCabinetOrderFormV3.Rendering.DXF.DXF
                 
                 MortisePockets = part.MortisePockets?.Select(p => 
                     (p.x1 * InchesToMillimeters, p.x2 * InchesToMillimeters, p.y1 * InchesToMillimeters, p.y2 * InchesToMillimeters)).ToList()!,
-                
+
+                MortisePocketsThru = part.MortisePocketsThru?.Select(p =>
+                    (p.x1 * InchesToMillimeters, p.x2 * InchesToMillimeters, p.y1 * InchesToMillimeters, p.y2 * InchesToMillimeters)).ToList()!,
+
                 Holes = part.Holes?.Select(h => 
                     (h.x * InchesToMillimeters, h.y * InchesToMillimeters, h.radius * InchesToMillimeters)).ToList()!,
                 

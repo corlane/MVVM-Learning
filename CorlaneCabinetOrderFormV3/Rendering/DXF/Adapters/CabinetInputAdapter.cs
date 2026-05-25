@@ -116,6 +116,7 @@ internal static class CabinetInputAdapter
                     Name: entry.PartName, Bounds: new PartBounds(entry.LengthIn, entry.WidthIn), Species: entry.Species, Quantity: entry.Qty,
                     TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
                     MortiseEdges: ResolveMortiseEdges(entry.PartName, cabinet),
+                    MortiseThruEdges: ResolveMortiseThruEdges(entry.PartName, cabinet),
                     ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName, cabinet),
                     ThinningPockets: ResolveTenonThinningEdges(entry.PartName, cabinet),
                     EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: partTkH, TkDepth: partTkD, CabinetModel: cabinet);
@@ -177,10 +178,26 @@ internal static class CabinetInputAdapter
             "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseEdge.Right,
             "left back" when cabinet is BaseCabinetModel => MortiseEdge.Bottom,
             "right back" when cabinet is BaseCabinetModel => MortiseEdge.Bottom,
-            "back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseEdge.Right | MortiseEdge.Left,
+            //"back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseEdge.Right | MortiseEdge.Left,
             "top stretcher (back)" => MortiseEdge.Bottom,
             "deck" when cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Top,
             _ => MortiseEdge.None
+        };
+    }
+
+    private static MortiseThruEdge ResolveMortiseThruEdges(string partName, CabinetModel? cabinet)
+    {
+        return partName.ToLowerInvariant() switch
+        {
+            "left end" or "right end" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
+            "left end" or "right end" when cabinet is UpperCabinetModel => MortiseThruEdge.None,
+            "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseThruEdge.None,
+            "left back" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
+            "right back" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
+            "back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseThruEdge.Left | MortiseThruEdge.Right,
+            "top stretcher (back)" => MortiseThruEdge.None,
+            "deck" when cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseThruEdge.None,
+            _ => MortiseThruEdge.None
         };
     }
 

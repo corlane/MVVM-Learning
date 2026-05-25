@@ -20,8 +20,8 @@ public class DxfLayerManager
     {
         { LayerType.PartOutline, ("OUTLINE z{0}", new AciColor(7)) },
         { LayerType.TenonThinningPocket, ("CHAINCOMPOUT [3185] z{0}", new AciColor(1)) },
-        { LayerType.MortisePocket, ("POCKET z{0}", new AciColor(5)) },
-        { LayerType.MortisePocketThru, ("POCKET z{0}", new AciColor(5)) },
+        { LayerType.MortisePocket, ("POCKET z10p0", new AciColor(5)) },
+        { LayerType.MortisePocketThru, ("POCKET z{0}", new AciColor(1)) },
         { LayerType.DrillHolesBlind, ("DRILL z12p7", new AciColor(4)) },
         { LayerType.DrillHolesThrough, ("DRILL z{0}", new AciColor(1)) }
     };
