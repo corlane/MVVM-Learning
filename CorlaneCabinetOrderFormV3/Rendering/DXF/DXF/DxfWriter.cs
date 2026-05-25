@@ -69,6 +69,13 @@ namespace CorlaneCabinetOrderFormV3.Rendering.DXF.DXF
                 rect.Layer = _layerManager.GetLayer(DxfLayerManager.LayerType.MortisePocket, thicknessInches);
                 doc.Entities.Add(rect);
             }
+
+            foreach (var pocket in part.MortisePocketsThru)
+            {
+                var rect = CreateClosedRectangle(pocket);
+                rect.Layer = _layerManager.GetLayer(DxfLayerManager.LayerType.MortisePocketThru, thicknessInches);
+                doc.Entities.Add(rect);
+            }
         }
 
         private void WriteHolesThru(DxfDocument doc, PartGeometry part, double thicknessInches)
