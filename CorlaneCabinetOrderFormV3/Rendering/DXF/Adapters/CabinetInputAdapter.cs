@@ -175,7 +175,7 @@ internal static class CabinetInputAdapter
         {
             "left end" or "right end" when cabinet is BaseCabinetModel => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
             "left end" or "right end" when cabinet is UpperCabinetModel => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
-            "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseEdge.Right,
+            //"back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseEdge.Right,
             "left back" when cabinet is BaseCabinetModel => MortiseEdge.Bottom,
             "right back" when cabinet is BaseCabinetModel => MortiseEdge.Bottom,
             //"back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseEdge.Right | MortiseEdge.Left,
@@ -191,7 +191,7 @@ internal static class CabinetInputAdapter
         {
             "left end" or "right end" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
             "left end" or "right end" when cabinet is UpperCabinetModel => MortiseThruEdge.None,
-            "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseThruEdge.None,
+            "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseThruEdge.Right,
             "left back" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
             "right back" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
             "back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseThruEdge.Left | MortiseThruEdge.Right,
