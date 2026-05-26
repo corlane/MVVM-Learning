@@ -506,4 +506,4 @@
 	Uploading 3.1.0.5
 
 3.1.0.6
-	
+	Fixed thumbnail image not updating when Supply Drawer Fronts changed for Base Cabinets. (was checking IncDrwFronts, not individual IncDrwFront1 etc.)
