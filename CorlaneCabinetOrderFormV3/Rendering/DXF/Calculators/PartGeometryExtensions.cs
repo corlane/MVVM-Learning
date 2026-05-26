@@ -22,7 +22,7 @@ internal static class PartGeometryExtensions
             .Select(p => (panelWidth - p.x2, panelWidth - p.x1, p.y1, p.y2))
             .ToList();
 
-        var mirroredMortisePocketsThru = geometry.MortisePockets
+        var mirroredMortisePocketsThru = geometry.MortisePocketsThru
             .Select(p => (panelWidth - p.x2, panelWidth - p.x1, p.y1, p.y2))
             .ToList();
 

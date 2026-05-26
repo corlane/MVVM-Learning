@@ -43,6 +43,12 @@ internal static class PanelGeometryCalculator
             MortiseBlindCalculator.ComputeMortisePockets(part, mortisePockets, joinery, materialThickness34);
             MortiseThruCalculator.ComputeMortisePocketsThru(part, mortisePocketsThru, joinery, materialThickness34);
             ScrewHoleEdgeCalculator.ComputeScrewHoles(part, holesThru, joinery, materialThickness34);
+
+            // Generate screw holes for parts that have MortiseThruEdges but no corresponding ScrewHoleEdges (e.g., Upper Cabinet Back)
+            if (part.MortiseThruEdges != MortiseThruEdge.None && part.ScrewHoleEdges == ScrewHoleEdge.None)
+            {
+                ScrewHoleEdgeCalculator.ComputeScrewHolesFromMortiseThru(part, holesThru, joinery, materialThickness34);
+            }
             ShelfHoleEdgeCalculator.ComputeShelfHoles(part, holes, joinery, materialThickness34);
 
             if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)

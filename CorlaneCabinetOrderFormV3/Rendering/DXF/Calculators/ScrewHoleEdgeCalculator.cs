@@ -220,7 +220,7 @@ internal static class ScrewHoleEdgeCalculator
             }
         }
 
-        else if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Left) && part.CabinetModel is UpperCabinetModel upperCab && part.Name.Contains("End")) // Upper Cabinet Deck screw holes
+        else if (part.ScrewHoleEdges.HasFlag(ScrewHoleEdge.Right) && part.CabinetModel is UpperCabinetModel upperCab && part.Name.Contains("End")) // Upper Cabinet Deck screw holes
         {
             if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
             {
@@ -433,6 +433,476 @@ internal static class ScrewHoleEdgeCalculator
                         MaterialThickness34: mt34), joinery)
                     );
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Computes assembly screw holes for parts that have MortiseThruEdges set but no ScrewHoleEdges.
+    /// Mirrors the edge-by-edge logic from MortiseThruCalculator so screw holes align with thru-mortise positions.
+    /// </summary>
+    internal static void ComputeScrewHolesFromMortiseThru(PartInfo part, List<(double, double, double)> holesThru, JoineryConfig joinery, double mt34)
+    {
+        var baseCab = part.CabinetModel as BaseCabinetModel;
+        double length = part.Bounds.Width;
+        double height = part.Bounds.Height;
+
+        // --------------------------------------------------------- LEFT -------------------------------------------------------------------
+
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Left))
+        {
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
+            {
+                double openingHeight = ConvertDimension.FractionToDouble(baseCab!.OpeningHeight1) + mt34;
+                double opening1Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight1);
+                double opening2Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight2);
+                double opening3Height = ConvertDimension.FractionToDouble(baseCab.OpeningHeight3);
+
+                if (baseCab.TopType == "Stretcher")
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Left,
+                        EdgeLength: 6, // stretcherWidth
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: false), joinery)
+                    );
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Left,
+                        EdgeLength: height,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+
+                if (baseCab.Style == CabinetStyles.Base.Standard && baseCab.DrwCount == 1)
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Left,
+                        EdgeLength: 6, // stretcherWidth
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: opening1Height + mt34,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: false), joinery)
+                    );
+                }
+
+                if (baseCab.Style == CabinetStyles.Base.Drawer && baseCab.DrwCount > 1)
+                {
+                    for (int i = 0; i < baseCab.DrwCount; i++)
+                    {
+                        if (i == 1) openingHeight += opening2Height + mt34;
+                        if (i == 2) openingHeight += opening3Height + mt34;
+
+                        holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                        (
+                            Edge: ScrewHoleEdge.Left,
+                            EdgeLength: 6, // stretcherWidth
+                            PartWidth: length,
+                            PartHeight: height,
+                            OffsetFromEdge: openingHeight,
+                            OffsetAlongEdge: 0,
+                            ForceTwoTenons: true,
+                            BlindStartOverride: 1.25,
+                            BlindStopOverride: 1.25,
+                            MaterialThickness34: mt34,
+                            IncludeEndHoles: false), joinery)
+                        );
+                    }
+                }
+            }
+
+            else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
+            {
+                double leftDeckOffsetAlong = ConvertDimension.FractionToDouble(base90corner.RightBackWidth) - (3 * mt34) - base90corner.ToeKickRightWidth;
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Left,
+                    EdgeLength: base90corner.ToeKickRightWidth,
+                    PartWidth: 0, // length
+                    PartHeight: 0, // height
+                    OffsetFromEdge: ConvertDimension.FractionToDouble(base90corner.LeftFrontWidth) - mt34 + ConvertDimension.FractionToDouble(base90corner.TKDepth),
+                    OffsetAlongEdge: leftDeckOffsetAlong,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 0,
+                    BlindStopOverride: 0,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
+            }
+
+            else if (part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
+            {
+                if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Left,
+                        EdgeLength: height,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Left,
+                        EdgeLength: height - mt34,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+            }
+
+            else // Standard catch-all Left Edge screw holes for thru-mortises
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Left,
+                    EdgeLength: height,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
+            }
+        }
+
+
+
+        // --------------------------------------------------------- RIGHT -------------------------------------------------------------------
+
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Right))
+        {
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
+            {
+                if (ConvertDimension.FractionToDouble(baseCab!.BackThickness) == 0.25)
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Right,
+                        EdgeLength: height,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: ConvertDimension.FractionToDouble(baseCab.TKHeight),
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Right,
+                        EdgeLength: height - mt34,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: ConvertDimension.FractionToDouble(baseCab.TKHeight),
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+            }
+
+            else if (part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
+            {
+                if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Right,
+                        EdgeLength: height,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Right,
+                        EdgeLength: height - mt34,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+            }
+
+            else // Standard catch-all Right Edge screw holes for thru-mortises
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Right,
+                    EdgeLength: height,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
+            }
+        }
+
+
+
+        // --------------------------------------------------------- BOTTOM -------------------------------------------------------------------
+
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Bottom))
+        {
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel && baseCab!.HasTK)
+            {
+                double tkBottomOffsetAlong = length - ConvertDimension.FractionToDouble(baseCab.TKHeight);
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Bottom,
+                    EdgeLength: ConvertDimension.FractionToDouble(baseCab.TKHeight) - 0.5,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: part.TkDepth,
+                    OffsetAlongEdge: tkBottomOffsetAlong,
+                    ForceTwoTenons: true,
+                    BlindStartOverride: 0,
+                    BlindStopOverride: 0,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: false), joinery)
+                );
+            }
+            else // Standard catch-all for Bottom Edge screw holes
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Bottom,
+                    EdgeLength: length,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
+            }
+        }
+
+
+
+        // --------------------------------------------------------- TOP -------------------------------------------------------------------
+
+        if (part.MortiseThruEdges.HasFlag(MortiseThruEdge.Top))
+        {
+            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
+            {
+                if (ConvertDimension.FractionToDouble(baseCab!.BackThickness) == 0.25)
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Top,
+                        EdgeLength: 6, // stretcherWidth
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: mt34,
+                        ForceTwoTenons: true,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: false), joinery)
+                    );
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Top,
+                        EdgeLength: length - part.TkHeight - mt34,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: mt34,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+            }
+            else if (part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
+            {
+                if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25)
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Top,
+                        EdgeLength: 4, // upperNailerWidth
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: mt34,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Top,
+                        EdgeLength: 4, // upperNailerWidth
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: length - 4 - mt34,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 1.25,
+                        BlindStopOverride: 1.25,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+                else
+                {
+                    holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                    (
+                        Edge: ScrewHoleEdge.Top,
+                        EdgeLength: length,
+                        PartWidth: length,
+                        PartHeight: height,
+                        OffsetFromEdge: 0,
+                        OffsetAlongEdge: 0,
+                        ForceTwoTenons: false,
+                        BlindStartOverride: 2.75,
+                        BlindStopOverride: 2.75,
+                        MaterialThickness34: mt34,
+                        IncludeEndHoles: true), joinery)
+                    );
+                }
+            }
+            else if (part.Name.Contains("Deck") && part.CabinetModel is BaseCabinetModel baseCabStd && (baseCabStd.Style == CabinetStyles.Base.Standard || baseCabStd.Style == CabinetStyles.Base.Drawer))
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Top,
+                    EdgeLength: length,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: ConvertDimension.FractionToDouble(baseCabStd.TKDepth),
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 1.25,
+                    BlindStopOverride: 1.25,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
+            }
+
+            else if (part.CabinetModel is BaseCabinetModel base90corner && base90corner.Style == CabinetStyles.Base.Corner90 && part.Name.Contains("Deck"))
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Top,
+                    EdgeLength: base90corner.ToeKickLeftWidth,
+                    PartWidth: 0, // length
+                    PartHeight: ConvertDimension.FractionToDouble(base90corner.LeftDepth) - (2 * mt34),
+                    OffsetFromEdge: ConvertDimension.FractionToDouble(base90corner.TKDepth),
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 0,
+                    BlindStopOverride: 0,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
+            }
+
+            else // Standard catch-all for Top Edge screw holes
+            {
+                holesThru.AddRange(MortiseScrewHoleCalculator.ComputeScrewHolesFromSpecs(new ScrewHolePlacementSpec
+                (
+                    Edge: ScrewHoleEdge.Top,
+                    EdgeLength: length,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    MaterialThickness34: mt34,
+                    IncludeEndHoles: true), joinery)
+                );
             }
         }
     }

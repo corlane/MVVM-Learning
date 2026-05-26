@@ -228,7 +228,7 @@ internal static class MortiseBlindCalculator
                 }
             }
 
-            else if (part.MortiseEdges.HasFlag(MortiseEdge.Left) && part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
+            else if (part.MortiseEdges.HasFlag(MortiseEdge.Right) && part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCab)
             {
                 if (ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25) // Upper cab Top Mortises, 1/4" back
                 {

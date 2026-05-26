@@ -167,20 +167,20 @@ internal static class MortiseThruCalculator
 
             else // Standard catch-all Left Edge mortise
             {
-                //mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
-                //(
-                //    Edge: MortiseEdge.Left,
-                //    EdgeLength: height,
-                //    PartWidth: length,
-                //    PartHeight: height,
-                //    OffsetFromEdge: 0,
-                //    OffsetAlongEdge: 0,
-                //    ForceTwoTenons: false,
-                //    BlindStartOverride: 2.75,
-                //    BlindStopOverride: 2.75,
-                //    FullThicknessTenon: false,
-                //    MaterialThickness34: mt34), joinery)
-                //);
+                mortisePockets.AddRange(MortiseCalculator.ComputeMortisePocketsFromSpecs(new MortisePlacementSpec
+                (
+                    Edge: MortiseEdge.Left,
+                    EdgeLength: height,
+                    PartWidth: length,
+                    PartHeight: height,
+                    OffsetFromEdge: 0,
+                    OffsetAlongEdge: 0,
+                    ForceTwoTenons: false,
+                    BlindStartOverride: 2.75,
+                    BlindStopOverride: 2.75,
+                    FullThicknessTenon: false,
+                    MaterialThickness34: mt34), joinery)
+                );
             }
         }
 
