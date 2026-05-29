@@ -1,5 +1,6 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using System.Windows;
 using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
@@ -105,8 +106,7 @@ internal static partial class BaseCabinetBuilder
 
         shelf = BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, cabType, style2, backThickness, tk_Height, interiorWidth, interiorHeight, shelfDepth, opening1Height);
 
-        // Doors
-        if (baseCab.DoorCount > 0 && baseCab.IncDoors && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2)
+        if (baseCab.DoorCount > 0 && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2) // REMOVED baseCab.IncDoors so they will show up still, but be a different color indicating that we are not supplying them.  This is because some users (CANNOT SET THE DOOR COUNT PROPERLY) want to see the doors in the 3D model even if they are not being supplied by us, and it is less confusing to have them show up as a different color than to have them not show up at all.
         {
             BuildDoors(cabinet, baseCab, dim, opening1Height, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, result);
         }

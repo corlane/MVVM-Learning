@@ -58,7 +58,7 @@ internal static partial class BaseCabinetBuilder
                 addFrontPartRow(baseCab, $"Drawer Front {fi + 1}", h, drwFrontWidth, baseCab.DoorSpecies, baseCab.DrwFrontGrainDir);
             }
 
-            if (!incFront[fi]) continue;
+            //if (!incFront[fi]) { doorEdgebandingSpecies = "Alt Source EB Color"; doorSpeciesForTotalsForDrw = "Alt Source Door Color"; } //continue;
 
             List<Point3D> drwFrontPoints =
             [
@@ -72,8 +72,15 @@ internal static partial class BaseCabinetBuilder
             for (int k = 0; k <= fi; k++) cumulativeHeight += drwHeights[k];
 
             double yPos = height - doorTopReveal - cumulativeHeight - (fi * baseDoorGap);
-
-            var front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, isFaceUp: false, CabinetPartKind.DrawerFront);
+            Model3DGroup? front = null;
+            if (!incFront[fi])
+            {
+                front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DrwFrontGrainDir, baseCab, isFaceUp: false, CabinetPartKind.DrawerFront);
+            }
+            else
+            {
+                front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, isFaceUp: false, CabinetPartKind.DrawerFront);
+            }
             ModelTransforms.ApplyTransform(front, -(width / 2) + doorLeftReveal, yPos, depth, 0, 0, 0);
             if (!doorsHidden) cabinet.Children.Add(front);
         }

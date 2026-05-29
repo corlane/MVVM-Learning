@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\Edgebanding\Alt Source EB Color.png" />
     <None Remove="Images\Edgebanding\Custom.png" />
     <None Remove="Images\Edgebanding\PVC Black.png" />
     <None Remove="Images\Edgebanding\PVC Hardrock Maple.png" />
@@ -33,6 +34,7 @@
     <None Remove="Images\icon.ico" />
     <None Remove="Images\Plywood\Alder Ply - Horizontal.png" />
     <None Remove="Images\Plywood\Alder Ply.png" />
+    <None Remove="Images\Plywood\Alt Source Door Color.png" />
     <None Remove="Images\Plywood\Black Melamine.png" />
     <None Remove="Images\Plywood\Cherry Ply - Horizontal.png" />
     <None Remove="Images\Plywood\Cherry Ply.png" />
@@ -78,6 +80,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Edgebanding\Alt Source EB Color.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Edgebanding\Custom.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -121,6 +126,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\Plywood\Alder Ply.png" />
+    <Resource Include="Images\Plywood\Alt Source Door Color.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\Plywood\Black Melamine.png" />
     <Resource Include="Images\Plywood\Cherry Ply.png" />
     <Resource Include="Images\Plywood\Custom.png" />

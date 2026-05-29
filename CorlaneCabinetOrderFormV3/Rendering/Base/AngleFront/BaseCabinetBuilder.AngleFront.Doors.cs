@@ -19,7 +19,7 @@ internal static partial class BaseCabinetBuilder
         }
 
         // Doors
-        if (baseCab.DoorCount > 0 && baseCab.IncDoors || baseCab.DoorCount > 0 && baseCab.IncDoorsInList)
+        if (baseCab.DoorCount > 0 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList)
         {
             var doorSpeciesForTotals = resolveDoorSpeciesForTotals(baseCab.DoorSpecies, baseCab.CustomDoorSpecies);
 
@@ -34,8 +34,8 @@ internal static partial class BaseCabinetBuilder
                     addFrontPartRow(baseCab, "Door", doorHeight, door1Width, baseCab.DoorSpecies, baseCab.DoorGrainDir);
                 }
 
-                if (baseCab.IncDoors)
-                {
+                //if (baseCab.IncDoors)
+                //{
                     doorPoints =
                     [
                         new (0,0,0),
@@ -43,13 +43,22 @@ internal static partial class BaseCabinetBuilder
                     new (door1Width,doorHeight,0),
                     new (0,doorHeight,0)
                     ];
-                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+
+                    if (baseCab.IncDoors)
+                    {
+                        door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                    }
+                    else
+                    {
+                        door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                    }
+
                     ModelTransforms.ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
                     var door1Rotated = new Model3DGroup();
                     door1Rotated.Children.Add(door1);
                     ModelTransforms.ApplyTransform(door1Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
                     if (!doorsHidden) cabinet.Children.Add(door1Rotated);
-                }
+                //}
             }
             if (baseCab.DoorCount == 2)
             {

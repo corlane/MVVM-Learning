@@ -44,7 +44,14 @@ internal static partial class BaseCabinetBuilder
 
         if (!edgeBandingOnDoorsAndDrawerFronts)
         {
-            doorEdgebandingSpecies = "None";
+            if (!baseCab.IncDoors)
+            {
+                doorEdgebandingSpecies = "PVC Black";
+            }
+            else
+            {
+                doorEdgebandingSpecies = "None";
+            }
         }
 
         if (cabType == style1 && baseCab.DrwCount == 1)
@@ -81,6 +88,19 @@ internal static partial class BaseCabinetBuilder
             if (baseCab.IncDoors)
             {
                 var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                if (!baseCab.HasTK)
+                {
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
+                }
+                else
+                {
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
+                }
+                if (!doorsHidden) cabinet.Children.Add(door1);
+            }
+            else // EXPERIMENTAL: if not including doors, still add a placeholder for the door in the model for better visualization of openings, use a different color/material to indicate it's a placeholder.
+            {
+                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
                 if (!baseCab.HasTK)
                 {
                     ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
@@ -132,6 +152,28 @@ internal static partial class BaseCabinetBuilder
                     cabinet.Children.Add(door2);
                 }
             }
+            else // EXPERIMENTAL: if not including doors, still add a placeholder for the door in the model for better visualization of openings, use a different color/material to indicate it's a placeholder.
+            {
+                var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+
+                var door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                if (!baseCab.HasTK)
+                {
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);
+                    ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal, depth, 0, 0, 0);
+                }
+                else
+                {
+                    ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
+                    ModelTransforms.ApplyTransform(door2, (width / 2) - doorWidth - doorRightReveal, doorBottomReveal + tk_Height, depth, 0, 0, 0);
+                }
+                if (!doorsHidden)
+                {
+                    cabinet.Children.Add(door1);
+                    cabinet.Children.Add(door2);
+                }
+            }
+
         }
     }
 
