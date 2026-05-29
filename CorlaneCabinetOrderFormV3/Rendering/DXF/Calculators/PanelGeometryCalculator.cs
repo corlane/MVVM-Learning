@@ -18,6 +18,10 @@ internal static class PanelGeometryCalculator
         bool isLShape = isCorner90 && (part.Name.Contains("Top") || part.Name.Contains("Deck") || part.Name.Contains("Shelf"));
         bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.TkHeight > 0 && part.TkDepth > 0;
 
+        bool isAngleFront = (baseCab != null && baseCab.Style == CabinetStyles.Base.AngleFront) ||
+                            (part.CabinetModel is UpperCabinetModel upperCab && upperCab.Style == CabinetStyles.Upper.AngleFront);
+        bool isAngleFrontPanel = isAngleFront && (part.Name.Contains("Top") || part.Name.Contains("Deck") || part.Name.Contains("Shelf"));
+
         var outline = new List<Vector2>();
         var thinningPockets = new List<(double x1, double x2, double y1, double y2)>();
         var mortisePockets = new List<(double x1, double x2, double y1, double y2)>();
@@ -26,13 +30,21 @@ internal static class PanelGeometryCalculator
         var holesThru = new List<(double x, double y, double radius)>();
 
         // 1. Build Outline
-        OutlineBuilder.BuildOutline(part, isEndPanelWithTk, isLShape, materialThickness34, outline);
+        OutlineBuilder.BuildOutline(part, isEndPanelWithTk, isLShape || isAngleFrontPanel, materialThickness34, outline);
 
         // 2. Compute Joinery
         if (isLShape && part.CabinetModel is BaseCabinetModel)
         {
             LShapeJoineryCalculator.ComputeLShapeJoinery(part, outline, thinningPockets, joinery, baseCab!, materialThickness34);
             if (baseCab!.HasTK && part.Name.Contains("Deck"))
+            {
+                MortiseBlindCalculator.ComputeMortisePockets(part, mortisePockets, joinery, materialThickness34);
+            }
+        }
+        else if (isAngleFrontPanel)
+        {
+            AngleFrontJoineryCalculator.ComputeAngleFrontJoinery(part, outline, thinningPockets, joinery, part.CabinetModel!, materialThickness34);
+            if (part.CabinetModel is BaseCabinetModel afBase && afBase.HasTK && part.Name.Contains("Deck"))
             {
                 MortiseBlindCalculator.ComputeMortisePockets(part, mortisePockets, joinery, materialThickness34);
             }
@@ -97,6 +109,12 @@ internal static class PanelGeometryCalculator
         {
             result = result.MirrorAcrossVerticalCenterline(part.Bounds.Width);
         }
+
+        if (isAngleFrontPanel && part.Name.Contains("Top"))
+        {
+            result = result.MirrorAcrossVerticalCenterline(part.Bounds.Width);
+        }
+
 
         return result;
     }
