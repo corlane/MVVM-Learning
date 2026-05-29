@@ -14,7 +14,7 @@ internal static partial class BaseCabinetBuilder
 
         bool edgeBandingOnDoorsAndDrawerFronts = baseCab.EdgebandDoorsAndDrawers;
 
-        if (edgeBandingOnDoorsAndDrawerFronts)
+        if (!edgeBandingOnDoorsAndDrawerFronts)
         {
             doorEdgebandingSpecies = "None";
         }

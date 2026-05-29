@@ -50,7 +50,7 @@ Upper angle front not showing calculated front width. AGAIN. It is only on initi
 If Supply Drw Boxes is unchecked, they become checked again on cabinet Depth change. The reason is: During typing, as the depth changes, it triggers if (ConvertDimension.FractionToDouble(Depth) < 10.625) IncDrwBoxOpening1 = false; etc.
 	I tried capturing the values of the checkboxes before the depth check and reapplying them after, and that didn't work. For some reason, it then started REMOVING the drw boxes, the opposite effect.
 
-ONLY Base Std and Base Drw cabinet doors add edgebanding to the totals! 90 deg, angle front, and uppers do not add edgebanding to the totals. Check for too-restrictive conditions (== Base Std or Base Drw) and change to if (cabinetType == "Base Std" || cabinetType == "Base Drw" || cabinetType == "Angle Front" || cabinetType == "Upper") or something like that.
+
 
 TESTING NOTES:
 									
