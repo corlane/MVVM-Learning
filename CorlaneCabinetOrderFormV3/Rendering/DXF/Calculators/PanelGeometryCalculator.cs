@@ -61,6 +61,7 @@ internal static class PanelGeometryCalculator
             {
                 ScrewHoleEdgeCalculator.ComputeScrewHolesFromMortiseThru(part, holesThru, joinery, materialThickness34);
             }
+
             ShelfHoleEdgeCalculator.ComputeShelfHoles(part, holes, joinery, materialThickness34);
 
             if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)

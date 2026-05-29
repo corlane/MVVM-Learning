@@ -22,10 +22,7 @@ internal static class CabinetInputAdapter
         {
             PartInfo mappedPart;
             bool isCorner90 = cabinet is BaseCabinetModel bCab && bCab.Style == CabinetStyles.Base.Corner90;
-
-            bool isAngleFront = (cabinet is BaseCabinetModel afBase && afBase.Style == CabinetStyles.Base.AngleFront) ||
-                                (cabinet is UpperCabinetModel afUpper && afUpper.Style == CabinetStyles.Upper.AngleFront);
-
+            bool isAngleFront = cabinet is BaseCabinetModel bCabA && bCabA.Style == CabinetStyles.Base.AngleFront;
 
             // ── Resolve Bounds (handle "—" dimensions for Corner90 L-shapes) ──
             double partLength = entry.LengthIn;
@@ -48,46 +45,19 @@ internal static class CabinetInputAdapter
                 }
             }
 
-
-            if (isAngleFront && (partLength == 0 || partWidth == 0))
-            {
-                bool isAnglePanel = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck") || entry.PartName.Contains("Shelf");
-                if (isAnglePanel)
-                {
-                    double lbw, rbw, ld2, rd2;
-                    if (cabinet is BaseCabinetModel afBaseCab)
-                    {
-                        lbw = ConvertDimension.FractionToDouble(afBaseCab.LeftBackWidth);
-                        rbw = ConvertDimension.FractionToDouble(afBaseCab.RightBackWidth);
-                        ld2 = ConvertDimension.FractionToDouble(afBaseCab.LeftDepth);
-                        rd2 = ConvertDimension.FractionToDouble(afBaseCab.RightDepth);
-                    }
-                    else
-                    {
-                        lbw = ConvertDimension.FractionToDouble(((UpperCabinetModel)cabinet!).LeftBackWidth);
-                        rbw = ConvertDimension.FractionToDouble(((UpperCabinetModel)cabinet!).RightBackWidth);
-                        ld2 = ConvertDimension.FractionToDouble(((UpperCabinetModel)cabinet!).LeftDepth);
-                        rd2 = ConvertDimension.FractionToDouble(((UpperCabinetModel)cabinet!).RightDepth);
-                    }
-
-                    partLength = Math.Max(ld2, rbw) + 1;
-                    partWidth = lbw - materialThickness34 + 1;
-                }
-            }
-
-            if (isCorner90)
+            if (isCorner90 || isAngleFront)
             {
                 bool isEnd = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
                 bool isLeftBack = entry.PartName.Contains("Left Back", StringComparison.OrdinalIgnoreCase);
                 bool isRightBack = entry.PartName.Contains("Right Back", StringComparison.OrdinalIgnoreCase);
                 bool isTopOrDeck = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck");
-                bool isShelf = entry.PartName.Contains("Shelf");
-                bool isDoor = entry.PartName.Contains("Door");
+                //bool isShelf = entry.PartName.Contains("Shelf");
+                //bool isDoor = entry.PartName.Contains("Door");
                 bool isToekick = entry.PartName.Contains("Toekick");
 
-                bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
-                double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
-                double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
+                //bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
+                //double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
+                //double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
 
 
                 if (isEnd)
@@ -136,54 +106,6 @@ internal static class CabinetInputAdapter
                         EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
                 }
             }
-            else if (isAngleFront)
-            {
-                bool isEnd = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
-                bool isTopOrDeck = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck");
-                bool isShelf = entry.PartName.Contains("Shelf");
-                bool isBack = entry.PartName.Contains("Back", StringComparison.OrdinalIgnoreCase) && !entry.PartName.Contains("End");
-                bool isDoor = entry.PartName.Contains("Door");
-
-                double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
-                double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
-
-                if (isEnd)
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None,
-                        MortiseEdges: MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
-                        ScrewHoleEdges: ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top | ScrewHoleEdge.Bottom,
-                        ThinningPockets: ThinningPocketEdge.None,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: partTkH, TkDepth: partTkD, CabinetModel: cabinet);
-                }
-                else if (isTopOrDeck || isShelf)
-                {
-                    bool hasMortiseOnDeck = cabinet is BaseCabinetModel baseCab && baseCab.HasTK && entry.PartName.Contains("Deck");
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None, // Handled by AngleFrontJoineryCalculator
-                        MortiseEdges: hasMortiseOnDeck ? MortiseEdge.Top : MortiseEdge.None,
-                        ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: partTkH, TkDepth: partTkD, CabinetModel: cabinet);
-                }
-                else if (isBack)
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
-                        MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ResolveTenonThinningEdges(entry.PartName, cabinet),
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: partTkH, TkDepth: partTkD, CabinetModel: cabinet);
-                }
-                else
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: partTkH, TkDepth: partTkD, CabinetModel: cabinet);
-                }
-            }
-
             else
             {
                 // Original mapping for Standard/Drawer

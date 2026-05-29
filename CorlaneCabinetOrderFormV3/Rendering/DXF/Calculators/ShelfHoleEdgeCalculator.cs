@@ -1,5 +1,6 @@
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
+using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Calculators;
 
@@ -18,12 +19,22 @@ internal static class ShelfHoleEdgeCalculator
             holes.AddRange(DXFShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
         }
 
-        if (part.CabinetModel is BaseCabinetModel bCab90Left && bCab90Left.Style == CabinetStyles.Base.Corner90 && bCab90Left.DrillShelfHoles && part.Name.Contains("Left End"))
+        if (part.CabinetModel is BaseCabinetModel bCab90Left && (bCab90Left.Style == CabinetStyles.Base.Corner90 || bCab90Left.Style == CabinetStyles.Base.AngleFront) && bCab90Left.DrillShelfHoles && part.Name.Contains("Left End"))
         {
             holes.AddRange(DXFShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
         }
 
-        if (part.CabinetModel is BaseCabinetModel bCab90Right && bCab90Right.Style == CabinetStyles.Base.Corner90 && bCab90Right.DrillShelfHoles && part.Name.Contains("Right End"))
+        if (part.CabinetModel is BaseCabinetModel bCab90Right && (bCab90Right.Style == CabinetStyles.Base.Corner90 || bCab90Right.Style == CabinetStyles.Base.AngleFront) && bCab90Right.DrillShelfHoles && part.Name.Contains("Right End"))
+        {
+            holes.AddRange(DXFShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
+        }
+
+        if (part.CabinetModel is UpperCabinetModel uCab90Left && (uCab90Left.Style == CabinetStyles.Upper.Corner90 || uCab90Left.Style == CabinetStyles.Upper.AngleFront) && uCab90Left.DrillShelfHoles && part.Name.Contains("Left End"))
+        {
+            holes.AddRange(DXFShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
+        }
+
+        if (part.CabinetModel is UpperCabinetModel uCab90Right && (uCab90Right.Style == CabinetStyles.Upper.Corner90 || uCab90Right.Style == CabinetStyles.Upper.AngleFront) && uCab90Right.DrillShelfHoles && part.Name.Contains("Right End"))
         {
             holes.AddRange(DXFShelfHoleCalculator.ComputeShelfHoles(part, joinery, materialThickness34: mt34));
         }
