@@ -44,76 +44,25 @@ internal static class CabinetInputAdapter
                 }
             }
 
-            if (isCorner90 || isAngleFront)
+            // Top/Deck panels in Corner90/AngleFront cabinets have unique joinery: mortise on Left|Top only, no tenons.
+            bool isCornerOrAngleTopDeck = (isCorner90 || isAngleFront) && 
+                (entry.PartName.Contains("Top") || entry.PartName.Contains("Deck"));
+
+            if (isCornerOrAngleTopDeck)
             {
-                bool isEnd = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
-                bool isLeftBack = entry.PartName.Contains("Left Back", StringComparison.OrdinalIgnoreCase);
-                bool isRightBack = entry.PartName.Contains("Right Back", StringComparison.OrdinalIgnoreCase);
-                bool isTopOrDeck = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck");
-                //bool isShelf = entry.PartName.Contains("Shelf");
-                //bool isDoor = entry.PartName.Contains("Door");
-                bool isToekick = entry.PartName.Contains("Toekick");
-
-                //bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
-                //double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
-                //double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
-
-
-                if (isEnd)
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None,
-                        MortiseEdges: MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
-                        ScrewHoleEdges: ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top | ScrewHoleEdge.Bottom,
-                        ThinningPockets: ThinningPocketEdge.None,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
-                }
-                else if (isTopOrDeck)
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.Left | MortiseEdge.Top, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
-                }
-                else if (isLeftBack)
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.Left, MortiseEdges: MortiseEdge.Bottom, ScrewHoleEdges: ScrewHoleEdge.Bottom, ThinningPockets: ThinningPocketEdge.Left,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
-                }
-                else if (isRightBack)
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.Right, MortiseEdges: MortiseEdge.Bottom, ScrewHoleEdges: ScrewHoleEdge.Bottom, ThinningPockets: ThinningPocketEdge.Right,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
-                }
-                else if (isToekick)
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.Right | TenonEdge.Left | TenonEdge.Top, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.Right | ThinningPocketEdge.Left | ThinningPocketEdge.Top,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
-                }
-                else
-                {
-                    mappedPart = new PartInfo(
-                        Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
-                        TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.None, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
-                        EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
-                }
+                mappedPart = new PartInfo(
+                    Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
+                    TenonEdges: TenonEdge.None, MortiseEdges: MortiseEdge.Left | MortiseEdge.Top, ScrewHoleEdges: ScrewHoleEdge.None, ThinningPockets: ThinningPocketEdge.None,
+                    EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: tkHeight, TkDepth: tkDepth, CabinetModel: cabinet);
             }
             else
             {
-                // Original mapping for Standard/Drawer
-                bool isEndPanel = entry.PartName.Contains("End", StringComparison.OrdinalIgnoreCase);
+                // Standard mapping for all other parts (including non-Top/Deck Corner90/AngleFront parts)
                 double partTkH = cabinet is BaseCabinetModel ? tkHeight : 0;
                 double partTkD = cabinet is BaseCabinetModel ? tkDepth : 0;
 
                 mappedPart = new PartInfo(
-                    Name: entry.PartName, Bounds: new PartBounds(entry.LengthIn, entry.WidthIn), Species: entry.Species, Quantity: entry.Qty,
+                    Name: entry.PartName, Bounds: new PartBounds(partLength, partWidth), Species: entry.Species, Quantity: entry.Qty,
                     TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
                     MortiseEdges: ResolveMortiseEdges(entry.PartName, cabinet),
                     MortiseThruEdges: ResolveMortiseThruEdges(entry.PartName, cabinet),
