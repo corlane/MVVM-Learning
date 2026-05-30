@@ -59,7 +59,7 @@ internal static class AngleFrontJoineryCalculator
 
         // Edge 1→2: Right side vertical (upward in Y from front-right to back-right inner)
         var p2 = new Vector2(rbw - mt34, lbw - backSetback);
-        AppendVerticalEdgeWithTenons(outline, p1, p2, joinery, dadoDepth, protrudePositiveX: false, thinningPockets, part);
+        AppendVerticalEdgeWithTenons(outline, p1, p2, joinery, dadoDepth, protrudePositiveX: true, thinningPockets, part);
 
         // Edge 2→3: Back horizontal (leftward from right to left)
         var p3 = new Vector2(backSetback, lbw - backSetback);
@@ -67,10 +67,10 @@ internal static class AngleFrontJoineryCalculator
 
         // Edge 3→4: Left-back vertical (downward in Y from back-left inner to inside-front-left)
         var p4 = new Vector2(backSetback, mt34);
-        AppendVerticalEdgeWithTenons(outline, p3, p4, joinery, dadoDepth, protrudePositiveX: true, thinningPockets, part);
+        AppendVerticalEdgeWithTenons(outline, p3, p4, joinery, dadoDepth, protrudePositiveX: false, thinningPockets, part);
 
         // Edge 4→0: Left-front vertical (downward in Y from inside-front-left to front-left)
-        AppendVerticalEdgeWithTenons(outline, p4, p0, joinery, dadoDepth, protrudePositiveX: false, thinningPockets, part);
+        AppendHorizontalEdgeWithTenons(outline, p4, p0, joinery, dadoDepth, protrudePositiveY: false, thinningPockets, part);
     }
 
     internal static void AppendHorizontalEdgeWithTenons(
