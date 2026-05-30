@@ -119,7 +119,7 @@ internal static class PartsListBuilder
 
     /// <summary>For L-shaped / pentagonal parts where simple L×W doesn't apply.</summary>
     private static void AddComplex(List<PartListEntry> entries, string label, string name,
-        int qty, string species, double thicknessIn, string notes,
+        int qty, double widthIn, double lengthIn, string species, double thicknessIn, string notes,
         string ebSpecies = "", double ebLengthIn = 0)
     {
         entries.Add(new PartListEntry
@@ -128,8 +128,8 @@ internal static class PartsListBuilder
             PartName = name,
             Qty = qty,
             Species = species,
-            Length = "—",
-            Width = "—",
+            Length = Fmt(lengthIn),
+            Width = Fmt(widthIn),
             Thickness = Fmt(thicknessIn),
             Notes = notes,
             EdgeBandSpecies = string.Equals(ebSpecies, "None", StringComparison.OrdinalIgnoreCase) ? "" : ebSpecies,
@@ -345,8 +345,8 @@ internal static class PartsListBuilder
         double deckEdge1 = rf - Mt34;   // second L-shape edge
         double deckEBLen = deckEdge0 + deckEdge1;
         string lNote = $"L-shape — LF: {Fmt(lf - Mt34)}, RF: {Fmt(rf - Mt34)}, LD: {Fmt(ld - 2 * Mt34)}, RD: {Fmt(rd - 2 * Mt34)}";
-        AddComplex(entries, label, "Deck", 1, species, Mt34, lNote, eb, deckEBLen);
-        AddComplex(entries, label, "Top", 1, species, Mt34, lNote, eb, deckEBLen);
+        AddComplex(entries, label, "Deck", 1, ld + rf, rd + lf, species, Mt34, lNote, eb, deckEBLen);
+        AddComplex(entries, label, "Top", 1, ld + rf, rd + lf, species, Mt34, lNote, eb, deckEBLen);
 
         // Backs — no EB
         double lbW = lf + rd - 2 * Mt34;
@@ -368,7 +368,7 @@ internal static class PartsListBuilder
         {
             string shelfNote = b.ShelfDepth == CabinetOptions.ShelfDepth.HalfDepth
                 ? "L-shape (half depth)" : lNote;
-            AddComplex(entries, label, "Shelf", b.ShelfCount, species, Mt34, shelfNote,
+            AddComplex(entries, label, "Shelf", b.ShelfCount, ld + rf, rd + lf, species, Mt34, shelfNote,
                 shelfEB, deckEBLen);
         }
 
@@ -419,8 +419,8 @@ internal static class PartsListBuilder
 
         // Deck & Top (pentagonal) — front edge banded
         string aNote = $"Angle front — LD: {Fmt(ld)}, RD: {Fmt(rd)}, LBack: {Fmt(lb)}, RBack: {Fmt(rb)}, Front: {Fmt(frontW)}";
-        AddComplex(entries, label, "Deck", 1, species, Mt34, aNote, eb, frontW);
-        AddComplex(entries, label, "Top", 1, species, Mt34, aNote, eb, frontW);
+        AddComplex(entries, label, "Deck", 1, rb, lb, species, Mt34, aNote, eb, frontW);
+        AddComplex(entries, label, "Top", 1, rb, lb, species, Mt34, aNote, eb, frontW);
 
         // Backs — no EB
         double lbkW = lb - Mt34 - 0.25;
@@ -435,7 +435,7 @@ internal static class PartsListBuilder
 
         // Shelves (pentagonal) — front edge banded
         if (b.ShelfCount > 0)
-            AddComplex(entries, label, "Shelf", b.ShelfCount, species, Mt34, aNote,
+            AddComplex(entries, label, "Shelf", b.ShelfCount, rbkW, lbkW, species, Mt34, aNote,
                 shelfEB, frontW);
 
         // Doors — all 4 edges banded
@@ -586,8 +586,8 @@ internal static class PartsListBuilder
         double deckEdge1 = rf - Mt34;
         double deckEBLen = deckEdge0 + deckEdge1;
         string lNote = $"L-shape — LF: {Fmt(lf - Mt34)}, RF: {Fmt(rf - Mt34)}, LD: {Fmt(ld - 2 * Mt34)}, RD: {Fmt(rd - 2 * Mt34)}";
-        AddComplex(entries, label, "Deck", 1, species, Mt34, lNote, eb, deckEBLen);
-        AddComplex(entries, label, "Top", 1, species, Mt34, lNote, eb, deckEBLen);
+        AddComplex(entries, label, "Deck", 1, lf - Mt34, rf - Mt34, species, Mt34, lNote, eb, deckEBLen);
+        AddComplex(entries, label, "Top", 1, lf - Mt34, rf - Mt34, species, Mt34, lNote, eb, deckEBLen);
 
         // Backs — no EB
         Add(entries, label, "Left Back", 1, species, height, lf + rd - 2 * Mt34, Mt34, "Vertical");
@@ -595,7 +595,7 @@ internal static class PartsListBuilder
 
         // Shelves — edges 0+1 banded
         if (u.ShelfCount > 0)
-            AddComplex(entries, label, "Shelf", u.ShelfCount, species, Mt34, lNote,
+            AddComplex(entries, label, "Shelf", u.ShelfCount, lf - Mt34, rf - Mt34, species, Mt34, lNote,
                 shelfEB, deckEBLen);
 
         // Doors — all 4 edges banded
@@ -640,8 +640,8 @@ internal static class PartsListBuilder
 
         // Deck & Top (pentagonal) — front edge banded
         string aNote = $"Angle front — LD: {Fmt(ld)}, RD: {Fmt(rd)}, LBack: {Fmt(lb)}, RBack: {Fmt(rb)}, Front: {Fmt(frontW)}";
-        AddComplex(entries, label, "Deck", 1, species, Mt34, aNote, eb, frontW);
-        AddComplex(entries, label, "Top", 1, species, Mt34, aNote, eb, frontW);
+        AddComplex(entries, label, "Deck", 1, rb, lb, species, Mt34, aNote, eb, frontW);
+        AddComplex(entries, label, "Top", 1, rb, lb, species, Mt34, aNote, eb, frontW);
 
         // Backs — no EB
         Add(entries, label, "Left Back", 1, species, height, lb - Mt34 - 0.25, Mt34, "Vertical");
@@ -649,7 +649,7 @@ internal static class PartsListBuilder
 
         // Shelves — front edge banded
         if (u.ShelfCount > 0)
-            AddComplex(entries, label, "Shelf", u.ShelfCount, species, Mt34, aNote,
+            AddComplex(entries, label, "Shelf", u.ShelfCount, rb, lb, species, Mt34, aNote,
                 shelfEB, frontW);
 
         // Doors — all 4 edges banded

@@ -639,7 +639,7 @@ public partial class POBatchListViewModel : ObservableObject
 
                     var pipeline = new DxfExportPipeline(new[] { part }, options);
 
-                    if (!pipeline.ValidateInput()) continue;
+                    //if (!pipeline.ValidateInput()) continue;  THIS HAS TO BE COMMENTED OUT OTHERWISE ANGLE FRONTS AND L SHAPES DONT PASS THROUGH BECAUSE THEY HAVE NO WIDTH AND HEIGHT SPECIFIED
 
                     string safeName = SanitizeFileName($"{part.CabinetLabel} — {part.PartName}");
                     string filePath = Path.Combine(dlg.FolderName, safeName + ".dxf");
