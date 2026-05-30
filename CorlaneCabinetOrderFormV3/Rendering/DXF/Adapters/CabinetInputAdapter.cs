@@ -1,4 +1,4 @@
-﻿using CorlaneCabinetOrderFormV3.Converters;
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
@@ -21,8 +21,10 @@ internal static class CabinetInputAdapter
         foreach (var entry in parts)
         {
             PartInfo mappedPart;
-            bool isCorner90 = cabinet is BaseCabinetModel bCab && bCab.Style == CabinetStyles.Base.Corner90;
-            bool isAngleFront = cabinet is BaseCabinetModel bCabA && bCabA.Style == CabinetStyles.Base.AngleFront;
+            
+            // Cabinet-type-agnostic style detection
+            bool isCorner90 = cabinet.IsCorner90();
+            bool isAngleFront = cabinet.IsAngleFront();
 
             // ── Resolve Bounds (handle "—" dimensions for Corner90 L-shapes) ──
             double partLength = entry.LengthIn;
@@ -31,13 +33,10 @@ internal static class CabinetInputAdapter
             if (isCorner90 && (partLength == 0 || partWidth == 0))
             {
                 bool isLShape = entry.PartName.Contains("Top") || entry.PartName.Contains("Deck") || entry.PartName.Contains("Shelf");
-                if (isLShape && cabinet is BaseCabinetModel baseCab)
+                if (isLShape)
                 {
                     // Assign bounding box dimensions so ValidateInput() passes
-                    double lf = ConvertDimension.FractionToDouble(baseCab.LeftFrontWidth);
-                    double rf = ConvertDimension.FractionToDouble(baseCab.RightFrontWidth);
-                    double ld = ConvertDimension.FractionToDouble(baseCab.LeftDepth);
-                    double rd = ConvertDimension.FractionToDouble(baseCab.RightDepth);
+                    var (_, _, lf, rf, ld, rd) = cabinet.GetCornerDimensions();
                     double mt = materialThickness34;
 
                     partLength = Math.Max(lf, ld) + Math.Max(rf, rd) - mt;

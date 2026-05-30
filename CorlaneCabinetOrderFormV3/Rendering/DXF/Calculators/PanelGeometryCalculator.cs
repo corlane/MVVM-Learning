@@ -13,14 +13,14 @@ internal static class PanelGeometryCalculator
 {
     internal static PartGeometry Compute(PartInfo part, JoineryConfig joinery, double materialThickness34)
     {
-        var baseCab = part.CabinetModel as BaseCabinetModel;
-        bool isCorner90 = baseCab != null && baseCab.Style == CabinetStyles.Base.Corner90;
-        bool isLShape = isCorner90 && (part.Name.Contains("Top") || part.Name.Contains("Deck") || part.Name.Contains("Shelf"));
-        bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.TkHeight > 0 && part.TkDepth > 0;
+        var cabinet = part.CabinetModel;
 
-        bool isAngleFront = (baseCab != null && baseCab.Style == CabinetStyles.Base.AngleFront) ||
-                            (part.CabinetModel is UpperCabinetModel upperCab && upperCab.Style == CabinetStyles.Upper.AngleFront);
+        // Cabinet-type-agnostic style detection
+        bool isCorner90 = cabinet.IsCorner90();
+        bool isAngleFront = cabinet.IsAngleFront();
+        bool isLShape = isCorner90 && (part.Name.Contains("Top") || part.Name.Contains("Deck") || part.Name.Contains("Shelf"));
         bool isAngleFrontPanel = isAngleFront && (part.Name.Contains("Top") || part.Name.Contains("Deck") || part.Name.Contains("Shelf"));
+        bool isEndPanelWithTk = part.Name.Contains("End", StringComparison.OrdinalIgnoreCase) && part.TkHeight > 0 && part.TkDepth > 0;
 
         var outline = new List<Vector2>();
         var thinningPockets = new List<(double x1, double x2, double y1, double y2)>();
@@ -33,18 +33,18 @@ internal static class PanelGeometryCalculator
         OutlineBuilder.BuildOutline(part, isEndPanelWithTk, isLShape || isAngleFrontPanel, materialThickness34, outline);
 
         // 2. Compute Joinery
-        if (isLShape && part.CabinetModel is BaseCabinetModel)
+        if (isLShape)
         {
-            LShapeJoineryCalculator.ComputeLShapeJoinery(part, outline, thinningPockets, joinery, baseCab!, materialThickness34);
-            if (baseCab!.HasTK && part.Name.Contains("Deck"))
+            LShapeJoineryCalculator.ComputeLShapeJoinery(part, outline, thinningPockets, joinery, cabinet, materialThickness34);
+            if (cabinet.HasToeKick() && part.Name.Contains("Deck"))
             {
                 MortiseBlindCalculator.ComputeMortisePockets(part, mortisePockets, joinery, materialThickness34);
             }
         }
         else if (isAngleFrontPanel)
         {
-            AngleFrontJoineryCalculator.ComputeAngleFrontJoinery(part, outline, thinningPockets, joinery, part.CabinetModel!, materialThickness34);
-            if (part.CabinetModel is BaseCabinetModel afBase && afBase.HasTK && part.Name.Contains("Deck"))
+            AngleFrontJoineryCalculator.ComputeAngleFrontJoinery(part, outline, thinningPockets, joinery, cabinet, materialThickness34);
+            if (cabinet.HasToeKick() && part.Name.Contains("Deck"))
             {
                 MortiseBlindCalculator.ComputeMortisePockets(part, mortisePockets, joinery, materialThickness34);
             }
@@ -64,19 +64,22 @@ internal static class PanelGeometryCalculator
 
             ShelfHoleEdgeCalculator.ComputeShelfHoles(part, holes, joinery, materialThickness34);
 
-            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel)
+            // Drawer slides — BaseCabinetModel only (uppers don't have drawers)
+            if (part.Name.Contains("End") && cabinet is BaseCabinetModel baseCabDrawers)
             {
-                DrawerSlideEdgeCalculator.ComputeDrawerSlideHoles(baseCab!, holes, joinery, materialThickness34);
+                DrawerSlideEdgeCalculator.ComputeDrawerSlideHoles(baseCabDrawers, holes, joinery, materialThickness34);
             }
 
-            if (part.Name.Contains("End") && part.CabinetModel is BaseCabinetModel baseCabHinge && baseCabHinge.DrillHingeHoles && baseCabHinge.Style != CabinetStyles.Base.Drawer)
+            // Hinges — BaseCabinetModel
+            if (part.Name.Contains("End") && cabinet is BaseCabinetModel baseCabHinge && baseCabHinge.DrillHingeHoles && baseCabHinge.Style != CabinetStyles.Base.Drawer)
             {
                 var baseDim = BaseCabinetDimensions.From(baseCabHinge);
                 double panelDepth = HingeHoleEdgeCalculator.ResolveBasePanelDepth(baseCabHinge, baseDim, part.Name);
                 HingeHoleEdgeCalculator.ComputeHingeHoles(baseCabHinge, baseDim, panelDepth, holes, materialThickness34);
             }
 
-            if (part.Name.Contains("End") && part.CabinetModel is UpperCabinetModel upperCabHinge && upperCabHinge.DrillHingeHoles)
+            // Hinges — UpperCabinetModel
+            if (part.Name.Contains("End") && cabinet is UpperCabinetModel upperCabHinge && upperCabHinge.DrillHingeHoles)
             {
                 var upperDim = UpperCabinetDimensions.From(upperCabHinge);
                 double panelDepth = HingeHoleEdgeCalculator.ResolveUpperPanelDepth(upperCabHinge, upperDim, part.Name);
@@ -115,7 +118,6 @@ internal static class PanelGeometryCalculator
         {
             result = result.MirrorAcrossVerticalCenterline(part.Bounds.Width);
         }
-
 
         return result;
     }

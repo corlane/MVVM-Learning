@@ -1,4 +1,3 @@
-using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 
@@ -10,15 +9,12 @@ namespace CorlaneCabinetOrderFormV3.Rendering.DXF.Calculators;
 /// </summary>
 internal static class LShapeJoineryCalculator
 {
-    internal static void ComputeLShapeJoinery(PartInfo part, List<Vector2> outline, List<(double, double, double, double)> thinningPockets, JoineryConfig joinery, BaseCabinetModel baseCab, double mt34)
+    internal static void ComputeLShapeJoinery(PartInfo part, List<Vector2> outline, List<(double, double, double, double)> thinningPockets, JoineryConfig joinery, CabinetModel cabinet, double mt34)
     {
         double gap = part.Name.Contains("Shelf") ? 0.125 : 0;
         double radius = 1.0;
         int segments = 8;
-        double lf = ConvertDimension.FractionToDouble(baseCab.LeftFrontWidth);
-        double rf = ConvertDimension.FractionToDouble(baseCab.RightFrontWidth);
-        double ld = ConvertDimension.FractionToDouble(baseCab.LeftDepth);
-        double rd = ConvertDimension.FractionToDouble(baseCab.RightDepth);
+        var (_, _, lf, rf, ld, rd) = cabinet.GetCornerDimensions();
         double doubleMt = mt34 * 2;
         double insetLf = lf - mt34 - gap;
         double insetRf = rf - mt34 - gap;
