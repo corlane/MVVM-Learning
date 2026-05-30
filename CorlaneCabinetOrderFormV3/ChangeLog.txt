@@ -509,3 +509,4 @@
 	Fixed thumbnail image not updating when Supply Drawer Fronts changed for Base Cabinets. (was checking IncDrwFronts, not individual IncDrwFront1 etc.)
 	Doors and Drw fronts show up RED  with BLACK edgebanding now when IncDoors or IncDrwFronts is false. Only implemented for Base Std, Drw, and Angle front so far. Saving the Allans of the world from themselves. commit
 	Fixed bug with doors not adding to edgebanding totals on all cabinets except Base Std. and Drawer Base. commit
+	All cabinet doors now show red with black edges if IncDoors is false. commit

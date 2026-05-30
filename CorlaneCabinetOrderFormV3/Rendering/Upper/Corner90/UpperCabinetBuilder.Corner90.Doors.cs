@@ -18,7 +18,7 @@ internal static partial class UpperCabinetBuilder
             doorEdgebandingSpecies = "None";
         }
 
-        if (upperCab.DoorCount > 0 && upperCab.IncDoors || upperCab.DoorCount > 0 && upperCab.IncDoorsInList)
+        if (upperCab.DoorCount > 0 || upperCab.DoorCount > 0 && upperCab.IncDoorsInList)
         {
             var doorSpeciesForTotals = resolveDoorSpeciesForTotals(upperCab.DoorSpecies, upperCab.CustomDoorSpecies);
 
@@ -32,33 +32,46 @@ internal static partial class UpperCabinetBuilder
                 addFrontPartRow(upperCab, "Door", doorHeight, door2Width, upperCab.DoorSpecies, upperCab.DoorGrainDir);
             }
 
+            doorPoints =
+            [
+                new (0,0,0),
+                new (door1Width,0,0),
+                new (door1Width,doorHeight,0),
+                new (0,doorHeight,0)
+            ];
+
             if (upperCab.IncDoors)
             {
-                doorPoints =
-                [
-                    new (0,0,0),
-                    new (door1Width,0,0),
-                    new (door1Width,doorHeight,0),
-                    new (0,doorHeight,0)
-                ];
                 door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
+            }
+            else
+            {
+                door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
+            }
 
-                doorPoints =
-                [
-                    new (0,0,0),
-                    new (door2Width,0,0),
-                    new (door2Width,doorHeight,0),
-                    new (0,doorHeight,0)
-                ];
+            doorPoints =
+            [
+                new (0,0,0),
+                new (door2Width,0,0),
+                new (door2Width,doorHeight,0),
+                new (0,doorHeight,0)
+            ];
+
+            if (upperCab.IncDoors)
+            {
                 door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
+            }
+            else
+            {
+                door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
+            }
 
-                ModelTransforms.ApplyTransform(door1, -MaterialThickness34 + doorLeftReveal, doorBottomReveal, leftDepth, 0, 0, 0);
-                ModelTransforms.ApplyTransform(door2, -leftDepth - door2Width - cornerCabDoorOpenSideReveal, doorBottomReveal, leftFrontWidth - (doubleMaterialThickness34), 0, 90, 0);
-                if (!doorsHidden)
-                {
-                    cabinet.Children.Add(door1);
-                    cabinet.Children.Add(door2);
-                }
+            ModelTransforms.ApplyTransform(door1, -MaterialThickness34 + doorLeftReveal, doorBottomReveal, leftDepth, 0, 0, 0);
+            ModelTransforms.ApplyTransform(door2, -leftDepth - door2Width - cornerCabDoorOpenSideReveal, doorBottomReveal, leftFrontWidth - (doubleMaterialThickness34), 0, 90, 0);
+            if (!doorsHidden)
+            {
+                cabinet.Children.Add(door1);
+                cabinet.Children.Add(door2);
             }
         }
     }

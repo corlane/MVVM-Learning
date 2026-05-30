@@ -34,32 +34,31 @@ internal static partial class BaseCabinetBuilder
                     addFrontPartRow(baseCab, "Door", doorHeight, door1Width, baseCab.DoorSpecies, baseCab.DoorGrainDir);
                 }
 
-                //if (baseCab.IncDoors)
-                //{
-                    doorPoints =
-                    [
-                        new (0,0,0),
-                    new (door1Width,0,0),
-                    new (door1Width,doorHeight,0),
-                    new (0,doorHeight,0)
-                    ];
+                doorPoints =
+                [
+                    new (0,0,0),
+                new (door1Width,0,0),
+                new (door1Width,doorHeight,0),
+                new (0,doorHeight,0)
+                ];
 
-                    if (baseCab.IncDoors)
-                    {
-                        door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
-                    }
-                    else
-                    {
-                        door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
-                    }
+                if (baseCab.IncDoors)
+                {
+                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                }
+                else
+                {
+                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                }
 
-                    ModelTransforms.ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
-                    var door1Rotated = new Model3DGroup();
-                    door1Rotated.Children.Add(door1);
-                    ModelTransforms.ApplyTransform(door1Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
-                    if (!doorsHidden) cabinet.Children.Add(door1Rotated);
-                //}
+                ModelTransforms.ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
+                var door1Rotated = new Model3DGroup();
+                door1Rotated.Children.Add(door1);
+                ModelTransforms.ApplyTransform(door1Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
+                if (!doorsHidden) cabinet.Children.Add(door1Rotated);
             }
+
+
             if (baseCab.DoorCount == 2)
             {
                 door1Width = (frontWidth / 2) - doorLeftReveal - (baseDoorGap / 2);
@@ -71,41 +70,55 @@ internal static partial class BaseCabinetBuilder
                     addFrontPartRow(baseCab, "Door", doorHeight, door2Width, baseCab.DoorSpecies, baseCab.DoorGrainDir);
                 }
 
+                doorPoints =
+                [
+                    new (0,0,0),
+                new (door1Width,0,0),
+                new (door1Width,doorHeight,0),
+                new (0,doorHeight,0)
+                ];
+
                 if (baseCab.IncDoors)
                 {
-                    doorPoints =
-                    [
-                        new (0,0,0),
-                    new (door1Width,0,0),
-                    new (door1Width,doorHeight,0),
-                    new (0,doorHeight,0)
-                    ];
                     door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
-                    ModelTransforms.ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
-                    var door1Rotated = new Model3DGroup();
-                    door1Rotated.Children.Add(door1);
-                    ModelTransforms.ApplyTransform(door1Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
-                    if (!doorsHidden)
-                    {
-                        cabinet.Children.Add(door1Rotated); ;
-                    }
-                    doorPoints =
-                    [
-                        new (0,0,0),
-                    new (door2Width,0,0),
-                    new (door2Width,doorHeight,0),
-                    new (0,doorHeight,0)
-                    ];
+                }
+                else
+                {
+                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                }
+
+                ModelTransforms.ApplyTransform(door1, doorLeftReveal, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
+                var door1Rotated = new Model3DGroup();
+                door1Rotated.Children.Add(door1);
+                ModelTransforms.ApplyTransform(door1Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
+                if (!doorsHidden)
+                {
+                    cabinet.Children.Add(door1Rotated); ;
+                }
+                doorPoints =
+                [
+                    new (0,0,0),
+                new (door2Width,0,0),
+                new (door2Width,doorHeight,0),
+                new (0,doorHeight,0)
+                ];
+
+                if (baseCab.IncDoors)
+                {
                     door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
-                    ModelTransforms.ApplyTransform(door2, door1Width + doorLeftReveal + baseDoorGap, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
-                    var door2Rotated = new Model3DGroup();
-                    door2Rotated.Children.Add(door2);
-                    ModelTransforms.ApplyTransform(door2Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
-                    if (!doorsHidden)
-                    {
-                        ;
-                        cabinet.Children.Add(door2Rotated);
-                    }
+                }
+                else
+                {
+                    door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, "Alt Source Door Color", "Alt Source EB Color", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                }
+                ModelTransforms.ApplyTransform(door2, door1Width + doorLeftReveal + baseDoorGap, doorBottomReveal, 0, 0, ((angle * 180) / Math.PI) + 90, 0);
+                var door2Rotated = new Model3DGroup();
+                door2Rotated.Children.Add(door2);
+                ModelTransforms.ApplyTransform(door2Rotated, -MaterialThickness34, tk_Height, -leftDepth, 0, 0, 0);
+                if (!doorsHidden)
+                {
+                    ;
+                    cabinet.Children.Add(door2Rotated);
                 }
             }
         }
