@@ -272,20 +272,18 @@ public partial class App : Application
         }
 
         // One-time popup — bump this version string whenever you have a new notice
-        const string currentPopupVersion = "3.1.0.0";
+        const string currentPopupVersion = "3.1.0.6";
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
-                "NEW IN VERSION 3.1:\n\n" +
-                "Redesigned User Interface!\n\n" +
-                "• New streamlined layout with the 3D preview in the center\n" +
-                "  and the cabinet list filling the full height on the right.\n\n" +
-                "• Less cluttered using flyout menus (accessible on the left)\n" +
-                "  for cabinet style and options.\n\n" +
-                "• Cleaner, more spacious controls for base, upper,\n" +
-                "  filler, and panel cabinets.\n\n" +
-                "• New Edgeband Doors & Drawer Fronts option per cabinet.\n"+
-                "  Find it under the Species tab (on the left.)\n\n",
+                "NEW IN VERSION 3.1.0.6:\n\n" +
+                "Doors / Drawer Fronts:\n\n" +
+                "• Doors & Drawer Fronts are now displayed in RED instead of\n" +
+                "  disappearing if the relevant 'Supply' checkbox is unchecked.\n\n"+
+
+                "• This makes it easier to visualize the door/drawer front\n" +
+                "  configuration when you will be sourcing the doors and/or\n"+
+                "  drawer fronts from a different supplier.\n",
 
                 "What's New",
                 MessageBoxButton.OK,

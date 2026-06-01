@@ -510,3 +510,5 @@
 	Doors and Drw fronts show up RED  with BLACK edgebanding now when IncDoors or IncDrwFronts is false. Only implemented for Base Std, Drw, and Angle front so far. Saving the Allans of the world from themselves. commit
 	Fixed bug with doors not adding to edgebanding totals on all cabinets except Base Std. and Drawer Base. commit
 	All cabinet doors now show red with black edges if IncDoors is false. commit
+	Updated one-time-popup.
+	Uploading 3.1.0.6. commit
