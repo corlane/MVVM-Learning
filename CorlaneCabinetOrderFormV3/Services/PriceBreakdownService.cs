@@ -1,4 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
+using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
@@ -40,6 +41,8 @@ public sealed class PriceBreakdownService : IPriceBreakdownService
         {
             var species = kv.Key;
             var qtySqFt = kv.Value;
+
+            if (species.Contains("Alt Source")) continue; // Skip "Alt Source" species for pricing, it is used only for displaying doors not supplied by us.
 
             var sheetAreaSqFt = _materialPrices.GetSheetAreaForSpecies(species);
             var yield = _materialPrices.GetYieldForSpecies(species);

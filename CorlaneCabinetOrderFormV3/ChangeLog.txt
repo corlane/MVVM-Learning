@@ -515,3 +515,4 @@
 
 3.1.0.7
 	Cabinets now resize to user-entered size when removing ends. commit
+	Fixed CNC price accidentally including Alt Source (red display only) door material. commit
