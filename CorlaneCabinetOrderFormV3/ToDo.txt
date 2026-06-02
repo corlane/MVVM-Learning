@@ -15,7 +15,6 @@ User side:
 
 Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
 
-Add option to round door sizes down to the nearest 1/16" IN THE DOOR SIZE LIST ONLY.
 
 
 
@@ -52,7 +51,6 @@ If Supply Drw Boxes is unchecked, they become checked again on cabinet Depth cha
 
 
 
-CRITICAL: CNC cutting cost is accounting for the Alternate Door material. The calculated square footage of that needs to be 0 so the price will be correct.
 
 
 

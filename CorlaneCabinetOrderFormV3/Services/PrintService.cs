@@ -22,8 +22,15 @@ namespace CorlaneCabinetOrderFormV3.Services;
 
 public sealed class PrintService : IPrintService
 {
+    private readonly DefaultSettingsService _defaults;
+
     private const double MarginInch = 0.75;
     private const double Dpi = 96.0;
+
+    public PrintService(DefaultSettingsService defaults)
+    {
+        _defaults = defaults;
+    }
 
     public void PrintCabinetList(string companyName, string jobName, string dimensionFormat, IReadOnlyList<CabinetModel> cabinets)
     {
@@ -34,7 +41,12 @@ public sealed class PrintService : IPrintService
 
     public void PrintDoorList(string companyName, string jobName, IReadOnlyList<FrontPartRow> doors)
     {
-        var doc = CreateDocument(companyName, jobName, "Door List");
+        string doorListHeader = "Door List";
+        if (_defaults.DefaultRoundDoorSizesDown)
+        {
+            doorListHeader += "\n\nNOTE: Door sizes have been rounded down to the nearest 1/16 inch to allow for inaccuracies from door manufacturers.";
+        }
+        var doc = CreateDocument(companyName, jobName, doorListHeader);
         AddDoorTable(doc, doors);
         Print(doc, "Door List");
     }
@@ -158,7 +170,7 @@ public sealed class PrintService : IPrintService
         });
     }
 
-    private static void AddDoorTable(FlowDocument doc, IReadOnlyList<FrontPartRow> doors)
+    private void AddDoorTable(FlowDocument doc, IReadOnlyList<FrontPartRow> doors)
     {
         var table = CreateTable(
             headers:

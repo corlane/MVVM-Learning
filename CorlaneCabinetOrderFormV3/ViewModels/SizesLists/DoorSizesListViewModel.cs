@@ -41,7 +41,7 @@ public sealed partial class DoorSizesListViewModel : ObservableObject
 
     private void Defaults_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat))
+        if (e.PropertyName == nameof(DefaultSettingsService.DefaultDimensionFormat) || e.PropertyName == nameof(DefaultSettingsService.DefaultRoundDoorSizesDown))
         {
             RequestRebuild();
         }
@@ -128,6 +128,11 @@ public sealed partial class DoorSizesListViewModel : ObservableObject
 
     private string FormatDimension(double value)
     {
+        if (_defaults.DefaultRoundDoorSizesDown)
+        {
+            value = Math.Floor(value * 16) / 16;
+        }
+
         var format = _defaults?.DefaultDimensionFormat ?? "Decimal";
 
         return string.Equals(format, "Fraction", StringComparison.OrdinalIgnoreCase)

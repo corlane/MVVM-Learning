@@ -154,7 +154,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public bool DefaultIncDoorsInList { get => _defaults.DefaultIncDoorsInList; set => _defaults.DefaultIncDoorsInList = value; }
     public bool DefaultIncDoors { get => _defaults.DefaultIncDoors; set => _defaults.DefaultIncDoors = value; }
     public bool DefaultEdgebandDoorsAndDrawers { get => _defaults.DefaultEdgebandDoorsAndDrawers; set => _defaults.DefaultEdgebandDoorsAndDrawers = value; }
-
+    public bool DefaultRoundDoorSizesDown { get => _defaults.DefaultRoundDoorSizesDown; set => _defaults.DefaultRoundDoorSizesDown = value; }
 
     // Drawers
     public int DefaultStdDrawerCount { get => _defaults.DefaultStdDrawerCount; set => _defaults.DefaultStdDrawerCount = value; }

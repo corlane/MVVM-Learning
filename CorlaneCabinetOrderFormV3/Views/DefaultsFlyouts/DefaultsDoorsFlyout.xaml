@@ -1,4 +1,4 @@
-<local:FlyoutUserControlBase
+﻿<local:FlyoutUserControlBase
     x:Class="CorlaneCabinetOrderFormV3.Views.DefaultsFlyouts.DefaultsDoorsFlyout"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -45,6 +45,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -115,6 +117,11 @@
                 <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                           Content="Equalize All Drw. Fronts"
                           IsChecked="{Binding DefaultEqualizeAllDrwFronts}" Margin="0,6,0,0"/>
+                <CheckBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                          Content="Round Door &amp; Drawer Front Sizes &#xA;DOWN to the nearest 1/16&quot;" Margin="0,30,0,0"
+                          IsChecked="{Binding DefaultRoundDoorSizesDown}"/>
+                <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="20,6,0,0" TextWrapping="Wrap"
+                           Text="NOTE: This ONLY applies to the Door/Drw Front Sizes list and does NOT affect sizes of doors or drawer fronts supplied by Corlane."/>
             </Grid>
         </StackPanel>
     </ScrollViewer>

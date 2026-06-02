@@ -96,6 +96,7 @@ public partial class DefaultSettingsService : ObservableObject
     [ObservableProperty] public partial bool DefaultIncDoorsInList { get; set; } = true;
     [ObservableProperty] public partial bool DefaultIncDoors { get; set; } = true;
     [ObservableProperty] public partial bool DefaultEdgebandDoorsAndDrawers { get; set; } = true;
+    [ObservableProperty] public partial bool DefaultRoundDoorSizesDown { get; set; } = false;
 
     // Drawers
     [ObservableProperty] public partial int DefaultStdDrawerCount { get; set; } = 1;
