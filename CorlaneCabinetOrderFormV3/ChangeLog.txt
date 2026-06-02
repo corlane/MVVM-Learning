@@ -514,4 +514,4 @@
 	Uploading 3.1.0.6. commit
 
 3.1.0.7
-	
+	Cabinets now resize to user-entered size when removing ends. commit
