@@ -512,3 +512,6 @@
 	All cabinet doors now show red with black edges if IncDoors is false. commit
 	Updated one-time-popup.
 	Uploading 3.1.0.6. commit
+
+3.1.0.7
+	
