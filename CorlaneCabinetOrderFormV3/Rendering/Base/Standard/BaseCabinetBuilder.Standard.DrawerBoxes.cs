@@ -122,18 +122,18 @@ internal static partial class BaseCabinetBuilder
 
         var dbxFrontAndBackPoints = new List<Point3D>
         {
-            new(dbxWidth - (materialThickness * 2), dbxHeight, 0),
-            new(0, dbxHeight, 0),
-            new(0, 0, 0),
-            new(dbxWidth - (materialThickness * 2), 0, 0)
+            new(hasLeftEnd ? dbxWidth - (materialThickness * 2) : dbxWidth + materialThickness - (materialThickness * 2), dbxHeight, 0),
+            new(hasRightEnd ? 0 : 0 - materialThickness, dbxHeight, 0),
+            new(hasRightEnd ? 0 : 0 - materialThickness, 0, 0),
+            new(hasLeftEnd ? dbxWidth - (materialThickness * 2) : dbxWidth + materialThickness - (materialThickness * 2), 0, 0)
         };
 
         var dbxBottomPoints = new List<Point3D>
         {
-            new(0, 0, 0),
-            new(dbxWidth - (materialThickness * 2), 0, 0),
-            new(dbxWidth - (materialThickness * 2), dbxDepth - (materialThickness * 2), 0),
-            new(0, dbxDepth - (materialThickness * 2), 0)
+            new(hasRightEnd ? 0 : 0 - materialThickness, 0, 0),
+            new(hasLeftEnd ? dbxWidth - (materialThickness * 2) : dbxWidth + materialThickness - (materialThickness * 2), 0, 0),
+            new(hasLeftEnd ? dbxWidth - (materialThickness * 2) : dbxWidth + materialThickness - (materialThickness * 2), dbxDepth - (materialThickness * 2), 0),
+            new(hasRightEnd ? 0 : 0 - materialThickness, dbxDepth - (materialThickness * 2), 0)
         };
 
         string drwBoxSpecies = "Prefinished Ply";
@@ -152,7 +152,8 @@ internal static partial class BaseCabinetBuilder
         var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxBack);
         var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, drwBoxSpecies, "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.DrawerBoxBottom);
 
-        ModelTransforms.ApplyTransform(leftSide, 0, 0, -(dbxWidth - materialThickness), 0, 0, 0);
+        ModelTransforms.ApplyTransform(leftSide, 0, 0, -(dbxWidth - materialThickness) - (hasLeftEnd ? 0 : + materialThickness), 0, 0, 0);
+        ModelTransforms.ApplyTransform(rightSide, 0, 0, hasRightEnd ? 0 : materialThickness, 0, 0, 0);
         ModelTransforms.ApplyTransform(front, 0, 0, 0, 0, 90, 0);
         ModelTransforms.ApplyTransform(back, 0, 0, dbxDepth - materialThickness, 0, 90, 0);
         ModelTransforms.ApplyTransform(bottom, 0, materialThickness, -materialThickness - .5, 90, 90, 0);
