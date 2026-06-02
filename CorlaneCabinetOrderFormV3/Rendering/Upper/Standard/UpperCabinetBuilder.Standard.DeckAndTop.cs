@@ -6,7 +6,21 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 internal static partial class UpperCabinetBuilder
 {
     
-    private static void BuildDeckAndTop(UpperCabinetModel upperCab, double MaterialThickness34, double depth, double backThickness, double interiorWidth, double backInsetForDeckAndTop, out Model3DGroup deck, out List<Point3D> deckPoints, out Model3DGroup top, out List<Point3D> topPoints, double height)
+    private static void BuildDeckAndTop(
+        UpperCabinetModel upperCab,
+        double MaterialThickness34, 
+        double depth, 
+        double backThickness, 
+        double interiorWidth, 
+        double backInsetForDeckAndTop, 
+        out Model3DGroup deck, 
+        out List<Point3D> deckPoints, 
+        out Model3DGroup top, 
+        out List<Point3D> topPoints, 
+        double height,
+        bool hasLeftEnd,
+        bool hasRightEnd
+        )
     {
         // Deck
         if (backThickness == MaterialThickness34 && upperCab.HasBack)
@@ -17,10 +31,10 @@ internal static partial class UpperCabinetBuilder
 
         deckPoints =
         [
-            new (0,0,0),
-            new (interiorWidth,0,0),
-            new (interiorWidth,depth - backInsetForDeckAndTop,0),
-            new (0,depth - backInsetForDeckAndTop,0)
+            new (hasLeftEnd ? 0 : - MaterialThickness34,0,0),
+            new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+            new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,depth - backInsetForDeckAndTop,0),
+            new (hasLeftEnd ? 0 : - MaterialThickness34,depth - backInsetForDeckAndTop,0)
         ];
 
         topPoints = deckPoints;

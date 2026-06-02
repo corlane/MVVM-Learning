@@ -5,7 +5,20 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class UpperCabinetBuilder
 {
-    private static void BuildShelves(Model3DGroup cabinet, UpperCabinetModel upperCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, double backThickness, double interiorWidth, double interiorHeight, double shelfDepth, out Model3DGroup? shelf, out List<Point3D>? shelfPoints)
+    private static void BuildShelves(
+        Model3DGroup cabinet, 
+        UpperCabinetModel upperCab, 
+        Func<string?, string> getMatchingEdgebandingSpecies, 
+        double MaterialThickness34, 
+        double backThickness, 
+        double interiorWidth, 
+        double interiorHeight, 
+        double shelfDepth, 
+        out Model3DGroup? shelf, 
+        out List<Point3D>? shelfPoints,
+        bool hasLeftEnd,
+        bool hasRightEnd
+        )
     {
         shelf = null;
         shelfPoints = null;
@@ -26,10 +39,10 @@ internal static partial class UpperCabinetBuilder
 
             shelfPoints =
             [
-                new (0,0,0),
-                new (interiorWidth-.125,0,0),
-                new (interiorWidth-.125,shelfDepth,0),
-                new (0,shelfDepth,0)
+                new (hasLeftEnd ? 0 : - MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth-.125 : interiorWidth - .125 + MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth-.125 : interiorWidth - .125 + MaterialThickness34,shelfDepth,0),
+                new (hasLeftEnd ? 0 : - MaterialThickness34,shelfDepth,0)
             ];
             shelf = CabinetPartFactory.CreatePanel(shelfPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Shelf);
             ModelTransforms.ApplyTransform(shelf, -(interiorWidth / 2) + .0625, -backThicknessForSpacing - shelfDepth, i * shelfSpacing, 270, 0, 0);

@@ -20,7 +20,10 @@ internal static partial class UpperCabinetBuilder
         out Model3DGroup back, 
         out Model3DGroup? nailer, 
         out List<Point3D> backPoints, 
-        out List<Point3D>? nailerPoints)
+        out List<Point3D>? nailerPoints,
+        bool hasLeftEnd,
+        bool hasRightEnd
+        )
     {
         nailer = null;
         nailerPoints = null;
@@ -32,10 +35,10 @@ internal static partial class UpperCabinetBuilder
             {
                 backPoints =
                 [
-                    new (0,-MaterialThickness34,0),
-                new (interiorWidth,-MaterialThickness34,0),
-                new (interiorWidth,interiorHeight + (MaterialThickness34),0),
-                new (0,interiorHeight + (MaterialThickness34),0)
+                    new (hasLeftEnd ? 0 : -MaterialThickness34,-MaterialThickness34,0),
+                    new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,-MaterialThickness34,0),
+                    new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,interiorHeight + (MaterialThickness34),0),
+                    new (hasLeftEnd ? 0 : -MaterialThickness34,interiorHeight + (MaterialThickness34),0)
                 ];
                 if (width <= 47.75 + (2 * MaterialThickness34))
                 {
@@ -52,9 +55,9 @@ internal static partial class UpperCabinetBuilder
                 backPoints =
                 [
                     new (0,0,0),
-                new (width,0,0),
-                new (width,height,0),
-                new (0,height,0)
+                    new (width,0,0),
+                    new (width,height,0),
+                    new (0,height,0)
                 ];
                 if (width <= 47.75)
                 {
@@ -74,10 +77,10 @@ internal static partial class UpperCabinetBuilder
         {
             nailerPoints =
             [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,StretcherWidth,0),
-                new (0,StretcherWidth,0)
+                new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,StretcherWidth,0),
+                new (hasLeftEnd ? 0 : -MaterialThickness34,StretcherWidth,0)
             ];
 
             nailer = CabinetPartFactory.CreatePanel(nailerPoints, MaterialThickness34, upperCab.Species, getMatchingEdgebandingSpecies(upperCab.Species), "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Nailer);

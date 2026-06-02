@@ -50,11 +50,11 @@ internal static partial class UpperCabinetBuilder
         ModelTransforms.ApplyTransform(leftEnd, 0, 0, interiorWidth / 2, 0, 270, 0);
         ModelTransforms.ApplyTransform(rightEnd, 0, 0, -(interiorWidth / 2) - (MaterialThickness34), 0, 270, 0);
 
-        BuildDeckAndTop(upperCab, MaterialThickness34, depth, backThickness, interiorWidth, backInsetForDeckAndTop, out Model3DGroup deck, out List<Point3D> deckPoints, out Model3DGroup top, out List<Point3D> topPoints, height);
+        BuildDeckAndTop(upperCab, MaterialThickness34, depth, backThickness, interiorWidth, backInsetForDeckAndTop, out Model3DGroup deck, out List<Point3D> deckPoints, out Model3DGroup top, out List<Point3D> topPoints, height, upperCab.HasLeftEnd, upperCab.HasRightEnd);
 
-        BuildBack(cabinet, upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, interiorWidth, interiorHeight, out Model3DGroup back, out Model3DGroup? nailer, out List<Point3D> backPoints, out List<Point3D>? nailerPoints);
+        BuildBack(cabinet, upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, interiorWidth, interiorHeight, out Model3DGroup back, out Model3DGroup? nailer, out List<Point3D> backPoints, out List<Point3D>? nailerPoints, upperCab.HasLeftEnd, upperCab.HasRightEnd);
 
-        BuildShelves(cabinet, upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, backThickness, interiorWidth, interiorHeight, shelfDepth, out Model3DGroup? shelf, out List<Point3D>? shelfPoints);
+        BuildShelves(cabinet, upperCab, getMatchingEdgebandingSpecies, MaterialThickness34, backThickness, interiorWidth, interiorHeight, shelfDepth, out Model3DGroup? shelf, out List<Point3D>? shelfPoints, upperCab.HasLeftEnd, upperCab.HasRightEnd);
 
         BuildDoors(cabinet, upperCab, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, MaterialThickness34, doorEdgebandingSpecies, width, height, depth, upperDoorGap, doorLeftReveal, doorRightReveal, doorTopReveal, doorBottomReveal, doorSideReveal, out Model3DGroup? door1, out Model3DGroup? door2, out List<Point3D>? doorPoints, result);
 
