@@ -17,11 +17,10 @@ internal static class CabinetInputAdapter
         )
     {
         var mapped = new List<PartInfo>();
-
         foreach (var entry in parts)
         {
             PartInfo mappedPart;
-            
+
             // Cabinet-type-agnostic style detection
             bool isCorner90 = cabinet.IsCorner90();
             bool isAngleFront = cabinet.IsAngleFront();
@@ -36,7 +35,7 @@ internal static class CabinetInputAdapter
                 if (isLShape)
                 {
                     // Assign bounding box dimensions so ValidateInput() passes
-                    var (_, _, lf, rf, ld, rd) = cabinet.GetCornerDimensions();
+                    var (_, _, lf, rf, ld, rd) = cabinet!.GetCornerDimensions();
                     double mt = materialThickness34;
 
                     partLength = Math.Max(lf, ld) + Math.Max(rf, rd) - mt;
@@ -44,9 +43,7 @@ internal static class CabinetInputAdapter
                 }
             }
 
-            // Top/Deck panels in Corner90/AngleFront cabinets have unique joinery: mortise on Left|Top only, no tenons.
-            bool isCornerOrAngleTopDeck = (isCorner90 || isAngleFront) && 
-                (entry.PartName.Contains("Top") || entry.PartName.Contains("Deck"));
+            bool isCornerOrAngleTopDeck = (isCorner90 || isAngleFront) && (entry.PartName.Contains("Top") || entry.PartName.Contains("Deck"));
 
             if (isCornerOrAngleTopDeck)
             {
@@ -79,7 +76,9 @@ internal static class CabinetInputAdapter
     {
         return partName switch
         {
-            "Toekick" or "Toekick (Left)" or "Toekick (Right)" => TenonEdge.Top | TenonEdge.Left | TenonEdge.Right,
+            "Toekick" => TenonEdge.Top | TenonEdge.Left | TenonEdge.Right,
+            "Toekick (Left)" => TenonEdge.Top | TenonEdge.Left,
+            "Toekick (Right)" => TenonEdge.Top | TenonEdge.Right,
             "Top Stretcher (Front)" or "Drawer Stretcher" => TenonEdge.Left | TenonEdge.Right,
             "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
             "Left Back" when cabinet is BaseCabinetModel basecab => TenonEdge.Left,
@@ -120,32 +119,39 @@ internal static class CabinetInputAdapter
 
     private static MortiseEdge ResolveMortiseEdges(string partName, CabinetModel? cabinet)
     {
+        bool isBaseCab = cabinet is BaseCabinetModel;
+        bool isUpperCab = cabinet is UpperCabinetModel;
+
         return partName.ToLowerInvariant() switch
         {
-            "left end" or "right end" when cabinet is BaseCabinetModel => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
-            "left end" or "right end" when cabinet is UpperCabinetModel => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
-            //"back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseEdge.Right,
-            "left back" when cabinet is BaseCabinetModel => MortiseEdge.Bottom,
-            "right back" when cabinet is BaseCabinetModel => MortiseEdge.Bottom,
-            //"back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseEdge.Right | MortiseEdge.Left,
+            "left end" or "right end" when isBaseCab && cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
+            "left end" or "right end" when isBaseCab && cabinet is BaseCabinetModel basecab && !basecab.HasTK => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
+            "left end" or "right end" when isUpperCab => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
+            "left back" when isBaseCab => MortiseEdge.Bottom,
+            "right back" when isBaseCab => MortiseEdge.Bottom,
             "top stretcher (back)" => MortiseEdge.Bottom,
-            "deck" when cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Top,
+            "deck" when isBaseCab && cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Top,
             _ => MortiseEdge.None
         };
     }
 
     private static MortiseThruEdge ResolveMortiseThruEdges(string partName, CabinetModel? cabinet)
     {
+        bool isBaseCab = cabinet is BaseCabinetModel;
+        bool isUpperCab = cabinet is UpperCabinetModel;
+
+        BaseCabinetDimensions baseDims = default;
+        if (isBaseCab) baseDims = BaseCabinetDimensions.From((BaseCabinetModel)cabinet!);
+        
+        UpperCabinetDimensions upperDims = default;
+        if (isUpperCab) upperDims = UpperCabinetDimensions.From((UpperCabinetModel)cabinet!);
+        
         return partName.ToLowerInvariant() switch
         {
-            "left end" or "right end" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
-            "left end" or "right end" when cabinet is UpperCabinetModel => MortiseThruEdge.None,
-            "back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => MortiseThruEdge.Right,
-            "left back" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
-            "right back" when cabinet is BaseCabinetModel => MortiseThruEdge.None,
-            "back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => MortiseThruEdge.Left | MortiseThruEdge.Right,
-            "top stretcher (back)" => MortiseThruEdge.None,
-            "deck" when cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseThruEdge.None,
+            "back" when isBaseCab && baseDims.BackThickness != 0.25 => MortiseThruEdge.Right,
+            "left back" when isBaseCab => MortiseThruEdge.None,
+            "right back" when isBaseCab => MortiseThruEdge.None,
+            "back" when isUpperCab && upperDims.BackThickness != 0.25 => MortiseThruEdge.Left | MortiseThruEdge.Right,
             _ => MortiseThruEdge.None
         };
     }

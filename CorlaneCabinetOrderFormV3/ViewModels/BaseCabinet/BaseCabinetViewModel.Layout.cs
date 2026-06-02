@@ -204,18 +204,23 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     private void RecalculateBackWidths90()
     {
+        // Only apply computed back widths for Corner90 style.
+        // AngleFront cabinets use user-input LeftBackWidth/RightBackWidth directly.
+        if (!string.Equals(Style, Style3, StringComparison.Ordinal))
+            return;
+
         double leftBack = ConvertDimension.FractionToDouble(LeftFrontWidth) + ConvertDimension.FractionToDouble(RightDepth);
         double rightBack = ConvertDimension.FractionToDouble(RightFrontWidth) + ConvertDimension.FractionToDouble(LeftDepth);
 
         bool useFraction = string.Equals(_defaults?.DefaultDimensionFormat, "Fraction", StringComparison.OrdinalIgnoreCase);
 
-        LeftBackWidth90 = useFraction
-            ? ConvertDimension.DoubleToFraction(leftBack)
-            : leftBack.ToString();
+        // Update the real model-bound properties so DXF rendering picks up correct values
+        LeftBackWidth = useFraction ? ConvertDimension.DoubleToFraction(leftBack) : leftBack.ToString();
+        RightBackWidth = useFraction ? ConvertDimension.DoubleToFraction(rightBack) : rightBack.ToString();
 
-        RightBackWidth90 = useFraction
-            ? ConvertDimension.DoubleToFraction(rightBack)
-            : rightBack.ToString();
+        // Also update display aliases for UI binding
+        LeftBackWidth90 = LeftBackWidth;
+        RightBackWidth90 = RightBackWidth;
     }
 
 }
