@@ -1,3 +1,4 @@
+using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 
@@ -114,10 +115,51 @@ internal static class PanelGeometryCalculator
             result = result.MirrorAcrossVerticalCenterline(part.Bounds.Width);
         }
 
+        // ── Angle Front rotation: make p0→p1 horizontal at Y=mt34, clockwise around p0 ──
+        if (isAngleFrontPanel && (part.Name.Contains("Top") || part.Name.Contains("Deck")))
+        {
+            double lbw = cabinet switch
+            {
+                BaseCabinetModel bc => ConvertDimension.FractionToDouble(bc.LeftBackWidth),
+                UpperCabinetModel uc => ConvertDimension.FractionToDouble(uc.LeftBackWidth),
+                _ => 24.0
+            };
+            double rbw = cabinet switch
+            {
+                BaseCabinetModel bc => ConvertDimension.FractionToDouble(bc.RightBackWidth),
+                UpperCabinetModel uc => ConvertDimension.FractionToDouble(uc.RightBackWidth),
+                _ => 24.0
+            };
+            double ld = cabinet switch
+            {
+                BaseCabinetModel bc => ConvertDimension.FractionToDouble(bc.LeftDepth),
+                UpperCabinetModel uc => ConvertDimension.FractionToDouble(uc.LeftDepth),
+                _ => 24.0
+            };
+            double rd = cabinet switch
+            {
+                BaseCabinetModel bc => ConvertDimension.FractionToDouble(bc.RightDepth),
+                UpperCabinetModel uc => ConvertDimension.FractionToDouble(uc.RightDepth),
+                _ => 24.0
+            };
+
+            // p0 = (ld, mt34), p1 = (rbw - mt34, lbw - rd)
+            double pivotX = ld;
+            double pivotY = materialThickness34;
+            double dx = rbw - materialThickness34 - ld;
+            double dy = lbw - rd - materialThickness34;
+
+            // Clockwise rotation angle to bring p0→p1 horizontal (Y=0 relative to pivot)
+            double angleRadians = Math.Atan2(dy, dx);
+
+            result = result.RotateAngleParts(pivotX, pivotY, angleRadians);
+        }
+
         if (isAngleFrontPanel && part.Name.Contains("Top"))
         {
             result = result.MirrorAcrossVerticalCenterline(part.Bounds.Width);
         }
+
 
         return result;
     }

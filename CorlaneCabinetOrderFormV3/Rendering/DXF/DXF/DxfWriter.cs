@@ -56,12 +56,23 @@ namespace CorlaneCabinetOrderFormV3.Rendering.DXF.DXF
             // Calculate cut depth: Full Thickness - Remaining Material (40%)
             double cutDepth = thicknessInches * (1.0 - _tenonThinningRatio);
 
+            //foreach (var pocket in part.TenonThinningPockets)
+            //{
+            //    var rect = CreateClosedRectangle(pocket);
+            //    rect.Layer = _layerManager.GetLayer(DxfLayerManager.LayerType.TenonThinningPocket, cutDepth);
+            //    doc.Entities.Add(rect);
+            //}
             foreach (var pocket in part.TenonThinningPockets)
             {
-                var rect = CreateClosedRectangle(pocket);
-                rect.Layer = _layerManager.GetLayer(DxfLayerManager.LayerType.TenonThinningPocket, cutDepth);
-                doc.Entities.Add(rect);
+                // Thinning pockets are rendered as LINE entities (not rectangles),
+                // so they survive rotation correctly without becoming bounding-box squares.
+                var line = new Line(
+                    new netDxfVector3((float)pocket.x1, (float)pocket.y1, 0),
+                    new netDxfVector3((float)pocket.x2, (float)pocket.y2, 0));
+                line.Layer = _layerManager.GetLayer(DxfLayerManager.LayerType.TenonThinningPocket, cutDepth);
+                doc.Entities.Add(line);
             }
+
 
             foreach (var pocket in part.MortisePockets)
             {
