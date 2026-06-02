@@ -5,7 +5,21 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    private static Model3DGroup BuildBack(Model3DGroup cabinet, BaseCabinetModel baseCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, double MaterialThickness14, double StretcherWidth, double width, double height, double backThickness, double tk_Height, double interiorWidth, double interiorHeight)
+    private static Model3DGroup BuildBack(
+        Model3DGroup cabinet, 
+        BaseCabinetModel baseCab, 
+        Func<string?, string> getMatchingEdgebandingSpecies, 
+        double MaterialThickness34, 
+        double MaterialThickness14, 
+        double StretcherWidth, 
+        double width, 
+        double height, 
+        double backThickness, 
+        double tk_Height, 
+        double interiorWidth, 
+        double interiorHeight,
+        bool hasLeftEnd,
+        bool hasRightEnd)
     {
         Model3DGroup back;
         // Back
@@ -15,10 +29,10 @@ internal static partial class BaseCabinetBuilder
             {
                 List<Point3D> backPoints =
                 [
-                    new (0,-MaterialThickness34,0),
-                new (interiorWidth,-MaterialThickness34,0),
-                new (interiorWidth,interiorHeight,0),
-                new (0,interiorHeight,0)
+                    new (hasLeftEnd ? 0 : -MaterialThickness34, -MaterialThickness34, 0),
+                    new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34, -MaterialThickness34, 0),
+                    new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34, interiorHeight, 0),
+                    new (hasLeftEnd ? 0 : -MaterialThickness34, interiorHeight, 0)
                 ];
                 if (width <= 47.75 + (2 * MaterialThickness34))
                 {
@@ -35,9 +49,9 @@ internal static partial class BaseCabinetBuilder
                 List<Point3D> backPoints =
                 [
                     new (0,0,0),
-                new (width,0,0),
-                new (width,height-tk_Height,0),
-                new (0,height-tk_Height,0)
+                    new (width,0,0),
+                    new (width,height-tk_Height,0),
+                    new (0,height-tk_Height,0)
                 ];
                 if (width <= 47.75)
                 {

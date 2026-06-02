@@ -16,7 +16,10 @@ internal static partial class BaseCabinetBuilder
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,
         Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow,
-        CabinetBuildResult? result)
+        CabinetBuildResult? result,
+        bool hasLeftEnd,
+        bool hasRightEnd
+        )
     {
         if (!baseCab.IncRollouts && !baseCab.IncRolloutsInList && !baseCab.IncTrashDrwBox) return;
 
@@ -94,7 +97,7 @@ internal static partial class BaseCabinetBuilder
                         addDrawerBoxRow(baseCab, "Rollout", dbxHeight, dbxWidth, dbxDepth);
                     }
 
-                    var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
+                    var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, hasLeftEnd, hasRightEnd);
                     var placement = new Model3DGroup();
                     placement.Children.Add(rotateGroup);
 
@@ -122,7 +125,7 @@ internal static partial class BaseCabinetBuilder
             {
                 addDrawerBoxRow(baseCab, "Trash Drawer", dbxHeight, dbxWidth, dbxDepth);
 
-                var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
+                var rotateGroup =  BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, hasLeftEnd, hasRightEnd);
                 var trashDrawer = new Model3DGroup();
                 trashDrawer.Children.Add(rotateGroup);
                 ModelTransforms.ApplyTransform(trashDrawer, (dbxWidth / 2) - MaterialThickness34, MaterialThickness34 + tk_Height + 0.5906, interiorDepth + backThickness, 0, 0, 0);

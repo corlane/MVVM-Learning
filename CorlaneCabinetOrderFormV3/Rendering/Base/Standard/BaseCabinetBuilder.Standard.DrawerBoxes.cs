@@ -16,7 +16,9 @@ internal static partial class BaseCabinetBuilder
         BaseCabinetModel baseCab,
         BaseCabinetDimensions dim,
         Action<BaseCabinetModel, string, double, double, double> addDrawerBoxRow,
-        CabinetBuildResult? result)
+        CabinetBuildResult? result,
+        bool hasLeftEnd,
+        bool hasRightEnd)
     {
         if (baseCab.DrwCount <= 0) return;
 
@@ -87,7 +89,7 @@ internal static partial class BaseCabinetBuilder
 
             if (!incBoxOpening[oi]) continue;
 
-            var dbxRotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab);
+            var dbxRotate = BuildDrawerBoxRotateGroup(dbxWidth, dbxHeight, dbxDepth, MaterialThickness34, baseCab, hasLeftEnd, hasRightEnd);
             Model3DGroup dbxGroup = new();
             dbxGroup.Children.Add(dbxRotate);
 
@@ -106,7 +108,9 @@ internal static partial class BaseCabinetBuilder
         double dbxHeight, 
         double dbxDepth,
         double materialThickness,
-        BaseCabinetModel baseCab)
+        BaseCabinetModel baseCab,
+        bool hasLeftEnd,
+        bool hasRightEnd)
     {
         var dbxSidePoints = new List<Point3D>
         {

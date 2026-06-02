@@ -14,7 +14,9 @@ internal static partial class BaseCabinetBuilder
     private static void BuildDrawerStretchers(
         Model3DGroup cabinet,
         BaseCabinetModel baseCab,
-        BaseCabinetDimensions dim)
+        BaseCabinetDimensions dim,
+        bool hasLeftEnd,
+        bool hasRightEnd)
 
     {
         double MaterialThickness34 = MaterialDefaults.Thickness34;
@@ -36,10 +38,10 @@ internal static partial class BaseCabinetBuilder
 
         List<Point3D> stretcherPoints =
         [
-            new (0,0,0),
-            new (interiorWidth,0,0),
-            new (interiorWidth,StretcherWidth,0),
-            new (0,StretcherWidth,0)
+            new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+            new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+            new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,StretcherWidth,0),
+            new (hasLeftEnd ? 0 : -MaterialThickness34,StretcherWidth,0)
         ];
 
         // Standard style with 1 drawer
@@ -50,10 +52,10 @@ internal static partial class BaseCabinetBuilder
             var points = baseCab.TrashDrawer
                 ? new List<Point3D>
                   {
-                      new (0,0,0),
-                      new (interiorWidth,0,0),
-                      new (interiorWidth,interiorDepth,0),
-                      new (0,interiorDepth,0)
+                      new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+                      new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+                      new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,interiorDepth,0),
+                      new (hasLeftEnd ? 0 : -MaterialThickness34,interiorDepth,0)
                   }
                 : stretcherPoints;
 
@@ -70,10 +72,10 @@ internal static partial class BaseCabinetBuilder
             {
                 List<Point3D> sinkStretcherPoints =
                 [
-                    new (0,0,0),
-                    new (interiorWidth,0,0),
-                    new (interiorWidth,opening1Height,0),
-                    new (0,opening1Height,0)
+                    new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+                    new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+                    new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,opening1Height,0),
+                    new (hasLeftEnd ? 0 : -MaterialThickness34,opening1Height,0)
                 ];
 
                 stretcher = CabinetPartFactory.CreatePanel(sinkStretcherPoints, MaterialThickness34, baseCab.Species, "None", "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.SinkStretcher);

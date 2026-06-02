@@ -15,7 +15,7 @@ User side:
 
 Finish angle corner cabinet models -- DONE except angle front base toekick board needs to be worked out - I don't think we have a way to do this yet, since we don't normally offer these. 
 
-
+Add option to round door sizes down to the nearest 1/16" IN THE DOOR SIZE LIST ONLY.
 
 
 

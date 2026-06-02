@@ -16,7 +16,10 @@ internal static partial class BaseCabinetBuilder
         double interiorWidth,
         Model3DGroup top, 
         out Model3DGroup? topStretcherFront, 
-        out Model3DGroup? topStretcherBack)
+        out Model3DGroup? topStretcherBack,
+        bool hasLeftEnd,
+        bool hasRightEnd
+        )
 
     {
         // Full Top
@@ -24,10 +27,10 @@ internal static partial class BaseCabinetBuilder
         {
             List<Point3D> topPoints =
             [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,depth,0),
-                new (0,depth,0)
+                new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,depth,0),
+                new (hasLeftEnd ? 0 : -MaterialThickness34,depth,0)
             ];
             top = CabinetPartFactory.CreatePanel(topPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.Top);
             ModelTransforms.ApplyTransform(top, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);
@@ -37,18 +40,18 @@ internal static partial class BaseCabinetBuilder
         {
             List<Point3D> topStretcherFrontPoints =
             [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,StretcherWidth,0),
-                new (0,StretcherWidth,0)
+                new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,StretcherWidth,0),
+                new (hasLeftEnd ? 0 : -MaterialThickness34,StretcherWidth,0)
             ];
 
             List<Point3D> topStretcherBackPoints =
             [
-                new (0,0,0),
-                new (interiorWidth,0,0),
-                new (interiorWidth,topStretcherBackWidth,0),
-                new (0,topStretcherBackWidth,0)
+                new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+                new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,topStretcherBackWidth,0),
+                new (hasLeftEnd ? 0 : -MaterialThickness34,topStretcherBackWidth,0)
             ];
 
             topStretcherFront = CabinetPartFactory.CreatePanel(topStretcherFrontPoints, MaterialThickness34, baseCab.Species, baseCab.EBSpecies, "Horizontal", baseCab, isFaceUp: false, CabinetPartKind.TopStretcherFront);

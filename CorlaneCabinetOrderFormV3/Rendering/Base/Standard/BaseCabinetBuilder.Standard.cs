@@ -86,25 +86,25 @@ internal static partial class BaseCabinetBuilder
 
         if (baseCab.HasDeck)
         {
-            deck = BuildDeck(baseCab, MaterialThickness34, depth, backThickness, tk_Height, interiorWidth, deckBackInset);
+            deck = BuildDeck(baseCab, MaterialThickness34, depth, backThickness, tk_Height, interiorWidth, deckBackInset, baseCab.HasLeftEnd, baseCab.HasRightEnd);
         }
 
         if (baseCab.HasTop)
         {
-            top = BuildTop(baseCab, MaterialThickness34, StretcherWidth, topStretcherBackWidth, width, height, depth, interiorWidth, top, out Model3DGroup? topStretcherFront, out Model3DGroup? topStretcherBack);
+            top = BuildTop(baseCab, MaterialThickness34, StretcherWidth, topStretcherBackWidth, width, height, depth, interiorWidth, top, out Model3DGroup? topStretcherFront, out Model3DGroup? topStretcherBack, baseCab.HasLeftEnd, baseCab.HasRightEnd);
         }
 
         if (baseCab.HasToeKickBoard)
         {
-            toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, toekick);
+            toekick = BuildToekick(baseCab, MaterialThickness34, depth, tk_Height, tk_Depth, interiorWidth, toekick, baseCab.HasLeftEnd, baseCab.HasRightEnd);
         }
 
-        back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight);
+        back = BuildBack(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, MaterialThickness14, StretcherWidth, width, height, backThickness, tk_Height, interiorWidth, interiorHeight, baseCab.HasLeftEnd, baseCab.HasRightEnd);
 
         // Drawer Stretchers
-        BuildDrawerStretchers(cabinet, baseCab, dim);
+        BuildDrawerStretchers(cabinet, baseCab, dim, baseCab.HasLeftEnd, baseCab.HasRightEnd);
 
-        shelf = BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, cabType, style2, backThickness, tk_Height, interiorWidth, interiorHeight, shelfDepth, opening1Height);
+        shelf = BuildShelves(cabinet, baseCab, getMatchingEdgebandingSpecies, MaterialThickness34, cabType, style2, backThickness, tk_Height, interiorWidth, interiorHeight, shelfDepth, opening1Height, baseCab.HasLeftEnd, baseCab.HasRightEnd);
 
         if (baseCab.DoorCount > 0 && cabType != style2 || baseCab.DoorCount > 0 && baseCab.IncDoorsInList && cabType != style2) // REMOVED baseCab.IncDoors so they will show up still, but be a different color indicating that we are not supplying them.  This is because some users (CANNOT SET THE DOOR COUNT PROPERLY) want to see the doors in the 3D model even if they are not being supplied by us, and it is less confusing to have them show up as a different color than to have them not show up at all.
         {
@@ -115,10 +115,10 @@ internal static partial class BaseCabinetBuilder
         BuildDrawerFronts(cabinet, baseCab, dim, doorEdgebandingSpecies, doorsHidden, resolveDoorSpeciesForTotals, addFrontPartRow, result);
 
         // Drawer Boxes
-        BuildDrawerBoxes(cabinet, baseCab, dim, addDrawerBoxRow, result);
+        BuildDrawerBoxes(cabinet, baseCab, dim, addDrawerBoxRow, result, baseCab.HasLeftEnd, baseCab.HasRightEnd);
 
         // Rollouts or Trash Drawer
-        BuildRolloutsAndTrash(cabinet, baseCab, dim, addDrawerBoxRow, result);
+        BuildRolloutsAndTrash(cabinet, baseCab, dim, addDrawerBoxRow, result, baseCab.HasLeftEnd, baseCab.HasRightEnd);
 
         if (baseCab.HasLeftEnd && !leftEndHidden) cabinet.Children.Add(leftEnd);
         if (baseCab.HasRightEnd && !rightEndHidden) cabinet.Children.Add(rightEnd);

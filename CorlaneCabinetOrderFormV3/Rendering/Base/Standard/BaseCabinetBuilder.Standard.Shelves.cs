@@ -5,16 +5,16 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class BaseCabinetBuilder
 {
-    private static Model3DGroup BuildShelves(Model3DGroup cabinet, BaseCabinetModel baseCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, string cabType, string style2, double backThickness, double tk_Height, double interiorWidth, double interiorHeight, double shelfDepth, double opening1Height)
+    private static Model3DGroup BuildShelves(Model3DGroup cabinet, BaseCabinetModel baseCab, Func<string?, string> getMatchingEdgebandingSpecies, double MaterialThickness34, string cabType, string style2, double backThickness, double tk_Height, double interiorWidth, double interiorHeight, double shelfDepth, double opening1Height, bool hasLeftEnd, bool hasRightEnd)
     {
         if (!baseCab.HasBack && backThickness == 0.75) { shelfDepth += 0.75; }
 
         List<Point3D> shelfPoints =
         [
-            new (0,0,0),
-            new (interiorWidth-.125,0,0),
-            new (interiorWidth-.125,shelfDepth,0),
-            new (0,shelfDepth,0)
+            new (hasLeftEnd ? 0 : -MaterialThickness34,0,0),
+            new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,0,0),
+            new (hasRightEnd ? interiorWidth : interiorWidth + MaterialThickness34,shelfDepth,0),
+            new (hasLeftEnd ? 0 : -MaterialThickness34,shelfDepth,0)
         ];
 
         Model3DGroup shelf;
