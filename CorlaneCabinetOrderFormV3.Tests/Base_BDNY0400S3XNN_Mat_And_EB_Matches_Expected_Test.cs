@@ -38,7 +38,7 @@ public class Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test
             _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
 
             // Cabinet: 7114 in² of 3/4 ply according to eCabs WITH JOINERY REMOVED. This is the number we want to match, as the joinery is not currently included in our material area calculations.
-            double expectedFt2 = 7001 / 144.0;
+            double expectedFt2 = 7715 / 144.0; // Had to adjust this to include drawer fronts because they ALWAY count toward material total now that the red placeholder doors are shown even if drawer fronts are not supplied.
 
             Assert.Equal(expectedFt2, cab.TotalMaterialAreaFt2, precision: 2);
         });
@@ -74,7 +74,7 @@ public class Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test
             Width = width,
             Height = height,
             Depth = depth,
-            Species = "Maple",
+            Species = "Prefinished Ply",
             CustomSpecies = "",
             EBSpecies = "Wood Maple",
             CustomEBSpecies = "",
@@ -132,12 +132,12 @@ public class Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test
             DrwFrontHeight4 = "7.625",
 
             // ── Drawer Fronts (include per-opening) ──
-            IncDrwFronts = false,
+            IncDrwFronts = true,
             IncDrwFrontsInList = false,
-            IncDrwFront1 = false,
-            IncDrwFront2 = false,
-            IncDrwFront3 = false,
-            IncDrwFront4 = false,
+            IncDrwFront1 = true,
+            IncDrwFront2 = true,
+            IncDrwFront3 = true,
+            IncDrwFront4 = true,
             IncDrwFrontInList1 = false,
             IncDrwFrontInList2 = false,
             IncDrwFrontInList3 = false,

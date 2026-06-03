@@ -538,7 +538,7 @@ internal static class CabinetPartFactory
             });
         }
 
-        //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and {edgeBandLengthInches:F1} inches {edgebandingSpecies} edge banding, and {endPanelBottomEBInches:F1} inches PVC Hardrock Maple edge banding on bottom end panel.");
+        //Debug.WriteLine($"Created {partKind} with area {areaFt2:F2} ft^2 and {edgeBandLengthInches:F1} inches {edgebandingSpecies} edge banding, and {endPanelBottomEBInches:F1} inches PVC Hardrock Maple edge banding on bottom end panel.\n");
 
         return partModel;
     }

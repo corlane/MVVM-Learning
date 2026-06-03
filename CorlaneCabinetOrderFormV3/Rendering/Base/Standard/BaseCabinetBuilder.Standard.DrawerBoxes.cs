@@ -144,8 +144,6 @@ internal static partial class BaseCabinetBuilder
             drwBoxEB = CabinetBuildHelpers.GetMatchingEdgebandingSpecies(baseCab.CustomEBSpecies);
         }
 
-        Debug.WriteLine($"BaseCabinetBuilder.Standard.DrawerBoxes: Drawer box species changed to {drwBoxSpecies}");
-
         var leftSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
         var rightSide = CabinetPartFactory.CreatePanel(dbxSidePoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxSide);
         var front = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxFront);

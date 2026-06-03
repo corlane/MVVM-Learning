@@ -517,4 +517,4 @@
 	Cabinets now resize to user-entered size when removing ends. commit
 	Fixed CNC price accidentally including Alt Source (red display only) door material. commit
 	Added option in Default Settings to round door sizes down to nearest 1/16" IN THE DOOR SIZE LIST ONLY. For Allan's dumb door company. commit
-
+	Uploading 3.1.0.7
