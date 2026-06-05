@@ -3,7 +3,6 @@ using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Rendering.DXF.Core;
 using System.Diagnostics;
-using System.Windows;
 
 internal static class CabinetInputAdapter
 {
@@ -63,7 +62,7 @@ internal static class CabinetInputAdapter
                     TenonEdges: ResolveTenonEdges(entry.PartName, cabinet),
                     MortiseEdges: ResolveMortiseEdges(entry.PartName, cabinet),
                     MortiseThruEdges: ResolveMortiseThruEdges(entry.PartName, cabinet),
-                    ScrewHoleEdges: (ScrewHoleEdge)ResolveMortiseEdges(entry.PartName, cabinet),
+                    ScrewHoleEdges: ResolveScrewHoleEdges(entry.PartName, cabinet),
                     ThinningPockets: ResolveTenonThinningEdges(entry.PartName, cabinet),
                     EdgeBand: entry.EdgeBandSpecies, Notes: entry.Notes, TkHeight: partTkH, TkDepth: partTkD, CabinetModel: cabinet);
             }
@@ -94,6 +93,7 @@ internal static class CabinetInputAdapter
             "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
             "Nailer" when cabinet is BaseCabinetModel => TenonEdge.Left | TenonEdge.Right | TenonEdge.Top,
             "Nailer" when cabinet is UpperCabinetModel => TenonEdge.Left | TenonEdge.Right,
+            "End Panel" when cabinet is FillerModel => TenonEdge.Top,
 
             _ => TenonEdge.None
         };
@@ -116,6 +116,8 @@ internal static class CabinetInputAdapter
             "Nailer" when cabinet is UpperCabinetModel => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
             "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) != 0.25 => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
             "Top" when cabinet is UpperCabinetModel upperCab && ConvertDimension.FractionToDouble(upperCab.BackThickness) == 0.25 => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
+            "End Panel" when cabinet is FillerModel => ThinningPocketEdge.Top,
+
             _ => ThinningPocketEdge.None
         };
     }
@@ -133,6 +135,8 @@ internal static class CabinetInputAdapter
             "left end" or "right end" when isUpperCab => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
             "top stretcher (back)" => MortiseEdge.Bottom,
             "deck" when isBaseCab && cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Top,
+            "back" when cabinet is FillerModel => MortiseEdge.Bottom,
+
             _ => MortiseEdge.None
         };
     }
@@ -156,7 +160,38 @@ internal static class CabinetInputAdapter
             "left back" when isUpperCab => MortiseThruEdge.Left | MortiseThruEdge.Right,
             "right back" when isUpperCab => MortiseThruEdge.Left | MortiseThruEdge.Right,
             "back" when isUpperCab && upperDims.BackThickness != 0.25 => MortiseThruEdge.Left | MortiseThruEdge.Right,
+
             _ => MortiseThruEdge.None
+        };
+    }
+
+    private static ScrewHoleEdge ResolveScrewHoleEdges(string partName, CabinetModel? cabinet)
+    {
+        bool isBaseCab = cabinet is BaseCabinetModel;
+        bool isUpperCab = cabinet is UpperCabinetModel;
+
+        BaseCabinetDimensions baseDims = default;
+        if (isBaseCab) baseDims = BaseCabinetDimensions.From((BaseCabinetModel)cabinet!);
+
+        UpperCabinetDimensions upperDims = default;
+        if (isUpperCab) upperDims = UpperCabinetDimensions.From((UpperCabinetModel)cabinet!);
+
+        return partName.ToLowerInvariant() switch
+        {
+            "left end" or "right end" when isBaseCab && cabinet is BaseCabinetModel basecab && basecab.HasTK => ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top | ScrewHoleEdge.Bottom,
+            "left end" or "right end" when isBaseCab && cabinet is BaseCabinetModel basecab && !basecab.HasTK => ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top,
+            "left end" or "right end" when isUpperCab => ScrewHoleEdge.Left | ScrewHoleEdge.Right | ScrewHoleEdge.Top,
+            "top stretcher (back)" => ScrewHoleEdge.Bottom,
+            "deck" when isBaseCab && cabinet is BaseCabinetModel basecab && basecab.HasTK => ScrewHoleEdge.Top,
+
+            "back" when isBaseCab && baseDims.BackThickness != 0.25 => ScrewHoleEdge.Right,
+            "left back" when isBaseCab => ScrewHoleEdge.Bottom,
+            "right back" when isBaseCab => ScrewHoleEdge.Bottom,
+            "left back" when isUpperCab => ScrewHoleEdge.Left | ScrewHoleEdge.Right,
+            "right back" when isUpperCab => ScrewHoleEdge.Left | ScrewHoleEdge.Right,
+            "back" when isUpperCab && upperDims.BackThickness != 0.25 => ScrewHoleEdge.Left | ScrewHoleEdge.Right,
+
+            _ => ScrewHoleEdge.None
         };
     }
 
