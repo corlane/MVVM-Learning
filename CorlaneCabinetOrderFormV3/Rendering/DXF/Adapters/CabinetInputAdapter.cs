@@ -81,8 +81,10 @@ internal static class CabinetInputAdapter
             "Toekick (Right)" => TenonEdge.Top | TenonEdge.Right,
             "Top Stretcher (Front)" or "Drawer Stretcher" => TenonEdge.Left | TenonEdge.Right,
             "Back" when cabinet is BaseCabinetModel basecab && ConvertDimension.FractionToDouble(basecab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom | TenonEdge.Left,
-            "Left Back" when cabinet is BaseCabinetModel basecab => TenonEdge.Left,
-            "Right Back" when cabinet is BaseCabinetModel basecab => TenonEdge.Right,
+            "Left Back" when cabinet is BaseCabinetModel => TenonEdge.Left,
+            "Right Back" when cabinet is BaseCabinetModel => TenonEdge.Right,
+            "Left Back" when cabinet is UpperCabinetModel => TenonEdge.Top,
+            "Right Back" when cabinet is UpperCabinetModel => TenonEdge.Bottom,
             "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => TenonEdge.Top | TenonEdge.Bottom,
             "Deck" when cabinet is BaseCabinetModel baseCab && ConvertDimension.FractionToDouble(baseCab.BackThickness) != 0.25 => TenonEdge.Left | TenonEdge.Right | TenonEdge.Bottom,
             "Deck" when cabinet is BaseCabinetModel baseCab && ConvertDimension.FractionToDouble(baseCab.BackThickness) == 0.25 => TenonEdge.Left | TenonEdge.Right,
@@ -107,6 +109,8 @@ internal static class CabinetInputAdapter
             "Back" when cabinet is UpperCabinetModel uppercab && ConvertDimension.FractionToDouble(uppercab.BackThickness) != 0.25 => ThinningPocketEdge.Top | ThinningPocketEdge.Bottom,
             "Left Back" when cabinet is BaseCabinetModel basecab => ThinningPocketEdge.Left,
             "Right Back" when cabinet is BaseCabinetModel basecab => ThinningPocketEdge.Right,
+            "Left Back" when cabinet is UpperCabinetModel uppercab => ThinningPocketEdge.Top,
+            "Right Back" when cabinet is UpperCabinetModel uppercab => ThinningPocketEdge.Bottom,
             "Deck" => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Bottom,
             "Nailer" when cabinet is BaseCabinetModel => ThinningPocketEdge.Left | ThinningPocketEdge.Right | ThinningPocketEdge.Top,
             "Nailer" when cabinet is UpperCabinetModel => ThinningPocketEdge.Left | ThinningPocketEdge.Right,
@@ -127,8 +131,6 @@ internal static class CabinetInputAdapter
             "left end" or "right end" when isBaseCab && cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top | MortiseEdge.Bottom,
             "left end" or "right end" when isBaseCab && cabinet is BaseCabinetModel basecab && !basecab.HasTK => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
             "left end" or "right end" when isUpperCab => MortiseEdge.Left | MortiseEdge.Right | MortiseEdge.Top,
-            "left back" when isBaseCab => MortiseEdge.Bottom,
-            "right back" when isBaseCab => MortiseEdge.Bottom,
             "top stretcher (back)" => MortiseEdge.Bottom,
             "deck" when isBaseCab && cabinet is BaseCabinetModel basecab && basecab.HasTK => MortiseEdge.Top,
             _ => MortiseEdge.None
@@ -149,8 +151,10 @@ internal static class CabinetInputAdapter
         return partName.ToLowerInvariant() switch
         {
             "back" when isBaseCab && baseDims.BackThickness != 0.25 => MortiseThruEdge.Right,
-            "left back" when isBaseCab => MortiseThruEdge.None,
-            "right back" when isBaseCab => MortiseThruEdge.None,
+            "left back" when isBaseCab => MortiseThruEdge.Bottom,
+            "right back" when isBaseCab => MortiseThruEdge.Bottom,
+            "left back" when isUpperCab => MortiseThruEdge.Left | MortiseThruEdge.Right,
+            "right back" when isUpperCab => MortiseThruEdge.Left | MortiseThruEdge.Right,
             "back" when isUpperCab && upperDims.BackThickness != 0.25 => MortiseThruEdge.Left | MortiseThruEdge.Right,
             _ => MortiseThruEdge.None
         };
