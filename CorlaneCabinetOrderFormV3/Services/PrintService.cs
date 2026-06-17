@@ -170,12 +170,13 @@ public sealed class PrintService : IPrintService
         });
     }
 
-    private void AddDoorTable(FlowDocument doc, IReadOnlyList<FrontPartRow> doors)
+    private static void AddDoorTable(FlowDocument doc, IReadOnlyList<FrontPartRow> doors)
     {
         var table = CreateTable(
             headers:
             [
                 "Cab #",
+                "Qty",
                 "Cabinet Name",
                 "Type",
                 "Height",
@@ -185,6 +186,7 @@ public sealed class PrintService : IPrintService
             ],
             columnWidths:
             [
+                55,
                 55,
                 180,
                 100,
@@ -199,6 +201,7 @@ public sealed class PrintService : IPrintService
             AddRow(table,
             [
                 d.CabinetNumber.ToString(),
+                d.Qty.ToString(),
                 d.CabinetName ?? "",
                 d.Type ?? "",
                 d.DisplayHeight ?? d.Height.ToString("0.####"),
@@ -223,6 +226,7 @@ public sealed class PrintService : IPrintService
             headers:
             [
                 "Cab #",
+                "Qty",
                 "Cabinet Name",
                 "Type",
                 "Height",
@@ -231,6 +235,7 @@ public sealed class PrintService : IPrintService
             ],
             columnWidths:
             [
+                55,
                 55,
                 190,
                 110,
@@ -244,6 +249,7 @@ public sealed class PrintService : IPrintService
             AddRow(table,
             [
                 r.CabinetNumber.ToString(),
+                r.Qty.ToString(),
                 r.CabinetName ?? "",
                 r.Type ?? "",
                 r.DisplayHeight ?? r.Height.ToString("0.####"),
