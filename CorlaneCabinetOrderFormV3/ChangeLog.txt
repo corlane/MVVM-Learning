@@ -525,3 +525,5 @@
 
 3.1.0.9
 	Initial commit.
+	Added Qty column to exported .csv door and drawer box lists.
+	Uploading 3.1.0.9. commit

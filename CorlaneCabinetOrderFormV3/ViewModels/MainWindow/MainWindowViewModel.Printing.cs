@@ -141,7 +141,7 @@ public partial class MainWindowViewModel
             }
 
             var sb = new StringBuilder();
-            sb.AppendLine("Cab #,Cabinet Name,Type,Height,Width,Species,Grain");
+            sb.AppendLine("Cab #,Qty,Cabinet Name,Type,Height,Width,Species,Grain");
 
             foreach (var d in doorVm.DoorSizes)
             {
@@ -150,6 +150,7 @@ public partial class MainWindowViewModel
 
                 sb.AppendLine(string.Join(",",
                     EscapeCsv(d.CabinetNumber.ToString()),
+                    EscapeCsv(d.Qty.ToString()),
                     EscapeCsv(d.CabinetName ?? ""),
                     EscapeCsv(d.Type ?? ""),
                     EscapeCsv(height),
@@ -198,7 +199,7 @@ public partial class MainWindowViewModel
             }
 
             var sb = new StringBuilder();
-            sb.AppendLine("Cab #,Cabinet Name,Type,Height,Width,Length");
+            sb.AppendLine("Cab #,Qty,Cabinet Name,Type,Height,Width,Length");
 
             foreach (var r in drawerVm.DrawerBoxSizes)
             {
@@ -208,6 +209,7 @@ public partial class MainWindowViewModel
 
                 sb.AppendLine(string.Join(",",
                     EscapeCsv(r.CabinetNumber.ToString()),
+                    EscapeCsv(r.Qty.ToString()),
                     EscapeCsv(r.CabinetName ?? ""),
                     EscapeCsv(r.Type ?? ""),
                     EscapeCsv(height),
