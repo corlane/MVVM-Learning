@@ -284,7 +284,6 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 DrwCount = 0;
                 TopType = CabinetOptions.TopType.Full;
                 BackThickness = "0.75"; // Force 3/4" back
-                ShelfDepth = CabinetOptions.ShelfDepth.FullDepth; // Force full-depth shelves
             }
 
             if (Style == Style4)
@@ -293,6 +292,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 RolloutCount = 0;
                 TopType = CabinetOptions.TopType.Full;
                 BackThickness = "0.75"; // Force 3/4" back
+                ShelfDepth = CabinetOptions.ShelfDepth.FullDepth; // Force full-depth shelves
             }
         }
     }

@@ -530,3 +530,4 @@
 
 3.1.0.10
 	Initial commit.
+	Base 90 deg corner cab was forcing full depth shelves for some reason. I think it was supposed to be Angle Front instead, so I changed it to that (BaseCabinetViewModel.Commands.EnforceStyleConstraints()). commit
