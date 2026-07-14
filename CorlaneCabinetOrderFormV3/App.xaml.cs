@@ -272,18 +272,20 @@ public partial class App : Application
         }
 
         // One-time popup — bump this version string whenever you have a new notice
-        const string currentPopupVersion = "3.1.0.6";
+        const string currentPopupVersion = "3.1.0.11";
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
-                "NEW IN VERSION 3.1.0.6:\n\n" +
-                "Doors / Drawer Fronts:\n\n" +
-                "• Doors & Drawer Fronts are now displayed in RED instead of\n" +
-                "  disappearing if the relevant 'Supply' checkbox is unchecked.\n\n"+
+                "NEW IN VERSION 3.1.0.11:\n\n" +
+                "NEW MATERIAL ADDED:\n\n" +
 
-                "• This makes it easier to visualize the door/drawer front\n" +
-                "  configuration when you will be sourcing the doors and/or\n"+
-                "  drawer fronts from a different supplier.\n",
+                "Prefinished Ply Premium\n\n" +
+
+                "• This is manufactured by Garnica, with a Maple face. It is the highest quality prefinished plywood available.\n\n" +
+
+                "• Now available as a material option for cabinets and doors/drawer fronts.\n" +
+                "• When chosen as a cabinet species, drawer boxes will also be made of the same material.\n" +
+                " ",
 
                 "What's New",
                 MessageBoxButton.OK,
