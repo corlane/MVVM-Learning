@@ -272,18 +272,18 @@ public partial class App : Application
         }
 
         // One-time popup — bump this version string whenever you have a new notice
-        const string currentPopupVersion = "3.1.0.11";
+        const string currentPopupVersion = "3.1.0.12";
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
-                "NEW IN VERSION 3.1.0.11:\n\n" +
+                "NEW IN VERSION 3.1.0.12:\n\n" +
                 "NEW MATERIAL ADDED:\n\n" +
 
                 "Prefinished Ply Premium\n\n" +
 
                 "• This is manufactured by Garnica, with a Maple face. It is the highest quality prefinished plywood available.\n\n" +
 
-                "• Now available as a material option for cabinets and doors/drawer fronts.\n" +
+                "• Now available as a material option for cabinets and doors/drawer fronts.\n\n" +
                 "• When chosen as a cabinet species, drawer boxes will also be made of the same material.\n" +
                 " ",
 
