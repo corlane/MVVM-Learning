@@ -32,6 +32,7 @@ public class MaterialLookupService : IMaterialLookupService
     public MaterialLookupService()
     {
         CabinetSpecies.Add("Prefinished Ply");
+        CabinetSpecies.Add("Prefinished Ply Premium");
         CabinetSpecies.Add("Maple Ply");
         CabinetSpecies.Add("Red Oak Ply");
         CabinetSpecies.Add("White Oak Ply");

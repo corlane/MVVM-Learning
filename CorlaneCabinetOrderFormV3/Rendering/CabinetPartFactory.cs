@@ -219,6 +219,7 @@ internal static class CabinetPartFactory
 
             // Materials where face orientation should be ignored (legacy behavior)
             if (string.Equals(baseKey, "Prefinished Ply", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(baseKey, "Prefinished Ply Premium", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(baseKey, "PFP 1/4", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(baseKey, "MDF", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(baseKey, "Melamine", StringComparison.OrdinalIgnoreCase))

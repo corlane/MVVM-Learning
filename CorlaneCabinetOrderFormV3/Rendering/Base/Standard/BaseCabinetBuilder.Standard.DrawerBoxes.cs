@@ -137,6 +137,7 @@ internal static partial class BaseCabinetBuilder
         };
 
         string drwBoxSpecies = "Prefinished Ply";
+        if (baseCab.Species.Contains("Premium")) { drwBoxSpecies = "Prefinished Ply Premium"; }
         string drwBoxEB = "PVC Hardrock Maple";
         if (baseCab.Species == "Custom" && baseCab.DrwBoxCustomSpecies)
         {

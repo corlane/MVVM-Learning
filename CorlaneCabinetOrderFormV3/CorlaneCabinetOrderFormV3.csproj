@@ -50,6 +50,7 @@
     <None Remove="Images\Plywood\Melamine - Horizontal.png" />
     <None Remove="Images\Plywood\Melamine.png" />
     <None Remove="Images\Plywood\Prefinished Ply - Horizontal.png" />
+    <None Remove="Images\Plywood\Prefinished Ply Premium.png" />
     <None Remove="Images\Plywood\Prefinished Ply.png" />
     <None Remove="Images\Plywood\Red Oak Ply - Horizontal.png" />
     <None Remove="Images\Plywood\Red Oak Ply.png" />
@@ -136,6 +137,7 @@
     <Resource Include="Images\Plywood\Mahogany Ply.png" />
     <Resource Include="Images\Plywood\Maple Ply.png" />
     <Resource Include="Images\Plywood\MDF.png" />
+    <Resource Include="Images\Plywood\Prefinished Ply Premium.png" />
     <Resource Include="Images\Plywood\Prefinished Ply.png" />
     <Resource Include="Images\Plywood\Red Oak Ply.png" />
     <Resource Include="Images\Plywood\Walnut Ply.png" />
