@@ -73,6 +73,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
     [ObservableProperty] public partial string DefaultUpperRightFrontWidth { get; set; } = "12";
     [ObservableProperty] public partial string DefaultUpperLeftDepth { get; set; } = "12";
     [ObservableProperty] public partial string DefaultUpperRightDepth { get; set; } = "12";
+    [ObservableProperty] public partial string DefaultUpperLeftBackWidth { get; set; } = "24";
+    [ObservableProperty] public partial string DefaultUpperRightBackWidth { get; set; } = "24";
 
     public ObservableCollection<CornerCabinetDimsChangeRow> CornerCabinetDimsToChange { get; } = new();
 
@@ -91,6 +93,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
     partial void OnDefaultUpperRightFrontWidthChanged(string value) => Refresh();
     partial void OnDefaultUpperLeftDepthChanged(string value) => Refresh();
     partial void OnDefaultUpperRightDepthChanged(string value) => Refresh();
+    partial void OnDefaultUpperLeftBackWidthChanged(string value) => Refresh();
+    partial void OnDefaultUpperRightBackWidthChanged(string value) => Refresh();
 
     public void Refresh()
     {
@@ -117,7 +121,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         // This prevents mismatches like "Style3" vs "Style 3" vs "90° Corner".
         string baseCorner90Style = BaseCabinetViewModel.Style3;
         string baseAngleFrontStyle = BaseCabinetViewModel.Style4;
-        string upperCornerStyle = UpperCabinetViewModel.Style2;
+        string upperCorner90Style = UpperCabinetViewModel.Style2;
+        string upperAngleFrontStyle = UpperCabinetViewModel.Style3;
 
         double defBaseLfw = ConvertDimension.FractionToDouble(DefaultBaseLeftFrontWidth ?? "");
         double defBaseRfw = ConvertDimension.FractionToDouble(DefaultBaseRightFrontWidth ?? "");
@@ -130,6 +135,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
         double defUpperRfw = ConvertDimension.FractionToDouble(DefaultUpperRightFrontWidth ?? "");
         double defUpperLd = ConvertDimension.FractionToDouble(DefaultUpperLeftDepth ?? "");
         double defUpperRd = ConvertDimension.FractionToDouble(DefaultUpperRightDepth ?? "");
+        double defUpperLbw = ConvertDimension.FractionToDouble(DefaultUpperLeftBackWidth ?? "");
+        double defUpperRbw = ConvertDimension.FractionToDouble(DefaultUpperRightBackWidth ?? "");
 
         var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
@@ -145,10 +152,13 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
             bool isBaseAngleFront = cab is BaseCabinetModel
                 && string.Equals(cab.Style, baseAngleFrontStyle, StringComparison.OrdinalIgnoreCase);
 
-            bool isUpperCorner = cab is UpperCabinetModel
-                && string.Equals(cab.Style, upperCornerStyle, StringComparison.OrdinalIgnoreCase);
+            bool isUpperCorner90 = cab is UpperCabinetModel
+                && string.Equals(cab.Style, upperCorner90Style, StringComparison.OrdinalIgnoreCase);
 
-            if (!isBaseCorner90 && !isBaseAngleFront && !isUpperCorner)
+            bool isUpperAngleFront = cab is UpperCabinetModel
+                && string.Equals(cab.Style, upperAngleFrontStyle, StringComparison.OrdinalIgnoreCase);
+
+            if (!isBaseCorner90 && !isBaseAngleFront && !isUpperCorner90 && !isUpperAngleFront)
             {
                 continue;
             }
@@ -181,9 +191,27 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
                 _ => ""
             };
 
-            BaseCabinetModel? angleBaseCab = isBaseAngleFront ? (cab as BaseCabinetModel) : null;
-            string lbw = angleBaseCab?.LeftBackWidth ?? "";
-            string rbw = angleBaseCab?.RightBackWidth ?? "";
+            string lbw = cab switch
+            {
+                BaseCabinetModel baseCab5 => baseCab5.LeftBackWidth ?? "",
+                UpperCabinetModel upperCab5 => upperCab5.LeftBackWidth ?? "",
+                _ => ""
+            };
+
+            string rbw = cab switch
+            {
+                BaseCabinetModel baseCab6 => baseCab6.RightBackWidth ?? "",
+                UpperCabinetModel upperCab6 => upperCab6.RightBackWidth ?? "",
+                _ => ""
+            };
+
+            //BaseCabinetModel? angleBaseCab = isBaseAngleFront ? (cab as BaseCabinetModel) : null;
+            //string lbw = angleBaseCab?.LeftBackWidth ?? "";
+            //string rbw = angleBaseCab?.RightBackWidth ?? "";
+
+            //UpperCabinetModel? angleUpperCab = isUpperAngleFront ? (cab as UpperCabinetModel) : null;
+            //string lubw = angleUpperCab?.LeftBackWidth ?? "";
+            //string rubw = angleUpperCab?.RightBackWidth ?? "";
 
             double cabLfw = ConvertDimension.FractionToDouble(lfw);
             double cabRfw = ConvertDimension.FractionToDouble(rfw);
@@ -191,6 +219,8 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
             double cabRd = ConvertDimension.FractionToDouble(rd);
             double cabLbw = ConvertDimension.FractionToDouble(lbw);
             double cabRbw = ConvertDimension.FractionToDouble(rbw);
+            //double cabLubw = ConvertDimension.FractionToDouble(lubw);
+            //double cabRubw = ConvertDimension.FractionToDouble(rubw);
 
             bool differs =
                 isBaseCorner90
@@ -203,10 +233,15 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
                        || !NearlyEqual(cabRd, defBaseRd)
                        || !NearlyEqual(cabLbw, defBaseLbw)
                        || !NearlyEqual(cabRbw, defBaseRbw))
-                : (!NearlyEqual(cabLfw, defUpperLfw)
-                   || !NearlyEqual(cabRfw, defUpperRfw)
-                   || !NearlyEqual(cabLd, defUpperLd)
-                   || !NearlyEqual(cabRd, defUpperRd));
+                : isUpperAngleFront
+                    ? (!NearlyEqual(cabLd, defUpperLd)
+                       || !NearlyEqual(cabRd, defUpperRd)
+                       || !NearlyEqual(cabLbw, defUpperLbw)
+                       || !NearlyEqual(cabRbw, defUpperRbw))
+                    : (!NearlyEqual(cabLfw, defUpperLfw)
+                       || !NearlyEqual(cabRfw, defUpperRfw)
+                       || !NearlyEqual(cabLd, defUpperLd)
+                       || !NearlyEqual(cabRd, defUpperRd));
 
             if (!differs)
             {
@@ -228,12 +263,12 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
                 LeftBackWidth = lbw,
                 RightBackWidth = rbw,
 
-                DefaultLeftFrontWidth = isBaseCorner90 ? (DefaultBaseLeftFrontWidth ?? "") : isUpperCorner ? (DefaultUpperLeftFrontWidth ?? "") : "",
-                DefaultRightFrontWidth = isBaseCorner90 ? (DefaultBaseRightFrontWidth ?? "") : isUpperCorner ? (DefaultUpperRightFrontWidth ?? "") : "",
+                DefaultLeftFrontWidth = isBaseCorner90 ? (DefaultBaseLeftFrontWidth ?? "") : isUpperCorner90 ? (DefaultUpperLeftFrontWidth ?? "") : "",
+                DefaultRightFrontWidth = isBaseCorner90 ? (DefaultBaseRightFrontWidth ?? "") : isUpperCorner90 ? (DefaultUpperRightFrontWidth ?? "") : "",
                 DefaultLeftDepth = (isBaseCorner90 || isBaseAngleFront) ? (DefaultBaseLeftDepth ?? "") : (DefaultUpperLeftDepth ?? ""),
                 DefaultRightDepth = (isBaseCorner90 || isBaseAngleFront) ? (DefaultBaseRightDepth ?? "") : (DefaultUpperRightDepth ?? ""),
-                DefaultLeftBackWidth = isBaseAngleFront ? (DefaultBaseLeftBackWidth ?? "") : "",
-                DefaultRightBackWidth = isBaseAngleFront ? (DefaultBaseRightBackWidth ?? "") : "",
+                DefaultLeftBackWidth = isBaseAngleFront ? (DefaultBaseLeftBackWidth ?? "") : isUpperAngleFront ? (DefaultUpperLeftBackWidth ?? "") : "",
+                DefaultRightBackWidth = isBaseAngleFront ? (DefaultBaseRightBackWidth ?? "") : isUpperAngleFront ? (DefaultUpperRightBackWidth ?? "") : "",
 
                 IsDone = savedKeys?.Contains(MakeKey(cab.Id)) == true
             };

@@ -90,7 +90,7 @@
 				<TextBox Grid.Column="4" Margin="6,0,0,0" Text="{Binding DefaultBaseRightBackWidth, UpdateSourceTrigger=PropertyChanged}"/>
 			</Grid>
 
-			<TextBlock Text="Upper cabinets (Style2 - 90 corner) baseline:"
+			<TextBlock Text="Upper cabinets (Style2 - 90 corner, Style3 - angle front) baseline:"
                        FontWeight="SemiBold"
                        Margin="0,0,0,6"/>
 
@@ -110,6 +110,12 @@
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="6"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
 				<TextBlock Grid.Column="0" VerticalAlignment="Center" Text="L Front Width:" FontWeight="SemiBold"/>
 				<TextBox Grid.Column="1" Margin="6,0,0,0" Text="{Binding DefaultUpperLeftFrontWidth, UpdateSourceTrigger=PropertyChanged}"/>
 
@@ -121,7 +127,13 @@
 
 				<TextBlock Grid.Column="9" VerticalAlignment="Center" Text="R Depth:" FontWeight="SemiBold"/>
 				<TextBox Grid.Column="10" Margin="6,0,0,0" Text="{Binding DefaultUpperRightDepth, UpdateSourceTrigger=PropertyChanged}"/>
-			</Grid>
+                
+                <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Text="L Back Width:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Margin="6,0,0,0" Text="{Binding DefaultUpperLeftBackWidth, UpdateSourceTrigger=PropertyChanged}"/>
+                
+                <TextBlock Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" Text="R Back Width:" FontWeight="SemiBold"/>
+                <TextBox Grid.Column="4" Grid.Row="2" Margin="6,0,0,0" Text="{Binding DefaultUpperRightBackWidth, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
 		</StackPanel>
 
 		<DataGrid Grid.Row="4"
