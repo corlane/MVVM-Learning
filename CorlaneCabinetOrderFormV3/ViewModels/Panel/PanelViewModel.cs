@@ -121,7 +121,28 @@ public partial class PanelViewModel : ObservableValidator
         {
             CustomEBSpeciesEnabled = false;
         }
+
+        if (newValue == "None")
+        {
+            PanelEBTop = false;
+            PanelEBBottom = false;
+            PanelEBLeft = false;
+            PanelEBRight = false;
+
+            PanelEBTopEnabled = false;
+            PanelEBLeftEnabled = false;
+            PanelEBBottomEnabled = false;
+            PanelEBRightEnabled = false;
+        }
+        else
+        {
+            PanelEBTopEnabled = true;
+            PanelEBLeftEnabled = true;
+            PanelEBBottomEnabled = true;
+            PanelEBRightEnabled = true;
+        }
     }
+
     [ObservableProperty] public partial string CustomEBSpecies { get; set; } = "";
 
     [ObservableProperty] public partial string Name { get; set; } = "";
@@ -133,6 +154,13 @@ public partial class PanelViewModel : ObservableValidator
     [ObservableProperty] public partial bool PanelEBBottom { get; set; }
     [ObservableProperty] public partial bool PanelEBLeft { get; set; }
     [ObservableProperty] public partial bool PanelEBRight { get; set; }
+
+    // Visibility
+    [ObservableProperty] public partial bool PanelEBTopEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool PanelEBBottomEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool PanelEBLeftEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool PanelEBRightEnabled { get; set; } = true;
+
 
 
     [ObservableProperty] public partial bool CustomCabSpeciesEnabled { get; set; } = false;

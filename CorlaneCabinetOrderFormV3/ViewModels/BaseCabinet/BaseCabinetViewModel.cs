@@ -157,8 +157,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
         }
 
         RecalculateDrawerLayout();
-
-
     }
     private static ObservableCollection<int> BuildRolloutCountList(double interiorHeight)
     {
@@ -432,10 +430,10 @@ public partial class BaseCabinetViewModel : ObservableValidator
             // sets equalization modes, pre-seeds heights, and runs a single
             // ApplyDrawerFrontEqualization + ResizeDrwFrontHeights pass.
             LoadDefaultDrwSettings();
-            RunValidationVisible();
         }
-
         ApplyStyleVisibility(Style);
+        RunValidationVisible();
+
     }
     [ObservableProperty] public partial string DrwStyle { get; set; } = "";
     [ObservableProperty] public partial string DrwFrontGrainDir { get; set; } = "";

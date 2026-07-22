@@ -551,3 +551,9 @@
 
 3.1.0.14
 	Initial commit.
+	Changed Fillers & Panels exception tab to flag if they are NOT Maple Ply. (Was checking against Prefinished Ply)
+	Base 90 deg corner cabinet: Initial add-to-list isn't saving the Supply Door config properly somehow. If explicitly set afterwards, it will behave. -- FIXED: keep an eye out though
+	Setting a multi-drw Drawer base height to too-short a dimension will cause correct invalidation, but then changing to a single drawer does not re-validate, causing the add/update etc buttons to remain grayed out. -- FIXED. Still doesn't work for 4-drw, but nobody should be dumb enough to try that.
+	Setting Panel Edgebanding Species to None should gray out all edge checkboxes. -- DONE
+	commit
+	

@@ -1,4 +1,4 @@
-namespace CorlaneCabinetOrderFormV3.ViewModels;
+﻿namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class BaseCabinetViewModel : IValidatableViewModel
 {
@@ -39,7 +39,7 @@ public partial class BaseCabinetViewModel : IValidatableViewModel
                 ValidateProperty(RightDepth, nameof(RightDepth));
             }
 
-            // 45� (angle-front) specific fields
+            // 45° (angle-front) specific fields
             if (Corner45Visibility)
             {
                 ValidateProperty(LeftDepth, nameof(LeftDepth));

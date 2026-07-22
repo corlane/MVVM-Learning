@@ -52,6 +52,9 @@ If Supply Drw Boxes is unchecked, they become checked again on cabinet Depth cha
 
 
 
+Setting Panel Edgebanding Species to None should gray out all edge checkboxes.
+
+
 
 
 

@@ -74,7 +74,6 @@ public partial class POCabinetSpeciesViewModel : ObservableObject
             return;
         }
 
-        var defaultSpecies = (DefaultCabinetSpecies ?? "").Trim();
 
         var savedKeys = _cabinetService.ExceptionDoneKeys.TryGetValue(TabId, out var set) ? set : null;
 
@@ -82,6 +81,8 @@ public partial class POCabinetSpeciesViewModel : ObservableObject
 
         foreach (var cab in _cabinetService.Cabinets)
         {
+            var defaultSpecies = (DefaultCabinetSpecies ?? "").Trim();
+
             cabNumber++;
 
             var cabSpecies = (cab.Species ?? "").Trim();
@@ -96,10 +97,16 @@ public partial class POCabinetSpeciesViewModel : ObservableObject
                 }
             }
 
+            if (cab.CabinetType.Contains("Filler") || cab.CabinetType.Contains("Panel"))
+            {
+                defaultSpecies = "Maple Ply";
+            }
+
             if (string.Equals(cabSpecies, defaultSpecies, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
+
 
             var row = new CabinetSpeciesChangeRow
             {
