@@ -12,7 +12,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class MainWindowViewModel : ObservableValidator
 {
-    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.15";
+    public string AppTitle { get; } = "Corlane Cabinet Order Form - Version 3.1.0.16";
 
     private readonly ICabinetService _cabinetService;
     private readonly AutoSaveService _autoSave;
