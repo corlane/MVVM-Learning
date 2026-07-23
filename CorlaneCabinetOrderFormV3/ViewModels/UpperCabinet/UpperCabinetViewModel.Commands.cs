@@ -109,6 +109,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
         {
             BackThickness = CabinetOptions.BackThickness.ThreeQuarterDecimal; // Force 3/4" back
         }
+
+        if (Style == Style2)
+        {
+            if (DoorCount == 1) { DoorCount = 2; } // Force 2 doors for style 2
+        }
     }
 
 }

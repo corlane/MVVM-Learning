@@ -284,7 +284,10 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 DrwCount = 0;
                 TopType = CabinetOptions.TopType.Full;
                 BackThickness = "0.75"; // Force 3/4" back
-                DoorCount = 2;
+                if (DoorCount == 1)
+                {
+                    DoorCount = 2;
+                }
                 IncRollouts = false;
             }
 
