@@ -557,3 +557,5 @@
 	Setting Panel Edgebanding Species to None should gray out all edge checkboxes. -- DONE
 	commit
 	
+3.1.0.15
+	initial commit.
