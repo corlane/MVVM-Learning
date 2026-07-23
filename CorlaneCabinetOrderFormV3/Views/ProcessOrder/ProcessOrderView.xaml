@@ -6,7 +6,7 @@
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
              xmlns:views="clr-namespace:CorlaneCabinetOrderFormV3.Views"
              mc:Ignorable="d"
-             d:DesignHeight="920" d:DesignWidth="1000"
+             d:DesignHeight="920" d:DesignWidth="1800"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
@@ -31,6 +31,14 @@
 
             <TabItem Padding="10">
                 <TabItem.Header>
+                    <TextBlock Text="Notes"
+                               Foreground="{Binding PONotesVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:PONotesView DataContext="{Binding PONotesVm}"/>
+            </TabItem>
+            
+            <TabItem Padding="10">
+                <TabItem.Header>
                     <TextBlock Text="Toekick"
                    Foreground="{Binding POToekickVm.TabHeaderBrush}" />
                 </TabItem.Header>
@@ -47,14 +55,14 @@
                 <views:POEdgebandingView DataContext="{Binding POEdgebandingVm}"/>
             </TabItem>
 
-            <TabItem Padding="10">
+            <!--<TabItem Padding="10">
                 <TabItem.Header>
                     <TextBlock Text="Hinge Holes"
                                Foreground="{Binding POHingeHolesVm.TabHeaderBrush}" />
                 </TabItem.Header>
 
                 <views:POHingeHolesView DataContext="{Binding POHingeHolesVm}"/>
-            </TabItem>
+            </TabItem>-->
 
             <TabItem Padding="10">
                 <TabItem.Header>
@@ -74,6 +82,23 @@
                 <views:POCabinetSpeciesView DataContext="{Binding POCabinetSpeciesVm}"/>
             </TabItem>
 
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Edgeband Doors"
+                               Foreground="{Binding POEdgebandDoorsVm.TabHeaderBrush}" />
+                </TabItem.Header>
+                <views:POEdgebandDoorsView DataContext="{Binding POEdgebandDoorsVm}"/>
+            </TabItem>
+
+            <TabItem Padding="10">
+                <TabItem.Header>
+                    <TextBlock Text="Door/Drw Grain Dir."
+                               Foreground="{Binding PODoorDrwGrainDirVm.TabHeaderBrush}" />
+                </TabItem.Header>
+
+                <views:PODoorDrwGrainDirView DataContext="{Binding PODoorDrwGrainDirVm}"/>
+            </TabItem>
+            
             <TabItem>
                 <TabItem.Header>
                     <TextBlock Text="Include Doors"
@@ -82,14 +107,6 @@
                 <views:POIncludeDoorsView DataContext="{Binding POIncludeDoorsVm}"/>
             </TabItem>
 
-            <TabItem Padding="10">
-                <TabItem.Header>
-                    <TextBlock Text="Edgeband Doors"
-                               Foreground="{Binding POEdgebandDoorsVm.TabHeaderBrush}" />
-                </TabItem.Header>
-                <views:POEdgebandDoorsView DataContext="{Binding POEdgebandDoorsVm}"/>
-            </TabItem>
-            
             <TabItem Padding="10">
                 <TabItem.Header>
                     <TextBlock Text="Corner Cabinet Dims"
@@ -101,28 +118,11 @@
 
             <TabItem Padding="10">
                 <TabItem.Header>
-                    <TextBlock Text="Notes"
-                               Foreground="{Binding PONotesVm.TabHeaderBrush}" />
-                </TabItem.Header>
-                <views:PONotesView DataContext="{Binding PONotesVm}"/>
-            </TabItem>
-
-            <TabItem Padding="10">
-                <TabItem.Header>
                     <TextBlock Text="Reveals/Gaps"
                                Foreground="{Binding PORevealsGapsVm.TabHeaderBrush}" />
                 </TabItem.Header>
 
                 <views:PORevealsGapsView DataContext="{Binding PORevealsGapsVm}"/>
-            </TabItem>
-
-            <TabItem Padding="10">
-                <TabItem.Header>
-                    <TextBlock Text="Door/Drw Grain Dir."
-                               Foreground="{Binding PODoorDrwGrainDirVm.TabHeaderBrush}" />
-                </TabItem.Header>
-
-                <views:PODoorDrwGrainDirView DataContext="{Binding PODoorDrwGrainDirVm}"/>
             </TabItem>
 
             <TabItem Padding="10">
