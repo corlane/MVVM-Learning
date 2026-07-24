@@ -97,6 +97,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     public static string Style3 => CabinetStyles.Base.Corner90;
     public static string Style4 => CabinetStyles.Base.AngleFront;
 
+
     // Common properties from CabinetModel
     [ObservableProperty, NotifyDataErrorInfo, Required] public partial string Style { get; set; } = ""; partial void OnStyleChanged(string oldValue, string newValue)
     {
@@ -158,12 +159,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
         RecalculateDrawerLayout();
     }
-    private static ObservableCollection<int> BuildRolloutCountList(double interiorHeight)
-    {
-        int maxRollouts = Math.Clamp(2 + (int)(interiorHeight / 12), 2, 10);
-        return new ObservableCollection<int>(Enumerable.Range(0, maxRollouts + 1));
-    }
-
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), BaseCabinetDepthRange(48)] public partial string Depth { get; set; } = ""; partial void OnDepthChanged(string oldValue, string newValue)
     {
         if (_isMapping) return;
@@ -617,6 +612,12 @@ public partial class BaseCabinetViewModel : ObservableValidator
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty] public partial bool DrwBoxCustomSpecies { get; set; } = false;
+
+    private static ObservableCollection<int> BuildRolloutCountList(double interiorHeight)
+    {
+        int maxRollouts = Math.Clamp(2 + (int)(interiorHeight / 12), 2, 10);
+        return new ObservableCollection<int>(Enumerable.Range(0, maxRollouts + 1));
+    }
 
 
     // Reveal and gap properties
