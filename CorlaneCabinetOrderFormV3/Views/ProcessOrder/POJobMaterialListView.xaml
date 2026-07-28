@@ -142,7 +142,9 @@
                   IsReadOnly="True"
                   CanUserAddRows="False"
                   HeadersVisibility="Column"
-                  GridLinesVisibility="Horizontal">
+                  GridLinesVisibility="Horizontal"
+                  Width="1000"
+                  HorizontalAlignment="Left">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Item" Binding="{Binding Species}" Width="2*"/>
                 <DataGridTextColumn Header="Qty" Binding="{Binding Quantity, StringFormat=N2}" Width="*"/>
@@ -154,10 +156,10 @@
 
         <StackPanel Grid.Row="7"
                     Orientation="Horizontal"
-                    HorizontalAlignment="Right"
+                    HorizontalAlignment="Left"
                     Margin="0,8,0,0">
-            <TextBlock Text="Total: " FontWeight="SemiBold"/>
-            <TextBlock Text="{Binding FormattedTotalMaterialPrice}" FontWeight="SemiBold"/>
+            <TextBlock Text="Total: " FontWeight="SemiBold" FontSize="18"/>
+            <TextBlock Text="{Binding FormattedTotalMaterialPrice}" FontWeight="SemiBold" FontSize="18"/>
         </StackPanel>
     </Grid>
 </UserControl>
