@@ -572,3 +572,5 @@
 	Adjusted more formatting on Job Material List PO tab.
 	On POJobMaterialListView, custom door/drawer front EB now shows as its own line item, instead of being lumped in with anything called "Custom". commit
 	
+3.1.0.18
+	Initial commit.
