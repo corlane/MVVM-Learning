@@ -53,7 +53,7 @@ internal static partial class BaseCabinetBuilder
 
             if (baseCab.IncDoors)
             {
-                door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies += " - Door", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
             }
             else
             {
@@ -70,7 +70,7 @@ internal static partial class BaseCabinetBuilder
 
             if (baseCab.IncDoors)
             {
-                door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies += " - Door", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
             }
             else
             {

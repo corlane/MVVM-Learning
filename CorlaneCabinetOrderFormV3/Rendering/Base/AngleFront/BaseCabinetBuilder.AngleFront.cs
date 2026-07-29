@@ -42,6 +42,11 @@ internal static partial class BaseCabinetBuilder
         double holeDiameter = 0.197;
         double holeDepth = MaterialThickness34 / 2;
 
+        if (doorEdgebandingSpecies.Contains("Custom", StringComparison.OrdinalIgnoreCase))
+        {
+            doorEdgebandingSpecies = baseCab.CustomDoorSpecies;
+        }
+
         BuildEndPanelsAngleFront(baseCab, MaterialThickness34, height, leftDepth, rightDepth, tk_Height, tk_Depth, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> leftEndPanelPoints, out List<Point3D> rightEndPanelPoints);
 
         AddHoles(baseCab, MaterialThickness34, height, leftDepth, rightDepth, leftBackWidth, rightBackWidth, tk_Height, backThickness, holeDiameter, holeDepth, leftEnd, rightEnd);

@@ -43,17 +43,10 @@ public partial class POJobMaterialListViewModel : ObservableObject
 
     public ObservableCollection<MaterialTotal> PriceBreakdown { get; } = new();
 
-    [ObservableProperty]
-    public partial double TotalSheetGoodsSqFt { get; set; }
-
-    [ObservableProperty]
-    public partial int TotalSheetGoodsSheets { get; set; }
-
-    [ObservableProperty]
-    public partial double TotalEdgeBandingFeet { get; set; }
-
-    [ObservableProperty]
-    public partial decimal TotalMaterialPrice { get; set; }
+    [ObservableProperty] public partial double TotalSheetGoodsSqFt { get; set; }
+    [ObservableProperty] public partial int TotalSheetGoodsSheets { get; set; }
+    [ObservableProperty] public partial double TotalEdgeBandingFeet { get; set; }
+    [ObservableProperty] public partial decimal TotalMaterialPrice { get; set; }
 
     public string FormattedTotalMaterialPrice => TotalMaterialPrice.ToString("C2");
 

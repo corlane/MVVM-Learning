@@ -569,3 +569,6 @@
 	Initial commit.
 	"Modified" bug list. Now there are no bugs :^D commit
 	Adjusted formatting on Job Material List PO tab. commit
+	Adjusted more formatting on Job Material List PO tab.
+	On POJobMaterialListView, custom door/drawer front EB now shows as its own line item, instead of being lumped in with anything called "Custom". commit
+	

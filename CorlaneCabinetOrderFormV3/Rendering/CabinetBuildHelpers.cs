@@ -34,9 +34,9 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static class CabinetBuildHelpers
 {
-    internal static string GetMatchingEdgebandingSpecies(string? fillerSpecies) // Helper to map common species/material names to edgebanding names
+    internal static string GetMatchingEdgebandingSpecies(string? matchingEBSpecies) // Helper to map common species/material names to edgebanding names
     {
-        return fillerSpecies switch
+        return matchingEBSpecies switch
         {
             null or "" => "None",
 

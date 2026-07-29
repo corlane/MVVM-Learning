@@ -42,7 +42,7 @@ internal static partial class UpperCabinetBuilder
 
                 if (upperCab.IncDoors)
                 {
-                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
+                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies += " - Door", upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
                 }
                 else
                 {
@@ -78,7 +78,7 @@ internal static partial class UpperCabinetBuilder
 
                 if (upperCab.IncDoors)
                 {
-                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
+                    door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies += " - Door", upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
                 }
                 else
                 {

@@ -43,6 +43,11 @@ internal static partial class UpperCabinetBuilder
         double holeDiameter = 0.197;
         double holeDepth = MaterialThickness34 / 2;
 
+        if (doorEdgebandingSpecies.Contains("Custom", StringComparison.OrdinalIgnoreCase))
+        {
+            doorEdgebandingSpecies = upperCab.CustomDoorSpecies;
+        }
+
         BuildEndPanels(upperCab, MaterialThickness34, height, depth, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> endPanelPoints);
 
         AddHoles(upperCab, MaterialThickness34, StretcherWidth, height, depth, backThickness, holeDiameter, holeDepth, leftEnd, rightEnd);

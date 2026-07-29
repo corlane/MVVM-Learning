@@ -40,6 +40,11 @@ internal static partial class UpperCabinetBuilder
         double insideCornerRadius = 1.0;
         int arcSegments = 8;
 
+        if (doorEdgebandingSpecies.Contains("Custom", StringComparison.OrdinalIgnoreCase))
+        {
+            doorEdgebandingSpecies = upperCab.CustomDoorSpecies;
+        }
+
         BuildEndPanels90(upperCab, MaterialThickness34, height, leftDepth, rightDepth, out Model3DGroup leftEnd, out Model3DGroup rightEnd, out List<Point3D> leftEndPanelPoints, out List<Point3D> rightEndPanelPoints);
 
         AddHoles(upperCab, MaterialThickness34, height, leftFrontWidth, rightFrontWidth, leftDepth, rightDepth, backThickness, holeDiameter, holeDepth, leftEnd, rightEnd);

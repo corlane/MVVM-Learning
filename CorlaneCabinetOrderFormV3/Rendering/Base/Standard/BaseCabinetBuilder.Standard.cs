@@ -51,6 +51,10 @@ internal static partial class BaseCabinetBuilder
         Model3DGroup back = new();
         List<Point3D> endPanelPoints;
 
+        if (doorEdgebandingSpecies.Contains("Custom", StringComparison.OrdinalIgnoreCase))
+        {
+            doorEdgebandingSpecies = baseCab.CustomDoorSpecies;
+        }
 
         // ── Capture core dimensions ──
         if (result is not null)

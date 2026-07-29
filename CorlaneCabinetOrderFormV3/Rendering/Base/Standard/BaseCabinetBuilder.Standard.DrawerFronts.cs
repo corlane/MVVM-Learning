@@ -37,6 +37,11 @@ internal static partial class BaseCabinetBuilder
         int maxFronts = Math.Min(4, Math.Max(0, baseCab.DrwCount));
         bool edgeBandingOnDoorsAndDrawerFronts = baseCab.EdgebandDoorsAndDrawers;
 
+        if (doorEdgebandingSpecies.Contains("Custom", StringComparison.OrdinalIgnoreCase))
+        {
+            doorEdgebandingSpecies = baseCab.CustomDoorSpecies;
+        }
+
         if (!edgeBandingOnDoorsAndDrawerFronts)
         {
             doorEdgebandingSpecies = "None";
@@ -79,7 +84,7 @@ internal static partial class BaseCabinetBuilder
             }
             else
             {
-                front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies, baseCab.DrwFrontGrainDir, baseCab, isFaceUp: false, CabinetPartKind.DrawerFront);
+                front = CabinetPartFactory.CreatePanel(drwFrontPoints, MaterialThickness34, doorSpeciesForTotalsForDrw, doorEdgebandingSpecies += " - Drawer Front", baseCab.DrwFrontGrainDir, baseCab, isFaceUp: false, CabinetPartKind.DrawerFront);
             }
             ModelTransforms.ApplyTransform(front, -(width / 2) + doorLeftReveal, yPos, depth, 0, 0, 0);
             if (!doorsHidden) cabinet.Children.Add(front);

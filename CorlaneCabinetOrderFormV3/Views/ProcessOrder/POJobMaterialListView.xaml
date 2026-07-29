@@ -6,7 +6,7 @@
              xmlns:viewmodels="clr-namespace:CorlaneCabinetOrderFormV3.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="920"
-             d:DesignWidth="1000"
+             d:DesignWidth="1600"
              d:Background="{DynamicResource ABrush.Tone8.Background.Static}"
              Background="{DynamicResource ABrush.Tone1.Background.Static}">
 
@@ -46,9 +46,9 @@
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="510"/>
                 <ColumnDefinition Width="16"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="510"/>
             </Grid.ColumnDefinitions>
 
             <!-- Sheet goods -->
@@ -72,7 +72,9 @@
                           IsReadOnly="True"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
-                          GridLinesVisibility="Horizontal">
+                          GridLinesVisibility="Horizontal"
+                          Width="500"
+                          HorizontalAlignment="Left">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Species" Binding="{Binding Species}" Width="2*"/>
                         <DataGridTextColumn Header="Sq Ft" Binding="{Binding SqFt, StringFormat=N2}" Width="*"/>
@@ -113,7 +115,9 @@
                           IsReadOnly="True"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
-                          GridLinesVisibility="Horizontal">
+                          GridLinesVisibility="Horizontal"
+                          Width="500"
+                          HorizontalAlignment="Left">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Species" Binding="{Binding Species}" Width="2*"/>
                         <DataGridTextColumn Header="Linear Ft" Binding="{Binding LinearFeet, StringFormat=N2}" Width="*"/>
@@ -134,7 +138,7 @@
         <TextBlock Grid.Row="4"
                    Text="Price Breakdown"
                    FontSize="14"
-                   FontWeight="SemiBold" />
+                   FontWeight="SemiBold"/>
 
         <DataGrid Grid.Row="6"
                   ItemsSource="{Binding PriceBreakdown}"
