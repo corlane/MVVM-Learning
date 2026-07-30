@@ -576,3 +576,6 @@
 	Initial commit.
 	Fixed brown edgebanding issue on doors/drw fronts caused by the name having " - Door" or " - Drawer Front" appended to it.
 	Fixed subsequent pricing issues caused by the above. commit
+
+3.1.0.19
+	Initial commit.
