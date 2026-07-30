@@ -74,6 +74,9 @@ public sealed class PriceBreakdownService : IPriceBreakdownService
             var species = kv.Key;
             var qtyFt = kv.Value;
 
+            if (species.Contains(" - Door")) { species = species.Replace(" - Door", string.Empty, StringComparison.OrdinalIgnoreCase).Trim(); }
+            if (species.Contains(" - Drawer Front")) { species = species.Replace(" - Drawer Front", string.Empty, StringComparison.OrdinalIgnoreCase).Trim(); }
+
             var unitPrice = GetEdgeBandPricePerFt(species);
 
             var line = new MaterialTotal

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
@@ -121,14 +122,109 @@ internal static class CabinetMaterials
         // Normalize species name for image lookup: remove the word "Prefinished" if present
         // so entries like "Wood Prefinished Maple" or "Prefinished Maple" map to the image name
         // without the redundant word.
+        //species = species.Trim();
+        //if (species.Contains(" Prefinished", StringComparison.OrdinalIgnoreCase))
+        //{
+        //    species = species.Replace(" Prefinished", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+        //    //MessageBox.Show($"Normalized edge banding species to '{species}' for image lookup.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        //}
+
+        //Debug.WriteLine(" ");       
+        //Debug.WriteLine("Species: " + species);
+        //if (species.Contains(" - Door", StringComparison.OrdinalIgnoreCase))
+        //{
+        //    species = species.Replace(" - Door", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+        //    Debug.WriteLine("Species changed to: " + species);
+        //    Debug.WriteLine(" ");
+        //}
+
+        //if (species.Contains(" - Drawer Front", StringComparison.OrdinalIgnoreCase))
+        //{
+        //    species = species.Replace(" - Drawer Front", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+        //    Debug.WriteLine("Species changed to: " + species);
+        //    Debug.WriteLine(" ");
+        //}
+
+        //string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
+        //Debug.WriteLine("Resource path: " + resourcePath);
+
+        //try
+        //{
+        //    var bitmap = new BitmapImage();
+        //    bitmap.BeginInit();
+        //    bitmap.UriSource = new Uri(resourcePath);
+        //    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+        //    bitmap.EndInit();
+        //    bitmap.Freeze();
+
+        //    var brush = new ImageBrush(bitmap)
+        //    {
+        //        TileMode = TileMode.Tile,
+        //        ViewportUnits = BrushMappingMode.Absolute,
+        //        Viewport = new Rect(0, 0, 1, 1)
+        //    };
+
+        //    brush.Freeze();
+
+        //    var material = new DiffuseMaterial(brush);
+        //    material.Freeze();
+
+        //    return material;
+        //}
+        //catch (Exception ex)
+        //{
+        //    Debug.WriteLine($"Failed to load edge-banding image '{resourcePath}': {ex.Message}");
+
+        //    var solid = new SolidColorBrush(Color.FromRgb(139, 69, 19));
+        //    solid.Freeze();
+
+        //    var mat = new DiffuseMaterial(solid);
+        //    mat.Freeze();
+
+        //    return mat;
+        //}
+
+
         species = species.Trim();
+
         if (species.Contains(" Prefinished", StringComparison.OrdinalIgnoreCase))
         {
             species = species.Replace(" Prefinished", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
-            //MessageBox.Show($"Normalized edge banding species to '{species}' for image lookup.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        Debug.WriteLine(" ");
+        Debug.WriteLine("Species: " + species);
+
+        if (species.Contains(" - Door", StringComparison.OrdinalIgnoreCase))
+        {
+            species = species.Replace(" - Door", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+            Debug.WriteLine("Species changed to: " + species);
+            Debug.WriteLine(" ");
+        }
+
+        if (species.Contains(" - Drawer Front", StringComparison.OrdinalIgnoreCase))
+        {
+            species = species.Replace(" - Drawer Front", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+            Debug.WriteLine("Species changed to: " + species);
+            Debug.WriteLine(" ");
+        }
+
+        // ---- NEW: treat "None" (or empty) as “no material” ----
+        if (string.IsNullOrWhiteSpace(species) ||
+            species.Equals("None", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.WriteLine("No edge-banding image required (species is None).");
+            // Return whatever makes sense for “no edge banding”.
+            // Transparent is usually the right choice so the underlying color shows through.
+            var transparent = new SolidColorBrush(Colors.Transparent);
+            transparent.Freeze();
+            var mat = new DiffuseMaterial(transparent);
+            mat.Freeze();
+            return mat;
         }
 
         string resourcePath = $"pack://application:,,,/Images/Edgebanding/{species}.png";
+        Debug.WriteLine("Resource path: " + resourcePath);
 
         try
         {
@@ -145,22 +241,20 @@ internal static class CabinetMaterials
                 ViewportUnits = BrushMappingMode.Absolute,
                 Viewport = new Rect(0, 0, 1, 1)
             };
-
             brush.Freeze();
 
             var material = new DiffuseMaterial(brush);
             material.Freeze();
-
             return material;
         }
-        catch
+        catch (Exception ex)
         {
-            var solid = new SolidColorBrush(Color.FromRgb(139, 69, 19));
-            solid.Freeze();
+            Debug.WriteLine($"Failed to load edge-banding image '{resourcePath}': {ex.Message}");
 
+            var solid = new SolidColorBrush(Color.FromRgb(139, 69, 19)); // fallback brown
+            solid.Freeze();
             var mat = new DiffuseMaterial(solid);
             mat.Freeze();
-
             return mat;
         }
     }

@@ -98,6 +98,11 @@ public partial class POJobMaterialListViewModel : ObservableObject
         var breakdown = _priceBreakdownService.Build(materials, edgebanding);
         foreach (var line in breakdown.Lines)
         {
+            if (line.Species.Contains("None", StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (line.Species.Contains(" - Door")) { line.Species = line.Species.Replace(" - Door", string.Empty, StringComparison.OrdinalIgnoreCase).Trim(); }
+            if (line.Species.Contains(" - Drawer Front")) { line.Species = line.Species.Replace(" - Drawer Front", string.Empty, StringComparison.OrdinalIgnoreCase).Trim(); }
+
             PriceBreakdown.Add(line);
         }
         TotalMaterialPrice = breakdown.Total;
@@ -143,6 +148,9 @@ public partial class POJobMaterialListViewModel : ObservableObject
         // Edgebanding rows
         foreach (var kv in edgebanding.OrderBy(k => k.Key))
         {
+            if (kv.Key.Contains("None", StringComparison.OrdinalIgnoreCase))
+                continue;
+
             EdgeBanding.Add(new MaterialBreakdownRow
             {
                 Species = kv.Key,
