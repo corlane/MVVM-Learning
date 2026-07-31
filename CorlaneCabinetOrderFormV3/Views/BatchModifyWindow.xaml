@@ -44,11 +44,11 @@
         </HeaderedContentControl>
 
         <!-- ── Edgebanding Species ──────────────────────── -->
-        <HeaderedContentControl Header="Edgebanding Species"
+        <HeaderedContentControl Header="Cabinet Edgebanding Species"
                                 Margin="0,0,0,10"
                                 Visibility="{Binding HasUserEB, Converter={StaticResource BoolToVis}}">
             <StackPanel>
-                <CheckBox IsChecked="{Binding ApplyEBSpecies}" Content="Apply Edgebanding Species" Margin="0,0,0,4"/>
+                <CheckBox IsChecked="{Binding ApplyEBSpecies}" Content="Apply Cabinet Edgebanding Species" Margin="0,0,0,4"/>
                 <ComboBox ItemsSource="{Binding EBSpeciesList}"
                           SelectedItem="{Binding EBSpecies}"
                           IsEnabled="{Binding ApplyEBSpecies}"
@@ -61,11 +61,11 @@
         </HeaderedContentControl>
 
         <!-- ── Door Species (Base & Upper only) ─────────── -->
-        <HeaderedContentControl Header="Door Species"
+        <HeaderedContentControl Header="Door/Drawer Front Species"
                                 Margin="0,0,0,10"
                                 Visibility="{Binding HasBaseOrUpper, Converter={StaticResource BoolToVis}}">
             <StackPanel>
-                <CheckBox IsChecked="{Binding ApplyDoorSpecies}" Content="Apply Door Species" Margin="0,0,0,4"/>
+                <CheckBox IsChecked="{Binding ApplyDoorSpecies}" Content="Apply Door/Drawer Front Species" Margin="0,0,0,4"/>
                 <ComboBox ItemsSource="{Binding CabinetSpeciesList}"
                           SelectedItem="{Binding DoorSpecies}"
                           IsEnabled="{Binding ApplyDoorSpecies}"
