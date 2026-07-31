@@ -580,3 +580,5 @@
 3.1.0.19
 	Initial commit.
 	Drawer front Custom edgebanding kept adding " - Drawer Front" to the end of the name for every loop thru a Drawer Base. Fixed. Changed += " - Drawer Front" to + " - Drawer Front". commit
+	Did the same for doors.
+	Removed commented out code and a bunch of Debug.WriteLine()s from CabinetMaterials.cs. commit
