@@ -171,7 +171,7 @@ public partial class MaterialPricesViewModel : ObservableValidator
 
             if (!response.IsSuccessStatusCode)
             {
-                _mainVm.NotifyMainWindow($"Upload failed ({(int)response.StatusCode}): {body}", Brushes.Red);
+                _mainVm.NotifyMainWindow($"Upload failed ({(int) response.StatusCode}): {body}", Brushes.Red);
                 return;
             }
 

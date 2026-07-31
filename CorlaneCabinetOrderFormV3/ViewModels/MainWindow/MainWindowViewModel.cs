@@ -193,7 +193,8 @@ public partial class MainWindowViewModel : ObservableValidator
         }
     }
 
-    [ObservableProperty] public partial CabinetModel? SelectedCabinet { get; set; } partial void OnSelectedCabinetChanged(CabinetModel? value)
+    [ObservableProperty] public partial CabinetModel? SelectedCabinet { get; set; }
+    partial void OnSelectedCabinetChanged(CabinetModel? value)
     {
         if (value == null)
         {

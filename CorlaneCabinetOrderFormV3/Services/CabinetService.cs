@@ -60,7 +60,7 @@ public class CabinetService : ICabinetService
 
     public CabinetService()
     {
-        ((INotifyCollectionChanged)Cabinets).CollectionChanged += OnCabinetsCollectionChanged;
+        ((INotifyCollectionChanged) Cabinets).CollectionChanged += OnCabinetsCollectionChanged;
     }
 
     private void OnCabinetsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -240,7 +240,7 @@ public class CabinetService : ICabinetService
 
         }
 
-        var bulk = (BulkObservableCollection<CabinetModel>)Cabinets;
+        var bulk = (BulkObservableCollection<CabinetModel>) Cabinets;
 
         if (System.Windows.Application.Current?.Dispatcher != null)
         {

@@ -1,5 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering;
+﻿using CorlaneCabinetOrderFormV3.Models;
 
 namespace CorlaneCabinetOrderFormV3.Tests;
 
@@ -238,22 +237,22 @@ public class FillerAndPanelMatAndEBTests
 
     private static PanelModel MakePanel(
         bool ebTop, bool ebBottom, bool ebLeft, bool ebRight) => new()
-    {
-        Name = "TestPanel",
-        Qty = 1,
-        Width = "24",
-        Height = "34.5",
-        Depth = "0.75",
-        Species = "Maple",
-        CustomSpecies = "",
-        EBSpecies = "Wood Maple",
-        CustomEBSpecies = "",
-        MaterialThickness34 = 0.75,
-        MaterialThickness14 = 0.25,
-        Notes = "",
-        PanelEBTop = ebTop,
-        PanelEBBottom = ebBottom,
-        PanelEBLeft = ebLeft,
-        PanelEBRight = ebRight,
-    };
+        {
+            Name = "TestPanel",
+            Qty = 1,
+            Width = "24",
+            Height = "34.5",
+            Depth = "0.75",
+            Species = "Maple",
+            CustomSpecies = "",
+            EBSpecies = "Wood Maple",
+            CustomEBSpecies = "",
+            MaterialThickness34 = 0.75,
+            MaterialThickness14 = 0.25,
+            Notes = "",
+            PanelEBTop = ebTop,
+            PanelEBBottom = ebBottom,
+            PanelEBLeft = ebLeft,
+            PanelEBRight = ebRight,
+        };
 }

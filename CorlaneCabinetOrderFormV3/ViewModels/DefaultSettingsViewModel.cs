@@ -64,7 +64,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
     public string DefaultEBSpecies { get => _defaults.DefaultEBSpecies; set => _defaults.DefaultEBSpecies = value; }
     public string DefaultFillerSpecies { get => _defaults.DefaultFillerSpecies; set => _defaults.DefaultFillerSpecies = value; }
     public string DefaultPanelSpecies { get => _defaults.DefaultPanelSpecies; set => _defaults.DefaultPanelSpecies = value; }
-    public string DefaultPanelEBSpecies { get => _defaults.DefaultPanelEBSpecies; set => _defaults.DefaultPanelEBSpecies     = value; }
+    public string DefaultPanelEBSpecies { get => _defaults.DefaultPanelEBSpecies; set => _defaults.DefaultPanelEBSpecies = value; }
 
     // Panel Thickness - store in defaults as canonical numeric string, but expose formatted strings for UI.
 
@@ -141,7 +141,7 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     // Shelves
     public int DefaultShelfCount { get => _defaults.DefaultShelfCount; set => _defaults.DefaultShelfCount = value; }
-    public int DefaultUpperShelfCount { get => _defaults.DefaultUpperShelfCount; set => _defaults.DefaultUpperShelfCount     = value; }
+    public int DefaultUpperShelfCount { get => _defaults.DefaultUpperShelfCount; set => _defaults.DefaultUpperShelfCount = value; }
 
     public string DefaultShelfDepth { get => _defaults.DefaultShelfDepth; set => _defaults.DefaultShelfDepth = value; }
     public bool DefaultDrillShelfHoles { get => _defaults.DefaultDrillShelfHoles; set => _defaults.DefaultDrillShelfHoles = value; }

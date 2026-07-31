@@ -16,7 +16,7 @@ public static class ZoomExtentsHelper
             typeof(ZoomExtentsHelper),
             new PropertyMetadata(Rect3D.Empty, OnBoundsChanged));
 
-    public static Rect3D GetBounds(DependencyObject obj) => (Rect3D)obj.GetValue(BoundsProperty);
+    public static Rect3D GetBounds(DependencyObject obj) => (Rect3D) obj.GetValue(BoundsProperty);
     public static void SetBounds(DependencyObject obj, Rect3D value) => obj.SetValue(BoundsProperty, value);
 
     public static readonly DependencyProperty BoundsChangeToleranceProperty =
@@ -26,7 +26,7 @@ public static class ZoomExtentsHelper
             typeof(ZoomExtentsHelper),
             new PropertyMetadata(0d));
 
-    public static double GetBoundsChangeTolerance(DependencyObject obj) => (double)obj.GetValue(BoundsChangeToleranceProperty);
+    public static double GetBoundsChangeTolerance(DependencyObject obj) => (double) obj.GetValue(BoundsChangeToleranceProperty);
     public static void SetBoundsChangeTolerance(DependencyObject obj, double value) => obj.SetValue(BoundsChangeToleranceProperty, value);
 
     public static readonly DependencyProperty ZoomMultiplierProperty =
@@ -36,7 +36,7 @@ public static class ZoomExtentsHelper
             typeof(ZoomExtentsHelper),
             new PropertyMetadata(1.0));
 
-    public static double GetZoomMultiplier(DependencyObject obj) => (double)obj.GetValue(ZoomMultiplierProperty);
+    public static double GetZoomMultiplier(DependencyObject obj) => (double) obj.GetValue(ZoomMultiplierProperty);
     public static void SetZoomMultiplier(DependencyObject obj, double value) => obj.SetValue(ZoomMultiplierProperty, value);
 
     private static void OnBoundsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -1,6 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using HelixToolkit.Wpf;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -172,7 +171,7 @@ internal static class CabinetPartFactory
         string panelEBEdges = "",
         double plywoodTextureRotationDegrees = 0)
 
-        {
+    {
         double thickness = matlThickness;
 
         // ── Derive flags from partKind (shadows the legacy parameters) ──

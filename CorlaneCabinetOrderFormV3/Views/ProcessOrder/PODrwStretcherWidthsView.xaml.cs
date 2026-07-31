@@ -7,8 +7,8 @@ namespace CorlaneCabinetOrderFormV3.Views;
 /// </summary>
 public partial class PODrwStretcherWidthsView : UserControl
 {
-	public PODrwStretcherWidthsView()
-	{
-		InitializeComponent();
-	}
+    public PODrwStretcherWidthsView()
+    {
+        InitializeComponent();
+    }
 }

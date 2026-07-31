@@ -5,18 +5,18 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 
 internal static partial class UpperCabinetBuilder
 {
-    
+
     private static void BuildDeckAndTop(
         UpperCabinetModel upperCab,
-        double MaterialThickness34, 
-        double depth, 
-        double backThickness, 
-        double interiorWidth, 
-        double backInsetForDeckAndTop, 
-        out Model3DGroup deck, 
-        out List<Point3D> deckPoints, 
-        out Model3DGroup top, 
-        out List<Point3D> topPoints, 
+        double MaterialThickness34,
+        double depth,
+        double backThickness,
+        double interiorWidth,
+        double backInsetForDeckAndTop,
+        out Model3DGroup deck,
+        out List<Point3D> deckPoints,
+        out Model3DGroup top,
+        out List<Point3D> topPoints,
         double height,
         bool hasLeftEnd,
         bool hasRightEnd
@@ -38,7 +38,7 @@ internal static partial class UpperCabinetBuilder
         ];
 
         topPoints = deckPoints;
-        
+
         if (upperCab.HasDeck)
         {
             deck = CabinetPartFactory.CreatePanel(deckPoints, MaterialThickness34, upperCab.Species, upperCab.EBSpecies, "Horizontal", upperCab, isFaceUp: false, CabinetPartKind.Deck);

@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 using System.IO;
 
@@ -47,13 +47,13 @@ public class JobFileRoundTripTests
             Assert.IsType<UpperCabinetModel>(loaded.Cabinets[1]);
 
             // Data preserved
-            var baseCab = (BaseCabinetModel)loaded.Cabinets[0];
+            var baseCab = (BaseCabinetModel) loaded.Cabinets[0];
             Assert.Equal("Base 1", baseCab.Name);
             Assert.Equal("24", baseCab.Width);
             Assert.Equal("Maple", baseCab.Species);
             Assert.Equal(CabinetStyles.Base.Standard, baseCab.Style);
 
-            var upperCab = (UpperCabinetModel)loaded.Cabinets[1];
+            var upperCab = (UpperCabinetModel) loaded.Cabinets[1];
             Assert.Equal("Upper 1", upperCab.Name);
             Assert.Equal("Cherry", upperCab.Species);
         }

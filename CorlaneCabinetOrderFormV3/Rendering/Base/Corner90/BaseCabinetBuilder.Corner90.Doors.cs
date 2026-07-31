@@ -92,7 +92,7 @@ internal static partial class BaseCabinetBuilder
                 cabinet.Children.Add(door1);
                 cabinet.Children.Add(door2);
             }
-            
+
         }
     }
 }

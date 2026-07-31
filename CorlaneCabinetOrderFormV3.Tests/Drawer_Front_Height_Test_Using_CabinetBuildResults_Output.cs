@@ -1,7 +1,5 @@
-using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
-using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.Tests
 {
@@ -12,7 +10,7 @@ namespace CorlaneCabinetOrderFormV3.Tests
         /// from opening heights, reveals, and gaps for a 4-drawer base cabinet.
         /// No WPF/STA required — pure math.
         /// </summary>
-         
+
         [Fact]
         public void DrawerFrontHeights_ComputedFromOpenings_4DrawerBase()
         {
@@ -62,7 +60,7 @@ namespace CorlaneCabinetOrderFormV3.Tests
         /// <summary>
         /// Tests the reverse path: given drawer front heights, compute opening heights.
         /// </summary>
-        
+
         [Fact]
         public void OpeningHeights_ComputedFromDrawerFronts_4DrawerBase()
         {

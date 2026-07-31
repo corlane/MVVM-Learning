@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CorlaneCabinetOrderFormV3.Themes
+﻿namespace CorlaneCabinetOrderFormV3.Themes
 {
     public enum ThemeType
     {

@@ -212,7 +212,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
         }
     }
 
-    [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
+    [ObservableProperty] public partial int ShelfCount { get; set; }
+    partial void OnShelfCountChanged(int value)
     {
         if (_isMapping) return;
 

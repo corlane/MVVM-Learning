@@ -1,8 +1,6 @@
-using System;
+﻿using CorlaneCabinetOrderFormV3.Services;
 using System.Globalization;
 using System.Windows.Data;
-using CorlaneCabinetOrderFormV3.Services;
-using CorlaneCabinetOrderFormV3.Converters;
 
 namespace CorlaneCabinetOrderFormV3.Converters;
 

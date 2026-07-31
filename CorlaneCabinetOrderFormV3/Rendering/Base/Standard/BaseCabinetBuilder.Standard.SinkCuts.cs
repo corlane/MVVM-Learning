@@ -1,5 +1,4 @@
-﻿using CorlaneCabinetOrderFormV3.Models;
-using System.Windows.Media.Media3D;
+﻿using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
 
@@ -10,10 +9,10 @@ internal static partial class BaseCabinetBuilder
     /// to a stretcher panel in its local coordinate space.
     /// </summary>
     private static void AddSinkCuts(
-        Model3DGroup panel, 
-        double interiorWidth, 
-        double width, 
-        double stretcherWidth, 
+        Model3DGroup panel,
+        double interiorWidth,
+        double width,
+        double stretcherWidth,
         double materialThickness)
 
     {

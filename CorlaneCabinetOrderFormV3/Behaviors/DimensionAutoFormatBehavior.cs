@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using CorlaneCabinetOrderFormV3.Converters;
+using CorlaneCabinetOrderFormV3.Services;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using CorlaneCabinetOrderFormV3.Converters;
-using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Behaviors;
 
@@ -25,14 +25,14 @@ public static class DimensionAutoFormat
             typeof(DimensionAutoFormat),
             new PropertyMetadata(false, OnIsEnabledChanged));
 
-    public static bool GetIsEnabled(DependencyObject obj) => (bool)obj.GetValue(IsEnabledProperty);
+    public static bool GetIsEnabled(DependencyObject obj) => (bool) obj.GetValue(IsEnabledProperty);
     public static void SetIsEnabled(DependencyObject obj, bool value) => obj.SetValue(IsEnabledProperty, value);
 
     private static void OnIsEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         if (d is not TextBox tb) return;
 
-        if ((bool)e.NewValue)
+        if ((bool) e.NewValue)
         {
             tb.LostFocus += TextBox_LostFocus;
             s_registeredBoxes.Add(new WeakReference<TextBox>(tb));

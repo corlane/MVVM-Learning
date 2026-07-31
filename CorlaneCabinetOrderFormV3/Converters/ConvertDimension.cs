@@ -19,7 +19,7 @@ public static class ConvertDimension
                 {
                     if (split.Length == 2)
                     {
-                        return b != 0 ? (double)a / b : 0;
+                        return b != 0 ? (double) a / b : 0;
                     }
                     int c;
                     if (int.TryParse(split[2], out c) && c != 0)
@@ -27,8 +27,8 @@ public static class ConvertDimension
                         // Handle mixed numbers with a possibly negative whole part correctly.
                         // e.g. "-1 1/2" should be -1.5, not -0.5.
                         if (a < 0)
-                            return a - (double)b / c;
-                        return a + (double)b / c;
+                            return a - (double) b / c;
+                        return a + (double) b / c;
                     }
                 }
             }
@@ -45,7 +45,7 @@ public static class ConvertDimension
         bool isNegative = dimension < 0;
         double absDim = Math.Abs(dimension);
 
-        int intPart = (int)absDim;
+        int intPart = (int) absDim;
         double decimalPart = (absDim - intPart);
         if (decimalPart == 0)
         {
@@ -53,7 +53,7 @@ public static class ConvertDimension
         }
 
         int denominator = 32;
-        int numerator = (int)(decimalPart * denominator);
+        int numerator = (int) (decimalPart * denominator);
 
         // If it rounds down to 0/32, there is no fractional component to display.
         if (numerator == 0)

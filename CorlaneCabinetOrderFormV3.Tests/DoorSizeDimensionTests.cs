@@ -1,4 +1,4 @@
-// DoorSizeDimensionTests.cs
+﻿// DoorSizeDimensionTests.cs
 // ─────────────────────────────────────────────────────────────────────────────
 // Verifies that CabinetPreviewBuilder.BuildCabinetWithResult correctly computes
 // door width and door height for base-standard cabinets under several conditions:
@@ -14,8 +14,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering;
-using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.Tests;
 
@@ -46,101 +44,101 @@ public class DoorSizeDimensionTests
         string opening1Height = "",
         bool hasTk = true,
         string tkHeight = "4") => new()
-    {
-        Name = "TestDoor",
-        Qty = 1,
-        Style = CabinetStyles.Base.Standard,
-        Width = width,
-        Height = height,
-        Depth = "24",
-        Species = "Maple",
-        CustomSpecies = "",
-        EBSpecies = "Wood Maple",
-        CustomEBSpecies = "",
-        MaterialThickness34 = 0.75,
-        MaterialThickness14 = 0.25,
-        Notes = "",
-        BackThickness = "3/4",
-        TopType = CabinetOptions.TopType.Full,
-        HasTK = hasTk,
-        TKHeight = tkHeight,
-        TKDepth = "3.75",
-        ShelfCount = 0,
-        ShelfDepth = CabinetOptions.ShelfDepth.FullDepth,
-        DrillShelfHoles = false,
-        DoorCount = doorCount,
-        DoorSpecies = "Maple",
-        CustomDoorSpecies = "",
-        DoorGrainDir = "Vertical",
-        IncDoors = false,
-        IncDoorsInList = true,   // enough to trigger BuildDoors + result population
-        DrillHingeHoles = false,
-        EdgebandDoorsAndDrawers = false,
-        LeftReveal = ".0625",
-        RightReveal = ".0625",
-        TopReveal = "0.4375",
-        BottomReveal = ".0625",
-        GapWidth = ".125",
-        DrwCount = drwCount,
-        DrwStyle = "Blum Tandem H/Equivalent Undermount",
-        DrwFrontGrainDir = "Vertical",
-        EqualizeAllDrwFronts = false,
-        EqualizeBottomDrwFronts = false,
-        OpeningHeight1 = opening1Height,
-        OpeningHeight2 = "",
-        OpeningHeight3 = "",
-        OpeningHeight4 = "",
-        DrwFrontHeight1 = "",
-        DrwFrontHeight2 = "",
-        DrwFrontHeight3 = "",
-        DrwFrontHeight4 = "",
-        IncDrwFronts = false,
-        IncDrwFrontsInList = false,
-        IncDrwFront1 = false,
-        IncDrwFront2 = false,
-        IncDrwFront3 = false,
-        IncDrwFront4 = false,
-        IncDrwFrontInList1 = false,
-        IncDrwFrontInList2 = false,
-        IncDrwFrontInList3 = false,
-        IncDrwFrontInList4 = false,
-        IncDrwBoxes = false,
-        IncDrwBoxesInList = false,
-        IncDrwBoxOpening1 = false,
-        IncDrwBoxOpening2 = false,
-        IncDrwBoxOpening3 = false,
-        IncDrwBoxOpening4 = false,
-        IncDrwBoxInListOpening1 = false,
-        IncDrwBoxInListOpening2 = false,
-        IncDrwBoxInListOpening3 = false,
-        IncDrwBoxInListOpening4 = false,
-        DrillSlideHoles = false,
-        DrillSlideHolesOpening1 = false,
-        DrillSlideHolesOpening2 = false,
-        DrillSlideHolesOpening3 = false,
-        DrillSlideHolesOpening4 = false,
-        IncRollouts = false,
-        IncRolloutsInList = false,
-        RolloutCount = 0,
-        RolloutStyle = "",
-        DrillSlideHolesForRollouts = false,
-        SinkCabinet = false,
-        TrashDrawer = false,
-        IncTrashDrwBox = false,
-        LeftBackWidth = "",
-        RightBackWidth = "",
-        LeftFrontWidth = "",
-        RightFrontWidth = "",
-        LeftDepth = "",
-        RightDepth = "",
-        FrontWidth = "",
-        HasTop = true,
-        HasDeck = true,
-        HasLeftEnd = true,
-        HasRightEnd = true,
-        HasBack = true,
-        HasToeKickBoard = hasTk,
-    };
+        {
+            Name = "TestDoor",
+            Qty = 1,
+            Style = CabinetStyles.Base.Standard,
+            Width = width,
+            Height = height,
+            Depth = "24",
+            Species = "Maple",
+            CustomSpecies = "",
+            EBSpecies = "Wood Maple",
+            CustomEBSpecies = "",
+            MaterialThickness34 = 0.75,
+            MaterialThickness14 = 0.25,
+            Notes = "",
+            BackThickness = "3/4",
+            TopType = CabinetOptions.TopType.Full,
+            HasTK = hasTk,
+            TKHeight = tkHeight,
+            TKDepth = "3.75",
+            ShelfCount = 0,
+            ShelfDepth = CabinetOptions.ShelfDepth.FullDepth,
+            DrillShelfHoles = false,
+            DoorCount = doorCount,
+            DoorSpecies = "Maple",
+            CustomDoorSpecies = "",
+            DoorGrainDir = "Vertical",
+            IncDoors = false,
+            IncDoorsInList = true,   // enough to trigger BuildDoors + result population
+            DrillHingeHoles = false,
+            EdgebandDoorsAndDrawers = false,
+            LeftReveal = ".0625",
+            RightReveal = ".0625",
+            TopReveal = "0.4375",
+            BottomReveal = ".0625",
+            GapWidth = ".125",
+            DrwCount = drwCount,
+            DrwStyle = "Blum Tandem H/Equivalent Undermount",
+            DrwFrontGrainDir = "Vertical",
+            EqualizeAllDrwFronts = false,
+            EqualizeBottomDrwFronts = false,
+            OpeningHeight1 = opening1Height,
+            OpeningHeight2 = "",
+            OpeningHeight3 = "",
+            OpeningHeight4 = "",
+            DrwFrontHeight1 = "",
+            DrwFrontHeight2 = "",
+            DrwFrontHeight3 = "",
+            DrwFrontHeight4 = "",
+            IncDrwFronts = false,
+            IncDrwFrontsInList = false,
+            IncDrwFront1 = false,
+            IncDrwFront2 = false,
+            IncDrwFront3 = false,
+            IncDrwFront4 = false,
+            IncDrwFrontInList1 = false,
+            IncDrwFrontInList2 = false,
+            IncDrwFrontInList3 = false,
+            IncDrwFrontInList4 = false,
+            IncDrwBoxes = false,
+            IncDrwBoxesInList = false,
+            IncDrwBoxOpening1 = false,
+            IncDrwBoxOpening2 = false,
+            IncDrwBoxOpening3 = false,
+            IncDrwBoxOpening4 = false,
+            IncDrwBoxInListOpening1 = false,
+            IncDrwBoxInListOpening2 = false,
+            IncDrwBoxInListOpening3 = false,
+            IncDrwBoxInListOpening4 = false,
+            DrillSlideHoles = false,
+            DrillSlideHolesOpening1 = false,
+            DrillSlideHolesOpening2 = false,
+            DrillSlideHolesOpening3 = false,
+            DrillSlideHolesOpening4 = false,
+            IncRollouts = false,
+            IncRolloutsInList = false,
+            RolloutCount = 0,
+            RolloutStyle = "",
+            DrillSlideHolesForRollouts = false,
+            SinkCabinet = false,
+            TrashDrawer = false,
+            IncTrashDrwBox = false,
+            LeftBackWidth = "",
+            RightBackWidth = "",
+            LeftFrontWidth = "",
+            RightFrontWidth = "",
+            LeftDepth = "",
+            RightDepth = "",
+            FrontWidth = "",
+            HasTop = true,
+            HasDeck = true,
+            HasLeftEnd = true,
+            HasRightEnd = true,
+            HasBack = true,
+            HasToeKickBoard = hasTk,
+        };
 
     // ── tests ─────────────────────────────────────────────────────────────────
 
@@ -159,8 +157,8 @@ public class DoorSizeDimensionTests
             cab.ResetAllMaterialAndEdgeTotals();
             var result = CabinetPreviewBuilder.BuildCabinetWithResult(cab);
 
-            Assert.Equal(23.875, result.DoorWidth,  tolerance: 0.001);
-            Assert.Equal(30.0,   result.DoorHeight, tolerance: 0.001);
+            Assert.Equal(23.875, result.DoorWidth, tolerance: 0.001);
+            Assert.Equal(30.0, result.DoorHeight, tolerance: 0.001);
         });
     }
 
@@ -178,8 +176,8 @@ public class DoorSizeDimensionTests
             cab.ResetAllMaterialAndEdgeTotals();
             var result = CabinetPreviewBuilder.BuildCabinetWithResult(cab);
 
-            Assert.Equal(11.875, result.DoorWidth,  tolerance: 0.001);
-            Assert.Equal(30.0,   result.DoorHeight, tolerance: 0.001);
+            Assert.Equal(11.875, result.DoorWidth, tolerance: 0.001);
+            Assert.Equal(30.0, result.DoorHeight, tolerance: 0.001);
         });
     }
 
@@ -197,7 +195,7 @@ public class DoorSizeDimensionTests
             cab.ResetAllMaterialAndEdgeTotals();
             var result = CabinetPreviewBuilder.BuildCabinetWithResult(cab);
 
-            Assert.Equal(23.875, result.DoorWidth,  tolerance: 0.001);
+            Assert.Equal(23.875, result.DoorWidth, tolerance: 0.001);
             Assert.Equal(22.875, result.DoorHeight, tolerance: 0.001);
         });
     }
@@ -215,8 +213,8 @@ public class DoorSizeDimensionTests
             cab.ResetAllMaterialAndEdgeTotals();
             var result = CabinetPreviewBuilder.BuildCabinetWithResult(cab);
 
-            Assert.Equal(23.875, result.DoorWidth,  tolerance: 0.001);
-            Assert.Equal(34.0,   result.DoorHeight, tolerance: 0.001);
+            Assert.Equal(23.875, result.DoorWidth, tolerance: 0.001);
+            Assert.Equal(34.0, result.DoorHeight, tolerance: 0.001);
         });
     }
 
@@ -234,8 +232,8 @@ public class DoorSizeDimensionTests
             cab.ResetAllMaterialAndEdgeTotals();
             var result = CabinetPreviewBuilder.BuildCabinetWithResult(cab);
 
-            Assert.Equal(35.875, result.DoorWidth,  tolerance: 0.001);
-            Assert.Equal(30.0,   result.DoorHeight, tolerance: 0.001);
+            Assert.Equal(35.875, result.DoorWidth, tolerance: 0.001);
+            Assert.Equal(30.0, result.DoorHeight, tolerance: 0.001);
         });
     }
 }

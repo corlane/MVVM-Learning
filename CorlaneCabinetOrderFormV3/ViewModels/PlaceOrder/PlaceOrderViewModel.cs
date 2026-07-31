@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering;
 using CorlaneCabinetOrderFormV3.Services;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
@@ -11,7 +9,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
@@ -169,7 +166,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-  
+
         private CancellationTokenSource? _saveDebounceCts;
 
         private void TrySaveDefaults()
@@ -315,7 +312,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                     {
                         await _defaults.SaveAsync();
                     }
-                    catch (Exception ex) 
+                    catch (Exception ex)
                     {
                         Debug.WriteLine("Error saving defaults while placing order: " + ex);
                     }
@@ -417,7 +414,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new InvalidOperationException($"Upload failed ({(int)response.StatusCode}): {body}");
+                throw new InvalidOperationException($"Upload failed ({(int) response.StatusCode}): {body}");
             }
         }
 
@@ -502,7 +499,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                     }
 
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     Debug.WriteLine("Error aggregating totals for a cabinet: " + ex);
                 }

@@ -56,7 +56,7 @@ internal static partial class UpperCabinetBuilder
             var pts = new List<Point3D>(segments + 1);
             for (int i = 0; i <= segments; i++)
             {
-                double t = (double)i / segments;
+                double t = (double) i / segments;
                 double angle = -(Math.PI / 2.0) + (t * Math.PI / 2.0); // -90° → 0°
                 pts.Add(new Point3D(
                     cx + radius * Math.Cos(angle),

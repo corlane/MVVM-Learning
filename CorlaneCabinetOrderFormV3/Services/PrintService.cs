@@ -67,7 +67,7 @@ public sealed class PrintService : IPrintService
         doc.PageHeight = dlg.PrintableAreaHeight;
         doc.PageWidth = dlg.PrintableAreaWidth;
 
-        var paginator = ((IDocumentPaginatorSource)doc).DocumentPaginator;
+        var paginator = ((IDocumentPaginatorSource) doc).DocumentPaginator;
         dlg.PrintDocument(paginator, description);
     }
 

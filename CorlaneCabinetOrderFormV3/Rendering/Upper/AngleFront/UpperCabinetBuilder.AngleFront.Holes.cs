@@ -17,12 +17,12 @@ internal static partial class UpperCabinetBuilder
                 double maxX = leftDepth - topConstructionHoleInset;
                 if (maxX < minX) (minX, maxX) = (maxX, minX);
                 double span = Math.Max(0, maxX - minX);
-                int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0));
+                int segments = Math.Max(1, (int) Math.Ceiling(span / 10.0));
                 int holeCount = segments + 1;
 
                 for (int i = 0; i < holeCount; i++)
                 {
-                    double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
+                    double t = holeCount == 1 ? 0 : (double) i / (holeCount - 1);
                     double xx = minX + (span * t);
                     double topYY = height - (MaterialThickness34 / 2);
                     double bottomYY = MaterialThickness34 / 2;
@@ -38,12 +38,12 @@ internal static partial class UpperCabinetBuilder
                 double maxX = rightDepth - topConstructionHoleInset;
                 if (maxX < minX) (minX, maxX) = (maxX, minX);
                 double span = Math.Max(0, maxX - minX);
-                int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0));
+                int segments = Math.Max(1, (int) Math.Ceiling(span / 10.0));
                 int holeCount = segments + 1;
 
                 for (int i = 0; i < holeCount; i++)
                 {
-                    double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
+                    double t = holeCount == 1 ? 0 : (double) i / (holeCount - 1);
                     double xx = minX + (span * t);
                     double topYY = height - (MaterialThickness34 / 2);
                     double bottomYY = MaterialThickness34 / 2;
@@ -61,11 +61,11 @@ internal static partial class UpperCabinetBuilder
             double bottomY = 2 + MaterialThickness34;
             if (topY < bottomY) (topY, bottomY) = (bottomY, topY);
             double spanY = Math.Max(0, topY - bottomY);
-            int holeCountY = Math.Max(1, (int)Math.Ceiling(spanY / 10.0)) + 1;
+            int holeCountY = Math.Max(1, (int) Math.Ceiling(spanY / 10.0)) + 1;
 
             for (int i = 0; i < holeCountY; i++)
             {
-                double t = holeCountY == 1 ? 0 : (double)i / (holeCountY - 1);
+                double t = holeCountY == 1 ? 0 : (double) i / (holeCountY - 1);
                 double y = bottomY + (spanY * t);
 
                 leftEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, MaterialThickness34, holeDepth, holeDiameter));
@@ -145,11 +145,11 @@ internal static partial class UpperCabinetBuilder
 
             double spanY = Math.Max(0, topCenterY - bottomCenterY);
 
-            int hingeCount = Math.Max(2, (int)Math.Ceiling(spanY / maxHingeCenterSpacing) + 1);
+            int hingeCount = Math.Max(2, (int) Math.Ceiling(spanY / maxHingeCenterSpacing) + 1);
 
             for (int h = 0; h < hingeCount; h++)
             {
-                double t = hingeCount == 1 ? 0 : (double)h / (hingeCount - 1);
+                double t = hingeCount == 1 ? 0 : (double) h / (hingeCount - 1);
                 double hingeCenterY = bottomCenterY + (spanY * t);
 
                 double y1 = hingeCenterY - (hingeBoreSpacing / 2);
@@ -180,11 +180,11 @@ internal static partial class UpperCabinetBuilder
 
             double spanY = Math.Max(0, topCenterY - bottomCenterY);
 
-            int hingeCount = Math.Max(2, (int)Math.Ceiling(spanY / maxHingeCenterSpacing) + 1);
+            int hingeCount = Math.Max(2, (int) Math.Ceiling(spanY / maxHingeCenterSpacing) + 1);
 
             for (int h = 0; h < hingeCount; h++)
             {
-                double t = hingeCount == 1 ? 0 : (double)h / (hingeCount - 1);
+                double t = hingeCount == 1 ? 0 : (double) h / (hingeCount - 1);
                 double hingeCenterY = bottomCenterY + (spanY * t);
 
                 double y1 = hingeCenterY - (hingeBoreSpacing / 2);

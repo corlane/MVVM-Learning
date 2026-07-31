@@ -22,10 +22,10 @@ internal static partial class UpperCabinetBuilder
 
         if (result is not null)
         {
-            result.InteriorWidth  = dim.InteriorWidth;
-            result.InteriorDepth  = dim.InteriorDepth;
+            result.InteriorWidth = dim.InteriorWidth;
+            result.InteriorDepth = dim.InteriorDepth;
             result.InteriorHeight = dim.InteriorHeight;
-            result.ShelfDepth     = dim.ShelfDepth;
+            result.ShelfDepth = dim.ShelfDepth;
         }
 
         if (string.Equals(upperCab.Style, CabinetStyles.Upper.Standard, StringComparison.OrdinalIgnoreCase))

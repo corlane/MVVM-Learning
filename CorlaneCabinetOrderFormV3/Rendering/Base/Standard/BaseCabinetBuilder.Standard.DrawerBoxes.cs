@@ -1,6 +1,5 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
-using System.Diagnostics;
 using System.Windows.Media.Media3D;
 
 namespace CorlaneCabinetOrderFormV3.Rendering;
@@ -105,7 +104,7 @@ internal static partial class BaseCabinetBuilder
 
     private static Model3DGroup BuildDrawerBoxRotateGroup(
         double dbxWidth,
-        double dbxHeight, 
+        double dbxHeight,
         double dbxDepth,
         double materialThickness,
         BaseCabinetModel baseCab,
@@ -151,7 +150,7 @@ internal static partial class BaseCabinetBuilder
         var back = CabinetPartFactory.CreatePanel(dbxFrontAndBackPoints, materialThickness, drwBoxSpecies, drwBoxEB, "Horizontal", baseCab, isFaceUp: true, CabinetPartKind.DrawerBoxBack);
         var bottom = CabinetPartFactory.CreatePanel(dbxBottomPoints, materialThickness, drwBoxSpecies, "None", "Vertical", baseCab, isFaceUp: false, CabinetPartKind.DrawerBoxBottom);
 
-        ModelTransforms.ApplyTransform(leftSide, 0, 0, -(dbxWidth - materialThickness) - (hasLeftEnd ? 0 : + materialThickness), 0, 0, 0);
+        ModelTransforms.ApplyTransform(leftSide, 0, 0, -(dbxWidth - materialThickness) - (hasLeftEnd ? 0 : +materialThickness), 0, 0, 0);
         ModelTransforms.ApplyTransform(rightSide, 0, 0, hasRightEnd ? 0 : materialThickness, 0, 0, 0);
         ModelTransforms.ApplyTransform(front, 0, 0, 0, 0, 90, 0);
         ModelTransforms.ApplyTransform(back, 0, 0, dbxDepth - materialThickness, 0, 90, 0);

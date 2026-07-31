@@ -6,15 +6,15 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 internal static partial class UpperCabinetBuilder
 {
     private static void BuildShelves(
-        Model3DGroup cabinet, 
-        UpperCabinetModel upperCab, 
-        Func<string?, string> getMatchingEdgebandingSpecies, 
-        double MaterialThickness34, 
-        double backThickness, 
-        double interiorWidth, 
-        double interiorHeight, 
-        double shelfDepth, 
-        out Model3DGroup? shelf, 
+        Model3DGroup cabinet,
+        UpperCabinetModel upperCab,
+        Func<string?, string> getMatchingEdgebandingSpecies,
+        double MaterialThickness34,
+        double backThickness,
+        double interiorWidth,
+        double interiorHeight,
+        double shelfDepth,
+        out Model3DGroup? shelf,
         out List<Point3D>? shelfPoints,
         bool hasLeftEnd,
         bool hasRightEnd

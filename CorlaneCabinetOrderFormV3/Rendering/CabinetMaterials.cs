@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
@@ -172,7 +171,7 @@ internal static class CabinetMaterials
             material.Freeze();
             return material;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             var solid = new SolidColorBrush(Color.FromRgb(139, 69, 19)); // fallback brown
             solid.Freeze();

@@ -6,16 +6,16 @@ namespace CorlaneCabinetOrderFormV3.Rendering;
 internal static partial class BaseCabinetBuilder
 {
     private static Model3DGroup BuildTop(
-        BaseCabinetModel baseCab, 
-        double MaterialThickness34, 
-        double StretcherWidth, 
-        double topStretcherBackWidth, 
-        double width, 
-        double height, 
-        double depth, 
+        BaseCabinetModel baseCab,
+        double MaterialThickness34,
+        double StretcherWidth,
+        double topStretcherBackWidth,
+        double width,
+        double height,
+        double depth,
         double interiorWidth,
-        Model3DGroup top, 
-        out Model3DGroup? topStretcherFront, 
+        Model3DGroup top,
+        out Model3DGroup? topStretcherFront,
         out Model3DGroup? topStretcherBack,
         bool hasLeftEnd,
         bool hasRightEnd
@@ -60,7 +60,7 @@ internal static partial class BaseCabinetBuilder
             // Sink cuts on top stretcher front (local coords: X 0→interiorWidth, Y 0→StretcherWidth)
             if (baseCab.SinkCabinet)
             {
-               AddSinkCuts(topStretcherFront, interiorWidth, width, StretcherWidth, MaterialThickness34);
+                AddSinkCuts(topStretcherFront, interiorWidth, width, StretcherWidth, MaterialThickness34);
             }
 
             ModelTransforms.ApplyTransform(topStretcherFront, -(interiorWidth / 2), -depth, height - MaterialThickness34, 270, 0, 0);

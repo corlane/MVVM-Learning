@@ -6,8 +6,6 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Timers;
-using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -357,7 +355,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
 
     // Shelf-specific properties
-    [ObservableProperty] public partial int ShelfCount { get; set; } partial void OnShelfCountChanged(int value)
+    [ObservableProperty] public partial int ShelfCount { get; set; }
+    partial void OnShelfCountChanged(int value)
     {
         if (_isMapping) return;
 
@@ -557,7 +556,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 IncRollouts = _defaults!.DefaultIncDrwBoxes;
             }
             else
-            { 
+            {
                 IncRollouts = false;
                 IncRolloutsInList = false;
             }
@@ -615,7 +614,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
 
     private static ObservableCollection<int> BuildRolloutCountList(double interiorHeight)
     {
-        int maxRollouts = Math.Clamp(2 + (int)(interiorHeight / 12), 2, 10);
+        int maxRollouts = Math.Clamp(2 + (int) (interiorHeight / 12), 2, 10);
         return new ObservableCollection<int>(Enumerable.Range(0, maxRollouts + 1));
     }
 

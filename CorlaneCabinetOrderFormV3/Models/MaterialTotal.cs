@@ -29,5 +29,5 @@ public partial class MaterialTotal : ObservableObject
         OnPropertyChanged(nameof(LineTotal));
     }
 
-    public decimal LineTotal => Math.Round(UnitPrice * (decimal)Quantity, 2);
+    public decimal LineTotal => Math.Round(UnitPrice * (decimal) Quantity, 2);
 }

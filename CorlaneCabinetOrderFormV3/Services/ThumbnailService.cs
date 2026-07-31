@@ -1,5 +1,4 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
-using CorlaneCabinetOrderFormV3.Rendering;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -52,7 +51,7 @@ public class ThumbnailService
     {
         _cabinetService = cabinetService;
 
-        ((INotifyCollectionChanged)_cabinetService.Cabinets).CollectionChanged += OnCollectionChanged;
+        ((INotifyCollectionChanged) _cabinetService.Cabinets).CollectionChanged += OnCollectionChanged;
 
         // Hook any items already present (normally empty at startup)
         foreach (var cab in _cabinetService.Cabinets)

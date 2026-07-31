@@ -23,12 +23,12 @@ internal static partial class UpperCabinetBuilder
 
             double span = Math.Max(0, maxX - minX);
 
-            int segments = Math.Max(1, (int)Math.Ceiling(span / 10.0));
+            int segments = Math.Max(1, (int) Math.Ceiling(span / 10.0));
             int holeCount = segments + 1;
 
             for (int i = 0; i < holeCount; i++)
             {
-                double t = holeCount == 1 ? 0 : (double)i / (holeCount - 1);
+                double t = holeCount == 1 ? 0 : (double) i / (holeCount - 1);
                 double xx = minX + (span * t);
 
                 double topYY = height - (MaterialThickness34 / 2);
@@ -86,11 +86,11 @@ internal static partial class UpperCabinetBuilder
 
             int holeCountY = backThickness == 0.25
                 ? 2
-                : (Math.Max(1, (int)Math.Ceiling(spanY / 10.0)) + 1);
+                : (Math.Max(1, (int) Math.Ceiling(spanY / 10.0)) + 1);
 
             for (int i = 0; i < holeCountY; i++)
             {
-                double t = holeCountY == 1 ? 0 : (double)i / (holeCountY - 1);
+                double t = holeCountY == 1 ? 0 : (double) i / (holeCountY - 1);
                 double y = bottomY + (spanY * t);
 
                 if (upperCab.HasLeftEnd)
@@ -135,11 +135,11 @@ internal static partial class UpperCabinetBuilder
 
             double spanYY = Math.Max(0, topCenterY - bottomCenterY);
 
-            int hingeCount = Math.Max(2, (int)Math.Ceiling(spanYY / maxHingeCenterSpacing) + 1);
+            int hingeCount = Math.Max(2, (int) Math.Ceiling(spanYY / maxHingeCenterSpacing) + 1);
 
             for (int h = 0; h < hingeCount; h++)
             {
-                double t = hingeCount == 1 ? 0 : (double)h / (hingeCount - 1);
+                double t = hingeCount == 1 ? 0 : (double) h / (hingeCount - 1);
                 double hingeCenterY = bottomCenterY + (spanYY * t);
 
                 double y1 = hingeCenterY - (hingeBoreSpacing / 2);

@@ -583,3 +583,4 @@
 	Did the same for doors.
 	Removed commented out code and a bunch of Debug.WriteLine()s from CabinetMaterials.cs. commit
 	Modified wording on Batch Modify window (changed "Doors" to "Doors/Drawer Fronts", etc.) commit
+	Ran Code Cleanup Profile 1 on entire solution. commit

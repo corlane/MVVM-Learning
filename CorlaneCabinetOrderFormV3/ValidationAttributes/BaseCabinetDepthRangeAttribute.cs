@@ -42,11 +42,11 @@ public sealed class BaseCabinetDepthRangeAttribute(double maximum) : ValidationA
             {
                 var hasTkProp = validationContext.ObjectType.GetProperty("HasTK");
                 if (hasTkProp?.PropertyType == typeof(bool))
-                    hasTk = (bool)(hasTkProp.GetValue(instance) ?? false);
+                    hasTk = (bool) (hasTkProp.GetValue(instance) ?? false);
 
                 var tkDepthProp = validationContext.ObjectType.GetProperty("TKDepth");
                 if (tkDepthProp?.PropertyType == typeof(string))
-                    tkDepthText = (string?)tkDepthProp.GetValue(instance) ?? "0";
+                    tkDepthText = (string?) tkDepthProp.GetValue(instance) ?? "0";
             }
         }
         catch

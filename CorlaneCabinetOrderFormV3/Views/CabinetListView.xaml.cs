@@ -1,16 +1,15 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using System.Windows.Data;
-using System.Windows.Controls.Primitives;
 
 namespace CorlaneCabinetOrderFormV3.Views;
 
@@ -212,7 +211,7 @@ public partial class CabinetListView : UserControl
         var container = FindAncestor<ListViewItem>(element);
         if (container != null)
         {
-            _draggedCabinet = (CabinetModel?)ListViewItems.ItemContainerGenerator.ItemFromContainer(container);
+            _draggedCabinet = (CabinetModel?) ListViewItems.ItemContainerGenerator.ItemFromContainer(container);
 
             // If user clicked the already-selected item, WPF won't fire SelectionChanged.
             // Force a refresh so bound fields + preview update anyway.
@@ -252,7 +251,7 @@ public partial class CabinetListView : UserControl
             {
                 int idx = ListViewItems.Items.IndexOf(_draggedCabinet);
                 if (idx >= 0)
-                    sourceContainer = (ListViewItem?)ListViewItems.ItemContainerGenerator.ContainerFromIndex(idx);
+                    sourceContainer = (ListViewItem?) ListViewItems.ItemContainerGenerator.ContainerFromIndex(idx);
             }
 
             if (sourceContainer != null)
@@ -331,7 +330,7 @@ public partial class CabinetListView : UserControl
                 return;
             }
 
-            targetContainer = (ListViewItem?)ListViewItems.ItemContainerGenerator.ContainerFromIndex(targetIndex);
+            targetContainer = (ListViewItem?) ListViewItems.ItemContainerGenerator.ContainerFromIndex(targetIndex);
             if (targetContainer == null)
             {
                 RemoveInsertionAdorner();

@@ -1,4 +1,4 @@
-using CorlaneCabinetOrderFormV3.Models;
+﻿using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.Tests;
@@ -126,7 +126,7 @@ public class PriceBreakdownServiceTests
         var (_, svc) = MakeService();
 
         var result = svc.Build(
-            new Dictionary<string, double> { ["None"] = 5.0 }, 
+            new Dictionary<string, double> { ["None"] = 5.0 },
             new Dictionary<string, double> { ["None"] = 8.0 });
 
         // "None" resolves to $0 price — no sheets billed, no EB billed, no CNC

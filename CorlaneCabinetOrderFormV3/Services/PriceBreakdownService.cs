@@ -1,5 +1,4 @@
 ﻿using CorlaneCabinetOrderFormV3.Models;
-using System.Diagnostics;
 
 namespace CorlaneCabinetOrderFormV3.Services;
 
@@ -49,12 +48,12 @@ public sealed class PriceBreakdownService : IPriceBreakdownService
 
             int sheetQty = (sheetAreaSqFt <= 0 || yield <= 0)
                 ? 0
-                : (int)Math.Ceiling((qtySqFt / yield) / sheetAreaSqFt);
+                : (int) Math.Ceiling((qtySqFt / yield) / sheetAreaSqFt);
 
             // CNC is billed based on actual sheet(s) that must be cut (rounded up), not net sqft.
             totalCncBillableSqFt += sheetQty * sheetAreaSqFt;
 
-            var unitPricePerSheet = GetSheetPricePerSqFt(species) * (decimal)sheetAreaSqFt;
+            var unitPricePerSheet = GetSheetPricePerSqFt(species) * (decimal) sheetAreaSqFt;
 
             var line = new MaterialTotal
             {
@@ -94,7 +93,7 @@ public sealed class PriceBreakdownService : IPriceBreakdownService
         if (totalCncBillableSqFt > 0 && BaselineCncSheetAreaSqFt > 0)
         {
             // Keep storing CNC as "$ per (48x96) sheet", but bill by sqft with rounding-to-sheets applied above.
-            var cncPricePerSqFt = _materialPrices.CncPricePerSheet / (decimal)BaselineCncSheetAreaSqFt;
+            var cncPricePerSqFt = _materialPrices.CncPricePerSheet / (decimal) BaselineCncSheetAreaSqFt;
 
             var cnc = new MaterialTotal
             {

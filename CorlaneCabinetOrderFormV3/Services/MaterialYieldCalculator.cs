@@ -41,7 +41,7 @@ public static class MaterialYieldCalculator
         if (sheetAreaSqFt <= 0 || yield <= 0)
             return 0;
 
-        return (int)Math.Ceiling((totalSqFt / yield) / sheetAreaSqFt);
+        return (int) Math.Ceiling((totalSqFt / yield) / sheetAreaSqFt);
     }
 
     /// <summary>
