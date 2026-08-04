@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -24,6 +24,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
             LeftBackWidth = "24";
             RightBackWidth = "24";
             Notes = "";
+            Name = "";
+            Qty = 1;
         }
         finally
         {

@@ -598,3 +598,4 @@
 3.1.0.22
 	Initial commit.
 	Changed "UI Scale" to "Window/Text Scale" in main window to make its function clearer to those who don't know what "UI" means. Also enlarged the font size for better readability. commit
+	Cabinet Name & Qty were not being cleared/reset on New job. Fixed. commit

@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -17,6 +17,8 @@ public partial class PanelViewModel : ObservableValidator
             Height = "32";
             Depth = "0.75";
             Notes = "";
+            Name = "";
+            Qty = 1;
         }
         finally
         {

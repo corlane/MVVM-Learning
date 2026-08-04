@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -14,9 +14,11 @@ public partial class FillerViewModel : ObservableValidator
         try
         {
             Width = "4";
+            Name = "";
             Height = "34.5";
             Depth = "24";
             Notes = "";
+            Qty = 1;
         }
         finally
         {

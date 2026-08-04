@@ -24,6 +24,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             RightBackWidth = "36";
             Style = Style1;
             Notes = "";
+            Name = "";
+            Qty = 1;
         }
         finally
         {
