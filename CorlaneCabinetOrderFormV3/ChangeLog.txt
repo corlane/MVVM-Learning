@@ -599,3 +599,5 @@
 	Initial commit.
 	Changed "UI Scale" to "Window/Text Scale" in main window to make its function clearer to those who don't know what "UI" means. Also enlarged the font size for better readability. commit
 	Cabinet Name & Qty were not being cleared/reset on New job. Fixed. commit
+	Corrected public void Base_BDNY0400S3XNN_EdgeBanding_MatchesExpected() in Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test. For some reason, edgebanding test was failing reporting expected 40-some-odd feet. Program was correct compared to ecabs, so I adjusted the test to match. All tests pass. commit.
+

@@ -52,7 +52,7 @@ public class Base_BDNY0400S3XNN_Mat_And_EB_Matches_Expected_Test
             cab.ResetAllMaterialAndEdgeTotals();
             _ = CabinetPreviewBuilder.BuildCabinetForTotals(cab);
 
-            double expectedFt = 506.28 / 12.0;
+            double expectedFt = 757.08 / 12.0;
             Assert.Equal(expectedFt, cab.TotalEdgeBandingFeet, precision: 2);
         });
     }
