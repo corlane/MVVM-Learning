@@ -589,8 +589,8 @@
 
 3.1.0.20
 	Initial commit.
-	Removed ability to enter # sign in Name textbox. commit
-
+	Removed ability to enter # sign in Name textbox. Sorry, Silt. commit
 
 3.1.0.21
 	Initial commit.
+	Assembly screw holes now disappear as you remove the relevant parts. commit

@@ -36,36 +36,48 @@ internal static partial class UpperCabinetBuilder
 
                 if (upperCab.HasLeftEnd)
                 {
-                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    if (upperCab.HasTop)
+                    {
+                        leftEnd.Children.Add(CabinetPartFactory.CreateHole(
                         centerX: xx,
                         centerY: topYY,
                         rimZ: MaterialThickness34,
                         bottomZ: holeDepth,
                         diameter: holeDiameter));
+                    }
 
-                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    if (upperCab.HasDeck)
+                    {
+                        leftEnd.Children.Add(CabinetPartFactory.CreateHole(
                         centerX: xx,
                         centerY: bottomYY,
                         rimZ: MaterialThickness34,
                         bottomZ: holeDepth,
                         diameter: holeDiameter));
+                    }
                 }
 
                 if (upperCab.HasRightEnd)
                 {
-                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    if (upperCab.HasTop)
+                    {
+                        rightEnd.Children.Add(CabinetPartFactory.CreateHole(
                         centerX: xx,
                         centerY: topYY,
                         rimZ: 0,
                         bottomZ: holeDepth,
                         diameter: holeDiameter));
+                    }
 
-                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    if (upperCab.HasDeck)
+                    {
+                        rightEnd.Children.Add(CabinetPartFactory.CreateHole(
                         centerX: xx,
                         centerY: bottomYY,
                         rimZ: 0,
                         bottomZ: holeDepth,
                         diameter: holeDiameter));
+                    }
                 }
             }
         }
@@ -95,22 +107,29 @@ internal static partial class UpperCabinetBuilder
 
                 if (upperCab.HasLeftEnd)
                 {
-                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    if (upperCab.HasBack)
+                    {
+                        leftEnd.Children.Add(CabinetPartFactory.CreateHole(
                         centerX: x,
                         centerY: y,
                         rimZ: MaterialThickness34,
                         bottomZ: holeDepth,
                         diameter: holeDiameter));
+                    }
+
                 }
 
                 if (upperCab.HasRightEnd)
                 {
-                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(
+                    if (upperCab.HasBack)
+                    {
+                        rightEnd.Children.Add(CabinetPartFactory.CreateHole(
                         centerX: x,
                         centerY: y,
                         rimZ: 0,
                         bottomZ: holeDepth,
                         diameter: holeDiameter));
+                    }   
                 }
             }
         }

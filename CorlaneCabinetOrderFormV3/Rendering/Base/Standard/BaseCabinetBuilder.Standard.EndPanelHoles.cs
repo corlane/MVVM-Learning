@@ -61,14 +61,20 @@ internal static partial class BaseCabinetBuilder
                 double topYY = (height - (MaterialThickness34 / 2));
                 double bottomYY = tk_Height + (MaterialThickness34 / 2);
 
-                if (!onlyEndHolesOnTop || i == 0 || i == holeCount - 1)
+                if (baseCab.HasTop)
                 {
-                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, MaterialThickness34, holeDepth, holeDiameter));
-                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, 0, holeDepth, holeDiameter));
+                    if (!onlyEndHolesOnTop || i == 0 || i == holeCount - 1)
+                    {
+                        leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, MaterialThickness34, holeDepth, holeDiameter));
+                        rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, topYY, 0, holeDepth, holeDiameter));
+                    }
                 }
 
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, MaterialThickness34, holeDepth, holeDiameter));
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, 0, holeDepth, holeDiameter));
+                if (baseCab.HasDeck)
+                {
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, MaterialThickness34, holeDepth, holeDiameter));
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(xx, bottomYY, 0, holeDepth, holeDiameter));
+                }
             }
         }
 
@@ -90,13 +96,16 @@ internal static partial class BaseCabinetBuilder
                 ? 2
                 : (Math.Max(1, (int) Math.Ceiling(spanY / 10.0)) + 1);
 
-            for (int i = 0; i < holeCountY; i++)
+            if (baseCab.HasBack)
             {
-                double t = holeCountY == 1 ? 0 : (double) i / (holeCountY - 1);
-                double y = bottomY + (spanY * t);
+                for (int i = 0; i < holeCountY; i++)
+                {
+                    double t = holeCountY == 1 ? 0 : (double) i / (holeCountY - 1);
+                    double y = bottomY + (spanY * t);
 
-                leftEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, MaterialThickness34, holeDepth, holeDiameter));
-                rightEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, 0, holeDepth, holeDiameter));
+                    leftEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, MaterialThickness34, holeDepth, holeDiameter));
+                    rightEnd.Children.Add(CabinetPartFactory.CreateHole(x, y, 0, holeDepth, holeDiameter));
+                }
             }
         }
 
