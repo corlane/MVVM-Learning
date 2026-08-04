@@ -21,12 +21,6 @@ Finish angle corner cabinet models -- DONE except angle front base toekick board
 
 Corlane side:
 
-Split Toekick tab into 2 tabs: One for TK Height, one for TK Depth.
-
-Add a new tab for Door Species, and remove the Species check from the Include Doors tab.
-
-Door Reveal tab: ONLY show reveals that differ from default. It currently shows ALL reveals even if they don't. Also, it has all the defaults on the right side of the list - totally unnecessary, because the defaults are shown above the list.
-
 
 OPTIONAL: Add fixed shelf option (FULL DEPTH ONLY) - This will introduce the possibility of splitting the cabinet into more than 1 opening: Allow adjustable shelves and doors per opening? That's CAD territory...
 OPTIONAL: Change pricing to account for linear inches of perimeter around parts. This would mean that jobs with a lot of small parts would be more expensive than jobs with fewer, larger parts.
