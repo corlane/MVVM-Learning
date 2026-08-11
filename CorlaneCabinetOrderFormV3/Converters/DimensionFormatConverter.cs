@@ -42,7 +42,7 @@ public sealed class DimensionFormatConverter : IValueConverter
         catch
         {
             // Fallback to decimal if fraction conversion fails
-            return parsed.ToString("0.##", CultureInfo.CurrentCulture);
+            return parsed.ToString("0.####", CultureInfo.CurrentCulture);
         }
     }
 
