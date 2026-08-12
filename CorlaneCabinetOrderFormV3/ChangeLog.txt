@@ -606,3 +606,5 @@
 	Quantity now resets to 0 after adding a cabinet to the list, to prevent accidentally adding cabinets with the wrong quantity.
 	Corner cabinets now show Left Back Width and Left Depth in the Width and Depth columns in the Cabinet List. Previously, those columns were being populated by the previous non-corner style cabinet. commit
 
+3.1.0.24
+	Initial commit.
