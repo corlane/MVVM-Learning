@@ -15,6 +15,11 @@ public partial class UpperCabinetViewModel : ObservableValidator
         target.Width = ConvertDimension.FractionToDouble(Width).ToString();
         target.Height = ConvertDimension.FractionToDouble(Height).ToString();
         target.Depth = ConvertDimension.FractionToDouble(Depth).ToString();
+        if (Style == Style2 || Style == Style3)
+        {
+            target.Width = LeftBackWidth; // Corner 90 and Corner 45 cabinets do not have a width; they are defined by the back widths and depth.
+            target.Depth = LeftDepth;
+        }
         target.Species = Species;
         target.CustomSpecies = CustomSpecies;
         target.EBSpecies = EBSpecies;

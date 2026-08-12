@@ -258,6 +258,8 @@ public partial class PanelViewModel : ObservableValidator
 
         Notes = "";
 
+        Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
+
         _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
 

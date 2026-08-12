@@ -20,6 +20,10 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             EnforceTopTypeForShallowDepth();
 
             var newCabinet = new BaseCabinetModel();
+
+            string width = Width; // capture width
+            string depth = Depth; // capture depth
+
             ApplyViewModelToModel(newCabinet);
 
             try
@@ -37,8 +41,14 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             TopType = tempTopType; // Restore user's top type choice after forcing a full top for shallow depths
 
+            Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
+
+            Width = width; // restore width to view model in case ApplyViewModelToModel modified it
+            Depth = depth; // restore depth to view model in case ApplyViewModelToModel modified it
+
             _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
             _mainVm?.IsModified = true;
+
 
             _mainVm.AutoSave();
         }

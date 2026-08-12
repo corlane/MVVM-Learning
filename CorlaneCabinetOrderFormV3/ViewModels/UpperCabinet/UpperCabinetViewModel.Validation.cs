@@ -1,4 +1,4 @@
-namespace CorlaneCabinetOrderFormV3.ViewModels;
+﻿namespace CorlaneCabinetOrderFormV3.ViewModels;
 
 public partial class UpperCabinetViewModel : IValidatableViewModel
 {
@@ -30,7 +30,7 @@ public partial class UpperCabinetViewModel : IValidatableViewModel
                 ValidateProperty(RightDepth, nameof(RightDepth));
             }
 
-            // 45� (angle-front) specific fields
+            // 45° (angle-front) specific fields
             if (Corner45DimsVisibility)
             {
                 ValidateProperty(LeftDepth, nameof(LeftDepth));
@@ -45,10 +45,9 @@ public partial class UpperCabinetViewModel : IValidatableViewModel
                 ValidateProperty(BackThickness, nameof(BackThickness));
             }
 
-
-
             // Any always-visible fields you want validated every time:
             ValidateProperty(Name, nameof(Name));
+            ValidateProperty(Qty, nameof(Qty));
         }
         catch (Exception)
         {

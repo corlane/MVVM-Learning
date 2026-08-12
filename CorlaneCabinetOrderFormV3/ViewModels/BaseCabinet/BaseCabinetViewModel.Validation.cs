@@ -27,7 +27,6 @@ public partial class BaseCabinetViewModel : IValidatableViewModel
                 ValidateProperty(Height, nameof(Height));
                 ValidateProperty(Depth, nameof(Depth));
                 ValidateProperty(Species, nameof(Species));
-                ValidateProperty(Qty, nameof(Qty));
             }
 
             // Corner-90 specific fields
@@ -87,6 +86,7 @@ public partial class BaseCabinetViewModel : IValidatableViewModel
 
             // Any always-visible fields you want validated every time:
             ValidateProperty(Name, nameof(Name));
+            ValidateProperty(Qty, nameof(Qty));
         }
         catch (Exception)
         {
