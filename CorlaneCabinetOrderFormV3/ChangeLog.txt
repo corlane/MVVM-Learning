@@ -608,3 +608,4 @@
 
 3.1.0.24
 	Initial commit.
+	Checking the Sink Cabinet checkbox now automatically sets Shelf Count to 0 and Drill Shelf Holes to false. They are not disabled, just zeroed out because most sink cabinets shouldn't have shelves. commit

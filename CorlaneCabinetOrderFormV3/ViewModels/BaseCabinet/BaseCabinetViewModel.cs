@@ -230,7 +230,16 @@ public partial class BaseCabinetViewModel : ObservableValidator
         IncDrwBoxInListOpening1 = (!newValue);
         IncDrwBoxOpening1 = (!newValue);
         DrillSlideHolesOpening1 = (!newValue);
-
+        if (newValue)
+        {
+            ShelfCount = 0;
+            DrillShelfHoles = false;
+        }
+        else
+        {
+            ShelfCount = _defaults!.DefaultShelfCount;
+            DrillShelfHoles = _defaults!.DefaultDrillShelfHoles;
+        }
         ApplyStyleVisibility(Style);
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(8, 48)] public partial string LeftBackWidth { get; set; } = ""; partial void OnLeftBackWidthChanged(string oldValue, string newValue)
