@@ -612,3 +612,5 @@
 
 3.1.0.25
 	Initial commit.
+	Changed Publish settings to require a minimum version of the current version number before app launches. This forces an update if available. APP WILL NOT LAUNCH WITHOUT AN INTERNET CONNECTION OR CONNECTION TO OUR SERVER NOW.
+	DON'T FORGET: This requires incrementing the version number in the Publish settings for every new release. commit

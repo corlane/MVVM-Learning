@@ -71,6 +71,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoUpdateProjectsMinimumRequiredClickOnceVersion" Version="1.2.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="HelixToolkit.Wpf" Version="2.27.3">
       <NoWarn>NU1701</NoWarn>
