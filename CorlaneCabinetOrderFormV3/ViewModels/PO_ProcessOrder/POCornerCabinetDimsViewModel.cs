@@ -205,22 +205,20 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
                 _ => ""
             };
 
-            //BaseCabinetModel? angleBaseCab = isBaseAngleFront ? (cab as BaseCabinetModel) : null;
-            //string lbw = angleBaseCab?.LeftBackWidth ?? "";
-            //string rbw = angleBaseCab?.RightBackWidth ?? "";
-
-            //UpperCabinetModel? angleUpperCab = isUpperAngleFront ? (cab as UpperCabinetModel) : null;
-            //string lubw = angleUpperCab?.LeftBackWidth ?? "";
-            //string rubw = angleUpperCab?.RightBackWidth ?? "";
-
             double cabLfw = ConvertDimension.FractionToDouble(lfw);
             double cabRfw = ConvertDimension.FractionToDouble(rfw);
             double cabLd = ConvertDimension.FractionToDouble(ld);
             double cabRd = ConvertDimension.FractionToDouble(rd);
             double cabLbw = ConvertDimension.FractionToDouble(lbw);
             double cabRbw = ConvertDimension.FractionToDouble(rbw);
-            //double cabLubw = ConvertDimension.FractionToDouble(lubw);
-            //double cabRubw = ConvertDimension.FractionToDouble(rubw);
+
+            if (isUpperAngleFront || isBaseAngleFront)
+            {
+                ld = ConvertDimension.DoubleToFraction(cabLd - .75);
+                rd = ConvertDimension.DoubleToFraction(cabRd - .75);
+                ld = ConvertDimension.FractionToDouble(ld).ToString();
+                rd = ConvertDimension.FractionToDouble(rd).ToString();
+            }
 
             bool differs =
                 isBaseCorner90
@@ -247,6 +245,7 @@ public partial class POCornerCabinetDimsViewModel : ObservableObject
             {
                 continue;
             }
+
 
             var row = new CornerCabinetDimsChangeRow
             {
