@@ -618,3 +618,6 @@
 3.1.0.26
 	Initial commit.
 	Edgebanding calculated wrong for some cabinets with 2 doors because of missing + " - Door" being added to the name of the edgebanding. Fixed. commit
+
+3.1.0.27
+	Initial commit.
