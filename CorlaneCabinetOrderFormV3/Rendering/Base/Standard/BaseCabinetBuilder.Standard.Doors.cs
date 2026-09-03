@@ -135,7 +135,7 @@ internal static partial class BaseCabinetBuilder
             {
                 var door1 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies + " - Door", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
 
-                var door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
+                var door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies + " - Door", baseCab.DoorGrainDir, baseCab, isFaceUp: false, CabinetPartKind.Door);
                 if (!baseCab.HasTK)
                 {
                     ModelTransforms.ApplyTransform(door1, -(width / 2) + doorLeftReveal, doorBottomReveal, depth, 0, 0, 0);

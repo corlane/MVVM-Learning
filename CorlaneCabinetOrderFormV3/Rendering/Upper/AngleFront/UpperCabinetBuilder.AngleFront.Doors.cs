@@ -104,7 +104,7 @@ internal static partial class UpperCabinetBuilder
 
                 if (upperCab.IncDoors)
                 {
-                    door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies, upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
+                    door2 = CabinetPartFactory.CreatePanel(doorPoints, MaterialThickness34, doorSpeciesForTotals, doorEdgebandingSpecies + " - Door", upperCab.DoorGrainDir, upperCab, isFaceUp: false, CabinetPartKind.Door);
                 }
                 else
                 {

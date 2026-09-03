@@ -37,9 +37,9 @@ internal static partial class BaseCabinetBuilder
                 doorPoints =
                 [
                     new (0,0,0),
-                new (door1Width,0,0),
-                new (door1Width,doorHeight,0),
-                new (0,doorHeight,0)
+                    new (door1Width,0,0),
+                    new (door1Width,doorHeight,0),
+                    new (0,doorHeight,0)
                 ];
 
                 if (baseCab.IncDoors)
@@ -73,9 +73,9 @@ internal static partial class BaseCabinetBuilder
                 doorPoints =
                 [
                     new (0,0,0),
-                new (door1Width,0,0),
-                new (door1Width,doorHeight,0),
-                new (0,doorHeight,0)
+                    new (door1Width,0,0),
+                    new (door1Width,doorHeight,0),
+                    new (0,doorHeight,0)
                 ];
 
                 if (baseCab.IncDoors)
@@ -98,9 +98,9 @@ internal static partial class BaseCabinetBuilder
                 doorPoints =
                 [
                     new (0,0,0),
-                new (door2Width,0,0),
-                new (door2Width,doorHeight,0),
-                new (0,doorHeight,0)
+                    new (door2Width,0,0),
+                    new (door2Width,doorHeight,0),
+                    new (0,doorHeight,0)
                 ];
 
                 if (baseCab.IncDoors)
