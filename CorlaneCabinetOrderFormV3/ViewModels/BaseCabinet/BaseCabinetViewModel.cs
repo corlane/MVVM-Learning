@@ -462,7 +462,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool DrillSlideHolesOpening4 { get; set; }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight1 { get; set; } = ""; partial void OnOpeningHeight1Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(OpeningHeight1);
@@ -472,7 +472,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight2 { get; set; } = ""; partial void OnOpeningHeight2Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(OpeningHeight2);
@@ -482,7 +482,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty, NotifyDataErrorInfo, Required(ErrorMessage = "Enter a value"), DimensionRange(4, 48)] public partial string OpeningHeight3 { get; set; } = ""; partial void OnOpeningHeight3Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(OpeningHeight3);
@@ -492,7 +492,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string OpeningHeight4 { get; set; } = ""; partial void OnOpeningHeight4Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(OpeningHeight4);
@@ -502,7 +502,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwFrontHeight1 { get; set; } = ""; partial void OnDrwFrontHeight1Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(DrwFrontHeight1);
@@ -513,7 +513,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwFrontHeight2 { get; set; } = ""; partial void OnDrwFrontHeight2Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(DrwFrontHeight2);
@@ -523,7 +523,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwFrontHeight3 { get; set; } = ""; partial void OnDrwFrontHeight3Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(DrwFrontHeight3);
@@ -533,7 +533,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
     }
     [ObservableProperty] public partial string DrwFrontHeight4 { get; set; } = ""; partial void OnDrwFrontHeight4Changed(string oldValue, string newValue)
     {
-        if (_isMapping) return;
+        if (_isMapping || _isResizing) return;
         if (newValue != oldValue)
         {
             _activeInputProperty = nameof(DrwFrontHeight4);

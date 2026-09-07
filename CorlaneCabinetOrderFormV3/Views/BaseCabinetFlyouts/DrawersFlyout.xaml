@@ -3,7 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:CorlaneCabinetOrderFormV3.Views.BaseCabinetFlyouts"
-    xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters">
+    xmlns:Converters="clr-namespace:CorlaneCabinetOrderFormV3.Converters"
+    xmlns:appbehaviors="clr-namespace:CorlaneCabinetOrderFormV3.Behaviors">
+ 
     <local:FlyoutUserControlBase.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Converters:BoolInverter x:Key="BoolInverter"/>
@@ -45,7 +47,8 @@
                     <TextBox Width="80" VerticalAlignment="Center"
                              IsReadOnly="{Binding Opening1Disabled}"
                              Text="{Binding OpeningHeight1, UpdateSourceTrigger=PropertyChanged}"
-                             GotFocus="TextBoxGotFocus"/>
+                             GotFocus="TextBoxGotFocus"
+                             appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                     <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}" IsTabStop="False"/>
                     <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}" IsTabStop="False"/>
                     <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening1}" IsEnabled="{Binding SinkCabinet, Converter={StaticResource BoolInverter}}" IsTabStop="False"/>
@@ -56,7 +59,8 @@
                     <TextBox Width="80" VerticalAlignment="Center"
                              IsReadOnly="{Binding Opening2Disabled}"
                              Text="{Binding OpeningHeight2, UpdateSourceTrigger=PropertyChanged}"
-                             GotFocus="TextBoxGotFocus"/>
+                             GotFocus="TextBoxGotFocus"
+                             appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                     <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening2}" IsTabStop="False"/>
                     <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening2}" IsTabStop="False"/>
                     <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening2}" IsTabStop="False"/>
@@ -67,7 +71,8 @@
                     <TextBox Width="80" VerticalAlignment="Center"
                              IsReadOnly="{Binding Opening3Disabled}"
                              Text="{Binding OpeningHeight3, UpdateSourceTrigger=PropertyChanged}"
-                             GotFocus="TextBoxGotFocus"/>
+                             GotFocus="TextBoxGotFocus"
+                             appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                     <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening3}" IsTabStop="False"/>
                     <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening3}" IsTabStop="False"/>
                     <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening3}" IsTabStop="False"/>
@@ -77,7 +82,8 @@
                     <TextBlock Text="Opening 4" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                     <TextBox Width="80" VerticalAlignment="Center" IsReadOnly="True"
                              Text="{Binding OpeningHeight4, UpdateSourceTrigger=PropertyChanged}"
-                             GotFocus="TextBoxGotFocus"/>
+                             GotFocus="TextBoxGotFocus"
+                             appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                     <CheckBox Content="Supply Drawer Box" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxOpening4}" IsTabStop="False"/>
                     <CheckBox Content="Drill Slide Holes" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding DrillSlideHolesOpening4}" IsTabStop="False"/>
                     <CheckBox Content="Include in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwBoxInListOpening4}" IsTabStop="False"/>
@@ -94,7 +100,8 @@
                         <TextBox Width="80" VerticalAlignment="Center"
                                  IsReadOnly="{Binding DrwFront1Disabled}"
                                  Text="{Binding DrwFrontHeight1, UpdateSourceTrigger=PropertyChanged}"
-                                 GotFocus="TextBoxGotFocus"/>
+                                 GotFocus="TextBoxGotFocus"
+                                 appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                         <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront1}" IsTabStop="False"/>
                         <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList1}" IsTabStop="False"/>
                     </StackPanel>
@@ -104,7 +111,8 @@
                         <TextBox Width="80" VerticalAlignment="Center"
                                  IsReadOnly="{Binding DrwFront2Disabled}"
                                  Text="{Binding DrwFrontHeight2, UpdateSourceTrigger=PropertyChanged}"
-                                 GotFocus="TextBoxGotFocus"/>
+                                 GotFocus="TextBoxGotFocus"
+                                 appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                         <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront2}" IsTabStop="False"/>
                         <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList2}" IsTabStop="False"/>
                     </StackPanel>
@@ -114,7 +122,8 @@
                         <TextBox Width="80" VerticalAlignment="Center"
                                  IsReadOnly="{Binding DrwFront3Disabled}"
                                  Text="{Binding DrwFrontHeight3, UpdateSourceTrigger=PropertyChanged}"
-                                 GotFocus="TextBoxGotFocus"/>
+                                 GotFocus="TextBoxGotFocus"
+                                 appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                         <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront3}" IsTabStop="False"/>
                         <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList3}" IsTabStop="False"/>
                     </StackPanel>
@@ -123,7 +132,8 @@
                         <TextBlock Text="Drw. Front 4" VerticalAlignment="Center" FontWeight="SemiBold" Width="Auto" Margin="0,0,5,0"/>
                         <TextBox Width="80" VerticalAlignment="Center" IsReadOnly="True"
                                  Text="{Binding DrwFrontHeight4, UpdateSourceTrigger=PropertyChanged}"
-                                 GotFocus="TextBoxGotFocus"/>
+                                 GotFocus="TextBoxGotFocus"
+                                 appbehaviors:DimensionAutoFormat.IsEnabled="True"/>
                         <CheckBox Content="Supply Slab Drawer Front" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFront4}" IsTabStop="False"/>
                         <CheckBox Content="Include Drawer Front in Sizes List" VerticalAlignment="Center" Margin="14,0,0,0" IsChecked="{Binding IncDrwFrontInList4}" IsTabStop="False"/>
                     </StackPanel>

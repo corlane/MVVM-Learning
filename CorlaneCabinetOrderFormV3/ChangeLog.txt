@@ -625,3 +625,5 @@
 
 3.1.0.28
 	Initial commit.
+	Added  appbehaviors:DimensionAutoFormat.IsEnabled="True" to all Default reveal/gap textboxes.
+	Drawer Front Height and Opening Height entries all seem to function properly now, taking decimals and fractions, updating properly, and enabling/disabling properly. FINALLY! commit
