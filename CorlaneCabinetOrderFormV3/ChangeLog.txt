@@ -634,3 +634,6 @@
 	Added massive, highly detailed summary at the top of BaseCabinetViewModel.Layout.cs to ease future maintenance,understanding of the layout logic. commit
 	Added confirmation dialog if changes are made and not applied before clicking on a different cabinet in the list. commit
 	Finished adding all properties to the overridden OnPropertyChanged() in each viewmodel, which is what triggers the above confirmation dialog. commit
+
+3.1.0.30
+	Initial commit.
