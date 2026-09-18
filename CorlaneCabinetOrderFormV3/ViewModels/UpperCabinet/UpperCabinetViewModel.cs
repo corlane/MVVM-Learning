@@ -307,8 +307,47 @@ public partial class UpperCabinetViewModel : ObservableValidator
         {
             case null:
             case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
+
             case nameof(Width):
             case nameof(Height):
+            case nameof(Depth):
+            case nameof(Species):
+            case nameof(CustomSpecies):
+            case nameof(EBSpecies):
+            case nameof(CustomEBSpecies):
+            case nameof(Name):
+            case nameof(Qty):
+            case nameof(Notes):
+            case nameof(Style):
+
+            case nameof(LeftBackWidth):
+            case nameof(RightBackWidth):
+            case nameof(LeftFrontWidth):
+            case nameof(RightFrontWidth):
+            case nameof(LeftDepth):
+            case nameof(RightDepth):
+            case nameof(DoorSpecies):
+            case nameof(CustomDoorSpecies):
+            case nameof(BackThickness):
+            case nameof(ShelfCount):
+            case nameof(DrillShelfHoles):
+            case nameof(DoorCount):
+            case nameof(DoorGrainDir):
+            case nameof(IncDoorsInList):
+            case nameof(IncDoors):
+            case nameof(DrillHingeHoles):
+            case nameof(LeftReveal):
+            case nameof(RightReveal):
+            case nameof(TopReveal):
+            case nameof(BottomReveal):
+            case nameof(GapWidth):
+            case nameof(EdgebandDoorsAndDrawers):
+            case nameof(HasTop):
+            case nameof(HasDeck):
+            case nameof(HasLeftEnd):
+            case nameof(HasRightEnd):
+            case nameof(HasBack):
+
                 _mainVm?.CabinetIsModifiedAndNotApplied = true;
 
                 return;

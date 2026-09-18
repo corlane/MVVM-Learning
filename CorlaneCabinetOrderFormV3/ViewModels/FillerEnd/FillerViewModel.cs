@@ -8,6 +8,7 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Windows;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -161,7 +162,9 @@ public partial class FillerViewModel : ObservableValidator
 
         Notes = "";
 
+        _isMapping = true; // Prevent triggering the modified flag when resetting Qty
         Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
+        _isMapping = false;
 
         _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
@@ -257,8 +260,18 @@ public partial class FillerViewModel : ObservableValidator
         {
             case null:
             case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
+
             case nameof(Width):
             case nameof(Height):
+            case nameof(Depth):
+            case nameof(Species):
+            case nameof(CustomSpecies):
+            case nameof(EBSpecies):
+            case nameof(CustomEBSpecies):
+            case nameof(Name):
+            case nameof(Qty):
+            case nameof(Notes):
+
                 _mainVm?.CabinetIsModifiedAndNotApplied = true;
 
                 return;

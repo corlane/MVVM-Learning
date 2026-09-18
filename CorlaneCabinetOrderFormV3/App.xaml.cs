@@ -272,24 +272,14 @@ public partial class App : Application
         }
 
         // One-time popup — bump this version string whenever you have a new notice
-        const string currentPopupVersion = "3.1.0.25";
+        const string currentPopupVersion = "3.1.0.29";
         if (defaults.HasSeenPopup != currentPopupVersion)
         {
             MessageBox.Show(
-                "NEW IN VERSION 3.1.0.25:\n\n" +
-                //"NEW MATERIAL ADDED:\n\n" +
+                "NEW IN VERSION 3.1.0.29:\n\n" +
 
-                //"Prefinished Ply Premium\n\n" +
-
-                //"• This is manufactured by Garnica, with a Maple face. It is the highest quality prefinished plywood available.\n\n" +
-
-                //"• Now available as a material option for cabinets and doors/drawer fronts.\n\n" +
-                //"• When chosen as a cabinet species, drawer boxes will also be made of the same material.\n" +
-
-                "IMPORTANT:\n\n"+
-                "An internet connection is now required for the Order Form to launch.\n\n"+
-                "If not connected to the internet, the application will display a message and exit.\n\n" +
-                "This ensures that you are always using the latest version of the Order Form."+
+                "NEW FEATURE:\n\n"+
+                "If an existing cabinet/item is modified and the changes are not applied, a confirmation dialog will appear when switching to a different cabinet.\n\n"+
                 " ",
 
                 "What's New",

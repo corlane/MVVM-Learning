@@ -33,12 +33,14 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         Notes = "";
 
+        _isMapping = true; // Prevents the mapping from triggering validation when resetting the quantity
         Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
+        _isMapping = false;
 
         _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
 
-        _mainVm.AutoSave();
+        _mainVm?.AutoSave();
     }
 
     [RelayCommand]

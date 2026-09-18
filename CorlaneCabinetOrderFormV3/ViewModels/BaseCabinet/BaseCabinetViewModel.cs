@@ -755,8 +755,96 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             case null:
             case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
+
             case nameof(Width):
             case nameof(Height):
+            case nameof(Depth):
+            case nameof(Species):
+            case nameof(CustomSpecies):
+            case nameof(EBSpecies):
+            case nameof(CustomEBSpecies):
+            case nameof(Name):
+            case nameof(Qty):
+            case nameof(Notes):
+            case nameof(Style):
+            case nameof(SinkCabinet):
+
+            case nameof(LeftBackWidth):
+            case nameof(RightBackWidth):
+            case nameof(LeftFrontWidth):
+            case nameof(RightFrontWidth):
+            case nameof(LeftDepth):
+            case nameof(RightDepth):
+            case nameof(HasTK):
+            case nameof(TKHeight):
+            case nameof(TKDepth):
+            case nameof(DoorSpecies):
+            case nameof(CustomDoorSpecies):
+            case nameof(BackThickness):
+            case nameof(TopType):
+            case nameof(ShelfCount):
+            case nameof(ShelfDepth):
+            case nameof(DrillShelfHoles):
+            case nameof(DoorCount):
+            case nameof(DoorGrainDir):
+            case nameof(IncDoorsInList):
+            case nameof(IncDoors):
+            case nameof(DrillHingeHoles):
+            case nameof(DrwFrontGrainDir):
+            case nameof(DrwCount):
+            case nameof(DrwStyle):
+            case nameof(OpeningHeight1):
+            case nameof(OpeningHeight2):
+            case nameof(OpeningHeight3):
+            case nameof(OpeningHeight4):
+            case nameof(IncDrwBoxOpening1):
+            case nameof(IncDrwBoxOpening2):
+            case nameof(IncDrwBoxOpening3):
+            case nameof(IncDrwBoxOpening4):
+            case nameof(DrillSlideHolesOpening1):
+            case nameof(DrillSlideHolesOpening2):
+            case nameof(DrillSlideHolesOpening3):
+            case nameof(DrillSlideHolesOpening4):
+            case nameof(IncDrwBoxInListOpening1):
+            case nameof(IncDrwBoxInListOpening2):
+            case nameof(IncDrwBoxInListOpening3):
+            case nameof(IncDrwBoxInListOpening4):
+            case nameof(DrwFrontHeight1):
+            case nameof(DrwFrontHeight2):
+            case nameof(DrwFrontHeight3):
+            case nameof(DrwFrontHeight4):
+            case nameof(IncDrwFront1):
+            case nameof(IncDrwFront2):
+            case nameof(IncDrwFront3):
+            case nameof(IncDrwFront4):
+            case nameof(IncDrwFrontInList1):
+            case nameof(IncDrwFrontInList2):
+            case nameof(IncDrwFrontInList3):
+            case nameof(IncDrwFrontInList4):
+            case nameof(LeftReveal):
+            case nameof(RightReveal):
+            case nameof(TopReveal):
+            case nameof(BottomReveal):
+            case nameof(GapWidth):
+            case nameof(IncRollouts):
+            case nameof(RolloutCount):
+            case nameof(RolloutStyle):
+            case nameof(IncRolloutsInList):
+            case nameof(DrillSlideHolesForRollouts):
+            case nameof(TrashDrawer):
+            case nameof(IncTrashDrwBox):
+            case nameof(EqualizeAllDrwFronts):
+            case nameof(EqualizeBottomDrwFronts):
+            case nameof(EdgebandDoorsAndDrawers):
+            case nameof(HasTop):
+            case nameof(HasDeck):
+            case nameof(HasLeftEnd):
+            case nameof(HasRightEnd):
+            case nameof(HasBack):
+            case nameof(HasToeKickBoard):
+            case nameof(DrwBoxCustomSpecies):
+
+
                 _mainVm?.CabinetIsModifiedAndNotApplied = true;
 
                 return;

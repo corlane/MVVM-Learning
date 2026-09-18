@@ -42,7 +42,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
             TopType = tempTopType; // Restore user's top type choice after forcing a full top for shallow depths
 
+            _isMapping = true; // Prevents ApplyViewModelToModel from firing while we reset the view model to defaults
             Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
+            _isMapping = false;
 
             Width = width; // restore width to view model in case ApplyViewModelToModel modified it
             Depth = depth; // restore depth to view model in case ApplyViewModelToModel modified it
