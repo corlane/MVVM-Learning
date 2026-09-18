@@ -45,6 +45,7 @@
                   VirtualizingStackPanel.ScrollUnit="Pixel"
                   ItemsSource="{Binding Cabinets}"
                   SelectedItem="{Binding SelectedCabinet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedIndex="{Binding SelectedCabinetIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectionMode="Single"
                   IsSynchronizedWithCurrentItem="True"
                   AllowDrop="True"
@@ -118,7 +119,6 @@
                     <GridViewColumn Header="Width" DisplayMemberBinding="{Binding Width, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="Height" DisplayMemberBinding="{Binding Height, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
                     <GridViewColumn Header="Depth" DisplayMemberBinding="{Binding Depth, Converter={StaticResource DimensionFormatConverter}}" Width="Auto"/>
-                    <!--<GridViewColumn Header="Sink" DisplayMemberBinding="{Binding SinkCabinet}" Width="Auto"/>-->
                 </GridView>
             </ListView.View>
         </ListView>

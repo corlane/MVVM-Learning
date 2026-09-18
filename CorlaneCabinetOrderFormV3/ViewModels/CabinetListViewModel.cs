@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.Views;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 
@@ -124,6 +125,7 @@ public partial class CabinetListViewModel : ObservableValidator
         {
             if (_mainVm != null)
             {
+
                 var oldValue = _mainVm.SelectedCabinet;
                 if (oldValue != value)
                 {
@@ -133,6 +135,32 @@ public partial class CabinetListViewModel : ObservableValidator
             }
         }
     }
+
+    private bool _suppressSelectionChanged; // so the selection can be reverted without firing selectionchanged infinitely
+
+    [ObservableProperty]
+    public partial int SelectedCabinetIndex { get; set; }
+
+    partial void OnSelectedCabinetIndexChanged(int oldValue, int newValue)
+    {
+        if (_suppressSelectionChanged) return;
+        if (oldValue == newValue) return;
+
+        if (_mainVm.CabinetIsModifiedAndNotApplied)
+        {
+            var result = MessageBox.Show(
+                "You have unsaved changes. Do you want to apply them before switching cabinets?",
+                "Unsaved Changes",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                _mainVm.TryUpdateCurrentCabinet();
+            }         
+        }
+    }
+
 
     /// <summary>True when at least one cabinet has IsSelected checked.</summary>
     public bool HasSelectedCabinets =>
@@ -205,4 +233,7 @@ public partial class CabinetListViewModel : ObservableValidator
         // Keep this VM's proxy property fresh too
         OnPropertyChanged(nameof(SelectedCabinet));
     }
+
+    public bool HasUnsavedCabinetChanges => _mainVm.CabinetIsModifiedAndNotApplied;
+
 }

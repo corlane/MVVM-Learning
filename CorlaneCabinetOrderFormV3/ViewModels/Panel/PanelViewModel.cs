@@ -281,6 +281,7 @@ public partial class PanelViewModel : ObservableValidator
 
             _mainVm?.NotifyPreviewWindow("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
+            _mainVm?.CabinetIsModifiedAndNotApplied = false; // Reset the modified flag after applying changes
         }
         else
         {
@@ -329,6 +330,7 @@ public partial class PanelViewModel : ObservableValidator
         }
         finally
         {
+            _mainVm?.CabinetIsModifiedAndNotApplied = false;
             _isMapping = false;
         }
     }
@@ -350,6 +352,25 @@ public partial class PanelViewModel : ObservableValidator
         };
 
         _previewService?.RequestPreview(3, model);
+    }
+
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (_isMapping) return;
+
+        switch (e.PropertyName)
+        {
+            case null:
+            case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
+            case nameof(Width):
+            case nameof(Height):
+                _mainVm?.CabinetIsModifiedAndNotApplied = true;
+
+                return;
+        }
     }
 
 }

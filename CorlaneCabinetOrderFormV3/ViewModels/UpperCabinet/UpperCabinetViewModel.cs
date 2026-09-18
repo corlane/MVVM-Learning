@@ -296,4 +296,23 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool IncDoorsInListVisible { get; set; } = true;
     [ObservableProperty] public partial bool DrillHingeHolesVisible { get; set; } = true;
     [ObservableProperty] public partial bool SupplySlabDoorsVisible { get; set; } = true;
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (_isMapping) return;
+
+        switch (e.PropertyName)
+        {
+            case null:
+            case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
+            case nameof(Width):
+            case nameof(Height):
+                _mainVm?.CabinetIsModifiedAndNotApplied = true;
+
+                return;
+        }
+    }
+
 }

@@ -44,6 +44,7 @@ public abstract partial class CabinetModel : ObservableObject
     [JsonIgnore]
     public partial bool IsSelected { get; set; }
 
+
     // Temporary UI-only flag used to animate/highlight a row when recently updated.
     [ObservableProperty]
     public partial bool IsHighlighted { get; set; }

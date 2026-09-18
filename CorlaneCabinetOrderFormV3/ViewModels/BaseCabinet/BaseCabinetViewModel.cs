@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -87,7 +88,6 @@ public partial class BaseCabinetViewModel : ObservableValidator
             OnPropertyChanged(nameof(ListBackThickness));
         }
     }
-
 
     // Base cabinet type strings
     public static string Style1 => CabinetStyles.Base.Standard;
@@ -743,4 +743,23 @@ public partial class BaseCabinetViewModel : ObservableValidator
     [ObservableProperty] public partial bool ListDrawerStyleVisible { get; set; } = true;
     [ObservableProperty] public partial bool ComboShelfDepthEnabled { get; set; } = true;
     [ObservableProperty] public partial bool ShelfDepthVisible { get; set; } = true;
+
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (_isMapping || _isResizing) return;
+
+        switch (e.PropertyName)
+        {
+            case null:
+            case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
+            case nameof(Width):
+            case nameof(Height):
+                _mainVm?.CabinetIsModifiedAndNotApplied = true;
+
+                return;
+        }
+    }
 }

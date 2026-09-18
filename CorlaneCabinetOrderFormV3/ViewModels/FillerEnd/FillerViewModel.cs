@@ -166,7 +166,7 @@ public partial class FillerViewModel : ObservableValidator
         _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
         _mainVm?.IsModified = true;
 
-        _mainVm.AutoSave();
+        _mainVm?.AutoSave();
     }
 
 
@@ -184,7 +184,8 @@ public partial class FillerViewModel : ObservableValidator
             ApplyViewModelToModel(selected);
 
             _mainVm?.NotifyPreviewWindow("Cabinet Updated", Brushes.Green);
-            _mainVm.IsModified = true;
+            _mainVm?.IsModified = true;
+            _mainVm?.CabinetIsModifiedAndNotApplied = false; // Reset the modified flag after applying changes
         }
         else
         {
@@ -226,6 +227,7 @@ public partial class FillerViewModel : ObservableValidator
         }
         finally
         {
+            _mainVm?.CabinetIsModifiedAndNotApplied = false;
             _isMapping = false;
         }
     }
@@ -242,5 +244,24 @@ public partial class FillerViewModel : ObservableValidator
         };
 
         _previewService?.RequestPreview(2, model);
+    }
+
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (_isMapping) return;
+
+        switch (e.PropertyName)
+        {
+            case null:
+            case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
+            case nameof(Width):
+            case nameof(Height):
+                _mainVm?.CabinetIsModifiedAndNotApplied = true;
+
+                return;
+        }
     }
 }

@@ -27,6 +27,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
                 DoorCount = 2;
             }
 
+            _mainVm?.CabinetIsModifiedAndNotApplied = false;
+
             // Only update visibility/state — do NOT recalculate values.
             // The model's values are authoritative after mapping.
             ApplyStyleVisibility(model.Style);

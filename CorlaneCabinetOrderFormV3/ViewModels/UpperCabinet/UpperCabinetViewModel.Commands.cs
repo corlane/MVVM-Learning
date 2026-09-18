@@ -58,6 +58,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
             _mainVm?.NotifyPreviewWindow("Cabinet Updated", Brushes.Green);
             _mainVm?.IsModified = true;
+            _mainVm?.CabinetIsModifiedAndNotApplied = false; // Reset the modified flag after applying changes
         }
         else
         {

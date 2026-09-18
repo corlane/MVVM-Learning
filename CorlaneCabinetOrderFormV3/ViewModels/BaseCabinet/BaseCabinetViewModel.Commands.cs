@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
+using System.Windows;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels
@@ -50,7 +51,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             _mainVm?.IsModified = true;
 
 
-            _mainVm.AutoSave();
+            _mainVm?.AutoSave();
         }
 
         [RelayCommand]
@@ -75,6 +76,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 _mainVm?.IsModified = true;
 
                 TopType = tempTopType; // Restore user's top type choice after enforcing depth-specific rules
+
+                _mainVm?.CabinetIsModifiedAndNotApplied = false; // Reset the modified flag after applying changes
             }
 
             else

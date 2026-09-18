@@ -69,7 +69,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         finally
         {
             _isMapping = false;
-
+            _mainVm?.CabinetIsModifiedAndNotApplied = false;
             ApplyStyleVisibility(Style);
         }
     }

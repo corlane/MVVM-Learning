@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 using System.Windows;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -229,6 +230,10 @@ public partial class MainWindowViewModel : ObservableValidator
         AutoSave();
     }
 
+    /// <summary>UI-only flag if cabient is modified but Apply hasn't been clicked yet. Not persisted.</summary>
+    [ObservableProperty]
+    public partial bool CabinetIsModifiedAndNotApplied { get; set; }
+
 
     // Call this once (e.g., in constructor) to wire collection/item change tracking
     private void InitializeModificationTracking()
@@ -344,5 +349,40 @@ public partial class MainWindowViewModel : ObservableValidator
         {
             MessageBox.Show($"Unable to open help page.\n\n{ex.Message}", "Help", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+    }
+
+
+    // MainViewModel
+    public bool TryUpdateCurrentCabinet()
+    {
+        if (SelectedCabinet is BaseCabinetModel bcm)
+        {
+            BaseCabinetVm.UpdateCabinetCommand.Execute(bcm);
+            CabinetIsModifiedAndNotApplied = false;
+            return true;
+        }
+
+        if (SelectedCabinet is UpperCabinetModel ucm)
+        {
+            UpperCabinetVm.UpdateCabinetCommand.Execute(ucm);
+            CabinetIsModifiedAndNotApplied = false;
+            return true;
+        }
+
+        if (SelectedCabinet is PanelModel pm)
+        {
+            PanelVm.UpdateCabinetCommand.Execute(pm);
+            CabinetIsModifiedAndNotApplied = false;
+            return true;
+        }
+
+        if (SelectedCabinet is FillerModel fm)
+        {
+            FillerVm.UpdateCabinetCommand.Execute(fm);
+            CabinetIsModifiedAndNotApplied = false;
+            return true;
+        }
+
+        return false;
     }
 }

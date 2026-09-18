@@ -4,6 +4,265 @@ using CorlaneCabinetOrderFormV3.Services;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
+/*
+ * =============================================================================
+ * DRAWER / OPENING LAYOUT ENGINE
+ * =============================================================================
+ *
+ * This class keeps opening heights and drawer-front heights in lockstep with
+ * cabinet Height, toe-kick, reveals, gaps, Style, and DrwCount.
+ *
+ * There are TWO sources of truth, depending on what the user last edited:
+ *
+ *   Openings  -> CabinetLayoutCalculator.ComputeFromOpenings
+ *               (user typed an opening; derive fronts, then remaining openings)
+ *
+ *   Fronts    -> CabinetLayoutCalculator.ComputeFromDrawerFronts
+ *               (user typed a drawer front; derive openings)
+ *
+ * Equalization (Style2 only) is a third overlay that rewrites fronts, then
+ * re-derives openings from those fronts.
+ *
+ *
+ * -----------------------------------------------------------------------------
+ * WHY THE GUARDS EXIST
+ * -----------------------------------------------------------------------------
+ *
+ * Every OpeningHeight* / DrwFrontHeight* is a TwoWay string with
+ * UpdateSourceTrigger=PropertyChanged. Each keystroke:
+ *
+ *   TextBox -> VM property -> OnXxxChanged -> resize -> write OTHER properties
+ *           -> those OnXxxChanged fire too
+ *
+ * Without guards that loop (a) overwrites the field being typed ("12." becomes
+ * "12", "1 1/" becomes "0") and (b) re-enters resize forever.
+ *
+ * Three flags, three jobs — do not collapse them:
+ *
+ *   _isMapping
+ *     Bulk load from a model / defaults. Every OnChanged returns immediately.
+ *     Set true around the whole mapping block, false in finally.
+ *
+ *   _isResizing
+ *     Nestable lock for "we are applying a calculated layout." OnChanged
+ *     handlers MUST return when this is true so assigning Opening2 does not
+ *     start a second resize that clears _activeInputProperty.
+ *
+ *     Take it with:
+ *         bool acquired = !_isResizing;
+ *         _isResizing = true;
+ *         try { ... }
+ *         finally { if (acquired) _isResizing = false; }
+ *
+ *     Outer caller keeps the lock; inner helper (equalization) must NOT clear
+ *     it. Historically `_isResizing = false` inside equalization was used so
+ *     that assigning fronts would chain into ResizeDrwFrontHeights via
+ *     OnChanged. That chain is what ate in-progress text. Call the calculator
+ *     explicitly instead.
+ *
+ *   _activeInputProperty
+ *     nameof() of the field the user is currently typing. ApplyLayoutResult
+ *     MUST skip that field or the TextBox loses partial input.
+ *
+ *     ALWAYS snapshot before assigning:
+ *         var active = _activeInputProperty;
+ *         if (active != nameof(OpeningHeight1)) OpeningHeight1 = ...
+ *
+ *     Reading _activeInputProperty on each line is wrong: setting Opening1
+ *     used to fire OnOpeningHeight1Changed, which set then CLEARED
+ *     _activeInputProperty, so later lines (fronts) overwrote the field
+ *     being typed. Opening1 appeared fine only because it was assigned first.
+ *
+ *
+ * -----------------------------------------------------------------------------
+ * DATA FLOW (happy path)
+ * -----------------------------------------------------------------------------
+ *
+ * A) User edits an OPENING (OpeningHeight1..4)
+ *
+ *    OnOpeningHeightNChanged
+ *      if (_isMapping || _isResizing) return;
+ *      _activeInputProperty = nameof(OpeningHeightN);
+ *      ResizeOpeningHeights();
+ *      _activeInputProperty = null;
+ *
+ *    ResizeOpeningHeights
+ *      take _isResizing
+ *      input  = BuildLayoutInputs()          // current strings -> doubles
+ *      result = ComputeFromOpenings(input)
+ *      ApplyLayoutResult(result)             // skip active opening
+ *      ApplyDrawerFrontEqualization()        // no-op if flags off / not Style2
+ *      UpdateDisabledFlags()
+ *      UpdatePreview()
+ *
+ * B) User edits a DRAWER FRONT (DrwFrontHeight1..4)
+ *
+ *    OnDrwFrontHeightNChanged
+ *      if (_isMapping || _isResizing) return;
+ *      _activeInputProperty = nameof(DrwFrontHeightN);
+ *      ApplyDrawerFrontEqualization();       // Front1 also equalizes bottoms
+ *      ResizeDrwFrontHeights();
+ *      _activeInputProperty = null;
+ *
+ *    ResizeDrwFrontHeights
+ *      take _isResizing
+ *      result = ComputeFromDrawerFronts(BuildLayoutInputs())
+ *      ApplyLayoutResult(result)             // skip active front
+ *      UpdateDisabledFlags()
+ *      UpdatePreview()
+ *
+ * C) Height / TK / reveals / gaps / Style / DrwCount change
+ *
+ *    RecalculateDrawerLayout()
+ *      if EqualizeAll or EqualizeBottom -> ApplyDrawerFrontEqualization()
+ *      else                             -> ResizeOpeningHeights()
+ *      ResizeDrwFrontHeights()           // disable flags + preview live here
+ *
+ *
+ * -----------------------------------------------------------------------------
+ * EQUALIZATION (Style2 only)
+ * -----------------------------------------------------------------------------
+ *
+ * ApplyDrawerFrontEqualization
+ *   abort if _isMapping, Style != Style2, DrwCount <= 0, or both flags false
+ *   nestable _isResizing lock (do NOT return early on _isResizing)
+ *
+ *   EqualizeAllDrwFronts
+ *     each front = EqualizeAll(height, reveals, gap, count)
+ *     write every front EXCEPT _activeInputProperty
+ *     (if the user is typing Opening1, active is Opening1, so ALL fronts
+ *      get written — that is intended)
+ *
+ *   EqualizeBottomDrwFronts
+ *     Front1 is the master; Fronts 2..N = EqualizeBottom(..., top: Front1)
+ *     NEVER write Front1 here (that is the field the user edits)
+ *     abort if DrwCount <= 1
+ *
+ *   Then ALWAYS:
+ *     ApplyLayoutResult(ComputeFromDrawerFronts(...))
+ *     so openings catch up without going through OnChanged.
+ *
+ * Do not re-enable _isResizing=false to "let openings resize." That was the
+ * overwrite bug. The explicit ComputeFromDrawerFronts call replaces the chain.
+ *
+ *
+ * -----------------------------------------------------------------------------
+ * DISABLE FLAGS  (UpdateDisabledFlags — assign EVERY flag EVERY time)
+ * -----------------------------------------------------------------------------
+ *
+ * Call from BOTH ResizeOpeningHeights and ResizeDrwFrontHeights, AND from
+ * OnEqualize*Changed / OnStyleChanged / OnDrwCountChanged / end of mapping.
+ * Stale flags are what made Opening2 look "stuck enabled."
+ *
+ * Style1 (base, no equalize):
+ *   Opening1 disabled only when DrwCount == 0
+ *   Opening2, Opening3 always disabled
+ *   Front1 enabled; Front2, Front3 disabled
+ *   DrwCount == 1: Opening1 and Front1 enabled
+ *
+ * Style2 (last used opening/front is computed remainder):
+ *   count 1: all openings + Front1 locked
+ *   count 2: Opening1 / Front1 open; 2 and 3 locked
+ *   count 3: Opening1–2 / Front1–2 open; 3 locked
+ *   count 4: Opening1–3 / Front1–3 open (4 is always IsReadOnly in XAML)
+ *
+ * Overlay (after the count table, never re-enables):
+ *   EqualizeBottomDrwFronts
+ *     only Opening1 (and Front1, if count >= 2) stay editable
+ *     Opening2, Opening3, Front2, Front3 forced disabled
+ *   EqualizeAllDrwFronts   (wins if both are on — apply last)
+ *     ALL openings and ALL fronts disabled; everything is computed
+ *
+ * XAML uses IsReadOnly="{Binding Opening1Disabled}" (NOT IsEnabled).
+ * true = cannot type. No invert converter. Opening4 / Front4 are
+ * IsReadOnly="True" in XAML permanently.
+ *
+ *
+ * -----------------------------------------------------------------------------
+ * DIMENSION FORMAT (decimal vs fraction)
+ * -----------------------------------------------------------------------------
+ *
+ * VM properties are STRINGS. Calculator talks DOUBLES.
+ *
+ *   in  : ConvertDimension.FractionToDouble  ("12 1/2" | "12.5" | "1/2")
+ *   out : FormatDimension(double)
+ *           Fraction -> ConvertDimension.DoubleToFraction (32nds, round down)
+ *           Decimal  -> ToString("0.####")
+ *         NEVER assign raw double.ToString() — that is how fractions vanished.
+ *
+ * Two writers, two jobs:
+ *
+ *   1. ApplyLayoutResult / equalization / mapping
+ *        FormatDimension on every field EXCEPT _activeInputProperty.
+ *
+ *   2. Behaviors.DimensionAutoFormat (XAML attached, LostFocus)
+ *        Formats THE box that lost focus (the skipped active field) and
+ *        UpdateSource()s the VM. That UpdateSource triggers OnChanged ->
+ *        resize, which is fine: active is skipped, siblings get
+ *        FormatDimension so they do not snap back to decimals.
+ *
+ * While typing we must NOT format (would kill "12." and "1 1/").
+ * Incomplete strings that parse to 0 (and are not "0") are left alone by
+ * DimensionAutoFormat. FractionToDouble does not Trim(); leading spaces
+ * on mixed numbers can fail parse.
+ *
+ * Format fallbacks must match:
+ *   VM FormatDimension            : _defaults?.DefaultDimensionFormat ?? "Decimal"
+ *   DimensionAutoFormat           : service value, else "Fraction"
+ * Align these if settings fail to resolve.
+ *
+ *
+ * -----------------------------------------------------------------------------
+ * BUILDING INPUTS
+ * -----------------------------------------------------------------------------
+ *
+ * BuildLayoutInputs() reads the CURRENT property strings every time.
+ * After equalization writes fronts, it must be called AGAIN before
+ * ComputeFromDrawerFronts — do not reuse a pre-equalize snapshot.
+ *
+ *
+ * -----------------------------------------------------------------------------
+ * TROUBLESHOOTING CHEAT SHEET
+ * -----------------------------------------------------------------------------
+ *
+ * Cannot type "." or " " or "/" in a box
+ *   Something is writing that property on every keystroke.
+ *   Check: _activeInputProperty snapshot, OnChanged missing `_isResizing`
+ *   return, equalization writing the active front, .ToString() instead of skip.
+ *
+ * Opening change does not equalize fronts
+ *   ApplyDrawerFrontEqualization must be called EXPLICITLY from
+ *   ResizeOpeningHeights. OnDrwFrontHeight1Changed will NOT run during
+ *   _isResizing (by design).
+ *
+ * Equalize flag on but openings do not move
+ *   Equalization must end with ComputeFromDrawerFronts + ApplyLayoutResult,
+ *   still inside the _isResizing lock. Do not set _isResizing = false to
+ *   "force" OnChanged.
+ *
+ * Disable flags ignored / Opening2 still editable
+ *   1. Count table ENABLES Opening2 at DrwCount >= 3. Overlay equalize
+ *      flags after that table.
+ *   2. UpdateDisabledFlags must run on flag/style/count change, not only
+ *      on height resize.
+ *   3. XAML is IsReadOnly, not IsEnabled. Property must be [ObservableProperty].
+ *
+ * Left a box, format did not stick / siblings went decimal
+ *   ApplyLayoutResult is using .ToString() instead of FormatDimension.
+ *   DimensionAutoFormat only touches the box that lost focus.
+ *
+ * Recursion / stack overflow on one keystroke
+ *   OnChanged is missing `if (_isMapping || _isResizing) return`.
+ *   Equalization is clearing _isResizing before assigning fronts.
+ *
+ * First load shows raw doubles
+ *   Mapping path must FormatDimension too; _isMapping must wrap the
+ *   whole load so OnChanged does not fight it. Then UpdateDisabledFlags().
+ *
+ * =============================================================================
+ */
+
+
 public partial class BaseCabinetViewModel : ObservableValidator
 {
     private string? _activeInputProperty;
