@@ -637,3 +637,4 @@
 
 3.1.0.30
 	Initial commit.
+	There were several issues that were triggering the "Do you want to apply changes" dialog box. I think they are worked out now. At least, most of them...we shall see. commit

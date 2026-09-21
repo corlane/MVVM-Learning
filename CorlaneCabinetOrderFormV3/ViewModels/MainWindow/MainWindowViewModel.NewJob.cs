@@ -69,6 +69,8 @@ public partial class MainWindowViewModel
             _materialPricesVm = null;
             _processOrderVm = null;
 
+            CabinetIsModifiedAndNotApplied = false; // Reset transient "modified" state for the new job
+
             // Reset persistent "ordered" state for the new job
             _cabinetService.OrderedAtLocal = null;
             _cabinetService.ExceptionDoneKeys.Clear();

@@ -306,7 +306,6 @@ public partial class UpperCabinetViewModel : ObservableValidator
         switch (e.PropertyName)
         {
             case null:
-            case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
 
             case nameof(Width):
             case nameof(Height):
@@ -348,8 +347,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
             case nameof(HasRightEnd):
             case nameof(HasBack):
 
-                _mainVm?.CabinetIsModifiedAndNotApplied = true;
-
+                if (_mainVm is not null)
+                    _mainVm.CabinetIsModifiedAndNotApplied = true;
                 return;
         }
     }

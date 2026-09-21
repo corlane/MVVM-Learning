@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.ValidationAttributes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -116,6 +117,7 @@ public partial class BaseCabinetViewModel : ObservableValidator
         {
             // Drawer cabinet selected
             RolloutCount = 0;
+            IncRollouts = false;
         }
         else if (newValue == Style1)
         {
@@ -749,13 +751,14 @@ public partial class BaseCabinetViewModel : ObservableValidator
     {
         base.OnPropertyChanged(e);
 
-        if (_isMapping || _isResizing) return;
+        if (_isMapping || _isResizing)
+        {
+            return;
+        }
 
         switch (e.PropertyName)
         {
             case null:
-            case nameof(_mainVm.CabinetIsModifiedAndNotApplied):
-
             case nameof(Width):
             case nameof(Height):
             case nameof(Depth):
@@ -845,8 +848,8 @@ public partial class BaseCabinetViewModel : ObservableValidator
             case nameof(DrwBoxCustomSpecies):
 
 
-                _mainVm?.CabinetIsModifiedAndNotApplied = true;
-
+                if (_mainVm is not null)
+                    _mainVm.CabinetIsModifiedAndNotApplied = true;
                 return;
         }
     }

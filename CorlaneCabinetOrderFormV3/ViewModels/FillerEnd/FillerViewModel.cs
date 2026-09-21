@@ -143,6 +143,8 @@ public partial class FillerViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
+        _mainVm?.CabinetIsModifiedAndNotApplied = false;
+
         if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, "", null))
             return;
 
@@ -198,7 +200,9 @@ public partial class FillerViewModel : ObservableValidator
 
         _mainVm!.SelectedCabinet = null;
 
+        _isMapping = true; // Prevent triggering the modified flag when resetting Qty
         Notes = "";
+        _isMapping = false;
 
         _mainVm.AutoSave();
     }
@@ -272,8 +276,8 @@ public partial class FillerViewModel : ObservableValidator
             case nameof(Qty):
             case nameof(Notes):
 
-                _mainVm?.CabinetIsModifiedAndNotApplied = true;
-
+                if (_mainVm is not null)
+                    _mainVm.CabinetIsModifiedAndNotApplied = true;
                 return;
         }
     }

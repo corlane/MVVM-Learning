@@ -11,6 +11,8 @@ public partial class UpperCabinetViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
+        _mainVm?.CabinetIsModifiedAndNotApplied = false;
+
         if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
             return;
 
@@ -31,10 +33,12 @@ public partial class UpperCabinetViewModel : ObservableValidator
             return;
         }
 
+        _isMapping = true; // Prevents the mapping from triggering validation when resetting the quantity
+
         Notes = "";
 
-        _isMapping = true; // Prevents the mapping from triggering validation when resetting the quantity
         Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
+
         _isMapping = false;
 
         _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
@@ -70,7 +74,9 @@ public partial class UpperCabinetViewModel : ObservableValidator
 
         _mainVm!.SelectedCabinet = null;
 
+        _isMapping = true; // Prevents the mapping from triggering validation when resetting the quantity
         Notes = "";
+        _isMapping = false;
 
         _mainVm.AutoSave();
     }
@@ -111,6 +117,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
     /// </summary>
     private void EnforceStyleConstraints()
     {
+        _isMapping = true; // Prevents the mapping from triggering validation when enforcing style constraints
         if (Style == Style2 || Style == Style3)
         {
             BackThickness = CabinetOptions.BackThickness.ThreeQuarterDecimal; // Force 3/4" back
@@ -120,6 +127,7 @@ public partial class UpperCabinetViewModel : ObservableValidator
         {
             if (DoorCount == 1) { DoorCount = 2; } // Force 2 doors for style 2
         }
+        _isMapping = false;
     }
 
 }

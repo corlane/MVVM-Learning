@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Converters;
 using CorlaneCabinetOrderFormV3.Models;
+using CorlaneCabinetOrderFormV3.ViewModels;
 using System.Windows;
 using System.Windows.Media;
 
@@ -12,6 +13,8 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         [RelayCommand]
         private void AddCabinet()
         {
+            _mainVm?.CabinetIsModifiedAndNotApplied = false;
+
             if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies, DoorSpecies, CustomDoorSpecies))
                 return;
 
@@ -38,20 +41,21 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 return;
             }
 
+            _isMapping = true; // Prevents ApplyViewModelToModel from firing while we reset the view model to defaults
+
             Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
 
             TopType = tempTopType; // Restore user's top type choice after forcing a full top for shallow depths
 
-            _isMapping = true; // Prevents ApplyViewModelToModel from firing while we reset the view model to defaults
             Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
-            _isMapping = false;
 
             Width = width; // restore width to view model in case ApplyViewModelToModel modified it
             Depth = depth; // restore depth to view model in case ApplyViewModelToModel modified it
 
+            _isMapping = false;
+
             _mainVm?.NotifyPreviewWindow($"{newCabinet.Style} {newCabinet.CabinetType} {newCabinet.Name} Added", Brushes.MediumBlue);
             _mainVm?.IsModified = true;
-
 
             _mainVm?.AutoSave();
         }
@@ -77,7 +81,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 _mainVm?.NotifyPreviewWindow("Cabinet Updated", Brushes.Green);
                 _mainVm?.IsModified = true;
 
+                _isMapping = true; // Prevents ApplyViewModelToModel from firing while we reset the view model to defaults
                 TopType = tempTopType; // Restore user's top type choice after enforcing depth-specific rules
+                _isMapping = false;
 
                 _mainVm?.CabinetIsModifiedAndNotApplied = false; // Reset the modified flag after applying changes
             }
@@ -92,7 +98,9 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             // Optional: clear selection after update
             _mainVm!.SelectedCabinet = null;
 
+            _isMapping = true; // Prevents ApplyViewModelToModel from firing while we reset the view model to defaults
             Notes = ""; // Clear notes field after adding, since it can contain cabinet-specific info that shouldn't be copied to next cabinet
+            _isMapping = false;
 
             _mainVm.AutoSave();
         }
@@ -271,12 +279,15 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         {
             // If the user chose "Stretcher" but the cabinet is very shallow, force "Full".
 
+            _isMapping = true; // Prevents ApplyViewModelToModel from firing while we enforce top type constraints
             double depth = ConvertDimension.FractionToDouble(Depth);
 
             if (depth > 0 && depth < 10)
             {
                 TopType = CabinetOptions.TopType.Full;
             }
+
+            _isMapping = false; // Re-enable ApplyViewModelToModel after enforcing top type constraints
         }
 
         /// <summary>
@@ -285,6 +296,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         /// </summary>
         private void EnforceStyleConstraints()
         {
+            _isMapping = true; // Prevents ApplyViewModelToModel from firing while we enforce style constraints
             if (Style == Style2)
             {
                 DoorCount = 0;
@@ -292,6 +304,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
                 DrillShelfHoles = false;
                 RolloutCount = 0;
                 ShelfCount = 0;
+                IncRollouts = false;
             }
 
             if (Style == Style3)
@@ -310,10 +323,12 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             {
                 DrwCount = 0;
                 RolloutCount = 0;
+                IncRollouts = false;
                 TopType = CabinetOptions.TopType.Full;
                 BackThickness = "0.75"; // Force 3/4" back
                 ShelfDepth = CabinetOptions.ShelfDepth.FullDepth; // Force full-depth shelves
             }
+            _isMapping = false; // Re-enable ApplyViewModelToModel after enforcing style constraints
         }
     }
 }

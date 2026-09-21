@@ -240,6 +240,8 @@ public partial class PanelViewModel : ObservableValidator
     [RelayCommand]
     private void AddCabinet()
     {
+        _mainVm?.CabinetIsModifiedAndNotApplied = false;
+
         if (!ViewModelValidationHelper.ValidateCustomSpecies(Species, CustomSpecies, EBSpecies, CustomEBSpecies))
             return;
 
@@ -257,9 +259,8 @@ public partial class PanelViewModel : ObservableValidator
             return;
         }
 
-        Notes = "";
-
         _isMapping = true; // Prevent triggering the modified flag when resetting Qty
+        Notes = "";
         Qty = 0; // Reset quantity to 0 after adding, this forces user to specify a quantity for each new cabinet
         _isMapping = false;
 
@@ -294,7 +295,9 @@ public partial class PanelViewModel : ObservableValidator
 
         _mainVm!.SelectedCabinet = null;
 
+        _isMapping = true; // Prevent triggering the modified flag when resetting Qty
         Notes = "";
+        _isMapping = false;
 
         _mainVm.AutoSave();
     }
@@ -385,9 +388,10 @@ public partial class PanelViewModel : ObservableValidator
             case nameof(PanelEBLeft):
             case nameof(PanelEBRight):
 
-                _mainVm?.CabinetIsModifiedAndNotApplied = true;
-
+                if (_mainVm is not null)
+                    _mainVm.CabinetIsModifiedAndNotApplied = true;
                 return;
+
         }
     }
 
