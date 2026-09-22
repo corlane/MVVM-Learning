@@ -641,3 +641,5 @@
 
 3.1.0.31
 	Initial commit.
+	Changed BaseCabinetVM.commands to file-scoped namespace
+	Added CabinetIsModifiedAndNotApplied = false; to MainWindowVM.NewJob to supress the dialog when the list is cleared. commit

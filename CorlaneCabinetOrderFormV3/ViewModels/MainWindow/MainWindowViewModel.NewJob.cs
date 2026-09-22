@@ -33,6 +33,8 @@ public partial class MainWindowViewModel
             // 1) Clear the shared cabinets collection
             try
             {
+                CabinetIsModifiedAndNotApplied = false;
+
                 _cabinetService.Cabinets!.Clear();
             }
             catch (Exception ex)
