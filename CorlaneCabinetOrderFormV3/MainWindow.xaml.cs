@@ -109,15 +109,19 @@ public partial class MainWindow : Window
 
         e.Cancel = true;
 
-        var result = MessageBox.Show(
-            "You have unsaved changes. Save before closing?",
-            "Unsaved Changes",
-            MessageBoxButton.YesNoCancel,
-            MessageBoxImage.Warning);
+        //var result = MessageBox.Show(
+        //    "You have unsaved changes. Save before closing?",
+        //    "Unsaved Changes",
+        //    MessageBoxButton.YesNoCancel,
+        //    MessageBoxImage.Warning);
 
-        if (result == MessageBoxResult.Cancel) return;
+        var res = new CustomMessageBoxWithCancel("You have unsaved changes. Save job before closing?");
+        res.ShowDialog();
+        bool? result = res.Result;
 
-        if (result == MessageBoxResult.No)
+        if (result == null) return;
+
+        if (result == false)
         {
             _allowClose = true;
             _ = Dispatcher.BeginInvoke(Close);

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.Views;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
@@ -22,13 +23,9 @@ public partial class MainWindowViewModel
                 return;
             }
 
-            var res = MessageBox.Show(
-                "Create a new job? This will clear the current job from memory. Unsaved changes will be lost.",
-                "New Job",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (res != MessageBoxResult.Yes) return;
+            var res = new CustomMessageBox("Create a new job? This will clear the current job from memory. Unsaved changes will be lost.");
+            bool? result = res.ShowDialog();
+            if (result != true) return;
 
             // 1) Clear the shared cabinets collection
             try

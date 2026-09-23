@@ -148,13 +148,16 @@ public partial class CabinetListViewModel : ObservableValidator
 
         if (_mainVm.CabinetIsModifiedAndNotApplied)
         {
-            var result = MessageBox.Show(
-                "You have unsaved changes. Do you want to apply them before switching cabinets?",
-                "Unsaved Changes",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+            //var result = MessageBox.Show(
+            //    "You have unsaved changes. Do you want to apply them before switching cabinets?",
+            //    "Unsaved Changes",
+            //    MessageBoxButton.YesNo,
+            //    MessageBoxImage.Question);
+            var res = new CustomMessageBox("Cabinet has been changed and not Updated. Do you want to apply the changes before switching cabinets?");
+            bool? result = res.ShowDialog();
 
-            if (result == MessageBoxResult.Yes)
+
+            if (result == true)
             {
                 _mainVm.TryUpdateCurrentCabinet();
             }         
@@ -213,13 +216,15 @@ public partial class CabinetListViewModel : ObservableValidator
     {
         if (cabinet is null) return;
 
-        var result = MessageBox.Show(
-            $"Delete {cabinet.CabinetType} {cabinet.Name}?",
-            "Confirm Delete",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question);
+        //var result = MessageBox.Show(
+        //    $"Delete {cabinet.CabinetType} {cabinet.Name}?",
+        //    "Confirm Delete",
+        //    MessageBoxButton.YesNo,
+        //    MessageBoxImage.Question);
+        var res = new CustomMessageBox($"Delete {cabinet.CabinetType} {cabinet.Name}?");
+        bool? result = res.ShowDialog();
 
-        if (result == MessageBoxResult.Yes)
+        if (result == true)
         {
             _cabinetService?.Remove(cabinet);
             _mainVm?.IsModified = true;

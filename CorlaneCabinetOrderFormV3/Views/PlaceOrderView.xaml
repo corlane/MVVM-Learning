@@ -90,6 +90,8 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
+
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="120"/>
@@ -112,6 +114,9 @@
                     <Button x:Name="buttonPlaceOrder" Content="Place Order" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="40,10,40,10" Margin="20,15,5,15"
                                 Command="{Binding PlaceOrderCommand}"/>
 
+                    <Label Content="Job must be saved before order can be placed." Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" />
+
+
                 </Grid>
             </GroupBox>
 
@@ -122,6 +127,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Label Content="Rate your experience with our Order Form!" FontSize="18" Grid.Row="0"/>
+                    
                     <!-- Replaced StackPanel with a Canvas so the 'Bad!' radio can be moved freely -->
 
                     <Canvas x:Name="ratingCanvas" Height="80" VerticalAlignment="Top" Grid.Row="1" Margin="5">

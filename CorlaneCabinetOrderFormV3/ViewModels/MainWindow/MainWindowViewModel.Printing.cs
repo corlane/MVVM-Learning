@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
 
@@ -18,6 +19,8 @@ public partial class MainWindowViewModel
             jobName: CurrentJobName,
             dimensionFormat: _defaults.DefaultDimensionFormat ?? "Fraction",
             cabinets: _cabinetService.Cabinets.ToList());
+        NotifyMainWindow("Cabinet list printed", Brushes.MediumBlue);
+
     }
 
     [RelayCommand]
@@ -30,6 +33,8 @@ public partial class MainWindowViewModel
             companyName: _defaults.CompanyName ?? "",
             jobName: CurrentJobName,
             doors: doorVm.DoorSizes.ToList());
+        NotifyMainWindow("Door list printed", Brushes.MediumBlue);
+
     }
 
     [RelayCommand]
@@ -42,6 +47,8 @@ public partial class MainWindowViewModel
             companyName: _defaults.CompanyName ?? "",
             jobName: CurrentJobName,
             drawerBoxes: drawerVm.DrawerBoxSizes.ToList());
+        NotifyMainWindow("Drawer Box list printed", Brushes.MediumBlue);
+
     }
 
     // --- CSV export commands added below ---
@@ -103,7 +110,8 @@ public partial class MainWindowViewModel
             }
 
             File.WriteAllText(dialog.FileName, sb.ToString(), Encoding.UTF8);
-            MessageBox.Show("Cabinet list exported.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show("Cabinet list exported.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            NotifyMainWindow("Cabinet list exported", Brushes.MediumBlue);
         }
         catch (System.Exception ex)
         {
@@ -161,7 +169,8 @@ public partial class MainWindowViewModel
             }
 
             File.WriteAllText(dialog.FileName, sb.ToString(), Encoding.UTF8);
-            MessageBox.Show("Door list exported.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show("Door list exported.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            NotifyMainWindow("Door list exported", Brushes.MediumBlue);
         }
         catch (System.Exception ex)
         {
@@ -219,7 +228,9 @@ public partial class MainWindowViewModel
             }
 
             File.WriteAllText(dialog.FileName, sb.ToString(), Encoding.UTF8);
-            MessageBox.Show("Drawer box list exported.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show("Drawer box list exported.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            NotifyMainWindow("Drawer Box list exported", Brushes.MediumBlue);
+
         }
         catch (System.Exception ex)
         {

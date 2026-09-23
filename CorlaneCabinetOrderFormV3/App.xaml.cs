@@ -278,13 +278,14 @@ public partial class App : Application
             MessageBox.Show(
                 "NEW IN VERSION 3.1.0.29:\n\n" +
 
-                "NEW FEATURE:\n\n"+
-                "If an existing cabinet/item is modified and the changes are not applied, a confirmation dialog will appear when switching to a different cabinet.\n\n"+
+                "NEW FEATURE:\n\n" +
+                "If an existing cabinet/item is modified and the changes are not applied, a confirmation dialog will appear when switching to a different cabinet.\n\n" +
                 " ",
 
                 "What's New",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
+
 
             defaults.HasSeenPopup = currentPopupVersion;
             _ = defaults.SaveAsync();

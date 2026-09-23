@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.Views;
 using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Media;
@@ -13,12 +14,15 @@ public partial class MainWindowViewModel
     {
         if (IsModified)
         {
-            var res = MessageBox.Show(
-                "The current job has unsaved changes. Loading a new job will discard these changes. Do you want to continue?",
-                "Unsaved Changes",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-            if (res != MessageBoxResult.Yes) return;
+            //var res = MessageBox.Show(
+            //    "The current job has unsaved changes. Loading a new job will discard these changes. Do you want to continue?",
+            //    "Unsaved Changes",
+            //    MessageBoxButton.YesNo,
+            //    MessageBoxImage.Warning);
+            var res = new CustomMessageBox("The current job has unsaved changes. Loading a new job will discard these changes. Do you want to continue?");
+            bool? result = res.ShowDialog();
+
+            if (result != true) return;
         }
 
         var dialog = new OpenFileDialog

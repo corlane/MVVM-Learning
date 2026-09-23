@@ -643,3 +643,6 @@
 	Initial commit.
 	Changed BaseCabinetVM.commands to file-scoped namespace
 	Added CabinetIsModifiedAndNotApplied = false; to MainWindowVM.NewJob to supress the dialog when the list is cleared. commit
+	Added text "Job must be saved before order can be placed." on Place Order tab, because Miles just stared at the screen.
+	Added custom dialog boxes in most places. commit
+

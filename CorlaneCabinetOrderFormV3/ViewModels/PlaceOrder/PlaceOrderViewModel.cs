@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CorlaneCabinetOrderFormV3.Models;
 using CorlaneCabinetOrderFormV3.Services;
+using CorlaneCabinetOrderFormV3.Views;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -277,8 +278,11 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         [RelayCommand(CanExecute = nameof(CanPlaceOrder))]
         private async Task PlaceOrder()
         {
-            var conf = MessageBox.Show("The order will be saved and sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?", "Place Order", MessageBoxButton.YesNo, MessageBoxImage.Information);
-            if (conf != MessageBoxResult.Yes) return;
+            //var conf = MessageBox.Show("The order will be saved and sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?", "Place Order", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            var res = new CustomMessageBox("The order will be saved and sent to Corlane.\n\nPlease ensure all information is correct before proceeding.\n\nDo you wish to proceed?");
+            bool? conf = res.ShowDialog();
+
+            if (conf != true) return;
 
             // Snapshot a current quote at the moment the user clicks Place Order.
             CalculatePrices();
