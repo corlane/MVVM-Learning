@@ -648,4 +648,6 @@
 
 3.1.0.32
 	Initial commit.
+	Removed commented-out debug lines from DefaultSettingsVM. commit
+
 

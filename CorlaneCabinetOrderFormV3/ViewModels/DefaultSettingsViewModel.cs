@@ -90,8 +90,6 @@ public partial class DefaultSettingsViewModel : ObservableObject
 
     [ObservableProperty] public partial string DefaultBaseBackThickness { get; set; } = "0.75"; partial void OnDefaultBaseBackThicknessChanged(string value)
     {
-        //Debug.WriteLine($"OnDefaultBaseBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultBaseBackThickness='{_defaults?.DefaultBaseBackThickness}'");
-
         // If the ComboBox temporarily clears SelectedItem because its ItemsSource changed,
         // the VM setter can receive an empty string. Don't treat that as a user intent to write back.
         if (string.IsNullOrWhiteSpace(value))
@@ -109,18 +107,14 @@ public partial class DefaultSettingsViewModel : ObservableObject
             _defaults.DefaultBaseBackThickness = ConvertDimension.FractionToDouble(value).ToString();
             // Persist directly on the service (fire-and-forget) rather than invoking the VM command
             _ = _defaults.SaveAsync();
-            //Debug.WriteLine($"Wrote to _defaults.DefaultBaseBackThickness='{_defaults.DefaultBaseBackThickness}'");
         }
     }
 
     [ObservableProperty] public partial string DefaultUpperBackThickness { get; set; } = "0.75"; partial void OnDefaultUpperBackThicknessChanged(string value)
     {
-        //Debug.WriteLine($"OnDefaultUpperBackThicknessChanged called. _isApplyingDefaults={_isApplyingDefaults}, value='{value}', _defaults.DefaultUpperBackThickness='{_defaults?.DefaultUpperBackThickness}'");
-
         // Same guard for the upper thickness: ignore transient empty changes from ItemsSource swap.
         if (string.IsNullOrWhiteSpace(value))
         {
-            //Debug.WriteLine("Ignoring empty/whitespace DefaultUpperBackThickness change (likely ItemsSource update).");
             return;
         }
 
@@ -130,7 +124,6 @@ public partial class DefaultSettingsViewModel : ObservableObject
         {
             _defaults.DefaultUpperBackThickness = ConvertDimension.FractionToDouble(value).ToString();
             _ = _defaults.SaveAsync();
-            //Debug.WriteLine($"Wrote to _defaults.DefaultUpperBackThickness='{_defaults.DefaultUpperBackThickness}'");
         }
     }
 
