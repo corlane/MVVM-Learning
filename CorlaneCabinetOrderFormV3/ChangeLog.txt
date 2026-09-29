@@ -649,5 +649,4 @@
 3.1.0.32
 	Initial commit.
 	Removed commented-out debug lines from DefaultSettingsVM. commit
-
-
+	Changed Upper Cab max width from 60" to 96". commit
