@@ -6,6 +6,7 @@ using CorlaneCabinetOrderFormV3.Services;
 using CorlaneCabinetOrderFormV3.Themes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Media;
 
 namespace CorlaneCabinetOrderFormV3.ViewModels;
@@ -359,6 +360,10 @@ public partial class DefaultSettingsViewModel : ObservableObject
                 DefaultUpperBackThickness = _defaults.DefaultUpperBackThickness;
                 DefaultPanelThickness = _defaults.DefaultPanelThickness;
             }
+
+            _mainVm.BaseCabinetVm.BackThickness = DefaultBaseBackThickness; // Update the BaseCabinetVm's BackThickness property
+            _mainVm.UpperCabinetVm.BackThickness = DefaultUpperBackThickness; // Update the UpperCabinetVm's BackThickness property
+            _mainVm.PanelVm.Depth = DefaultPanelThickness; // Update the PanelCabinetVm's BackThickness property
 
             // 2. THEN notify the list changed — ComboBox SelectedItems already match the new list items
             OnPropertyChanged(nameof(ListBackThickness));

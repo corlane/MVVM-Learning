@@ -650,3 +650,4 @@
 	Initial commit.
 	Removed commented-out debug lines from DefaultSettingsVM. commit
 	Changed Upper Cab max width from 60" to 96". commit
+	FINALLY got the Base & Upper back thickness, and Panel thickness to auto-select their respective defaults when dimension format is changed. No more confusing hidden red invalidation boxes. commit
