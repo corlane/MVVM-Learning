@@ -123,5 +123,6 @@
         <Label Content="Rotate: Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,60,5,5"/>
         <Label Content="Pan: Shift + Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,80,5,5"/>
         <Label Content="Zoom: Ctrl + Right Mouse Button + Drag" HorizontalAlignment="Left" Margin="5,100,5,5"/>
+        <Label Content="(Mouse wheel can also be used for zooming)" HorizontalAlignment="Left" Margin="5,120,5,5"/>
     </Grid>
 </UserControl>
