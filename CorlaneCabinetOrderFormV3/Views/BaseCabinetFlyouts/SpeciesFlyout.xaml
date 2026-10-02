@@ -33,7 +33,7 @@
                          Visibility="{Binding CustomEBSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
             </StackPanel>
             <!-- Door / Drawer Front Species -->
-            <StackPanel Width="190">
+            <StackPanel Width="196">
                 <TextBlock Text="Door / Drw. Front" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,4"/>
                 <ListBox ItemsSource="{Binding ListCabSpecies}" SelectedItem="{Binding DoorSpecies}"/>
                 <Label Content="Custom Door Species:" Margin="0,6,0,0" Padding="0" Visibility="{Binding CustomDoorSpeciesEnabled, Converter={StaticResource B2VConverter}}"/>
