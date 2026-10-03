@@ -656,3 +656,4 @@
 	Initial commit.
 	Added "(Mouse wheel can also be used for zooming)" label to 3D view. commit
 	Increased width of Door / Drawer Front Species column of Species flyout to get rid of horizontal scrollbar. commit
+	Place Order button is now disabled if all Customer Info fields are not filled in. commit

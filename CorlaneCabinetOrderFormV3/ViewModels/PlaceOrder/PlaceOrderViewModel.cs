@@ -44,7 +44,17 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
         private bool CanPlaceOrder() =>
             IsInternetConnected
             && _cabinetService?.Cabinets?.Count > 0
-            && !string.IsNullOrEmpty(_mainVm?.CurrentJobPath);
+            && !string.IsNullOrEmpty(_mainVm?.CurrentJobPath)
+            && HasAllCustomerInfo;
+
+        private bool HasAllCustomerInfo =>
+            !string.IsNullOrWhiteSpace(CompanyName)
+            && !string.IsNullOrWhiteSpace(ContactName)
+            && !string.IsNullOrWhiteSpace(PhoneNumber)
+            && !string.IsNullOrWhiteSpace(EMail)
+            && !string.IsNullOrWhiteSpace(Street)
+            && !string.IsNullOrWhiteSpace(City)
+            && !string.IsNullOrWhiteSpace(ZipCode);
 
         private CancellationTokenSource? _networkCts;
 
@@ -195,7 +205,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
 
         public ObservableCollection<MaterialTotal> MaterialTotals { get; } = new ObservableCollection<MaterialTotal>();
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? CompanyName { get; set; }
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1), NotifyCanExecuteChangedFor(nameof(PlaceOrderCommand))] public partial string? CompanyName { get; set; }
         partial void OnCompanyNameChanged(string? oldValue, string? newValue)
         {
             if (_defaults != null)
@@ -215,7 +225,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ContactName { get; set; }
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1), NotifyCanExecuteChangedFor(nameof(PlaceOrderCommand))] public partial string? ContactName { get; set; }
         partial void OnContactNameChanged(string? oldValue, string? newValue)
         {
             if (_defaults != null)
@@ -225,7 +235,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? PhoneNumber { get; set; }
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1), NotifyCanExecuteChangedFor(nameof(PlaceOrderCommand))] public partial string? PhoneNumber { get; set; }
         partial void OnPhoneNumberChanged(string? oldValue, string? newValue)
         {
             if (_defaults != null)
@@ -235,7 +245,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? EMail { get; set; }
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1), NotifyCanExecuteChangedFor(nameof(PlaceOrderCommand))] public partial string? EMail { get; set; }
         partial void OnEMailChanged(string? oldValue, string? newValue)
         {
             if (_defaults != null)
@@ -245,7 +255,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? Street { get; set; }
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1), NotifyCanExecuteChangedFor(nameof(PlaceOrderCommand))] public partial string? Street { get; set; }
         partial void OnStreetChanged(string? oldValue, string? newValue)
         {
             if (_defaults != null)
@@ -255,7 +265,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? City { get; set; }
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1), NotifyCanExecuteChangedFor(nameof(PlaceOrderCommand))] public partial string? City { get; set; }
         partial void OnCityChanged(string? oldValue, string? newValue)
         {
             if (_defaults != null)
@@ -265,7 +275,7 @@ namespace CorlaneCabinetOrderFormV3.ViewModels
             }
         }
 
-        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1)] public partial string? ZipCode { get; set; }
+        [ObservableProperty, Required, NotifyDataErrorInfo, MinLength(1), NotifyCanExecuteChangedFor(nameof(PlaceOrderCommand))] public partial string? ZipCode { get; set; }
         partial void OnZipCodeChanged(string? oldValue, string? newValue)
         {
             if (_defaults != null)
